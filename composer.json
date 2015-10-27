@@ -3,7 +3,7 @@
    "repositories": [
         {
            "type": "vcs",
-            "url": "https://github.com/ginasink/cmwn-front"
+           "url": "https://github.com/ginasink/cmwn-front"
         }
    ]
 }
