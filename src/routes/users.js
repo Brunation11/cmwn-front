@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Table from '../components/table';
+import {Table, Column}  from '../components/table';
 
 const data = [
     {name: 'Davis', age: 10},
@@ -12,6 +12,10 @@ var Users = React.createClass({
     render: function () {return (
         <div>
             users
+            <Table rows={data}>
+                <Column dataKey="name" />
+                <Column dataKey="age" />
+            </Table>
         </div>
     );}
 });
