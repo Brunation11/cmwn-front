@@ -1,4 +1,9 @@
 {
-   "type": "vcs",
-   "url": "https://github.com/ginasink/cmwn-front"
+   "name": "ginasink/cmwn-front",
+   "repositories": [
+        {
+           "type": "vcs",
+            "url": "https://github.com/ginasink/cmwn-front"
+        }
+   ],
 }
