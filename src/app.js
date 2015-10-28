@@ -2,7 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom'
 import { Router, Route, Link } from 'react-router';
 
+import GlobalHeader from 'components/global_header';
+
 import Users from 'routes/users'
+import Districts from 'routes/districts'
 
 //var Users = React.createClass({
 //    render: function () {return (<div>users</div>);}
@@ -12,6 +15,7 @@ var App = React.createClass({
     render: function () {
         return (
             <div>
+                <GlobalHeader />
                 Hello!
                 {this.props.children}
             </div>
@@ -25,8 +29,8 @@ const routes = {
     component: App,
     childRoutes: [
         { path: 'users', component: Users },
+        { path: 'districts', component: Districts},
         //{ path: 'roles', component: Roles },
-        //{ path: 'districts', component: Districs },
         //{ path: 'organizations', component: Organizations },
         //{ path: 'groups', component: Groups },
         //{ path: 'images', component: Images },
