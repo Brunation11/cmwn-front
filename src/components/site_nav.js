@@ -1,10 +1,25 @@
 import React from 'react';
+import {Link} from 'react-router';
+import _ from 'lodash';
+
+import GLOBALS from 'components/globals'
 
 
-React.createClass({
+var SiteNav = React.createClass({
+    renderNavItems: function () {
+        return _.map(GLOBALS.TOP_NAV, item => (<li><Link to={item.URL}>{item.TEXT}</Link></li>))
+    },
     render: function () {
         return (
-            <div class=""></div>
+            <nav class="">
+                <ul>
+                    {this.renderNavItems()}
+                    <li><a href="#">Logout</a></li>
+                </ul> 
+            </nav>
         );
     }
 });
+
+export default SiteNav;
+
