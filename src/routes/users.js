@@ -11,7 +11,7 @@ const data = [
 
 var urlData = HttpManager.GET({url:'http://cmwn/districts'});
 data.then(res => {
-    alert('Data Recieved ': JSON.stringify(res));
+    alert('Data Recieved ' + JSON.stringify(res));
 });
 
 var Users = React.createClass({
