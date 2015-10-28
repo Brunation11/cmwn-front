@@ -22,7 +22,7 @@ var _makeRequest = function(verb, requests){
                     }
                     return res({
                         status: xhr.status,
-                        response: xhr.response,
+                        response: (_.isObject(xhr.response) ? xhr.response : JSON.parse(xhr.response)),
                         request: xhr
                     });
                 }
