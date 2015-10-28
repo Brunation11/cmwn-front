@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import { Router, Route, Link } from 'react-router';
 
 import GlobalHeader from 'components/global_header';
+import Sidebar from 'components/Sidebar';
 
 import Users from 'routes/users'
 import Districts from 'routes/districts'
@@ -18,6 +19,7 @@ var App = React.createClass({
                 <GlobalHeader />
                 Hello!
                 {this.props.children}
+                <Sidebar />
             </div>
         );
     }
