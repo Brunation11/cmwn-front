@@ -8,9 +8,10 @@ import _ from 'lodash';
 
 var _makeRequest = function(verb, requests){
     var promises = _.map(requests, req => {
-        return new Promise((res, rej) => {
+        var abort;
+        var promise = new Promise((res, rej) => {
             var xhr = new XMLHttpRequest();
-            this.abort = () => {
+            abort = () => { //Promise constructor does not expose `this`, must attach outside
                 xhr.abort();
                 res(null);
             }
@@ -31,6 +32,8 @@ var _makeRequest = function(verb, requests){
                 rej(err);
             }
         });
+        promise.abort = abort;
+        return promise;
     });
     var promise = Promise.all(promises);
     promise.abort = () => _.each(promises, p => p.abort);
@@ -60,7 +63,7 @@ class _HttpManager {
     }
 };
 
-var HttpManager = new _httpManager();
+var HttpManager = new _HttpManager();
 
 export default HttpManager;
 

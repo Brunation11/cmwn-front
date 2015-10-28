@@ -3,7 +3,6 @@ import _ from 'lodash';
 
 
 var _renderCell = function (data, row) {
-    debugger;
     if (_.isFunction(this.props.renderCell)) {
         return this.props.renderCell(...arguments);
     } else if (data) {
