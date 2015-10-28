@@ -16,8 +16,7 @@ myDevConfig.devtool = "sourcemap";
 myDevConfig.debug = true;
 var devCompiler = webpack(myDevConfig);
 
-// The development server (the recommended option for development)
-gulp.task("default", ["webpack-dev-server"]);
+gulp.task("default", ["build-dev", "webpack-dev-server"]);
 
 // Build and watch cycle (another option for development)
 // Advantage: No server required, can run app from filesystem
@@ -66,13 +65,19 @@ gulp.task("webpack:build-dev", function(callback) {
 
 gulp.task("webpack-dev-server", function(callback) {
     var config = Object.create(webpackConfig);
-    config.devtool = "eval";
+    config.devtool = "source-map";
     config.debug = true;
     // Start a webpack-dev-server
     var compiler = webpack(config);
 
     new WebpackDevServer(compiler, {
-        // server and middleware options
+        contentBase: './',
+        hot: true,
+        watchOptions: {
+            aggregateTimeout: 100,
+            poll: 300
+        },
+       noInfo: true 
     }).listen(8080, "localhost", function(err) {
         if(err) throw new gutil.PluginError("webpack-dev-server", err);
         // Server listening
