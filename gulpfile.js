@@ -1,40 +1,90 @@
 var gulp = require('gulp');
 var sourcemaps = require('gulp-sourcemaps');
-var source = require('vinyl-source-stream');
-var buffer = require('vinyl-buffer');
-var browserify = require('browserify');
-var watchify = require('watchify');
-var babel = require('babelify');
+//var source = require('vinyl-source-stream');
+//var buffer = require('vinyl-buffer');
+//var browserify = require('browserify');
+//var watchify = require('watchify');
+//var babel = require('babelify');
+var gutil = require("gulp-util");
+var webpack = require("webpack");
+var WebpackDevServer = require("webpack-dev-server");
+var webpackConfig = require("./webpack.config.js");
 
-function compile(watch) {
-    var bundler = watchify(browserify({entries: './src/app.js', extensions: ['.js'],  debug: true }).transform(babel));
+//dev config
+var myDevConfig = Object.create(webpackConfig);
+myDevConfig.devtool = "sourcemap";
+myDevConfig.debug = true;
+var devCompiler = webpack(myDevConfig);
 
-    function rebundle() {
-        bundler.bundle()
-        .on('error', function(err) { console.error(err); this.emit('end'); })
-        .pipe(source('build.js'))
-        .pipe(buffer())
-        .pipe(sourcemaps.init({ loadMaps: true }))
-        .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest('./build'));
-    }
+// The development server (the recommended option for development)
+gulp.task("default", ["webpack-dev-server"]);
 
-    if (watch) {
-        bundler.on('update', function() {
-            console.log('-> bundling...');
-            rebundle();
-        });
-    }
+// Build and watch cycle (another option for development)
+// Advantage: No server required, can run app from filesystem
+// Disadvantage: Requests are not blocked until bundle is available,
+// can serve an old app on refresh
+gulp.task("build-dev", ["webpack:build-dev"], function() {
+    gulp.watch(["app/**/*"], ["webpack:build-dev"]);
+});
 
-    rebundle();
-}
+// Production build
+gulp.task("build", ["webpack:build"]);
+
+gulp.task("webpack:build", function(callback) {
+    // modify some webpack config options
+    var myConfig = Object.create(webpackConfig);
+    myConfig.plugins = myConfig.plugins.concat(
+        new webpack.DefinePlugin({
+            "process.env": {
+                // This has effect on the react lib size
+                "NODE_ENV": JSON.stringify("production")
+            }
+        }),
+        new webpack.optimize.DedupePlugin(),
+        new webpack.optimize.UglifyJsPlugin()
+    );
+
+    // run webpack
+    webpack(myConfig, function(err, stats) {
+        if(err) throw new gutil.PluginError("webpack:build", err);
+        gutil.log("[webpack:build]", stats.toString({
+            colors: true
+        }));
+        callback();
+    });
+});
+
+gulp.task("webpack:build-dev", function(callback) {
+    devCompiler.run(function(err, stats) {
+        if(err) throw new gutil.PluginError("webpack:build-dev", err);
+        gutil.log("[webpack:build-dev]", stats.toString({
+            colors: true
+        }));
+        callback();
+    });
+});
+
+gulp.task("webpack-dev-server", function(callback) {
+    var config = Object.create(webpackConfig);
+    config.devtool = "eval";
+    config.debug = true;
+    // Start a webpack-dev-server
+    var compiler = webpack(config);
+
+    new WebpackDevServer(compiler, {
+        // server and middleware options
+    }).listen(8080, "localhost", function(err) {
+        if(err) throw new gutil.PluginError("webpack-dev-server", err);
+        // Server listening
+        gutil.log("[webpack-dev-server]", "http://localhost:8080/webpack-dev-server/index.html");
+
+        // keep the server alive or continue?
+        callback();
+    });
+});
 
 function watch() {
     return compile(true);
 };
 
-gulp.task('build', function() { return compile(); });
-gulp.task('watch', function() { return watch(); });
-
-gulp.task('default', ['watch']);
 

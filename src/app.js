@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom'
 import { Router, Route, Link } from 'react-router';
 
-import Users from './routes/users'
+import Users from 'routes/users'
 
 //var Users = React.createClass({
 //    render: function () {return (<div>users</div>);}
