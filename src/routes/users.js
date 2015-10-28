@@ -17,7 +17,7 @@ urlData.then(res => {
 var Users = React.createClass({
     render: function () {return (
         <div>
-            tsers
+            users
             <Table rows={data}>
                 <Column dataKey="name" />
                 <Column dataKey="age" />
