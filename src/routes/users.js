@@ -10,7 +10,7 @@ const data = [
 ];
 
 var urlData = HttpManager.GET({url:'http://cmwn/districts'});
-data.then(res => {
+urlData.then(res => {
     alert('Data Recieved ' + JSON.stringify(res));
 });
 
