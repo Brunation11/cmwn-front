@@ -1,0 +1,27 @@
+//**
+//* app.scss
+//* Contains all of the core styles for the platform. Any style added
+//* to this file will be inlined into the primary index.html in order
+//* to prevent a possible jarring flash of unstyled content.
+//* because we are importing them here, functions.scss and 
+//* variables.scss share this property
+//*//
+
+@import 'variables';
+@import 'functions';
+;
+#cmwn-app {
+    max-width: $monitor-max-break;
+    width: calc(100% - 2 * #{$standard});
+    position: relative;
+    padding: 0;
+    margin: $standard;
+    left: 50%;
+    transform: translateX(-50%);
+
+    .profile-pic {
+        @include no-text($profile-width, $profile-width);
+        background-size: cover;
+    }
+}
+

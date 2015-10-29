@@ -1,0 +1,13 @@
+//**
+//* functions.scss
+//* contains all reusable style mixins and functions
+//**//
+
+@mixin no-text($width, $height) {
+    display: inline-block;
+    overflow: hidden;
+    width: 0;
+    height: $height;
+    padding-left: $width;
+    color: transparent;
+}

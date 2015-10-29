@@ -8,6 +8,8 @@ import Sidebar from 'components/Sidebar';
 import Users from 'routes/users'
 import Districts from 'routes/districts'
 
+import CoreStyles from 'app.scss';
+
 //var Users = React.createClass({
 //    render: function () {return (<div>users</div>);}
 //});
@@ -40,12 +42,12 @@ const routes = {
 }
 
 function run() {
-    ReactDOM.render(<Router routes={routes} />, document.getElementById('app'))
+    ReactDOM.render(<Router routes={routes} />, document.getElementById('cmwn-app'))
 }
 
 const loadedStates = ['complete', 'loaded', 'interactive'];
 
-if (loadedStates.indexOf(document.readyState) != -1  && document.getElementById('app')) {
+if (loadedStates.indexOf(document.readyState) != -1  && document.getElementById('cmwn-app')) {
       run();
       console.info('running');
 } else {
