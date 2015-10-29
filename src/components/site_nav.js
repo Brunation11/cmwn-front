@@ -2,7 +2,8 @@ import React from 'react';
 import {Link} from 'react-router';
 import _ from 'lodash';
 
-import GLOBALS from 'components/globals'
+import HttpManager from 'components/http_manager';
+import GLOBALS from 'components/globals';
 
 
 var SiteNav = React.createClass({
@@ -11,7 +12,7 @@ var SiteNav = React.createClass({
     },
     render: function () {
         return (
-            <nav class="">
+            <nav className="">
                 <ul>
                     {this.renderNavItems()}
                     <li><a href="#">Logout</a></li>

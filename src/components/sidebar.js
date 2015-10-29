@@ -9,11 +9,11 @@ const PIC_ALT = 'Profile Picture';
 var Sidebar = React.createClass({
     render: function () {
         return (
-            <div class="sidebar">
+            <div className="sidebar">
                 <div
-                    class="profile-pic"
+                    className="profile-pic"
                     alt={PIC_ALT}
-                    style={{'background-image':`url("${GLOBALS.CURRENT_USER.PROFILE_IMAGE}")`}}
+                    style={{'backgroundImage':`url("${GLOBALS.CURRENT_USER.PROFILE_IMAGE}")`}}
                 >
                      {PIC_ALT}
                 </div>
