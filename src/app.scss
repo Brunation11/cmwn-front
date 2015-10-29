@@ -11,17 +11,51 @@
 @import 'functions';
 ;
 #cmwn-app {
-    max-width: $monitor-max-break;
-    width: calc(100% - 2 * #{$standard});
-    position: relative;
-    padding: 0;
-    margin: $standard;
-    left: 50%;
-    transform: translateX(-50%);
+
+    .content {
+        max-width: $monitor-max-break;
+        width: calc(100% - 2 * #{$standard});
+        position: relative;
+        padding: 0;
+        margin: $standard;
+        left: 50%;
+        transform: translateX(-50%);
+    }
 
     .profile-pic {
         @include no-text($profile-width, $profile-width);
         background-size: cover;
+    }
+
+    .global-header {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        right: 0px;
+    }
+
+    .logo-pad {
+        margin-top: -$standard;
+        visibility:hidden;
+        width: 100%;
+    }
+
+    .logo {
+        color: transparent;
+        background: url(media/logo.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+        max-width: 950px;
+
+        a {
+            color: transparent;
+        }
+
+        img {
+            width: 100%;
+            visibility: hidden;
+            margin-left:-100%;
+        }
     }
 }
 

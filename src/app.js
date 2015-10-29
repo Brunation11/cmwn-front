@@ -10,17 +10,17 @@ import Districts from 'routes/districts'
 
 import CoreStyles from 'app.scss';
 
-//var Users = React.createClass({
-//    render: function () {return (<div>users</div>);}
-//});
+import LOGO_URL from 'media/logo.png';
 
 var App = React.createClass({
     render: function () {
         return (
             <div>
                 <GlobalHeader />
-                Hello!
-                {this.props.children}
+                <div className="content"> 
+                    <img className="logo-pad" src={LOGO_URL} />
+                    {this.props.children}
+                </div>
                 <Sidebar />
             </div>
         );
