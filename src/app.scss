@@ -9,7 +9,7 @@
 
 @import 'variables';
 @import 'functions';
-;
+
 #cmwn-app {
 
     .content {
@@ -41,6 +41,7 @@
     }
 
     .logo {
+        width: calc(100% - #{$standard});;;;
         color: transparent;
         background: url(media/logo.png);
         background-repeat: no-repeat;
@@ -52,10 +53,26 @@
         }
 
         img {
-            width: 100%;
+            width: calc(100% - 60px);
             visibility: hidden;
             margin-left:-100%;
         }
+    }
+
+    .logout {
+        @include no-text($logout-size, $logout-size);
+        background: url(media/pt_logout_on.png);
+        background-repeat: no-repeat;
+        position: absolute;
+        right: 0;
+        top: 0;
+        background-size: contain;
+    }
+
+    .current-user-info {
+        position: absolute;
+        bottom: -10px;
+        right: 0;
     }
 }
 
