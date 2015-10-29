@@ -12,7 +12,7 @@ module.exports = {
         './src/app.js'
     ],
     output: {
-        path: path.join(__dirname, 'dist'),
+        path: path.join(__dirname, 'build'),
         filename: 'build.js',
         publicPath: '/build/'
     },
@@ -29,6 +29,13 @@ module.exports = {
         {
             test: /\.scss$/,
             loaders: ['style', 'css', 'sass']
+        },
+        {
+            test: /\.(jpe?g|png|gif|svg)$/i,
+            loaders: [
+                'file?hash=sha512&digest=hex&name=[hash].[ext]',
+                'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
+            ]
         }]
     }
 };
