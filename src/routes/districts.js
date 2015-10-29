@@ -1,7 +1,12 @@
 import React from 'react';
+import {Link} from 'react-router';
 
 import HttpManager from 'components/http_manager'
+import GLOBALS from 'components/globals'
 import {Table, Column}  from 'components/table';
+
+const TITLE = 'Districts';
+const HOME = 'Home';
 
 var Districs = React.createClass({
     districs: [{id: '1', description: 'yes'}],
@@ -9,9 +14,8 @@ var Districs = React.createClass({
         this.getDistrics();
     },
     getDistrics: function () {
-        var urlData = HttpManager.GET({url:'http://cmwn/districts'});
+        var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'districts'});
         urlData.then(res => {
-            debugger;
             this.districs = res.response.data;
             this.forceUpdate();
         });
@@ -19,7 +23,13 @@ var Districs = React.createClass({
     render: function () {
         return (
             <div>
-                districs
+                <header>
+                    <h2>{TITLE}</h2>
+                    <div className="breadcrumb">
+                        <Link to="/">{HOME}</Link>
+                        {TITLE}
+                    </div>
+                </header>
                 <Table rows={this.districs}>
                     <Column dataKey="id" />
                     <Column dataKey="title" />
