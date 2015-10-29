@@ -8,22 +8,21 @@ var sourcemaps = require('gulp-sourcemaps');
 var gutil = require("gulp-util");
 var webpack = require("webpack");
 var WebpackDevServer = require("webpack-dev-server");
-var webpackConfig = require("./webpack.config.js");
+var webpackDevConfig = require("./webpack.config.dev.js");
+var webpackProdConfig = require("./webpack.config.prod.js");
+var spawn = require('child_process').spawn;
 
-//dev config
-var myDevConfig = Object.create(webpackConfig);
-myDevConfig.devtool = "sourcemap";
-myDevConfig.debug = true;
-var devCompiler = webpack(myDevConfig);
+gulp.task("default", ["build-dev"]); 
 
-gulp.task("default", ["build-dev", "webpack-dev-server"]);
-
-// Build and watch cycle (another option for development)
-// Advantage: No server required, can run app from filesystem
-// Disadvantage: Requests are not blocked until bundle is available,
-// can serve an old app on refresh
 gulp.task("build-dev", ["webpack:build-dev"], function() {
-    gulp.watch(["app/**/*"], ["webpack:build-dev"]);
+    var start = spawn('npm', ['start']);
+    start.stdout.on('data', function (data) {
+        console.log('stdout: ' + data);
+    });
+
+    start.stderr.on('data', function (data) {
+        console.log('stderr: ' + data);
+    });
 });
 
 // Production build
@@ -31,7 +30,7 @@ gulp.task("build", ["webpack:build"]);
 
 gulp.task("webpack:build", function(callback) {
     // modify some webpack config options
-    var myConfig = Object.create(webpackConfig);
+    var myConfig = Object.create(webpackProdConfig);
     myConfig.plugins = myConfig.plugins.concat(
         new webpack.DefinePlugin({
             "process.env": {
@@ -54,7 +53,7 @@ gulp.task("webpack:build", function(callback) {
 });
 
 gulp.task("webpack:build-dev", function(callback) {
-    devCompiler.run(function(err, stats) {
+    webpack(Object.create(webpackDevConfig)).run(function(err, stats) {
         if(err) throw new gutil.PluginError("webpack:build-dev", err);
         gutil.log("[webpack:build-dev]", stats.toString({
             colors: true
@@ -62,34 +61,4 @@ gulp.task("webpack:build-dev", function(callback) {
         callback();
     });
 });
-
-gulp.task("webpack-dev-server", function(callback) {
-    var config = Object.create(webpackConfig);
-    config.devtool = "source-map";
-    config.debug = true;
-    // Start a webpack-dev-server
-    var compiler = webpack(config);
-
-    new WebpackDevServer(compiler, {
-        contentBase: './',
-        hot: true,
-        watchOptions: {
-            aggregateTimeout: 100,
-            poll: 300
-        },
-       noInfo: true 
-    }).listen(8080, "localhost", function(err) {
-        if(err) throw new gutil.PluginError("webpack-dev-server", err);
-        // Server listening
-        gutil.log("[webpack-dev-server]", "http://localhost:8080/webpack-dev-server/index.html");
-
-        // keep the server alive or continue?
-        callback();
-    });
-});
-
-function watch() {
-    return compile(true);
-};
-
 
