@@ -9,10 +9,15 @@
 //page
 $standard: 15px;
 $monitor-max-break: 985px;
-$ultrawide-min-break: 2048px; //totally arbitrary
+$ultrawide-min-break: 1800px; //vmax = 18px
 $device-max-break: 667px; //iphone landscape
 //element
 $profile-width: 172px;
-$logout-size: 60px;
+$logout-size: 70px;
 $logo-max-width: 900px;
-
+$ultrawide-logo-offset: 82px; //max width without needing a non-transparent logo image
+//font
+$min-base-font-size: 12px;
+$device-font-size: 2vmax;
+$base-font-size: 15px;
+$max-base-font-size: 18px;
