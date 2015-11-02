@@ -8,6 +8,7 @@ import Sidebar from 'components/Sidebar';
 import Users from 'routes/users'
 import Districts from 'routes/districts'
 
+import Reset from 'reset.css';
 import CoreStyles from 'app.scss';
 
 import LOGO_URL from 'media/logo.png';
@@ -17,11 +18,12 @@ var App = React.createClass({
         return (
             <div>
                 <GlobalHeader />
-                <div className="content"> 
-                    <img className="logo-pad" src={LOGO_URL} />
-                    {this.props.children}
+                <div className="sweater">
+                    <div className="content"> 
+                        {this.props.children}
+                    </div>
+                    <Sidebar />
                 </div>
-                <Sidebar />
             </div>
         );
     }
