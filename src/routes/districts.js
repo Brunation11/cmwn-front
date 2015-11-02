@@ -31,12 +31,16 @@ var Districs = React.createClass({
                     </div>
                 </header>
                 <Table rows={this.districs}>
-                    <Column dataKey="id" />
-                    <Column dataKey="title" />
+                    <Column dataKey="title" 
+                        renderCell={(data, row) => (
+                            <a href={`#/district/${row.id}`}>{_.startCase(data)}</a>
+                        )}
+                    />
                     <Column dataKey="description" />
-                    <Column dataKey="created_at" />
-                    <Column dataKey="updated_at" />
-                    <Column dataKey="deleted_at" renderCell={data => (data == null ? 'never' : data)} />
+                    <Column dataKey="created_at" renderHeader="Created" />
+                    <Column dataKey="updated_at" renderHeader="Last Updated"
+                        renderCell={data => (data == null ? 'never' : data)}
+                    />
                 </Table>
             </div>
         );

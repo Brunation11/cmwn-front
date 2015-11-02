@@ -25,6 +25,7 @@ body {
 }
 
 #cmwn-app {
+    min-height: 100vh;
     overflow-x: hidden;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
@@ -44,6 +45,7 @@ body {
         position: relative;
         padding: $standard;
         margin: 0;
+        margin-bottom: 2 * $standard;
         left: 50%;
         transform: translateX(-50%);
         display: flex;
