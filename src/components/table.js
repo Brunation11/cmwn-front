@@ -47,7 +47,7 @@ var Table = React.createClass({
     },
     render: function () {
         return (
-            <table>
+            <table cellSpacing="0" cellPadding="0">
                 {this.renderHeader()}
                 <tbody>
                     {_.map(this.props.rows, this.renderRow)}
