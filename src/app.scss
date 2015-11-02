@@ -17,15 +17,6 @@ body {
         font-size: $min-base-font-size; //IE vmax fallback
         font-size: $device-font-size;
 
-        .sidebar {
-            background: #fff;
-            position: fixed;
-            top: 0;
-            bottom: 0;
-            right: -110%; //extra just to account for scrollbars
-            width: 100%;
-            overflow-y: scroll;
-        }
     }
 
     @media (min-width: $ultrawide-min-break) {
@@ -165,6 +156,7 @@ body {
         a img {
             width: $logout-size - ($standard / 2);
         }
+
     }
 
     .current-user-info {
@@ -269,6 +261,24 @@ body {
         .current-user-info {
             display: none;
         }
+
+        .sidebar {
+            padding: 0;
+            background: #fff;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            right: -110%; //extra just to account for scrollbars
+            width: 100%;
+            overflow-y: scroll;
+            transition: right  1s ease-in-out;
+
+            &.open {
+                right: 0;
+            }
+
+        }
+
 
     }
 

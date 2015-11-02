@@ -9,7 +9,7 @@ const PIC_ALT = 'Profile Picture';
 var Sidebar = React.createClass({
     render: function () {
         return (
-            <div className="sidebar">
+            <div className={'sidebar ' + (this.props.menuIsOpen ? 'open' : '')}>
                 <div
                     className="profile-pic"
                     alt={PIC_ALT}
