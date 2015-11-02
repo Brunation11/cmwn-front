@@ -19,10 +19,10 @@ var Table = React.createClass({
         var childRows;
         if (this.props.renderHeader !== false) {
             childRows = React.Children.map(this.props.children, elem => {
-                if (_.isFunction(elem.renderHeader)) {
-                    return <td>{elem.renderHeader()}</td>
-                } else if (_.isString(elem.renderHeader)) {
-                    return <td>{_.startCase(elem.renderHeader)}</td>
+                if (_.isFunction(elem.props.renderHeader)) {
+                    return <td>{elem.props.renderHeader()}</td>
+                } else if (_.isString(elem.props.renderHeader)) {
+                    return <td>{_.startCase(elem.props.renderHeader)}</td>
                 } else {
                     return <td>{_.startCase(elem.props.dataKey)}</td>
                 }
