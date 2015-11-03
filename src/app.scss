@@ -287,6 +287,7 @@ body {
             width: 100%;
             overflow-y: scroll;
             transition: right  1s ease-in-out;
+            min-height: 100vh;
 
             &.open {
                 right: 0;
