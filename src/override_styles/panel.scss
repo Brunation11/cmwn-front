@@ -1,0 +1,18 @@
+
+.panel.standard {
+    border: 0;
+    border-radius: 0;
+
+    .panel-heading {
+        font-size: 1.2rem;
+        font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
+        color: #fff;
+        background: url(/build/f427849b8caaa9e4cba74e927cba4b6e.jpg);
+        background-size: 100% auto;
+        border-radius: 0;
+    }
+
+    .panel-body {
+        border-radius: 0;
+    }
+}
