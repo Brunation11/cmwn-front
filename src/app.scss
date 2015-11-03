@@ -157,11 +157,19 @@ body {
     .menu {
         display: none;
         padding: $standard / 2;
+        width: $logout-size - ($standard / 2);
+        height: $logout-size - ($standard / 2);
+        border: 0;
 
-        a img {
-            width: $logout-size - ($standard / 2);
+        .glyphicon {
+            color: #000;
+            font-size: 3em;
         }
 
+        .fallback {
+            display: inline-block;
+            width: 0;
+        }
     }
 
     .current-user-info {

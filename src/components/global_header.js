@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
+import {Button, Glyphicon} from 'react-bootstrap';
 
 import Authorization from 'components/authorization'
 import EventManager from 'components/event_manager'
@@ -19,9 +20,10 @@ var GlobalHeader = React.createClass({
         return (
             <div className="global-header">
                 <div className="logo" ><Link to="/" ><img alt="Change My World Now" src={LOGO_URL} />Change My World Now</Link></div>
-                <div className="menu" ><a onClick={this.toggleMenu}>
-                    <img src={MENU_URL} alt={MENU} />{MENU}
-                </a></div>
+                <Button className="menu" onClick={this.toggleMenu}>
+                   <Glyphicon glyph="glyphicon glyphicon-menu-hamburger" />
+                   <span className="fallback">{MENU}</span>
+                </Button>
                 <div className="logout"><a href='#' onClick={this.logout}> 
                     <img src={LOGOUT_URL} alt={LOGOUT} />{LOGOUT} 
                 </a></div>
