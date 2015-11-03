@@ -4,8 +4,6 @@ import ReactDOM from 'react-dom'
 import { Router, Route, Link } from 'react-router';
 
 import GlobalHeader from 'components/global_header';
-import Sidebar from 'components/Sidebar';
-import EventManager from 'components/event_manager';
 
 import Users from 'routes/users'
 import Districts from 'routes/districts'
@@ -17,24 +15,12 @@ import CoreStyles from 'app.scss';
 import LOGO_URL from 'media/logo.png';
 
 var App = React.createClass({
-    getInitialState: function () {
-        var self = this;
-        EventManager.listen('menuIsOpen', val => {
-            this.menuIsOpen = val;
-            this.forceUpdate();
-        });
-        EventManager.update('menuIsOpen', false);
-        return {};
-    },
     render: function () {
         return (
             <div>
                 <GlobalHeader />
                 <div className="sweater">
-                    <div className="content"> 
-                        {this.props.children}
-                    </div>
-                    <Sidebar menuIsOpen={this.menuIsOpen}/>
+                    {this.props.children}
                 </div>
             </div>
         );

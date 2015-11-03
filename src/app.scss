@@ -48,6 +48,9 @@ body {
         margin-bottom: 2 * $standard;
         left: 50%;
         transform: translateX(-50%);
+    }
+
+    .layout {
         display: flex;
         align-items: stretch;
     }
@@ -166,6 +169,16 @@ body {
         bottom: 15px;
         right: $standard;
         font-size: 0.7rem;
+    }
+
+    section {
+    
+        h3 {
+            background: url(media/blue-header-bg.jpg);
+            background-size: 100% auto;
+            padding: $standard / 2 $standard;
+            color: #FFF;
+        }
     }
 
     table {

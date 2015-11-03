@@ -1,15 +1,16 @@
 import React from 'react';
 import {Link} from 'react-router';
 
-import HttpManager from 'components/http_manager'
-import GLOBALS from 'components/globals'
+import HttpManager from 'components/http_manager';
+import GLOBALS from 'components/globals';
+import Layout from 'layouts/two_col';
 import {Table, Column}  from 'components/table';
 
 const TITLE = 'Districts';
 const HOME = 'Home';
 
 var Districs = React.createClass({
-    districs: [{id: '1', description: 'yes'}],
+    districs: [],
     componentWillMount: function () {
         this.getDistrics();
     },
@@ -22,7 +23,7 @@ var Districs = React.createClass({
     },
     render: function () {
         return (
-            <div>
+            <Layout>
                 <header>
                     <h2>{TITLE}</h2>
                     <div className="breadcrumb">
@@ -42,7 +43,7 @@ var Districs = React.createClass({
                         renderCell={data => (data == null ? 'never' : data)}
                     />
                 </Table>
-            </div>
+            </Layout>
         );
     }
 });

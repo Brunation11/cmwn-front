@@ -1,6 +1,7 @@
 import React from 'react';
 
 import HttpManager from 'components/http_manager'
+import Layout from 'layouts/two_col';
 import {Table, Column}  from 'components/table';
 
 var Users = React.createClass({
@@ -18,13 +19,13 @@ var Users = React.createClass({
     },
     render: function () {
         return (
-            <div>
+            <Layout>
                 users
                 <Table rows={this.users}>
                     <Column dataKey="id" />
                     <Column dataKey="description" />
                 </Table>
-            </div>
+            </Layout>
         );
     }
 });
