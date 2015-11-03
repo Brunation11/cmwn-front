@@ -9,6 +9,7 @@ import EventManager from 'components/event_manager';
 
 import Users from 'routes/users'
 import Districts from 'routes/districts'
+import DistrictView from 'routes/districts/view'
 
 import Reset from 'reset.css';
 import CoreStyles from 'app.scss';
@@ -47,6 +48,7 @@ const routes = {
     childRoutes: [
         { path: 'users', component: Users },
         { path: 'districts', component: Districts},
+        { path: 'district/:id', component: DistrictView},
         //{ path: 'roles', component: Roles },
         //{ path: 'organizations', component: Organizations },
         //{ path: 'groups', component: Groups },
