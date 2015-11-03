@@ -34,7 +34,7 @@ var View = React.createClass({
     renderEditLink: function () {
         if (GLOBALS.CURRENT_USER.ID === window.parseInt(this.props.params.id)) {
             /** @TODO MPR, 10/4/15: Add check for user is admin*/
-            return <Link>({EDIT_LINK})</Link>
+            return <Link to={`/district/${this.props.params.id}/edit`} >({EDIT_LINK})</Link>
         }
         return null;
     },
