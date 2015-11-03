@@ -8,8 +8,10 @@ import GlobalHeader from 'components/global_header';
 import Users from 'routes/users'
 import Districts from 'routes/districts'
 import DistrictView from 'routes/districts/view'
+import DistrictEdit from 'routes/districts/edit'
 
 import Reset from 'reset.css';
+import Overrides from 'overrides.scss';
 import CoreStyles from 'app.scss';
 
 import LOGO_URL from 'media/logo.png';
@@ -32,9 +34,11 @@ const routes = {
     path: '/',
     component: App,
     childRoutes: [
-        { path: 'users', component: Users },
-        { path: 'districts', component: Districts},
-        { path: 'district/:id', component: DistrictView},
+        { path: 'users(/)', component: Users },
+        { path: 'districts(/)', component: Districts},
+        { path: 'district/:id(/)', component: DistrictView},
+        { path: 'district/:id/view(/)', component: DistrictView},
+        { path: 'district/:id/edit(/)', component: DistrictEdit},
         //{ path: 'roles', component: Roles },
         //{ path: 'organizations', component: Organizations },
         //{ path: 'groups', component: Groups },
