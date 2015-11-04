@@ -54,12 +54,18 @@ var _makeRequest = function(verb, requests){
             };
             try{
                 xhr.onreadystatechange = () => {
+                    var response;
                     if (xhr.readyState !== 4) {
                         return;
                     }
+                    try {
+                        response =  (_.isObject(xhr.response) ? xhr.response : JSON.parse(xhr.response));
+                    } catch (err) {
+                        response = xhr.response;
+                    }
                     return res({
                         status: xhr.status,
-                        response: (_.isObject(xhr.response) ? xhr.response : JSON.parse(xhr.response)),
+                        response,
                         request: xhr
                     });
                 };
