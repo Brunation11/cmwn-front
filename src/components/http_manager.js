@@ -70,6 +70,9 @@ var _makeRequest = function (verb, requests){
                     });
                 };
                 xhr.open(verb, req.url, true);
+                _.each(req.headers, (header, key) => {
+                    xhr.setRequestHeader(key, header);
+                });
                 xhr.send(req.body);
             } catch (err) {
                 rej(err);
