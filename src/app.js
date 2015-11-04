@@ -5,6 +5,7 @@ import { Router } from 'react-router';
 
 import GlobalHeader from 'components/global_header';
 
+import Login from 'routes/login';
 import Users from 'routes/users';
 import Districts from 'routes/districts';
 import DistrictView from 'routes/districts/view';
@@ -36,6 +37,7 @@ const routes = {
     path: '/',
     component: App,
     childRoutes: [
+        { path: 'login(/)', component: Login},
         { path: 'users(/)', component: Users },
         { path: 'districts(/)', component: Districts},
         { path: 'district/:id(/)', component: DistrictView},
