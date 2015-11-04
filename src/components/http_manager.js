@@ -31,16 +31,16 @@ var _makeRequestObj = function (requests, body = '', headers = {}) {
 };
 
 var _getRequestPromise = function (method, request, body, headers) {
-        var promise;
-        request = _makeRequestObj(request, body, headers);
-        if (_.isObject(request)) {
-            request = [request];
-        };
-        promise = _makeRequest(method, request);
-        if (request.length === 1) {
-            return promise.then(res => Promise.resolve(res[0]));
-        }
-        return promise;
+    var promise;
+    request = _makeRequestObj(request, body, headers);
+    if (_.isObject(request)) {
+        request = [request];
+    }
+    promise = _makeRequest(method, request);
+    if (request.length === 1) {
+        return promise.then(res => Promise.resolve(res[0]));
+    }
+    return promise;
 };
 
 var _makeRequest = function(verb, requests){
@@ -51,7 +51,7 @@ var _makeRequest = function(verb, requests){
             abort = () => { //Promise constructor does not expose `this`, must attach outside
                 xhr.abort();
                 res(null);
-            }
+            };
             try{
                 xhr.onreadystatechange = () => {
                     if (xhr.readyState !== 4) {
@@ -62,7 +62,7 @@ var _makeRequest = function(verb, requests){
                         response: (_.isObject(xhr.response) ? xhr.response : JSON.parse(xhr.response)),
                         request: xhr
                     });
-                }
+                };
                 xhr.open(verb, req.url, true);
                 xhr.send(req.body);
             } catch (err) {
@@ -79,7 +79,6 @@ var _makeRequest = function(verb, requests){
 
 class _HttpManager {
     constructor() {
-        
     }
     GET(request, headers){
         return _getRequestPromise('GET', request, headers);
@@ -93,7 +92,7 @@ class _HttpManager {
     DELETE(request, headers){
         return _getRequestPromise('DELETE', request, headers);
     }
-};
+}
 
 var HttpManager = new _HttpManager();
 

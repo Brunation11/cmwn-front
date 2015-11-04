@@ -2,9 +2,9 @@ import React from 'react';
 import {Link} from 'react-router';
 import {Panel} from 'react-bootstrap';
 
-import HttpManager from 'components/http_manager'
+import HttpManager from 'components/http_manager';
 import Layout from 'layouts/two_col';
-import GLOBALS from 'components/globals'
+import GLOBALS from 'components/globals';
 
 const HEADINGS = {
     TITLE: 'Info',
@@ -34,7 +34,7 @@ var View = React.createClass({
     renderEditLink: function () {
         if (GLOBALS.CURRENT_USER.ID === window.parseInt(this.props.params.id)) {
             /** @TODO MPR, 10/4/15: Add check for user is admin*/
-            return <Link to={`/district/${this.props.params.id}/edit`} >({EDIT_LINK})</Link>
+            return <Link to={`/district/${this.props.params.id}/edit`} >({EDIT_LINK})</Link>;
         }
         return null;
     },
@@ -43,8 +43,8 @@ var View = React.createClass({
             <Layout>
                 <h2>{this.district.title}</h2>
                 <div className="breadcrumb">
-                    <Link to="/">Home</Link>
-                    <Link to="/districts">Districts</Link>
+                    <Link to="/">{BREADCRUMB.HOME}</Link>
+                    <Link to="/districts">{BREADCRUMB.DISTRICTS}</Link>
                     <span>{this.district.title}</span>
                 </div>
                 <Panel header={HEADINGS.TITLE} className="standard">

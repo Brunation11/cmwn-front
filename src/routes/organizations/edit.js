@@ -1,9 +1,9 @@
 import React from 'react';
 import {Button, Input, Panel} from 'react-bootstrap';
 
-import HttpManager from 'components/http_manager'
+import HttpManager from 'components/http_manager';
 import Layout from 'layouts/two_col';
-import GLOBALS from 'components/globals'
+import GLOBALS from 'components/globals';
 
 const HEADINGS = {
     EDIT_TITLE: 'Info'
@@ -19,7 +19,7 @@ var  _nameValidation = function () {
         return 'error';
     }
     return 'success';
-}
+};
 
 var Edit = React.createClass({
     organization: {},
@@ -45,7 +45,6 @@ var Edit = React.createClass({
         });
     },
     submitData: function () {
-        
     },
     render: function () {
         return (

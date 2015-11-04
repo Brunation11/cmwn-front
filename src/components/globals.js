@@ -23,7 +23,7 @@ const GLOBALS = {
         {URL: 'uploadcsv', TEXT: 'Upload CSV'},
         {URL: '/playground', TEXT: 'Cloudinary Image'}
     ]
-}
+};
 
 export default GLOBALS;
 

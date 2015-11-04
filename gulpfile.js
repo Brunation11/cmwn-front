@@ -11,8 +11,17 @@ var WebpackDevServer = require("webpack-dev-server");
 var webpackDevConfig = require("./webpack.config.dev.js");
 var webpackProdConfig = require("./webpack.config.prod.js");
 var spawn = require('child_process').spawn;
+var eslint = require('gulp-eslint');
+var fs = require('fs');
+var eslintConfig = JSON.parse(fs.readFileSync('./.eslintrc'));
+var watch = require('gulp-watch');
 
-gulp.task("default", ["build-dev"]); 
+gulp.task("default", ["watch", "build-dev"]);
+gulp.task("echo", function () { console.log('workin')});
+gulp.task('watch', function () {
+    watch('src/**/*.js', ['lint']);
+    //watch('**/*', ['echo']);
+});
 
 gulp.task("build-dev", ["webpack:build-dev"], function() {
     var start = spawn('npm', ['start']);
@@ -62,3 +71,15 @@ gulp.task("webpack:build-dev", function(callback) {
     });
 });
 
+gulp.task('lint', function () {
+    return gulp.src(['src/**/*.js'])
+        // eslint() attaches the lint output to the eslint property
+        // of the file object so it can be used by other modules.
+        .pipe(eslint(Object.create(eslintConfig)))
+        // eslint.format() outputs the lint results to the console.
+        // Alternatively use eslint.formatEach() (see Docs).
+        .pipe(eslint.format())
+        // To have the process exit with an error code (1) on
+        // lint error, return the stream and pipe to failAfterError last.
+//        .pipe(eslint.failAfterError());
+});

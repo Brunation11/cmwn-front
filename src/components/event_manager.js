@@ -7,11 +7,10 @@
  * and combines updates provided by these events, issuing changes
  * no more often than once every 17ms. 
  */
-import React from "react";
-import _ from "lodash";
+import _ from 'lodash';
 
 var _pendingChanges = [];
-var _state = {}; 
+var _state = {};
 var _pendingChangeTracker = {};
 var _changeHandlers = {};
 
@@ -21,7 +20,6 @@ const UPDATE_THROTTLE = 17; //60 FPS should be sufficent
  * Predicate. Checks if two collections share references to all items/properties
  */
 var eqByCollection = function (a, b) {
-    var i;
     if (a.length !== b.length){
         //avoid the loop if we can
         return false;
@@ -31,13 +29,13 @@ var eqByCollection = function (a, b) {
         typeof b[key] !== 'undefined' &&
         item === b[key]
     ));
-}
+};
 
 /**
  * Private method of _EventManager. Must always be called with .call(this, ...) or .apply(this, ...)
  * Consumes the current list of pending changes
  */
-var _commitChanges = function (id, oldVal) {
+var _commitChanges = function (id) {
     if (this.pendingCount === 0 || _pendingChangeTracker[id] == null) {
         return; //deferred change was commited by an earlier event. We're done.
     }
@@ -72,8 +70,7 @@ class _EventManager {
      */
     update (key, val, scopeHandle = 'global', depth = 0) {
         var now = Date.now();
-        var itemScope = {}; //need to hold on to a reference to this until its component updates, to prevent it from being cleared by GC
-        var bypass, oldVal, promise, resolver, changeEvent;
+        var bypass, oldVal, promise, resolver;
 
         if (_.isNumber(scopeHandle)) {
             depth = scopeHandle;
@@ -107,10 +104,10 @@ class _EventManager {
                 resolver
             });
             if (now - this.lastUpdate > UPDATE_THROTTLE) {
-               _commitChanges.call(this, `${scopeHandle}.${key}`);
+                _commitChanges.call(this, `${scopeHandle}.${key}`);
             } else {
                 window.setTimeout(() => {
-                   _commitChanges.call(this, `${scopeHandle}.${key}`);
+                    _commitChanges.call(this, `${scopeHandle}.${key}`);
                 }, UPDATE_THROTTLE - (now - this.lastUpdate));
             }
         }
@@ -123,7 +120,7 @@ class _EventManager {
         handlers.push(callback);
         _.set(_changeHandlers, `${scopeHandle}.${key}`, handlers);
     }
-    dispose (scopeHandle) {
+    dispose (scopeHandle) { //eslint-disable-line no-unused-vars
         /** TODO: MPR, 11/3/15: Implement Dispose */
     }
     get pendingCount () {

@@ -24,5 +24,5 @@ var Sidebar = React.createClass({
     }
 });
 
-export default Sidebar; 
+export default Sidebar;
 

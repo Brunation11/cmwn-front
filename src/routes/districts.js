@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import {Link} from 'react-router';
 
 import HttpManager from 'components/http_manager';
@@ -32,7 +33,7 @@ var Districs = React.createClass({
                     </div>
                 </header>
                 <Table rows={this.districs}>
-                    <Column dataKey="title" 
+                    <Column dataKey="title"
                         renderCell={(data, row) => (
                             <a href={`#/district/${row.id}`}>{_.startCase(data)}</a>
                         )}

@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 
 import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';

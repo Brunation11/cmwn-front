@@ -1,0 +1,48 @@
+{
+    "parser": "babel-eslint",
+    "rules": {
+        "comma-dangle": 0,
+        "indent": [
+            2,
+            4
+        ],
+        "quotes": [
+            2,
+            "single"
+        ],
+        "linebreak-style": [
+            2,
+            "unix"
+        ],
+        "semi": [
+            2,
+            "always"
+        ]
+    },
+    "env": {
+        "es6": true,
+        "browser": true
+    },
+    "extends": "eslint:recommended",
+    "ecmaFeatures": {
+        "jsx": true,
+        "modules": true,
+        "arrowFunctions": true,
+        "blockBindings": true,
+        "classes": true,
+        "defaultParams": true,
+        "destructuring": true,
+        "forOf": true,
+        "objectLiteralComputedProperties": true,
+        "objectLiteralShorthandMethods": true,
+        "objectLiteralShorthandProperties": true,
+        "restParams": true,
+        "spread": true,
+        "superInFunctions": true,
+        "templateStrings": true,
+        "experimentalObjectRestSpread": true
+    },
+    "plugins": [
+        "react"
+    ]
+}

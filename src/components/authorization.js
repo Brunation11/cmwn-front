@@ -5,7 +5,7 @@ class _Authorization {
         this.currentUserName = GLOBALS.CURRENT_USER.NAME;
         this.currentUserId = GLOBALS.CURRENT_USER.ID;
     }
-};
+}
 
 var Authorization = new _Authorization();
 
