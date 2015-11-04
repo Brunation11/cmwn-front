@@ -9,6 +9,9 @@ import Users from 'routes/users'
 import Districts from 'routes/districts'
 import DistrictView from 'routes/districts/view'
 import DistrictEdit from 'routes/districts/edit'
+import Organizations from 'routes/organizations'
+import OrganizationView from 'routes/organizations/view'
+import OrganizationEdit from 'routes/organizations/edit'
 
 import Reset from 'reset.css';
 import Overrides from 'overrides.scss';
@@ -39,6 +42,11 @@ const routes = {
         { path: 'district/:id(/)', component: DistrictView},
         { path: 'district/:id/view(/)', component: DistrictView},
         { path: 'district/:id/edit(/)', component: DistrictEdit},
+        { path: 'organizations(/)', component: Organizations},
+        { path: 'organization/:id(/)', component: OrganizationView},
+        { path: 'organization/:id/view(/)', component: OrganizationView},
+        { path: 'organization/:id/edit(/)', component: OrganizationEdit},
+
         //{ path: 'roles', component: Roles },
         //{ path: 'organizations', component: Organizations },
         //{ path: 'groups', component: Groups },
