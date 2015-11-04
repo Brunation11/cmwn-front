@@ -6,7 +6,7 @@ import GLOBALS from 'components/globals';
 import Layout from 'layouts/two_col';
 import {Table, Column}  from 'components/table';
 
-const TITLE = 'Districts';
+const TITLE = 'Organizations';
 const HOME = 'Home';
 
 var Districs = React.createClass({
@@ -15,7 +15,7 @@ var Districs = React.createClass({
         this.getDistrics();
     },
     getDistrics: function () {
-        var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'districts'});
+        var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'organizations'});
         urlData.then(res => {
             this.districs = res.response.data;
             this.forceUpdate();
@@ -34,7 +34,7 @@ var Districs = React.createClass({
                 <Table rows={this.districs}>
                     <Column dataKey="title" 
                         renderCell={(data, row) => (
-                            <a href={`#/district/${row.id}`}>{_.startCase(data)}</a>
+                            <a href={`#/organization/${row.id}`}>{_.startCase(data)}</a>
                         )}
                     />
                     <Column dataKey="description" />

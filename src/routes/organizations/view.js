@@ -14,49 +14,49 @@ const HEADINGS = {
 };
 const BREADCRUMB = {
     HOME: 'Home',
-    DISTRICTS: 'Districts'
+    DISTRICTS: 'Organizations'
 };
 const EDIT_LINK = 'Edit';
 
 
 var View = React.createClass({
-    district: {},
+    organization: {},
     componentWillMount: function () {
-        this.getDistrict();
+        this.getOrganization();
     },
-    getDistrict: function () {
-        var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'districts/' + this.props.params.id});
+    getOrganization: function () {
+        var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'organizations/' + this.props.params.id});
         urlData.then(res => {
-            this.district = res.response.data;
+            this.organization = res.response.data;
             this.forceUpdate();
         });
     },
     renderEditLink: function () {
         if (GLOBALS.CURRENT_USER.ID === window.parseInt(this.props.params.id)) {
             /** @TODO MPR, 10/4/15: Add check for user is admin*/
-            return <Link to={`/district/${this.props.params.id}/edit`} >({EDIT_LINK})</Link>
+            return <Link to={`/organization/${this.props.params.id}/edit`} >({EDIT_LINK})</Link>
         }
         return null;
     },
     render: function() {
         return (
             <Layout>
-                <h2>{this.district.title}</h2>
+                <h2>{this.organization.title}</h2>
                 <div className="breadcrumb">
                     <Link to="/">Home</Link>
-                    <Link to="/districts">Districts</Link>
-                    <span>{this.district.title}</span>
+                    <Link to="/organizations">Organizations</Link>
+                    <span>{this.organization.title}</span>
                 </div>
                 <Panel header={HEADINGS.TITLE} className="standard">
                     <p>
                         {this.renderEditLink()}
                     </p>
                     <br />
-                    <p>{`${HEADINGS.ID}: ${this.district.id}`}</p>
+                    <p>{`${HEADINGS.ID}: ${this.organization.id}`}</p>
                     <br />
-                    <p>{`${HEADINGS.DESCRIPTION}: ${this.district.description}`}</p>
+                    <p>{`${HEADINGS.DESCRIPTION}: ${this.organization.description}`}</p>
                     <br />
-                    <p>{`${HEADINGS.CREATED}: ${this.district.created_at}`}</p>
+                    <p>{`${HEADINGS.CREATED}: ${this.organization.created_at}`}</p>
                 </Panel>
            </Layout>
         );

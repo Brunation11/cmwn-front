@@ -22,7 +22,7 @@ var  _nameValidation = function () {
 }
 
 var Edit = React.createClass({
-    district: {},
+    organization: {},
     getInitialState: function () {
         return {
             code: '',
@@ -31,16 +31,16 @@ var Edit = React.createClass({
         };
     },
     componentWillMount: function () {
-        this.getDistrict();
+        this.getOrganization();
     },
-    getDistrict: function () {
-        var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'districts/' + this.props.params.id});
+    getOrganization: function () {
+        var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'organizations/' + this.props.params.id});
         urlData.then(res => {
-            this.district = res.response.data;
+            this.organization = res.response.data;
             this.setState({
-                code: this.district.code,
-                title: this.district.title,
-                description: this.district.description
+                code: this.organization.code,
+                title: this.organization.title,
+                description: this.organization.description
             });
         });
     },
