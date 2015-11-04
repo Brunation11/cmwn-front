@@ -5,6 +5,43 @@
  */
 import _ from 'lodash';
 
+/**
+ * Bundles requests into an array of request objects
+ * @param {array|string|object} requests - arrays will have makeRequestObj on each of their items, strings will be set to the url of a new request object. 
+ * @param {object} [headers] - the headers to be sent with requests. If you need
+ * each to have different headers, configure the .headers property of individual
+ * request objects
+ * @param {string|object} [body] - request info. Should be a properly formatted JSON
+ * or query string
+ * @returns {array|object} - returns an array when an array is passed in, otherwise a request object
+ */
+var _makeRequestObj = function (requests, body = '', headers = {}) {
+    if (_.isArray(requests)) {
+        requests = _.map(requests, req => _makeRequestObj(req, body, headers));
+    } else if (_.isString(requests)) {
+        requests = {url: requests, body, headers};
+    }
+    if (_.isObject(requests) && requests.headers == null) {
+        requests.headers = headers;
+    }
+    if (_.isObject(requests) && requests.body == null) {
+        requests.body = body;
+    }
+    return requests;
+};
+
+var _getRequestPromise = function (method, request, body, headers) {
+        var promise;
+        request = _makeRequestObj(request, body, headers);
+        if (_.isObject(request)) {
+            request = [request];
+        };
+        promise = _makeRequest(method, request);
+        if (request.length === 1) {
+            return promise.then(res => Promise.resolve(res[0]));
+        }
+        return promise;
+};
 
 var _makeRequest = function(verb, requests){
     var promises = _.map(requests, req => {
@@ -27,7 +64,7 @@ var _makeRequest = function(verb, requests){
                     });
                 }
                 xhr.open(verb, req.url, true);
-                xhr.send();
+                xhr.send(req.body);
             } catch (err) {
                 rej(err);
             }
@@ -44,22 +81,17 @@ class _HttpManager {
     constructor() {
         
     }
-    GET(request){
-        var promise;
-        if (_.isObject(request)) {
-            request = [request];
-        };
-        promise = _makeRequest('GET', request);
-        if (request.length === 1) {
-            return promise.then(res => Promise.resolve(res[0]));
-        }
-        return promise;
+    GET(request, headers){
+        return _getRequestPromise('GET', request, headers);
     }
-    POST(request){
+    POST(request, headers){
+        return _getRequestPromise('POST', request, headers);
     }
-    PUT(request){
+    PUT(request, headers){
+        return _getRequestPromise('PUT', request, headers);
     }
-    DELETE(){
+    DELETE(request, headers){
+        return _getRequestPromise('DELETE', request, headers);
     }
 };
 
