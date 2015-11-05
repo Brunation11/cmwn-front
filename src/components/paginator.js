@@ -1,14 +1,14 @@
 import React from 'react';
 import {Panel, ButtonGroup, Button, DropdownButton, MenuItem} from 'react-bootstrap';
 import _ from 'lodash';
-import ClassNames from 'classnames';
+//import ClassNames from 'classnames';
 
 import GLOBALS from 'components/globals';
 
 var _getButtonPattern = function (currentPage, pageCount) {
     var pattern;
     if (pageCount <= 5) {
-        pattern = _.map(Array(pageCount), (v, i) => i);
+        pattern = _.map(Array(pageCount), (v, i) => i + 1);
     } else if (currentPage === 1 && currentPage === pageCount) {
         pattern = [1, 2, '...', pageCount - 1, pageCount];
     } else if (currentPage === 2) {
@@ -28,13 +28,26 @@ var _getButtonPattern = function (currentPage, pageCount) {
  * of the paginator.
  */
 var Paginator = React.createClass({
+    getDefaultProps: function () {
+        return {
+            onPageChange: _.identity,
+            onRowCountChange: _.identity
+        };
+    },
     getInitialState: function () {
         return {
-            rowCount: 0
+            rowCount: this.props.rowCount || GLOBALS.PAGINATOR_COUNTS[0],
+            currentPage: this.props.currentPage || 1,
+            pageCount: this.props.pageCount || 1
         };
     },
     selectPage: function (pageNum) {
+        this.props.onPageChange(pageNum);
         this.setState({currentPage: pageNum});
+    },
+    selectRowCount: function (e, count) {
+        this.props.onRowCountChange(count);
+        this.setState({rowCount: count});
     },
     renderPageSelectors: function () {
         return _.map(_getButtonPattern(this.state.currentPage, this.state.pageCount), value => {
@@ -50,20 +63,24 @@ var Paginator = React.createClass({
         });
     },
     renderRowCountChoices: function () {
-        return _.map(GLOBALS.PAGINATOR_COUNTS, value => <MenuItem eventKey={value} key={value}>{value}</MenuItem>);
+        return _.map(GLOBALS.PAGINATOR_COUNTS, value => <MenuItem value={value} eventKey={value} key={value}>{value}</MenuItem>);
     },
     render: function () {
         if (!this.state.pageCount) {
             return null;
         }
         return (
-            <Panel>class={ClassNames({collapsed: (this.props.data.lenght)})}>
+            <Panel>
                 <div>
-                    {_.React.Children.map(this.props.children, child => React.cloneElement(child, {data: this.props.data}))}
+                    {React.Children.map(this.props.children, child => React.cloneElement(child, {data: this.props.data}))}
                 </div>
                 <footer>
                     <ButtonGroup>
-                        <DropdownButton title={`Showing ${this.state.rowCount} rows`} >
+                        <DropdownButton
+                            id="row-count"
+                            title={`Showing ${this.state.rowCount} rows`}
+                            onSelect={this.selectRowCount}
+                        >
                             {this.renderRowCountChoices()}
                         </DropdownButton>
                         {this.renderPageSelectors()}

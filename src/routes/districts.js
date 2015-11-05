@@ -6,6 +6,7 @@ import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
 import Layout from 'layouts/two_col';
 import {Table, Column} from 'components/table';
+import Paginator from 'components/paginator';
 
 const TITLE = 'Districts';
 const HOME = 'Home';
@@ -32,18 +33,20 @@ var Districs = React.createClass({
                         {TITLE}
                     </div>
                 </header>
-                <Table data={this.districs}>
-                    <Column dataKey="title"
-                        renderCell={(data, row) => (
-                            <a href={`#/district/${row.id}`}>{_.startCase(data)}</a>
-                        )}
-                    />
-                    <Column dataKey="description" />
-                    <Column dataKey="created_at" renderHeader="Created" />
-                    <Column dataKey="updated_at" renderHeader="Last Updated"
-                        renderCell={data => (data == null ? 'never' : data)}
-                    />
-                </Table>
+                <Paginator data={this.districs} pageCount={1}>
+                    <Table>
+                        <Column dataKey="title"
+                            renderCell={(data, row) => (
+                                <a href={`#/district/${row.id}`}>{_.startCase(data)}</a>
+                            )}
+                        />
+                        <Column dataKey="description" />
+                        <Column dataKey="created_at" renderHeader="Created" />
+                        <Column dataKey="updated_at" renderHeader="Last Updated"
+                            renderCell={data => (data == null ? 'never' : data)}
+                        />
+                    </Table>
+                </Paginator>
             </Layout>
         );
     }
