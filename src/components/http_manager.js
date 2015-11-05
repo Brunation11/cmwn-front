@@ -21,10 +21,10 @@ var _makeRequestObj = function (requests, body = '', headers = {}) {
     } else if (_.isString(requests)) {
         requests = {url: requests, body, headers};
     }
-    if (_.isObject(requests) && requests.headers == null) {
+    if (_.isObject(requests) && !_.isArray(requests) && requests.headers == null) {
         requests.headers = headers;
     }
-    if (_.isObject(requests) && requests.body == null) {
+    if (_.isObject(requests) && !_.isArray(requests) && requests.body == null) {
         requests.body = body;
     }
     return requests;
@@ -33,7 +33,7 @@ var _makeRequestObj = function (requests, body = '', headers = {}) {
 var _getRequestPromise = function (method, request, body, headers) {
     var promise;
     request = _makeRequestObj(request, body, headers);
-    if (_.isObject(request)) {
+    if (!_.isArray(request)) {
         request = [request];
     }
     promise = _makeRequest(method, request);
@@ -55,6 +55,7 @@ var _makeRequest = function(verb, requests){
             try{
                 xhr.onreadystatechange = () => {
                     var response;
+                    debugger;
                     if (xhr.readyState !== 4) {
                         return;
                     }
