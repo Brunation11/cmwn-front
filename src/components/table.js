@@ -52,7 +52,7 @@ var Table = React.createClass({
             <table cellSpacing="0" cellPadding="0">
                 {this.renderHeader()}
                 <tbody>
-                    {_.map(this.props.rows, this.renderRow)}
+                    {_.map(this.props.data, this.renderRow)}
                 </tbody>
             </table>
         );

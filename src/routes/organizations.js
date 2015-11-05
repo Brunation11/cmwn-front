@@ -32,7 +32,7 @@ var Districs = React.createClass({
                         {TITLE}
                     </div>
                 </header>
-                <Table rows={this.districs}>
+                <Table data={this.districs}>
                     <Column dataKey="title"
                         renderCell={(data, row) => (
                             <a href={`#/organization/${row.id}`}>{_.startCase(data)}</a>
