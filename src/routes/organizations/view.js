@@ -10,7 +10,8 @@ const HEADINGS = {
     TITLE: 'Info',
     ID: 'ID',
     DESCRIPTION: 'Description',
-    CREATED: 'Created'
+    CREATED: 'Created',
+    DISTRICTS: 'Districts'
 };
 const BREADCRUMB = {
     HOME: 'Home',
@@ -54,11 +55,14 @@ var View = React.createClass({
                     <br />
                     <p>{`${HEADINGS.ID}: ${this.organization.id}`}</p>
                     <br />
+                    <p>{`${HEADINGS.DISTRICT}: ${''}}`}</p>
+                    <br />
                     <p>{`${HEADINGS.DESCRIPTION}: ${this.organization.description}`}</p>
                     <br />
                     <p>{`${HEADINGS.CREATED}: ${this.organization.created_at}`}</p>
                 </Panel>
            </Layout>
+
         );
     }
 });

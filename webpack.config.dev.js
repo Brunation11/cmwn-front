@@ -5,7 +5,7 @@ module.exports = {
     devtool: 'eval-source-map',
     resolve: {
         root: path.resolve('./src'),
-        extensions: ['', '.js']
+        extensions: ['.js']
     },
     entry: [
         'webpack-hot-middleware/client',

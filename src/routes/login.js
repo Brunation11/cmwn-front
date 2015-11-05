@@ -21,7 +21,7 @@ var Page = React.createClass({
         this.getToken();
     },
     getToken: function () {
-        var req = HttpManager.GET({url: 'http://cmwn/api/users/login'});
+        var req = HttpManager.GET({url: `${GLOBALS.API_URL}users/getToken`});
         req.then(res => {
             this.setState({_token: res.response});
         });
