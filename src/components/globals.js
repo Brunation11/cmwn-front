@@ -23,7 +23,7 @@ const GLOBALS = {
         {URL: 'uploadcsv', TEXT: 'Upload CSV'},
         {URL: '/playground', TEXT: 'Cloudinary Image'}
     ],
-    PAGINATOR_COUNTS: [10,25,50,250]
+    PAGINATOR_COUNTS: [10, 25, 50, 250]
 };
 
 export default GLOBALS;

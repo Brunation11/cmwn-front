@@ -24,7 +24,7 @@ var GlobalHeader = React.createClass({
                    <Glyphicon glyph="glyphicon glyphicon-menu-hamburger" />
                    <span className="fallback">{MENU}</span>
                 </Button>
-                <div className="logout"><a href='#' onClick={this.logout}>
+                <div className="logout"><a href="#" onClick={this.logout}>
                     <img src={LOGOUT_URL} alt={LOGOUT} />{LOGOUT}
                 </a></div>
                 <div className="current-user-info">{CURRENT_USER_IS + Authorization.currentUserName}</div>

@@ -7,7 +7,7 @@ import _ from 'lodash';
 
 /**
  * Bundles requests into an array of request objects
- * @param {array|string|object} requests - arrays will have makeRequestObj on each of their items, strings will be set to the url of a new request object. 
+ * @param {array|string|object} requests - arrays will have makeRequestObj on each of their items, strings will be set to the url of a new request object.
  * @param {object} [headers] - the headers to be sent with requests. If you need
  * each to have different headers, configure the .headers property of individual
  * request objects
@@ -43,7 +43,7 @@ var _getRequestPromise = function (method, request, body, headers) {
     return promise;
 };
 
-var _makeRequest = function(verb, requests){
+var _makeRequest = function (verb, requests){
     var promises = _.map(requests, req => {
         var abort;
         var promise = new Promise((res, rej) => {
@@ -55,12 +55,11 @@ var _makeRequest = function(verb, requests){
             try{
                 xhr.onreadystatechange = () => {
                     var response;
-                    debugger;
                     if (xhr.readyState !== 4) {
                         return;
                     }
                     try {
-                        response =  (_.isObject(xhr.response) ? xhr.response : JSON.parse(xhr.response));
+                        response = (_.isObject(xhr.response) ? xhr.response : JSON.parse(xhr.response));
                     } catch (err) {
                         response = xhr.response;
                     }

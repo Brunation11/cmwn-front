@@ -38,7 +38,7 @@ var View = React.createClass({
         }
         return null;
     },
-    render: function() {
+    render: function () {
         return (
             <Layout>
                 <h2>{this.district.title}</h2>

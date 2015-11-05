@@ -18,7 +18,7 @@ var FriendList = React.createClass({
     requests: [],
     accepted: [],
     getInitialState: function () {
-        HttpManager.GET(GLOBALS.API_URL + 'friends',).then(responses => {
+        HttpManager.GET(GLOBALS.API_URL + 'friends').then(responses => {
             this.pending = responses.response.pendingfriends;
             this.requests = responses.response.pendingfriends;
             this.accepted = responses.response.acceptedfriends;

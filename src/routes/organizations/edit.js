@@ -13,7 +13,7 @@ const HEADINGS = {
 /**
  * Private Function. Must always be called with call or apply
  */
-var  _nameValidation = function () {
+var _nameValidation = function () {
     var length = this.state.title.length;
     if (length < 3) {
         return 'error';
@@ -60,8 +60,8 @@ var Edit = React.createClass({
                     ref="titleInput"
                     onChange={() => this.setState({title: this.refs.titleInput.getValue()})}
                  />
-                 <Input 
-                    type="textarea" 
+                 <Input
+                    type="textarea"
                     value={this.state.description}
                     placeholder="description"
                     label="Description"

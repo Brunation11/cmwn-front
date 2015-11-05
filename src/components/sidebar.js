@@ -13,7 +13,7 @@ var Sidebar = React.createClass({
                 <div
                     className="profile-pic"
                     alt={PIC_ALT}
-                    style={{'backgroundImage':`url("${GLOBALS.CURRENT_USER.PROFILE_IMAGE}")`}}
+                    style={{'backgroundImage': `url("${GLOBALS.CURRENT_USER.PROFILE_IMAGE}")`}}
                 >
                      {PIC_ALT}
                 </div>

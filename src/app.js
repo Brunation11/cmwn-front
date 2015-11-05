@@ -61,7 +61,7 @@ function run() {
 
 const loadedStates = ['complete', 'loaded', 'interactive'];
 
-if (loadedStates.indexOf(document.readyState) != -1  && document.getElementById('cmwn-app')) {
+if (loadedStates.indexOf(document.readyState) !== -1 && document.getElementById('cmwn-app')) {
     run();
     console.info('running'); //eslint-disable-line
 } else {

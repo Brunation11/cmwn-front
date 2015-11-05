@@ -8,15 +8,15 @@ import GLOBALS from 'components/globals';
 var _getButtonPattern = function (currentPage, pageCount) {
     var pattern;
     if (pageCount <= 5) {
-        pattern =  _.map(Array(pageCount), (v, i) => i); 
+        pattern = _.map(Array(pageCount), (v, i) => i);
     } else if (currentPage === 1 && currentPage === pageCount) {
-        pattern = [1,2,'...',pageCount - 1, pageCount];
+        pattern = [1, 2, '...', pageCount - 1, pageCount];
     } else if (currentPage === 2) {
-        pattern = [1,2,3,'...',5];
+        pattern = [1, 2, 3, '...', 5];
     } else if (currentPage === pageCount - 1) {
-        pattern = [1,'...',pageCount - 2, pageCount - 1, pageCount];
+        pattern = [1, '...', pageCount - 2, pageCount - 1, pageCount];
     } else {
-        pattern = [1, '...' , currentPage - 1, currentPage, currentPage + 1, '...', pageCount];
+        pattern = [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', pageCount];
     }
     pattern.unshift('<');
     pattern.push('>');

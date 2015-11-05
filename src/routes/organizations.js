@@ -5,7 +5,7 @@ import {Link} from 'react-router';
 import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
 import Layout from 'layouts/two_col';
-import {Table, Column}  from 'components/table';
+import {Table, Column} from 'components/table';
 
 const TITLE = 'Organizations';
 const HOME = 'Home';
