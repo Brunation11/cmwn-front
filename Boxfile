@@ -1,0 +1,7 @@
+global:
+  env:
+    - APP_ENV: production
+build:
+  exec:
+    - "npm install"
+    - "/data/node_modules/.bin/gulp.js"
