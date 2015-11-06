@@ -48,6 +48,9 @@ var Table = React.createClass({
         );
     },
     render: function () {
+        if (this.props.data == null || !this.props.data.length) {
+            return null;
+        }
         return (
             <table cellSpacing="0" cellPadding="0">
                 {this.renderHeader()}

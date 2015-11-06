@@ -6,19 +6,20 @@ import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
 import Layout from 'layouts/two_col';
 import {Table, Column} from 'components/table';
+import Paginator from 'components/paginator';
 
 const TITLE = 'Organizations';
 const HOME = 'Home';
 
-var Districs = React.createClass({
-    districs: [],
+var Organizations = React.createClass({
+    organizations: [],
     componentWillMount: function () {
-        this.getDistrics();
+        this.getOrganizations();
     },
-    getDistrics: function () {
+    getOrganizations: function () {
         var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'organizations'});
         urlData.then(res => {
-            this.districs = res.response.data;
+            this.organizations = res.response.data;
             this.forceUpdate();
         });
     },
@@ -32,22 +33,24 @@ var Districs = React.createClass({
                         {TITLE}
                     </div>
                 </header>
-                <Table data={this.districs}>
-                    <Column dataKey="title"
-                        renderCell={(data, row) => (
-                            <a href={`#/organization/${row.id}`}>{_.startCase(data)}</a>
-                        )}
-                    />
-                    <Column dataKey="description" />
-                    <Column dataKey="created_at" renderHeader="Created" />
-                    <Column dataKey="updated_at" renderHeader="Last Updated"
-                        renderCell={data => (data == null ? 'never' : data)}
-                    />
-                </Table>
+                <Paginator data={this.organizations}>
+                    <Table>
+                        <Column dataKey="title"
+                            renderCell={(data, row) => (
+                                <a href={`#/organization/${row.id}`}>{_.startCase(data)}</a>
+                            )}
+                        />
+                        <Column dataKey="description" />
+                        <Column dataKey="created_at" renderHeader="Created" />
+                        <Column dataKey="updated_at" renderHeader="Last Updated"
+                            renderCell={data => (data == null ? 'never' : data)}
+                        />
+                    </Table>
+                </Paginator>
             </Layout>
         );
     }
 });
 
-export default Districs;
+export default Organizations;
 

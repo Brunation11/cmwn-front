@@ -66,7 +66,7 @@ var Paginator = React.createClass({
         return _.map(GLOBALS.PAGINATOR_COUNTS, value => <MenuItem value={value} eventKey={value} key={value}>{value}</MenuItem>);
     },
     render: function () {
-        if (!this.state.pageCount) {
+        if (this.props.data == null || !this.props.data.length) {
             return null;
         }
         return (

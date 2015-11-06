@@ -14,11 +14,12 @@ var Util = {
      *  property does not exist, returns notFoundValue
      */
     normalize: function (target, key, notFoundValue) {
-        var retVal = _.get(target, 'data', notFoundValue);
+        var retVal = _.get(target, 'data', target);
         retVal = _.get(retVal, key, retVal);
-        retVal = _.get(target, 'data', retVal);
+        retVal = _.get(retVal, 'data', retVal);
+        retVal = retVal === target.data || retVal === target ? notFoundValue : retVal;
         retVal = _.isArray(retVal) ? retVal : [retVal];
-        return notFoundValue;
+        return retVal;
     }
 };
 
