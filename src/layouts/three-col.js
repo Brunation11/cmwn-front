@@ -7,10 +7,9 @@ var Layout = React.createClass({
     getInitialProps: function () {
         return {
             rightPanel: this.props.rightPanel || (<div></div>)
-        }
+        };
     },
     getInitialState: function () {
-        var self = this;
         EventManager.listen('menuIsOpen', val => {
             this.menuIsOpen = val;
             this.forceUpdate();

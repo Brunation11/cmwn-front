@@ -1,8 +1,8 @@
 import React from 'react';
 
-import HttpManager from 'components/http_manager'
+import HttpManager from 'components/http_manager';
 import Layout from 'layouts/two_col';
-import {Table, Column}  from 'components/table';
+import {Table, Column} from 'components/table';
 
 var Users = React.createClass({
     users: [{id: '1', description: 'yes'}],
@@ -10,9 +10,8 @@ var Users = React.createClass({
         this.getUsers();
     },
     getUsers: function () {
-        var urlData = HttpManager.GET({url:'http://cmwn/districts'});
+        var urlData = HttpManager.GET({url: 'http://cmwn/districts'});
         urlData.then(res => {
-            debugger;
             this.users = res.response.data;
             this.forceUpdate();
         });

@@ -1,10 +1,11 @@
 import React from 'react';
+import _ from 'lodash';
 import {Link} from 'react-router';
 
 import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
 import Layout from 'layouts/two_col';
-import {Table, Column}  from 'components/table';
+import {Table, Column} from 'components/table';
 
 const TITLE = 'Organizations';
 const HOME = 'Home';
@@ -31,8 +32,8 @@ var Districs = React.createClass({
                         {TITLE}
                     </div>
                 </header>
-                <Table rows={this.districs}>
-                    <Column dataKey="title" 
+                <Table data={this.districs}>
+                    <Column dataKey="title"
                         renderCell={(data, row) => (
                             <a href={`#/organization/${row.id}`}>{_.startCase(data)}</a>
                         )}

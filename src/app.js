@@ -1,23 +1,24 @@
 import 'babel-polyfill';
 import React from 'react';
-import ReactDOM from 'react-dom'
-import { Router, Route, Link } from 'react-router';
+import ReactDOM from 'react-dom';
+import { Router } from 'react-router';
 
 import GlobalHeader from 'components/global_header';
 
-import Users from 'routes/users'
-import Districts from 'routes/districts'
-import DistrictView from 'routes/districts/view'
-import DistrictEdit from 'routes/districts/edit'
-import Organizations from 'routes/organizations'
-import OrganizationView from 'routes/organizations/view'
-import OrganizationEdit from 'routes/organizations/edit'
+import Login from 'routes/login';
+import Users from 'routes/users';
+import Districts from 'routes/districts';
+import DistrictView from 'routes/districts/view';
+import DistrictEdit from 'routes/districts/edit';
+import Organizations from 'routes/organizations';
+import OrganizationView from 'routes/organizations/view';
+import OrganizationEdit from 'routes/organizations/edit';
 
-import Reset from 'reset.css';
-import Overrides from 'overrides.scss';
-import CoreStyles from 'app.scss';
+import 'reset.css';
+import 'overrides.scss';
+import 'app.scss';
 
-import LOGO_URL from 'media/logo.png';
+import 'media/logo.png';
 
 var App = React.createClass({
     render: function () {
@@ -32,11 +33,11 @@ var App = React.createClass({
     }
 });
 
-
 const routes = {
     path: '/',
     component: App,
     childRoutes: [
+        { path: 'login(/)', component: Login},
         { path: 'users(/)', component: Users },
         { path: 'districts(/)', component: Districts},
         { path: 'district/:id(/)', component: DistrictView},
@@ -52,18 +53,18 @@ const routes = {
         //{ path: 'groups', component: Groups },
         //{ path: 'images', component: Images },
     ]
-}
+};
 
 function run() {
-    ReactDOM.render(<Router routes={routes} />, document.getElementById('cmwn-app'))
+    ReactDOM.render(<Router routes={routes} />, document.getElementById('cmwn-app'));
 }
 
 const loadedStates = ['complete', 'loaded', 'interactive'];
 
-if (loadedStates.indexOf(document.readyState) != -1  && document.getElementById('cmwn-app')) {
-      run();
-      console.info('running');
+if (loadedStates.indexOf(document.readyState) !== -1 && document.getElementById('cmwn-app')) {
+    run();
+    console.info('running'); //eslint-disable-line
 } else {
-      window.addEventListener('DOMContentLoaded', run, false);
+    window.addEventListener('DOMContentLoaded', run, false);
 }
 

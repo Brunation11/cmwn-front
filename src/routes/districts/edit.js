@@ -1,9 +1,9 @@
 import React from 'react';
 import {Button, Input, Panel} from 'react-bootstrap';
 
-import HttpManager from 'components/http_manager'
+import HttpManager from 'components/http_manager';
 import Layout from 'layouts/two_col';
-import GLOBALS from 'components/globals'
+import GLOBALS from 'components/globals';
 
 const HEADINGS = {
     EDIT_TITLE: 'Info'
@@ -13,13 +13,13 @@ const HEADINGS = {
 /**
  * Private Function. Must always be called with call or apply
  */
-var  _nameValidation = function () {
+var _nameValidation = function () {
     var length = this.state.title.length;
     if (length < 3) {
         return 'error';
     }
     return 'success';
-}
+};
 
 var Edit = React.createClass({
     district: {},
@@ -45,7 +45,6 @@ var Edit = React.createClass({
         });
     },
     submitData: function () {
-        
     },
     render: function () {
         return (
@@ -61,8 +60,8 @@ var Edit = React.createClass({
                     ref="titleInput"
                     onChange={() => this.setState({title: this.refs.titleInput.getValue()})}
                  />
-                 <Input 
-                    type="textarea" 
+                 <Input
+                    type="textarea"
                     value={this.state.description}
                     placeholder="description"
                     label="Description"
