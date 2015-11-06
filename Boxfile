@@ -4,4 +4,4 @@ global:
 build:
   exec:
     - "npm install"
-    - "/data/node_modules/.bin/gulp.js"
+    - "node node_modules/gulp/bin/gulp.js webpack:build"
