@@ -2,8 +2,9 @@ global:
   env:
     - APP_ENV: production
     - BABEL_ENV: prooductin
-    - NODE_ENV: production
 build:
   exec:
     - "npm install"
-    - "node node_modules/gulp/bin/gulp.js webpack:build"
+    - "/data/node_modules/gulp/bin/gulp.js webpack:build"
+  lib_dirs:
+    - node_modules
