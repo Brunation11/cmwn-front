@@ -18,17 +18,19 @@ var FriendList = React.createClass({
     requests: [],
     accepted: [],
     getInitialState: function () {
+        return {
+            friendsHidden: false,
+            requestsHidden: true,
+            pendingHidden: true
+        };
+    },
+    componentWillMount: function () {
         HttpManager.GET(GLOBALS.API_URL + 'friends').then(responses => {
             this.pending = responses.response.pendingfriends;
             this.requests = responses.response.pendingfriends;
             this.accepted = responses.response.acceptedfriends;
             this.forceUpdate();
         });
-        return {
-            friendsHidden: false,
-            requestsHidden: true,
-            pendingHidden: true
-        };
     },
     toggleFriends: function () {
         this.setState({friendsHidden: !this.state.friendsHidden});

@@ -1,5 +1,5 @@
 import React from 'react';
-import Update from 'react-addons-update';
+import Immutable from 'immutable';
 
 import HttpManager from 'components/http_manager';
 
@@ -16,13 +16,13 @@ var Fetcher = React.createClass({
         });
     },
     render: function () {
-        var propsForChild = Update(this.props, {
-            url: {$set: null},
-            data: {$set: this.data}
-        });
+        var propsForChild = Immutable.Map(this.props)
+            .remove('url')
+            .remove('children')
+            .set('data', this.data);
         return (
             <div>
-                {React.Children.map(this.props.children, child => React.cloneElement(child, propsForChild))}
+                {React.Children.map(this.props.children, child => React.cloneElement(child, propsForChild.toObject()))}
             </div>
         );
     }

@@ -1,5 +1,6 @@
 import React from 'react';
 import {Button, Input, Panel} from 'react-bootstrap';
+
 import HttpManager from 'components/http_manager';
 import Layout from 'layouts/two_col';
 import GLOBALS from 'components/globals';
@@ -67,7 +68,6 @@ var Edit = React.createClass({
                     ref="descriptionInput"
                     onChange={() => this.setState({description: this.refs.descriptionInput.getValue()})}
                  />
-                     hello
                  <Button onClick={this.submitData} > Save </Button>
               </Panel>
            </Layout>

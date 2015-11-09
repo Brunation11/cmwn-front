@@ -5,6 +5,8 @@ import _ from 'lodash';
 
 import GLOBALS from 'components/globals';
 
+import 'components/paginator.scss';
+
 var _getButtonPattern = function (currentPage, pageCount) {
     var pattern;
     if (pageCount <= 5) {
@@ -66,24 +68,25 @@ var Paginator = React.createClass({
         return _.map(GLOBALS.PAGINATOR_COUNTS, value => <MenuItem value={value} eventKey={value} key={value}>{value}</MenuItem>);
     },
     render: function () {
-        if (this.props.data == null || !this.props.data.length) {
+        var self = this;
+        if (self.props.data == null || !self.props.data.length) {
             return null;
         }
         return (
-            <Panel>
+            <Panel className="paginator">
                 <div>
-                    {React.Children.map(this.props.children, child => React.cloneElement(child, {data: this.props.data}))}
+                    {React.Children.map(self.props.children, child => React.cloneElement(child, {data: self.props.data}))}
                 </div>
                 <footer>
                     <ButtonGroup>
                         <DropdownButton
                             id="row-count"
-                            title={`Showing ${this.state.rowCount} rows`}
-                            onSelect={this.selectRowCount}
+                            title={`Showing ${self.state.rowCount} rows`}
+                            onSelect={self.selectRowCount}
                         >
-                            {this.renderRowCountChoices()}
+                            {self.renderRowCountChoices()}
                         </DropdownButton>
-                        {this.renderPageSelectors()}
+                        {self.renderPageSelectors()}
                    </ButtonGroup>
                 </footer>
             </Panel>

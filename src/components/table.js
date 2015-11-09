@@ -37,12 +37,12 @@ var Table = React.createClass({
         }
         return null;
     },
-    renderRow: function (row) {
+    renderRow: function (row, i) {
         var cells = React.Children.map(this.props.children, col => {
             return (<td key={col.props.dataKey}>{_renderCell.call(col, row[col.props.dataKey], row)}</td>);
         });
         return (
-            <tr key={Math.random()}>{''/*temporary to silence unique key warnings*/}
+            <tr key={i}>
                 {cells}
             </tr>
         );
