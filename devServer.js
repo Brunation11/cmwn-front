@@ -13,18 +13,18 @@ app.use(require('webpack-dev-middleware')(compiler, {
 
 app.use(require('webpack-hot-middleware')(compiler));
 
-app.get('/', function(req, res) {
+app.get('/*', function(req, res) {
     //res.send(Object.stringify(req));
     //if(req == '/'){
-        res.sendFile(path.join(__dirname, 'index.html'));
+        res.sendFile(path.resolve('index.html'));
     //} else {
     //    res.sendFile(path.join(__dirname, req));
     //}
 });
 
-app.get('/*', function(req, res) {
-    res.sendFile(path.join(__dirname, req.path));
-});
+//app.get('/*', function(req, res) {
+//    res.sendFile(path.join(__dirname, req.path));
+//});
 //app.get('*', function(req, res) {
 //    res.sendFile(path.join(__dirname, 'index.html'));
 //});

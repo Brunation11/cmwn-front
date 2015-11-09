@@ -121,7 +121,7 @@ class _EventManager {
         _.set(_changeHandlers, `${scopeHandle}.${key}`, handlers);
     }
     dispose(scopeHandle) { //eslint-disable-line no-unused-vars
-        /** TODO: MPR, 11/3/15: Implement Dispose */
+        /** @TODO: MPR, 11/3/15: Implement Dispose */
     }
     get pendingCount() {
         return _pendingChanges.lenght;

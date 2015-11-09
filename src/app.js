@@ -2,6 +2,7 @@ import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router } from 'react-router';
+import CreateBrowserHistory from 'history/lib/createBrowserHistory';
 
 import GlobalHeader from 'components/global_header';
 
@@ -65,7 +66,7 @@ const routes = {
 };
 
 function run() {
-    ReactDOM.render(<Router routes={routes} />, document.getElementById('cmwn-app'));
+    ReactDOM.render(<Router history={CreateBrowserHistory()} routes={routes} />, document.getElementById('cmwn-app'));
 }
 
 const loadedStates = ['complete', 'loaded', 'interactive'];
