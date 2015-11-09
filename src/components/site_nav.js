@@ -12,15 +12,15 @@ var SiteNav = React.createClass({
         this.getMenuItems();
     },
     getMenuItems: function () {
-            var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'organizations'});
+        var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'sidebar'});
         urlData.then(res => {
-            this.organizations = res.response.data;
+            this.menuItems = _.map(_.pairs(res.response.data[0]), (value) => ({text: value[0], url: value[1]}));
             this.forceUpdate();
         });
 
     },
     renderNavItems: function () {
-        return _.map(GLOBALS.TOP_NAV, item => (<li key={`(${item.TEXT}) ${item.URL}`}><Link to={item.URL}>{item.TEXT}</Link></li>));
+        return _.map(this.menuItems, item => (<li key={`(${item.text}) ${item.url}`}><Link to={item.url}>{item.text}</Link></li>));
     },
     render: function () {
         return (
