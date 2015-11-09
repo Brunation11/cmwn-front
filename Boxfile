@@ -5,6 +5,7 @@ global:
 build:
   exec:
     - "npm install"
+    - "npm install node-sass@beta"
     - "/data/node_modules/gulp/bin/gulp.js webpack:build"
   lib_dirs:
     - node_modules
