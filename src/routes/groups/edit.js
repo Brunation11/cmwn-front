@@ -1,5 +1,6 @@
 import React from 'react';
 import {Button, Input, Panel} from 'react-bootstrap';
+import {Link} from 'react-router';
 
 import HttpManager from 'components/http_manager';
 import Layout from 'layouts/two_col';
@@ -7,6 +8,10 @@ import GLOBALS from 'components/globals';
 
 const HEADINGS = {
     EDIT_TITLE: 'Info'
+};
+const BREADCRUMB = {
+    HOME: 'Home',
+    GROUPS: 'Groups'
 };
 
 /** @TODO MPR, 11/4/15: Probably these validation rules should be stored elsewhere */
@@ -22,7 +27,7 @@ var _nameValidation = function () {
 };
 
 var Edit = React.createClass({
-    organization: {},
+    group: {},
     getInitialState: function () {
         return {
             code: '',
@@ -31,24 +36,33 @@ var Edit = React.createClass({
         };
     },
     componentWillMount: function () {
-        this.getOrganization();
+        this.getGroup();
     },
-    getOrganization: function () {
-        var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'organizations/' + this.props.params.id});
+    getGroup: function () {
+        var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'groups/' + this.props.params.id});
         urlData.then(res => {
-            this.organization = res.response.data;
+            this.group = res.response.data;
             this.setState({
-                code: this.organization.code,
-                title: this.organization.title,
-                description: this.organization.description
+                code: this.group.code,
+                title: this.group.title,
+                description: this.group.description
             });
         });
     },
     submitData: function () {
     },
     render: function () {
+        if (this.group.length === 0) {
+            return null;
+        }
         return (
            <Layout>
+                <h2>{this.group.title}</h2>
+                <div className="breadcrumb">
+                    <Link to="/">{BREADCRUMB.HOME}</Link>
+                    <Link to="/groups">{BREADCRUMB.GROUPS}</Link>
+                    <span>{this.group.title}</span>
+                </div>
               <Panel header={HEADINGS.EDIT_TITLE} className="standard">
                  <Input
                     type="text"
