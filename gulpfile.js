@@ -1,6 +1,7 @@
 /*eslint-disable */
 var gulp = require('gulp');
 var del = require('del');
+var args = require('yargs').argv;
 var path = require('path');
 var sourcemaps = require('gulp-sourcemaps');
 var gutil = require("gulp-util");
@@ -39,11 +40,11 @@ gulp.task('watch', function () {
 
 gulp.task("build-dev", ["webpack:build-dev"], function() {;});
 
-gulp.task("build", ["webpack:build"]);
+gulp.task("build", ["webpack:build", 'primary-style', 'index']);
 
 gulp.task('index', function () {
     var target = gulp.src('./src/index.html');
-console.log('test');
+
     return target
         .pipe(inject(gulp.src('./build/build.js', {read: false}), {name: 'app'}))
         .pipe(gulp.dest('./build'));
@@ -98,7 +99,7 @@ gulp.task('primary-style', function () {
 
 gulp.task("webpack:build", function(callback) {
     var mode = process.env.APP_ENV;
-    if (mode === 'production') {
+    if (args.prod || args.production || (!args.production && mode === 'production')) {
         gulp.start('webpack:build-prod');
     } else {
         gulp.start('webpack:build-dev');
