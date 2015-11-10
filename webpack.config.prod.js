@@ -16,7 +16,7 @@ module.exports = {
     output: {
         path: path.join(__dirname, 'build'),
         filename: 'build.js',
-        publicPath: '/build/'
+        publicPath: '/'
     },
     plugins: [
         new webpack.optimize.OccurenceOrderPlugin(),
@@ -37,7 +37,7 @@ module.exports = {
             test: /\.js$/,
             loaders: ['babel'],
             include: path.join(__dirname, 'src')
-        },
+        } ,
         {
             test: /\.css$/,
             loaders: ['style', 'css']
