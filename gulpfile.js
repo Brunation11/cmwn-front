@@ -21,6 +21,29 @@ var inject = require('gulp-inject');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var mergeStream = require('merge-stream');
 
+/** @const */
+var APP_PREFIX = 'APP_';
+
+/**
+ * Higher order function. Starts an arbitrary shell command
+ * note that this is not a gulp best practice, and should be
+ * used sparingly and only with justification.
+ * @param {string} command - command to run
+ * @param {string[]} [flags = []] - any flags that need to be passed to command
+ */
+var executeAsProcess = function (command, flags) {
+    return function () {
+       var start = spawn(command, flags);
+       start.stdout.on('data', function (data) {
+           console.log('stdout: ' + data);
+       });
+
+       start.stderr.on('data', function (data) {
+           console.log('stderr: ' + data);
+       });
+    }
+}
+
 var buildDevelopment = function () {
     env({
         vars: {
@@ -65,31 +88,44 @@ gulp.task('watch', function () {
 });
 
 gulp.task('dev-server', ['development-server']);
-gulp.task('development-server', function () {
-   var start = spawn('npm', ['start']);
-   start.stdout.on('data', function (data) {
-       console.log('stdout: ' + data);
-   });
-
-   start.stderr.on('data', function (data) {
-       console.log('stderr: ' + data);
-   });
-});
-
-gulp.task("build-dev", ["build-development"]);
-gulp.task("build-development", ["webpack:build-development"], function() {;});
+//using eAP here only to start the express dev server. Not in violation
+//of working around gulp streams to produce a sync result
+gulp.task('development-server', executeAsProcess('npm', ['start']));
 
 gulp.task("build", ["webpack:build", 'primary-style', 'index']);
+// eAP here just lets us restart gulp with appropriate flags
+// so that build is the single source of truth. Style and index
+// are dependent, so we need a way to call different commands
+// while still going through the single webpack:build dependency.
+// as such, this is how we need to alias build commands.
+gulp.task("build-dev", executeAsProcess('gulp build', ['build', '--development']));
+gulp.task("build-development", executeAsProcess('gulp build', ['build', '--development']));
+gulp.task("build-prod", executeAsProcess('gulp build', ['build', '--development']));
+gulp.task("build-production", executeAsProcess('gulp build', ['build', '--development']));
 
-gulp.task('index', function () {
+gulp.task('index', ['primary-style'], function () {
     var target = gulp.src('./src/index.html');
 
     return target
-        .pipe(inject(gulp.src('./build/build.js', {read: false}), {name: 'app'}))
+        .pipe(inject(gulp.src('./build/build.js', {read: false}), {name: 'app', relative: true}))
         .pipe(inject(gulp.src('./build/reset.css'), {
             starttag: '<!-- inject:reset -->',
             transform: function (filePath, file) {
                 return '<style>\n' + file.contents.toString('utf8') + '\n</style>';
+            }
+        }))
+        .pipe(inject(gulp.src('./src/app.js', {read: false}), {
+            starttag: '<!-- inject:env -->',
+            transform: function () {
+                //note: we aren't actually doing anything with app.js, but a file is mandatory
+                var output = '<script>';
+                _.each(process.env, function (value, key) {
+                    if(key.indexOf(APP_PREFIX) === 0) {
+                        output += '\nwindow.__cmwn.' + _.capitalize(key.split(APP_PREFIX)[1]) + ' = ' + JSON.stringify(value) + ';';
+                    }
+                });
+                output += '\n</script>';
+                return output;
             }
         }))
         .pipe(gulp.dest('./build'));
@@ -102,7 +138,7 @@ gulp.task('index', function () {
          */
 });
 
-gulp.task('primary-style', function (done) {
+gulp.task('primary-style', ['webpack:build'], function (done) {
     var config = {
         resolve: {
             root: path.resolve('./src'),
@@ -145,8 +181,8 @@ gulp.task('primary-style', function (done) {
 
             //a little cleanup of intermediate files
             del(['./build/styles.js']);
-        })
-        .pipe('./build'));
+        }))
+        .pipe(gulp.dest('./build'));
     return mergeStream(reset, primary);
 });
 
@@ -173,11 +209,15 @@ gulp.task("webpack:build", function(callback) {
     return buildDevelopment();
 });
 
-gulp.task("webpack:build-prod", buildProduction);
-gulp.task("webpack:build-production", buildProduction);
+gulp.task('build-warning', function () {
+    console.log(gutil.colors.yellow('Warning: `gulp webpack:build` does not build the index or some styles. Run `gulp build` to build all artifacts'));
+});
 
-gulp.task("webpack:build-dev", buildDevelopment);
-gulp.task("webpack:build-development", buildDevelopment);
+gulp.task("webpack:build-prod", ['build-warning'], buildProduction);
+gulp.task("webpack:build-production", ['build-warning'], buildProduction);
+
+gulp.task("webpack:build-dev", ['build-warning'], buildDevelopment);
+gulp.task("webpack:build-development", ['build-warning'], buildDevelopment);
 
 gulp.task('lint', function () {
     return gulp.src(['src/**/*.js'])
