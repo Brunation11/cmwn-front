@@ -15,6 +15,7 @@ var eslint = require('gulp-eslint');
 var fs = require('fs');
 var eslintConfig = JSON.parse(fs.readFileSync('./.eslintrc'));
 var watch = require('gulp-watch');
+var env = require('gulp-env');
 
 gulp.task("default", ["watch", "build-dev"]);
 gulp.task("echo", function () { console.log('workin')});
@@ -40,7 +41,13 @@ gulp.task("build", ["webpack:build"]);
 gulp.task("webpack:build", function(callback) {
     // modify some webpack config options
     var myConfig = Object.create(webpackProdConfig);
-    
+
+    //mark environment as prod
+    env({
+        vars: {
+            NODE_ENV: 'production',
+            BABEL_ENV: 'production'
+    }});
     // run webpack
     webpack(myConfig, function(err, stats) {
         if(err) throw new gutil.PluginError("webpack:build", err);

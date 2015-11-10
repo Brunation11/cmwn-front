@@ -33,6 +33,7 @@
     "express": "^4.13.3",
     "file-loader": "^0.8.4",
     "gulp": "^3.9.0",
+    "gulp-env": "^0.2.0",
     "gulp-eslint": "^1.0.0",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-util": "^3.0.7",

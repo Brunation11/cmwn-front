@@ -22,6 +22,7 @@ module.exports = {
         new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.DefinePlugin({
             'process.env': {
+                'BABEL_ENV': JSON.stringify('production'),
                 'NODE_ENV': JSON.stringify('production')
             }
         }),
