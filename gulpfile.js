@@ -1,5 +1,6 @@
 /*eslint-disable */
 var gulp = require('gulp');
+var gulpif = require('gulp-if');
 var del = require('del');
 var args = require('yargs').argv;
 var path = require('path');
@@ -20,24 +21,63 @@ var inject = require('gulp-inject');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var mergeStream = require('merge-stream');
 
-gulp.task("default", ["build-dev", "watch", 'dev-server']);
+var buildDevelopment = function () {
+    env({
+        vars: {
+            NODE_ENV: 'development',
+            BABEL_ENV: 'development'
+    }});
+    return gulp.src('./src/app.js')
+        .pipe(gulpWebpack(Object.create(webpackDevConfig), webpack, function(err, stats) {
+            if(err) throw new gutil.PluginError("webpack:build-dev", err);
+            gutil.log("[webpack:build-dev]", stats.toString({
+                colors: true
+            }));
+        }))
+        .pipe(gulp.dest('./build'));
+}
+
+var buildProduction = function () {
+    // modify some webpack config options
+    var myConfig = Object.create(webpackProdConfig);
+
+    //mark environment as prod
+    env({
+        vars: {
+            NODE_ENV: 'production',
+            BABEL_ENV: 'production'
+    }});
+    // run webpack
+    return gulp.src('./src/app.js')
+        .pipe(gulpWebpack(myConfig, webpack, function(err, stats) {
+            if(err) throw new gutil.PluginError("webpack:build", err);
+            gutil.log("[webpack:build]", stats.toString({
+                colors: true
+            }));
+        }))
+        .pipe(gulp.dest('./build'));
+}
+
+gulp.task("default", ["build-development", "watch", 'development-server']);
 
 gulp.task('watch', function () {
     gulp.watch('src/**/*.js', ['lint']);
 });
 
-gulp.task('dev-server', function () {
+gulp.task('dev-server', ['development-server']);
+gulp.task('development-server', function () {
    var start = spawn('npm', ['start']);
-    start.stdout.on('data', function (data) {
-        console.log('stdout: ' + data);
-    });
+   start.stdout.on('data', function (data) {
+       console.log('stdout: ' + data);
+   });
 
-    start.stderr.on('data', function (data) {
-        console.log('stderr: ' + data);
-    });
+   start.stderr.on('data', function (data) {
+       console.log('stderr: ' + data);
+   });
 });
 
-gulp.task("build-dev", ["webpack:build-dev"], function() {;});
+gulp.task("build-dev", ["build-development"]);
+gulp.task("build-development", ["webpack:build-development"], function() {;});
 
 gulp.task("build", ["webpack:build", 'primary-style', 'index']);
 
@@ -116,7 +156,7 @@ gulp.task("webpack:build", function(callback) {
     // --production flag
     // APP_ENV environment variable
     // NODE_ENV environment variable
-    var mode;
+    var mode = 'development';
     if (args.development || args.prod) {
         mode = 'development';
     } else if (args.prod || args.production) {
@@ -125,52 +165,19 @@ gulp.task("webpack:build", function(callback) {
         mode = process.env.APP_ENV;
     } else if (process.env.NODE_ENV) {
         mode = process.env.NODE_ENV;
-    } else {
-        mode = 'development';
     }
 
-    return gulp.src('./src/app.js')
-        .pipe(gulpif(mode === production, 'webpack:build-production'))
-        .pipe(gulpif(mode === development, 'webpack:build-development'))
-        .pipe(gulp.dest('./build'));
+    if (mode === 'production' || mode == 'prod') {
+        return buildDevelopment();
+    }
+    return buildDevelopment();
 });
 
-gulp.task("webpack:build-production", function() {
-    // modify some webpack config options
-    var myConfig = Object.create(webpackProdConfig);
+gulp.task("webpack:build-prod", buildProduction);
+gulp.task("webpack:build-production", buildProduction);
 
-    //mark environment as prod
-    env({
-        vars: {
-            NODE_ENV: 'production',
-            BABEL_ENV: 'production'
-    }});
-    // run webpack
-    return gulp.src('./src/app.js')
-        .pipe(gulpWebpack(myConfig, webpack, function(err, stats) {
-            if(err) throw new gutil.PluginError("webpack:build", err);
-            gutil.log("[webpack:build]", stats.toString({
-                colors: true
-            }));
-        }))
-        .pipe(gulp.dest('./build'));
-});
-
-gulp.task("webpack:build-development", function() {
-    env({
-        vars: {
-            NODE_ENV: 'development',
-            BABEL_ENV: 'development'
-    }});
-    return gulp.src('./src/app.js')
-        .pipe(gulpWebpack(Object.create(webpackDevConfig), webpack, function(err, stats) {
-            if(err) throw new gutil.PluginError("webpack:build-dev", err);
-            gutil.log("[webpack:build-dev]", stats.toString({
-                colors: true
-            }));
-        }))
-        .pipe(gulp.dest('./build'));
-});
+gulp.task("webpack:build-dev", buildDevelopment);
+gulp.task("webpack:build-development", buildDevelopment);
 
 gulp.task('lint', function () {
     return gulp.src(['src/**/*.js'])
