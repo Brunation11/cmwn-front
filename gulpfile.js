@@ -6,6 +6,7 @@ var path = require('path');
 var sourcemaps = require('gulp-sourcemaps');
 var gutil = require("gulp-util");
 var webpack = require("webpack");
+var gulpWebpack = require('gulp-webpack');
 var WebpackDevServer = require("webpack-dev-server");
 var webpackDevConfig = require("./webpack.config.dev.js");
 var webpackProdConfig = require("./webpack.config.prod.js");
@@ -13,21 +14,20 @@ var spawn = require('child_process').spawn;
 var eslint = require('gulp-eslint');
 var fs = require('fs');
 var eslintConfig = JSON.parse(fs.readFileSync('./.eslintrc'));
-var watch = require('gulp-watch');
 var env = require('gulp-env');
 var _ = require('lodash');
 var inject = require('gulp-inject');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var mergeStream = require('merge-stream');
 
-gulp.task("default", ["build-dev", "watch"]);
+gulp.task("default", ["build-dev", "watch", 'dev-server']);
 
 gulp.task('watch', function () {
-    var start = spawn('npm', ['start']);
+    gulp.watch('src/**/*.js', ['lint']);
+});
 
-    watch('src/**/*.js', function () {
-        gulp.start('lint');
-    });
-
+gulp.task('dev-server', function () {
+   var start = spawn('npm', ['start']);
     start.stdout.on('data', function (data) {
         console.log('stdout: ' + data);
     });
@@ -35,7 +35,6 @@ gulp.task('watch', function () {
     start.stderr.on('data', function (data) {
         console.log('stderr: ' + data);
     });
-
 });
 
 gulp.task("build-dev", ["webpack:build-dev"], function() {;});
@@ -47,12 +46,23 @@ gulp.task('index', function () {
 
     return target
         .pipe(inject(gulp.src('./build/build.js', {read: false}), {name: 'app'}))
+        .pipe(inject(gulp.src('./build/reset.css'), {
+            starttag: '<!-- inject:reset -->',
+            transform: function (filePath, file) {
+                return '<style>\n' + file.contents.toString('utf8') + '\n</style>';
+            }
+        }))
         .pipe(gulp.dest('./build'));
+        /*
+         *<!-- inject:style -->
+        <!-- endinject -->
+        <!-- inject:env -->
+        <!-- endinject -->
+
+         */
 });
 
-gulp.task('primary-style', function () {
-    gulp.src('./src/reset.css').pipe(gulp.dest('./build'));
-
+gulp.task('primary-style', function (done) {
     var config = {
         resolve: {
             root: path.resolve('./src'),
@@ -84,29 +94,48 @@ gulp.task('primary-style', function () {
         ]
     };
 
-    webpack(config, function(err, stats) {
-        if(err) throw new gutil.PluginError("webpack:style", err);
-        gutil.log("[webpack:style]", stats.toString({
-            colors: true
-        }));
+    var reset = gulp.src('./src/reset.css').pipe(gulp.dest('./build'));
 
-        //a little cleanup of intermediate files
-        del(['./build/styles.js']);
-    });
+    var primary = gulp.src('./src/styles.js')
+        .pipe(gulpWebpack(config, webpack, function (err, stats) {
+            if(err) throw new gutil.PluginError("webpack:style", err);
+            gutil.log("[webpack:style]", stats.toString({
+                colors: true
+            }));
 
-
+            //a little cleanup of intermediate files
+            del(['./build/styles.js']);
+        })
+        .pipe('./build'));
+    return mergeStream(reset, primary);
 });
 
 gulp.task("webpack:build", function(callback) {
-    var mode = process.env.APP_ENV;
-    if (args.prod || args.production || (!args.production && mode === 'production')) {
-        gulp.start('webpack:build-prod');
+    //mode defaults to development and is selected with the following precedences:
+    // --development flag
+    // --production flag
+    // APP_ENV environment variable
+    // NODE_ENV environment variable
+    var mode;
+    if (args.development || args.prod) {
+        mode = 'development';
+    } else if (args.prod || args.production) {
+        mode = 'production';
+    } else if(process.env.APP_ENV) {
+        mode = process.env.APP_ENV;
+    } else if (process.env.NODE_ENV) {
+        mode = process.env.NODE_ENV;
     } else {
-        gulp.start('webpack:build-dev');
+        mode = 'development';
     }
+
+    return gulp.src('./src/app.js')
+        .pipe(gulpif(mode === production, 'webpack:build-production'))
+        .pipe(gulpif(mode === development, 'webpack:build-development'))
+        .pipe(gulp.dest('./build'));
 });
 
-gulp.task("webpack:build-prod", function(callback) {
+gulp.task("webpack:build-production", function() {
     // modify some webpack config options
     var myConfig = Object.create(webpackProdConfig);
 
@@ -117,28 +146,30 @@ gulp.task("webpack:build-prod", function(callback) {
             BABEL_ENV: 'production'
     }});
     // run webpack
-    webpack(myConfig, function(err, stats) {
-        if(err) throw new gutil.PluginError("webpack:build", err);
-        gutil.log("[webpack:build]", stats.toString({
-            colors: true
-        }));
-        callback();
-    });
+    return gulp.src('./src/app.js')
+        .pipe(gulpWebpack(myConfig, webpack, function(err, stats) {
+            if(err) throw new gutil.PluginError("webpack:build", err);
+            gutil.log("[webpack:build]", stats.toString({
+                colors: true
+            }));
+        }))
+        .pipe(gulp.dest('./build'));
 });
 
-gulp.task("webpack:build-dev", function(callback) {
+gulp.task("webpack:build-development", function() {
     env({
         vars: {
             NODE_ENV: 'development',
             BABEL_ENV: 'development'
     }});
-    webpack(Object.create(webpackDevConfig)).run(function(err, stats) {
-        if(err) throw new gutil.PluginError("webpack:build-dev", err);
-        gutil.log("[webpack:build-dev]", stats.toString({
-            colors: true
-        }));
-        callback();
-    });
+    return gulp.src('./src/app.js')
+        .pipe(gulpWebpack(Object.create(webpackDevConfig), webpack, function(err, stats) {
+            if(err) throw new gutil.PluginError("webpack:build-dev", err);
+            gutil.log("[webpack:build-dev]", stats.toString({
+                colors: true
+            }));
+        }))
+        .pipe(gulp.dest('./build'));
 });
 
 gulp.task('lint', function () {
