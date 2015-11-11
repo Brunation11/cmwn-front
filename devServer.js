@@ -16,7 +16,7 @@ app.use(require('webpack-hot-middleware')(compiler));
 app.get('/*', function(req, res) {
     //res.send(Object.stringify(req));
     //if(req == '/'){
-        res.sendFile(path.resolve('index.html'));
+        res.sendFile(path.resolve('build/index.html'));
     //} else {
     //    res.sendFile(path.join(__dirname, req));
     //}

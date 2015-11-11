@@ -81,7 +81,7 @@ var buildProduction = function () {
         .pipe(gulp.dest('./build'));
 }
 
-gulp.task("default", ["build-development", "watch", 'development-server']);
+gulp.task("default", ["build", "watch", 'development-server']);
 
 gulp.task('watch', function () {
     gulp.watch('src/**/*.js', ['lint']);
@@ -92,7 +92,7 @@ gulp.task('dev-server', ['development-server']);
 //of working around gulp streams to produce a sync result
 gulp.task('development-server', executeAsProcess('npm', ['start']));
 
-gulp.task("build", ["webpack:build", 'primary-style', 'index']);
+gulp.task("build", ['primary-style', "webpack:build", 'index']);
 // eAP here just lets us restart gulp with appropriate flags
 // so that build is the single source of truth. Style and index
 // are dependent, so we need a way to call different commands
@@ -103,11 +103,17 @@ gulp.task("build-development", executeAsProcess('gulp build', ['build', '--devel
 gulp.task("build-prod", executeAsProcess('gulp build', ['build', '--development']));
 gulp.task("build-production", executeAsProcess('gulp build', ['build', '--development']));
 
-gulp.task('index', ['primary-style'], function () {
+gulp.task('index', ['primary-style', 'webpack:build'], function () {
     var target = gulp.src('./src/index.html');
 
     return target
-        .pipe(inject(gulp.src('./build/build.js', {read: false}), {name: 'app', relative: true}))
+        //.pipe(inject(gulp.src('./build/build.js', {read: false}), {name: 'app', relative: true}))
+        .pipe(inject(gulp.src('./build/inline.css'), {
+            starttag: '<!-- inject:style -->',
+            transform: function (filePath, file) {
+                return '<style>\n' + file.contents.toString('utf8') + '\n</style>';
+            }
+        }))
         .pipe(inject(gulp.src('./build/reset.css'), {
             starttag: '<!-- inject:reset -->',
             transform: function (filePath, file) {
@@ -119,6 +125,7 @@ gulp.task('index', ['primary-style'], function () {
             transform: function () {
                 //note: we aren't actually doing anything with app.js, but a file is mandatory
                 var output = '<script>';
+                output += '\nwindow.__cmwn = {};';
                 _.each(process.env, function (value, key) {
                     if(key.indexOf(APP_PREFIX) === 0) {
                         output += '\nwindow.__cmwn.' + _.capitalize(key.split(APP_PREFIX)[1]) + ' = ' + JSON.stringify(value) + ';';
@@ -138,7 +145,7 @@ gulp.task('index', ['primary-style'], function () {
          */
 });
 
-gulp.task('primary-style', ['webpack:build'], function (done) {
+gulp.task('primary-style', function (done) {
     var config = {
         resolve: {
             root: path.resolve('./src'),
@@ -186,7 +193,7 @@ gulp.task('primary-style', ['webpack:build'], function (done) {
     return mergeStream(reset, primary);
 });
 
-gulp.task("webpack:build", function(callback) {
+gulp.task("webpack:build", function(done) {
     //mode defaults to development and is selected with the following precedences:
     // --development flag
     // --production flag
@@ -204,8 +211,10 @@ gulp.task("webpack:build", function(callback) {
     }
 
     if (mode === 'production' || mode == 'prod') {
-        return buildDevelopment();
+        gutil.log(gutil.colors.green('Building in production mode'));
+        return buildProduction();
     }
+    gutil.log(gutil.colors.green('Building in development mode'));
     return buildDevelopment();
 });
 

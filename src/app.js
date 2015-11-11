@@ -18,7 +18,6 @@ import Groups from 'routes/groups';
 import GroupView from 'routes/groups/view';
 import GroupEdit from 'routes/groups/edit';
 
-
 //import 'reset.css';
 import 'overrides.scss';
 //import 'app.scss';
