@@ -17,6 +17,8 @@ import OrganizationEdit from 'routes/organizations/edit';
 import Groups from 'routes/groups';
 import GroupView from 'routes/groups/view';
 import GroupEdit from 'routes/groups/edit';
+import Friends from 'routes/friends';
+import SuggestedFriends from 'routes/friends/suggested';
 
 //import 'reset.css';
 import 'overrides.scss';
@@ -55,7 +57,8 @@ const routes = {
         { path: 'group/:id(/)', component: GroupView},
         { path: 'group/:id/view(/)', component: GroupView},
         { path: 'group/:id/edit(/)', component: GroupEdit},
-
+        { path: 'friends(/)', component: Friends},
+        { path: 'friends/suggested(/)', component: SuggestedFriends},
 
         //{ path: 'roles', component: Roles },
         //{ path: 'organizations', component: Organizations },
