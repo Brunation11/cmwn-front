@@ -90,7 +90,9 @@ class _HttpManager {
         return _getRequestPromise('GET', request, headers);
     }
     POST(request, headers){
-        return _getRequestPromise('POST', request, headers);
+       var req = _getRequestPromise('POST', request, headers);
+       debugger;
+        return req;
     }
     PUT(request, headers){
         return _getRequestPromise('PUT', request, headers);
