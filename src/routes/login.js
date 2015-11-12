@@ -21,9 +21,26 @@ var Page = React.createClass({
         this.getToken();
     },
     getToken: function () {
-        var req = HttpManager.GET({url: `${GLOBALS.API_URL}users/getToken`});
+        var req = HttpManager.GET({url: `${GLOBALS.API_URL}csrf_token`});
         req.then(res => {
             this.setState({_token: res.response});
+        });
+    },
+    login: function () {
+        var formData = new FormData();
+        var req;
+        formData.append('login', this.refs.login.getValue().toString());
+        formData.append('password', this.refs.password.getValue());
+        formData.append('_token', this.state._token);
+        req = HttpManager.POST({
+            url: `${GLOBALS.API_URL}auth/login`
+        }, {
+            'X-Csrf-Token': this.state._token,
+            'Authorization': `Basic ${window.btoa(this.refs.login.getValue() + ':' + this.refs.password.getValue())}`
+        });
+        req.then(res => {
+            debugger;
+            console.log(res);
         });
     },
     onSubmit: function () {
@@ -31,11 +48,11 @@ var Page = React.createClass({
     render: function () {
         return (
            <Layout>
-                <form method="POST" action={`${GLOBALS.API_URL}users/login`} onSubmit={this.onSubmit}>
+                <form method="POST" >
                     <input type="hidden" name="_token" value={this.state._token} />
-                    <Input type="text" name="email" label={LABELS.LOGIN} />
-                    <Input type="password" name="password" label={LABELS.PASSWORD} />
-                    <Button type="submit" >{LABELS.SUBMIT}</Button>
+                    <Input ref="login" type="text" name="email" label={LABELS.LOGIN} />
+                    <Input ref="password" type="password" name="password" label={LABELS.PASSWORD} />
+                    <Button onClick={this.login} >{LABELS.SUBMIT}</Button>
                 </form>
            </Layout>
         );
