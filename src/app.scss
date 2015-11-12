@@ -10,8 +10,11 @@
 @import 'variables';
 @import 'functions';
 
-body {
+html {
     font-size: $base-font-size;
+}
+
+body {
 
     @media (max-width: $device-max-break) {
         font-size: $min-base-font-size; //IE vmax fallback

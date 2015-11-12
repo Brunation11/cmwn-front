@@ -212,6 +212,8 @@ gulp.task("webpack:build", function(done) {
 
     if (mode === 'production' || mode == 'prod') {
         gutil.log(gutil.colors.green('Building in production mode'));
+        process.env.NODE_ENV = 'production';
+        process.env.BABEL_ENV = 'production'
         return buildProduction();
     }
     gutil.log(gutil.colors.green('Building in development mode'));
