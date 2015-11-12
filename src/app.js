@@ -1,7 +1,7 @@
 import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router } from 'react-router';
+import { Router, Link } from 'react-router';
 import CreateBrowserHistory from 'history/lib/createBrowserHistory';
 
 import GlobalHeader from 'components/global_header';
@@ -19,6 +19,7 @@ import GroupView from 'routes/groups/view';
 import GroupEdit from 'routes/groups/edit';
 import Friends from 'routes/friends';
 import SuggestedFriends from 'routes/friends/suggested';
+import Layout from 'layouts/one_col';
 
 //import 'reset.css';
 import 'overrides.scss';
@@ -39,9 +40,31 @@ var App = React.createClass({
     }
 });
 
+var Landing = React.createClass({
+    render: function () {
+        return (
+            <Layout>
+                <h1>Welcome</h1>
+                <p>This is a temporary landing page for ease of navigation to site sections
+                as they are constructed.</p>
+                <p>
+                    <Link to="/districts">districts</Link>
+                </p>
+                <p>
+                    <Link to="/organizations">organizations</Link>
+                </p>
+                <p>
+                    <Link to="/groups">groups</Link>
+                </p>
+            </Layout>
+        );
+    }
+});
+
 const routes = {
     path: '/',
     component: App,
+    indexRoute: {component: Landing},
     childRoutes: [
         { path: 'login(/)', component: Login},
         { path: 'users(/)', component: Users },
@@ -60,6 +83,7 @@ const routes = {
         { path: 'friends(/)', component: Friends},
         { path: 'friends/suggested(/)', component: SuggestedFriends},
 
+        { path: '*', component: Landing},
         //{ path: 'roles', component: Roles },
         //{ path: 'organizations', component: Organizations },
         //{ path: 'groups', component: Groups },
