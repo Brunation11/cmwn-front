@@ -21,6 +21,7 @@ var _makeRequestObj = function (requests, body = '', headers = {}) {
     } else if (_.isString(requests)) {
         requests = {url: requests, body, headers};
     }
+    debugger;
     if (_.isObject(requests) && !_.isArray(requests) && requests.headers == null) {
         requests.headers = headers;
     }
@@ -70,8 +71,12 @@ var _makeRequest = function (verb, requests){
                     });
                 };
                 xhr.open(verb, req.url, true);
+                if (req.withCredentials != null) {
+                    xhr.withCredentials = true;
+                }
                 _.each(req.headers, (header, key) => {
                     xhr.setRequestHeader(key, header);
+                    debugger;
                 });
                 xhr.send(req.body);
             } catch (err) {
@@ -89,17 +94,17 @@ var _makeRequest = function (verb, requests){
 class _HttpManager {
     constructor() {
     }
-    GET(request, headers){
-        return _getRequestPromise('GET', request, headers);
+    GET(request, body, headers){
+        return _getRequestPromise('GET', request, body, headers);
     }
-    POST(request, headers){
-        return _getRequestPromise('POST', request, headers);
+    POST(request, body, headers){
+        return _getRequestPromise('POST', request, body, headers);
     }
-    PUT(request, headers){
-        return _getRequestPromise('PUT', request, headers);
+    PUT(request, body, headers){
+        return _getRequestPromise('PUT', request, body, headers);
     }
-    DELETE(request, headers){
-        return _getRequestPromise('DELETE', request, headers);
+    DELETE(request, body, headers){
+        return _getRequestPromise('DELETE', request, body, headers);
     }
 }
 

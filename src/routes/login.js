@@ -27,14 +27,11 @@ var Page = React.createClass({
         });
     },
     login: function () {
-        var formData = new FormData();
         var req;
-        formData.append('login', this.refs.login.getValue().toString());
-        formData.append('password', this.refs.password.getValue());
-        formData.append('_token', this.state._token);
         req = HttpManager.POST({
-            url: `${GLOBALS.API_URL}auth/login`
-        }, {
+            url: `${GLOBALS.API_URL}auth/login`,
+            withCredentials: true
+        }, '', {
             'X-Csrf-Token': this.state._token,
             'Authorization': `Basic ${window.btoa(this.refs.login.getValue() + ':' + this.refs.password.getValue())}`
         });
