@@ -1,0 +1,40 @@
+.profile-image {
+    position: relative;
+    z-index: 2;
+
+    .profile-pic {
+        transform: translate3d(0px, 0px, 0px); //fix for image jitter in chrome: http://stackoverflow.com/questions/12980153/image-moves-on-hover-chrome-opacity-issue
+    }
+
+    .upload {
+        z-index: 1;
+        text-align: center;
+        background: rgba(200,200,200,0.8);
+        color: white;
+        padding: 15px;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        opacity: 0;
+        transition: opacity 0.8s, z-index 0s
+    }
+
+    &:hover .upload {
+        opacity: 1;
+        z-index: 3;
+        cursor: pointer;
+    }
+}
+
+#cloudinary-overlay {
+
+    .widget {
+        max-width: 0;
+        transition: max-width 0.8s;
+    }
+
+    &.with_theme .widget {
+        max-width: 101vw;
+    }
+}
