@@ -4,6 +4,7 @@
  * objects and returns a promise containing a matching set of responses
  */
 import _ from 'lodash';
+import Cookie from 'cookie';
 
 /**
  * Bundles requests into an array of request objects
@@ -21,7 +22,6 @@ var _makeRequestObj = function (requests, body = '', headers = {}) {
     } else if (_.isString(requests)) {
         requests = {url: requests, body, headers};
     }
-    debugger;
     if (_.isObject(requests) && !_.isArray(requests) && requests.headers == null) {
         requests.headers = headers;
     }
@@ -78,6 +78,9 @@ var _makeRequest = function (verb, requests){
                     xhr.setRequestHeader(key, header);
                     debugger;
                 });
+                if (Cookie.parse(document.cookie)['XSRF-TOKEN'] != null) {
+                    xhr.setRequestHeader('X-XSRF-TOKEN', Cookie.parse(document.cookie)['XSRF-TOKEN']);
+                }
                 xhr.send(req.body);
             } catch (err) {
                 rej(err);

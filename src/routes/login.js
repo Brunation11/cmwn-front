@@ -39,8 +39,6 @@ var Page = React.createClass({
         req.then(res => {
             debugger;
             console.log(res);
-            console.log(res);
-
         });
     },
     onSubmit: function () {
