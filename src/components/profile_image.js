@@ -10,7 +10,7 @@ const PIC_ALT = 'Profile Picture';
 var Image = React.createClass({
     getInitialState: function () {
         return {
-            profileImage: GLOBALS.CURRENT_USER.PROFILE_IMAGE
+            profileImage: GLOBALS.DEFAULT_PROFILE
         };
     },
     startUpload: function () {
