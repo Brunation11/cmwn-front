@@ -21,7 +21,7 @@ var Page = React.createClass({
         this.getToken();
     },
     getToken: function () {
-        var req = HttpManager.GET({url: `${GLOBALS.API_URL}csrf_token`});
+        var req = HttpManager.GET({url: `${GLOBALS.API_URL}csrf_token`, withCredentials: true});
         req.then(res => {
             this.setState({_token: res.response});
         });
@@ -32,7 +32,7 @@ var Page = React.createClass({
             url: `${GLOBALS.API_URL}auth/login`,
             withCredentials: true
         }, '', {
-            'X-Csrf-Token': this.state._token,
+            //'X-Csrf-Token': this.state._token,
             'Authorization': `Basic ${window.btoa(this.refs.login.getValue() + ':' + this.refs.password.getValue())}`
         });
         req.then(res => {
