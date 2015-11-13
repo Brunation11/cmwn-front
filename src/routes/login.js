@@ -1,5 +1,6 @@
 import React from 'react';
 import {Button, Input} from 'react-bootstrap';
+import Cookie from 'cookie';
 
 import Layout from 'layouts/one_col';
 import HttpManager from 'components/http_manager';
@@ -23,7 +24,7 @@ var Page = React.createClass({
     getToken: function () {
         var req = HttpManager.GET({url: `${GLOBALS.API_URL}csrf_token`, withCredentials: true});
         req.then(res => {
-            this.setState({_token: res.response});
+            //this.setState({_token: res.response});
         });
     },
     login: function () {
@@ -32,7 +33,7 @@ var Page = React.createClass({
             url: `${GLOBALS.API_URL}auth/login`,
             withCredentials: true
         }, '', {
-            //'X-Csrf-Token': this.state._token,
+            'X-XSRF-TOKEN': Cookie.parse(document.cookie)['XSRF-TOKEN'],
             'Authorization': `Basic ${window.btoa(this.refs.login.getValue() + ':' + this.refs.password.getValue())}`
         });
         req.then(res => {
