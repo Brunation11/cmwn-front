@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Development Webpack Configuration
  */
@@ -44,6 +45,9 @@ module.exports = {
                 'image-webpack?bypassOnDebug&optimizationLevel=7&interlaced=false'
             ]
         }]
+    },
+    sassLoader: {
+        includePaths: [path.resolve(__dirname, './src')]
     }
 };
 
