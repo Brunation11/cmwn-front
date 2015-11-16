@@ -7,8 +7,11 @@
  */
 import _ from 'lodash';
 
+import DefaultProfile from 'media/profile_tranparent.png';
+
 const GLOBALS = _.defaults(window.__cmwn, {
-    API_URL: 'http://cmwn/api/',
+    API_URL: 'http://api.changemyworldnow.com/',
+    DEFAULT_PROFILE: DefaultProfile,
     CURRENT_USER: {
         PROFILE_IMAGE: 'https://upload.wikimedia.org/wikipedia/commons/1/17/F%C3%ABdor_Ivanovi%C4%8D_%C5%A0aljapin_as_Farlaf_by_Alexandr_Golovin.jpg',
         NAME: 'Alexandr Golovin',
