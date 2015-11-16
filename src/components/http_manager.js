@@ -44,13 +44,12 @@ var _getRequestPromise = function (method, request, body, headers) {
     promise = _makeRequest.call(this, method, request);
     if (request.length === 1) {
         return promise.then(res => {
-            debugger;
             if (res[0].response == null || res[0].response.length === 0) {
                 throw 'no data recieved';
             }
             return Promise.resolve(res[0]);
         }).catch(err => {
-            console.info(err)
+            console.info(err); //eslint-disable-line no-console
             History.replaceState(null, '/login');
         });
     }
@@ -75,7 +74,6 @@ var _makeRequest = function (verb, requests){
                     try {
                         response = (_.isObject(xhr.response) ? xhr.response : JSON.parse(xhr.response));
                     } catch (err) {
-                        debugger;
                         response = xhr.response;
                     }
                     return res({
@@ -121,20 +119,13 @@ var _makeRequest = function (verb, requests){
                 }
                 xhr.send(req.body);
             } catch (err) {
-                debugger
                 rej(err);
             }
         });
         promise.abort = abort;
-        promise.catch(err => {
-            debugger;
-        });
         return promise;
     });
     var promise = Promise.all(promises);
-    promise.catch(err => {
-        debugger;
-    });
     promise.abort = () => _.each(promises, p => p.abort);
     return promise;
 };
