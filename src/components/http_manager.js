@@ -87,7 +87,7 @@ var _makeRequest = function (verb, requests){
                     xhr.setRequestHeader(key, header);
                 });
                 //if (!res.withoutXSRF && Cookie.parse(document.cookie)['XSRF-TOKEN'] != null) {
-                if (!res.withoutXSRF && this._token != null) {
+                if (!req.withoutXSRF && this._token != null) {
                     //xhr.setRequestHeader('X-XSRF-TOKEN', Cookie.parse(document.cookie)['XSRF-TOKEN']);
                     xhr.setRequestHeader('X-CSRF-TOKEN', this._token);
                 }
