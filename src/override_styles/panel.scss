@@ -1,3 +1,4 @@
+@import 'variables';
 
 .panel.standard {
     border: 0;
@@ -8,6 +9,7 @@
         font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
         color: #fff;
         background: url(/build/f427849b8caaa9e4cba74e927cba4b6e.jpg);
+        background-color: $cmwn-blue;
         background-size: 100% auto;
         border-radius: 0;
     }
