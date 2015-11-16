@@ -6,6 +6,8 @@
 import _ from 'lodash';
 //import Cookie from 'cookie';
 
+import History from 'components/history';
+
 const APP_COOKIE_NAME = 'cmwn_token';
 
 /**
@@ -41,7 +43,16 @@ var _getRequestPromise = function (method, request, body, headers) {
     }
     promise = _makeRequest.call(this, method, request);
     if (request.length === 1) {
-        return promise.then(res => Promise.resolve(res[0]));
+        return promise.then(res => {
+            debugger;
+            if (res[0].response == null || res[0].response.length === 0) {
+                throw 'no data recieved';
+            }
+            return Promise.resolve(res[0]);
+        }).catch(err => {
+            console.info(err)
+            History.replaceState(null, '/login');
+        });
     }
     return promise;
 };
@@ -64,6 +75,7 @@ var _makeRequest = function (verb, requests){
                     try {
                         response = (_.isObject(xhr.response) ? xhr.response : JSON.parse(xhr.response));
                     } catch (err) {
+                        debugger;
                         response = xhr.response;
                     }
                     return res({
@@ -81,7 +93,7 @@ var _makeRequest = function (verb, requests){
                 }
                 xhr.open(verb, req.url, true);
                 //if (req.withCredentials != null) {
-                    xhr.withCredentials = true;
+                xhr.withCredentials = true;
                 //}
                 _.each(req.headers, (header, key) => {
                     xhr.setRequestHeader(key, header);
@@ -94,7 +106,6 @@ var _makeRequest = function (verb, requests){
                 if (_.isObject(req.body)) {
                     req.body = (_.defaults({_token: this._token}, req.body));
                 }
-                debugger
                 if (req.asJSON) {
                     req.body = JSON.stringify(req.body);
                 } else {
@@ -102,19 +113,28 @@ var _makeRequest = function (verb, requests){
                         acc.append(encodeURIComponent(key), encodeURIComponent(val));
                         return acc;
                     }, new FormData())*/
-                    req.body = _.reduce(req.body, (acc, value, key) => 
-                        acc === '' ? `${encodeURIComponent(key)}=${encodeURIComponent(value)}` : `${acc}&${encodeURIComponent(key)}=${encodeURIComponent(value)}`,
-                    '')
+                    req.body = _.reduce(req.body, (acc, value, key) =>
+                        acc === '' ?
+                        `${encodeURIComponent(key)}=${encodeURIComponent(value)}` :
+                        `${acc}&${encodeURIComponent(key)}=${encodeURIComponent(value)}`,
+                    '');
                 }
                 xhr.send(req.body);
             } catch (err) {
+                debugger
                 rej(err);
             }
         });
         promise.abort = abort;
+        promise.catch(err => {
+            debugger;
+        });
         return promise;
     });
     var promise = Promise.all(promises);
+    promise.catch(err => {
+        debugger;
+    });
     promise.abort = () => _.each(promises, p => p.abort);
     return promise;
 };

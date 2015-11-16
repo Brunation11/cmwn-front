@@ -2,10 +2,10 @@ import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Link } from 'react-router';
-import CreateBrowserHistory from 'history/lib/createBrowserHistory';
 
 import GlobalHeader from 'components/global_header';
 
+import History from 'components/history';
 import Login from 'routes/login';
 import Users from 'routes/users';
 import Districts from 'routes/districts';
@@ -19,6 +19,8 @@ import GroupView from 'routes/groups/view';
 import GroupEdit from 'routes/groups/edit';
 import Friends from 'routes/friends';
 import SuggestedFriends from 'routes/friends/suggested';
+import Profile from 'routes/students/profile';
+import StudentEdit from 'routes/students/edit';
 import Layout from 'layouts/one_col';
 
 //import 'reset.css';
@@ -68,6 +70,8 @@ const routes = {
     childRoutes: [
         { path: 'login(/)', component: Login},
         { path: 'users(/)', component: Users },
+        { path: 'profile(/)', component: Profile},
+        { path: 'student/edit(/)', component: StudentEdit },
         { path: 'districts(/)', component: Districts},
         { path: 'district/:id(/)', component: DistrictView},
         { path: 'district/:id/view(/)', component: DistrictView},
@@ -92,7 +96,7 @@ const routes = {
 };
 
 function run() {
-    ReactDOM.render(<Router history={CreateBrowserHistory()} routes={routes} />, document.getElementById('cmwn-app'));
+    ReactDOM.render(<Router history={History} routes={routes} />, document.getElementById('cmwn-app'));
 }
 
 const loadedStates = ['complete', 'loaded', 'interactive'];
