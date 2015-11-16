@@ -72,7 +72,7 @@ var _makeRequest = function (verb, requests){
                         request: xhr
                     });
                 };
-                if (this._token != null && verb === 'GET') {
+                if (!req.withoutToken && this._token != null && verb === 'GET') {
                     if (req.url.indexOf('?') === -1) {
                         req.url += `?_token=${this._token}`;
                     } else {
@@ -92,10 +92,21 @@ var _makeRequest = function (verb, requests){
                     xhr.setRequestHeader('X-CSRF-TOKEN', this._token);
                 }
                 if (_.isObject(req.body)) {
-                    xhr.send(_.defaults(this._token, req.body));
-                } else {
-                    xhr.send(req.body);
+                    req.body = (_.defaults({_token: this._token}, req.body));
                 }
+                debugger
+                if (req.asJSON) {
+                    req.body = JSON.stringify(req.body);
+                } else {
+                    /*req.body = _.reduce(req.body, (acc, val, key) => {
+                        acc.append(encodeURIComponent(key), encodeURIComponent(val));
+                        return acc;
+                    }, new FormData())*/
+                    req.body = _.reduce(req.body, (acc, value, key) => 
+                        acc === '' ? `${encodeURIComponent(key)}=${encodeURIComponent(value)}` : `${acc}&${encodeURIComponent(key)}=${encodeURIComponent(value)}`,
+                    '')
+                }
+                xhr.send(req.body);
             } catch (err) {
                 rej(err);
             }
