@@ -4,7 +4,9 @@
  * objects and returns a promise containing a matching set of responses
  */
 import _ from 'lodash';
-import Cookie from 'cookie';
+//import Cookie from 'cookie';
+
+const APP_COOKIE_NAME = 'cmwn_token';
 
 /**
  * Bundles requests into an array of request objects
@@ -37,7 +39,7 @@ var _getRequestPromise = function (method, request, body, headers) {
     if (!_.isArray(request)) {
         request = [request];
     }
-    promise = _makeRequest(method, request);
+    promise = _makeRequest.call(this, method, request);
     if (request.length === 1) {
         return promise.then(res => Promise.resolve(res[0]));
     }
@@ -70,18 +72,30 @@ var _makeRequest = function (verb, requests){
                         request: xhr
                     });
                 };
+                if (this._token != null && verb === 'GET') {
+                    if (req.url.indexOf('?') === -1) {
+                        req.url += `?_token=${this._token}`;
+                    } else {
+                        req.url += `&_token=${this._token}`;
+                    }
+                }
                 xhr.open(verb, req.url, true);
                 if (req.withCredentials != null) {
                     xhr.withCredentials = true;
                 }
                 _.each(req.headers, (header, key) => {
                     xhr.setRequestHeader(key, header);
-                    debugger;
                 });
-                if (Cookie.parse(document.cookie)['XSRF-TOKEN'] != null) {
-                    xhr.setRequestHeader('X-XSRF-TOKEN', Cookie.parse(document.cookie)['XSRF-TOKEN']);
+                //if (!res.withoutXSRF && Cookie.parse(document.cookie)['XSRF-TOKEN'] != null) {
+                if (!res.withoutXSRF && this._token != null) {
+                    //xhr.setRequestHeader('X-XSRF-TOKEN', Cookie.parse(document.cookie)['XSRF-TOKEN']);
+                    xhr.setRequestHeader('X-CSRF-TOKEN', this._token);
                 }
-                xhr.send(req.body);
+                if (_.isObject(req.body)) {
+                    xhr.send(_.defaults(this._token, req.body));
+                } else {
+                    xhr.send(req.body);
+                }
             } catch (err) {
                 rej(err);
             }
@@ -96,18 +110,26 @@ var _makeRequest = function (verb, requests){
 
 class _HttpManager {
     constructor() {
+        var csrf = window.localStorage[APP_COOKIE_NAME];
+        if (csrf != null) {
+            this.setToken(csrf);
+        }
     }
     GET(request, body, headers){
-        return _getRequestPromise('GET', request, body, headers);
+        return _getRequestPromise.call(this, 'GET', request, body, headers);
     }
     POST(request, body, headers){
-        return _getRequestPromise('POST', request, body, headers);
+        return _getRequestPromise.call(this, 'POST', request, body, headers);
     }
     PUT(request, body, headers){
-        return _getRequestPromise('PUT', request, body, headers);
+        return _getRequestPromise.call(this, 'PUT', request, body, headers);
     }
     DELETE(request, body, headers){
-        return _getRequestPromise('DELETE', request, body, headers);
+        return _getRequestPromise.call(this, 'DELETE', request, body, headers);
+    }
+    setToken(_token) {
+        this._token = _token;
+        window.localStorage.setItem(APP_COOKIE_NAME, _token);
     }
 }
 

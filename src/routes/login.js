@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button, Input} from 'react-bootstrap';
-import Cookie from 'cookie';
+//import Cookie from 'cookie';
 
 import Layout from 'layouts/one_col';
 import HttpManager from 'components/http_manager';
@@ -22,21 +22,25 @@ var Page = React.createClass({
         this.getToken();
     },
     getToken: function () {
-        var req = HttpManager.GET({url: `${GLOBALS.API_URL}csrf_token`, withCredentials: true});
+        var req = HttpManager.GET({url: `${GLOBALS.API_URL}csrf_token`, withCredentials: true, withoutXSRF: true});
         req.then(res => {
-            //this.setState({_token: res.response});
+            this.setState({_token: res.response.token});
+            HttpManager.setToken(res.response.token);
         });
     },
     login: function () {
         var req;
         req = HttpManager.POST({
             url: `${GLOBALS.API_URL}auth/login`,
-            withCredentials: true
+            withCredentials: true,
+            withoutXSRF: true
         }, '', {
-            'X-XSRF-TOKEN': Cookie.parse(document.cookie)['XSRF-TOKEN'],
+            //'X-XSRF-TOKEN': Cookie.parse(document.cookie)['XSRF-TOKEN'],
+            'X-CSRF-TOKEN': this.state._token,
             'Authorization': `Basic ${window.btoa(this.refs.login.getValue() + ':' + this.refs.password.getValue())}`
         });
         req.then(res => {
+            //HttpManager.setToken(Cookie.parse(document.cookie)['XSRF-TOKEN'])
             debugger;
             console.log(res);
         });
