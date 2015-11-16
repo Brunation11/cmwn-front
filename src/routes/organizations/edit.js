@@ -3,21 +3,10 @@ import {Button, Input, Panel} from 'react-bootstrap';
 import HttpManager from 'components/http_manager';
 import Layout from 'layouts/two_col';
 import GLOBALS from 'components/globals';
+import Validate from 'components/validators';
 
 const HEADINGS = {
     EDIT_TITLE: 'Info'
-};
-
-/** @TODO MPR, 11/4/15: Probably these validation rules should be stored elsewhere */
-/**
- * Private Function. Must always be called with call or apply
- */
-var _nameValidation = function () {
-    var length = this.state.title.length;
-    if (length < 3) {
-        return 'error';
-    }
-    return 'success';
 };
 
 var Edit = React.createClass({
@@ -54,7 +43,7 @@ var Edit = React.createClass({
                     value={this.state.title}
                     placeholder="title"
                     label="Title"
-                    bsStyle={_nameValidation.call(this)}
+                    bsStyle={Validate.len(this.state.title)}
                     hasFeedback
                     ref="titleInput"
                     onChange={() => this.setState({title: this.refs.titleInput.getValue()})}
