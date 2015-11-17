@@ -43,14 +43,19 @@ var _getRequestPromise = function (method, request, body, headers) {
     }
     promise = _makeRequest.call(this, method, request);
     if (request.length === 1) {
-        return promise.then(res => {
+        return promise.then((res, rej) => {
+            if (res[0].status > 399) {
+                /** @TODO MPR, 11/18/15: Implement error page */
+                rej(res);
+                History.replaceState(null, '/profile');
+            }
             if (res[0].response == null || res[0].response.length === 0) {
-                throw 'no data recieved';
+                rej('no data recieved');
             }
             return Promise.resolve(res[0]);
         }).catch(err => {
             console.info(err); //eslint-disable-line no-console
-            History.replaceState(null, '/login');
+            //History.replaceState(null, '/login');
         });
     }
     return promise;

@@ -16,6 +16,9 @@ var SiteNav = React.createClass({
         urlData.then(res => {
             this.menuItems = _.map(_.pairs(res.response.data[0]), (value) => ({text: value[0], url: value[1]}));
             this.forceUpdate();
+        }).catch(err => {
+            /** @TODO MPR, 10/18/15: Implement error page */
+            console.info(err); //eslint-disable no-console
         });
 
     },
