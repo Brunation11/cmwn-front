@@ -2,15 +2,22 @@
 /**
  * length validation. Defaults to 3 just because. Exported as len because we don't want to overwrite the length property.
  * @param {string} str
- * @param {number} [max = 3] - length to check against
+ * @param {number} [min = 3] - length to check against
  */
 import _ from 'lodash';
 
-var length = function (str, max = 3) {
-    if (str.length < max) {
-        return 'error';
+var required = function (str) {
+    if (str != null && str !== '') {
+        return 'success';
     }
-    return 'success';
+    return 'error';
+};
+
+var length = function (str, min = 3) {
+    if (str && str.length > min) {
+        return 'success';
+    }
+    return 'error';
 };
 
 var date = function (str) {
@@ -37,6 +44,7 @@ var Validate = function (str) {
     });
 };
 
+Validate.required = required;
 Validate.len = length;
 Validate.date = date;
 Validate.email = email;
