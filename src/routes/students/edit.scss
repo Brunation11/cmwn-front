@@ -1,0 +1,65 @@
+@import 'variables';
+
+.edit-student {
+
+    a {
+        color: $cmwn-purple;
+    }
+
+    .panel-body {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+
+        & > * {
+            flex: 1 0 275px;//arbitrary, looks good as a breakpoint
+            position: relative;
+        }
+
+        .right {
+
+            label, span, h3, h2, p, a { //fixes a horrible chrome/osx font aliasing issue http://stackoverflow.com/questions/8024061/webkit-blurry-text-with-css-scale-translate3d
+                transform: translate3d(0, 0, 0);
+                filter: blur(0);
+                -webkit-filter: blur(0);
+            }
+
+            .input-group-addon {
+                padding: 0;
+                margin: 0;
+                border: 0;
+            }
+
+            .has-addon {
+                
+                .form-control-feedback:before {
+                    margin-left: -75px;
+                }
+            }
+        }
+
+        .left {
+        
+            & > * {
+                position: relative;
+                transform: translateX(50%) translate3d( 0, 0, 0);
+                margin-left: -50%;
+            }
+
+            & > p {
+                padding-top: $standard;
+                padding-left: $standard / 3;
+            }
+        }
+
+
+    }
+    
+    .profile-image {
+    }
+
+    .below {
+        padding-top: $standard;
+        padding-left: $standard / 3;
+    }
+}
