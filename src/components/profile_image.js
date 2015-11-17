@@ -1,4 +1,5 @@
 import React from 'react';
+import Classnames from 'classnames';
 
 import Cloudinary from 'components/cloudinary';
 import GLOBALS from 'components/globals';
@@ -50,9 +51,10 @@ var Image = React.createClass({
     },
     render: function () {
         return (
-            <div className="profile-image">
+            <div className={Classnames('profile-image', {'link-below': this.props['link-below']})} >
                 {this.renderImage(this.state.profileImage)}
                 <div className="upload" onClick={this.startUpload}>Upload Image</div>
+                <div className="below"><a onClick={this.startUpload}>Upload New Image</a></div>
             </div>
         );
     }
