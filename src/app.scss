@@ -78,6 +78,10 @@ body {
         }
     }
 
+    a {
+        cursor: pointer;
+    }
+
     .sidebar{
         order: 1;
         flex-grow: 0;
@@ -85,7 +89,7 @@ body {
         padding: $standard / 2;
 
         nav {
-            
+
             * {
                 margin: $standard / 2 0
             }
