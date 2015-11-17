@@ -88,10 +88,6 @@ const routes = {
         { path: 'friends/suggested(/)', component: SuggestedFriends},
 
         { path: '*', component: Landing},
-        //{ path: 'roles', component: Roles },
-        //{ path: 'organizations', component: Organizations },
-        //{ path: 'groups', component: Groups },
-        //{ path: 'images', component: Images },
     ]
 };
 
