@@ -27,7 +27,7 @@ var GlobalHeader = React.createClass({
                 <div className="logout"><a href="#" onClick={this.logout}>
                     <img src={LOGOUT_URL} alt={LOGOUT} />{LOGOUT}
                 </a></div>
-                <div className="current-user-info">{CURRENT_USER_IS + Authorization.currentUserName}</div>
+                <div className="current-user-info">{CURRENT_USER_IS + Authorization.currentUser.name}</div>
             </div>
         );
     }
