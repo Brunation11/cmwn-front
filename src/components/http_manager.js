@@ -158,6 +158,9 @@ class _HttpManager {
         this._token = _token;
         window.localStorage.setItem(APP_COOKIE_NAME, _token);
     }
+    get token () {
+        return this._token;
+    }
 }
 
 var HttpManager = new _HttpManager();
