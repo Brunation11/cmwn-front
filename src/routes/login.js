@@ -43,8 +43,6 @@ var Page = React.createClass({
             History.replaceState(null, '/profile');
         });
     },
-    onSubmit: function () {
-    },
     render: function () {
         return (
            <Layout>
