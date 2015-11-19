@@ -2,6 +2,7 @@ import React from 'react';
 import Classnames from 'classnames';
 
 import Cloudinary from 'components/cloudinary';
+import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
 
 import 'components/profile_image.scss';
@@ -31,7 +32,10 @@ var Image = React.createClass({
                 theme: 'minimal',
             }, (error, result) => {
                 self.setState({profileImage: result[0].secure_url});
-                /** @TODO MPR, 11/13/15: Send url and id to server */
+                HttpManager.POST({url: `${GLOBALS.API_URL}/updateimage`}, {
+                    url: result[0].secure_url,
+                    id: result[0].public_id
+                })
                 //result[0].public_id
             });
             /* eslint-enable camelcase */
