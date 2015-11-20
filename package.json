@@ -1,6 +1,6 @@
 {
   "name": "cmwn-platorm-frontend",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "ChangeMyWorldNow Platform Frontend (React)",
   "main": "index.html",
   "scripts": {
@@ -19,7 +19,6 @@
     "react": "^0.14.2",
     "react-addons-update": "^0.14.2",
     "react-bootstrap": "^0.27.3",
-    "react-bootstrap-validation": "git://github.com/maxprafferty/react-bootstrap-validation",
     "react-router": "^1.0.0-rc3"
   },
   "devDependencies": {
