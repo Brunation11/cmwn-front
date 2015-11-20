@@ -201,8 +201,7 @@ var ChangePassword = React.createClass({
                 'current_password': this.state.current,
                 'password': this.state.new,
                 'password_confirmation': this.state.confirm,
-                'current_user_id': Authorization.currentUser.id,
-                'updating_user_id': this.props.id
+                'user_id': this.props.id
             });
             update.then(() => {});
             /** #TODO MPR, 11/19/15: handle failure */
