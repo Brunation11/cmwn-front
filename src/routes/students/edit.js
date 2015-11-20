@@ -14,7 +14,8 @@ import Form from 'components/form';
 import 'routes/students/edit.scss';
 
 const HEADINGS = {
-    EDIT_TITLE: 'Info'
+    EDIT_TITLE: 'Info',
+    PASSWORD: 'Update Password'
 };
 const SUSPEND = 'Suspend Account';
 
@@ -185,6 +186,55 @@ var Fields = React.createClass({
     }
 });
 
+var ChangePassword = React.createClass({
+    getInitialState: function () {
+        return {
+            current: '',
+            new: '',
+            confirm: ''
+        };
+    },
+    render: function () {
+        return (
+            <Panel header={HEADINGS.PASSWORD} className="standard">
+                <form>
+                <Input
+                    type="password"
+                    value={this.state.current}
+                    placeholder="********"
+                    label="Current Password"
+                    validate="required"
+                    ref="currentInput"
+                    name="currentInput"
+                    onChange={e => this.setState({current: e.target.value})}
+                />
+                <Input
+                    type="password"
+                    value={this.state.new}
+                    placeholder="********"
+                    label="New Password"
+                    validate="required"
+                    ref="newInput"
+                    name="newInput"
+                    onChange={e => this.setState({new: e.target.value})}
+                />
+                <Input
+                    type="password"
+                    value={this.state.confirm}
+                    placeholder="********"
+                    label="Confirm Password"
+                    validate="required"
+                    ref="confirmInput"
+                    name="confirmInput"
+                    onChange={e => this.setState({confirm: e.target.value})}
+                />
+                <Button onClick={this.submit}>Update</Button>
+                </form>
+            </Panel>
+        );
+    }
+});
+
 var Edit = React.createClass({
     getInitialState: function () {
         this.id = this.props.params.id || Authorization.currentUser.id;
@@ -197,6 +247,7 @@ var Edit = React.createClass({
                 <Fetcher url={this.url}>
                     <Fields id={this.id} />
                 </Fetcher>
+                <ChangePassword />
            </Layout>
          );
     }
