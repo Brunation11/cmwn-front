@@ -43,14 +43,14 @@ var _getRequestPromise = function (method, request, body, headers) {
     }
     promise = _makeRequest.call(this, method, request);
     if (request.length === 1) {
-        return promise.then((res, rej) => {
+        return promise.then((res) => {
             if (res[0].status > 399) {
                 /** @TODO MPR, 11/18/15: Implement error page */
-                rej(res);
+                throw res;
                 History.replaceState(null, '/profile');
             }
             if (res[0].response == null || res[0].response.length === 0) {
-                rej('no data recieved');
+                throw 'no data recieved';
             }
             return Promise.resolve(res[0]);
         }).catch(err => {
@@ -95,6 +95,7 @@ var _makeRequest = function (verb, requests){
                     }
                 }
                 xhr.open(verb, req.url, true);
+                debugger
                 //if (req.withCredentials != null) {
                 xhr.withCredentials = true;
                 //}
@@ -112,15 +113,16 @@ var _makeRequest = function (verb, requests){
                 if (req.asJSON) {
                     req.body = JSON.stringify(req.body);
                 } else {
-                    /*req.body = _.reduce(req.body, (acc, val, key) => {
+                    /** @TODO MPR, 11/19/15: Polyfill formdata*/
+                    req.body = _.reduce(req.body, (acc, val, key) => {
                         acc.append(encodeURIComponent(key), encodeURIComponent(val));
                         return acc;
-                    }, new FormData())*/
-                    req.body = _.reduce(req.body, (acc, value, key) =>
+                    }, new FormData())
+                    /*req.body = _.reduce(req.body, (acc, value, key) =>
                         acc === '' ?
                         `${encodeURIComponent(key)}=${encodeURIComponent(value)}` :
                         `${acc}&${encodeURIComponent(key)}=${encodeURIComponent(value)}`,
-                    '');
+                    '');*/
                 }
                 xhr.send(req.body);
             } catch (err) {
@@ -158,7 +160,7 @@ class _HttpManager {
         this._token = _token;
         window.localStorage.setItem(APP_COOKIE_NAME, _token);
     }
-    get token () {
+    get token() {
         return this._token;
     }
 }
