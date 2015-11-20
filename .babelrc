@@ -1,5 +1,9 @@
 {
   "stage": 0,
+  "optional": [
+    "es6.spread",
+    "react"
+  ],
   "env": {
     "development": {
       "plugins": ["react-transform"],
