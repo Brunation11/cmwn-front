@@ -12,6 +12,11 @@ const LOGOUT = 'logout';
 const CURRENT_USER_IS = 'You are logged in as ';
 const MENU = 'Menu';
 var GlobalHeader = React.createClass({
+    componentDidMount: function () {
+        Authorization.userIsLoaded.then(() => {
+            this.forceUpdate();
+        })
+    },
     toggleMenu: function () {
         var isOpen = EventManager.get('menuIsOpen');
         EventManager.update('menuIsOpen', !isOpen);

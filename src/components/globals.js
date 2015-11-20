@@ -14,7 +14,7 @@ const GLOBALS = _.defaults(window.__cmwn, {
     DEFAULT_PROFILE: DefaultProfile,
     CURRENT_USER: {
         PROFILE_IMAGE: 'https://upload.wikimedia.org/wikipedia/commons/1/17/F%C3%ABdor_Ivanovi%C4%8D_%C5%A0aljapin_as_Farlaf_by_Alexandr_Golovin.jpg',
-        NAME: 'Alexandr Golovin',
+        NAME: '',
         ID: 99
     },
     TOP_NAV: [
