@@ -4,8 +4,8 @@ import ReactDOM from 'react-dom';
 import { Router, Link } from 'react-router';
 
 import GlobalHeader from 'components/global_header';
-
 import History from 'components/history';
+
 import Login from 'routes/login';
 import Users from 'routes/users';
 import Districts from 'routes/districts';

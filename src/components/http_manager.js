@@ -46,8 +46,8 @@ var _getRequestPromise = function (method, request, body, headers) {
         return promise.then((res) => {
             if (res[0].status > 399) {
                 /** @TODO MPR, 11/18/15: Implement error page */
-                throw res;
                 History.replaceState(null, '/profile');
+                throw res;
             }
             if (res[0].response == null || res[0].response.length === 0) {
                 throw 'no data recieved';
@@ -95,7 +95,7 @@ var _makeRequest = function (verb, requests){
                     }
                 }
                 xhr.open(verb, req.url, true);
-                debugger
+
                 //if (req.withCredentials != null) {
                 xhr.withCredentials = true;
                 //}
@@ -117,7 +117,7 @@ var _makeRequest = function (verb, requests){
                     req.body = _.reduce(req.body, (acc, val, key) => {
                         acc.append(encodeURIComponent(key), encodeURIComponent(val));
                         return acc;
-                    }, new FormData())
+                    }, new FormData());
                     /*req.body = _.reduce(req.body, (acc, value, key) =>
                         acc === '' ?
                         `${encodeURIComponent(key)}=${encodeURIComponent(value)}` :

@@ -12,7 +12,7 @@ const HEADINGS = {
 
 const LABELS = {
     SUBMIT: 'Submit'
-}
+};
 
 var Edit = React.createClass({
     organization: {},
@@ -70,7 +70,7 @@ var Edit = React.createClass({
                     <input type="hidden" name="organization_id" value={this.props.params.id} />
                     <Input type="file" label="Upload Spreadsheet"/>
                     <Button type="submit" >{LABELS.SUBMIT}</Button>
-                </form>       
+                </form>
               </Panel>
            </Layout>
          );

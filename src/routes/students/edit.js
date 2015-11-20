@@ -124,7 +124,7 @@ var Fields = React.createClass({
                         validate="required"
                         ref="firstnameInput"
                         name="firstnameInput"
-                        validationEvent='onBlur'
+                        validationEvent="onBlur"
                         hasFeedback
                         onChange={e => this.setState({first_name: e.target.value})} //eslint-disable-line camelcase
                     />
@@ -188,7 +188,7 @@ var Fields = React.createClass({
 var Edit = React.createClass({
     getInitialState: function () {
         this.id = this.props.params.id || Authorization.currentUser.id;
-        this.url =  GLOBALS.API_URL + 'users/' + this.id;
+        this.url = GLOBALS.API_URL + 'users/' + this.id;
         return {};
     },
     render: function () {

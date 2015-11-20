@@ -41,7 +41,7 @@ var Validate = function (str) {
             return 'error';
         }
         return 'success';
-    });
+    }, 'success');
 };
 
 Validate.required = required;

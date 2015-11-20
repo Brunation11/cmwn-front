@@ -35,8 +35,7 @@ var Image = React.createClass({
                 HttpManager.POST({url: `${GLOBALS.API_URL}/updateimage`}, {
                     url: result[0].secure_url,
                     id: result[0].public_id
-                })
-                //result[0].public_id
+                });
             });
             /* eslint-enable camelcase */
         });

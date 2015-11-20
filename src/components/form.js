@@ -7,7 +7,6 @@ import Validator from 'components/validators';
 
 class ValidatedInput extends Input {
     isValid() {
-        debugger;
         return this.props.validate();
     }
     getValue() {
@@ -60,7 +59,7 @@ var Form = React.createClass({
             <form {...self.props}>
                 {React.Children.map(self.props.children, child => {
                     var validationFn, propsForChild, props;
-            
+
                     if (child == null) {
                         return child;
                     }
@@ -83,7 +82,7 @@ var Form = React.createClass({
                                     return Validator.call(child, self.refs[child.ref].getValue(), ...props.validate.split(','));
                                 }
                                 return 'success';
-                            }
+                            };
                         }
 
                         propsForChild = propsForChild.set('validate', validationFn);

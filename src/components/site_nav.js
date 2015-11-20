@@ -18,7 +18,7 @@ var SiteNav = React.createClass({
             this.forceUpdate();
         }).catch(err => {
             /** @TODO MPR, 10/18/15: Implement error page */
-            console.info(err); //eslint-disable no-console
+            console.info(err); //eslint-disable-line no-console
         });
 
     },
