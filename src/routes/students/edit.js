@@ -200,7 +200,9 @@ var ChangePassword = React.createClass({
             var update = HttpManager.POST({url: `${GLOBALS.API_URL}/auth/password`}, {
                 'current_password': this.state.current,
                 'password': this.state.new,
-                'password_confirmation': this.state.confirm
+                'password_confirmation': this.state.confirm,
+                'current_user_id': Authorization.currentUser.id,
+                'updating_user_id': this.props.id
             });
             update.then(() => {});
             /** #TODO MPR, 11/19/15: handle failure */
@@ -264,7 +266,7 @@ var Edit = React.createClass({
                 <Fetcher url={this.url}>
                     <Fields id={this.id} />
                 </Fetcher>
-                <ChangePassword />
+                <ChangePassword id={this.id} />
            </Layout>
          );
     }
