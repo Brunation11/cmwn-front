@@ -17,6 +17,7 @@
         }
 
         .right {
+            z-index: 2;
 
             label, span, h3, h2, p, a { //fixes a horrible chrome/osx font aliasing issue http://stackoverflow.com/questions/8024061/webkit-blurry-text-with-css-scale-translate3d
                 transform: translate3d(0, 0, 0);
@@ -39,6 +40,7 @@
         }
 
         .left {
+            z-index: 1;
         
             & > * {
                 position: relative;

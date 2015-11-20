@@ -9,6 +9,7 @@ import GLOBALS from 'components/globals';
 import Validate from 'components/validators';
 import Fetcher from 'components/fetcher';
 import ProfileImage from 'components/profile_image';
+import Form from 'components/form';
 
 import 'routes/students/edit.scss';
 
@@ -19,7 +20,9 @@ const SUSPEND = 'Suspend Account';
 
 var Fields = React.createClass({
     getInitialState: function () {
-        return _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {};
+        var state = _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {};
+        state.id = this.props.id;
+        return state;
     },
     suspendAccount: function () {
     },
@@ -35,33 +38,51 @@ var Fields = React.createClass({
         parents.push({name: 'Jane Adams'});
         this.setState({parents});
     },
+    submitData: function () {
+        if (this.refs.formRef.isValid()) {
+            HttpManager.POST(`${GLOBALS.API_URL}users/${this.state.id}`, {
+                first_name: this.state.first_name, //eslint-disable-line camelcase
+                last_name: this.state.last_name, //eslint-disable-line camelcase
+                sex: this.state.sex,
+                dob: this.state.dob,
+                email: this.state.email
+            });
+        }
+    },
     renderParentFields: function () {
-        return _.map(this.state.parents, (parent, i) => {
-            /** @TODO MPR, 11/14/15: Implement Autocomplete, store parent ID*/
-            return (
-                    <span>
-                        <Input
-                            type="text"
-                            groupClassName="has-addon"
-                            value={parent.name}
-                            placeholder="Parent or Guardian"
-                            label="Parent or Guardian"
-                            bsStyle={Validate.required(parent.name)}
-                            hasFeedback
-                            ref={`parentRef${i}`}
-                            key={`parentRef${i}`}
-                            addonAfter={<Button onClick={this.removeParent(i)} >X</Button>}
-                            onChange={() => {
-                                var parents = this.state.parents;
-                                parents[i] = {name: this.refs[`parentRef${i}`].getValue()};
-                                this.setState({parents});
-                            }}
-                        />
-                    </span>
-            );
-        });
+        if (this.state.parents && this.state.parents.length) {
+            return _.map(this.state.parents, (parent, i) => {
+                /** @TODO MPR, 11/14/15: Implement Autocomplete, store parent ID*/
+                return (
+                        <span>
+                            <Input
+                                type="text"
+                                groupClassName="has-addon"
+                                value={parent.name}
+                                placeholder="Parent or Guardian"
+                                label="Parent or Guardian"
+                                bsStyle={Validate.required(parent.name)}
+                                hasFeedback
+                                ref={`parentRef${i}`}
+                                key={`parentRef${i}`}
+                                addonAfter={<Button onClick={this.removeParent(i)} >X</Button>}
+                                onChange={() => {
+                                    var parents = this.state.parents;
+                                    parents[i] = {name: this.refs[`parentRef${i}`].getValue()};
+                                    this.setState({parents});
+                                }}
+                            />
+                        </span>
+                );
+            });
+        }
+        return null;
     },
     renderSchoolInformation: function () {
+        var teachers = _.map(this.state.teachers, this.renderTeacherInputs);
+        if (!teachers.length) {
+            teachers = null;
+        }
         return (
            <div>
                 <Input
@@ -72,7 +93,7 @@ var Fields = React.createClass({
                     ref="gradeInput"
                     onChange={() => this.setState({grade: this.refs.gradeInput.getValue()})}
                 >{this.renderk8()}</Input>
-                {_.map(this.state.teachers, this.renderTeacherInputs)}
+                {teachers}
            </div>
         );
     },
@@ -94,89 +115,88 @@ var Fields = React.createClass({
                     <ProfileImage url={this.state.profile_image} link-below={true}/>
                     <p><a onClick={this.suspendAccount}>{SUSPEND}</a></p>
                 </div>
-                <div className="right">
+                <div className="right"><Form ref="formRef">
                     <Input
                         type="text"
-                        value={this.state.name}
-                        placeholder="name"
-                        label="Name"
-                        bsStyle={Validate.len(this.state.name)}
+                        value={this.state.first_name}
+                        placeholder="first name"
+                        label="First Name"
+                        validate="required"
+                        ref="firstnameInput"
+                        name="firstnameInput"
+                        validationEvent='onBlur'
                         hasFeedback
-                        ref="nameInput"
-                        onChange={() => this.setState({title: this.refs.nameInput.getValue()})}
+                        onChange={e => this.setState({first_name: e.target.value})} //eslint-disable-line camelcase
+                    />
+                    <Input
+                        type="text"
+                        value={this.state.last_name}
+                        placeholder="last name"
+                        label="Last Name"
+                        validate="required"
+                        ref="lastnameInput"
+                        name="lastnameInput"
+                        onChange={e => this.setState({last_name: e.target.value})} //eslint-disable-line camelcase
                     />
                     <Input
                         type="select"
-                        value={this.state.gender}
+                        value={this.state.sex}
                         placeholder="Gender"
                         label="Gender"
-                        ref="genderInput"
-                        onChange={() => this.setState({gender: this.refs.genderInput.getValue()})}
-                    />
+                        validate="required"
+                        ref="sexInput"
+                        name="sexInput"
+                        onChange={e => this.setState({sex: e.target.value})}
+                    >
+                            <option value="" disabled >Select gender</option>
+                            <option value="female">Female</option>
+                            <option value="male">Male</option>
+                            <option value="other">Other</option>
+                    </Input>
                     <Input
                         type="text"
                         value={this.state.birthdate}
                         placeholder="date of birth"
                         label="Date of Birth"
-                        bsStyle={Validate.date(this.state.birthdate)}
-                        hasFeedback
+                        validate="required"
                         ref="birthdateInput"
-                        onChange={() => this.setState({birthdate: this.refs.birthdateInput.getValue()})}
+                        name="birthdateInput"
+                        onChange={e => this.setState({dob: e.target.value})}
                     />
                     <Input
                         type="email"
                         value={this.state.email}
                         placeholder="email"
                         label="email"
-                        bsStyle={Validate.email(this.state.email)}
-                        hasFeedback
+                        validate="required,email"
                         ref="emailInput"
-                        onChange={() => this.setState({title: this.refs.emailInput.getValue()})}
+                        name="emailInput"
+                        onChange={e => this.setState({email: e.target.value})}
                     />
                     <h3>Parent or Guardian</h3>
                     {this.renderParentFields()}
                     <p><a onClick={this.addParent}>+ Add parent or guardian</a></p>
                     <h3>School Information</h3>
                     {this.renderSchoolInformation()}
-                    <Button onClick={this.submitData} > Save </Button>
-                </div>
+                    <Button onClick={this.submitData}> Save </Button>
+                </Form></div>
             </Panel>
         );
     }
 });
 
 var Edit = React.createClass({
-    user: {},
     getInitialState: function () {
-        return {
-            code: '',
-            title: '',
-            description: ''
-        };
-    },
-    componentWillMount: function () {
-//        this.getUser();
-    },
-    getUser: function () {
-        var id = this.props.params.id || Authorization.currentUser.id;
-        var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'users/' + id});
-        urlData.then(res => {
-            this.user = res.response.data;
-            this.setState({
-                code: this.user.code,
-                title: this.user.title,
-                description: this.user.description
-            });
-        });
-    },
-    submitData: function () {
+        this.id = this.props.params.id || Authorization.currentUser.id;
+        this.url =  GLOBALS.API_URL + 'users/' + this.id;
+        return {};
     },
     render: function () {
         return (
            <Layout className="edit-student">
-               <Fetcher data={{not: 'empty'}}>
-                    <Fields />
-               </Fetcher>
+                <Fetcher url={this.url}>
+                    <Fields id={this.id} />
+                </Fetcher>
            </Layout>
          );
     }
