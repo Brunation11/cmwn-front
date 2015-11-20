@@ -191,8 +191,23 @@ var ChangePassword = React.createClass({
         return {
             current: '',
             new: '',
-            confirm: ''
+            confirm: '',
+            extraProps: {}
         };
+    },
+    submit: function () {
+        if (this.state.confirm === this.state.new) {
+            var update = HttpManager.POST({url: `${GLOBALS.API_URL}/auth/password`}, {
+                'current_password': this.state.current,
+                'password': this.state.new,
+                'password_confirmation': this.state.confirm
+            });
+            update.then(() => {});
+            /** #TODO MPR, 11/19/15: handle failure */
+        } else {
+            this.setState({extraProps: {bsStyle: 'error'}});
+            /** @TODO MPR, 11/19/15: check on change, not submit*/
+        }
     },
     render: function () {
         return (
@@ -217,6 +232,7 @@ var ChangePassword = React.createClass({
                     ref="newInput"
                     name="newInput"
                     onChange={e => this.setState({new: e.target.value})}
+                    {...this.state.extraProps}
                 />
                 <Input
                     type="password"
@@ -227,6 +243,7 @@ var ChangePassword = React.createClass({
                     ref="confirmInput"
                     name="confirmInput"
                     onChange={e => this.setState({confirm: e.target.value})}
+                    {...this.state.extraProps}
                 />
                 <Button onClick={this.submit}>Update</Button>
                 </form>
