@@ -28,11 +28,12 @@ var Fetcher = React.createClass({
     },
     render: function () {
         var propsForChild;
+        var props = this.props || {};
         if (this.data == null || (_.isArray(this.data) && this.data.length === 0)) {
             return this.props.renderNoData();
         }
 
-        propsForChild = Immutable.Map(this.props)
+        propsForChild = Immutable.Map(props)
             .remove('url')
             .remove('children')
             .set('data', this.data);
