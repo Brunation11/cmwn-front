@@ -1,17 +1,17 @@
 import React from 'react';
 import _ from 'lodash';
-import {Carousel, CarouselItem, Button, Modal}
+import {Carousel, CarouselItem, Button, Modal} from 'react-bootstrap';
 
 import 'routes/home.scss';
 
 const COPY = {
     BUTTONS: {
-        WORK: '',
-        CONTACT: '',
+        WORK: 'Work with Us',
+        CONTACT: 'Contact Us',
         LOGIN: '',
         SIGNUP: '',
         WATCH: ''
-    }
+    },
     SLIDES: [
         {
             HEADING: '',
@@ -45,7 +45,7 @@ const COPY = {
     },
     MODALS: {
         WORK: '',
-        SIGNUP: ''
+        CONTACT: ''
     }
 };
 
@@ -60,7 +60,7 @@ const SOURCES = {
     PARTNERS: ''
 };
 
-var Home = React.createClass(function () {
+var Home = React.createClass({
     render: function () {
         return (
             <div className="home">
@@ -71,14 +71,38 @@ var Home = React.createClass(function () {
     }
 });
 
-var Header = React.createClass(function () {
-    displayWorkModal: function () {},
-    displayContactModal: function () {},
-    loginAlert: function () {},
-    signupAlert: function () {},
+var Header = React.createClass({
+    getInitialState: function () {
+        return {
+            workOpen: false,
+            contactOpen: false
+        };
+    },
+    displayWorkModal: function () {
+        this.setState({workOpen: true});
+    },
+    displayContactModal: function () {
+        this.setState({contactOpen: true});
+    },
+    loginAlert: function () {
+        this.setState({viewOpen: true});
+    },
+    signupAlert: function () {
+        this.setState({viewOpen: true});
+    },
     render: function () {
         return (
             <div>
+                <Modal show={this.state.workOpen} onHide={() => this.setState({workOpen: false})}>
+                    <Modal.Body>
+                        {COPY.MODALS.WORK}
+                    </Modal.Body>
+                </Modal>
+                <Modal show={this.state.contactOpen} onHide={() => this.setState({contactOpen: false})}>
+                    <Modal.Body>
+                        {COPY.MODALS.CONTACT}
+                    </Modal.Body>
+                </Modal>
                 <h1 className="fallback">Change My World Now</h1>
                 <Button className="white" onClick={this.displayWorkModal}>
                     {COPY.BUTTONS.WORK}
@@ -98,16 +122,26 @@ var Header = React.createClass(function () {
     }
 });
 
-var Layout = React.createClass(function () {
-    openViewModal: function () {},
+var Layout = React.createClass({
+    getInitialState: function () {
+        return {
+            viewOpen: false
+        };
+    },
+    openViewModal: function () {
+        this.setState({viewOpen: true});
+    },
     render: function () {
         return (
             <div className="layout">
                 <div className="content">
+                    <Modal show={this.state.viewOpen} onHide={() => this.setState({viewOpen: false})}>
+                        {COPY.MODALS.VIEW}
+                    </Modal>
                     <Carousel>
-                        <CarouelItem style={
+                        <CarouselItem style={{
                             backgroundImage: `url(${SOURCES.SLIDEBG[0]})`
-                        }>
+                        }}>
                             <p>
                                 {COPY.SLIDES[0].TEXT}
                             </p>
@@ -115,16 +149,16 @@ var Layout = React.createClass(function () {
                                 {COPY.BUTTONS.WATCH}
                             </Button>
                         </CarouselItem>
-                        <CarouelItem style={
+                        <CarouselItem style={{
                             backgroundImage: `url(${SOURCES.SLIDEBG[1]})`
-                        }>
+                        }}>
                             <p>
                                 {COPY.SLIDES[1].TEXT}
                             </p>
                         </CarouselItem>
-                        <CarouelItem style={
+                        <CarouselItem style={{
                             backgroundImage: `url(${SOURCES.SLIDEBG[2]})`
-                        }>
+                        }}>
                             <p>
                                 {COPY.SLIDES[2].TEXT}
                             </p>
