@@ -8,44 +8,46 @@ const COPY = {
     BUTTONS: {
         WORK: 'Work with Us',
         CONTACT: 'Contact Us',
-        LOGIN: '',
-        SIGNUP: '',
-        WATCH: ''
+        LOGIN: 'Login',
+        SIGNUP: 'School Signup',
+        WATCH: 'Watch the video'
     },
     SLIDES: [
         {
-            HEADING: '',
+            HEADING: <span>Change my world now is the kids' soical activation platform for the <span className="purple">now</span> generation</span>,
+            /*I don't know that i love this convention for copy with arbitrary styling. It's clean but doesn't allow for programmatic transformation of text by the js below*/
             TEXT: '',
             ALT: ''
         },
         {
             HEADING: '',
-            TEXT: '',
+            TEXT: 'Be the hero of your own story',
             ALT: ''
         },
         {
             HEADING: '',
-            TEXT: '',
+            TEXT: 'Start changing the world now!',
             ALT: ''
         },
     ],
     HEADINGS: {
-        SHINE: '',
-        PARTNERS: ''
+        SHINE: 'It\'s Time to Shine',
+        PARTNERS: 'Our Partners'
     },
     PARAGRAPHS: [
-        '',
-        '',
-        '',
-        ''
+        'For Grown Ups Too!',
+        'Welcome Adult Change-Makers! We\'re thrilled that you joined us here at ChangeMyWorldNow.com Whether you\'re assiting your child, student, grandchild, foster friend, or local scout troop, we are here to help you make a big difference in their lives...as well as your own.',
+        'Use our teacher and parent friendly tabs to help you plan activites and find enlightening inspiration and instruction for you and your families',
+        <span>Here's to all of us <em><b>Changing the world together!</b></em></span>
     ],
     ALERTS: {
-        LOGIN: '',
-        SIGNUP: ''
+        LOGIN: 'Thanks for your interest! We\'ll be launching very soon, and will keep you notified of updates!',
+        SIGNUP: 'We would be happy to help you start the process. Give us a call at xxx for more details!'
     },
     MODALS: {
-        WORK: '',
-        CONTACT: ''
+        WORK: 'We would be happy to help you start the process. Give us a call at REAL CONTACT INFO for more details!',
+
+        CONTACT: 'REAL CONTACT INFO HERE'
     }
 };
 
@@ -136,12 +138,15 @@ var Layout = React.createClass({
             <div className="layout">
                 <div className="content">
                     <Modal show={this.state.viewOpen} onHide={() => this.setState({viewOpen: false})}>
-                        {COPY.MODALS.VIEW}
+                        <Modal.Body>
+                            {COPY.MODALS.VIEW}
+                        </Modal.Body>
                     </Modal>
                     <Carousel>
                         <CarouselItem style={{
                             backgroundImage: `url(${SOURCES.SLIDEBG[0]})`
                         }}>
+                            <h2>{COPY.SLIDES[0].HEADING}</h2>
                             <p>
                                 {COPY.SLIDES[0].TEXT}
                             </p>
@@ -164,9 +169,9 @@ var Layout = React.createClass({
                             </p>
                         </CarouselItem>
                     </Carousel>
-                    <h2>{COPY.SHINE}</h2>
-                    <p>{_.map(COPY.PARAGRAPHS, _.identity)}</p>
-                    <h2>{COPY.PARTNERS}</h2>
+                    <h2>{COPY.HEADINGS.SHINE}</h2>
+                    {_.map(COPY.PARAGRAPHS, text => <p>{text}</p>)}
+                    <h2>{COPY.HEADINGS.PARTNERS}</h2>
                     <p>{SOURCES.PARTNERS}</p>
                 </div>
             </div>
