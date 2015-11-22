@@ -85,10 +85,10 @@ var Header = React.createClass({
         this.setState({contactOpen: true});
     },
     loginAlert: function () {
-        this.setState({viewOpen: true});
+        /** @TODO MPR, 11/22/15: requires CORE-117*/
     },
     signupAlert: function () {
-        this.setState({viewOpen: true});
+        /** @TODO MPR, 11/22/15: requires CORE-117*/
     },
     render: function () {
         return (
