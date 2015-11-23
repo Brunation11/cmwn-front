@@ -22,6 +22,7 @@ import SuggestedFriends from 'routes/friends/suggested';
 import Profile from 'routes/students/profile';
 import StudentEdit from 'routes/students/edit';
 import Layout from 'layouts/one_col';
+import Home from 'routes/home';
 
 //import 'reset.css';
 import 'overrides.scss';
@@ -30,7 +31,15 @@ import 'overrides.scss';
 import 'media/logo.png';
 
 var App = React.createClass({
+    isHome: function () {
+        return window.location.href.toLowerCase().indexOf('home') !== -1 ||
+            window.location.pathname === '/' ||
+            window.location.pathname === '';
+    },
     render: function () {
+        if (this.isHome()) {
+            return <Home />;
+        }
         return (
             <div>
                 <GlobalHeader />

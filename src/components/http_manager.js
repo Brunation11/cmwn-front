@@ -49,7 +49,7 @@ var _getRequestPromise = function (method, request, body, headers) {
                 History.replaceState(null, '/profile');
                 throw res;
             }
-            if (res[0].response == null || res[0].response.length === 0) {
+            if (res[0].status === 0 || res[0].response == null || res[0].response.length === 0) {
                 throw 'no data recieved';
             }
             return Promise.resolve(res[0]);
@@ -96,15 +96,11 @@ var _makeRequest = function (verb, requests){
                 }
                 xhr.open(verb, req.url, true);
 
-                //if (req.withCredentials != null) {
                 xhr.withCredentials = true;
-                //}
                 _.each(req.headers, (header, key) => {
                     xhr.setRequestHeader(key, header);
                 });
-                //if (!res.withoutXSRF && Cookie.parse(document.cookie)['XSRF-TOKEN'] != null) {
                 if (!req.withoutXSRF && this._token != null) {
-                    //xhr.setRequestHeader('X-XSRF-TOKEN', Cookie.parse(document.cookie)['XSRF-TOKEN']);
                     xhr.setRequestHeader('X-CSRF-TOKEN', this._token);
                 }
                 if (_.isObject(req.body)) {
@@ -118,11 +114,6 @@ var _makeRequest = function (verb, requests){
                         acc.append(encodeURIComponent(key), encodeURIComponent(val));
                         return acc;
                     }, new FormData());
-                    /*req.body = _.reduce(req.body, (acc, value, key) =>
-                        acc === '' ?
-                        `${encodeURIComponent(key)}=${encodeURIComponent(value)}` :
-                        `${acc}&${encodeURIComponent(key)}=${encodeURIComponent(value)}`,
-                    '');*/
                 }
                 xhr.send(req.body);
             } catch (err) {
