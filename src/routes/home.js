@@ -2,6 +2,8 @@ import React from 'react';
 import _ from 'lodash';
 import {Carousel, CarouselItem, Button, Modal} from 'react-bootstrap';
 
+import Toast from 'components/toast';
+
 import 'routes/home.scss';
 
 const COPY = {
@@ -41,8 +43,14 @@ const COPY = {
         <span>Here's to all of us <em><b>Changing the world together!</b></em></span>
     ],
     ALERTS: {
-        LOGIN: 'Thanks for your interest! We\'ll be launching very soon, and will keep you notified of updates!',
-        SIGNUP: 'We would be happy to help you start the process. Give us a call at xxx for more details!'
+        LOGIN: {
+            TEXT: 'Thanks for your interest! We\'ll be launching very soon, and will keep you notified of updates!',
+            ACTION: 'close'
+        },
+        SIGNUP: {
+            TEXT: 'We would be happy to help you start the process. Give us a call at xxx for more details!',
+            ACTION: 'close'
+        }
     },
     MODALS: {
         WORK: 'We would be happy to help you start the process. Give us a call at REAL CONTACT INFO for more details!',
@@ -77,7 +85,9 @@ var Header = React.createClass({
     getInitialState: function () {
         return {
             workOpen: false,
-            contactOpen: false
+            contactOpen: false,
+            loginOpen: false,
+            signupOpen: false
         };
     },
     displayWorkModal: function () {
@@ -87,10 +97,10 @@ var Header = React.createClass({
         this.setState({contactOpen: true});
     },
     loginAlert: function () {
-        /** @TODO MPR, 11/22/15: requires CORE-117*/
+        Toast.success(COPY.ALERTS.LOGIN.TEXT);
     },
     signupAlert: function () {
-        /** @TODO MPR, 11/22/15: requires CORE-117*/
+        Toast.success(COPY.ALERTS.SIGNUP.TEXT);
     },
     render: function () {
         return (
