@@ -32,13 +32,12 @@ import 'media/logo.png';
 
 var App = React.createClass({
     isHome: function () {
-        return 
-            window.location.href.toLowerCase().indexOf('home') !== -1 ||
+        return window.location.href.toLowerCase().indexOf('home') !== -1 ||
             window.location.pathname === '/' ||
             window.location.pathname === '';
     },
     render: function () {
-        if (this.isHome) {
+        if (this.isHome()) {
             return <Home />;
         }
         return (

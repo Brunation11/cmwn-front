@@ -15,7 +15,7 @@ var GlobalHeader = React.createClass({
     componentDidMount: function () {
         Authorization.userIsLoaded.then(() => {
             this.forceUpdate();
-        })
+        });
     },
     toggleMenu: function () {
         var isOpen = EventManager.get('menuIsOpen');
