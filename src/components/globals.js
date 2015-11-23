@@ -27,7 +27,8 @@ const GLOBALS = _.defaults(window.__cmwn, {
         {URL: 'uploadcsv', TEXT: 'Upload CSV'},
         {URL: '/playground', TEXT: 'Cloudinary Image'}
     ],
-    PAGINATOR_COUNTS: [10, 25, 50, 250]
+    PAGINATOR_COUNTS: [10, 25, 50, 250],
+    TOAST_DEFAULT_TIMEOUT: 2000
 });
 
 export default GLOBALS;
