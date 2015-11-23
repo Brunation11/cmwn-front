@@ -32,12 +32,9 @@ var Page = React.createClass({
     render: function () {
         return (
            <Layout className="suggestedFriends">
-                <h2>{HEADINGS.SUGGESTED}</h2>
                 <form>
-                    {''/*<Fetcher url={ GLOBALS.API_URL + 'suggestedfriends'} renderNoData={this.renderNoData} >*/}
-                    <Fetcher data={[
-                        {image: 'https://upload.wikimedia.org/wikipedia/commons/1/17/F%C3%ABdor_Ivanovi%C4%8D_%C5%A0aljapin_as_Farlaf_by_Alexandr_Golovin.jpg', last_name: 'guy', first_name: 'palBuddy', id: -1},
-                        {image: 'https://upload.wikimedia.org/wikipedia/commons/1/17/F%C3%ABdor_Ivanovi%C4%8D_%C5%A0aljapin_as_Farlaf_by_Alexandr_Golovin.jpg', last_name: 'manbro', first_name: 'dude', id: -2}]} renderNoData={this.renderNoData} >
+                    <Fetcher url={ GLOBALS.API_URL + 'suggestedfriends'} renderNoData={this.renderNoData} >
+                        <Panel header={HEADINGS.SUGGESTED} className="standard"/>
                         <Paginator>
                             <Table renderHeader={false}>
                                 <Column dataKey="image" renderCell={data => <img src={data} />} renderHeader={false} />
