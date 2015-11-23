@@ -1,7 +1,8 @@
 import React from 'react';
 import _ from 'lodash';
-import Notification from 'react-notification';
 import {Carousel, CarouselItem, Button, Modal} from 'react-bootstrap';
+
+import Toast from 'components/toast';
 
 import 'routes/home.scss';
 
@@ -96,22 +97,14 @@ var Header = React.createClass({
         this.setState({contactOpen: true});
     },
     loginAlert: function () {
-        this.setState({loginOpen: true});
+        Toast.success(COPY.ALERTS.LOGIN.TEXT);
     },
     signupAlert: function () {
-        this.setState({signupOpen: true});
+        Toast.success(COPY.ALERTS.SIGNUP.TEXT);
     },
     render: function () {
         return (
             <div>
-                <Notification
-                    isActive={this.state.loginOpen}
-                    message={COPY.ALERTS.LOGIN.TEXT}
-                    action={COPY.ALERTS.LOGIN.ACTION}
-                    onDismiss={() => this.setState({loginOpen: false})}
-                    onClick={() => this.setState({loginOpen: false})}
-
-                />
                 <Modal show={this.state.workOpen} onHide={() => this.setState({workOpen: false})}>
                     <Modal.Body>
                         {COPY.MODALS.WORK}
