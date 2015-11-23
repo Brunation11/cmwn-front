@@ -112,7 +112,7 @@ var Header = React.createClass({
                 <Button className="white" onClick={this.displayContactModal}>
                     {COPY.BUTTONS.CONTACT}
                 </Button>
-                <img src={SOURCES.LOGO} alt='Change My World Now'/>
+                <img src={SOURCES.LOGO} alt="Change My World Now"/>
                 <Button className="blue" onClick={this.loginAlert}>
                     {COPY.BUTTONS.LOGIN}
                 </Button>
