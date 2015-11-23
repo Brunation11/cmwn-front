@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Production Webpack configuration
  */
@@ -40,11 +41,11 @@ module.exports = {
         } ,
         {
             test: /\.css$/,
-            loaders: ['style', 'css']
+            loaders: ['style', 'css', 'autoprefixer']
         },
         {
             test: /\.scss$/,
-            loaders: ['style', 'css', 'sass']
+            loaders: ['style', 'css', 'autoprefixer', 'sass']
         },
         {
             test: /\.(jpe?g|png|gif|svg)$/i,

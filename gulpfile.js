@@ -165,7 +165,7 @@ gulp.task('primary-style', function (done) {
             },
             {
                 test: /\.scss$/,
-                loader: ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader')
+                loader: ExtractTextPlugin.extract('style-loader', 'css-loader!autoprefixer-loader!sass-loader')
             },
             {
                 test: /\.(jpe?g|png|gif|svg)$/i,
@@ -177,6 +177,8 @@ gulp.task('primary-style', function (done) {
         ]
     };
 
+    var favicon = gulp.src('./src/media/favicon.ico').pipe(gulp.dest('./build'));
+    
     var reset = gulp.src('./src/reset.css').pipe(gulp.dest('./build'));
 
     var primary = gulp.src('./src/styles.js')
