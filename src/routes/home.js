@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import Notification from 'react-notification';
 import {Carousel, CarouselItem, Button, Modal} from 'react-bootstrap';
 
 import 'routes/home.scss';
@@ -41,8 +42,14 @@ const COPY = {
         <span>Here's to all of us <em><b>Changing the world together!</b></em></span>
     ],
     ALERTS: {
-        LOGIN: 'Thanks for your interest! We\'ll be launching very soon, and will keep you notified of updates!',
-        SIGNUP: 'We would be happy to help you start the process. Give us a call at xxx for more details!'
+        LOGIN: {
+            TEXT: 'Thanks for your interest! We\'ll be launching very soon, and will keep you notified of updates!',
+            ACTION: 'close'
+        },
+        SIGNUP: {
+            TEXT: 'We would be happy to help you start the process. Give us a call at xxx for more details!',
+            ACTION: 'close'
+        }
     },
     MODALS: {
         WORK: 'We would be happy to help you start the process. Give us a call at REAL CONTACT INFO for more details!',
@@ -77,7 +84,9 @@ var Header = React.createClass({
     getInitialState: function () {
         return {
             workOpen: false,
-            contactOpen: false
+            contactOpen: false,
+            loginOpen: false,
+            signupOpen: false
         };
     },
     displayWorkModal: function () {
@@ -87,14 +96,22 @@ var Header = React.createClass({
         this.setState({contactOpen: true});
     },
     loginAlert: function () {
-        /** @TODO MPR, 11/22/15: requires CORE-117*/
+        this.setState({loginOpen: true});
     },
     signupAlert: function () {
-        /** @TODO MPR, 11/22/15: requires CORE-117*/
+        this.setState({signupOpen: true});
     },
     render: function () {
         return (
             <div>
+                <Notification
+                    isActive={this.state.loginOpen}
+                    message={COPY.ALERTS.LOGIN.TEXT}
+                    action={COPY.ALERTS.LOGIN.ACTION}
+                    onDismiss={() => this.setState({loginOpen: false})}
+                    onClick={() => this.setState({loginOpen: false})}
+
+                />
                 <Modal show={this.state.workOpen} onHide={() => this.setState({workOpen: false})}>
                     <Modal.Body>
                         {COPY.MODALS.WORK}
@@ -112,7 +129,7 @@ var Header = React.createClass({
                 <Button className="white" onClick={this.displayContactModal}>
                     {COPY.BUTTONS.CONTACT}
                 </Button>
-                <img src={SOURCES.LOGO} alt='Change My World Now'/>
+                <img src={SOURCES.LOGO} alt="Change My World Now"/>
                 <Button className="blue" onClick={this.loginAlert}>
                     {COPY.BUTTONS.LOGIN}
                 </Button>

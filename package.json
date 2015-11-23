@@ -19,6 +19,7 @@
     "react": "^0.14.2",
     "react-addons-update": "^0.14.2",
     "react-bootstrap": "^0.27.3",
+    "react-notification": "^3.0.3",
     "react-router": "^1.0.0-rc3"
   },
   "devDependencies": {
