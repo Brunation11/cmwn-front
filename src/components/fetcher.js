@@ -6,6 +6,10 @@ import HttpManager from 'components/http_manager';
 
 var Fetcher = React.createClass({
     data: [],
+    getInitialState: function () {
+        this.data = this.props.data || [];
+        return {};
+    },
     getDefaultProps: function () {
         return {
             renderNoData: (() => null)
@@ -18,6 +22,9 @@ var Fetcher = React.createClass({
         var urlData = HttpManager.GET({url: this.props.url});
         urlData.then(res => {
             this.data = res.response.data;
+            if (_.isArray(this.props.data)) {
+                this.data = this.data.concat(this.props.data);
+            }
             this.forceUpdate();
         }).catch(err => {
             /** @TODO MPR, 10/18/15: Implement error page */
