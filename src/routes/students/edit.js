@@ -14,7 +14,8 @@ import Form from 'components/form';
 import 'routes/students/edit.scss';
 
 const HEADINGS = {
-    EDIT_TITLE: 'Info'
+    EDIT_TITLE: 'Info',
+    PASSWORD: 'Update Password'
 };
 const SUSPEND = 'Suspend Account';
 
@@ -185,6 +186,73 @@ var Fields = React.createClass({
     }
 });
 
+var ChangePassword = React.createClass({
+    getInitialState: function () {
+        return {
+            current: '',
+            new: '',
+            confirm: '',
+            extraProps: {}
+        };
+    },
+    submit: function () {
+        if (this.state.confirm === this.state.new) {
+            var update = HttpManager.POST({url: `${GLOBALS.API_URL}/auth/password`}, {
+                'current_password': this.state.current,
+                'password': this.state.new,
+                'password_confirmation': this.state.confirm,
+                'user_id': this.props.id
+            });
+            update.then(() => {});
+            /** #TODO MPR, 11/19/15: handle failure */
+        } else {
+            this.setState({extraProps: {bsStyle: 'error'}});
+            /** @TODO MPR, 11/19/15: check on change, not submit*/
+        }
+    },
+    render: function () {
+        return (
+            <Panel header={HEADINGS.PASSWORD} className="standard">
+                <form>
+                <Input
+                    type="password"
+                    value={this.state.current}
+                    placeholder="********"
+                    label="Current Password"
+                    validate="required"
+                    ref="currentInput"
+                    name="currentInput"
+                    onChange={e => this.setState({current: e.target.value})}
+                />
+                <Input
+                    type="password"
+                    value={this.state.new}
+                    placeholder="********"
+                    label="New Password"
+                    validate="required"
+                    ref="newInput"
+                    name="newInput"
+                    onChange={e => this.setState({new: e.target.value})}
+                    {...this.state.extraProps}
+                />
+                <Input
+                    type="password"
+                    value={this.state.confirm}
+                    placeholder="********"
+                    label="Confirm Password"
+                    validate="required"
+                    ref="confirmInput"
+                    name="confirmInput"
+                    onChange={e => this.setState({confirm: e.target.value})}
+                    {...this.state.extraProps}
+                />
+                <Button onClick={this.submit}>Update</Button>
+                </form>
+            </Panel>
+        );
+    }
+});
+
 var Edit = React.createClass({
     getInitialState: function () {
         this.id = this.props.params.id || Authorization.currentUser.id;
@@ -197,6 +265,7 @@ var Edit = React.createClass({
                 <Fetcher url={this.url}>
                     <Fields id={this.id} />
                 </Fetcher>
+                <ChangePassword id={this.id} />
            </Layout>
          );
     }

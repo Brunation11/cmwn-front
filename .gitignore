@@ -6,3 +6,4 @@ build
 **/*.log
 bumpVersion.sh
 npm-debug.log.*
+.brackets.json
