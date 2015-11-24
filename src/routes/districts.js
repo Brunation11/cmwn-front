@@ -24,7 +24,7 @@ var Districs = React.createClass({
                     </div>
                 </header>
                 <Fetcher url={GLOBALS.API_URL + 'districts'}>
-                    <Paginator data={this.districs} pageCount={1}>
+                    <Paginator pageCount={1}>
                         <Table>
                             <Column dataKey="title"
                                 renderCell={(data, row) => (

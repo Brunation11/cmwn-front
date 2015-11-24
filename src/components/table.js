@@ -1,6 +1,8 @@
 import React from 'react';
 import _ from 'lodash';
 
+import 'components/table.scss';
+
 //we include the second param here purely to indicate to
 //the reader that it may be passed to a custom renderCell
 //(as may additional unnamed params
@@ -22,11 +24,11 @@ var Table = React.createClass({
         if (this.props.renderHeader !== false) {
             childRows = React.Children.map(this.props.children, elem => {
                 if (_.isFunction(elem.props.renderHeader)) {
-                    return <td>{elem.props.renderHeader()}</td>;
+                    return <td className={elem.props.className}>{elem.props.renderHeader()}</td>;
                 } else if (_.isString(elem.props.renderHeader)) {
-                    return <td>{_.startCase(elem.props.renderHeader)}</td>;
+                    return <td className={elem.props.className}>{_.startCase(elem.props.renderHeader)}</td>;
                 } else {
-                    return <td>{_.startCase(elem.props.dataKey)}</td>;
+                    return <td className={elem.props.className}>{_.startCase(elem.props.dataKey)}</td>;
                 }
             });
             return (
@@ -39,7 +41,7 @@ var Table = React.createClass({
     },
     renderRow: function (row, i) {
         var cells = React.Children.map(this.props.children, col => {
-            return (<td key={col.props.dataKey}>{_renderCell.call(col, row[col.props.dataKey], row)}</td>);
+            return (<td key={col.props.dataKey} className={col.props.className}>{_renderCell.call(col, row[col.props.dataKey], row)}</td>);
         });
         return (
             <tr key={i}>
@@ -52,7 +54,7 @@ var Table = React.createClass({
             return null;
         }
         return (
-            <table cellSpacing="0" cellPadding="0">
+            <table className="datatable" cellSpacing="0" cellPadding="0">
                 {this.renderHeader()}
                 <tbody>
                     {_.map(this.props.data, this.renderRow)}
