@@ -44,7 +44,14 @@ var _getRequestPromise = function (method, request, body, headers) {
     promise = _makeRequest.call(this, method, request);
     if (request.length === 1) {
         return promise.then((res) => {
-            if (res[0].status > 399) {
+            if (res[0].status === 401) {
+                History.replaceState(null, '/login');
+                throw res;
+            } else if (res[0].status === 403) {
+                /** @TODO MPR, 11/18/15: Implement error page */
+                History.replaceState(null, '/profile');
+                throw res;
+            } else if (res[0].status > 399) {
                 /** @TODO MPR, 11/18/15: Implement error page */
                 History.replaceState(null, '/profile');
                 throw res;
