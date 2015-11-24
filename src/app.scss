@@ -251,25 +251,22 @@ body {
 
     }
 
-    h1 {
-        font-size: 2rem;
+    h1, h2, h3 {
         font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
         filter: blur(0);
         -webkit-font-smoothing: antialiased;
+    }
+
+    h1 {
+        font-size: 2rem;
     }
 
     h2 {
         font-size: 1.7rem;
-        font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
-        filter: blur(0);
-        -webkit-font-smoothing: antialiased;
     }
 
     h3 {
         font-size: 1.5rem;
-        font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
-        filter: blur(0);
-        -webkit-font-smoothing: antialiased;
     }
 
     @media (max-width: $device-max-break) {
