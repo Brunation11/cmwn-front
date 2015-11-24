@@ -74,8 +74,12 @@ var Home = React.createClass({
     render: function () {
         return (
             <div className="home">
-                <Header />
-                <Layout />
+                <div className="global-header">
+                    <Header />
+                </div>
+                <div className="sweater">
+                    <Layout />
+                </div>
             </div>
         );
     }
