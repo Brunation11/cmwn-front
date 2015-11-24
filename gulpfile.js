@@ -20,6 +20,7 @@ var _ = require('lodash');
 var inject = require('gulp-inject');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var mergeStream = require('merge-stream');
+var sri = require('gulp-sri');
 
 /** @const */
 var APP_PREFIX = 'APP_';
@@ -103,8 +104,9 @@ gulp.task("build-development", executeAsProcess('gulp build', ['build', '--devel
 gulp.task("build-prod", executeAsProcess('gulp build', ['build', '--development']));
 gulp.task("build-production", executeAsProcess('gulp build', ['build', '--development']));
 
-gulp.task('index', ['primary-style', 'webpack:build'], function () {
+gulp.task('index', ['primary-style', 'webpack:build', 'sri'], function () {
     var target = gulp.src('./src/index.html');
+    var sriHashes = JSON.parse(fs.readFileSync('./build/sri.json'));
 
     return target
         //.pipe(inject(gulp.src('./build/build.js', {read: false}), {name: 'app', relative: true}))
@@ -135,6 +137,12 @@ gulp.task('index', ['primary-style', 'webpack:build'], function () {
                 return output;
             }
         }))
+        .pipe(inject(gulp.src('./src/app.js', {read: false}), {
+            starttag: '<!-- app:js -->',
+            transform: function () {
+                return '<script src="/build.js" integrity="' + sriHashes['build/build.js'] + '"></script>'
+            }
+        }))
         .pipe(gulp.dest('./build'));
         /*
          *<!-- inject:style -->
@@ -144,6 +152,10 @@ gulp.task('index', ['primary-style', 'webpack:build'], function () {
 
          */
 });
+
+gulp.task('sri', ['webpack:build'], function () {
+    return gulp.src('./build/build.js').pipe(sri()).pipe(gulp.dest('./build'))
+})
 
 gulp.task('primary-style', function (done) {
     var config = {
@@ -165,7 +177,7 @@ gulp.task('primary-style', function (done) {
             },
             {
                 test: /\.scss$/,
-                loader: ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader')
+                loader: ExtractTextPlugin.extract('style-loader', 'css-loader!autoprefixer-loader!sass-loader')
             },
             {
                 test: /\.(jpe?g|png|gif|svg)$/i,
@@ -177,6 +189,8 @@ gulp.task('primary-style', function (done) {
         ]
     };
 
+    var favicon = gulp.src('./src/media/favicon.ico').pipe(gulp.dest('./build'));
+    
     var reset = gulp.src('./src/reset.css').pipe(gulp.dest('./build'));
 
     var primary = gulp.src('./src/styles.js')
