@@ -40,6 +40,7 @@ var Page = React.createClass({
             'Authorization': `Basic ${window.btoa(this.refs.login.getValue() + ':' + this.refs.password.getValue())}`
         });
         req.then(() => {
+            Authorization.reloadUser();
             History.replaceState(null, '/profile');
         });
     },
