@@ -25,6 +25,22 @@ var sri = require('gulp-sri');
 /** @const */
 var APP_PREFIX = 'APP_';
 
+//mode defaults to development and is selected with the following precedences:
+// --development flag
+// --production flag
+// APP_ENV environment variable
+// NODE_ENV environment variable
+var mode = 'development';
+if (args.development || args.prod) {
+    mode = 'development';
+} else if (args.prod || args.production) {
+    mode = 'production';
+} else if(process.env.APP_ENV) {
+    mode = process.env.APP_ENV;
+} else if (process.env.NODE_ENV) {
+    mode = process.env.NODE_ENV;
+}
+
 /**
  * Higher order function. Starts an arbitrary shell command
  * note that this is not a gulp best practice, and should be
@@ -109,7 +125,6 @@ gulp.task('index', ['primary-style', 'webpack:build', 'sri'], function () {
     var sriHashes = JSON.parse(fs.readFileSync('./build/sri.json'));
 
     return target
-        //.pipe(inject(gulp.src('./build/build.js', {read: false}), {name: 'app', relative: true}))
         .pipe(inject(gulp.src('./build/inline.css'), {
             starttag: '<!-- inject:style -->',
             transform: function (filePath, file) {
@@ -130,6 +145,7 @@ gulp.task('index', ['primary-style', 'webpack:build', 'sri'], function () {
                 output += '\nwindow.__cmwn = {};';
                 _.each(process.env, function (value, key) {
                     if(key.indexOf(APP_PREFIX) === 0) {
+                        console.log('riting ' + key + ' : ' + value);
                         output += '\nwindow.__cmwn.' + _.capitalize(key.split(APP_PREFIX)[1]) + ' = ' + JSON.stringify(value) + ';';
                     }
                 });
@@ -137,26 +153,16 @@ gulp.task('index', ['primary-style', 'webpack:build', 'sri'], function () {
                 return output;
             }
         }))
-        // .pipe(inject(gulp.src('./src/app.js', {read: false}), {
-        //     starttag: '<!-- app:js -->',
-        //     transform: function () {
-        //         return '<script src="/build.js" integrity="' + sriHashes['build/build.js'] + '"></script>'
-        //     }
-        // }))
         .pipe(inject(gulp.src('./src/app.js', {read: false}), {
             starttag: '<!-- app:js -->',
             transform: function () {
-                return '<script src="/build.js"></script>'
+                if (mode === 'production' || mode === 'prod') {
+                    return '<script src="/build.js" integrity="' + sriHashes['build/build.js'] + '"></script>';
+                }
+                return '<script src="/build.js"></script>';
             }
         }))
         .pipe(gulp.dest('./build'));
-        /*
-         *<!-- inject:style -->
-        <!-- endinject -->
-        <!-- inject:env -->
-        <!-- endinject -->
-
-         */
 });
 
 gulp.task('sri', ['webpack:build'], function () {
@@ -196,7 +202,7 @@ gulp.task('primary-style', function (done) {
     };
 
     var favicon = gulp.src('./src/media/favicon.ico').pipe(gulp.dest('./build'));
-    
+
     var reset = gulp.src('./src/reset.css').pipe(gulp.dest('./build'));
 
     var primary = gulp.src('./src/styles.js')
@@ -214,21 +220,6 @@ gulp.task('primary-style', function (done) {
 });
 
 gulp.task("webpack:build", function(done) {
-    //mode defaults to development and is selected with the following precedences:
-    // --development flag
-    // --production flag
-    // APP_ENV environment variable
-    // NODE_ENV environment variable
-    var mode = 'development';
-    if (args.development || args.prod) {
-        mode = 'development';
-    } else if (args.prod || args.production) {
-        mode = 'production';
-    } else if(process.env.APP_ENV) {
-        mode = process.env.APP_ENV;
-    } else if (process.env.NODE_ENV) {
-        mode = process.env.NODE_ENV;
-    }
 
     if (mode === 'production' || mode == 'prod') {
         gutil.log(gutil.colors.green('Building in production mode'));

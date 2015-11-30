@@ -21,6 +21,14 @@ var GlobalHeader = React.createClass({
         var isOpen = EventManager.get('menuIsOpen');
         EventManager.update('menuIsOpen', !isOpen);
     },
+    renderLoggedInUser: function () {
+        if (Authorization.currentUser.id != null && Authorization.currentUser.id !== 'null') {
+            return (
+               <div className="current-user-info">{CURRENT_USER_IS + Authorization.currentUser.name}</div>
+            );
+        }
+        return null;
+    },
     render: function () {
         return (
             <div className="global-header">
@@ -32,7 +40,7 @@ var GlobalHeader = React.createClass({
                 <div className="logout"><a href="#" onClick={this.logout}>
                     <img src={LOGOUT_URL} alt={LOGOUT} />{LOGOUT}
                 </a></div>
-                <div className="current-user-info">{CURRENT_USER_IS + Authorization.currentUser.name}</div>
+                {this.renderLoggedInUser()}
             </div>
         );
     }

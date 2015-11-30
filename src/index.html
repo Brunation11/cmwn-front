@@ -20,6 +20,7 @@
         <!-- endinject -->
     </head>
     <body>
+        <div id="pageerror"><a href="/login"> </a></div>
         <div id="cmwn-app"></div>
         <!--[if lt IE 9]>
             <script>
@@ -33,6 +34,16 @@
             <script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-shim.js"></script>
             <script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-sham.js"></script>
         <![endif]-->
+        <script>
+            var style = document.createElement('style');
+            style.appendChild(document.createTextNode(''));
+            document.head.appendChild(style);
+            if (document.styleSheets[0].addRule != null){
+                style.sheet.addRule('#pageerror', 'display:none;', 0);
+            } else if (document.styleSheets[0].insertRule != null) {
+                style.sheet.insertRule('#pageerror{display:none;}', 0);
+            }
+        </script>
         <!-- app:js -->
         <!-- endinject -->
     </body>

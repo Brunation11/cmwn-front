@@ -7,7 +7,7 @@ var config = require('./webpack.config.dev');
 var app = express();
 var compiler = webpack(config);
 
-var PORT = 80;
+var PORT = 3000;
 
 app.use(require('webpack-dev-middleware')(compiler, {
     noInfo: true,
@@ -23,14 +23,13 @@ app.use(require('webpack-hot-middleware')(compiler));
 
 app.get('/*', function(req, res) {
     //res.send(Object.stringify(req));
-    if(req.path.indexOf('.ico') !== -1 ){
+    if(/\.(?:png|jpg|gif|jpeg|bmp|js|ico)$/.test(req.path)) {
         console.log(req.path + ' : ' + path.resolve('./build/index.html'))
         res.sendFile(path.join(__dirname, 'build/' + req.path));
     } else {
         console.log(req.path + ' : ' + path.resolve('./build/index.html'))
         res.sendFile(path.resolve('./build/index.html'));
     }
-    //} else {
     //    res.sendFile(path.join(__dirname, req));
     //}
 });

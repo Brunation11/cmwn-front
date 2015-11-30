@@ -5,6 +5,7 @@ import {Button, Input} from 'react-bootstrap';
 import Layout from 'layouts/one_col';
 import History from 'components/history';
 import HttpManager from 'components/http_manager';
+import Authorization from 'components/authorization';
 import GLOBALS from 'components/globals';
 
 const LABELS = {
@@ -40,6 +41,7 @@ var Page = React.createClass({
             'Authorization': `Basic ${window.btoa(this.refs.login.getValue() + ':' + this.refs.password.getValue())}`
         });
         req.then(() => {
+            Authorization.reloadUser();
             History.replaceState(null, '/profile');
         });
     },
