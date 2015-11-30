@@ -15,7 +15,7 @@
 
         footer {
             padding: 30px;
-            border-top: solid 5px #2cc4f4;
+            border-top: solid 5px $cmwn-blue;
         }
 
         button:active {
@@ -31,19 +31,13 @@
             a:active,
             a:visited {
                 font-size: 13px;
-                color: #989898;
+                color: #000;
             }
 
             a:first-child {
                 margin-right: 5px;
                 padding-right: 5px;
-                border-right: solid 1px;
-            }
-
-            a:hover {
-                color: #000;
-                border-color: #989898;
-                text-decoration: none;
+                border-right: solid 1px #000;
             }
         }
 
@@ -57,7 +51,7 @@
 
         .sweater {
             h2 {
-                color: #2cc4f4;
+                color: $cmwn-blue;
             }
         }
 
@@ -110,25 +104,25 @@
                 font-family: "CMWNJadeRegular";
                 text-transform: uppercase;
                 border: none;
-                background-color: #6309ab;
+                background-color: $cmwn-purple;
                 color: #fff;
                 outline: none;
             }
 
             button:hover {
                 background-color: transparent;
-                color: #6309ab;
+                color: $cmwn-purple;
             }
 
             button:first-child {
                 margin-right: 0;
 
-                background-color: #49b029;
+                background-color: $cmwn-green;
             }
 
             button:first-child:hover {
                 background-color: transparent;
-                color: #49b029;
+                color: $cmwn-green;
             }
         }
 
@@ -142,7 +136,7 @@
                 overflow: hidden;
 
                 .em {
-                    color: #6309ab;
+                    color: $cmwn-purple;
                 }
 
                 img {
@@ -200,14 +194,14 @@
                     font-size: 18px;
                     line-height: 50px;
                     text-transform: uppercase;
-                    background-color: #6309ab;
+                    background-color: $cmwn-purple;
                     color: #fff;
                     outline: none;
                 }
 
                 button:hover {
                     background-color: #fff;
-                    color: #6309ab;
+                    color: $cmwn-purple;
                 }
 
                 button::before {
@@ -267,7 +261,7 @@
             }
 
             p {
-                color: #666;
+                color: $copy-medium-gray;
                 font-size: 17px;
                 line-height: 26px;
 
@@ -284,7 +278,7 @@
 
         .message::after {
             display: block;
-            border-bottom: solid 1px #e6e6e6;
+            border-bottom: solid 1px $rule-light-gray;
 
             content: "";
             clear: both;
@@ -306,7 +300,7 @@
             .cell {
                 display: inline-block;
                 width: 120px; height: 120px;
-                border: solid 1px #e5e5e5;
+                border: solid 1px $rule-light-gray;
                 margin-right: 20px;
                 margin-bottom: 20px;
 
