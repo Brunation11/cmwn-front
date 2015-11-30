@@ -120,12 +120,11 @@ var Home = React.createClass({
         return {
             viewOpen: false,
             workOpen: false,
-            contactOpen: false,
-            shouldPlay: false
+            contactOpen: false
         };
     },
     openViewModal: function () {
-        this.setState({viewOpen: true, shouldPlay: true});
+        this.setState({viewOpen: true});
     },
     openModal: function (id) {
         var state;
@@ -143,7 +142,7 @@ var Home = React.createClass({
     render: function () {
         return (
             <div className="home">
-                <Modal show={this.state.viewOpen} onHide={() => this.setState({viewOpen: false, shouldPlay: false})}>
+                <Modal show={this.state.viewOpen} onHide={() => this.setState({viewOpen: false})}>
                     <Modal.Body>
                         <iframe id="viddler-b9cd1cb6" src="//www.viddler.com/embed/b9cd1cb6/?f=1&amp;autoplay=1&amp;player=simple&amp;secret=54225444&amp;make_responsive=0" width="100%" height="300" frameBorder="0" scrolling="no" allowFullScreen="1"></iframe>
                     </Modal.Body>
