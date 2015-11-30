@@ -135,7 +135,6 @@ var Home = React.createClass({
         this.setState(state);
     },
     closeWork: function () {
-        console.log('yay2');
         this.setState({ workOpen: false });
     },
     closeContact: function () {
