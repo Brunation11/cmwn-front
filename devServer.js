@@ -23,7 +23,7 @@ app.use(require('webpack-hot-middleware')(compiler));
 
 app.get('/*', function(req, res) {
     //res.send(Object.stringify(req));
-    if(/(\.png|\.jpg|\.gif|\.jpeg|\.bmp|\.js|\.ico)$/.test(req.path)) {
+    if(/\.(?:png|jpg|gif|jpeg|bmp|js|ico)$/.test(req.path)) {
         console.log(req.path + ' : ' + path.resolve('./build/index.html'))
         res.sendFile(path.join(__dirname, 'build/' + req.path));
     } else {
