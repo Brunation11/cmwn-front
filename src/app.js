@@ -41,7 +41,6 @@ var App = React.createClass({
             window.location.pathname === '';
     },
     onError: function () {
-        debugger;
         this.forceUpdate();
     },
     render: function () {
@@ -113,7 +112,6 @@ function run() {
     try {
         ReactDOM.render(<Router history={History} routes={routes} />, document.getElementById('cmwn-app'));
     } catch (err) {
-        debugger;
         //@TODO MPR, 11/31/15: attempt to rebootstrap to homepage on unhandled exception
         Errors.show404(); /** @TODO MPR, 11/31/15: create distinct "something went wrong" error page */
     }

@@ -5,6 +5,7 @@ import {Button, Input} from 'react-bootstrap';
 import Layout from 'layouts/one_col';
 import History from 'components/history';
 import HttpManager from 'components/http_manager';
+import Authorization from 'components/authorization';
 import GLOBALS from 'components/globals';
 
 const LABELS = {

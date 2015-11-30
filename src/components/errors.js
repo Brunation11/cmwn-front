@@ -7,7 +7,6 @@ var _errors = [];
 var _handlers = [];
 
 var renderErrors = function () {
-    debugger;
     History.listenBeforeUnload(() => {
         _errors = [];
     });
