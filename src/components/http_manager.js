@@ -7,6 +7,7 @@ import _ from 'lodash';
 //import Cookie from 'cookie';
 
 import History from 'components/history';
+import Errors from 'components/errors';
 
 const APP_COOKIE_NAME = 'cmwn_token';
 
@@ -46,15 +47,14 @@ var _getRequestPromise = function (method, request, body, headers) {
         return promise.then((res) => {
             if (res[0].status === 401) {
                 History.replaceState(null, '/login');
-                throw res;
             } else if (res[0].status === 403) {
                 /** @TODO MPR, 11/18/15: Implement error page */
                 History.replaceState(null, '/profile');
-                throw res;
+            } else if (res[0].status === 404) {
+                Errors.show404();
             } else if (res[0].status > 399) {
                 /** @TODO MPR, 11/18/15: Implement error page */
                 History.replaceState(null, '/profile');
-                throw res;
             }
             if (res[0].status === 0 || res[0].response == null || res[0].response.length === 0) {
                 throw 'no data recieved';
@@ -62,6 +62,9 @@ var _getRequestPromise = function (method, request, body, headers) {
             return Promise.resolve(res[0]);
         }).catch(err => {
             console.info(err); //eslint-disable-line no-console
+            Errors.show404();
+            //Unhandled API error probably indicates a failed preflight with no status, treat as
+            //if the user is unauthenticated and redirect to login
             //History.replaceState(null, '/login');
         });
     }

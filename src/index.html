@@ -1,6 +1,12 @@
 <html>
     <head>
         <title></title>
+        <script>
+            var style = document.createElement("style");
+            style.appendChild(document.createTextNode(""));
+            style.sheet.insertRule('#pageerror{display:none;}');
+            document.head.appendChild(style);
+        </script>
         <style>
             @font-face {
                 font-family: "CMWNJadeRegular";
@@ -17,6 +23,7 @@
         <!-- endinject -->
     </head>
     <body>
+        <div id="pageerror"><a href="/login"> </a></div>
         <div id="cmwn-app"></div>
         <!--[if lt IE 9]>
             <script>

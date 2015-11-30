@@ -3,7 +3,7 @@
 //* Contains all of the core styles for the platform. Any style added
 //* to this file will be inlined into the primary index.html in order
 //* to prevent a possible jarring flash of unstyled content.
-//* because we are importing them here, functions.scss and 
+//* because we are importing them here, functions.scss and
 //* variables.scss share this property
 //*//
 
@@ -27,6 +27,21 @@ body {
     }
 }
 
+#pageerror, #triggeredError {
+    background: url("media/404.png") #fff;
+    position: fixed;
+    display: block;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 2000;
+    background-size: contain;
+    border: 15px solid #fff;
+}
+
 #cmwn-app {
     min-height: 100vh;
     overflow-x: hidden;
@@ -34,7 +49,7 @@ body {
 
     @font-face {
         font-family: "CMWNJadeRegular";
-        src: url("http://changemyworldnow.education/sites/all/themes/cmwn/assets/fonts/cmwn_ulc-webfont.woff") format("woff"); 
+        src: url("http://changemyworldnow.education/sites/all/themes/cmwn/assets/fonts/cmwn_ulc-webfont.woff") format("woff");
     }
 
 
@@ -97,7 +112,7 @@ body {
             li:first-child {
                 border-top: 1px solid rgb(84, 194, 242);
             }
-            
+
             li {
                 border-bottom: 1px solid rgb(84, 194, 242);
                 padding: $standard / 2;

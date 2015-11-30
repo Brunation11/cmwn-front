@@ -23,14 +23,13 @@ app.use(require('webpack-hot-middleware')(compiler));
 
 app.get('/*', function(req, res) {
     //res.send(Object.stringify(req));
-    if(req.path.indexOf('.ico') !== -1 ){
-        console.log(req.path + ' : ' + path.resolve('./build/index.html'))
-        res.sendFile(path.join(__dirname, 'build/' + req.path));
+    if(~req.path.indexOf('.jpg') || ~req.path.indexOf('.png') || ~req.path.indexOf('.ico')){
+        console.log(req.path + ' : ' + path.resolve(path.join(__dirname, 'build/', req.path)))
+        res.sendFile(path.join(__dirname, 'build/', req.path));
     } else {
         console.log(req.path + ' : ' + path.resolve('./build/index.html'))
         res.sendFile(path.resolve('./build/index.html'));
     }
-    //} else {
     //    res.sendFile(path.join(__dirname, req));
     //}
 });

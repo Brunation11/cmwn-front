@@ -6,6 +6,7 @@ import { Router, Link } from 'react-router';
 import GlobalHeader from 'components/global_header';
 import History from 'components/history';
 
+import Errors from 'components/errors';
 import Login from 'routes/login';
 import Users from 'routes/users';
 import Districts from 'routes/districts';
@@ -31,10 +32,17 @@ import 'overrides.scss';
 import 'media/logo.png';
 
 var App = React.createClass({
+    componentWillMount: function () {
+        Errors.onError(this.onError);
+    },
     isHome: function () {
         return window.location.href.toLowerCase().indexOf('home') !== -1 ||
             window.location.pathname === '/' ||
             window.location.pathname === '';
+    },
+    onError: function () {
+        debugger;
+        this.forceUpdate();
     },
     render: function () {
         if (this.isHome()) {
@@ -42,6 +50,7 @@ var App = React.createClass({
         }
         return (
             <div>
+                {Errors.renderErrors()}
                 <GlobalHeader />
                 <div className="sweater">
                     {this.props.children}
@@ -101,7 +110,13 @@ const routes = {
 };
 
 function run() {
-    ReactDOM.render(<Router history={History} routes={routes} />, document.getElementById('cmwn-app'));
+    try {
+        ReactDOM.render(<Router history={History} routes={routes} />, document.getElementById('cmwn-app'));
+    } catch (err) {
+        debugger;
+        //@TODO MPR, 11/31/15: attempt to rebootstrap to homepage on unhandled exception
+        Errors.show404(); /** @TODO MPR, 11/31/15: create distinct "something went wrong" error page */
+    }
 }
 
 const loadedStates = ['complete', 'loaded', 'interactive'];
