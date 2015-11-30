@@ -1,10 +1,34 @@
 import React from 'react';
+import {Link} from 'react-router';
 import _ from 'lodash';
 import {Carousel, CarouselItem, Button, Modal} from 'react-bootstrap';
 
 import Toast from 'components/toast';
 
 import 'routes/home.scss';
+import LOGO_URL from 'media/logo.png';
+import SLIDE_A_BG_URL from 'media/home/green_background.jpg';
+import SLIDE_B_BG_URL from 'media/home/purple_background.jpg';
+import SLIDE_C_BG_URL from 'media/home/blue_background.jpg';
+import KIDS_URL from 'media/home/GroupKids_Homepage.png';
+
+import PARTNER_1PERCENT from 'media/home/1percent_@2x.png';
+import PARTNER_ADINASDECK from 'media/home/adinasdeck_@2x.png';
+import PARTNER_BNF_LOGO from 'media/home/BNF_LOGO_@2x.png';
+import PARTNER_CI4Y_SIDE_RGBWEB from 'media/home/CI4Y_side_RGBweb_@2x.png';
+import PARTNER_DON_MC_PHERSON from 'media/home/Don-McPherson_@2x.png';
+import PARTNER_ECO_SCHOOLS_LOGO from 'media/home/EcoSchools_logo_@2x.png';
+import PARTNER_GG_PARTNERS from 'media/home/GGpartners_@2x.png';
+import PARTNER_GIRL_EFFECT from 'media/home/GirlEffect_@2x.png';
+import PARTNER_HUM from 'media/home/HUM_@2x.png';
+import PARTNER_INLEASHED from 'media/home/inleashed_@2x.png';
+import PARTNER_NATIONAL_WILDLIFE_FEDERATION_LOGO from 'media/home/National_Wildlife_Federation_logo_@2x.png';
+import PARTNER_PEACE_JAM from 'media/home/peacejam_@2x.png';
+import PARTNER_PG_LOGO from 'media/home/PGlogo_@2x.png';
+import PARTNER_PROJECT_GIRL_LOGO from 'media/home/projectgirllogo_@2x.png';
+import PARTNER_SHES_THE_FIRST_LOGO from 'media/home/ShesTheFirst_Logo-pinkstar_@2x.png';
+import PARTNER_STOW_IT_DONT_THROWIT from 'media/home/StowItDontThrowIt_@2x.png';
+import PARTNER_TEACHING_THE_WORLD_THROUGH_ART from 'media/home/teachingtheworldthroughart_@2x.png';
 
 const COPY = {
     BUTTONS: {
@@ -16,31 +40,29 @@ const COPY = {
     },
     SLIDES: [
         {
-            HEADING: <span>Change my world now is the kids' soical activation platform for the <span className="purple">now</span> generation</span>,
+            HEADING: <span>Change my world now is the kids' soical activation platform for the <span className="em">now</span> generation</span>,
             /*I don't know that i love this convention for copy with arbitrary styling. It's clean but doesn't allow for programmatic transformation of text by the js below*/
             TEXT: '',
             ALT: ''
         },
         {
-            HEADING: '',
-            TEXT: 'Be the hero of your own story',
+            HEADING: 'Be the hero of your own story',
+            TEXT: '',
             ALT: ''
         },
         {
-            HEADING: '',
-            TEXT: 'Start changing the world now!',
+            HEADING: 'Start changing the world now!',
+            TEXT: '',
             ALT: ''
         },
     ],
     HEADINGS: {
+        WORLD_HELP: <span>The World needs help and we believe it is the kids of today who are going to be the ones to save it!</span>,
         SHINE: 'It\'s Time to Shine',
         PARTNERS: 'Our Partners'
     },
     PARAGRAPHS: [
-        'For Grown Ups Too!',
-        'Welcome Adult Change-Makers! We\'re thrilled that you joined us here at ChangeMyWorldNow.com Whether you\'re assiting your child, student, grandchild, foster friend, or local scout troop, we are here to help you make a big difference in their lives...as well as your own.',
-        'Use our teacher and parent friendly tabs to help you plan activites and find enlightening inspiration and instruction for you and your families',
-        <span>Here's to all of us <em><b>Changing the world together!</b></em></span>
+        <span>At <strong>Change My World Now</strong>, our team is committed to giving this next generation everything they need to take charge of their world and to become compassionate, responsible stewards of the future they are creating. With safety and parents in mind, we have built a place where kids, ages 6-14, can discover the world around them and take action through our amazing games and content.</span>
     ],
     ALERTS: {
         LOGIN: {
@@ -53,32 +75,110 @@ const COPY = {
         }
     },
     MODALS: {
-        WORK: 'We would be happy to help you start the process. Give us a call at REAL CONTACT INFO for more details!',
+        WORK: <span><p>We are so excited about your interest to work with us!</p><p>Click <a href="mailto:&#106;&#111;&#110;&#105;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#097;&#114;&#114;&#111;&#110;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;?subject=Work With Us!">here</a> to contact us.</p></span>,
 
-        CONTACT: 'REAL CONTACT INFO HERE'
+        CONTACT: <span>
+            <p>Postage can be sent to:</p>
+            <p>600 Third Ave<br />2nd Floor<br />New York, NY 10016<br /></p>
+            <p>Or give us a call at (646) 861-0571</p>
+            <p>Click <a href="mailto:&#105;&#110;&#102;&#111;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#106;&#111;&#110;&#105;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;">here</a> to contact us.</p>
+        </span>,
     }
 };
 
 const SOURCES = {
     LOGO: '',
     SLIDEBG: [
-        '',
-        '',
-        ''
+        SLIDE_A_BG_URL,
+        SLIDE_B_BG_URL,
+        SLIDE_C_BG_URL
     ],
     SHINE: '',
-    PARTNERS: ''
+    PARTNERS: [
+        PARTNER_1PERCENT,
+        PARTNER_ADINASDECK,
+        PARTNER_BNF_LOGO,
+        PARTNER_CI4Y_SIDE_RGBWEB,
+        PARTNER_DON_MC_PHERSON,
+        PARTNER_ECO_SCHOOLS_LOGO,
+        PARTNER_GG_PARTNERS,
+        PARTNER_GIRL_EFFECT,
+        PARTNER_HUM,
+        PARTNER_INLEASHED,
+        PARTNER_NATIONAL_WILDLIFE_FEDERATION_LOGO,
+        PARTNER_PEACE_JAM,
+        PARTNER_PG_LOGO,
+        PARTNER_PROJECT_GIRL_LOGO,
+        PARTNER_SHES_THE_FIRST_LOGO,
+        PARTNER_STOW_IT_DONT_THROWIT,
+        PARTNER_TEACHING_THE_WORLD_THROUGH_ART
+    ]
 };
 
 var Home = React.createClass({
+    getInitialState: function () {
+        return {
+            viewOpen: false,
+            workOpen: false,
+            contactOpen: false
+        };
+    },
+    openViewModal: function () {
+        this.setState({viewOpen: true});
+    },
+    openModal: function (id) {
+        var state;
+
+        state = {};
+        state[id + 'Open'] = true;
+        this.setState(state);
+    },
+    closeWork: function () {
+        this.setState({ workOpen: false });
+    },
+    closeContact: function () {
+        this.setState({ contactOpen: false });
+    },
     render: function () {
         return (
             <div className="home">
+                <Modal show={this.state.viewOpen} onHide={() => this.setState({viewOpen: false})}>
+                    <Modal.Body>
+                        <iframe id="viddler-b9cd1cb6" src="//www.viddler.com/embed/b9cd1cb6/?f=1&amp;autoplay=1&amp;player=simple&amp;secret=54225444&amp;make_responsive=0" width="100%" height="300" frameBorder="0" scrolling="no" allowFullScreen="1"></iframe>
+                    </Modal.Body>
+                </Modal>
                 <div className="global-header">
-                    <Header />
+                    <div className="logo" ><Link to="/" ><img alt="Change My World Now" src={LOGO_URL} />Change My World Now</Link></div>
+                    <Header workOpen={this.state.workOpen} contactOpen={this.state.contactOpen} closeWork={this.closeWork} closeContact={this.closeContact} />
                 </div>
+                <Carousel>
+                    <CarouselItem>
+                        <img className="bg" src={SOURCES.SLIDEBG[0]} />
+                        <div className="content-group sweater">
+                            <h2>{COPY.SLIDES[0].HEADING}</h2>
+                            <p>
+                                {COPY.SLIDES[0].TEXT}
+                            </p>
+                            <Button className="purple" onClick={this.openViewModal}>
+                                {COPY.BUTTONS.WATCH}
+                            </Button>
+                        </div>
+                    </CarouselItem>
+                    <CarouselItem>
+                        <img className="bg" src={SOURCES.SLIDEBG[1]} />
+                        <div className="content-group sweater">
+                            <h2>{COPY.SLIDES[1].HEADING}</h2>
+                        </div>
+                    </CarouselItem>
+                    <CarouselItem>
+                        <img className="bg" src={SOURCES.SLIDEBG[2]} />
+                        <div className="content-group sweater">
+                            <h2>{COPY.SLIDES[2].HEADING}</h2>
+                        </div>
+                    </CarouselItem>
+                </Carousel>
                 <div className="sweater">
-                    <Layout />
+                    <Layout openModal={this.openModal} />
                 </div>
             </div>
         );
@@ -88,10 +188,14 @@ var Home = React.createClass({
 var Header = React.createClass({
     getInitialState: function () {
         return {
-            workOpen: false,
-            contactOpen: false,
             loginOpen: false,
             signupOpen: false
+        };
+    },
+    getDefaultProps: function () {
+        return {
+            workOpen: false,
+            contactOpen: false,
         };
     },
     displayWorkModal: function () {
@@ -99,6 +203,14 @@ var Header = React.createClass({
     },
     displayContactModal: function () {
         this.setState({contactOpen: true});
+    },
+    hideWorkModal: function () {
+        this.props.closeWork();
+        this.setState({workOpen: false});
+    },
+    hideContactModal: function () {
+        this.props.closeContact();
+        this.setState({contactOpen: false});
     },
     loginAlert: function () {
         Toast.success(COPY.ALERTS.LOGIN.TEXT);
@@ -109,84 +221,68 @@ var Header = React.createClass({
     render: function () {
         return (
             <div>
-                <Modal show={this.state.workOpen} onHide={() => this.setState({workOpen: false})}>
+                <Modal show={this.props.workOpen || this.state.workOpen} onHide={this.hideWorkModal}>
                     <Modal.Body>
                         {COPY.MODALS.WORK}
                     </Modal.Body>
                 </Modal>
-                <Modal show={this.state.contactOpen} onHide={() => this.setState({contactOpen: false})}>
+                <Modal show={this.props.contactOpen || this.state.contactOpen} onHide={this.hideContactModal}>
                     <Modal.Body>
                         {COPY.MODALS.CONTACT}
                     </Modal.Body>
                 </Modal>
                 <h1 className="fallback">Change My World Now</h1>
-                <Button className="white" onClick={this.displayWorkModal}>
-                    {COPY.BUTTONS.WORK}
-                </Button>
-                <Button className="white" onClick={this.displayContactModal}>
-                    {COPY.BUTTONS.CONTACT}
-                </Button>
-                <img src={SOURCES.LOGO} alt="Change My World Now"/>
-                <Button className="blue" onClick={this.loginAlert}>
-                    {COPY.BUTTONS.LOGIN}
-                </Button>
-                <Button className="blue" onClick={this.signupAlert}>
-                    {COPY.BUTTONS.SIGNUP}
-                </Button>
+                <div className="links">
+                    <Link onClick={this.displayWorkModal}>
+                        {COPY.BUTTONS.WORK}
+                    </Link>
+                    <Link onClick={this.displayContactModal}>
+                        {COPY.BUTTONS.CONTACT}
+                    </Link>
+                </div>
+                <div className="actions">
+                    <Button className="green" onClick={this.signupAlert}>
+                        {COPY.BUTTONS.SIGNUP}
+                    </Button>
+                    <Button className="purple" onClick={this.loginAlert}>
+                        {COPY.BUTTONS.LOGIN}
+                    </Button>
+                </div>
             </div>
         );
     }
 });
 
 var Layout = React.createClass({
-    getInitialState: function () {
-        return {
-            viewOpen: false
-        };
+    displayWorkModal: function () {
+        this.props.openModal('work');
     },
-    openViewModal: function () {
-        this.setState({viewOpen: true});
+    displayContactModal: function () {
+        this.props.openModal('contact');
     },
     render: function () {
         return (
             <div className="layout">
                 <div className="content">
-                    <Modal show={this.state.viewOpen} onHide={() => this.setState({viewOpen: false})}>
-                        <Modal.Body>
-                            {COPY.MODALS.VIEW}
-                        </Modal.Body>
-                    </Modal>
-                    <Carousel>
-                        <CarouselItem style={{
-                            backgroundImage: `url(${SOURCES.SLIDEBG[0]})`
-                        }}>
-                            <h2>{COPY.SLIDES[0].HEADING}</h2>
-                            <p>
-                                {COPY.SLIDES[0].TEXT}
-                            </p>
-                            <Button className="purple" onClick={this.openViewModal}>
-                                {COPY.BUTTONS.WATCH}
-                            </Button>
-                        </CarouselItem>
-                        <CarouselItem style={{
-                            backgroundImage: `url(${SOURCES.SLIDEBG[1]})`
-                        }}>
-                            <p>
-                                {COPY.SLIDES[1].TEXT}
-                            </p>
-                        </CarouselItem>
-                        <CarouselItem style={{
-                            backgroundImage: `url(${SOURCES.SLIDEBG[2]})`
-                        }}>
-                            <p>
-                                {COPY.SLIDES[2].TEXT}
-                            </p>
-                        </CarouselItem>
-                    </Carousel>
-                    <h2>{COPY.HEADINGS.SHINE}</h2>
-                    {_.map(COPY.PARAGRAPHS, text => <p>{text}</p>)}
-                    <h2>{COPY.HEADINGS.PARTNERS}</h2>
-                    <p>{SOURCES.PARTNERS}</p>
+                    <div className="content-group message">
+                        <img alt="Change My World Now" src={KIDS_URL} />
+                        <h2>{COPY.HEADINGS.WORLD_HELP}</h2>
+                        {_.map(COPY.PARAGRAPHS, text => <p>{text}</p>)}
+                    </div>
+                    <div className="content-group partners">
+                        <h2>{COPY.HEADINGS.PARTNERS}</h2>
+                        <div className="logos">
+                            {_.map(SOURCES.PARTNERS, url => <div className="cell" style={{backgroundImage: `url(${url})`}}></div>)}
+                        </div>
+                    </div>
+                    <footer className="links">
+                        <Link onClick={this.displayWorkModal}>
+                            {COPY.BUTTONS.WORK}
+                        </Link>
+                        <Link onClick={this.displayContactModal}>
+                            {COPY.BUTTONS.CONTACT}
+                        </Link>
+                    </footer>
                 </div>
             </div>
         );

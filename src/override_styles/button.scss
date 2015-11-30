@@ -1,0 +1,22 @@
+.btn.reset {
+    display: initial;
+    padding: 0;
+    margin: auto;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    text-align: inherit;
+    white-space: normal;
+    vertical-align: middle;
+    touch-action: manipulation;
+    user-select: none;
+    background-image: none;
+    border: none;
+    border-radius: 0;
+}
+
+.btn-default.reset {
+    color: inherit;
+    background-color: transparent;
+    border: none;
+}

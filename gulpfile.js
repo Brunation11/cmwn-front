@@ -125,7 +125,6 @@ gulp.task('index', ['primary-style', 'webpack:build', 'sri'], function () {
     var sriHashes = JSON.parse(fs.readFileSync('./build/sri.json'));
 
     return target
-        //.pipe(inject(gulp.src('./build/build.js', {read: false}), {name: 'app', relative: true}))
         .pipe(inject(gulp.src('./build/inline.css'), {
             starttag: '<!-- inject:style -->',
             transform: function (filePath, file) {
@@ -159,19 +158,11 @@ gulp.task('index', ['primary-style', 'webpack:build', 'sri'], function () {
             transform: function () {
                 if (mode === 'production' || mode === 'prod') {
                     return '<script src="/build.js" integrity="' + sriHashes['build/build.js'] + '"></script>';
-                } else {
-                    return '<script src="/build.js" ></script>';
                 }
+                return '<script src="/build.js"></script>';
             }
         }))
         .pipe(gulp.dest('./build'));
-        /*
-         *<!-- inject:style -->
-        <!-- endinject -->
-        <!-- inject:env -->
-        <!-- endinject -->
-
-         */
 });
 
 gulp.task('sri', ['webpack:build'], function () {
