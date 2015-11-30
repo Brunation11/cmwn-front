@@ -1,7 +1,320 @@
-.home {
+@import 'variables';
+#cmwn-app {
 
-    .fallback {
-        opacity: 0;
-        height: 0px;
+    .sweater, .sweater .content {
+        padding: 0;
+    }
+
+    .home {
+        text-align: center;
+
+        h2 {
+            font-size: 36px;
+            text-transform: uppercase;
+        }
+
+        footer {
+            padding: 30px;
+            border-top: solid 5px $cmwn-blue;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .fallback {
+            display: none;
+        }
+
+        .links {
+            a,
+            a:active,
+            a:visited {
+                font-size: 13px;
+                color: #000;
+            }
+
+            a:first-child {
+                margin-right: 5px;
+                padding-right: 5px;
+                border-right: solid 1px #000;
+            }
+        }
+
+        .sweater, .global-header {
+            box-shadow: 0px 0px 20px rgba(0,0,0,0.2);
+        }
+
+        .sweater, .carousel, .global-header {
+            text-align: left;
+        }
+
+        .sweater {
+            h2 {
+                color: $cmwn-blue;
+            }
+        }
+
+        .sweater::before {
+            position: absolute;
+            left: 0px; right: 0px;
+            bottom: 100%;
+            height: 20px;
+
+            content: "";
+            background-color: white;
+        }
+
+        .global-header {
+            .logo  {
+                overflow: hidden;
+
+                img {
+                    margin-bottom: 40px;
+                }
+            }
+            
+            .links {
+                position: absolute;
+                top: 10px; right: 20px;
+
+                @media (max-width: $device-max-break) {
+                    display: none;
+                }
+            }
+        }
+
+        footer.links {
+            position: relative;
+            top: auto; right: auto; 
+        }
+
+        .global-header .actions {
+            position: absolute;
+            bottom: 0; right: 20px;
+
+            border-radius: 4px;
+            box-shadow: 0px 0px 20px rgba(0,0,0,0.2);
+
+            button {
+                margin: 10px;
+                padding: 3px 0px;
+                width: 110px;
+
+                font-family: "CMWNJadeRegular";
+                text-transform: uppercase;
+                border: none;
+                background-color: $cmwn-purple;
+                color: #fff;
+                outline: none;
+            }
+
+            button:hover {
+                background-color: transparent;
+                color: $cmwn-purple;
+            }
+
+            button:first-child {
+                margin-right: 0;
+
+                background-color: $cmwn-green;
+            }
+
+            button:first-child:hover {
+                background-color: transparent;
+                color: $cmwn-green;
+            }
+        }
+
+        .carousel {
+            max-width: 1358px;
+            margin: auto;
+            z-index: 1;
+
+            .item {
+                position: relative;
+                overflow: hidden;
+
+                .em {
+                    color: $cmwn-purple;
+                }
+
+                img {
+                    min-width: 1025px;
+                    min-height: 370px;
+
+                    @media (max-width: $device-max-break) {
+                        min-width: 914px;
+                        min-height: 330px;
+                    }
+                }
+
+                .content-group {
+                    position: absolute;
+                    top: 40px;
+                    width: 100%;
+
+                    background-color: transparent;
+                    box-shadow: none;
+
+                    > * {
+                        margin-left: 20px;
+                        margin-right: 20px;
+                    }
+
+                    
+                }
+
+                .content-group::before {
+                    content: none;
+                }
+
+                h2 {
+                    width: 420px;
+                    margin: 0;
+                    margin-bottom: 20px;
+                    color: #fff;
+                        
+                    @media (max-width: $device-max-break) {
+                        width: auto;
+                        font-size: 30px;
+                    }
+                }
+
+                button {
+                    padding: 5px;
+                    padding-right: 20px;
+                    border: none;
+
+                    box-shadow: 0px 0px 20px rgba(0,0,0,0.6);
+                    font-family: "CMWNJadeRegular";
+                    font-size: 18px;
+                    line-height: 50px;
+                    text-transform: uppercase;
+                    background-color: $cmwn-purple;
+                    color: #fff;
+                    outline: none;
+                }
+
+                button:hover {
+                    background-color: #fff;
+                    color: $cmwn-purple;
+                }
+
+                button::before {
+                    float: left;
+                    width: 70px; height: 50px;
+                    margin-right: 20px;
+
+                    content: "";
+                    background: #000 url(../media/home/btn_play.png) center no-repeat;
+                    background-size: 20px;
+                }
+            }
+
+            .item.next,
+            .item.prev {
+                position: absolute;
+                top: 0;
+            }
+
+            .carousel-control {
+                display: none;
+            }
+        }
+
+        .message {
+            overflow: hidden;
+
+            h2, p {
+                margin-left: 20px;
+                margin-right: 40px;
+            }
+            
+            h2 {
+                margin-top: 65px;
+
+                @media (max-width: $device-max-break) {
+                    margin-top: 10px;
+                    margin-right: 10px;
+                    font-size: 32px;
+                }
+
+                @media (max-width: $device-portrait-break) {
+                    font-size: 20px;
+                }
+            }
+
+            img {
+                float: left;
+                width: 50%;
+                margin-right: 20px;
+
+                @media (max-width: $device-max-break) {
+                    width: 40%;
+                    margin-right: 10px;
+                    margin-bottom: 25px;
+                }
+            }
+
+            p {
+                color: $copy-medium-gray;
+                font-size: 17px;
+                line-height: 26px;
+
+                @media (max-width: $device-max-break) {
+                    clear: both;
+                    margin: 50px 15px;
+                    margin-top: 0;
+
+                    font-size: 14px;
+                    line-height: 24px;
+                }
+            }
+        }
+
+        .message::after {
+            display: block;
+            border-bottom: solid 1px $rule-light-gray;
+
+            content: "";
+            clear: both;
+        }
+
+        .partners {
+            margin: 65px 30px;
+
+            h2 {
+                margin-left: 0;
+            }
+
+            .logos {
+                line-height: 0;
+                margin-right: -20px;
+                text-align: center;
+            }
+
+            .cell {
+                display: inline-block;
+                width: 120px; height: 120px;
+                border: solid 1px $rule-light-gray;
+                margin-right: 20px;
+                margin-bottom: 20px;
+
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: 70%;
+            }
+        }
+    }
+
+    .home::after {
+        position: absolute;
+        left: 0px; right: 0px;
+        bottom: 100%;
+        height: 10px;
+
+        content: "";
+        box-shadow: 0px 0px 20px #000;
     }
 }
