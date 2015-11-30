@@ -157,20 +157,12 @@
                     background-color: transparent;
                     box-shadow: none;
 
-                    h2 {
-                        width: 420px;
-                    }
-
                     > * {
                         margin-left: 20px;
                         margin-right: 20px;
                     }
 
-                    @media (max-width: $device-max-break) {
-                        h2 {
-                            width: auto;
-                        }
-                    }
+                    
                 }
 
                 .content-group::before {
@@ -178,10 +170,15 @@
                 }
 
                 h2 {
+                    width: 420px;
                     margin: 0;
                     margin-bottom: 20px;
-                    font-size: 250%;
                     color: #fff;
+                        
+                    @media (max-width: $device-max-break) {
+                        width: auto;
+                        font-size: 30px;
+                    }
                 }
 
                 button {
