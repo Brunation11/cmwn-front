@@ -145,8 +145,8 @@ gulp.task('index', ['primary-style', 'webpack:build', 'sri'], function () {
                 var output = '<script>';
                 output += '\nwindow.__cmwn = {};';
                 _.each(process.env, function (value, key) {
-                console.log('************************ Writing ' + key + ' : ' + value);
                     if(key.indexOf(APP_PREFIX) === 0) {
+                        console.log('riting ' + key + ' : ' + value);
                         output += '\nwindow.__cmwn.' + _.capitalize(key.split(APP_PREFIX)[1]) + ' = ' + JSON.stringify(value) + ';';
                     }
                 });
