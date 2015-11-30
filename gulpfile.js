@@ -137,10 +137,16 @@ gulp.task('index', ['primary-style', 'webpack:build', 'sri'], function () {
                 return output;
             }
         }))
+        // .pipe(inject(gulp.src('./src/app.js', {read: false}), {
+        //     starttag: '<!-- app:js -->',
+        //     transform: function () {
+        //         return '<script src="/build.js" integrity="' + sriHashes['build/build.js'] + '"></script>'
+        //     }
+        // }))
         .pipe(inject(gulp.src('./src/app.js', {read: false}), {
             starttag: '<!-- app:js -->',
             transform: function () {
-                return '<script src="/build.js" integrity="' + sriHashes['build/build.js'] + '"></script>'
+                return '<script src="/build.js"></script>'
             }
         }))
         .pipe(gulp.dest('./build'));
