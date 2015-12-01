@@ -157,13 +157,18 @@
                     position: absolute;
                     top: 40px;
                     width: 100%;
+                    margin: 0;
 
                     background-color: transparent;
                     box-shadow: none;
 
                     > * {
-                        margin-left: 20px;
+                        margin-left: 80px;
                         margin-right: 20px;
+
+                        @media (max-width: $device-max-break) {
+                            margin-left: 20px;
+                        }
                     }
                 }
 
@@ -174,7 +179,7 @@
                 .centered {
                     top: 0; bottom: 0;
 
-                    h2 {
+                    > h2 {
                         font-size: 55px;
                     }
 

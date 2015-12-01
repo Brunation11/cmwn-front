@@ -40,13 +40,13 @@ const COPY = {
     },
     SLIDES: [
         {
-            HEADING: <span>Change my world now is the kids' soical activation platform for the <span className="em">now</span> generation</span>,
+            HEADING: <span>Change my world now is the kids' social activation platform for the <span className="em">now</span> generation</span>,
             /*I don't know that i love this convention for copy with arbitrary styling. It's clean but doesn't allow for programmatic transformation of text by the js below*/
             TEXT: '',
             ALT: ''
         },
         {
-            HEADING: 'Be the hero of your own story',
+            HEADING: <span>Be the hero<br />of your<br />own story</span>,
             TEXT: '',
             ALT: ''
         },
@@ -156,14 +156,13 @@ var Home = React.createClass({
                 <Carousel>
                     <CarouselItem>
                         <img className="bg" src={SOURCES.SLIDEBG[0]} />
-                        <div className="content-group sweater">
-                            <h2>{COPY.SLIDES[0].HEADING}</h2>
-                            <p>
-                                {COPY.SLIDES[0].TEXT}
-                            </p>
-                            <Button className="purple" onClick={this.openViewModal}>
-                                {COPY.BUTTONS.WATCH}
-                            </Button>
+                        <div className="content-group centered sweater">
+                            <div>
+                                <h2>{COPY.SLIDES[0].HEADING}</h2>
+                                <Button className="purple" onClick={this.openViewModal}>
+                                    {COPY.BUTTONS.WATCH}
+                                </Button>
+                            </div>
                         </div>
                     </CarouselItem>
                     <CarouselItem>
