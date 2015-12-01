@@ -42,11 +42,12 @@ var Fields = React.createClass({
     submitData: function () {
         if (this.refs.formRef.isValid()) {
             HttpManager.POST(`${GLOBALS.API_URL}users/${this.state.id}`, {
-                first_name: this.state.first_name, //eslint-disable-line camelcase
-                last_name: this.state.last_name, //eslint-disable-line camelcase
-                sex: this.state.sex,
-                dob: this.state.dob,
-                email: this.state.email
+                //first_name: this.state.first_name, //eslint-disable-line camelcase
+                //last_name: this.state.last_name, //eslint-disable-line camelcase
+                //sex: this.state.sex,
+                //job: this.state.dob,
+                //email: this.state.email,
+                username: this.state.username
             });
         }
     },
@@ -119,6 +120,18 @@ var Fields = React.createClass({
                 <div className="right"><Form ref="formRef">
                     <Input
                         type="text"
+                        value={this.state.username}
+                        placeholder="Username"
+                        label="Username"
+                        validate="required"
+                        ref="usernameInput"
+                        name="usernameInput"
+                        validationEvent="onBlur"
+                        hasFeedback
+                        onChange={e => this.setState({username: e.target.value})} //eslint-disable-line camelcase
+                    />
+                    <Input
+                        type="text"
                         value={this.state.first_name}
                         placeholder="first name"
                         label="First Name"
@@ -128,6 +141,7 @@ var Fields = React.createClass({
                         validationEvent="onBlur"
                         hasFeedback
                         onChange={e => this.setState({first_name: e.target.value})} //eslint-disable-line camelcase
+                        disabled
                     />
                     <Input
                         type="text"
@@ -138,6 +152,7 @@ var Fields = React.createClass({
                         ref="lastnameInput"
                         name="lastnameInput"
                         onChange={e => this.setState({last_name: e.target.value})} //eslint-disable-line camelcase
+                        disabled
                     />
                     <Input
                         type="select"
@@ -148,6 +163,7 @@ var Fields = React.createClass({
                         ref="sexInput"
                         name="sexInput"
                         onChange={e => this.setState({sex: e.target.value})}
+                        disabled
                     >
                             <option value="" disabled >Select gender</option>
                             <option value="female">Female</option>
@@ -163,7 +179,9 @@ var Fields = React.createClass({
                         ref="birthdateInput"
                         name="birthdateInput"
                         onChange={e => this.setState({dob: e.target.value})}
+                        disabled
                     />
+                    {''/*
                     <Input
                         type="email"
                         value={this.state.email}
@@ -179,6 +197,7 @@ var Fields = React.createClass({
                     <p><a onClick={this.addParent}>+ Add parent or guardian</a></p>
                     <h3>School Information</h3>
                     {this.renderSchoolInformation()}
+                    */}
                     <Button onClick={this.submitData}> Save </Button>
                 </Form></div>
             </Panel>
