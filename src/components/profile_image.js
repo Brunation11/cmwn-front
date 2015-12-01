@@ -2,12 +2,14 @@ import React from 'react';
 import Classnames from 'classnames';
 
 import Cloudinary from 'components/cloudinary';
+import Toast from 'components/toast';
 import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
 
 import 'components/profile_image.scss';
 
 const PIC_ALT = 'Profile Picture';
+const UPLOAD_ERROR = 'There was a problem uploading your image. Please refresh the page and try again.';
 
 var Image = React.createClass({
     getInitialState: function () {
@@ -19,7 +21,7 @@ var Image = React.createClass({
         var self = this;
         Cloudinary.load((e, err) => {
             if (err != null) {
-                /** @TODO MPR, 11/13/15: Warn the user once we have some toasts */
+                Toast.error(UPLOAD_ERROR);
             }
             /* eslint-disable camelcase*/
             Cloudinary.instance.openUploadWidget({
