@@ -6,8 +6,8 @@ import { Router, Link } from 'react-router';
 import GlobalHeader from 'components/global_header';
 import History from 'components/history';
 import GLOBALS from 'components/globals';
-import PublicRoutes from 'components/public_routes';
-import PrivateRoutes from 'components/private_routes';
+import PublicRoutes from 'public_routes';
+import PrivateRoutes from 'private_routes';
 
 import Errors from 'components/errors';
 import Layout from 'layouts/one_col';
@@ -49,7 +49,7 @@ var App = React.createClass({
 
 var Landing = React.createClass({
     render: function () {
-        var redirect;
+        //var redirect;
         if (GLOBALS.MODE != null && (~GLOBALS.MODE.indexOf('dev') || ~GLOBALS.MODE.indexOf('development'))) {
             return (
                 <Layout>
@@ -68,15 +68,15 @@ var Landing = React.createClass({
                 </Layout>
             );
         }
-        redirect = window.setTimeout(function () {
-            History.replaceState(null, '/profile');
-        }, 10000);
-        History.listenBeforeUnload(() => {
-            window.clearTimeout(redirect);
-        });
+        //redirect = window.setTimeout(function () {
+        //    History.replaceState(null, '/profile');
+        //}, 10000);
+        //History.listenBeforeUnload(() => {
+        //    window.clearTimeout(redirect);
+        //});
         Errors.show404();
         return (
-            <div></div>
+            <div> </div>
         );
     }
 });
