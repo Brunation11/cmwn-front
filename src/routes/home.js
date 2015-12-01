@@ -7,9 +7,9 @@ import Toast from 'components/toast';
 
 import 'routes/home.scss';
 import LOGO_URL from 'media/logo.png';
-import SLIDE_A_BG_URL from 'media/home/green_background.jpg';
-import SLIDE_B_BG_URL from 'media/home/purple_background.jpg';
-import SLIDE_C_BG_URL from 'media/home/blue_background.jpg';
+import SLIDE_A_BG_URL from 'media/home/green_background.png';
+import SLIDE_B_BG_URL from 'media/home/purple_background.png';
+import SLIDE_C_BG_URL from 'media/home/blue_background.png';
 import KIDS_URL from 'media/home/GroupKids_Homepage.png';
 
 import PARTNER_1PERCENT from 'media/home/1percent_@2x.png';
