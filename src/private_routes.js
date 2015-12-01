@@ -15,8 +15,8 @@ import Profile from 'routes/students/profile';
 import StudentEdit from 'routes/students/edit';
 import TeacherProfile from 'routes/teachers/profile';
 import TeacherEdit from 'routes/teachers/edit';
-import ParentEdit from 'routes/parents/profile';
-import ParentProfile from 'routes/parents/edit';
+import ParentProfile from 'routes/parents/profile';
+import ParentEdit from 'routes/parents/edit';
 
 var routes = [
     { path: 'users(/)', component: Users },
