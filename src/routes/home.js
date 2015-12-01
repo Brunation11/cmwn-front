@@ -83,6 +83,8 @@ const COPY = {
             <p>Or give us a call at (646) 861-0571</p>
             <p>Click <a href="mailto:&#105;&#110;&#102;&#111;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#106;&#111;&#110;&#105;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;">here</a> to contact us.</p>
         </span>,
+
+        SIGNUP: <span><p>We are so excited about your interest to work with us!</p><p>Click <a href="mailto:&#106;&#111;&#110;&#105;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#099;&#097;&#116;&#104;&#121;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;?subject=Sign up with CMWN&body=Thank you for your interest in Change My World Now!%0D%0A%0D%0AIf you would like to launch Change My World Now in your school please provide the following information and someone from our team will contact you.%0D%0A%0D%0AYour Name:%0D%0AYour School:%0D%0AYour Email:%0D%0ASchool Grades:%0D%0APrincipal Name:%0D%0ASchool Phone:%0D%0ACity/State:">here</a> to contact us.</p></span>
     }
 };
 
@@ -95,18 +97,18 @@ const SOURCES = {
     ],
     SHINE: '',
     PARTNERS: [
-        PARTNER_1PERCENT,
-        PARTNER_ADINASDECK,
-        PARTNER_BNF_LOGO,
-        PARTNER_CI4Y_SIDE_RGBWEB,
-        PARTNER_DON_MC_PHERSON,
+        PARTNER_NATIONAL_WILDLIFE_FEDERATION_LOGO,
         PARTNER_ECO_SCHOOLS_LOGO,
-        PARTNER_GG_PARTNERS,
+        PARTNER_1PERCENT,
         PARTNER_GIRL_EFFECT,
         PARTNER_HUM,
-        PARTNER_INLEASHED,
-        PARTNER_NATIONAL_WILDLIFE_FEDERATION_LOGO,
         PARTNER_PEACE_JAM,
+        PARTNER_BNF_LOGO,
+        PARTNER_ADINASDECK,
+        PARTNER_CI4Y_SIDE_RGBWEB,
+        PARTNER_DON_MC_PHERSON,
+        PARTNER_GG_PARTNERS,
+        PARTNER_INLEASHED,
         PARTNER_PG_LOGO,
         PARTNER_PROJECT_GIRL_LOGO,
         PARTNER_SHES_THE_FIRST_LOGO,
@@ -166,13 +168,13 @@ var Home = React.createClass({
                     </CarouselItem>
                     <CarouselItem>
                         <img className="bg" src={SOURCES.SLIDEBG[1]} />
-                        <div className="content-group sweater">
+                        <div className="content-group centered sweater">
                             <h2>{COPY.SLIDES[1].HEADING}</h2>
                         </div>
                     </CarouselItem>
                     <CarouselItem>
                         <img className="bg" src={SOURCES.SLIDEBG[2]} />
-                        <div className="content-group sweater">
+                        <div className="content-group centered sweater">
                             <h2>{COPY.SLIDES[2].HEADING}</h2>
                         </div>
                     </CarouselItem>
@@ -204,6 +206,9 @@ var Header = React.createClass({
     displayContactModal: function () {
         this.setState({contactOpen: true});
     },
+    displaySignupModal: function () {
+        this.setState({signupOpen: true});
+    },
     hideWorkModal: function () {
         this.props.closeWork();
         this.setState({workOpen: false});
@@ -231,6 +236,11 @@ var Header = React.createClass({
                         {COPY.MODALS.CONTACT}
                     </Modal.Body>
                 </Modal>
+                <Modal show={this.state.signupOpen} onHide={() => this.setState({signupOpen: false})}>
+                    <Modal.Body>
+                        {COPY.MODALS.SIGNUP}
+                    </Modal.Body>
+                </Modal>
                 <h1 className="fallback">Change My World Now</h1>
                 <div className="links">
                     <Link onClick={this.displayWorkModal}>
@@ -241,10 +251,10 @@ var Header = React.createClass({
                     </Link>
                 </div>
                 <div className="actions">
-                    <Button className="green" onClick={this.signupAlert}>
+                    <Button id="signup" className="green" onClick={this.displaySignupModal}>
                         {COPY.BUTTONS.SIGNUP}
                     </Button>
-                    <Button className="purple" onClick={this.loginAlert}>
+                    <Button id="login" className="purple" onClick={this.loginAlert}>
                         {COPY.BUTTONS.LOGIN}
                     </Button>
                 </div>
