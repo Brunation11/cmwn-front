@@ -156,9 +156,11 @@ gulp.task('index', ['primary-style', 'webpack:build', 'sri'], function () {
         .pipe(inject(gulp.src('./src/app.js', {read: false}), {
             starttag: '<!-- app:js -->',
             transform: function () {
+                /* Disabling SRI until such a time as chrome correctly generates hashes: https://code.google.com/p/chromium/issues/detail?id=527436
                 if (mode === 'production' || mode === 'prod') {
-                    return '<script src="/build.js" integrity="' + sriHashes['build/build.js'] + '"></script>';
+                    return '<script src="/build.js" integrity="' + sriHashes['build/build.js'] + '" crossorigin="anonymous"></script>';
                 }
+                */
                 return '<script src="/build.js"></script>';
             }
         }))
@@ -166,7 +168,7 @@ gulp.task('index', ['primary-style', 'webpack:build', 'sri'], function () {
 });
 
 gulp.task('sri', ['webpack:build'], function () {
-    return gulp.src('./build/build.js').pipe(sri()).pipe(gulp.dest('./build'))
+    return gulp.src('./build/build.js').pipe(sri({algorithms: ['sha512']})).pipe(gulp.dest('./build'))
 })
 
 gulp.task('primary-style', function (done) {
