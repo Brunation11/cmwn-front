@@ -156,7 +156,7 @@ gulp.task('index', ['primary-style', 'webpack:build', 'sri'], function () {
         .pipe(inject(gulp.src('./src/app.js', {read: false}), {
             starttag: '<!-- app:js -->',
             transform: function () {
-                /* Disabling SRI until such a time as chrome correctly generates hashes: https://code.google.com/p/chromium/issues/detail?id=527436
+                /* Disabling SRI until such a time as chrome correctly generates hashes of files containing non-ascii characters: https://code.google.com/p/chromium/issues/detail?id=527286,  https://code.google.com/p/chromium/issues/detail?id=527436
                 if (mode === 'production' || mode === 'prod') {
                     return '<script src="/build.js" integrity="' + sriHashes['build/build.js'] + '" crossorigin="anonymous"></script>';
                 }

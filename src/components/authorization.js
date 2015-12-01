@@ -2,22 +2,20 @@ import _ from 'lodash';
 
 import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
+import PublicRoutes from 'public_routes';
 
 class _Authorization {
     constructor(options = {}){
+        var route = window.location.pathname;
+        route = route.indexOf('/') === 0 ? route.slice(1) : route;
+        route = route[route.length - 1] === '/' ? route.slice(0, route.length - 1) : route;
+
         options.onChangeUser = options.onChangeUser || _.noop;
         this.currentUser = {};
         this.currentUser.name = window.localStorage.userName;
         this.currentUser.id = window.localStorage.userId;
         this._userLoaded = Promise.resolve();
-        /** @TODO MPR, 11/30/15: Implement actual whitelisting solution */
-        if (
-            window.location.pathname !== '/login' &&
-            window.location.pathname !== '/login/' &&
-            window.location.pathname !== '/' &&
-            window.location.pathname !== '/home' &&
-            window.location.pathname !== '/home/'
-        ) {
+        if (_.reduce(PublicRoutes, (acc, path) => acc || path.path.indexOf(route) === 0, false)) {
             this.reloadUser();
         }
     }
