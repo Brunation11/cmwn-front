@@ -13,11 +13,20 @@ import Friends from 'routes/friends';
 import SuggestedFriends from 'routes/friends/suggested';
 import Profile from 'routes/students/profile';
 import StudentEdit from 'routes/students/edit';
+import TeacherProfile from 'routes/teachers/profile';
+import TeacherEdit from 'routes/teachers/edit';
+import ParentEdit from 'routes/parents/profile';
+import ParentProfile from 'routes/parents/edit';
 
 var routes = [
     { path: 'users(/)', component: Users },
     { path: 'profile(/)', component: Profile},
+    { path: 'profile/edit(/)', component: StudentEdit },
     { path: 'student/edit(/)', component: StudentEdit },
+    { path: 'teacher/profile(/)', component: TeacherProfile },
+    { path: 'teacher/edit(/)', component: TeacherEdit },
+    { path: 'parent/profile(/)', component: ParentProfile },
+    { path: 'parent/edit(/)', component: ParentEdit },
     { path: 'districts(/)', component: Districts},
     { path: 'district/:id(/)', component: DistrictView},
     { path: 'district/:id/view(/)', component: DistrictView},
