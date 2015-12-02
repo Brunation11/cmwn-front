@@ -242,12 +242,12 @@ var Header = React.createClass({
                 </Modal>
                 <h1 className="fallback">Change My World Now</h1>
                 <div className="links">
-                    <Link onClick={this.displayWorkModal}>
+                    <a href="#" onClick={this.displayWorkModal}>
                         {COPY.BUTTONS.WORK}
-                    </Link>
-                    <Link onClick={this.displayContactModal}>
+                    </a>
+                    <a href="#" onClick={this.displayContactModal}>
                         {COPY.BUTTONS.CONTACT}
-                    </Link>
+                    </a>
                 </div>
                 <div className="actions">
                     <Button id="signup" className="green" onClick={this.displaySignupModal}>
@@ -285,12 +285,12 @@ var Layout = React.createClass({
                         </div>
                     </div>
                     <footer className="links">
-                        <Link onClick={this.displayWorkModal}>
+                        <a href="#" onClick={this.displayWorkModal}>
                             {COPY.BUTTONS.WORK}
-                        </Link>
-                        <Link onClick={this.displayContactModal}>
+                        </a>
+                        <a href="#" onClick={this.displayContactModal}>
                             {COPY.BUTTONS.CONTACT}
-                        </Link>
+                        </a>
                     </footer>
                 </div>
             </div>
