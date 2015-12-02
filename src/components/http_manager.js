@@ -45,7 +45,10 @@ var _getRequestPromise = function (method, request, body, headers) {
     promise = _makeRequest.call(this, method, request);
     if (request.length === 1) {
         return promise.then((res) => {
-            if (res[0].status === 401) {
+            if (res[0].status > 499) {
+                /** @TODO MPR, 12/2/15: Implement catastrophic error page */
+                console.error('Unrecoverable server error.'); //eslint-disable-line no-console
+            } else if (res[0].status === 401) {
                 History.replaceState(null, '/login');
             } else if (res[0].status === 403) {
                 /** @TODO MPR, 11/18/15: Implement error page */
@@ -55,8 +58,7 @@ var _getRequestPromise = function (method, request, body, headers) {
             } else if (res[0].status > 399) {
                 /** @TODO MPR, 11/18/15: Implement error page */
                 History.replaceState(null, '/profile');
-            }
-            if (res[0].status === 0 || res[0].response == null || res[0].response.length === 0) {
+            } else if (res[0].status === 0 || res[0].response == null || res[0].response.length === 0) {
                 throw 'no data recieved';
             }
             return Promise.resolve(res[0]);
