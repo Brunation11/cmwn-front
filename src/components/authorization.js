@@ -3,6 +3,7 @@ import _ from 'lodash';
 import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
 import PrivateRoutes from 'private_routes';
+//var PrivateRoutes = [];
 
 class _Authorization {
     constructor(options = {}){
@@ -15,7 +16,7 @@ class _Authorization {
         this.currentUser.name = window.localStorage.userName;
         this.currentUser.id = window.localStorage.userId;
         this._userLoaded = Promise.resolve();
-        if (_.reduce(PrivateRoutes, (acc, path) => acc || path.path.indexOf(route) === 0, false)) {
+        if (window.location.pathname !== '/' && _.reduce(PrivateRoutes, (acc, path) => acc || path.path.indexOf(route) === 0, false)) {
             this.reloadUser();
         }
     }
