@@ -28,7 +28,7 @@ var Groups = React.createClass({
                         <Table>
                             <Column dataKey="title"
                                 renderCell={(data, row) => (
-                                    <a href={`/group/${row.id}`}>{_.startCase(data)}</a>
+                                    <a href={`/group/${row.uuid}`}>{_.startCase(data)}</a>
                                 )}
                             />
                             <Column dataKey="description" />

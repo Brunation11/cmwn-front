@@ -22,7 +22,7 @@ var GlobalHeader = React.createClass({
         EventManager.update('menuIsOpen', !isOpen);
     },
     renderLoggedInUser: function () {
-        if (Authorization.currentUser.id != null && Authorization.currentUser.id !== 'null') {
+        if (Authorization.currentUser.uuid != null && Authorization.currentUser.uuid !== 'null') {
             return (
                <div className="current-user-info">{CURRENT_USER_IS + Authorization.currentUser.name}</div>
             );

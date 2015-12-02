@@ -14,7 +14,7 @@ class _Authorization {
         options.onChangeUser = options.onChangeUser || _.noop;
         this.currentUser = {};
         this.currentUser.name = window.localStorage.userName;
-        this.currentUser.id = window.localStorage.userId;
+        this.currentUser.uuid = window.localStorage.userId;
         this._userLoaded = Promise.resolve();
         if (window.location.pathname !== '/' && _.reduce(PrivateRoutes, (acc, path) => acc || path.path.indexOf(route) === 0, false)) {
             this.reloadUser();
@@ -26,8 +26,8 @@ class _Authorization {
             getUser.then(res => {
                 this.currentUser.name = res.response.data.first_name + ' ' + res.response.data.last_name;
                 window.localStorage.setItem('userName', res.response.data.first_name + ' ' + res.response.data.last_name);
-                this.currentUser.id = res.response.data.id;
-                window.localStorage.setItem('userId', res.response.data.id);
+                this.currentUser.uuid = res.response.data.uuid;
+                window.localStorage.setItem('userId', res.response.data.uuid);
                 resolve(res.response.data);
             }).catch(() => {
                 //user is not logged in.

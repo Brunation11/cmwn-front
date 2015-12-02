@@ -37,7 +37,7 @@ var Organizations = React.createClass({
                     <Table>
                         <Column dataKey="title"
                             renderCell={(data, row) => (
-                                <a href={`/organization/${row.id}`}>{_.startCase(data)}</a>
+                                <a href={`/organization/${row.uuid}`}>{_.startCase(data)}</a>
                             )}
                         />
                         <Column dataKey="description" />
