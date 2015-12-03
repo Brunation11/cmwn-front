@@ -24,6 +24,7 @@ var routes = [
     { path: 'users(/)', component: Users },
     { path: 'profile(/)', component: Profile},
     { path: 'profile/edit(/)', component: StudentEdit },
+    { path: 'student/:id(/)', component: Profile},
     { path: 'student/edit(/)', component: StudentEdit },
     { path: 'student/:id/edit(/)', component: StudentEdit },
     { path: 'teacher/profile(/)', component: TeacherProfile },
