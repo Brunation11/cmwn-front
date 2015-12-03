@@ -9,7 +9,7 @@ import {Table, Column} from 'components/table';
 import Paginator from 'components/paginator';
 import Fetcher from 'components/fetcher';
 
-const TITLE = 'Groups';
+const TITLE = 'My Classes';
 const HOME = 'Home';
 
 var Groups = React.createClass({
@@ -28,7 +28,7 @@ var Groups = React.createClass({
                         <Table>
                             <Column dataKey="title"
                                 renderCell={(data, row) => (
-                                    <a href={`/group/${row.id}`}>{_.startCase(data)}</a>
+                                    <a href={`/group/${row.uuid}/profile`}>{_.startCase(data)}</a>
                                 )}
                             />
                             <Column dataKey="description" />

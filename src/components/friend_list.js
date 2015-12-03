@@ -47,13 +47,13 @@ var FriendList = React.createClass({
         );
     },
     renderFriends: function () {
-        return _.map(this.accepted, item => (<li key={item.id}>{this.renderFriend(item)}</li>));
+        return _.map(this.accepted, item => (<li key={item.uuid}>{this.renderFriend(item)}</li>));
     },
     renderPending: function () {
-        return _.map(this.pending, item => (<li key={item.id}>{this.renderFriend(item)}</li>));
+        return _.map(this.pending, item => (<li key={item.uuid}>{this.renderFriend(item)}</li>));
     },
     renderRequests: function () {
-        return _.map(this.requests, item => (<li key={item.id}>{this.renderFriend(item)}</li>));
+        return _.map(this.requests, item => (<li key={item.uuid}>{this.renderFriend(item)}</li>));
     },
     render: function () {
         return (

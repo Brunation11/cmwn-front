@@ -28,7 +28,7 @@ var Districs = React.createClass({
                         <Table>
                             <Column dataKey="title"
                                 renderCell={(data, row) => (
-                                    <a href={`/district/${row.id}`}>{_.startCase(data)}</a>
+                                    <a href={`/district/${row.uuid}`}>{_.startCase(data)}</a>
                                 )}
                             />
                             <Column dataKey="description" />

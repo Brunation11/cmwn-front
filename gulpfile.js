@@ -207,6 +207,8 @@ gulp.task('primary-style', function (done) {
 
     var reset = gulp.src('./src/reset.css').pipe(gulp.dest('./build'));
 
+    var robots = gulp.src('./src/robots.txt').pipe(gulp.dest('./build'));
+
     var primary = gulp.src('./src/styles.js')
         .pipe(gulpWebpack(config, webpack, function (err, stats) {
             if(err) throw new gutil.PluginError("webpack:style", err);
