@@ -8,7 +8,7 @@ import Layout from 'layouts/two_col';
 import {Table, Column} from 'components/table';
 import Paginator from 'components/paginator';
 
-const TITLE = 'Organizations';
+const TITLE = 'My Schools';
 const HOME = 'Home';
 
 var Organizations = React.createClass({

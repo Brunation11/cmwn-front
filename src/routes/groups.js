@@ -9,7 +9,7 @@ import {Table, Column} from 'components/table';
 import Paginator from 'components/paginator';
 import Fetcher from 'components/fetcher';
 
-const TITLE = 'Groups';
+const TITLE = 'My Classes';
 const HOME = 'Home';
 
 var Groups = React.createClass({
