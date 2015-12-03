@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router';
 //import _ from 'lodash';
 import {Panel} from 'react-bootstrap';
 
@@ -41,7 +42,7 @@ var Page = React.createClass({
     },
     renderFlip: function (item){
         return (
-            <div className="flip"><a href={item.url}><img src={FlipBgDefault}></img></a></div>
+            <div className="flip"><Link to={`/group/${item.uuid}/profile`}><img src={FlipBgDefault}></img><p>{item.title}</p></Link></div>
         );
     },
     render: function () {
