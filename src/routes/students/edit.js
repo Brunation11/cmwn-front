@@ -22,7 +22,7 @@ const SUSPEND = 'Suspend Account';
 var Fields = React.createClass({
     getInitialState: function () {
         var state = _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {};
-        state.id = this.props.id;
+        state.uuid = this.props.uuid;
         return state;
     },
     suspendAccount: function () {
@@ -41,7 +41,7 @@ var Fields = React.createClass({
     },
     submitData: function () {
         if (this.refs.formRef.isValid()) {
-            HttpManager.POST(`${GLOBALS.API_URL}users/${this.state.id}`, {
+            HttpManager.POST(`${GLOBALS.API_URL}users/${this.state.uuid}`, {
                 //first_name: this.state.first_name, //eslint-disable-line camelcase
                 //last_name: this.state.last_name, //eslint-disable-line camelcase
                 //sex: this.state.sex,
@@ -220,7 +220,7 @@ var ChangePassword = React.createClass({
                 'current_password': this.state.current,
                 'password': this.state.new,
                 'password_confirmation': this.state.confirm,
-                'user_id': this.props.id
+                'user_uuid': this.props.uuid
             });
             update.then(() => {});
             /** #TODO MPR, 11/19/15: handle failure */
@@ -274,17 +274,17 @@ var ChangePassword = React.createClass({
 
 var Edit = React.createClass({
     getInitialState: function () {
-        this.id = this.props.params.id || Authorization.currentUser.id;
-        this.url = GLOBALS.API_URL + 'users/' + this.id;
+        this.uuid = this.props.params.uuid || Authorization.currentUser.uuid;
+        this.url = GLOBALS.API_URL + 'users/' + this.uuid;
         return {};
     },
     render: function () {
         return (
            <Layout className="edit-student">
                 <Fetcher url={this.url}>
-                    <Fields id={this.id} />
+                    <Fields uuid={this.uuid} />
                 </Fetcher>
-                <ChangePassword id={this.id} />
+                <ChangePassword uuid={this.uuid} />
            </Layout>
          );
     }
