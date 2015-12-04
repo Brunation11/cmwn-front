@@ -4,6 +4,7 @@ import {Panel} from 'react-bootstrap';
 
 import Layout from 'layouts/two_col';
 import FlipBoard from 'components/flipboard';
+
 import FlipBgDefault from 'media/flip-placeholder-white.png';
 
 import 'routes/students/profile.scss';
