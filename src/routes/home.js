@@ -77,6 +77,7 @@ const COPY = {
     MODALS: {
         WORK: <span><p>We are so excited about your interest to work with us!</p><p>Click <a href="mailto:&#106;&#111;&#110;&#105;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#097;&#114;&#114;&#111;&#110;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;?subject=Work With Us!">here</a> to contact us.</p></span>,
 
+        PRECAPTCHA: 'Thanks for your interest! Please check the box below to display contact information.',
         CONTACT: <span>
             <p>Postage can be sent to:</p>
             <p>600 Third Ave<br />2nd Floor<br />New York, NY 10016<br /></p>
@@ -190,7 +191,8 @@ var Header = React.createClass({
     getInitialState: function () {
         return {
             loginOpen: false,
-            signupOpen: false
+            signupOpen: false,
+            showContact: false
         };
     },
     getDefaultProps: function () {
@@ -198,6 +200,26 @@ var Header = React.createClass({
             workOpen: false,
             contactOpen: false,
         };
+    },
+    componentDidMount: function () {
+        this.renderCaptcha();
+    },
+    componentDidUpdate: function () {
+        try {
+            this.renderCaptcha();
+        } catch (err) {
+            //captcha doesnt always clean itself up nicely, throws its own
+            //unhelpful, unbreaking 'container not empty' error. Ignoring.
+            return err;
+        }
+    },
+    renderCaptcha: function () {
+        var captchas = document.getElementsByClassName('grecaptcha');
+        if (captchas.length) {
+            grecaptcha.render(captchas[0], {'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l', callback: () => { //eslint-disable-line no-undef
+                this.setState({showContact: true});
+            }});
+        }
     },
     displayWorkModal: function () {
         this.setState({workOpen: true});
@@ -214,7 +236,7 @@ var Header = React.createClass({
     },
     hideContactModal: function () {
         this.props.closeContact();
-        this.setState({contactOpen: false});
+        this.setState({contactOpen: false, showContact: false});
     },
     loginAlert: function () {
         Toast.success(COPY.ALERTS.LOGIN.TEXT);
@@ -232,7 +254,9 @@ var Header = React.createClass({
                 </Modal>
                 <Modal show={this.props.contactOpen || this.state.contactOpen} onHide={this.hideContactModal}>
                     <Modal.Body>
-                        {COPY.MODALS.CONTACT}
+                        {COPY.MODALS.PRECAPTCHA}
+                        <div className="grecaptcha"></div>
+                        {this.state.showContact ? COPY.MODALS.CONTACT : ''}
                     </Modal.Body>
                 </Modal>
                 <Modal show={this.state.signupOpen} onHide={() => this.setState({signupOpen: false})}>
