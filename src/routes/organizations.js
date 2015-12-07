@@ -1,27 +1,22 @@
 import React from 'react';
-import _ from 'lodash';
 import {Link} from 'react-router';
 
-import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
 import Layout from 'layouts/two_col';
-import {Table, Column} from 'components/table';
 import Paginator from 'components/paginator';
+import FlipBoard from 'components/flipboard';
+import Fetcher from 'components/fetcher';
+
+import DefaultProfile from 'media/profile_tranparent.png';
 
 const TITLE = 'My Schools';
 const HOME = 'Home';
 
 var Organizations = React.createClass({
-    organizations: [],
-    componentWillMount: function () {
-        this.getOrganizations();
-    },
-    getOrganizations: function () {
-        var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'organizations'});
-        urlData.then(res => {
-            this.organizations = res.response.data;
-            this.forceUpdate();
-        });
+    renderFlip: function (item){
+        return (
+            <div className="flip"><a href={`/organization/${item.uuid}`}><img src={DefaultProfile}></img><p>{`${item.title}`}</p></a></div>
+        );
     },
     render: function () {
         return (
@@ -33,20 +28,11 @@ var Organizations = React.createClass({
                         {TITLE}
                     </div>
                 </header>
-                <Paginator data={this.organizations}>
-                    <Table>
-                        <Column dataKey="title"
-                            renderCell={(data, row) => (
-                                <a href={`/organization/${row.uuid}/profile`}>{_.startCase(data)}</a>
-                            )}
-                        />
-                        <Column dataKey="description" />
-                        <Column dataKey="created_at" renderHeader="Created" />
-                        <Column dataKey="updated_at" renderHeader="Last Updated"
-                            renderCell={data => (data == null ? 'never' : data)}
-                        />
-                    </Table>
-                </Paginator>
+                <Fetcher url={GLOBALS.API_URL + 'organizations?include=images'} test="test">
+                    <Paginator pageCount={1}>
+                        <FlipBoard renderFlip={this.renderFlip} />
+                    </Paginator>
+                </Fetcher>
             </Layout>
         );
     }
