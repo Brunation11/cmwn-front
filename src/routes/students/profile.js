@@ -4,6 +4,7 @@ import {Panel, Modal} from 'react-bootstrap';
 
 import Layout from 'layouts/two_col';
 import FlipBoard from 'components/flipboard';
+import Game from 'components/game';
 
 import FlipBgDefault from 'media/flip-placeholder-white.png';
 
@@ -17,7 +18,7 @@ const HEADINGS = {
 var Page = React.createClass({
     getInitialState: function () {
         return {
-            data: _.map(Array(10), i => ({url: i, uuid: 'adorablepuppies' + i})),
+            data: _.map(Array(10), (v, i) => ({url: i, uuid: 'adorablepuppies' + i})),
             gameOn: false,
             gameId: -1
         };
@@ -31,7 +32,7 @@ var Page = React.createClass({
     renderFlip: function (item) {
         return (
         <div className="flip">
-            <a onClick={this.showModal.bind(item.uuid)} href="#">
+            <a onClick={this.showModal.bind(this, item.uuid)} href="#">
                 <img src={FlipBgDefault}></img>
             </a>
         </div>
@@ -42,7 +43,7 @@ var Page = React.createClass({
            <Layout className="profile">
                 <Modal show={this.state.gameOn} onHide={this.hideModal}>
                     <Modal.Body>
-                        wheee
+                        <Game id={this.state.gameId} />
                     </Modal.Body>
                 </Modal>
                <Panel header={HEADINGS.ACTION} className="standard">
