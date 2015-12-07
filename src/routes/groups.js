@@ -1,18 +1,28 @@
 import React from 'react';
-import _ from 'lodash';
 import {Link} from 'react-router';
 
 //import HttpManager from 'components/http_manager';
+import FlipBoard from 'components/flipboard';
 import GLOBALS from 'components/globals';
 import Layout from 'layouts/two_col';
-import {Table, Column} from 'components/table';
 import Paginator from 'components/paginator';
 import Fetcher from 'components/fetcher';
+
+import DefaultProfile from 'media/profile_tranparent.png';
 
 const TITLE = 'My Classes';
 const HOME = 'Home';
 
 var Groups = React.createClass({
+    renderFlip: function (item){
+        return (
+            <div className="flip">
+                <a href={`/group/${item.uuid}`/** @TODO MPR, 12/7/15: very much need to switch on type, CORE-149*/}>
+                    <img src={DefaultProfile}></img><p>{`${item.title}`}</p>
+                </a>
+            </div>
+        );
+    },
     render: function () {
         return (
             <Layout>
@@ -25,18 +35,7 @@ var Groups = React.createClass({
                 </header>
                 <Fetcher url={GLOBALS.API_URL + 'groups'} test="test">
                     <Paginator data={this.groups} pageCount={1}>
-                        <Table>
-                            <Column dataKey="title"
-                                renderCell={(data, row) => (
-                                    <a href={`/group/${row.uuid}/profile`}>{_.startCase(data)}</a>
-                                )}
-                            />
-                            <Column dataKey="description" />
-                            <Column dataKey="created_at" renderHeader="Created" />
-                            <Column dataKey="updated_at" renderHeader="Last Updated"
-                                renderCell={data => (data == null ? 'never' : data)}
-                            />
-                        </Table>
+                        <FlipBoard renderFlip={this.renderFlip} />
                     </Paginator>
                </Fetcher>
             </Layout>
