@@ -55,7 +55,7 @@ var Page = React.createClass({
                         <li><Link to={'/organization/' + this.state.orgUuid + '/edit'}>Edit School</Link></li>
                         <li><Link to={'/teacher/' + Authorization.currentUser.uuid + '/profile'}>Teacher Profile</Link></li>
                         <li><Link to={'/teacher/' + Authorization.currentUser.uuid + '/edit'}>Edit Teacher</Link></li>
-                        <li><Link to={'/parent' + Authorization.currentUser.uuid + '//profile'}>Parent Profile</Link></li>
+                        <li><Link to={'/parent/' + Authorization.currentUser.uuid + '/profile'}>Parent Profile</Link></li>
                         <li><Link to={'/parent/' + Authorization.currentUser.uuid + '/edit'}>Edit Parent</Link></li>
                    </ul>
                </Panel>
