@@ -35,7 +35,7 @@ var View = React.createClass({
         this.getGroup();
     },
     getGroup: function () {
-        var urlData = HttpManager.GET({url: `${GLOBALS.API_URL}groups/${this.props.params.id}?include=users,organizations`});
+        var urlData = HttpManager.GET({url: `${GLOBALS.API_URL}groups/${this.props.params.uuid}?include=users,organizations`});
         urlData.then(res => {
             this.data = res.response.data;
             this.members = Util.normalize(res.response, 'users', []);
@@ -43,27 +43,27 @@ var View = React.createClass({
         });
     },
     renderEditLink: function () {
-        if (GLOBALS.CURRENT_USER.ID === window.parseInt(this.props.params.id)) {
+        if (GLOBALS.CURRENT_USER.ID === window.parseInt(this.props.params.uuid)) {
             /** @TODO MPR, 10/4/15: Add check for user is admin*/
-            return <Link to={`/group/${this.props.params.id}/edit`} >({EDIT_LINK})</Link>;
+            return <Link to={`/group/${this.props.params.uuid}/edit`} >({EDIT_LINK})</Link>;
         }
         return null;
     },
     renderGroups: function () {
         var links = _.map(this.data.organizations, organization => {
             return (
-                <Link to={`organization/$organization.id}`}>
+                <Link to={`organization/$organization.uuid}`}>
                     {organization.title}
                 </Link>
             );
         });
-        if (!links.lenght) {
+        if (!links.length) {
             return null;
         }
         return <span>{`${HEADINGS.GROUPS}: `}{links}</span>;
     },
     render: function () {
-        if (this.data.lenght === 0) {
+        if (this.data.length === 0) {
             return null;
         }
         return (
@@ -79,7 +79,7 @@ var View = React.createClass({
                         {this.renderEditLink()}
                     </p>
                     <br />
-                    <p>{`${HEADINGS.ID}: ${this.data.id}`}</p>
+                    <p>{`${HEADINGS.ID}: ${this.data.uuid}`}</p>
                     <br />
                     <p>{this.renderGroups()}</p>
                     <br />
@@ -91,7 +91,7 @@ var View = React.createClass({
                     <Table>
                         <Column dataKey="title"
                             renderCell={(data, row) => (
-                                <a href={`#/organization/${row.id}`}>{_.startCase(data)}</a>
+                                <a href={`#/organization/${row.uuid}`}>{_.startCase(data)}</a>
                             )}
                         />
                         <Column dataKey="description" />
