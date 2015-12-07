@@ -2,11 +2,9 @@ import React from 'react';
 import {Link} from 'react-router';
 
 import FlipBoard from 'components/flipboard';
-
 //import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
 import Layout from 'layouts/two_col';
-import {Table, Column} from 'components/table';
 import Paginator from 'components/paginator';
 import Fetcher from 'components/fetcher';
 
@@ -18,7 +16,11 @@ const HOME = 'Home';
 var Users = React.createClass({
     renderFlip: function (item){
         return (
-            <div className="flip"><a href={item.url}><img src={DefaultProfile}></img><p>{`${item.first_name} ${item.last_name}`}</p></a></div>
+            <div className="flip">
+                <a href={`/users/${item.uuid}`/** @TODO MPR, 12/7/15: very much need to switch on type, CORE-149*/}>
+                    <img src={DefaultProfile}></img><p>{`${item.first_name} ${item.last_name}`}</p>
+                </a>
+            </div>
         );
     },
     render: function () {
