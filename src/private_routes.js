@@ -40,11 +40,13 @@ var routes = [
     { path: 'district/:id/view(/)', component: DistrictView},
     { path: 'district/:id/edit(/)', component: DistrictEdit},
     { path: 'organizations(/)', component: Organizations},
+    { path: 'organization/:id', component: OrganizationProfile},/** @TODO MPR, 12/7/15: Figure out why this route is neccissary*/
     { path: 'organization/:id(/)', component: OrganizationProfile},
     { path: 'organization/:id/view(/)', component: OrganizationView},
     { path: 'organization/:id/edit(/)', component: OrganizationEdit},
     { path: 'organization/:id/profile(/)', component: OrganizationProfile},
     { path: 'groups(/)', component: Groups},
+    { path: 'group/:id', component: GroupProfile},
     { path: 'group/:id(/)', component: GroupProfile},
     { path: 'group/:id/view(/)', component: GroupView},
     { path: 'group/:id/edit(/)', component: GroupEdit},
