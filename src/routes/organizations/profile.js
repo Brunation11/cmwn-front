@@ -23,6 +23,7 @@ var Page = React.createClass({
     componentWillMount: function () {
         this.getOrganization();
         this.getMyClasses();
+        this.forceUpdate();
     },
     getMyClasses: function () {
         var fetchOrgs = HttpManager.GET({url: GLOBALS.API_URL + 'users/me?include=groups'});
