@@ -1,10 +1,10 @@
 import React from 'react';
 import {Link} from 'react-router';
 
+import FlipBoard from 'components/flipboard';
 //import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
 import Layout from 'layouts/two_col';
-import {Table, Column} from 'components/table';
 import Paginator from 'components/paginator';
 import Fetcher from 'components/fetcher';
 
@@ -14,6 +14,15 @@ const TITLE = 'My Friends and Network'; /** @TODO MPR, 12/3/15: May need to swap
 const HOME = 'Home';
 
 var Users = React.createClass({
+    renderFlip: function (item){
+        return (
+            <div className="flip">
+                <a href={`/users/${item.uuid}`/** @TODO MPR, 12/7/15: very much need to switch on type, CORE-149*/}>
+                    <img src={DefaultProfile}></img><p>{`${item.first_name} ${item.last_name}`}</p>
+                </a>
+            </div>
+        );
+    },
     render: function () {
         return (
             <Layout>
@@ -26,16 +35,7 @@ var Users = React.createClass({
                 </header>
                 <Fetcher url={GLOBALS.API_URL + 'users?include=images'} test="test">
                     <Paginator pageCount={1}>
-                        <Table>
-                            <Column dataKey="images" renderHeader="Profile" renderCell={(images, row) => {
-                                var image = images.data.length ? images.data[0] : DefaultProfile;
-                                return (
-                                    <Link to={'/'/*@TODO MPR, 12/3/15: CORE-149*/}><img src={image} alt={`${row.first_name}'s profile`}></img></Link>
-                                );
-                            }} />
-                            <Column dataKey="uuid" renderHeader="Name" renderCell={(id, row) => `${row.first_name} ${row.last_name}`} />
-                            <Column dataKey="username" />
-                        </Table>
+                        <FlipBoard renderFlip={this.renderFlip} />
                     </Paginator>
                </Fetcher>
             </Layout>
