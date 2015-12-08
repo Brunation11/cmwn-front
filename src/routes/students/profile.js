@@ -14,11 +14,17 @@ const HEADINGS = {
     ACTION: 'Action Items',
     ARCADE: 'Arcade'
 };
+const PLAY = 'Play Now!';
 
 var Page = React.createClass({
     getInitialState: function () {
         return {
-            data: _.map(Array(10), (v, i) => ({url: i, uuid: 'adorablepuppies' + i})),
+            data: _.map(Array(10), (v, i) => ({
+                url: i,
+                uuid: 'adorablepuppies' + i,
+                title: 'Adorable Action Item',
+                description: 'Captain, why are we out here chasing comets? Yesterday I did not know how to eat gagh. We finished our first sensor sweep of the neutral zone. The game\'s not big enough unless it scares you a little.'
+            })),
             gameOn: false,
             gameId: -1
         };
@@ -32,8 +38,15 @@ var Page = React.createClass({
     renderFlip: function (item) {
         return (
         <div className="flip">
-            <a onClick={this.showModal.bind(this, item.uuid)} href="#">
-                <img src={FlipBgDefault}></img>
+            <a onClick={this.showModal.bind(this, item.uuid)} >
+                <div className="item">
+                    <span className="overlay">
+                        <span className="heading">{item.title}</span>
+                        <span className="text">{item.description}</span>
+                        <span className="play">{PLAY}</span>
+                    </span>
+                    <img src={FlipBgDefault}></img>
+                </div>
             </a>
         </div>
         );
@@ -43,7 +56,7 @@ var Page = React.createClass({
            <Layout className="profile">
                 <Modal show={this.state.gameOn} onHide={this.hideModal}>
                     <Modal.Body>
-                        <Game id={this.state.gameId} />
+                        <Game uuid={this.state.gameId} />
                     </Modal.Body>
                 </Modal>
                <Panel header={HEADINGS.ACTION} className="standard">

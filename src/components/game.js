@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'lodash';
 
-import {Button} from 'react-bootstrap';
+import {Button, Glyphicon} from 'react-bootstrap';
 
 import 'components/game.scss';
 
@@ -90,8 +90,8 @@ var Game = React.createClass({
         }
         return (
             <div className="game">
-                <iframe ref="gameRef" src={'http://www.bing.com/search?q=' + this.props.id} data-state={this.props.gameState} data-uuid={this.props.uuid} />
-                <Button onClick={this.makeFullScreen}>Full Screen</Button>
+                <iframe ref="gameRef" src={'http://www.bing.com/search?q=' + this.props.uuid} data-state={this.props.gameState} data-uuid={this.props.uuid} />
+                <Button onClick={this.makeFullScreen}><Glyphicon glyph="fullscreen" /> Full Screen</Button>
             </div>
         );
     }
