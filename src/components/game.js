@@ -18,7 +18,7 @@ import 'components/game.scss';
  * is issued to window from with the iframe with:
  * ```
  * var uuid = window.frameElement.getAttribute('data-uuid');
- * var event = new Event(uuid + '-save);
+ * var event = new Event(uuid + '-save');
  * parent.window.dispatchEvent(event)
  * ```
  * likewise, game state can be read with:
