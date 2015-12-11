@@ -78,7 +78,8 @@ var routes = [
     { path: 'group/:id/profile(/)', component: GroupProfile},
     { path: 'groups/:id/profile(/)', onEnter: redirect('/group/:id/profile')},
     { path: 'friends(/)', component: Friends},
-    { path: 'friends/suggested(/)', component: SuggestedFriends}
+    { path: 'friends/suggested(/)', component: SuggestedFriends},
+    { path: 'suggestedfriends(/)', onEnter: redirect('/friends/suggested')}
 ];
 
 export default routes;
