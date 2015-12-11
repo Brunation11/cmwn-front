@@ -2,6 +2,8 @@ import React from 'react';
 import Loader from 'react-loader';
 
 import Layout from 'layouts/one_col';
+import HttpManager from 'components/http_manager';
+import GLOBALS from 'components/globals';
 
 import 'routes/logout.scss';
 
@@ -25,6 +27,12 @@ var loaderOptions = {
 };
 
 var Page = React.createClass({
+    componentDidMount: function () {
+        var logout = HttpManager.GET({url: GLOBALS.API_URL + '/auth/logout'});
+        logout.then(() => {
+            window.location.href = '/login';
+        });
+    },
     render: function () {
         return (
            <Layout>
