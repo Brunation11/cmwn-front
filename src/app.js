@@ -87,7 +87,7 @@ const routes = {
     indexRoute: {component: Landing},
     childRoutes: PublicRoutes.concat(PrivateRoutes).concat([
         { path: '*', component: Landing},
-    ])
+    ]),
 };
 
 function run() {

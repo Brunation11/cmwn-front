@@ -21,6 +21,13 @@ import ParentProfile from 'routes/parents/profile';
 import ParentEdit from 'routes/parents/edit';
 import Sitemap from 'sitemap';
 
+var redirect = function (path) {
+    return function (nextState, transition) {
+        debugger;
+        transition(null, path);
+    };
+};
+
 var routes = [
     { path: 'sitemap(/)', component: Sitemap },
     { path: 'users(/)', component: Users },
@@ -36,6 +43,7 @@ var routes = [
     { path: 'parent/:id/profile(/)', component: ParentProfile },
     { path: 'parent/:id/edit(/)', component: ParentEdit },
     { path: 'districts(/)', component: Districts},
+    { path: 'district(/)', onEnter: redirect('/districts')},
     { path: 'district/:id(/)', component: DistrictView},
     { path: 'district/:id/view(/)', component: DistrictView},
     { path: 'district/:id/edit(/)', component: DistrictEdit},
