@@ -21,6 +21,7 @@ import TeacherEdit from 'routes/teachers/edit';
 import ParentProfile from 'routes/parents/profile';
 import ParentEdit from 'routes/parents/edit';
 import Sitemap from 'sitemap';
+import Logout from 'routes/logout';
 
 var redirect = function (path) {
     return function (nextState, transition) {
@@ -33,6 +34,8 @@ var redirect = function (path) {
 };
 
 var routes = [
+    { path: 'logout(/)', component: Logout },
+    { path: 'auth/logout(/)', onEnter: redirect('/logout')},
     { path: 'sitemap(/)', component: Sitemap },
     { path: 'users(/)', component: Users },
     { path: 'profile(/)', component: Profile},
@@ -75,7 +78,8 @@ var routes = [
     { path: 'group/:id/profile(/)', component: GroupProfile},
     { path: 'groups/:id/profile(/)', onEnter: redirect('/group/:id/profile')},
     { path: 'friends(/)', component: Friends},
-    { path: 'friends/suggested(/)', component: SuggestedFriends}
+    { path: 'friends/suggested(/)', component: SuggestedFriends},
+    { path: 'suggestedfriends(/)', onEnter: redirect('/friends/suggested')}
 ];
 
 export default routes;

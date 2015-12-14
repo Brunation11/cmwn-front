@@ -17,8 +17,9 @@ var Image = React.createClass({
             profileImage: GLOBALS.DEFAULT_PROFILE
         };
     },
-    startUpload: function () {
+    startUpload: function (e) {
         var self = this;
+        e.stopPropagation();
         Cloudinary.load((e, err) => {
             if (err != null) {
                 Toast.error(UPLOAD_ERROR);
@@ -59,7 +60,7 @@ var Image = React.createClass({
             <div className={Classnames('profile-image', {'link-below': this.props['link-below']})} >
                 {this.renderImage(this.state.profileImage)}
                 <div className="upload" onClick={this.startUpload}>Upload Image</div>
-                <div className="below"><a onClick={this.startUpload}>Upload New Image</a></div>
+                <div className="below"><span onClick={this.startUpload}>Upload New Image</span></div>
             </div>
         );
     }

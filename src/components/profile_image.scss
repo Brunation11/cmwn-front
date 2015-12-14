@@ -1,6 +1,7 @@
 .profile-image {
     position: relative;
     z-index: 2;
+    text-align: center;
 
     .profile-pic {
         transform: translate3d(0px, 0px, 0px); //fix for image jitter in chrome: http://stackoverflow.com/questions/12980153/image-moves-on-hover-chrome-opacity-issue

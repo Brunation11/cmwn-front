@@ -5,10 +5,15 @@ import FriendList from 'components/friend_list';
 import ProfileImage from 'components/profile_image';
 
 var Sidebar = React.createClass({
+    attemptNavigate: function () {
+        window.location.href = '/profile';
+    },
     render: function () {
         return (
             <div className={'sidebar ' + (this.props.menuIsOpen ? 'open' : '')}>
-                <ProfileImage />
+                <a onClick={this.attemptNavigate} >
+                    <ProfileImage />
+                </a>
                 <SiteNav />
                 <FriendList />
             </div>
