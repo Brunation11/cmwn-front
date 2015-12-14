@@ -57,6 +57,10 @@ body {
         background: #fff;
     }
 
+    .sweater, .sweater .content {
+        padding: 0;
+    }
+
     .sweater {
         max-width: $monitor-max-break;
         position: relative;
@@ -65,10 +69,15 @@ body {
         margin-bottom: 2 * $standard;
         left: 50%;
         transform: translateX(-50%);
+
+        .content, .sidebar {
+            padding-bottom: $standard;
+        }
     }
 
     .layout {
         display: flex;
+        margin-bottom: 4 * $standard;
         align-items: stretch;
     }
 
@@ -78,6 +87,7 @@ body {
         flex-shrink: 1;
         padding: $standard / 2;
     }
+
 
     .breadcrumb {
         padding: $standard / 2 $standard;
@@ -133,6 +143,32 @@ body {
     .global-header {
         position: relative;
         max-width: $monitor-max-break; 
+    }
+    
+    .global-footer {
+        order: 666;
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 15px;
+        border-top: 5px solid $cmwn-blue;
+
+        .links {
+            a,
+            a:active,
+            a:visited {
+                font-size: 13px;
+                color: #000;
+            }
+
+            a:first-child {
+                margin-right: 5px;
+                padding-right: 5px;
+                border-right: solid 1px #000;
+            }
+        }
     }
 
     .logo-pad {

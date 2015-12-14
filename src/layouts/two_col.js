@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Sidebar from 'components/sidebar';
+import Footer from 'components/footer';
 import EventManager from 'components/event_manager';
 
 var Layout = React.createClass({
@@ -18,6 +19,7 @@ var Layout = React.createClass({
                     {this.props.children}
                 </div>
                 <Sidebar menuIsOpen={this.menuIsOpen}/>
+                <Footer />
              </div>
         );
     }
