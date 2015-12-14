@@ -3,6 +3,10 @@ import React from 'react';
 import SiteNav from 'components/site_nav';
 import FriendList from 'components/friend_list';
 import ProfileImage from 'components/profile_image';
+import Authorization from 'components/authorization';
+
+
+const WELCOME = 'Welcome';
 
 var Sidebar = React.createClass({
     attemptNavigate: function () {
@@ -11,6 +15,8 @@ var Sidebar = React.createClass({
     render: function () {
         return (
             <div className={'sidebar ' + (this.props.menuIsOpen ? 'open' : '')}>
+                <p className="welcome">{WELCOME}</p>
+                <p className="username">{Authorization.currentUser.username}<a onClick={this.attemptNavigate} > </a></p>
                 <a onClick={this.attemptNavigate} >
                     <ProfileImage />
                 </a>
