@@ -4,12 +4,16 @@ import SiteNav from 'components/site_nav';
 import FriendList from 'components/friend_list';
 import ProfileImage from 'components/profile_image';
 import Authorization from 'components/authorization';
+import EventManager from 'components/event_manager';
 
 import 'components/sidebar.scss';
 
 const WELCOME = 'Welcome';
 
 var Sidebar = React.createClass({
+    componentDidMount: function () {
+        EventManager.listen('userChanged', this.forceUpdate);
+    },
     attemptNavigate: function () {
         window.location.href = '/profile';
     },
