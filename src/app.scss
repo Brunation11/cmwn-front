@@ -244,6 +244,7 @@ body {
             background-size: 100% auto;
             padding: $standard / 2 $standard;
             color: #FFF;
+            text-transform: uppercase;
         }
     }
 
@@ -266,6 +267,7 @@ body {
 
             tr {
                 color: #fff;
+                text-transform: uppercase;
                 font-size: 1.2rem;
                 font-family: $cmwn-jade-font;
                 filter: blur(0);

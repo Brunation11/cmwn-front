@@ -33,7 +33,6 @@ var App = React.createClass({
     },
     globalUpdate: function () {
         this.forceUpdate();
-        debugger;
     },
     render: function () {
         if (this.isHome()) {
