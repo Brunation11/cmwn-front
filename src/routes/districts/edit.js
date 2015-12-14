@@ -11,8 +11,8 @@ const HEADINGS = {
 };
 
 var Edit = React.createClass({
-    district: {},
     getInitialState: function () {
+        this.district = {};
         return {
             code: '',
             title: '',

@@ -15,8 +15,8 @@ const LABELS = {
 };
 
 var Edit = React.createClass({
-    organization: {},
     getInitialState: function () {
+        this.organization = {};
         return {
             code: '',
             title: '',

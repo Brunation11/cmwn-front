@@ -7,8 +7,8 @@ import GLOBALS from 'components/globals';
 
 
 var SiteNav = React.createClass({
-    menuItems: [],
     componentWillMount: function () {
+        this.menuItems = [];
         this.getMenuItems();
     },
     getMenuItems: function () {

@@ -5,7 +5,6 @@ import Immutable from 'immutable';
 import HttpManager from 'components/http_manager';
 
 var Fetcher = React.createClass({
-    data: [],
     getInitialState: function () {
         this.data = this.props.data || [];
         return {};

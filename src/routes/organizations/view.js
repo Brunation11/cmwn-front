@@ -79,7 +79,7 @@ var View = React.createClass({
                         {this.renderEditLink()}
                     </p>
                     <br />
-                    <p>{`${HEADINGS.ID}: ${this.state.organization.id}`}</p>
+                    <p>{`${HEADINGS.ID}: ${this.state.organization.uuid}`}</p>
                     <br />
                     <p>{`${HEADINGS.DISTRICTS}: `}{this.renderDistricts()}</p>
                     <br />

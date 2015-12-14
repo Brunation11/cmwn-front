@@ -274,7 +274,7 @@ var ChangePassword = React.createClass({
 
 var Edit = React.createClass({
     getInitialState: function () {
-        this.uuid = this.props.params.uuid || Authorization.currentUser.uuid;
+        this.uuid = this.props.params.id || Authorization.currentUser.uuid;
         this.url = GLOBALS.API_URL + 'users/' + this.uuid;
         return {};
     },
