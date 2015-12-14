@@ -30,7 +30,6 @@ var SiteNav = React.createClass({
             <nav className="">
                 <ul>
                     {this.renderNavItems()}
-                    <li><a href="#">Logout</a></li>
                 </ul>
             </nav>
         );

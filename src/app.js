@@ -24,6 +24,7 @@ var App = React.createClass({
     componentWillMount: function () {
         Errors.onError(this.globalUpdate);
         EventManager.listen('userChanged', this.globalUpdate);
+        EventManager.listen('errorChanged', this.globalUpdate);
     },
     isHome: function () {
         return window.location.href.toLowerCase().indexOf('home') !== -1 ||
