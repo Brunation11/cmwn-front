@@ -19,7 +19,7 @@ var FlipBoard = React.createClass({
         }
         return (<div className="flipboard">
             <Panel header={this.props.header} className="standard">
-                {_.map(this.props.data, item => this.props.renderFlip(item))}
+                {_.map(this.props.data, (item, i) => this.props.renderFlip(item, i))}
             </Panel>
         </div>);
     }
