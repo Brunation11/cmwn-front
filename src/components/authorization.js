@@ -3,6 +3,7 @@ import _ from 'lodash';
 import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
 import PrivateRoutes from 'private_routes';
+import EventManager from 'components/event_manager';
 //var PrivateRoutes = [];
 
 class _Authorization {
@@ -32,6 +33,7 @@ class _Authorization {
                 this.currentUser.uuid = res.response.data.uuid;
                 window.localStorage.setItem('userId', res.response.data.uuid);
                 resolve(res.response.data);
+                EventManager.update('userChanged', res.response.data.uuid);
             }).catch(() => {
                 //user is not logged in.
                 window.localStorage.setItem('userName', null);

@@ -8,6 +8,7 @@ import History from 'components/history';
 import GLOBALS from 'components/globals';
 import PublicRoutes from 'public_routes';
 import PrivateRoutes from 'private_routes';
+import EventManager from 'components/event_manager';
 
 import Errors from 'components/errors';
 import Layout from 'layouts/one_col';
@@ -21,15 +22,17 @@ import 'media/logo.png';
 
 var App = React.createClass({
     componentWillMount: function () {
-        Errors.onError(this.onError);
+        Errors.onError(this.globalUpdate);
+        EventManager.listen('userChanged', this.globalUpdate);
     },
     isHome: function () {
         return window.location.href.toLowerCase().indexOf('home') !== -1 ||
             window.location.pathname === '/' ||
             window.location.pathname === '';
     },
-    onError: function () {
+    globalUpdate: function () {
         this.forceUpdate();
+        debugger;
     },
     render: function () {
         if (this.isHome()) {
