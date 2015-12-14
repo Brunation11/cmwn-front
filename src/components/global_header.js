@@ -24,7 +24,7 @@ var GlobalHeader = React.createClass({
     renderLoggedInUser: function () {
         if (Authorization.currentUser.uuid != null && Authorization.currentUser.uuid !== 'null') {
             return (
-               <div className="current-user-info">{CURRENT_USER_IS} <a href="/profile" >{Authorization.currentUser.name}</a></div>
+               <div className="current-user-info">{CURRENT_USER_IS} <a href="/profile" >{Authorization.currentUser.fullname}</a></div>
             );
         }
         return null;
