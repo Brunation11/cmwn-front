@@ -5,6 +5,7 @@ import FriendList from 'components/friend_list';
 import ProfileImage from 'components/profile_image';
 import Authorization from 'components/authorization';
 
+import 'components/sidebar.scss';
 
 const WELCOME = 'Welcome';
 
