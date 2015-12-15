@@ -11,7 +11,10 @@ var Page = React.createClass({
         return (
            <Layout>
                 <form>
-                    <Fetcher url={ GLOBALS.API_URL + '/friends'}>
+                    <Fetcher url={ GLOBALS.API_URL + 'friends'} transform={data => {
+                        debugger;
+                        return data;
+                    }}>
                         <Paginator>
                             <Table>
                                 <Column data-key="name" />
