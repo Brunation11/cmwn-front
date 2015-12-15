@@ -58,7 +58,7 @@ var _getRequestPromise = function (method, request, body, headers) {
             } else if (res[0].status > 399) {
                 /** @TODO MPR, 11/18/15: Implement error page */
                 History.replaceState(null, '/profile');
-            } else if (res[0].status === 0 || res[0].response == null || res[0].response.length === 0) {
+            } else if (res[0].status === 0 || res[0].response == null || res[0].response.length === 0 && request[0].url.indexOf('logout') === -1) {
                 throw 'no data recieved';
             }
             return Promise.resolve(res[0]);
