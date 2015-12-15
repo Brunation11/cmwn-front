@@ -244,6 +244,7 @@ body {
             background-size: 100% auto;
             padding: $standard / 2 $standard;
             color: #FFF;
+            text-transform: uppercase;
         }
     }
 
@@ -266,8 +267,9 @@ body {
 
             tr {
                 color: #fff;
+                text-transform: uppercase;
                 font-size: 1.2rem;
-                font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
+                font-family: $cmwn-jade-font;
                 filter: blur(0);
                 -webkit-font-smoothing: antialiased;
             }
@@ -281,7 +283,7 @@ body {
         tbody {
 
             tr {
-                //border-bottom: 1px solid #ddd; 
+                //border-bottom: 1px solid #ddd;
                 background: #fff;
 
                 td {
@@ -303,7 +305,7 @@ body {
     }
 
     h1, h2, h3 {
-        font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
+        font-family: $cmwn-jade-font;
         filter: blur(0);
         -webkit-font-smoothing: antialiased;
     }

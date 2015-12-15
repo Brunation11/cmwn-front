@@ -3,8 +3,13 @@
 //* contains all globally used colors, measuerments, etc
 //**//
 
+$cmwn-jade-font: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
 //*************************colors************************
-
+$cmwn-blue: #2CC4F4;
+$cmwn-green: #47B72C;
+$cmwn-purple: #7829BB;
+$rule-light-gray: #E6E6E6; // 10% Gray
+$copy-medium-gray: #666; // 60% Gray
 //************************measures**********************
 //page
 $standard: 15px;
@@ -22,9 +27,3 @@ $min-base-font-size: 12px;
 $device-font-size: 2vmax;
 $base-font-size: 15px;
 $max-base-font-size: 18px;
-//colors
-$cmwn-blue: #2CC4F4;
-$cmwn-green: #47B72C;
-$cmwn-purple: #7829BB;
-$rule-light-gray: #E6E6E6; // 10% Gray
-$copy-medium-gray: #666; // 60% Gray

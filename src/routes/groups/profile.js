@@ -18,7 +18,6 @@ const HEADINGS = {
 };
 
 var Page = React.createClass({
-    group: null,
     componentWillMount: function () {
         this.getGroup();
     },

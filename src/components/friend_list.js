@@ -14,10 +14,10 @@ const REQUESTS = 'Friend Requests';
 const PENDING = 'Pending Friends';
 
 var FriendList = React.createClass({
-    pending: [],
-    requests: [],
-    accepted: [],
     getInitialState: function () {
+        this.pending = [];
+        this.requests = [];
+        this.accepted = [];
         return {
             friendsHidden: false,
             requestsHidden: true,

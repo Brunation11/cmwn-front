@@ -16,8 +16,8 @@ const BREADCRUMB = {
 };
 
 var Edit = React.createClass({
-    group: {},
     getInitialState: function () {
+        this.group = {};
         return {
             code: '',
             title: '',

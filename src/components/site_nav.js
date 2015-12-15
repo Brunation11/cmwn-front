@@ -7,8 +7,8 @@ import GLOBALS from 'components/globals';
 
 
 var SiteNav = React.createClass({
-    menuItems: [],
     componentWillMount: function () {
+        this.menuItems = [];
         this.getMenuItems();
     },
     getMenuItems: function () {
@@ -30,7 +30,6 @@ var SiteNav = React.createClass({
             <nav className="">
                 <ul>
                     {this.renderNavItems()}
-                    <li><a href="#">Logout</a></li>
                 </ul>
             </nav>
         );
