@@ -67,6 +67,7 @@ var Edit = React.createClass({
                 <iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe"></iframe>
                 <form method="post" target="dummyframe" encType="multipart/form-data" action={`${GLOBALS.API_URL}admin/importexcel`} onsubmit={e => e.preventDefault()}>
                     <input type="hidden" name="_token" value={HttpManager.token} />
+                    <input type="hidden" name="organizations" value={this.props.params.id} />
                     <input type="hidden" name="organization_id" value={this.props.params.id} />
                     <Input type="file" name="yourcsv" chars="40" label="Upload Spreadsheet"/>
                     <Button type="submit" >{LABELS.SUBMIT}</Button>
