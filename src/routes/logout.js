@@ -28,7 +28,7 @@ var loaderOptions = {
 
 var Page = React.createClass({
     componentDidMount: function () {
-        var logout = HttpManager.GET({url: GLOBALS.API_URL + '/auth/logout'});
+        var logout = HttpManager.GET({url: GLOBALS.API_URL + 'auth/logout'});
         logout.then(() => {
             window.location.href = '/login';
         });
