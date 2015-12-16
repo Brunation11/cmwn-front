@@ -33,7 +33,6 @@ var onError = function (callback) {
 
 var clearErrors = function () {
     _errors = [];
-    debugger;
     EventManager.update('errorChange', _errors);
 };
 
