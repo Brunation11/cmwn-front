@@ -48,7 +48,7 @@ var Profile = React.createClass({
         else bg = PigBg;
         /* eslint-enable curly */
         return (
-            <div className="flip"><a href={item.url}><img src={bg}></img></a></div>
+            <div className="flip fill"><a href={item.url}><img src={bg}></img></a></div>
         );
     },
     render: function () {

@@ -28,6 +28,16 @@
 
     .flip {
  
+        &.fill {
+            padding: 5px;
+            border: 0;
+
+            img {
+                width: 100%;
+                max-width: 359px; //Completely arbitrary maximum. Taken from flip image width
+            }
+        }
+        
         .item {
             display: table;
             position: relative;
