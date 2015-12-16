@@ -7,6 +7,7 @@ import Fetcher from 'components/fetcher';
 import HttpManager from 'components/http_manager';
 import FlipBoard from 'components/flipboard';
 import GLOBALS from 'components/globals';
+import Toast from 'components/toast';
 import Layout from 'layouts/one_col';
 
 import DefaultProfile from 'media/profile_tranparent.png';
@@ -16,6 +17,8 @@ import 'routes/friends.scss';
 const HEADINGS = {
     FRIENDS: 'My Friends'
 };
+
+const FRIEND_PROBLEM = 'There was a problem adding your friend. Please try again in a little while.';
 
 var Page = React.createClass({
     getInitialState: function () {
@@ -34,9 +37,12 @@ var Page = React.createClass({
         e.stopPropagation();
         e.preventDefault();
         HttpManager.GET({url: GLOBALS.API_URL + 'friendrequest/' + item.uuid, handleErrors: false})
-            .catch(_.noop); /** @TODO MPR, 12/16/15: Alert on error*/
+            .catch(this.friendErr);
         item.relationship = 'Pending';
         this.forceUpdate;
+    },
+    friendErr: function () {
+        Toast.error(FRIEND_PROBLEM);
     },
     renderFlip: function (item){
         return (
