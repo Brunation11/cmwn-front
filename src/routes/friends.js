@@ -4,6 +4,7 @@ import {Button} from 'react-bootstrap';
 import ClassNames from 'classnames';
 
 import Fetcher from 'components/fetcher';
+import HttpManager from 'components/http_manager';
 import FlipBoard from 'components/flipboard';
 import GLOBALS from 'components/globals';
 import Layout from 'layouts/one_col';
@@ -29,6 +30,14 @@ var Page = React.createClass({
         ];
         return {};
     },
+    addFriend: function (item, e) {
+        e.stopPropagation();
+        e.preventDefault();
+        HttpManager.GET({url: GLOBALS.API_URL + 'friendrequest/' + item.uuid, handleErrors: false})
+            .catch(_.noop); /** @TODO MPR, 12/16/15: Alert on error*/
+        item.relationship = 'Pending';
+        this.forceUpdate;
+    },
     renderFlip: function (item){
         return (
             <div className="flip">
@@ -36,7 +45,7 @@ var Page = React.createClass({
                     <div className="item">
                         <span className="overlay">
                             <div className="relwrap"><div className="abswrap">
-                                <Button className={ClassNames('green standard', {displayed: item.relationship || true})}> Add Friend</Button>
+                                <Button onClick={this.addFriend.bind(this, item)} className={ClassNames('green standard', {hidden: item.relationship === 'Pending'})}> Add Friend</Button>
                                 <Button className="purple standard">View Profile</Button>
                             </div></div>
                         </span>
