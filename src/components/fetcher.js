@@ -11,6 +11,7 @@ var Fetcher = React.createClass({
     },
     getDefaultProps: function () {
         return {
+            transform: _.identity,
             renderNoData: (() => null)
         };
     },
@@ -42,7 +43,7 @@ var Fetcher = React.createClass({
         propsForChild = Immutable.Map(props)
             .remove('url')
             .remove('children')
-            .set('data', this.data);
+            .set('data', this.props.transform(this.data));
         return (
             <div>
                 {React.Children.map(this.props.children, child => React.cloneElement(child, propsForChild.toObject()))}

@@ -31,7 +31,12 @@ var Page = React.createClass({
     },
     renderFlip: function (item){
         return (
-            <div className="flip"><Link to={`/student/${item.uuid}`}><img src={DefaultProfile}></img><p>{item.first_name} {item.last_name}</p></Link></div>
+            <div className="flip">
+                <Link to={`/student/${item.uuid.toString()}`}><img src={item.image || DefaultProfile}></img>
+                    <p className="linkText" >{item.username}</p>
+                </Link>
+                <p className="userFlips">0 Flips Earned</p>
+            </div>
         );
     },
     render: function () {

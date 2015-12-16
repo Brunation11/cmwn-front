@@ -17,8 +17,21 @@
     }
 
     .flip > a {
+        font-weight: bold;
         max-width: 200px;
         margin: 0 auto;
+
+        .linkText {
+            margin-bottom: 0;
+        }
+    }
+
+    .flip {
+        
+        .userFlips {
+            color: $copy-medium-gray;
+            font-weight: bold;
+        }
     }
 
     .flip p {
