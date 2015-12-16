@@ -69,6 +69,10 @@ var Page = React.createClass({
     getInitialState: function () {
         this.uuid = this.props.params.id || Authorization.currentUser.uuid;
         this.url = GLOBALS.API_URL + 'users/' + this.uuid;
+        if (this.uuid == null) {
+            //race condition edge case where the profile has loaded before the auth module
+            window.location.reload();
+        }
         return {};
     },
     render: function () {
