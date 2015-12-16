@@ -15,7 +15,7 @@ var Layout = React.createClass({
     },
     render: function () {
         return (
-             <div className="layout">
+             <div className={'layout ' + this.props.className}>
                 <div className="content">
                     {this.props.children}
                 </div>
