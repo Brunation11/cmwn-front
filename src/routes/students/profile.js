@@ -69,13 +69,20 @@ var Page = React.createClass({
     getInitialState: function () {
         this.uuid = this.props.params.id || Authorization.currentUser.uuid;
         this.url = GLOBALS.API_URL + 'users/' + this.uuid;
-        if (this.uuid == null) {
+        if (this.uuid == null || this.uuid.toLowerCase() === 'null') {
             //race condition edge case where the profile has loaded before the auth module
-            window.location.reload();
+            Authorization.userIsLoaded.then(() => {
+                this.uuid = this.props.params.id || Authorization.currentUser.uuid;
+                this.url = GLOBALS.API_URL + 'users/' + this.uuid;
+                this.forceUpdate();
+            });
         }
         return {};
     },
     render: function () {
+        if (this.uuid == null || this.uuid.toLowerCase() === 'null') {
+            return null;
+        }
         return (
             <Fetcher url={this.url}>
                 <Profile />
