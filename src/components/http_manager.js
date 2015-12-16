@@ -45,7 +45,9 @@ var _getRequestPromise = function (method, request, body, headers) {
     promise = _makeRequest.call(this, method, request);
     if (request.length === 1) {
         return promise.then((res) => {
-            if (res[0].status > 499) {
+            if (request[0].handleErrors === false) {
+                return Promise.resolve(res);
+            } else if (res[0].status > 499) {
                 /** @TODO MPR, 12/2/15: Implement catastrophic error page */
                 console.error('Unrecoverable server error.'); //eslint-disable-line no-console
             } else if (res[0].status === 401) {
