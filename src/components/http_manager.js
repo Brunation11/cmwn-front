@@ -45,9 +45,7 @@ var _getRequestPromise = function (method, request, body, headers) {
     promise = _makeRequest.call(this, method, request);
     if (request.length === 1) {
         return promise.then((res) => {
-            if (request[0].handleErrors === false) {
-                return Promise.resolve(res);
-            } else if (res[0].status > 499) {
+            if (res[0].status > 499) {
                 /** @TODO MPR, 12/2/15: Implement catastrophic error page */
                 console.error('Unrecoverable server error.'); //eslint-disable-line no-console
             } else if (res[0].status === 401) {
@@ -65,11 +63,15 @@ var _getRequestPromise = function (method, request, body, headers) {
             }
             return Promise.resolve(res[0]);
         }).catch(err => {
-            console.info(err); //eslint-disable-line no-console
-            Errors.show404();
-            //Unhandled API error probably indicates a failed preflight with no status, treat as
-            //if the user is unauthenticated and redirect to login
-            //History.replaceState(null, '/login');
+            if (request[0].handleErrors === false) {
+                return Promise.reject(err);
+            } else {
+                console.info(err); //eslint-disable-line no-console
+                Errors.show404();
+                //Unhandled API error probably indicates a failed preflight with no status, treat as
+                //if the user is unauthenticated and redirect to login
+                //History.replaceState(null, '/login');
+            }
         });
     }
     return promise;
