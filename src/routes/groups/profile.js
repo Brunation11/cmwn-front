@@ -39,16 +39,20 @@ var Page = React.createClass({
             </div>
         );
     },
+    renderClassInfo: function () {
+        return (
+           <Panel header={this.group.title} className="standard">
+               {this.group.description}
+           </Panel>
+        );
+    },
     render: function () {
         if (this.group == null) {
             return null;
         }
         return (
            <Layout className="profile">
-               <Panel header={this.group.title} className="standard">
-                   {this.group.description}
-               </Panel>
-               <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.MY_CLASSMATES} data={this.group.users.data} />
+               <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.MY_CLASSMATES + ' - ' + this.group.title} data={this.group.users.data} />
            </Layout>
         );
     }
