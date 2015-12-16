@@ -39,6 +39,7 @@ class _Authorization {
                 window.localStorage.setItem('userName', null);
                 window.localStorage.setItem('userId', null);
                 window.localStorage.setItem('fullName', null);
+                EventManager.update('userChanged', null);
                 if (window.location.pathname !== '/login' && window.location.pathname !== '/login/') {
                     History.replaceState(null, '/login');
                     resolve();
