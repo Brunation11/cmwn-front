@@ -27,15 +27,74 @@
     }
 
     .flip {
+ 
+        &.fill {
+            padding: 5px;
+            border: 0;
+
+            img {
+                width: 100%;
+                max-width: 359px; //Completely arbitrary maximum. Taken from flip image width
+            }
+        }
         
+        .item {
+            display: table;
+            position: relative;
+            margin: auto;
+
+            .heading, .text, .play{
+                display: block;
+                padding-bottom: $standard;
+            }
+
+            .heading, .play {
+                font-weight: bold;
+            }
+
+            .text {
+                font-size: 0.8rem;
+            }
+
+            .heading {
+                font-size: 1.4rem;
+            }
+
+            .play {
+                font-size: 1.1rem;
+                text-decoration: underline;
+                text-transform: uppercase;
+            }
+        }
+
         .userFlips {
             color: $copy-medium-gray;
             font-weight: bold;
         }
-    }
 
-    .flip p {
-        max-width: 200px;
-        margin: 5px auto 10px auto;
+        .overlay {
+            color: #ffffff;
+            opacity: 0;
+            background: rgba($cmwn-blue, 0.6);
+            position: absolute;
+            overflow: hidden;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: table-caption;
+            padding: $standard;
+            text-align: left;
+            transition: opacity 0.5s;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+
+        p {
+            max-width: 200px;
+            margin: 5px auto 10px auto;
+        }
     }
 }

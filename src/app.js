@@ -42,6 +42,7 @@ var App = React.createClass({
             <div>
                 {Errors.renderErrors()}
                 <GlobalHeader />
+                <div className="blocker"></div>
                 <div className="sweater">
                     {this.props.children}
                 </div>

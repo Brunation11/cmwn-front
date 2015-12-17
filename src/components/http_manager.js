@@ -63,11 +63,15 @@ var _getRequestPromise = function (method, request, body, headers) {
             }
             return Promise.resolve(res[0]);
         }).catch(err => {
-            console.info(err); //eslint-disable-line no-console
-            Errors.show404();
-            //Unhandled API error probably indicates a failed preflight with no status, treat as
-            //if the user is unauthenticated and redirect to login
-            //History.replaceState(null, '/login');
+            if (request[0].handleErrors === false) {
+                return Promise.reject(err);
+            } else {
+                console.info(err); //eslint-disable-line no-console
+                Errors.show404();
+                //Unhandled API error probably indicates a failed preflight with no status, treat as
+                //if the user is unauthenticated and redirect to login
+                //History.replaceState(null, '/login');
+            }
         });
     }
     return promise;

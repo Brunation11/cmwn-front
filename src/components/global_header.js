@@ -16,6 +16,9 @@ var GlobalHeader = React.createClass({
         Authorization.userIsLoaded.then(() => {
             this.forceUpdate();
         });
+        EventManager.listen('userChanged', () => {
+            this.forceUpdate();
+        });
     },
     toggleMenu: function () {
         var isOpen = EventManager.get('menuIsOpen');
@@ -29,6 +32,16 @@ var GlobalHeader = React.createClass({
         }
         return null;
     },
+    renderLogout: function () {
+        if (Authorization.currentUser.username == null || Authorization.currentUser.username.toLowerCase() === 'null') {
+            return null;
+        }
+        return (
+            <div className="logout"><a href="/logout" onClick={this.logout}>
+                <img src={LOGOUT_URL} alt={LOGOUT} />{LOGOUT}
+            </a></div>
+        );
+    },
     render: function () {
         return (
             <div className="global-header">
@@ -37,10 +50,7 @@ var GlobalHeader = React.createClass({
                    <Glyphicon glyph="glyphicon glyphicon-menu-hamburger" />
                    <span className="fallback">{MENU}</span>
                 </Button>
-                <div className="logout"><a href="/logout" onClick={this.logout}>
-                    <img src={LOGOUT_URL} alt={LOGOUT} />{LOGOUT}
-                </a></div>
-                {this.renderLoggedInUser()}
+                {this.renderLogout()}
             </div>
         );
     }

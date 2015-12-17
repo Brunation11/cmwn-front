@@ -1,22 +1,54 @@
-.btn.reset {
-    display: initial;
-    padding: 0;
-    margin: auto;
-    font-size: inherit;
-    font-weight: inherit;
-    line-height: inherit;
-    text-align: inherit;
-    white-space: normal;
-    vertical-align: middle;
-    touch-action: manipulation;
-    user-select: none;
-    background-image: none;
-    border: none;
-    border-radius: 0;
+@import 'variables';
+
+.btn-default {
+
+    &.reset {
+        color: inherit;
+        background-color: transparent;
+        border: none;
+    }
 }
 
-.btn-default.reset {
-    color: inherit;
-    background-color: transparent;
-    border: none;
+.btn {
+ 
+    &.blue {
+        background-color: $cmwn-blue;
+    }
+
+    &.green {
+        background-color: $cmwn-green;
+    }
+
+    &.purple {
+        background-color: $cmwn-purple;
+    }
+
+    &.standard {
+        padding: 5px;
+        border: none;
+        box-shadow: 0px 0px 20px rgba(0,0,0,0.6);
+        font-family: $cmwn-jade-font;
+        font-size: 18px;
+        text-transform: uppercase;
+        color: #fff;
+        outline: none;
+    }
+
+    &.reset {
+        display: initial;
+        padding: 0;
+        margin: auto;
+        font-size: inherit;
+        font-weight: inherit;
+        line-height: inherit;
+        text-align: inherit;
+        white-space: normal;
+        vertical-align: middle;
+        touch-action: manipulation;
+        user-select: none;
+        background-image: none;
+        border: none;
+        border-radius: 0;
+    }
+
 }

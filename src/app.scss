@@ -55,6 +55,7 @@ body {
 
     .sweater, .global-header {
         background: #fff;
+        box-shadow: 0 0 20px rgba(0,0,0,.2);
     }
 
     .sweater, .sweater .content {
@@ -73,6 +74,18 @@ body {
         .content, .sidebar {
             padding-bottom: $standard;
         }
+    }
+
+    .blocker {
+        position: relative;
+        padding-top: 30px;
+        margin-top: -15px;
+        margin-bottom: -15px;
+        background: white;
+        z-index: 3;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: $monitor-max-break;
     }
 
     .layout {
@@ -96,6 +109,8 @@ body {
         display: inline-block;
         margin: $standard / 2 0;
         font-size: 12px;
+
+        display: none;
 
         a + a::before, a + span::before {
             content: " | ";
@@ -374,7 +389,7 @@ body {
     }
 
     @media (min-width: $monitor-max-break) {
-        background: #F8F8F8;
+        //background: #F8F8F8;
 
         .global-header {
             padding: 0 $standard;
