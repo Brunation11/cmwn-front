@@ -18,7 +18,6 @@ const HEADINGS = {
 };
 
 var Page = React.createClass({
-    group: null,
     componentWillMount: function () {
         this.getGroup();
     },
@@ -32,7 +31,19 @@ var Page = React.createClass({
     },
     renderFlip: function (item){
         return (
-            <div className="flip"><Link to={`/student/${item.uuid}`}><img src={DefaultProfile}></img><p>{item.first_name} {item.last_name}</p></Link></div>
+            <div className="flip">
+                <Link to={`/student/${item.uuid.toString()}`}><img src={item.image || DefaultProfile}></img>
+                    <p className="linkText" >{item.username}</p>
+                </Link>
+                <p className="userFlips">0 Flips Earned</p>
+            </div>
+        );
+    },
+    renderClassInfo: function () {
+        return (
+           <Panel header={this.group.title} className="standard">
+               {this.group.description}
+           </Panel>
         );
     },
     render: function () {
@@ -41,10 +52,7 @@ var Page = React.createClass({
         }
         return (
            <Layout className="profile">
-               <Panel header={this.group.title} className="standard">
-                   {this.group.description}
-               </Panel>
-               <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.MY_CLASSMATES} data={this.group.users.data} />
+               <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.MY_CLASSMATES + ' - ' + this.group.title} data={this.group.users.data} />
            </Layout>
         );
     }

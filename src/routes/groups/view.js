@@ -25,9 +25,9 @@ const EDIT_LINK = 'Edit';
 
 
 var View = React.createClass({
-    data: {},
-    members: [],
     getInitialState: function () {
+        this.data = {};
+        this.members = [];
         return {
         };
     },
@@ -35,7 +35,7 @@ var View = React.createClass({
         this.getGroup();
     },
     getGroup: function () {
-        var urlData = HttpManager.GET({url: `${GLOBALS.API_URL}groups/${this.props.params.uuid}?include=users,organizations`});
+        var urlData = HttpManager.GET({url: `${GLOBALS.API_URL}groups/${this.props.params.id}?include=users,organizations`});
         urlData.then(res => {
             this.data = res.response.data;
             this.members = Util.normalize(res.response, 'users', []);
@@ -43,9 +43,9 @@ var View = React.createClass({
         });
     },
     renderEditLink: function () {
-        if (GLOBALS.CURRENT_USER.ID === window.parseInt(this.props.params.uuid)) {
+        if (GLOBALS.CURRENT_USER.ID === window.parseInt(this.props.params.id)) {
             /** @TODO MPR, 10/4/15: Add check for user is admin*/
-            return <Link to={`/group/${this.props.params.uuid}/edit`} >({EDIT_LINK})</Link>;
+            return <Link to={`/group/${this.props.params.id}/edit`} >({EDIT_LINK})</Link>;
         }
         return null;
     },

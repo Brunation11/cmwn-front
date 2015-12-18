@@ -20,8 +20,8 @@ const EDIT_LINK = 'Edit';
 
 
 var View = React.createClass({
-    district: {},
     componentWillMount: function () {
+        this.district = {};
         this.getDistrict();
     },
     getDistrict: function () {

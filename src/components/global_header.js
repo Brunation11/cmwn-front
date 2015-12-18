@@ -16,6 +16,9 @@ var GlobalHeader = React.createClass({
         Authorization.userIsLoaded.then(() => {
             this.forceUpdate();
         });
+        EventManager.listen('userChanged', () => {
+            this.forceUpdate();
+        });
     },
     toggleMenu: function () {
         var isOpen = EventManager.get('menuIsOpen');
@@ -24,10 +27,20 @@ var GlobalHeader = React.createClass({
     renderLoggedInUser: function () {
         if (Authorization.currentUser.uuid != null && Authorization.currentUser.uuid !== 'null') {
             return (
-               <div className="current-user-info">{CURRENT_USER_IS + Authorization.currentUser.name}</div>
+               <div className="current-user-info">{CURRENT_USER_IS} <a href="/profile" >{Authorization.currentUser.fullname}</a></div>
             );
         }
         return null;
+    },
+    renderLogout: function () {
+        if (Authorization.currentUser.username == null || Authorization.currentUser.username.toLowerCase() === 'null') {
+            return null;
+        }
+        return (
+            <div className="logout"><a href="/logout" onClick={this.logout}>
+                <img src={LOGOUT_URL} alt={LOGOUT} />{LOGOUT}
+            </a></div>
+        );
     },
     render: function () {
         return (
@@ -37,10 +50,7 @@ var GlobalHeader = React.createClass({
                    <Glyphicon glyph="glyphicon glyphicon-menu-hamburger" />
                    <span className="fallback">{MENU}</span>
                 </Button>
-                <div className="logout"><a href="#" onClick={this.logout}>
-                    <img src={LOGOUT_URL} alt={LOGOUT} />{LOGOUT}
-                </a></div>
-                {this.renderLoggedInUser()}
+                {this.renderLogout()}
             </div>
         );
     }

@@ -5,13 +5,13 @@ import Immutable from 'immutable';
 import HttpManager from 'components/http_manager';
 
 var Fetcher = React.createClass({
-    data: [],
     getInitialState: function () {
         this.data = this.props.data || [];
         return {};
     },
     getDefaultProps: function () {
         return {
+            transform: _.identity,
             renderNoData: (() => null)
         };
     },
@@ -43,7 +43,7 @@ var Fetcher = React.createClass({
         propsForChild = Immutable.Map(props)
             .remove('url')
             .remove('children')
-            .set('data', this.data);
+            .set('data', this.props.transform(this.data));
         return (
             <div>
                 {React.Children.map(this.props.children, child => React.cloneElement(child, propsForChild.toObject()))}

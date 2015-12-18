@@ -11,7 +11,7 @@ import Layout from 'layouts/two_col';
 
 import 'routes/friends/suggested.scss';
 
-const NO_FRIENDS = 'You\'re already friends everyone in your network. Great work!';
+const NO_FRIENDS = <div>You are already friends with everyone in your group. <br /> Great Work! <br /> Let's Take Action!</div>;
 const HEADINGS = {
     SUGGESTED: 'Suggested Friends'
 };

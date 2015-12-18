@@ -58,16 +58,20 @@ var _getRequestPromise = function (method, request, body, headers) {
             } else if (res[0].status > 399) {
                 /** @TODO MPR, 11/18/15: Implement error page */
                 History.replaceState(null, '/profile');
-            } else if (res[0].status === 0 || res[0].response == null || res[0].response.length === 0) {
+            } else if (res[0].status === 0 || res[0].response == null || res[0].response.length === 0 && request[0].url.indexOf('logout') === -1) {
                 throw 'no data recieved';
             }
             return Promise.resolve(res[0]);
         }).catch(err => {
-            console.info(err); //eslint-disable-line no-console
-            Errors.show404();
-            //Unhandled API error probably indicates a failed preflight with no status, treat as
-            //if the user is unauthenticated and redirect to login
-            //History.replaceState(null, '/login');
+            if (request[0].handleErrors === false) {
+                return Promise.reject(err);
+            } else {
+                console.info(err); //eslint-disable-line no-console
+                Errors.show404();
+                //Unhandled API error probably indicates a failed preflight with no status, treat as
+                //if the user is unauthenticated and redirect to login
+                //History.replaceState(null, '/login');
+            }
         });
     }
     return promise;

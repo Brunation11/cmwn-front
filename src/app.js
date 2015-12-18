@@ -8,6 +8,7 @@ import History from 'components/history';
 import GLOBALS from 'components/globals';
 import PublicRoutes from 'public_routes';
 import PrivateRoutes from 'private_routes';
+import EventManager from 'components/event_manager';
 
 import Errors from 'components/errors';
 import Layout from 'layouts/one_col';
@@ -21,14 +22,16 @@ import 'media/logo.png';
 
 var App = React.createClass({
     componentWillMount: function () {
-        Errors.onError(this.onError);
+        Errors.onError(this.globalUpdate);
+        EventManager.listen('userChanged', this.globalUpdate);
+        EventManager.listen('errorChanged', this.globalUpdate);
     },
     isHome: function () {
         return window.location.href.toLowerCase().indexOf('home') !== -1 ||
             window.location.pathname === '/' ||
             window.location.pathname === '';
     },
-    onError: function () {
+    globalUpdate: function () {
         this.forceUpdate();
     },
     render: function () {
@@ -39,6 +42,7 @@ var App = React.createClass({
             <div>
                 {Errors.renderErrors()}
                 <GlobalHeader />
+                <div className="blocker"></div>
                 <div className="sweater">
                     {this.props.children}
                 </div>
@@ -87,7 +91,7 @@ const routes = {
     indexRoute: {component: Landing},
     childRoutes: PublicRoutes.concat(PrivateRoutes).concat([
         { path: '*', component: Landing},
-    ])
+    ]),
 };
 
 function run() {

@@ -3,6 +3,7 @@ import Classnames from 'classnames';
 
 import Cloudinary from 'components/cloudinary';
 import Toast from 'components/toast';
+import Authorization from 'components/authorization';
 import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
 
@@ -17,24 +18,30 @@ var Image = React.createClass({
             profileImage: GLOBALS.DEFAULT_PROFILE
         };
     },
-    startUpload: function () {
+    startUpload: function (e) {
         var self = this;
-        Cloudinary.load((e, err) => {
+        e.stopPropagation();
+        Cloudinary.load((e_, err) => {
             if (err != null) {
                 Toast.error(UPLOAD_ERROR);
             }
             /* eslint-disable camelcase*/
             Cloudinary.instance.openUploadWidget({
-                cloud_name: 'dyf9catvs',
-                upload_preset: 'hgkcitbs',
+                cloud_name: 'changemyworldnow',
+                upload_preset: 'public-profile-image',
                 multiple: false,
                 cropping: 'server',
                 gravity: 'custom',
                 cropping_aspect_ratio: 1,
                 theme: 'minimal',
             }, (error, result) => {
+                if (error !== null) {
+                    if (error.message === 'User closed widget') {
+                        return;
+                    }
+                }
                 self.setState({profileImage: result[0].secure_url});
-                HttpManager.POST({url: `${GLOBALS.API_URL}/updateimage`}, {
+                HttpManager.PUT({url: `${GLOBALS.API_URL}users/${Authorization.currentUser.uuid}/image`}, {
                     url: result[0].secure_url,
                     id: result[0].public_id
                 });
@@ -59,7 +66,7 @@ var Image = React.createClass({
             <div className={Classnames('profile-image', {'link-below': this.props['link-below']})} >
                 {this.renderImage(this.state.profileImage)}
                 <div className="upload" onClick={this.startUpload}>Upload Image</div>
-                <div className="below"><a onClick={this.startUpload}>Upload New Image</a></div>
+                <div className="below"><span onClick={this.startUpload}>Upload New Image</span></div>
             </div>
         );
     }

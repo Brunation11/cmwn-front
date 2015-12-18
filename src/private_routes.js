@@ -1,3 +1,4 @@
+import _ from 'lodash';
 
 import Users from 'routes/users';
 import Districts from 'routes/districts';
@@ -21,7 +22,18 @@ import ParentProfile from 'routes/parents/profile';
 import ParentEdit from 'routes/parents/edit';
 import Sitemap from 'sitemap';
 
+var redirect = function (path) {
+    return function (nextState, transition) {
+        _.each(nextState.params, (v, k) => {
+            path = path.replace(`:${k}`, v);
+        });
+
+        transition(null, path);
+    };
+};
+
 var routes = [
+    { path: 'auth/logout(/)', onEnter: redirect('/logout')},
     { path: 'sitemap(/)', component: Sitemap },
     { path: 'users(/)', component: Users },
     { path: 'profile(/)', component: Profile},
@@ -36,23 +48,36 @@ var routes = [
     { path: 'parent/:id/profile(/)', component: ParentProfile },
     { path: 'parent/:id/edit(/)', component: ParentEdit },
     { path: 'districts(/)', component: Districts},
+    { path: 'district(/)', onEnter: redirect('/districts')},
     { path: 'district/:id(/)', component: DistrictView},
+    { path: 'districts/:id(/)', onEnter: redirect('/district/:id(/)')},
     { path: 'district/:id/view(/)', component: DistrictView},
+    { path: 'districts/:id/view(/)', onEnter: redirect('/district/:id/view(/)')},
     { path: 'district/:id/edit(/)', component: DistrictEdit},
+    { path: 'districts:id/edit(/)', onEnter: redirect('/district/id:edit(/)')},
     { path: 'organizations(/)', component: Organizations},
-    { path: 'organization/:id', component: OrganizationProfile},/** @TODO MPR, 12/7/15: Figure out why this route is neccissary*/
+    { path: 'organization(/)', onEnter: redirect('/organizations')},
     { path: 'organization/:id(/)', component: OrganizationProfile},
+    { path: 'organizations/:id(/)', onEnter: redirect('/organization/:id')},
     { path: 'organization/:id/view(/)', component: OrganizationView},
+    { path: 'organizations/:id/view(/)', onEnter: redirect('/organization/:id/view')},
     { path: 'organization/:id/edit(/)', component: OrganizationEdit},
+    { path: 'organizations/:id/edit(/)', onEnter: redirect('/organization/:id/edit')},
     { path: 'organization/:id/profile(/)', component: OrganizationProfile},
+    { path: 'organizations/:id/profile(/)', onEnter: redirect('/organization/:id/profile')},
     { path: 'groups(/)', component: Groups},
-    { path: 'group/:id', component: GroupProfile},
+    { path: 'group(/)', onEnter: redirect('/groups')},
     { path: 'group/:id(/)', component: GroupProfile},
+    { path: 'groups/:id(/)', onEnter: redirect('/group/:id')},
     { path: 'group/:id/view(/)', component: GroupView},
+    { path: 'groups/:id/view(/)', onEnter: redirect('/group/:id/view')},
     { path: 'group/:id/edit(/)', component: GroupEdit},
+    { path: 'groups/:id/edit(/)', onEnter: redirect('/group/:id/edit')},
     { path: 'group/:id/profile(/)', component: GroupProfile},
+    { path: 'groups/:id/profile(/)', onEnter: redirect('/group/:id/profile')},
     { path: 'friends(/)', component: Friends},
-    { path: 'friends/suggested(/)', component: SuggestedFriends}
+    { path: 'friends/suggested(/)', component: SuggestedFriends},
+    { path: 'suggestedfriends(/)', onEnter: redirect('/friends/suggested')}
 ];
 
 export default routes;

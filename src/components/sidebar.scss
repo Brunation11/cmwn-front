@@ -1,0 +1,17 @@
+@import 'variables';
+
+.sidebar {
+    
+    .username {
+        font-family: $cmwn-jade-font;
+        font-size: 1.3rem;
+        color: $cmwn-blue;
+        cursor: pointer;
+    }
+
+   .welcome {
+        line-height: 0;
+        color: $copy-medium-gray;
+        font-weight: bold;
+   } 
+}
