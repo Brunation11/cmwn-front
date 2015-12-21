@@ -42,7 +42,7 @@ var Game = React.createClass({
      * default events. These will always fire regardless of whether or not
      * there is an event defined in addition to the submission behavior
      */
-    [EVENT_PREFIX + 'flipEarned']: function () {
+    [EVENT_PREFIX + 'flipped']: function () {
     },
     [EVENT_PREFIX + 'save']: function () {
     },
