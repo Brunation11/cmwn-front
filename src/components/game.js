@@ -10,22 +10,15 @@ const EVENT_PREFIX = '_e_';
 
 /**
  * Game wrapper iframe component.
- * Has two default events - onFlipEarned and onSave
- * provides data-state and data-uuid to iframe via attributes
+ * Listens for 'game-event'
+ * Has three default events - init, onFlipEarned, and onSave
+ * Provides data to component via respond method in details of init event
  * additional arbitrary events can be added by adding additional
  * props prefixed with 'on'. Should the game issue events with
- * these names, any provided callbacks will fire.
- * event names are formatted as gameUuid-eventName, so for example
- * the onSave function will fire when 00e79c5a-9ad6-11e5-ae02-acbc32a6b1bb-save
- * is issued to window from with the iframe with:
+ * these names, any provided callbacks will fire. For example:
  * ```
- * var uuid = window.frameElement.getAttribute('data-uuid');
- * var event = new Event(uuid + '-save');
- * parent.window.dispatchEvent(event)
- * ```
- * likewise, game state can be read with:
- * ```
- * var data = window.frameElement.getAttribute('data-uuid');
+ * var event = new Event('save', {bubbles: true}, {name: 'save', gameData: {state: {...}}});
+ * window.frameElement.dispatchEvent(event)
  * ```
  * note that the component may provide incomplete or empty
  * state data, so any missing properties should be actively
@@ -39,19 +32,11 @@ var Game = React.createClass({
             gameState: {}
         };
     },
-    componentDidMount: function () {
-        if (this.props.uuid != null) {
-            this.setEvents();
-        }
-    },
-    componentWillReceiveProps: function (nextProps) {
-        if (nextProps.uuid !== this.props.uuid) {
-            this.clearEvents();
-            this.setEvents();
-        }
+    componentWillMount: function () {
+        this.setEvent();
     },
     componentWillUnmount: function () {
-        this.clearEvents();
+        this.clearEvent();
     },
     /**
      * default events. These will always fire regardless of whether or not
@@ -62,35 +47,36 @@ var Game = React.createClass({
     [EVENT_PREFIX + 'save']: function () {
     },
     [EVENT_PREFIX + 'init']: function (e) {
-        e.detail.init(this.props.gameState);
+        e.detail.respond(this.props.gameState);
     },
    /** end of default events */
     gameEventHandler: function (e) {
-        if (e.detail.type != null) {
-            if (_.isFunction(this[EVENT_PREFIX + e.detail.type])) {
-                this[EVENT_PREFIX + e.detail.type](...arguments);
+        console.log('Heard Event:', e);
+        if (e.detail.name != null) {
+            if (_.isFunction(this[EVENT_PREFIX + e.detail.name])) {
+                this[EVENT_PREFIX + e.detail.name](...arguments);
             }
-            if(_.isFunction(this.props['on' + e.detail.type])) {
-                this.props['on' + e.detail.type](...arguments);
+            if(_.isFunction(this.props['on' + e.detail.name])) {
+                this.props['on' + e.detail.name](...arguments);
             }
         }
     },
     setEvent: function () {
-        ReactDOM.findDOMNode(this.refs.gameRef).addEventListener('gameEvent', this.gameEventHandler);
+        window.addEventListener('game_event', this.gameEventHandler);
     },
     clearEvent: function () {
-        ReactDOM.findDOMNode(this.refs.gameRef).removeEventListener('gameEvent', this.gameEventHandler);
+        window.removeEventListener('game_event', this.gameEventHandler);
     },
     makeFullScreen: function () {
         ReactDOM.findDOMNode(this.refs.gameRef).webkitRequestFullScreen();
     },
     render: function () {
-        if (this.props.uuid == null) {
+        if (this.props.url == null) {
             return null;
         }
         return (
             <div className="game">
-                <iframe ref="gameRef" src={'http://www.bing.com/search?q=' + this.props.uuid} />
+                <iframe ref="gameRef" src={this.props.url} />
                 <Button onClick={this.makeFullScreen}><Glyphicon glyph="fullscreen" /> Full Screen</Button>
             </div>
         );

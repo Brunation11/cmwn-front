@@ -54,7 +54,7 @@ var Profile = React.createClass({
     getInitialState: function () {
         var state = _.defaults({
             data: _.map(Array(11), (v, i) => ({
-                url: i,
+                url: 'http://games.changemyworldnow.com/polar-bear/',
                 uuid: 'adorablepuppies' + i,
                 title: 'Adorable Action Item',
                 description: 'Captain, why are we out here chasing comets? Yesterday I did not know how to eat gagh. We finished our first sensor sweep of the neutral zone. The game\'s not big enough unless it scares you a little.'
@@ -69,8 +69,8 @@ var Profile = React.createClass({
             this.forceUpdate();
         });
     },
-    showModal: function (gameId) {
-        this.setState({gameOn: true, gameId});
+    showModal: function (gameUrl) {
+        this.setState({gameOn: true, gameUrl});
     },
     hideModal: function () {
         this.setState({gameOn: false});
@@ -91,7 +91,7 @@ var Profile = React.createClass({
         /* eslint-enable curly */
         return (
             <div className="flip fill">
-                <a onClick={this.showModal.bind(this, item.uuid)} >
+                <a onClick={this.showModal.bind(this, item.url)} >
                     <div className="item">
                         <span className="overlay">
                             <span className="heading">{item.title}</span>
@@ -109,7 +109,7 @@ var Profile = React.createClass({
            <Layout className="profile">
                 <Modal show={this.state.gameOn} onHide={this.hideModal}>
                     <Modal.Body>
-                        <Game uuid={this.state.gameId} />
+                        <Game url={this.state.gameUrl} />
                     </Modal.Body>
                 </Modal>
                <Panel header={
