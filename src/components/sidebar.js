@@ -20,9 +20,6 @@ var Sidebar = React.createClass({
         window.location.href = '/profile';
     },
     renderWelcome: function () {
-        if (Authorization.currentUser.username == null || Authorization.currentUser.username.toLowerCase() === 'null') {
-            return null;
-        }
         return (
             <div>
                 <p className="welcome">{WELCOME}</p>
@@ -31,11 +28,14 @@ var Sidebar = React.createClass({
         );
     },
     render: function () {
+        if (Authorization.currentUser.username == null || Authorization.currentUser.username.toLowerCase() === 'null') {
+            return null;
+        }
         return (
             <div className={'sidebar ' + (this.props.menuIsOpen ? 'open' : '')}>
                 {this.renderWelcome()}
                 <a onClick={this.attemptNavigate} >
-                    <ProfileImage />
+                    <ProfileImage uuid={Authorization.currentUser.uuid}/>
                 </a>
                 <SiteNav />
                 <FriendList />
