@@ -3,6 +3,8 @@ import _ from 'lodash';
 import {Panel} from 'react-bootstrap';
 
 import Layout from 'layouts/two_col';
+import EditLink from 'components/edit_link';
+
 import FlipBoard from 'components/flipboard';
 import FlipBgDefault from 'media/flip-placeholder-white.png';
 
@@ -23,6 +25,7 @@ var Page = React.createClass({
         return (
            <Layout className="profile">
                <Panel header={HEADINGS.ACTION} className="standard">
+                 <EditLink base="/profile" uuid={this.state.uuid} canUpdate={this.state.can_update} />
                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nec arcu id massa fringilla condimentum. Nam ornare eget nibh vel laoreet. Donec tincidunt hendrerit nunc, varius facilisis lacus placerat eget. Sed pretium interdum pretium. Pellentesque bibendum libero eget elit consectetur iaculis. Praesent nec mi fringilla, ornare nunc at, auctor velit. Mauris gravida ipsum nisi, eu elementum erat elementum quis.
 
 Suspendisse in maximus mauris, ut mollis libero. Nunc ut ullamcorper mauris, a interdum nisl. Vivamus posuere porttitor magna. Cras varius metus venenatis condimentum cursus. Aenean ac lacus viverra dui tincidunt suscipit. Duis condimentum velit sit amet imperdiet efficitur. Praesent sit amet varius tortor, et elementum nisl. Donec ligula ex, lacinia a accumsan non, placerat sed justo. Morbi in dui a nunc ullamcorper gravida vel sit amet diam. Fusce eget libero suscipit, vestibulum arcu non, porta sem. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vivamus mauris quam, viverra vitae tellus ac, porta bibendum felis.
