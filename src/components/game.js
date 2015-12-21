@@ -47,25 +47,25 @@ var Game = React.createClass({
     [EVENT_PREFIX + 'save']: function () {
     },
     [EVENT_PREFIX + 'init']: function (e) {
-        e.detail.respond(this.props.gameState);
+        e.respond(this.props.gameState);
     },
    /** end of default events */
     gameEventHandler: function (e) {
-        console.log('Heard Event:', e);
-        if (e.detail.name != null) {
-            if (_.isFunction(this[EVENT_PREFIX + e.detail.name])) {
-                this[EVENT_PREFIX + e.detail.name](...arguments);
+        console.log('Heard Event:', e); //eslint-disable-line no-console
+        if (e.name != null) {
+            if (_.isFunction(this[EVENT_PREFIX + e.name])) {
+                this[EVENT_PREFIX + e.name](...arguments);
             }
-            if(_.isFunction(this.props['on' + e.detail.name])) {
-                this.props['on' + e.detail.name](...arguments);
+            if(_.isFunction(this.props['on' + e.name])) {
+                this.props['on' + e.name](...arguments);
             }
         }
     },
     setEvent: function () {
-        window.addEventListener('game_event', this.gameEventHandler);
+        window.addEventListener('game-event', this.gameEventHandler);
     },
     clearEvent: function () {
-        window.removeEventListener('game_event', this.gameEventHandler);
+        window.removeEventListener('game-event', this.gameEventHandler);
     },
     makeFullScreen: function () {
         ReactDOM.findDOMNode(this.refs.gameRef).webkitRequestFullScreen();
