@@ -6,6 +6,8 @@ import {Button, Glyphicon} from 'react-bootstrap';
 
 import 'components/game.scss';
 
+const EVENT_PREFIX = '_e_';
+
 /**
  * Game wrapper iframe component.
  * Has two default events - onFlipEarned and onSave
@@ -37,7 +39,7 @@ var Game = React.createClass({
             gameState: {}
         };
     },
-    componentWillMount: function () {
+    componentDidMount: function () {
         if (this.props.uuid != null) {
             this.setEvents();
         }
@@ -55,31 +57,29 @@ var Game = React.createClass({
      * default events. These will always fire regardless of whether or not
      * there is an event defined in addition to the submission behavior
      */
-    flipEarned: function () {
+    [EVENT_PREFIX + 'flipEarned']: function () {
     },
-    save: function () {
+    [EVENT_PREFIX + 'save']: function () {
+    },
+    [EVENT_PREFIX + 'init']: function (e) {
+        e.detail.init(this.props.gameState);
     },
    /** end of default events */
-    setEvents: function () {
-        var callback = function (eventName, prop) {
-            if (_.isFunction(this[eventName])) { //there is no possible way this could ever go wrong
-                this[eventName](...arguments);
+    gameEventHandler: function (e) {
+        if (e.detail.type != null) {
+            if (_.isFunction(this[EVENT_PREFIX + e.detail.type])) {
+                this[EVENT_PREFIX + e.detail.type](...arguments);
             }
-            prop(...arguments);
-        };
-        _.each(this.props, (prop, key) => {
-            var eventName, eventCallback;
-            if (key.indexOf('on') === 0 && _.isFunction(prop)) {
-                eventName = `${this.props.uuid}-${_.camelCase(key.slice(2))}`;
-                eventCallback = callback.bind(this, eventName, prop);
-                window.addEventListener(eventName, eventCallback);
-                this.registeredEvents = this.registeredEvents || {};
-                this.registeredEvents[eventName] = eventCallback;
+            if(_.isFunction(this.props['on' + e.detail.type])) {
+                this.props['on' + e.detail.type](...arguments);
             }
-        });
+        }
     },
-    clearEvents: function () {
-        _.each(this.registeredEvents, (prop, key) => window.removeEventListener(key, prop));
+    setEvent: function () {
+        ReactDOM.findDOMNode(this.refs.gameRef).addEventListener('gameEvent', this.gameEventHandler);
+    },
+    clearEvent: function () {
+        ReactDOM.findDOMNode(this.refs.gameRef).removeEventListener('gameEvent', this.gameEventHandler);
     },
     makeFullScreen: function () {
         ReactDOM.findDOMNode(this.refs.gameRef).webkitRequestFullScreen();
@@ -90,7 +90,7 @@ var Game = React.createClass({
         }
         return (
             <div className="game">
-                <iframe ref="gameRef" src={'http://www.bing.com/search?q=' + this.props.uuid} data-state={this.props.gameState} data-uuid={this.props.uuid} />
+                <iframe ref="gameRef" src={'http://www.bing.com/search?q=' + this.props.uuid} />
                 <Button onClick={this.makeFullScreen}><Glyphicon glyph="fullscreen" /> Full Screen</Button>
             </div>
         );
