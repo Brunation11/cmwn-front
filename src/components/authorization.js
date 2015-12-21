@@ -22,11 +22,16 @@ class _Authorization {
         }
     }
     reloadUser() {
-        var getUser = HttpManager.GET({url: `${GLOBALS.API_URL}users/me`});
+        var getUser = HttpManager.GET({url: `${GLOBALS.API_URL}users/me?include=images`});
         getUser.then(res => {
             window.localStorage.setItem('fullName', res.response.data.first_name + ' ' + res.response.data.last_name);
             window.localStorage.setItem('userName', res.response.data.username);
             window.localStorage.setItem('userId', res.response.data.uuid);
+            if (_.isString(res.response.data.images.data.url)) {
+                window.localStorage.setItem('profileImage', res.response.data.image.data);
+            } else {
+                window.localStorage.setItem('profileImage', GLOBALS.DEFAULT_PROFILE);
+            }
             this._resolve(res.response.data);
             EventManager.update('userChanged', res.response.data.uuid);
         }).catch(() => {
@@ -34,6 +39,7 @@ class _Authorization {
             window.localStorage.setItem('userName', null);
             window.localStorage.setItem('userId', null);
             window.localStorage.setItem('fullName', null);
+            window.localStorage.setItem('profileImage', null);
             EventManager.update('userChanged', null);
             if (window.location.pathname !== '/login' && window.location.pathname !== '/login/') {
                 History.replaceState(null, '/login');
@@ -43,6 +49,7 @@ class _Authorization {
     }
     get currentUser() {
         return {
+            profileImage: window.localStorage.profileImage,
             fullname: window.localStorage.fullName,
             username: window.localStorage.userName,
             uuid: window.localStorage.userId
