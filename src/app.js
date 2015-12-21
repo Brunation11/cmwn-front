@@ -20,6 +20,8 @@ import 'overrides.scss';
 
 import 'media/logo.png';
 
+document.domain = 'changemyworldnow.com';
+
 var App = React.createClass({
     componentWillMount: function () {
         Errors.onError(this.globalUpdate);

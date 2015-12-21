@@ -1,0 +1,6 @@
+@import 'variables';
+
+html .modal-backdrop.in {
+    opacity: 0.8;
+    background-color: $cmwn-blue;
+}
