@@ -44,6 +44,8 @@ var Image = React.createClass({
                 HttpManager.PUT({url: `${GLOBALS.API_URL}users/${Authorization.currentUser.uuid}/image`}, {
                     url: result[0].secure_url,
                     id: result[0].public_id
+                }).catch(() => {
+                    /** @TODO MPR, 12/22/15: alert user of failure*/
                 });
             });
             /* eslint-enable camelcase */

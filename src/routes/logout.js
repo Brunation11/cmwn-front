@@ -28,11 +28,13 @@ var loaderOptions = {
 
 var Page = React.createClass({
     componentDidMount: function () {
-        var logout = HttpManager.GET({url: GLOBALS.API_URL + 'auth/logout'});
+        var logout = HttpManager.GET({url: GLOBALS.API_URL + 'auth/logout', handleErrors: false});
+        window.localStorage.setItem('userName', null);
+        window.localStorage.setItem('userId', null);
+        window.localStorage.setItem('fullName', null);
         logout.then(() => {
-            window.localStorage.setItem('userName', null);
-            window.localStorage.setItem('userId', null);
-            window.localStorage.setItem('fullName', null);
+            window.location.href = '/login';
+        }).catch(() => {
             window.location.href = '/login';
         });
     },
