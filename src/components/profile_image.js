@@ -58,7 +58,10 @@ var Image = React.createClass({
                 self.setState({profileImage: result[0].secure_url});
                 HttpManager.PUT({url: `${GLOBALS.API_URL}users/${this.props.uuid}/image`}, {
                     url: result[0].secure_url,
-                    id: result[0].public_id
+                    imageable_id: Authorization.currentUser.uuid,
+                    cloudinary_id: result[0].public_id
+                }).catch(() => {
+                    /** @TODO MPR, 12/22/15: alert user of failure*/
                 });
             });
             /* eslint-enable camelcase */
