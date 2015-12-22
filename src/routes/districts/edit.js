@@ -26,6 +26,9 @@ var Edit = React.createClass({
         var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'districts/' + this.props.params.id});
         urlData.then(res => {
             this.district = res.response.data;
+            if (!this.district.can_update) { //eslint-disable-line camel_case
+                window.location.href = `/district/${this.props.params.id}/profile`;
+            }
             this.setState({
                 code: this.district.code,
                 title: this.district.title,
@@ -36,6 +39,9 @@ var Edit = React.createClass({
     submitData: function () {
     },
     render: function () {
+        if (this.state.district == null || !this.state.district.can_update) {
+            return null;
+        }
         return (
            <Layout>
               <Panel header={HEADINGS.EDIT_TITLE} className="standard">

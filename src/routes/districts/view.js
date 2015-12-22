@@ -28,6 +28,9 @@ var View = React.createClass({
         var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'districts/' + this.props.params.id});
         urlData.then(res => {
             this.district = res.response.data;
+            if (!this.district.can_update) { //eslint-disable-line camel_case
+                window.location.href = `/district/${this.props.params.id}/profile`;
+            }
             this.forceUpdate();
         });
     },
@@ -39,7 +42,7 @@ var View = React.createClass({
         return null;
     },
     render: function () {
-        if (this.district.lenght === 0) {
+        if (this.state.district == null || !this.state.district.can_update) {
             return null;
         }
         return (
