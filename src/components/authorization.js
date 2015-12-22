@@ -22,7 +22,7 @@ class _Authorization {
         }
     }
     reloadUser() {
-        var getUser = HttpManager.GET({url: `${GLOBALS.API_URL}users/me`});
+        var getUser = HttpManager.GET({url: `${GLOBALS.API_URL}users/me`, handleErrors: false});
         getUser.then(res => {
             window.localStorage.setItem('fullName', res.response.data.first_name + ' ' + res.response.data.last_name);
             window.localStorage.setItem('userName', res.response.data.username);
