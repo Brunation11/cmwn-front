@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import {Link} from 'react-router';
 import {Button} from 'react-bootstrap';
 import ClassNames from 'classnames';
@@ -22,16 +23,23 @@ const FRIEND_PROBLEM = 'There was a problem adding your friend. Please try again
 
 var Page = React.createClass({
     getInitialState: function () {
-        this.data = [
-            {image: DefaultProfile, username: 'user', uuid: 1, flips: Math.floor(Math.random() * 10)},
-            {image: DefaultProfile, username: 'user', uuid: 1, flips: Math.floor(Math.random() * 10)},
-            {image: DefaultProfile, username: 'user', uuid: 1, flips: Math.floor(Math.random() * 10)},
-            {image: DefaultProfile, username: 'user', uuid: 1, flips: Math.floor(Math.random() * 10)},
-            {image: DefaultProfile, username: 'user', uuid: 1, flips: Math.floor(Math.random() * 10)},
-            {image: DefaultProfile, username: 'user', uuid: 1, flips: Math.floor(Math.random() * 10)},
-            {image: DefaultProfile, username: 'user', uuid: 1, flips: Math.floor(Math.random() * 10)}
-        ];
         return {};
+    },
+    componentDidMount: function () {
+        this.getFriends();
+    },
+    getFriends: function () {
+        var self = this;
+        HttpManager.GET({url: GLOBALS.API_URL + 'friends/'})
+            .then(res => {
+                res.response.data = res.response.data || res.response;
+                self.data = _.map(res.response.data.acceptedfriends, item => {
+                    item.image = _.has(item, 'images.data.url') ? item.images.data.url : DefaultProfile;
+                    item.flips = item.flips == null ? Math.floor(Math.random() * 10) : item.flips;
+                    return item;
+                });
+                self.forceUpdate();
+            });
     },
     addFriend: function (item, e) {
         e.stopPropagation();
@@ -64,6 +72,9 @@ var Page = React.createClass({
         );
     },
     render: function () {
+        if (this.data == null) {
+            return null;
+        }
         return (
            <Layout className="friends-page">
                 <form>
