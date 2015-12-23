@@ -9,7 +9,7 @@ import HttpManager from 'components/http_manager';
 import FlipBoard from 'components/flipboard';
 import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
-import Layout from 'layouts/one_col';
+import Layout from 'layouts/two_col';
 
 import DefaultProfile from 'media/profile_tranparent.png';
 

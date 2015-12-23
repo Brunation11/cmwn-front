@@ -22,6 +22,8 @@ $profile-width: 172px;
 $logout-size: 70px;
 $logo-max-width: 900px;
 $ultrawide-logo-offset: 82px; //max width without needing a non-transparent logo image
+$flip-standard-size: 200px;
+$max-flip-size: 359px; //Completely arbitrary maximum. Taken from flip image width
 //font
 $min-base-font-size: 12px;
 $device-font-size: 2vmax;
