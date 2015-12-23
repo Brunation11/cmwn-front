@@ -8,7 +8,7 @@ import 'components/flipboard.scss';
 var FlipBoard = React.createClass({
     getInitialState: function () {
         return {
-            data: _.map(this.props.data || [], this.props.transform)
+            data: _.map(this.props.data == null ? [] : this.props.data, this.props.transform)
         };
     },
     getDefaultProps: function () {
@@ -17,6 +17,11 @@ var FlipBoard = React.createClass({
             transform: _.identity,
             renderFlip: () => <div className="flip"></div>
         };
+    },
+    componentWillReceiveProps: function (nextProps) {
+        this.setState({
+            data: _.map(nextProps.data == null ? [] : nextProps.data, this.props.transform)
+        });
     },
     render: function () {
         if(!this.state.data.length) {

@@ -18,7 +18,7 @@
 
     .flip > a {
         font-weight: bold;
-        max-width: 200px;
+        max-width: $flip-standard-size;
         margin: 0 auto;
 
         .linkText {
@@ -27,19 +27,22 @@
     }
 
     .flip {
+        margin: auto;
  
         &.fill {
             padding: 5px;
             border: 0;
+            max-width: $max-flip-size;
 
-            img, .overlay {
+            .item, img, .overlay {
                 width: 100%;
-                max-width: 359px; //Completely arbitrary maximum. Taken from flip image width
+                max-width: $max-flip-size;
                 margin: auto;
             }
         }
         
         .item {
+            max-width: $flip-standard-size;
             position: relative;
             margin: auto;
 
@@ -73,6 +76,8 @@
         }
 
         .overlay {
+            max-width: $flip-standard-size;
+            margin: auto;
             color: #ffffff;
             opacity: 0;
             background: rgba($cmwn-blue, 0.6);
@@ -89,6 +94,17 @@
 
             &:hover {
                 opacity: 1;
+            }
+            
+            .relwrap {
+                position: relative;
+                height: 100%;
+            }
+
+            .abswrap {
+                position: absolute;
+                bottom: 0;
+                width: 100%;
             }
         }
 
