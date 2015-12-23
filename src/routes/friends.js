@@ -25,22 +25,6 @@ var Page = React.createClass({
     getInitialState: function () {
         return {};
     },
-    componentDidMount: function () {
-        this.getFriends();
-    },
-    getFriends: function () {
-        var self = this;
-        HttpManager.GET({url: GLOBALS.API_URL + 'friends/'})
-            .then(res => {
-                res.response.data = res.response.data || res.response;
-                self.data = _.map(res.response.data.acceptedfriends, item => {
-                    item.image = _.has(item, 'images.data.url') ? item.images.data.url : DefaultProfile;
-                    item.flips = item.flips == null ? Math.floor(Math.random() * 10) : item.flips;
-                    return item;
-                });
-                self.forceUpdate();
-            });
-    },
     addFriend: function (item, e) {
         e.stopPropagation();
         e.preventDefault();
@@ -55,7 +39,7 @@ var Page = React.createClass({
     renderFlip: function (item){
         return (
             <div className="flip">
-                <Link to={`/student/${item.uuid.toString()}`}>
+                <Link to={`/student/${item.uuid}`}>
                     <div className="item">
                         <span className="overlay">
                             <div className="relwrap"><div className="abswrap">
@@ -72,21 +56,19 @@ var Page = React.createClass({
         );
     },
     render: function () {
-        if (this.data == null) {
-            return null;
-        }
         return (
            <Layout className="friends-page">
                 <form>
                     <Fetcher url={ GLOBALS.API_URL + 'friends'} transform={data => {
-                        data = data.concat([
-                            {image: DefaultProfile, username: 'user'}
-                        ]);
+                        data = _.map(data.acceptedfriends, item => {
+                            item.image = _.has(item, 'images.data.url') ? item.images.data.url : DefaultProfile;
+                            item.flips = item.flips == null ? Math.floor(Math.random() * 10) : item.flips;
+                            return item;
+                        });
                         return data;
                     }}>
                        <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.FRIENDS} />
                     </Fetcher>
-                   <FlipBoard renderFlip={this.renderFlip} header="Fake Friends List" data={this.data} />
                 </form>
            </Layout>
         );
