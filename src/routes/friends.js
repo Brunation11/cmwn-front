@@ -2,7 +2,6 @@ import React from 'react';
 import _ from 'lodash';
 import {Link} from 'react-router';
 import {Button} from 'react-bootstrap';
-import ClassNames from 'classnames';
 
 import Fetcher from 'components/fetcher';
 import HttpManager from 'components/http_manager';
@@ -20,6 +19,7 @@ const HEADINGS = {
 };
 
 const FRIEND_PROBLEM = 'There was a problem adding your friend. Please try again in a little while.';
+const PROFILE = 'View Profile';
 
 var Page = React.createClass({
     getInitialState: function () {
@@ -43,8 +43,7 @@ var Page = React.createClass({
                     <div className="item">
                         <span className="overlay">
                             <div className="relwrap"><div className="abswrap">
-                                <Button onClick={this.addFriend.bind(this, item)} className={ClassNames('green standard', {hidden: item.relationship === 'Pending'})}> Add Friend</Button>
-                                <Button className="purple standard">View Profile</Button>
+                                <Button className="purple standard">{PROFILE}</Button>
                             </div></div>
                         </span>
                         <img src={item.image}></img>
