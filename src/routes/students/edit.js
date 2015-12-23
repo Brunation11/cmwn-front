@@ -108,8 +108,8 @@ var Fields = React.createClass({
     },
     renderTeacherInputs: function () {},
     render: function () {
-        if (this.props.data == null) {
-            //return null;
+        if (this.props.data == null || this.props.data.can_update === false) {
+            return null;
         }
         return (
             <Panel header={HEADINGS.EDIT_TITLE} className="standard profile">
@@ -222,8 +222,10 @@ var ChangePassword = React.createClass({
                 'password_confirmation': this.state.confirm,
                 'user_uuid': this.props.uuid
             });
-            update.then(() => {});
-            /** #TODO MPR, 11/19/15: handle failure */
+            update.then(() => {})
+                .catch(() => {
+                    /** #TODO MPR, 12/22/15: handle failure */
+                });
         } else {
             this.setState({extraProps: {bsStyle: 'error'}});
             /** @TODO MPR, 11/19/15: check on change, not submit*/

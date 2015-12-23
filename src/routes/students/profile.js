@@ -8,6 +8,7 @@ import Game from 'components/game';
 import Authorization from 'components/authorization';
 import EventManager from 'components/event_manager';
 import Fetcher from 'components/fetcher';
+import EditLink from 'components/edit_link';
 import GLOBALS from 'components/globals';
 
 import FlipBgDefault from 'media/flip-placeholder-white.png';
@@ -66,6 +67,12 @@ var Profile = React.createClass({
     },
     componentDidMount: function () {
         EventManager.listen('userChanged', () => {
+            /** @TODO MPR, 12/21/15: Remove this conditional once CORE-146 and CORE-219 are done*/
+            if (this.state.canupdate == null && this.state.can_update == null) {
+                this.setState({'can_update': this.state.uuid === Authorization.currentUser.uuid});
+            } else if (this.state.canupdate != null){
+                this.setState({'can_update': this.state.canupdate});
+            }
             this.forceUpdate();
         });
     },
@@ -115,6 +122,7 @@ var Profile = React.createClass({
                <Panel header={
                    ((this.state.uuid === Authorization.currentUser.uuid) ? 'My ' : this.state.username + '\'s ') + HEADINGS.ACTION
                } className="standard">
+                 <EditLink base="/profile" uuid={this.state.uuid} canUpdate={this.state.can_update} />
                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nec arcu id massa fringilla condimentum. Nam ornare eget nibh vel laoreet. Donec tincidunt hendrerit nunc, varius facilisis lacus placerat eget. Sed pretium interdum pretium. Pellentesque bibendum libero eget elit consectetur iaculis. Praesent nec mi fringilla, ornare nunc at, auctor velit. Mauris gravida ipsum nisi, eu elementum erat elementum quis.
 
 Suspendisse in maximus mauris, ut mollis libero. Nunc ut ullamcorper mauris, a interdum nisl. Vivamus posuere porttitor magna. Cras varius metus venenatis condimentum cursus. Aenean ac lacus viverra dui tincidunt suscipit. Duis condimentum velit sit amet imperdiet efficitur. Praesent sit amet varius tortor, et elementum nisl. Donec ligula ex, lacinia a accumsan non, placerat sed justo. Morbi in dui a nunc ullamcorper gravida vel sit amet diam. Fusce eget libero suscipit, vestibulum arcu non, porta sem. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vivamus mauris quam, viverra vitae tellus ac, porta bibendum felis.

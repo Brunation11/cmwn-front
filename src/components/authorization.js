@@ -21,20 +21,23 @@ class _Authorization {
             this.reloadUser();
         }
     }
+    logout() {
+        window.localStorage.setItem('com.cmwn.platform.userName', null);
+        window.localStorage.setItem('com.cmwn.platform.userId', null);
+        window.localStorage.setItem('com.cmwn.platform.fullName', null);
+        EventManager.update('userChanged', null);
+    }
     reloadUser() {
-        var getUser = HttpManager.GET({url: `${GLOBALS.API_URL}users/me`});
+        var getUser = HttpManager.GET({url: `${GLOBALS.API_URL}users/me`, handleErrors: false});
         getUser.then(res => {
-            window.localStorage.setItem('fullName', res.response.data.first_name + ' ' + res.response.data.last_name);
-            window.localStorage.setItem('userName', res.response.data.username);
-            window.localStorage.setItem('userId', res.response.data.uuid);
+            window.localStorage.setItem('com.cmwn.platform.fullName', res.response.data.first_name + ' ' + res.response.data.last_name);
+            window.localStorage.setItem('com.cmwn.platform.userName', res.response.data.username);
+            window.localStorage.setItem('com.cmwn.platform.userId', res.response.data.uuid);
             this._resolve(res.response.data);
             EventManager.update('userChanged', res.response.data.uuid);
         }).catch(() => {
             //user is not logged in.
-            window.localStorage.setItem('userName', null);
-            window.localStorage.setItem('userId', null);
-            window.localStorage.setItem('fullName', null);
-            EventManager.update('userChanged', null);
+            this.logout();
             if (window.location.pathname !== '/login' && window.location.pathname !== '/login/') {
                 History.replaceState(null, '/login');
                 this._resolve();

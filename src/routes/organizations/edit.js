@@ -30,6 +30,9 @@ var Edit = React.createClass({
         var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'organizations/' + this.props.params.id});
         urlData.then(res => {
             this.organization = res.response.data;
+            if (!res.response.data.can_update) { //eslint-disable-line camel_case
+                window.location.href = `/organization/${this.props.params.id}/profile`;
+            }
             this.setState({
                 code: this.organization.code,
                 title: this.organization.title,
@@ -40,6 +43,9 @@ var Edit = React.createClass({
     submitData: function () {
     },
     render: function () {
+        if (this.state.organization == null || !this.state.organization.can_update) {
+            return null;
+        }
         return (
            <Layout>
               <Panel header={HEADINGS.EDIT_TITLE} className="standard">

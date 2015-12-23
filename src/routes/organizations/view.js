@@ -40,6 +40,9 @@ var View = React.createClass({
         var urlData = HttpManager.GET({url: `${GLOBALS.API_URL}organizations/${this.props.params.id}?include=districts,users,groups`});
         urlData.then(res => {
             Util.normalize(res.response, 'users', []);
+            if (!res.response.data.can_update) { //eslint-disable-line camel_case
+                window.location.href = `/organization/${this.props.params.id}/profile`;
+            }
             this.setState({
                 organization: res.response.data,
                 districts: Util.normalize(res.response, 'districts', []),
@@ -66,6 +69,9 @@ var View = React.createClass({
         return links;
     },
     render: function () {
+        if (this.state.organization == null || !this.state.organization.can_update) {
+            return null;
+        }
         return (
             <Layout>
                 <h2>{this.state.organization.title}</h2>

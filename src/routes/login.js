@@ -42,14 +42,19 @@ var Page = React.createClass({
             req = HttpManager.POST({
                 url: `${GLOBALS.API_URL}auth/login`,
                 withCredentials: true,
-                withoutXSRF: true
+                withoutXSRF: true,
+                handleErrors: false
             }, {}, {
                 'X-CSRF-TOKEN': this.state._token,
                 'Authorization': `Basic ${window.btoa(this.refs.login.getValue() + ':' + this.refs.password.getValue())}`
             });
-            req.then(() => {
-                Authorization.reloadUser();
-                History.replaceState(null, '/profile');
+            req.then(res => {
+                if (res.status < 300 && res.status >= 200) {
+                    Authorization.reloadUser();
+                    History.replaceState(null, '/profile');
+                }
+            }).catch(() => {
+                // @TODO MPR, 12/22/15: Alert user of error
             });
         }
     },

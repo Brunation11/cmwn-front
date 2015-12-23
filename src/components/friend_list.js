@@ -30,6 +30,8 @@ var FriendList = React.createClass({
             this.requests = responses.response.pendingfriends;
             this.accepted = responses.response.acceptedfriends;
             this.forceUpdate();
+        }).catch(() => {
+            /** @TODO MPR, 12/22/15: alert user*/
         });
     },
     toggleFriends: function () {
@@ -56,6 +58,9 @@ var FriendList = React.createClass({
         return _.map(this.requests, item => (<li key={item.uuid}>{this.renderFriend(item)}</li>));
     },
     render: function () {
+        //disabled indefinetly
+        return null;
+        /* eslint-disable */
         return (
             <div className="friend-list">
                 <h3 onClick={this.toggleFriends}>{HEADING}<Toggler isOpen={!this.state.friendsHidden} /></h3>
