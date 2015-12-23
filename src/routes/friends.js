@@ -31,7 +31,7 @@ var Page = React.createClass({
     addFriend: function (item, e) {
         e.stopPropagation();
         e.preventDefault();
-        HttpManager.GET({url: GLOBALS.API_URL + 'friendrequest/' + item.uuid, handleErrors: false})
+        HttpManager.GET({url: GLOBALS.API_URL + 'users/friendrequest/' + item.uuid, handleErrors: false})
             .catch(this.friendErr);
         item.relationship = 'Pending';
         this.forceUpdate;
@@ -39,7 +39,7 @@ var Page = React.createClass({
     acceptRequest: function (item, e) {
         e.stopPropagation();
         e.preventDefault();
-        HttpManager.GET({url: GLOBALS.API_URL + 'acceptfriendrequest/' + item.uuid, handleErrors: false})
+        HttpManager.POST({url: GLOBALS.API_URL + 'users/acceptfriendrequest/' + item.uuid, handleErrors: false})
             .catch(this.friendErr);
         item.relationship = 'accepted';
         this.forceUpdate;
