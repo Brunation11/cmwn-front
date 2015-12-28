@@ -8,7 +8,7 @@ RewriteRule (.*)  index.html [QSA]
 
 </IfModule>
 
-# 1 year for all your static assets
+# 1 year for all static assets
 <filesMatch ".(ico|pdf|flv|jpg|jpeg|png|gif|bmp|css|swf)$">
 Header set Cache-Control "max-age=31556926, public"
 Header always append X-Frame-Options DENY
