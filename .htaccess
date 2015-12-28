@@ -8,6 +8,11 @@ RewriteRule (.*)  index.html [QSA]
 
 </IfModule>
 
+# Content security policies. Unfortunately we need to use unsafe inlining for the time being because
+# a number of our tools rely on injecting style/script tags (webpack in particular).
+# See http://www.html5rocks.com/en/tutorials/security/content-security-policy/ for additional details
+Header set Content-Security-Policy "default-src 'self'; base-uri http://*.changemyworldnow.com:*; style-src 'unsafe-inline' http://*.changemyworldnow.com:* https://maxcdn.bootstrapcdn.com https://cdnjs.cloudflare.com; script-src https://*.changemyworldnow.com:* http://*.changemyworldnow.com:* 'unsafe-inline' http://*.cloudinary.com  https://*.google.com https://cdnjs.cloudflare.com https://maxcdn.bootstrapcdn.com https://*.gstatic.com; frame-ancestors 'none'; child-src http://*.changemyworldnow.com:* http://*.cloudinary.com http://*.viddler.com; connect-src http://*.changemyworldnow.com; font-src 'self' http://changemyworldnow.education http://*.changemyworldnow.com:* https://maxcdn.bootstrapcdn.com; img-src http://*.changemyworldnow.com:* https://*.changemyworldnow.com:* https://*.cloudinary.com; form-action http://*.changemyworldnow.com:*;"
+
 # 1 year for all static assets
 <filesMatch ".(ico|pdf|flv|jpg|jpeg|png|gif|bmp|css|swf|js)$">
 Header set Cache-Control "max-age=31556926, public"
