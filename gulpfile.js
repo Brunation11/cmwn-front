@@ -11,6 +11,7 @@ var gulpWebpack = require('gulp-webpack');
 var WebpackDevServer = require("webpack-dev-server");
 var webpackDevConfig = require("./webpack.config.dev.js");
 var webpackProdConfig = require("./webpack.config.prod.js");
+var appPackage = require('./package.json');
 var exec = require('child_process').exec;
 var spawn = require('child_process').spawn;
 var eslint = require('gulp-eslint');
@@ -160,21 +161,21 @@ gulp.task('index', ['primary-style', 'webpack:build', 'explicit-utf-8', 'sri'], 
                 /* Disabling SRI until such a time as chrome correctly generates hashes of files containing non-ascii characters: https://code.google.com/p/chromium/issues/detail?id=527286,  https://code.google.com/p/chromium/issues/detail?id=527436
                 */
                 if (mode === 'production' || mode === 'prod') {
-                    return '<script src="/build2.js" integrity="' + sriHashes['build/build2.js'] + '" crossorigin="anonymous"></script>';
+                    return '<script src="/cmwn-' + appPackage.version + '.js" integrity="' + sriHashes['build/cmwn-' + appPackage.version + '.js'] + '" crossorigin="anonymous"></script>';
                 }
-                return '<script src="/build.js"></script>';
+                return '<script src="/cmwn-' + appPackage.version + '.js"></script>';
             }
         }))
         .pipe(gulp.dest('./build'));
 });
 
 gulp.task('explicit-utf-8', ['webpack:build'], function(done) {
-    exec('iconv -f utf-8 ./build/build.js > ./build/build2.js', done)
+    exec('iconv -f utf-8 ./build/build.js > ./build/cmwn-' + appPackage.version + '.js', done)
 //    executeAsProcess('iconv', '-f ./build/build.js > ./build/buildz.js');
 });
 
 gulp.task('sri', ['webpack:build', 'explicit-utf-8'], function () {
-    return gulp.src('./build/build2.js').pipe(sri({algorithms: ['sha256']})).pipe(gulp.dest('./build'))
+    return gulp.src('./build/cmwn-' + appPackage.version + '.js').pipe(sri({algorithms: ['sha256']})).pipe(gulp.dest('./build'))
 })
 
 gulp.task('primary-style', function (done) {
