@@ -4,12 +4,19 @@
         text-align: center;
     }
 
-    .btn.standard {
-        width: 100%;
-        margin: 5px 0;
+    .btn{
+
+        &.standard {
+            width: 100%;
+            opacity: 1;
+            margin: 5px 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        &.hidden {
+            transition: opacity 1s ease-in-out;
+            opacity: 0;
+        }
     }
 
-    .hidden {
-        visibility: hidden;
-    }
 }

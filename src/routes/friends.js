@@ -19,6 +19,7 @@ const HEADINGS = {
     FRIENDS: 'My Friends'
 };
 
+const FRIEND_ADDED = 'Great! You are now friends with ';
 const FRIEND_PROBLEM = 'There was a problem adding your friend. Please try again in a little while.';
 const PROFILE = 'View Profile';
 const REQUESTED = 'Accept Request';
@@ -40,12 +41,15 @@ var Page = React.createClass({
     acceptRequest: function (item, e) {
         e.stopPropagation();
         e.preventDefault();
-        debugger;
         HttpManager.POST({url: GLOBALS.API_URL + 'friends/', handleErrors: false}, {
             'user_id': item.uuid
+        }).then(() => {
+            this.refs.fetcher.getData().then(() => {
+                Toast.success(FRIEND_ADDED + item.username);
+                this.forceUpdate();
+            });
         }).catch(this.friendErr);
-        item.relationship = 'accepted';
-        this.forceUpdate;
+        e.target.className += ' hidden'; //element will be replaced so we need to cheat a little
     },
     doNothing: function (e) {
         e.stopPropagation();
@@ -84,7 +88,7 @@ var Page = React.createClass({
         return (
            <Layout className="friends-page">
                 <form>
-                    <Fetcher url={ GLOBALS.API_URL + 'friends'} transform={data => {
+                    <Fetcher ref="fetcher" url={ GLOBALS.API_URL + 'friends'} transform={data => {
                         data = [].concat(
                             _.map(data.friendrequests, this.transformFriend.bind(this, 'requested')),
                             _.map(data.acceptedfriends, this.transformFriend.bind(this, 'accepted')),
