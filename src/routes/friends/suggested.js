@@ -37,7 +37,12 @@ var Page = React.createClass({
     friendErr: function () {
         Toast.error(FRIEND_PROBLEM);
     },
-    renderNoData: function () {
+    renderNoData: function (data) {
+        if (data == null) {
+            //render nothing before a request has been made
+            return null;
+        }
+        //render a nice message if the list is actually empty
         return (
             <Panel header={HEADINGS.SUGGESTED} className="standard">
                 <h2>{NO_FRIENDS}</h2>
