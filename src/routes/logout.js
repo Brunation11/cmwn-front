@@ -2,7 +2,7 @@ import React from 'react';
 import Loader from 'react-loader';
 
 import Layout from 'layouts/one_col';
-import Authorization from 'layouts/authorization';
+import Authorization from 'components/authorization';
 import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
 
