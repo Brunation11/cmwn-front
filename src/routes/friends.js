@@ -31,18 +31,25 @@ var Page = React.createClass({
     addFriend: function (item, e) {
         e.stopPropagation();
         e.preventDefault();
-        HttpManager.GET({url: GLOBALS.API_URL + 'users/friendrequest/' + item.uuid, handleErrors: false})
-            .catch(this.friendErr);
+        HttpManager.POST({url: GLOBALS.API_URL + 'friends/', handleErrors: false}, {
+            'user_id': item.uuid
+        }).catch(this.friendErr);
         item.relationship = 'Pending';
         this.forceUpdate;
     },
     acceptRequest: function (item, e) {
         e.stopPropagation();
         e.preventDefault();
-        HttpManager.POST({url: GLOBALS.API_URL + 'users/acceptfriendrequest/' + item.uuid, handleErrors: false})
-            .catch(this.friendErr);
+        debugger;
+        HttpManager.POST({url: GLOBALS.API_URL + 'friends/', handleErrors: false}, {
+            'user_id': item.uuid
+        }).catch(this.friendErr);
         item.relationship = 'accepted';
         this.forceUpdate;
+    },
+    doNothing: function (e) {
+        e.stopPropagation();
+        e.preventDefault();
     },
     friendErr: function () {
         Toast.error(FRIEND_PROBLEM);
@@ -60,8 +67,8 @@ var Page = React.createClass({
                     <div className="item">
                         <span className="overlay">
                             <div className="relwrap"><div className="abswrap">
-                                <Button onClick={this.acceptRequest.bind(this, item)} className={ClassNames('blue standard', {hidden: item.relationship !== 'requested'})}>{REQUESTED}</Button>
-                                <Button className={ClassNames('blue standard', {hidden: item.relationship !== 'pending'})}>{PENDING}</Button>
+                                <Button onClick={this.doNothing} className={ClassNames('blue standard', {hidden: item.relationship !== 'requested'})}>{PENDING}</Button>
+                                <Button onClick={this.acceptRequest.bind(this, item)} className={ClassNames('blue standard', {hidden: item.relationship !== 'pending'})}>{REQUESTED}</Button>
                                 <Button className="purple standard">{PROFILE}</Button>
                             </div></div>
                         </span>
