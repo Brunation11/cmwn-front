@@ -27,14 +27,17 @@ const PLAY = 'Play Now!';
 
 var Page = React.createClass({
     getInitialState: function () {
-        this.uuid = this.props.params.id || Authorization.currentUser.uuid;
-        this.url = GLOBALS.API_URL + 'users/' + this.uuid;
-        if (this.uuid == null || this.uuid.toLowerCase() === 'null') {
+        var self = this;
+                debugger;
+        self.uuid = self.props.params.id || Authorization.currentUser.uuid;
+        self.url = GLOBALS.API_URL + 'users/' + self.uuid;
+        if (self.uuid == null || self.uuid.toLowerCase() === 'null') {
             //race condition edge case where the profile has loaded before the auth module
             Authorization.userIsLoaded.then(() => {
-                this.uuid = this.props.params.id || Authorization.currentUser.uuid;
-                this.url = GLOBALS.API_URL + 'users/' + this.uuid;
-                this.forceUpdate();
+                debugger;
+                self.uuid = self.props.params.id || Authorization.currentUser.uuid;
+                self.url = GLOBALS.API_URL + 'users/' + self.uuid;
+                self.forceUpdate();
             });
         }
         return {};

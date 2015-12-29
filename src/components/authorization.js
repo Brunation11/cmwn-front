@@ -46,9 +46,9 @@ class _Authorization {
     }
     get currentUser() {
         return {
-            fullname: window.localStorage.fullName,
-            username: window.localStorage.userName,
-            uuid: window.localStorage.userId
+            fullname: window.localStorage['com.cmwn.platform.fullName'],
+            username: window.localStorage['com.cmwn.platform.userName'],
+            uuid: window.localStorage['com.cmwn.platform.userId']
         };
     }
     get userIsLoaded() {
