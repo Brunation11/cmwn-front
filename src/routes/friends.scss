@@ -5,16 +5,15 @@
     }
 
     .btn{
+        opacity: 1;
+        transition: opacity 1s ease-in-out;
 
         &.standard {
             width: 100%;
-            opacity: 1;
             margin: 5px 0;
-            transition: opacity 1s ease-in-out;
         }
 
-        &.hidden {
-            transition: opacity 1s ease-in-out;
+        &.faded {
             opacity: 0;
         }
     }

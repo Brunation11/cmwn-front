@@ -49,7 +49,7 @@ var Page = React.createClass({
                 this.forceUpdate();
             });
         }).catch(this.friendErr);
-        e.target.className += ' hidden'; //element will be replaced so we need to cheat a little
+        e.target.className += ' faded'; //element will be replaced so we need to cheat a little
     },
     doNothing: function (e) {
         e.stopPropagation();
@@ -71,8 +71,8 @@ var Page = React.createClass({
                     <div className="item">
                         <span className="overlay">
                             <div className="relwrap"><div className="abswrap">
-                                <Button onClick={this.doNothing} className={ClassNames('blue standard', {hidden: item.relationship !== 'requested'})}>{PENDING}</Button>
-                                <Button onClick={this.acceptRequest.bind(this, item)} className={ClassNames('blue standard', {hidden: item.relationship !== 'pending'})}>{REQUESTED}</Button>
+                                <Button onClick={this.doNothing} className={ClassNames('blue standard', {faded: item.relationship !== 'requested'})}>{PENDING}</Button>
+                                <Button onClick={this.acceptRequest.bind(this, item)} className={ClassNames('blue standard', {faded: item.relationship !== 'pending'})}>{REQUESTED}</Button>
                                 <Button className="purple standard">{PROFILE}</Button>
                             </div></div>
                         </span>
