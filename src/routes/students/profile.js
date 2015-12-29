@@ -9,6 +9,7 @@ import Authorization from 'components/authorization';
 import EventManager from 'components/event_manager';
 import Fetcher from 'components/fetcher';
 import EditLink from 'components/edit_link';
+import Trophycase from 'components/trophycase';
 import GLOBALS from 'components/globals';
 
 import FlipBgDefault from 'media/flip-placeholder-white.png';
@@ -28,13 +29,11 @@ const PLAY = 'Play Now!';
 var Page = React.createClass({
     getInitialState: function () {
         var self = this;
-                debugger;
         self.uuid = self.props.params.id || Authorization.currentUser.uuid;
         self.url = GLOBALS.API_URL + 'users/' + self.uuid;
         if (self.uuid == null || self.uuid.toLowerCase() === 'null') {
             //race condition edge case where the profile has loaded before the auth module
             Authorization.userIsLoaded.then(() => {
-                debugger;
                 self.uuid = self.props.params.id || Authorization.currentUser.uuid;
                 self.url = GLOBALS.API_URL + 'users/' + self.uuid;
                 self.forceUpdate();
@@ -122,6 +121,7 @@ var Profile = React.createClass({
                         <Game url={this.state.gameUrl} />
                     </Modal.Body>
                 </Modal>
+               <Trophycase data={this.state} />
                <Panel header={
                    ((this.state.uuid === Authorization.currentUser.uuid) ? 'My ' : this.state.username + '\'s ') + HEADINGS.ACTION
                } className="standard">

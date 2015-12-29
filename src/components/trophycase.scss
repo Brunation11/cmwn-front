@@ -1,0 +1,19 @@
+@import 'variables';
+
+.trophycase {
+    
+    .flip-list {
+        position: relative;
+
+        img {
+            padding: $standard / 3;
+        }
+
+        .partial {
+            display: inline-block;
+            position: absolute;
+            left: 0;
+            overflow: hidden;
+        }
+    }
+}
