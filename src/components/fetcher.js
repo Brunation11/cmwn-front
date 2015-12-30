@@ -42,7 +42,9 @@ var Fetcher = React.createClass({
         var propsForChild;
         var props = this.props || {};
         if (this.data == null || (_.isArray(this.data) && this.data.length === 0)) {
-            return this.props.renderNoData();
+            return (
+                <div className={this.props.className}>{this.props.renderNoData()}</div>
+            );
         }
 
         propsForChild = Immutable.Map(props)
@@ -51,7 +53,7 @@ var Fetcher = React.createClass({
             .remove('transform')
             .set('data', this.props.transform(this.data));
         return (
-            <div>
+            <div className={this.props.className}>
                 {React.Children.map(this.props.children, child => React.cloneElement(child, propsForChild.toObject()))}
             </div>
         );

@@ -239,7 +239,7 @@ var Header = React.createClass({
         this.setState({contactOpen: false, showContact: false});
     },
     loginAlert: function () {
-        Toast.success(COPY.ALERTS.LOGIN.TEXT);
+        window.location.href = '/login';
     },
     signupAlert: function () {
         Toast.success(COPY.ALERTS.SIGNUP.TEXT);
