@@ -11,6 +11,8 @@ var gulpWebpack = require('gulp-webpack');
 var WebpackDevServer = require("webpack-dev-server");
 var webpackDevConfig = require("./webpack.config.dev.js");
 var webpackProdConfig = require("./webpack.config.prod.js");
+var appPackage = require('./package.json');
+var exec = require('child_process').exec;
 var spawn = require('child_process').spawn;
 var eslint = require('gulp-eslint');
 var fs = require('fs');
@@ -120,7 +122,7 @@ gulp.task("build-development", executeAsProcess('gulp build', ['build', '--devel
 gulp.task("build-prod", executeAsProcess('gulp build', ['build', '--development']));
 gulp.task("build-production", executeAsProcess('gulp build', ['build', '--development']));
 
-gulp.task('index', ['primary-style', 'webpack:build', 'sri'], function () {
+gulp.task('index', ['primary-style', 'webpack:build', 'explicit-utf-8', 'sri'], function () {
     var target = gulp.src('./src/index.html');
     var sriHashes = JSON.parse(fs.readFileSync('./build/sri.json'));
 
@@ -145,7 +147,7 @@ gulp.task('index', ['primary-style', 'webpack:build', 'sri'], function () {
                 output += '\nwindow.__cmwn = {};';
                 _.each(process.env, function (value, key) {
                     if(key.indexOf(APP_PREFIX) === 0) {
-                        console.log('riting ' + key + ' : ' + value);
+                        console.log('Writing ' + key + ' : ' + value);
                         output += '\nwindow.__cmwn.' + _.capitalize(key.split(APP_PREFIX)[1]) + ' = ' + JSON.stringify(value) + ';';
                     }
                 });
@@ -157,18 +159,23 @@ gulp.task('index', ['primary-style', 'webpack:build', 'sri'], function () {
             starttag: '<!-- app:js -->',
             transform: function () {
                 /* Disabling SRI until such a time as chrome correctly generates hashes of files containing non-ascii characters: https://code.google.com/p/chromium/issues/detail?id=527286,  https://code.google.com/p/chromium/issues/detail?id=527436
-                if (mode === 'production' || mode === 'prod') {
-                    return '<script src="/build.js" integrity="' + sriHashes['build/build.js'] + '" crossorigin="anonymous"></script>';
-                }
                 */
-                return '<script src="/build.js"></script>';
+                if (mode === 'production' || mode === 'prod') {
+                    return '<script src="/cmwn-' + appPackage.version + '.js" integrity="' + sriHashes['build/cmwn-' + appPackage.version + '.js'] + '" crossorigin="anonymous"></script>';
+                }
+                return '<script src="/cmwn-' + appPackage.version + '.js"></script>';
             }
         }))
         .pipe(gulp.dest('./build'));
 });
 
-gulp.task('sri', ['webpack:build'], function () {
-    return gulp.src('./build/build.js').pipe(sri({algorithms: ['sha512']})).pipe(gulp.dest('./build'))
+gulp.task('explicit-utf-8', ['webpack:build'], function(done) {
+    exec('iconv -f utf-8 ./build/build.js > ./build/cmwn-' + appPackage.version + '.js', done)
+//    executeAsProcess('iconv', '-f ./build/build.js > ./build/buildz.js');
+});
+
+gulp.task('sri', ['webpack:build', 'explicit-utf-8'], function () {
+    return gulp.src('./build/cmwn-' + appPackage.version + '.js').pipe(sri({algorithms: ['sha256']})).pipe(gulp.dest('./build'))
 })
 
 gulp.task('primary-style', function (done) {
