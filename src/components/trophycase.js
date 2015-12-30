@@ -45,16 +45,17 @@ var Trophycase = React.createClass({
             ];
         }
         complete = _.filter(props.data, item => item.progress === 100);
-        complete = complete.concat(_.map(Array(30), () => ({uuid: '3b215c5e-a8f9-11e5-891c-acbc32a6b1bb', description: 'lorem ipsum', title: 'Flip Title 175', partial: DISABLED_FLIP, image: ENABLED_FLIP, progress: 34})));
         inProgress = _.difference(props.data, complete);
         return (
             <Panel className="standard" header={HEADINGS.FLIPBOARD}>
                 <div className="earned">
-                    {EARNED}<strong>{props.data.length}</strong>{OUT_OF}<strong>{63/** @TODO MPR, 12/29/15: use a real number*/}</strong>
+                    {EARNED}<strong>{complete.length}</strong>{OUT_OF}<strong>{63/** @TODO MPR, 12/29/15: use a real number*/}</strong>
+                    <img className="spacer" src={DISABLED_FLIP} />
                     {this.renderComplete(complete)}
                 </div>
                 <div className="in-progress">
                     {IN_PROGRESS}<strong>{inProgress.length}</strong>
+                    <img className="spacer" src={DISABLED_FLIP} />
                     {this.renderPartial(inProgress)}
                 </div>
             </Panel>

@@ -4,6 +4,7 @@
     
     .flip-list {
         position: absolute;
+        top: 25px;
 
         img {
             padding: $standard / 3;
@@ -21,12 +22,21 @@
         position: relative;
         overflow-x: auto;
         overflow-y: hidden;
-        height: 110px;
         margin-bottom: 10px;
         white-space: nowrap;
+
+        strong {
+            color: $cmwn-purple;
+        }
     }
 
     .in-progress {
         margin-bottom: -12px;
+    }
+
+    .spacer {
+        display: block;
+        padding: 10px;
+        visibility: hidden;
     }
 }
