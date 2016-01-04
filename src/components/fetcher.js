@@ -21,7 +21,12 @@ var Fetcher = React.createClass({
     getData: function () {
         var urlData = HttpManager.GET({url: this.props.url});
         urlData.then(res => {
-            this.data = res.response.data;
+            if (res.response.data == null) {
+                this.data = res.response;
+                console.warn('An endpoint has returned an unexpected result (No Data Property). Attempting to proceed.'); //eslint-disable-line no-console
+            } else {
+                this.data = res.response.data;
+            }
             if (_.isArray(this.props.data)) {
                 this.data = this.data.concat(this.props.data);
             }
@@ -37,15 +42,18 @@ var Fetcher = React.createClass({
         var propsForChild;
         var props = this.props || {};
         if (this.data == null || (_.isArray(this.data) && this.data.length === 0)) {
-            return this.props.renderNoData();
+            return (
+                <div className={this.props.className}>{this.props.renderNoData()}</div>
+            );
         }
 
         propsForChild = Immutable.Map(props)
             .remove('url')
             .remove('children')
+            .remove('transform')
             .set('data', this.props.transform(this.data));
         return (
-            <div>
+            <div className={this.props.className}>
                 {React.Children.map(this.props.children, child => React.cloneElement(child, propsForChild.toObject()))}
             </div>
         );

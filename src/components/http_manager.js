@@ -63,7 +63,7 @@ var _getRequestPromise = function (method, request, body, headers) {
             }
             return Promise.resolve(res[0]);
         }).catch(err => {
-            if (request[0].handleErrors === false) {
+            if (request[0].handleErrors === false || method !== 'GET') {//assume non-gets are not navigational
                 return Promise.reject(err);
             } else {
                 console.info(err); //eslint-disable-line no-console

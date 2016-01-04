@@ -8,6 +8,7 @@ import FlipBoard from 'components/flipboard';
 import FlipBgDefault from 'media/flip-placeholder-white.png';
 import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
+import EditLink from 'components/edit_link';
 import Util from 'components/util';
 
 import 'routes/students/profile.scss';
@@ -20,10 +21,9 @@ const HEADINGS = {
 var Page = React.createClass({
     myClasses: [],
     organization: null,
-    componentWillMount: function () {
+    componentDidMount: function () {
         this.getOrganization();
         this.getMyClasses();
-        this.forceUpdate();
     },
     getMyClasses: function () {
         var fetchOrgs = HttpManager.GET({url: GLOBALS.API_URL + 'users/me?include=groups'});
@@ -38,12 +38,15 @@ var Page = React.createClass({
         var urlData = HttpManager.GET({url: `${GLOBALS.API_URL}organizations/${this.props.params.id}?include=groups`});
         urlData.then(res => {
             Util.normalize(res.response, 'users', []);
+            /** @TODO MPR, 12/21/15: Remove this line once CORE-146 and CORE-219 are done*/
+            res.response.data.can_update = res.response.data.can_update || res.response.data.canupdate; //eslint-disable-line
             this.organization = res.response.data;
+            this.forceUpdate();
         });
     },
-    renderFlip: function (item){
+    renderFlip: function (item, i){
         return (
-            <div className="flip"><Link to={`/group/${item.uuid}/profile`}><img src={FlipBgDefault}></img><p>{item.title}</p></Link></div>
+            <div className="flip" key={i}><Link to={`/group/${item.uuid}/profile`}><img src={FlipBgDefault}></img><p>{item.title}</p></Link></div>
         );
     },
     render: function () {
@@ -53,6 +56,7 @@ var Page = React.createClass({
         return (
            <Layout className="profile">
                <Panel header={this.organization.title} className="standard">
+                   <EditLink base="/organization" uuid={this.organization.uuid} canUpdate={this.organization.can_update} />
                    {this.organization.description}
                </Panel>
                <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.MY_CLASSES} data={this.myClasses} />

@@ -31,6 +31,9 @@ var Edit = React.createClass({
         var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'groups/' + this.props.params.id});
         urlData.then(res => {
             this.group = res.response.data;
+            if (!this.group.can_update) { //eslint-disable-line camel_case
+                window.location.href = `/groups/${this.props.params.id}/profile`;
+            }
             this.setState({
                 code: this.group.code,
                 title: this.group.title,
@@ -41,7 +44,7 @@ var Edit = React.createClass({
     submitData: function () {
     },
     render: function () {
-        if (this.group.length === 0) {
+        if (this.group == null || !this.group.can_update) {
             return null;
         }
         return (

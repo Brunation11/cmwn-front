@@ -3,6 +3,7 @@ import _ from 'lodash';
 import {Panel} from 'react-bootstrap';
 
 import Layout from 'layouts/two_col';
+
 import FlipBoard from 'components/flipboard';
 import FlipBgDefault from 'media/flip-placeholder-white.png';
 

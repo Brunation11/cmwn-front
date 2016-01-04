@@ -1,0 +1,42 @@
+@import 'variables';
+
+.trophycase {
+    
+    .flip-list {
+        position: absolute;
+        top: 25px;
+
+        img {
+            padding: $standard / 3;
+        }
+
+        .partial {
+            display: inline-block;
+            position: absolute;
+            left: 0;
+            overflow: hidden;
+        }
+    }
+
+    .earned, .in-progress {
+        position: relative;
+        overflow-x: auto;
+        overflow-y: hidden;
+        margin-bottom: 10px;
+        white-space: nowrap;
+
+        strong {
+            color: $cmwn-purple;
+        }
+    }
+
+    .in-progress {
+        margin-bottom: -12px;
+    }
+
+    .spacer {
+        display: block;
+        padding: 10px;
+        visibility: hidden;
+    }
+}

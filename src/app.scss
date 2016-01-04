@@ -62,6 +62,10 @@ body {
         padding: 0;
     }
 
+    .sweater, .sweater .content {
+        padding: 0;
+    }
+
     .sweater {
         max-width: $monitor-max-break;
         position: relative;

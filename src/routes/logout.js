@@ -2,6 +2,7 @@ import React from 'react';
 import Loader from 'react-loader';
 
 import Layout from 'layouts/one_col';
+import Authorization from 'components/authorization';
 import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
 
@@ -28,11 +29,11 @@ var loaderOptions = {
 
 var Page = React.createClass({
     componentDidMount: function () {
-        var logout = HttpManager.GET({url: GLOBALS.API_URL + 'auth/logout'});
+        var logout = HttpManager.GET({url: GLOBALS.API_URL + 'auth/logout', handleErrors: false});
+        Authorization.logout();
         logout.then(() => {
-            window.localStorage.setItem('userName', null);
-            window.localStorage.setItem('userId', null);
-            window.localStorage.setItem('fullName', null);
+            window.location.href = '/login';
+        }).catch(() => {
             window.location.href = '/login';
         });
     },

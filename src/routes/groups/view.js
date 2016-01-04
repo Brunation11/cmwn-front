@@ -38,6 +38,9 @@ var View = React.createClass({
         var urlData = HttpManager.GET({url: `${GLOBALS.API_URL}groups/${this.props.params.id}?include=users,organizations`});
         urlData.then(res => {
             this.data = res.response.data;
+            if (!this.data.can_update) { //eslint-disable-line camel_case
+                window.location.href = `/groups/${this.props.params.id}/profile`;
+            }
             this.members = Util.normalize(res.response, 'users', []);
             this.forceUpdate();
         });
@@ -63,7 +66,7 @@ var View = React.createClass({
         return <span>{`${HEADINGS.GROUPS}: `}{links}</span>;
     },
     render: function () {
-        if (this.data.length === 0) {
+        if (this.data == null || !this.data.can_update) {
             return null;
         }
         return (
