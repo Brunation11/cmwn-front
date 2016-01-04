@@ -114,7 +114,7 @@ var Fields = React.createClass({
         return (
             <Panel header={HEADINGS.EDIT_TITLE} className="standard profile">
                 <div className="left">
-                    <ProfileImage uuid={this.props.params.id} link-below={true}/>
+                    <ProfileImage uuid={this.props.uuid} link-below={true}/>
                     <p><a onClick={this.suspendAccount}>{SUSPEND}</a></p>
                 </div>
                 <div className="right"><Form ref="formRef">
