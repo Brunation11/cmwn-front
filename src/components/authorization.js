@@ -3,6 +3,7 @@ import _ from 'lodash';
 import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
 import PrivateRoutes from 'private_routes';
+import History from 'components/history';
 import EventManager from 'components/event_manager';
 //var PrivateRoutes = [];
 
@@ -25,14 +26,20 @@ class _Authorization {
         window.localStorage.setItem('com.cmwn.platform.userName', null);
         window.localStorage.setItem('com.cmwn.platform.userId', null);
         window.localStorage.setItem('com.cmwn.platform.fullName', null);
+        window.localStorage.setItem('com.cmwn.platform.profileImage', null);
         EventManager.update('userChanged', null);
     }
     reloadUser() {
-        var getUser = HttpManager.GET({url: `${GLOBALS.API_URL}users/me`, handleErrors: false});
+        var getUser = HttpManager.GET({url: `${GLOBALS.API_URL}users/me?include=images`, handleErrors: false});
         getUser.then(res => {
             window.localStorage.setItem('com.cmwn.platform.fullName', res.response.data.first_name + ' ' + res.response.data.last_name);
             window.localStorage.setItem('com.cmwn.platform.userName', res.response.data.username);
             window.localStorage.setItem('com.cmwn.platform.userId', res.response.data.uuid);
+            if (res.response.data.images && _.isString(res.response.data.images.data.url)) {
+                window.localStorage.setItem('com.cmwn.platform.profileImage', res.response.data.image.data);
+            } else {
+                window.localStorage.setItem('com.cmwn.platform.profileImage', GLOBALS.DEFAULT_PROFILE);
+            }
             this._resolve(res.response.data);
             EventManager.update('userChanged', res.response.data.uuid);
         }).catch(() => {
@@ -48,6 +55,7 @@ class _Authorization {
         return {
             fullname: window.localStorage['com.cmwn.platform.fullName'],
             username: window.localStorage['com.cmwn.platform.userName'],
+            profileImage: window.localStorage['com.cmwn.platform.profileImage'],
             uuid: window.localStorage['com.cmwn.platform.userId']
         };
     }

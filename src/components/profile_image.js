@@ -1,10 +1,11 @@
 import React from 'react';
+import _ from 'lodash';
 import Classnames from 'classnames';
 
 import Cloudinary from 'components/cloudinary';
 import Toast from 'components/toast';
-import Authorization from 'components/authorization';
 import HttpManager from 'components/http_manager';
+import Authorization from 'components/authorization';
 import GLOBALS from 'components/globals';
 
 import 'components/profile_image.scss';
@@ -17,6 +18,20 @@ var Image = React.createClass({
         return {
             profileImage: GLOBALS.DEFAULT_PROFILE
         };
+    },
+    componentDidMount: function () {
+        if (this.props.uuid === Authorization.currentUser.uuid) {
+            this.setState({profileImage: Authorization.currentUser.profileImage});
+        } else {
+            HttpManager.GET({url: `${GLOBALS.API_URL}users/${this.props.uuid}/image`, handleErrors: false})
+                .then(res => {
+                    if (res && res.data && _.isString(res.data.url)) {
+                        this.setState({profileImage: res.data.url});
+                    }
+                }).catch(() => {
+                    /** @TODO MPR, 12/21/15: Display alert */
+                });
+        }
     },
     startUpload: function (e) {
         var self = this;
@@ -41,9 +56,10 @@ var Image = React.createClass({
                     }
                 }
                 self.setState({profileImage: result[0].secure_url});
-                HttpManager.PUT({url: `${GLOBALS.API_URL}users/${Authorization.currentUser.uuid}/image`}, {
+                HttpManager.PUT({url: `${GLOBALS.API_URL}users/${this.props.uuid}/image`}, {
                     url: result[0].secure_url,
-                    id: result[0].public_id
+                    imageable_id: Authorization.currentUser.uuid,
+                    cloudinary_id: result[0].public_id
                 }).catch(() => {
                     /** @TODO MPR, 12/22/15: alert user of failure*/
                 });
@@ -64,6 +80,9 @@ var Image = React.createClass({
         );
     },
     render: function () {
+        if (this.props.uuid == null) {
+            return null;
+        }
         return (
             <div className={Classnames('profile-image', {'link-below': this.props['link-below']})} >
                 {this.renderImage(this.state.profileImage)}
