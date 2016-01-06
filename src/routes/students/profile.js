@@ -13,10 +13,6 @@ import Trophycase from 'components/trophycase';
 import GLOBALS from 'components/globals';
 
 import FlipBgDefault from 'media/flip-placeholder-white.png';
-import FireBg from 'media/_FIRE_title.jpg';
-import FoodBg from 'media/_Food_Saver_Superhero_title.jpg';
-import PrintPg from 'media/_PrintMaster_title.jpg';
-import PigBg from 'media/_virtual_piggybank_title.jpg';
 
 import 'routes/students/profile.scss';
 
@@ -57,7 +53,7 @@ var Profile = React.createClass({
     getInitialState: function () {
         var state = _.defaults({
             data: _.map(Array(11), (v, i) => ({
-                url: 'http://games.changemyworldnow.com/polar-bear/',
+                url: 'polar-bear/',
                 uuid: 'adorablepuppies' + i,
                 title: 'Adorable Action Item',
                 description: 'Captain, why are we out here chasing comets? Yesterday I did not know how to eat gagh. We finished our first sensor sweep of the neutral zone. The game\'s not big enough unless it scares you a little.'
@@ -84,30 +80,19 @@ var Profile = React.createClass({
     hideModal: function () {
         this.setState({gameOn: false});
     },
-    renderFlip: function (item, i){
-        var bg;
-        var rnd = Math.floor(Math.random() * 1000) % 5;
-        /* eslint-disable curly */
-        if (i === 0) bg = PigBg;
-        else if (i === 1) bg = FireBg;
-        else if (i === 2) bg = FoodBg;
-        else if (i === 3) bg = PrintPg;
-        else if (rnd === 0) bg = FlipBgDefault;
-        else if (rnd === 1) bg = FireBg;
-        else if (rnd === 2) bg = FoodBg;
-        else if (rnd === 3) bg = PrintPg;
-        else bg = PigBg;
-        /* eslint-enable curly */
+    renderFlip: function (item){
         return (
             <div className="flip fill">
-                <a onClick={this.showModal.bind(this, item.url)} >
+                <a onClick={this.showModal.bind(this, 'http://games.changemyworldnow.com/' + item.uuid)} >
                     <div className="item">
                         <span className="overlay">
                             <span className="heading">{item.title}</span>
                             <span className="text">{item.description}</span>
                             <span className="play">{PLAY}</span>
                         </span>
-                        <img src={bg}></img>
+                        <object data={FlipBgDefault} type="image/png" >
+                            <img src={'http://games.changemyworldnow.com/' + item.uuid + '/thumb.jpg'}></img>
+                        </object>
                     </div>
                 </a>
             </div>
@@ -130,10 +115,12 @@ var Profile = React.createClass({
 
 Suspendisse in maximus mauris, ut mollis libero. Nunc ut ullamcorper mauris, a interdum nisl. Vivamus posuere porttitor magna. Cras varius metus venenatis condimentum cursus. Aenean ac lacus viverra dui tincidunt suscipit. Duis condimentum velit sit amet imperdiet efficitur. Praesent sit amet varius tortor, et elementum nisl. Donec ligula ex, lacinia a accumsan non, placerat sed justo. Morbi in dui a nunc ullamcorper gravida vel sit amet diam. Fusce eget libero suscipit, vestibulum arcu non, porta sem. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vivamus mauris quam, viverra vitae tellus ac, porta bibendum felis.
                </Panel>
-               <FlipBoard
-                   renderFlip={this.renderFlip}
-                   header={HEADINGS.ARCADE} data={this.state.data}
-               />
+               <Fetcher url={GLOBALS.API_URL + 'games'} >
+                   <FlipBoard
+                       renderFlip={this.renderFlip}
+                       header={HEADINGS.ARCADE}
+                   />
+               </Fetcher>
            </Layout>
         );
     }
