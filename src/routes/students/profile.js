@@ -52,12 +52,6 @@ var Page = React.createClass({
 var Profile = React.createClass({
     getInitialState: function () {
         var state = _.defaults({
-            data: _.map(Array(11), (v, i) => ({
-                url: 'polar-bear/',
-                uuid: 'adorablepuppies' + i,
-                title: 'Adorable Action Item',
-                description: 'Captain, why are we out here chasing comets? Yesterday I did not know how to eat gagh. We finished our first sensor sweep of the neutral zone. The game\'s not big enough unless it scares you a little.'
-            })),
             gameOn: false,
             gameId: -1
         }, _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {});
