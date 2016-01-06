@@ -55,7 +55,7 @@ var api = express ();
 //    res.redirect(200, 'http://lapi.changemyworldnow.com'+req.path);
 //})
 var proxy = require('express-http-proxy');
-api.use('/*', proxy('http://lapi.changemyworldnow.com', {
+api.use('/*', proxy('http://proxy.changemyworldnow.com', {
   forwardPath: function(req, res) {
     return require('url').parse(req.baseUrl).path;
   }
