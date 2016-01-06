@@ -49,3 +49,24 @@ app.listen(PORT, 'localhost', function(err) {
 
     console.log('Listening at http://localhost:' + PORT);
 });
+
+var api = express ();
+//api.get('/*', function(req, res) {
+//    res.redirect(200, 'http://lapi.changemyworldnow.com'+req.path);
+//})
+var proxy = require('express-http-proxy');
+api.use('/*', proxy('http://proxy.changemyworldnow.com', {
+  forwardPath: function(req, res) {
+    return require('url').parse(req.baseUrl).path;
+  }
+}));
+api.listen(3001, 'localhost', function(err) {
+
+    if (err) {
+        console.log(err);
+        return;
+    }
+
+    console.log('Listening at api');
+})
+
