@@ -118,7 +118,7 @@ var Profile = React.createClass({
            <Layout className="profile">
                 <Modal show={this.state.gameOn} onHide={this.hideModal}>
                     <Modal.Body>
-                        <Game url={this.state.gameUrl} />
+                        <Game url={this.state.gameUrl} onExit={() => this.setState({gameOn: false})}/>
                     </Modal.Body>
                 </Modal>
                <Trophycase data={this.state} />
