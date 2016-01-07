@@ -6,6 +6,10 @@ RewriteEngine On
 RewriteCond %{REQUEST_URI}  !(\.pdf|\.css|\.png|\.jpg|\.gif|\.jpeg|\.bmp|\.js|\.ico)$
 RewriteRule (.*)  index.html [QSA]
 
+RewriteEngine On
+RewriteCond %{HTTP:X-Forwarded-Proto} =http
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
 </IfModule>
 
 # Content security policies. Unfortunately we need to use unsafe inlining for the time being because
