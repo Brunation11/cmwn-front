@@ -110,7 +110,7 @@ var Profile = React.createClass({
     render: function () {
         return (
            <Layout className="profile">
-                <Modal show={this.state.gameOn} onHide={this.hideModal}>
+                <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal} keyboard={false}>
                     <Modal.Body>
                         <Game url={this.state.gameUrl} onExit={() => this.setState({gameOn: false})}/>
                     </Modal.Body>
