@@ -27,7 +27,7 @@ var Page = React.createClass({
     getInitialState: function () {
         var self = this;
         self.uuid = self.props.params.id || Authorization.currentUser.uuid;
-        self.url = GLOBALS.API_URL + 'users/' + self.uuid;
+        self.url = GLOBALS.API_URL + 'users/' + self.uuid + '?include=roles';
         if (self.uuid == null || self.uuid.toLowerCase() === 'null') {
             //race condition edge case where the profile has loaded before the auth module
             Authorization.userIsLoaded.then(() => {
@@ -70,7 +70,7 @@ var Profile = React.createClass({
         });
         this.resolveRole();
     },
-    componentWillRecieveProps: function () {
+    componentWillReceiveProps: function () {
         this.resolveRole();
     },
     resolveRole: function () {
