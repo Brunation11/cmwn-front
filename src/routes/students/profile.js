@@ -110,9 +110,10 @@ var Profile = React.createClass({
     render: function () {
         return (
            <Layout className="profile">
-                <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal} keyboard={false}>
+                <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal} keyboard={false} backdrop="static">
                     <Modal.Body>
                         <Game url={this.state.gameUrl} onExit={() => this.setState({gameOn: false})}/>
+                        <a onClick={() => this.setState({gameOn: false})} className="modal-close">(close)</a>
                     </Modal.Body>
                 </Modal>
                <Trophycase className={ClassNames({hidden: !this.state.isStudent})} data={this.state} />
