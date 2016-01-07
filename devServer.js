@@ -57,7 +57,7 @@ var api = express ();
 var proxy = require('express-http-proxy');
 api.use('/*', proxy('http://proxy.changemyworldnow.com', {
   forwardPath: function(req, res) {
-    return require('url').parse(req.baseUrl).path;
+    return require('url').parse(req.originalUrl).path;
   }
 }));
 api.listen(3001, 'localhost', function(err) {
