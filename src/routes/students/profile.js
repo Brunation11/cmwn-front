@@ -84,8 +84,8 @@ var Profile = React.createClass({
                             <span className="text">{item.description}</span>
                             <span className="play">{PLAY}</span>
                         </span>
-                        <object data={FlipBgDefault} type="image/png" >
-                            <img src={'http://games.changemyworldnow.com/' + item.uuid + '/thumb.jpg'}></img>
+                        <object data={'http://games.changemyworldnow.com/' + item.uuid + '/thumb.jpg'} type="image/png" >
+                            <img src={FlipBgDefault}></img>
                         </object>
                     </div>
                 </a>
