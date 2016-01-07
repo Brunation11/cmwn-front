@@ -5,7 +5,9 @@
         border: 1px solid #eeeeee;
         border-collapse: collapse;
 
-        img {
+        object {
+            display: inline-block;
+            background: #fff;
             border: 1px solid black;
             border-collapse: collapse;
         }
