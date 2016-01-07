@@ -53,7 +53,7 @@ var Trophycase = React.createClass({
                     <img className="spacer" src={DISABLED_FLIP} />
                     {this.renderComplete(complete)}
                 </div>
-                <div className="in-progress">
+                <div className="in-progress hidden">
                     {IN_PROGRESS}<strong>{inProgress.length}</strong>
                     <img className="spacer" src={DISABLED_FLIP} />
                     {this.renderPartial(inProgress)}
