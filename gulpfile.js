@@ -210,6 +210,8 @@ gulp.task('primary-style', function (done) {
         ]
     };
 
+    var flips = gulp.src('./src/media/flips/*.*').pipe(gulp.dest('./build/flips'));
+
     var favicon = gulp.src('./src/media/favicon.ico').pipe(gulp.dest('./build'));
 
     var reset = gulp.src('./src/reset.css').pipe(gulp.dest('./build'));
