@@ -22,19 +22,19 @@ var Trophycase = React.createClass({
     renderPartial: function (items) {
         return (
            <div className="flip-list">
-               {_.map(items, (item, i) => (<Link to="" key={i}><img src={item.image} ></img><div className="partial" style={{height: `${item.progress}%`}} ><img src={item.partial} ></img></div></Link>))}
+               {_.map(items, (item, i) => (<Link to="" key={i}><img src={`/flips/${item.uuid}.png`} ></img><div className="partial" style={{height: `${item.progress}%`}} ><img src={`/flips/${item.uuid}_grey.png`} ></img></div></Link>))}
            </div>
         );
     },
     renderComplete: function (items) {
         return (
            <div className="flip-list">
-               {_.map(items, (item, i) => (<Link to="" key={i}><img src={item.image} ></img></Link>))}
+               {_.map(items, (item, i) => (<Link to="" key={i}><img src={`/flips/${item.uuid}.png`} ></img></Link>))}
            </div>
         );
     },
     renderCase: function (props) {
-        var complete, inProgress;
+        var complete, inProgress, flips;
         if (props.data == null) {
             //return null; //uncomment once you want to only use real data
             props.data = [
@@ -44,8 +44,18 @@ var Trophycase = React.createClass({
                 {uuid: '3b215c5e-a8f9-11e5-891c-acbc32a6b1bb', description: 'lorem ipsum', title: 'Flip Title 175', partial: DISABLED_FLIP, image: ENABLED_FLIP, progress: 34},
             ];
         }
-        complete = _.filter(props.data, item => item.progress === 100);
-        inProgress = _.difference(props.data, complete);
+        /** @TODO MPR, 1/7/16: remove this once we have real flip progress */
+        flips = _.map(props.data, item => {
+            item.progress = Math.floor(Math.random() * 100);
+            return item;
+        });
+        complete = _.filter(flips, item => item.progress === 100);
+        inProgress = _.difference(flips, complete);
+        if (flips.length === 0) {
+            return null;
+        }
+        /** @TODO MPR, 1/7/16: remove this once we have real flip progress */
+        complete = flips;
         return (
             <Panel className="standard" header={HEADINGS.FLIPBOARD}>
                 <div className="earned">
@@ -53,7 +63,7 @@ var Trophycase = React.createClass({
                     <img className="spacer" src={DISABLED_FLIP} />
                     {this.renderComplete(complete)}
                 </div>
-                <div className="in-progress hidden">
+                <div className="in-progress  hidden">
                     {IN_PROGRESS}<strong>{inProgress.length}</strong>
                     <img className="spacer" src={DISABLED_FLIP} />
                     {this.renderPartial(inProgress)}
@@ -64,7 +74,7 @@ var Trophycase = React.createClass({
     render: function () {
         var Self = this;
         return (
-            <Fetcher className={'trophycase ' + this.props.className} url={GLOBALS.API_URL + 'flips/' + this.props.data.uuid} renderNoData={Self.renderCase.bind(this, {})}>
+            <Fetcher className={'trophycase ' + this.props.className} url={GLOBALS.API_URL + 'flips/'} renderNoData={Self.renderCase.bind(this, {})}>
                 <Self.renderCase />
             </Fetcher>
         );

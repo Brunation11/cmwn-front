@@ -8,6 +8,12 @@
 
         img {
             padding: $standard / 3;
+            max-width: 75px; //totally arbitrary
+        }
+
+        a {
+            display: inline-block;
+            position: relative;
         }
 
         .partial {
@@ -15,6 +21,7 @@
             position: absolute;
             left: 0;
             overflow: hidden;
+            background: #fff;
         }
     }
 
