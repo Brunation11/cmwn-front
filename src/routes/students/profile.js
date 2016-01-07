@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import ClassNames from 'classnames';
 import {Panel, Modal} from 'react-bootstrap';
 
 import Layout from 'layouts/two_col';
@@ -31,7 +32,7 @@ var Page = React.createClass({
             //race condition edge case where the profile has loaded before the auth module
             Authorization.userIsLoaded.then(() => {
                 self.uuid = self.props.params.id || Authorization.currentUser.uuid;
-                self.url = GLOBALS.API_URL + 'users/' + self.uuid;
+                self.url = GLOBALS.API_URL + 'users/' + self.uuid + '?include=roles';
                 self.forceUpdate();
             });
         }
@@ -67,6 +68,20 @@ var Profile = React.createClass({
             }
             this.forceUpdate();
         });
+        this.resolveRole();
+    },
+    componentWillRecieveProps: function () {
+        this.resolveRole();
+    },
+    resolveRole: function () {
+        var newState = {};
+        if (this.props.data == null) {
+            return;
+        }
+        if (this.props.data.roles && ~this.props.data.roles.data.indexOf('Student')) {
+            newState.isStudent = true;
+        }
+        this.setState(newState);
     },
     showModal: function (gameUrl) {
         this.setState({gameOn: true, gameUrl});
@@ -100,7 +115,7 @@ var Profile = React.createClass({
                         <Game url={this.state.gameUrl} onExit={() => this.setState({gameOn: false})}/>
                     </Modal.Body>
                 </Modal>
-               <Trophycase data={this.state} />
+               <Trophycase className={ClassNames({hidden: !this.state.isStudent})} data={this.state} />
                <Panel header={
                    ((this.state.uuid === Authorization.currentUser.uuid) ? 'My ' : this.state.username + '\'s ') + HEADINGS.ACTION
                } className="standard">
