@@ -27,14 +27,18 @@ class _Authorization {
         window.localStorage.setItem('com.cmwn.platform.userId', null);
         window.localStorage.setItem('com.cmwn.platform.fullName', null);
         window.localStorage.setItem('com.cmwn.platform.profileImage', null);
+        window.localStorage.setItem('com.cmwn.platform.roles', null);
         EventManager.update('userChanged', null);
     }
     reloadUser() {
-        var getUser = HttpManager.GET({url: `${GLOBALS.API_URL}users/me?include=images`, handleErrors: false});
+        var getUser = HttpManager.GET({url: `${GLOBALS.API_URL}users/me?include=images,roles`, handleErrors: false});
         getUser.then(res => {
             window.localStorage.setItem('com.cmwn.platform.fullName', res.response.data.first_name + ' ' + res.response.data.last_name);
             window.localStorage.setItem('com.cmwn.platform.userName', res.response.data.username);
             window.localStorage.setItem('com.cmwn.platform.userId', res.response.data.uuid);
+            if (res.response.data.roles) {
+                window.localStorage.setItem('com.cmwn.platform.roles', res.response.data.roles.data);
+            }
             if (res.response.data.images && _.isString(res.response.data.images.data.url)) {
                 window.localStorage.setItem('com.cmwn.platform.profileImage', res.response.data.image.data);
             } else {
@@ -55,6 +59,7 @@ class _Authorization {
         return {
             fullname: window.localStorage['com.cmwn.platform.fullName'],
             username: window.localStorage['com.cmwn.platform.userName'],
+            roles: window.localStorage['com.cmwn.platform.roles'],
             profileImage: window.localStorage['com.cmwn.platform.profileImage'],
             uuid: window.localStorage['com.cmwn.platform.userId']
         };

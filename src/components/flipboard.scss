@@ -33,8 +33,10 @@
             padding: 5px;
             border: 0;
             max-width: $max-flip-size;
+            margin-top: 0;
+            margin-bottom: 0;
 
-            .item, img, .overlay {
+            .item, img, .overlay, object {
                 width: 100%;
                 max-width: $max-flip-size;
                 margin: auto;
