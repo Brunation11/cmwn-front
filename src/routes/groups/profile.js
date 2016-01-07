@@ -68,7 +68,7 @@ var Page = React.createClass({
         );
     },
     render: function () {
-        if (this.group == null) {
+        if (this.group == null || this.state == null) {
             return null;
         }
         return (
