@@ -92,14 +92,14 @@ var Profile = React.createClass({
     renderFlip: function (item){
         return (
             <div className="flip fill">
-                <a onClick={this.showModal.bind(this, 'http://games.changemyworldnow.com/' + item.uuid)} >
+                <a onClick={this.showModal.bind(this, 'https://games.changemyworldnow.com/' + item.uuid)} >
                     <div className="item">
                         <span className="overlay">
                             <span className="heading">{item.title}</span>
                             <span className="text">{item.description}</span>
                             <span className="play">{PLAY}</span>
                         </span>
-                        <object data={'http://games.changemyworldnow.com/' + item.uuid + '/thumb.jpg'} type="image/png" >
+                        <object data={'https://games.changemyworldnow.com/' + item.uuid + '/thumb.jpg'} type="image/png" >
                             <img src={FlipBgDefault}></img>
                         </object>
                     </div>
