@@ -3,7 +3,7 @@ Options +FollowSymLinks +ExecCGI
 <IfModule mod_rewrite.c>
 
 RewriteEngine On
-RewriteCond %{REQUEST_URI}  !(\.pdf|\.css|\.png|\.jpg|\.gif|\.jpeg|\.bmp|\.js|\.ico)$
+RewriteCond %{REQUEST_URI}  !(\.pdf|\.css|\.png|\.jpg|\.gif|\.jpeg|\.bmp|\.js|\.ico|\.woff)$
 RewriteRule (.*)  index.html [QSA]
 
 #RewriteCond %{HTTP:X-Forwarded-Proto} =http
@@ -15,7 +15,7 @@ RewriteRule (.*)  index.html [QSA]
 # Content security policies. Unfortunately we need to use unsafe inlining for the time being because
 # a number of our tools rely on injecting style/script tags (webpack in particular).
 # See http://www.html5rocks.com/en/tutorials/security/content-security-policy/ for additional details
-Header set Content-Security-Policy "default-src 'self'; base-uri https://*.changemyworldnow.com:*; style-src 'unsafe-inline' https://*.changemyworldnow.com:* https://maxcdn.bootstrapcdn.com https://cdnjs.cloudflare.com; script-src https://*.changemyworldnow.com:* https://*.changemyworldnow.com:* 'unsafe-inline' https://*.cloudinary.com  https://*.google.com https://cdnjs.cloudflare.com https://maxcdn.bootstrapcdn.com https://*.gstatic.com; frame-ancestors 'none'; child-src https://*.changemyworldnow.com:* https://*.cloudinary.com https://*.viddler.com; connect-src https://*.changemyworldnow.com; font-src 'self' https://changemyworldnow.education https://*.changemyworldnow.com:* https://maxcdn.bootstrapcdn.com; img-src https://*.changemyworldnow.com:* https://*.changemyworldnow.com:* https://*.cloudinary.com; form-action https://*.changemyworldnow.com:*;"
+Header set Content-Security-Policy "default-src 'self'; base-uri https://*.changemyworldnow.com:*; style-src 'unsafe-inline' https://*.changemyworldnow.com:* https://maxcdn.bootstrapcdn.com https://cdnjs.cloudflare.com; script-src 'unsafe-eval' https://*.changemyworldnow.com:* https://*.changemyworldnow.com:* 'unsafe-inline' https://*.cloudinary.com  https://*.google.com https://cdnjs.cloudflare.com https://maxcdn.bootstrapcdn.com https://*.gstatic.com; frame-ancestors 'none'; child-src https://*.changemyworldnow.com:* https://*.cloudinary.com https://*.viddler.com; connect-src https://*.changemyworldnow.com; font-src 'self' https://changemyworldnow.education https://*.changemyworldnow.com:* https://maxcdn.bootstrapcdn.com; img-src https://*.changemyworldnow.com:* https://*.changemyworldnow.com:* https://*.cloudinary.com; form-action https://*.changemyworldnow.com:*;"
 
 # 1 year for all static assets
 <filesMatch ".(ico|pdf|flv|jpg|jpeg|png|gif|bmp|css|swf|js)$">
