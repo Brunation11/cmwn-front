@@ -214,6 +214,10 @@ gulp.task('primary-style', function (done) {
 
     var favicon = gulp.src('./src/media/favicon.ico').pipe(gulp.dest('./build'));
 
+    var htaccess = gulp.src('./.htaccess').pipe(gulp.dest('./build'));
+
+    var titleFont = gulp.src('./media/cmwn_ulc-webfont.woff').pipe(gulp.dest('./build/fonts'));
+
     var reset = gulp.src('./src/reset.css').pipe(gulp.dest('./build'));
 
     var robots = gulp.src('./src/robots.txt').pipe(gulp.dest('./build'));
