@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #forgive us our hacks as we forgive those who hack against us
 
-export APP_API_URL=http://api.changemyworldnow.com/
+export APP_API_URL=https://api.changemyworldnow.com/
 gulp build --production
 rm -rf ../artifact
 CURRENT_VERSION=$(echo "(function () {return require('./package.json').version;})()" | node -p)
