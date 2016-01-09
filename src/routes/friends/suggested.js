@@ -22,21 +22,31 @@ const HEADINGS = {
 };
 const FRIEND_PROBLEM = 'There was a problem adding your friend. Please try again in a little while.';
 const ADD_FRIEND = 'Add Friend';
+const REQUESTED = 'Request Sent';
+const ACCEPT = 'Accept';
 const PROFILE = 'View Profile';
 
 var Page = React.createClass({
     addFriend: function (item, e) {
         e.stopPropagation();
         e.preventDefault();
-        HttpManager.GET({url: GLOBALS.API_URL + 'users/friendrequest/' + item.uuid, handleErrors: false})
-            .catch(this.friendErr);
+        HttpManager.POST({url: GLOBALS.API_URL + 'friends/', handleErrors: false}, {
+            'user_id': item.uuid
+        }).then(() => {
+            this.refs.datasource.getData().then(this.forceUpdate);
+        }).catch(this.friendErr);
         item.relationship = 'Pending';
         this.forceUpdate;
     },
     friendErr: function () {
         Toast.error(FRIEND_PROBLEM);
     },
-    renderNoData: function () {
+    renderNoData: function (data) {
+        if (data == null) {
+            //render nothing before a request has been made
+            return null;
+        }
+        //render a nice message if the list is actually empty
         return (
             <Panel header={HEADINGS.SUGGESTED} className="standard">
                 <h2>{NO_FRIENDS}</h2>
@@ -51,7 +61,12 @@ var Page = React.createClass({
                     <div className="item">
                         <span className="overlay">
                             <div className="relwrap"><div className="abswrap">
-                                <Button onClick={this.addFriend.bind(this, item)} className={ClassNames('green standard', {hidden: item.relationship === 'Pending'})}>{ADD_FRIEND}</Button>
+                                <Button onClick={this.addFriend.bind(this, item)} className={ClassNames('green standard', {hidden: item.relationship === 'Pending' || item.relationship === 'requested'})}>{ADD_FRIEND}</Button>
+                                <Button
+                                    onClick={this.addFriend.bind(this, item)}
+                                    className={ClassNames('blue standard', {hidden: item.relationship !== 'Pending'})}
+                                >{ACCEPT}</Button>
+                                <Button className={ClassNames('blue standard', {hidden: item.relationship !== 'requested'})}>{REQUESTED}</Button>
                                 <Button className="purple standard">{PROFILE}</Button>
                             </div></div>
                         </span>
@@ -67,7 +82,7 @@ var Page = React.createClass({
         return (
            <Layout className="friends-page">
                 <form>
-                    <Fetcher url={ GLOBALS.API_URL + 'suggestedfriends'} renderNoData={this.renderNoData} transform={data => {
+                    <Fetcher ref="datasource" url={ GLOBALS.API_URL + 'suggestedfriends'} renderNoData={this.renderNoData} transform={data => {
                         data = _.map(data, item => {
                             item.image = _.has(item, 'images.data.url') ? item.images.data.url : DefaultProfile;
                             item.flips = item.flips == null ? Math.floor(Math.random() * 10) : item.flips;

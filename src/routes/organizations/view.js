@@ -9,6 +9,7 @@ import GLOBALS from 'components/globals';
 import {Table, Column} from 'components/table';
 import Paginator from 'components/paginator';
 import Util from 'components/util';
+import History from 'components/history';
 
 const HEADINGS = {
     TITLE: 'Info',
@@ -41,7 +42,7 @@ var View = React.createClass({
         urlData.then(res => {
             Util.normalize(res.response, 'users', []);
             if (!res.response.data.can_update) { //eslint-disable-line camel_case
-                window.location.href = `/organization/${this.props.params.id}/profile`;
+                History.replaceState(null, `/organization/${this.props.params.id}/profile`);
             }
             this.setState({
                 organization: res.response.data,

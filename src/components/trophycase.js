@@ -38,10 +38,9 @@ var Trophycase = React.createClass({
         if (props.data == null) {
             //return null; //uncomment once you want to only use real data
             props.data = [
-                {uuid: '3b215c5e-a8f9-11e5-891c-acbc32a6b1bb', description: 'lorem ipsum', title: 'Flip Title 475', partial: DISABLED_FLIP, image: ENABLED_FLIP, progress: 100},
-                {uuid: '3b215c5e-a8f9-11e5-891c-acbc32a6b1bb', description: 'lorem ipsum', title: 'Flip Title 375', partial: DISABLED_FLIP, image: ENABLED_FLIP, progress: 100},
-                {uuid: '3b215c5e-a8f9-11e5-891c-acbc32a6b1bb', description: 'lorem ipsum', title: 'Flip Title 225', partial: DISABLED_FLIP, image: ENABLED_FLIP, progress: 100},
-                {uuid: '3b215c5e-a8f9-11e5-891c-acbc32a6b1bb', description: 'lorem ipsum', title: 'Flip Title 175', partial: DISABLED_FLIP, image: ENABLED_FLIP, progress: 34},
+                {uuid: 'polar-bear', description: 'lorem ipsum', title: 'Flip Title 475', partial: DISABLED_FLIP, image: ENABLED_FLIP, progress: 100},
+                {uuid: 'animal-id', description: 'lorem ipsum', title: 'Flip Title 375', partial: DISABLED_FLIP, image: ENABLED_FLIP, progress: 100},
+                {uuid: 'sea-turtle', description: 'lorem ipsum', title: 'Flip Title 225', partial: DISABLED_FLIP, image: ENABLED_FLIP, progress: 100}
             ];
         }
         /** @TODO MPR, 1/7/16: remove this once we have real flip progress */

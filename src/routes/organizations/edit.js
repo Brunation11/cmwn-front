@@ -4,6 +4,7 @@ import HttpManager from 'components/http_manager';
 import Layout from 'layouts/two_col';
 import GLOBALS from 'components/globals';
 import Validate from 'components/validators';
+import History from 'components/history';
 
 const HEADINGS = {
     EDIT_TITLE: 'Info',
@@ -31,7 +32,7 @@ var Edit = React.createClass({
         urlData.then(res => {
             this.organization = res.response.data;
             if (!res.response.data.can_update) { //eslint-disable-line camel_case
-                window.location.href = `/organization/${this.props.params.id}/profile`;
+                History.replaceState(null, `/organization/${this.props.params.id}/profile`);
             }
             this.setState({
                 code: this.organization.code,

@@ -12,4 +12,19 @@
             border-collapse: collapse;
         }
     }
+
+    .link-below {
+        
+        .below {
+            display: none;
+        }
+    }
+
+    .infopanel {
+
+        .profile-image {
+            float: left;
+            padding-right: 15px;
+        }
+    }
 }

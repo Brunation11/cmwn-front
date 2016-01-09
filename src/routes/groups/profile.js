@@ -21,6 +21,11 @@ const HEADINGS = {
 };
 
 var Page = React.createClass({
+    getInitialState: function () {
+        return {
+            isStudent: true
+        };
+    },
     componentWillMount: function () {
         this.getGroup();
     },
@@ -45,6 +50,8 @@ var Page = React.createClass({
         Authorization.userIsLoaded.then(() => {
             if (~Authorization.currentUser.roles.indexOf('Student')) {
                 newState.isStudent = true;
+            } else {
+                newState.isStudent = false;
             }
             this.setState(newState);
         });

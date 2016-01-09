@@ -5,6 +5,7 @@ import FriendList from 'components/friend_list';
 import ProfileImage from 'components/profile_image';
 import Authorization from 'components/authorization';
 import EventManager from 'components/event_manager';
+import History from 'components/history';
 
 import 'components/sidebar.scss';
 
@@ -17,7 +18,7 @@ var Sidebar = React.createClass({
         });
     },
     attemptNavigate: function () {
-        window.location.href = '/profile';
+        History.replaceState(null, '/profile');
     },
     renderWelcome: function () {
         return (
