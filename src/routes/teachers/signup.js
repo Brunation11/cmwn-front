@@ -42,14 +42,15 @@ var Page = React.createClass({
     login: function (e) {
         var req, req2;
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
-            req2 =HttpManager.POST({
+            req2 = HttpManager.POST({
                 url: `${GLOBALS.API_URL}create_demo_teacher`
             }, {
                 username: this.refs.login.getValue(),
                 email: this.refs.login.getValue(),
                 first_name: this.refs.first_name.getValue(),
                 last_name: this.refs.last_name.getValue()
-            }).then(() => {
+            });
+            req2.then(() => {
                 req = HttpManager.POST({
                     url: `${GLOBALS.API_URL}auth/login`,
                     withCredentials: true,
@@ -59,14 +60,14 @@ var Page = React.createClass({
                     'X-CSRF-TOKEN': this.state._token,
                     'Authorization': `Basic ${window.btoa(this.refs.login.getValue() + ':demo123')}`
                 });
-            })
-            req.then(res => {
-                if (res.status < 300 && res.status >= 200) {
-                    Authorization.reloadUser();
-                    History.replaceState(null, '/profile');
-                }
-            }).catch(() => {
-                // @TODO MPR, 12/22/15: Alert user of error
+                req.then(res => {
+                    if (res.status < 300 && res.status >= 200) {
+                        Authorization.reloadUser();
+                        History.replaceState(null, '/profile');
+                    }
+                }).catch(() => {
+                    // @TODO MPR, 12/22/15: Alert user of error
+                });
             });
         }
     },
