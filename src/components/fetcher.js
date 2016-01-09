@@ -6,7 +6,7 @@ import HttpManager from 'components/http_manager';
 
 var Fetcher = React.createClass({
     getInitialState: function () {
-        this.data = this.props.data || [];
+        this.data = this.props.data;
         return {};
     },
     getDefaultProps: function () {
@@ -20,7 +20,7 @@ var Fetcher = React.createClass({
     },
     getData: function () {
         var urlData = HttpManager.GET({url: this.props.url});
-        urlData.then(res => {
+        return urlData.then(res => {
             if (res.response.data == null) {
                 this.data = res.response;
                 console.warn('An endpoint has returned an unexpected result (No Data Property). Attempting to proceed.'); //eslint-disable-line no-console
@@ -31,11 +31,13 @@ var Fetcher = React.createClass({
                 this.data = this.data.concat(this.props.data);
             }
             this.forceUpdate();
+            return Promise.resolve(this.data);
         }).catch(err => {
             /** @TODO MPR, 10/18/15: Implement error page */
             console.info(err); //eslint-disable-line no-console
             this.data = this.props.data;
             this.forceUpdate();
+            return Promise.resolve(this.data);
         });
     },
     render: function () {

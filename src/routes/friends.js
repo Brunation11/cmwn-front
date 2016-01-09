@@ -19,6 +19,7 @@ const HEADINGS = {
     FRIENDS: 'My Friends'
 };
 
+const FRIEND_ADDED = 'Great! You are now friends with ';
 const FRIEND_PROBLEM = 'There was a problem adding your friend. Please try again in a little while.';
 const PROFILE = 'View Profile';
 const REQUESTED = 'Accept Request';
@@ -31,18 +32,28 @@ var Page = React.createClass({
     addFriend: function (item, e) {
         e.stopPropagation();
         e.preventDefault();
-        HttpManager.GET({url: GLOBALS.API_URL + 'users/friendrequest/' + item.uuid, handleErrors: false})
-            .catch(this.friendErr);
+        HttpManager.POST({url: GLOBALS.API_URL + 'friends/', handleErrors: false}, {
+            'user_id': item.uuid
+        }).catch(this.friendErr);
         item.relationship = 'Pending';
         this.forceUpdate;
     },
     acceptRequest: function (item, e) {
         e.stopPropagation();
         e.preventDefault();
-        HttpManager.POST({url: GLOBALS.API_URL + 'users/acceptfriendrequest/' + item.uuid, handleErrors: false})
-            .catch(this.friendErr);
-        item.relationship = 'accepted';
-        this.forceUpdate;
+        HttpManager.POST({url: GLOBALS.API_URL + 'friends/', handleErrors: false}, {
+            'user_id': item.uuid
+        }).then(() => {
+            this.refs.fetcher.getData().then(() => {
+                Toast.success(FRIEND_ADDED + item.username);
+                this.forceUpdate();
+            });
+        }).catch(this.friendErr);
+        e.target.className += ' faded'; //element will be replaced so we need to cheat a little
+    },
+    doNothing: function (e) {
+        e.stopPropagation();
+        e.preventDefault();
     },
     friendErr: function () {
         Toast.error(FRIEND_PROBLEM);
@@ -60,8 +71,8 @@ var Page = React.createClass({
                     <div className="item">
                         <span className="overlay">
                             <div className="relwrap"><div className="abswrap">
-                                <Button onClick={this.acceptRequest.bind(this, item)} className={ClassNames('blue standard', {hidden: item.relationship !== 'requested'})}>{REQUESTED}</Button>
-                                <Button className={ClassNames('blue standard', {hidden: item.relationship !== 'pending'})}>{PENDING}</Button>
+                                <Button onClick={this.doNothing} className={ClassNames('blue standard', {faded: item.relationship !== 'requested'})}>{PENDING}</Button>
+                                <Button onClick={this.acceptRequest.bind(this, item)} className={ClassNames('blue standard', {faded: item.relationship !== 'pending'})}>{REQUESTED}</Button>
                                 <Button className="purple standard">{PROFILE}</Button>
                             </div></div>
                         </span>
@@ -77,7 +88,7 @@ var Page = React.createClass({
         return (
            <Layout className="friends-page">
                 <form>
-                    <Fetcher url={ GLOBALS.API_URL + 'friends'} transform={data => {
+                    <Fetcher ref="fetcher" url={ GLOBALS.API_URL + 'friends'} transform={data => {
                         data = [].concat(
                             _.map(data.friendrequests, this.transformFriend.bind(this, 'requested')),
                             _.map(data.acceptedfriends, this.transformFriend.bind(this, 'accepted')),

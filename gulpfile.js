@@ -107,7 +107,7 @@ gulp.task('watch', function () {
 });
 
 gulp.task('watch-version', function () {
-    gulp.watch('build/build.js', ['sri']);
+    gulp.watch('build/build.js', ['sri', 'index']);
 });
 
 gulp.task('dev-server', ['development-server']);
