@@ -4,6 +4,7 @@ import ClassNames from 'classnames';
 import {Panel, Modal} from 'react-bootstrap';
 
 import Layout from 'layouts/two_col';
+import ProfileImage from 'components/profile_image';
 import FlipBoard from 'components/flipboard';
 import Game from 'components/game';
 import Authorization from 'components/authorization';
@@ -27,12 +28,12 @@ var Page = React.createClass({
     getInitialState: function () {
         var self = this;
         self.uuid = self.props.params.id || Authorization.currentUser.uuid;
-        self.url = GLOBALS.API_URL + 'users/' + self.uuid + '?include=roles';
+        self.url = GLOBALS.API_URL + 'users/' + self.uuid + '?include=roles,groups';
         if (self.uuid == null || self.uuid.toLowerCase() === 'null') {
             //race condition edge case where the profile has loaded before the auth module
             Authorization.userIsLoaded.then(() => {
                 self.uuid = self.props.params.id || Authorization.currentUser.uuid;
-                self.url = GLOBALS.API_URL + 'users/' + self.uuid + '?include=roles';
+                self.url = GLOBALS.API_URL + 'users/' + self.uuid + '?include=roles,groups';
                 self.forceUpdate();
             });
         }
@@ -55,7 +56,8 @@ var Profile = React.createClass({
         var state = _.defaults({
             gameOn: false,
             gameId: -1
-        }, _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {});
+        }, _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {},
+        {groups: {data: []}});
         return state;
     },
     componentDidMount: function () {
@@ -80,6 +82,8 @@ var Profile = React.createClass({
         }
         if (this.props.data.roles && ~this.props.data.roles.data.indexOf('Student')) {
             newState.isStudent = true;
+        } else {
+            newState.isStudent = false;
         }
         this.setState(newState);
     },
@@ -119,13 +123,17 @@ var Profile = React.createClass({
                <Trophycase className={ClassNames({hidden: !this.state.isStudent})} data={this.state} />
                <Panel header={
                    ((this.state.uuid === Authorization.currentUser.uuid) ? 'My ' : this.state.username + '\'s ') + HEADINGS.ACTION
-               } className={ClassNames('standard', {hidden: !this.state.isStudent})}>
-                 <EditLink base="/profile" uuid={this.state.uuid} canUpdate={this.state.can_update} />
-               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nec arcu id massa fringilla condimentum. Nam ornare eget nibh vel laoreet. Donec tincidunt hendrerit nunc, varius facilisis lacus placerat eget. Sed pretium interdum pretium. Pellentesque bibendum libero eget elit consectetur iaculis. Praesent nec mi fringilla, ornare nunc at, auctor velit. Mauris gravida ipsum nisi, eu elementum erat elementum quis.
-
-Suspendisse in maximus mauris, ut mollis libero. Nunc ut ullamcorper mauris, a interdum nisl. Vivamus posuere porttitor magna. Cras varius metus venenatis condimentum cursus. Aenean ac lacus viverra dui tincidunt suscipit. Duis condimentum velit sit amet imperdiet efficitur. Praesent sit amet varius tortor, et elementum nisl. Donec ligula ex, lacinia a accumsan non, placerat sed justo. Morbi in dui a nunc ullamcorper gravida vel sit amet diam. Fusce eget libero suscipit, vestibulum arcu non, porta sem. Interdum et malesuada fames ac ante ipsum primis in faucibus. Vivamus mauris quam, viverra vitae tellus ac, porta bibendum felis.
+               } className={ClassNames('standard', {hidden: !this.state.isStudent && this.state.uuid === Authorization.currentUser.uuid})}>
+               <div className="infopanel">
+                     <EditLink base="/profile" uuid={this.state.uuid} canUpdate={this.state.can_update} />
+                     <ProfileImage className={ClassNames({hidden: this.state.uuid === Authorization.currentUser.uuid})} uuid={this.state.uuid} link-below={true}/>
+                     <div className="info">
+                        <p><strong>Name</strong>: {this.state.first_name} {this.state.last_name}</p>
+                        <p><strong>Classes</strong>: {_.map(this.state.groups.data, item => item.title).join(', ')}</p>
+                     </div>
+                 </div>
                </Panel>
-               <Fetcher url={GLOBALS.API_URL + 'games'} >
+               <Fetcher className={ClassNames({hidden: this.state.uuid !== Authorization.currentUser.uuid})} url={GLOBALS.API_URL + 'games'} >
                    <FlipBoard
                        renderFlip={this.renderFlip}
                        header={HEADINGS.ARCADE}
