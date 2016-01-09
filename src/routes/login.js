@@ -3,6 +3,7 @@ import {Button, Input} from 'react-bootstrap';
 //import Cookie from 'cookie';
 
 import Layout from 'layouts/one_col';
+import Toast from 'components/toast';
 import History from 'components/history';
 import HttpManager from 'components/http_manager';
 import Authorization from 'components/authorization';
@@ -12,6 +13,10 @@ const LABELS = {
     LOGIN: 'Email',
     PASSWORD: 'Password',
     SUBMIT: 'SUBMIT'
+};
+
+const ERRORS = {
+    LOGIN: 'Sorry, that wasn\'t quite right. Please try again.'
 };
 
 var Page = React.createClass({
@@ -52,9 +57,11 @@ var Page = React.createClass({
                 if (res.status < 300 && res.status >= 200) {
                     Authorization.reloadUser();
                     History.replaceState(null, '/profile');
+                } else {
+                    throw res;
                 }
             }).catch(() => {
-                // @TODO MPR, 12/22/15: Alert user of error
+                Toast.error(ERRORS.LOGIN);
             });
         }
     },

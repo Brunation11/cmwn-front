@@ -100,10 +100,14 @@ var buildProduction = function () {
         .pipe(gulp.dest('./build'));
 }
 
-gulp.task("default", ["build", "watch", 'development-server']);
+gulp.task("default", ["build", "watch", 'development-server', 'watch-version']);
 
 gulp.task('watch', function () {
     gulp.watch('src/**/*.js', ['lint']);
+});
+
+gulp.task('watch-version', function () {
+    gulp.watch('build/build.js', ['sri']);
 });
 
 gulp.task('dev-server', ['development-server']);
