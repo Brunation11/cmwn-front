@@ -39,8 +39,8 @@ class _Authorization {
             if (res.response.data.roles) {
                 window.localStorage.setItem('com.cmwn.platform.roles', res.response.data.roles.data);
             }
-            if (res.response.data.images && _.isString(res.response.data.images.data.url)) {
-                window.localStorage.setItem('com.cmwn.platform.profileImage', res.response.data.image.data);
+            if (res.response.data.images && _.isString(res.response.data.images.data[0].url)) {
+                window.localStorage.setItem('com.cmwn.platform.profileImage', res.response.data.images.data[0].url);
             } else {
                 window.localStorage.setItem('com.cmwn.platform.profileImage', GLOBALS.DEFAULT_PROFILE);
             }
