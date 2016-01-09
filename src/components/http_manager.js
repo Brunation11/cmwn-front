@@ -127,7 +127,7 @@ var _makeRequest = function (verb, requests){
                 } else {
                     /** @TODO MPR, 11/19/15: Polyfill formdata*/
                     req.body = _.reduce(req.body, (acc, val, key) => {
-                        acc.append(encodeURIComponent(key), encodeURIComponent(val));
+                        acc.append(key, val);
                         return acc;
                     }, new FormData());
                 }
