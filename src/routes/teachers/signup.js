@@ -47,8 +47,9 @@ var Page = React.createClass({
             }, {
                 username: this.refs.login.getValue(),
                 email: this.refs.login.getValue(),
-                first_name: this.refs.first_name.getValue(),
-                last_name: this.refs.last_name.getValue()
+                first_name: this.refs.first_name.getValue(), // eslint-disable-line
+                last_name: this.refs.last_name.getValue() // eslint-disable-line
+
             });
             req2.then(() => {
                 req = HttpManager.POST({
@@ -64,6 +65,8 @@ var Page = React.createClass({
                     if (res.status < 300 && res.status >= 200) {
                         Authorization.reloadUser();
                         History.replaceState(null, '/profile');
+                    } else {
+                        throw res;
                     }
                 }).catch(() => {
                     // @TODO MPR, 12/22/15: Alert user of error
