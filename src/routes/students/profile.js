@@ -29,6 +29,7 @@ var Page = React.createClass({
         var self = this;
         self.uuid = self.props.params.id || Authorization.currentUser.uuid;
         self.url = GLOBALS.API_URL + 'users/' + self.uuid + '?include=roles,groups';
+        self.currentLoc = document.location.pathname;
         if (self.uuid == null || self.uuid.toLowerCase() === 'null') {
             //race condition edge case where the profile has loaded before the auth module
             Authorization.userIsLoaded.then(() => {
@@ -38,6 +39,11 @@ var Page = React.createClass({
             });
         }
         return {};
+    },
+    componentWillReceiveProps: function () {
+        if (self.currentLoc !== document.location.pathname) {
+            document.location.reload();
+        }
     },
     render: function () {
         if (this.uuid == null || this.uuid.toLowerCase() === 'null') {

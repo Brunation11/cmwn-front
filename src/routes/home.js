@@ -4,6 +4,7 @@ import _ from 'lodash';
 import {Carousel, CarouselItem, Button, Modal} from 'react-bootstrap';
 
 import Toast from 'components/toast';
+import History from 'components/history';
 
 import 'routes/home.scss';
 import LOGO_URL from 'media/logo.png';
@@ -239,7 +240,7 @@ var Header = React.createClass({
         this.setState({contactOpen: false, showContact: false});
     },
     loginAlert: function () {
-        window.location.href = '/login';
+        History.replaceState(null, '/login');
     },
     signupAlert: function () {
         Toast.success(COPY.ALERTS.SIGNUP.TEXT);
