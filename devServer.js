@@ -3,11 +3,20 @@ var path = require('path');
 var express = require('express');
 var webpack = require('webpack');
 var config = require('./webpack.config.dev');
+var fs = require('fs');
+var http = require('http');
+var https = require('https');
+var privateKey  = fs.readFileSync('/Users/maxrafferty/certs/server.key', 'utf8');
+var certificate = fs.readFileSync('/Users/maxrafferty/certs/server.crt', 'utf8');
 
+var credentials = {key: privateKey, cert: certificate};
 var app = express();
 var compiler = webpack(config);
 
 var PORT = 3000;
+var APIPORT = 3001;
+var SSHPORT = 3002;
+var SSHAPIPORT = 3004;
 
 app.use(require('webpack-dev-middleware')(compiler, {
     noInfo: true,
@@ -41,14 +50,14 @@ app.get('/*', function(req, res) {
 //    res.sendFile(path.join(__dirname, 'index.html'));
 //});
 
-app.listen(PORT, 'localhost', function(err) {
+/*app.listen(PORT, 'localhost', function(err) {
     if (err) {
         console.log(err);
         return;
     }
 
     console.log('Listening at http://localhost:' + PORT);
-});
+});*/
 
 var api = express ();
 //api.get('/*', function(req, res) {
@@ -60,7 +69,7 @@ api.use('/*', proxy('http://proxy.changemyworldnow.com', {
     return require('url').parse(req.originalUrl).path;
   }
 }));
-api.listen(3001, 'localhost', function(err) {
+/*api.listen(3001, 'localhost', function(err) {
 
     if (err) {
         console.log(err);
@@ -68,5 +77,14 @@ api.listen(3001, 'localhost', function(err) {
     }
 
     console.log('Listening at api');
-})
+})*/
+var httpServer = http.createServer(app);
+var httpsServer = https.createServer(credentials, app);
 
+httpServer.listen(PORT);
+httpsServer.listen(SSHPORT);
+var apiHttpServer = http.createServer(api);
+var apiHttpsServer = https.createServer(credentials, api);
+
+apiHttpServer.listen(APIPORT);
+apiHttpsServer.listen(SSHAPIPORT);
