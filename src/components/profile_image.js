@@ -25,7 +25,7 @@ var Image = React.createClass({
         } else {
             HttpManager.GET({url: `${GLOBALS.API_URL}users/${this.props.uuid}/image`, handleErrors: false})
                 .then(res => {
-                    if (res && res.data && _.isString(res.data.url)) {
+                    if (res && res.data && _.isString(res.data[0].url)) {
                         this.setState({profileImage: res.data.url});
                     }
                 }).catch(() => {
@@ -56,7 +56,7 @@ var Image = React.createClass({
                     }
                 }
                 self.setState({profileImage: result[0].secure_url});
-                HttpManager.PUT({url: `${GLOBALS.API_URL}users/${this.props.uuid}/image`}, {
+                HttpManager.POST({url: `${GLOBALS.API_URL}users/${this.props.uuid}/image`}, {
                     url: result[0].secure_url,
                     imageable_id: Authorization.currentUser.uuid,
                     cloudinary_id: result[0].public_id

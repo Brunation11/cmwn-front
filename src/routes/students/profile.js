@@ -119,7 +119,7 @@ var Profile = React.createClass({
                <Trophycase className={ClassNames({hidden: !this.state.isStudent})} data={this.state} />
                <Panel header={
                    ((this.state.uuid === Authorization.currentUser.uuid) ? 'My ' : this.state.username + '\'s ') + HEADINGS.ACTION
-               } className="standard">
+               } className={ClassNames('standard', {hidden: !this.state.isStudent})}>
                  <EditLink base="/profile" uuid={this.state.uuid} canUpdate={this.state.can_update} />
                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam nec arcu id massa fringilla condimentum. Nam ornare eget nibh vel laoreet. Donec tincidunt hendrerit nunc, varius facilisis lacus placerat eget. Sed pretium interdum pretium. Pellentesque bibendum libero eget elit consectetur iaculis. Praesent nec mi fringilla, ornare nunc at, auctor velit. Mauris gravida ipsum nisi, eu elementum erat elementum quis.
 
