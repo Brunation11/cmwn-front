@@ -112,7 +112,7 @@ var Fields = React.createClass({
             return null;
         }
         return (
-            <Panel header={HEADINGS.EDIT_TITLE} className="standard profile">
+            <Panel header={HEADINGS.EDIT_TITLE} className="standard edit-profile">
                 <div className="left">
                     <ProfileImage uuid={this.props.uuid} link-below={true}/>
                     <p><a onClick={this.suspendAccount}>{SUSPEND}</a></p>

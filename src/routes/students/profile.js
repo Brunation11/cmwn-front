@@ -28,13 +28,13 @@ var Page = React.createClass({
     getInitialState: function () {
         var self = this;
         self.uuid = self.props.params.id || Authorization.currentUser.uuid;
-        self.url = GLOBALS.API_URL + 'users/' + self.uuid + '?include=roles,groups';
+        self.url = GLOBALS.API_URL + 'users/' + self.uuid + '?include=roles,groups,images';
         self.currentLoc = document.location.pathname;
         if (self.uuid == null || self.uuid.toLowerCase() === 'null') {
             //race condition edge case where the profile has loaded before the auth module
             Authorization.userIsLoaded.then(() => {
                 self.uuid = self.props.params.id || Authorization.currentUser.uuid;
-                self.url = GLOBALS.API_URL + 'users/' + self.uuid + '?include=roles,groups';
+                self.url = GLOBALS.API_URL + 'users/' + self.uuid + '?include=roles,groups,images';
                 self.forceUpdate();
             });
         }
