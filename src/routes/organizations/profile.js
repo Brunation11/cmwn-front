@@ -5,7 +5,7 @@ import {Panel} from 'react-bootstrap';
 
 import Layout from 'layouts/two_col';
 import FlipBoard from 'components/flipboard';
-import FlipBgDefault from 'media/flip-placeholder-white.png';
+import FlipBgDefault from 'media/school-placeholder-grey.png';
 import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
 import EditLink from 'components/edit_link';

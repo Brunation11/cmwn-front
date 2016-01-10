@@ -8,7 +8,7 @@ import Layout from 'layouts/two_col';
 import Paginator from 'components/paginator';
 import Fetcher from 'components/fetcher';
 
-import DefaultProfile from 'media/profile_tranparent.png';
+import DefaultProfile from 'media/school-placeholder-grey.png';
 
 const TITLE = 'My Classes';
 const HOME = 'Home';

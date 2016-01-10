@@ -7,7 +7,7 @@ import Paginator from 'components/paginator';
 import FlipBoard from 'components/flipboard';
 import Fetcher from 'components/fetcher';
 
-import DefaultProfile from 'media/profile_tranparent.png';
+import DefaultProfile from 'media/school-placeholder-grey.png';
 
 const TITLE = 'My Schools';
 const HOME = 'Home';
