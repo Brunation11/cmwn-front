@@ -207,6 +207,9 @@ gulp.task('primary-style', function (done) {
             {
                 test: /\.(jpe?g|png|gif|svg)$/i,
                 loader: 'url-loader?limit=10000'
+            }, {
+                test: /\.woff$/,
+                loader: 'url?limit=100000'
             }]
         },
         plugins: [
@@ -220,7 +223,7 @@ gulp.task('primary-style', function (done) {
 
     var htaccess = gulp.src('./.htaccess').pipe(gulp.dest('./build'));
 
-    var titleFont = gulp.src('./media/cmwn_ulc-webfont.woff').pipe(gulp.dest('./build/fonts'));
+    var fonts = gulp.src('./src/media/fonts/*.*').pipe(gulp.dest('./build/fonts'));
 
     var reset = gulp.src('./src/reset.css').pipe(gulp.dest('./build'));
 
