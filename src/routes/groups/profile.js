@@ -36,7 +36,7 @@ var Page = React.createClass({
         this.resolveRole();
     },
     getGroup: function () {
-        var urlData = HttpManager.GET({url: `${GLOBALS.API_URL}groups/${this.props.params.id}?include=users`});
+        var urlData = HttpManager.GET({url: `${GLOBALS.API_URL}groups/${this.props.params.id}?include=users.images`});
         urlData.then(res => {
             Util.normalize(res.response, 'users', []);
             this.group = res.response.data;
@@ -59,7 +59,7 @@ var Page = React.createClass({
     renderFlip: function (item){
         return (
             <div className="flip">
-                <Link to={`/student/${item.uuid.toString()}`}><img src={item.image || DefaultProfile}></img>
+                <Link to={`/student/${item.uuid.toString()}`}><img src={item.images.data.length ? item.images.data[0].url : DefaultProfile}></img>
                     <p className="linkText" >{item.username}</p>
                 </Link>
                 <p className="userFlips">0 Flips Earned</p>

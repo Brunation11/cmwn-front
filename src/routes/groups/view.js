@@ -36,7 +36,7 @@ var View = React.createClass({
         this.getGroup();
     },
     getGroup: function () {
-        var urlData = HttpManager.GET({url: `${GLOBALS.API_URL}groups/${this.props.params.id}?include=users,organizations`});
+        var urlData = HttpManager.GET({url: `${GLOBALS.API_URL}groups/${this.props.params.id}?include=users.images,organizations`});
         urlData.then(res => {
             this.data = res.response.data;
             if (!this.data.can_update) { //eslint-disable-line camel_case
