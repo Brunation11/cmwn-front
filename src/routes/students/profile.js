@@ -102,7 +102,7 @@ var Profile = React.createClass({
     renderFlip: function (item){
         return (
             <div className="flip fill">
-                <a onClick={this.showModal.bind(this, 'https://games.changemyworldnow.com/' + item.uuid)} >
+                <a onClick={this.showModal.bind(this, 'https://games.changemyworldnow.com/' + item.uuid + '/index.html')} >
                     <div className="item">
                         <span className="overlay">
                             <span className="heading">{item.title}</span>
