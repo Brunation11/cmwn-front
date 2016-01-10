@@ -36,7 +36,7 @@ var Page = React.createClass({
         this.resolveRole();
     },
     getGroup: function () {
-        var urlData = HttpManager.GET({url: `${GLOBALS.API_URL}groups/${this.props.params.id}?include=users.images`});
+        var urlData = HttpManager.GET({url: `${GLOBALS.API_URL}groups/${this.props.params.id}?include=images,users.flips,users.images`});
         urlData.then(res => {
             Util.normalize(res.response, 'users', []);
             this.group = res.response.data;
