@@ -1,5 +1,4 @@
 import React from 'react';
-import {Link} from 'react-router';
 
 import GLOBALS from 'components/globals';
 import Layout from 'layouts/two_col';
@@ -9,8 +8,7 @@ import Fetcher from 'components/fetcher';
 
 import DefaultProfile from 'media/icon_school_blue.png';
 
-const TITLE = 'My Schools';
-const HOME = 'Home';
+const TITLE = 'MY SCHOOLS';
 
 var Organizations = React.createClass({
     renderFlip: function (item){
@@ -21,16 +19,9 @@ var Organizations = React.createClass({
     render: function () {
         return (
             <Layout>
-                <header>
-                    <h2>{TITLE}</h2>
-                    <div className="breadcrumb">
-                        <Link to="/">{HOME}</Link>
-                        {TITLE}
-                    </div>
-                </header>
                 <Fetcher url={GLOBALS.API_URL + 'organizations?include=images'} test="test">
                     <Paginator pageCount={1}>
-                        <FlipBoard renderFlip={this.renderFlip} />
+                        <FlipBoard header={TITLE} renderFlip={this.renderFlip} />
                     </Paginator>
                 </Fetcher>
             </Layout>

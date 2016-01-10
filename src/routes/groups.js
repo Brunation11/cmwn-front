@@ -1,5 +1,4 @@
 import React from 'react';
-import {Link} from 'react-router';
 
 //import HttpManager from 'components/http_manager';
 import FlipBoard from 'components/flipboard';
@@ -10,8 +9,7 @@ import Fetcher from 'components/fetcher';
 
 import DefaultProfile from 'media/icon_class_blue.png';
 
-const TITLE = 'My Classes';
-const HOME = 'Home';
+const TITLE = 'MY CLASSES';
 
 var Groups = React.createClass({
     renderFlip: function (item){
@@ -26,16 +24,9 @@ var Groups = React.createClass({
     render: function () {
         return (
             <Layout>
-                <header>
-                    <h2>{TITLE}</h2>
-                    <div className="breadcrumb">
-                        <Link to="/">{HOME}</Link>
-                        {TITLE}
-                    </div>
-                </header>
                 <Fetcher url={GLOBALS.API_URL + 'groups'} test="test">
                     <Paginator data={this.groups} pageCount={1}>
-                        <FlipBoard renderFlip={this.renderFlip} />
+                        <FlipBoard header={TITLE} renderFlip={this.renderFlip} />
                     </Paginator>
                </Fetcher>
             </Layout>

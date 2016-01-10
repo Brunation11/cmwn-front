@@ -17,7 +17,8 @@ import 'routes/groups/profile.scss';
 
 const HEADINGS = {
     MY_CLASSMATES: 'My Classmates',
-    MY_STUDENTS: 'My Students'
+    MY_STUDENTS: 'My Students',
+    CLASS: 'Class – '
 };
 
 var Page = React.createClass({
@@ -81,7 +82,7 @@ var Page = React.createClass({
         return (
            <Layout className="groupProfile">
                <FlipBoard renderFlip={this.renderFlip} header={
-                 (this.state.isStudent ? HEADINGS.MY_CLASSMATES : HEADINGS.MY_STUDENTS) + ' - ' + this.group.title
+                 HEADINGS.CLASS + this.group.title
                } data={this.group.users.data} />
            </Layout>
         );
