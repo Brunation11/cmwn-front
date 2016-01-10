@@ -37,6 +37,7 @@ var routes = [
     { path: 'sitemap(/)', component: Sitemap },
     { path: 'users(/)', component: Users },
     { path: 'profile(/)', component: Profile},
+    { path: 'games(/)', component: Profile},
     { path: 'profile/edit(/)', component: StudentEdit },
     { path: 'profile/:id/edit(/)', component: StudentEdit },
     { path: 'student/:id(/)', component: Profile},
