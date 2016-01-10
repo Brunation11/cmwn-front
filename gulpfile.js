@@ -100,7 +100,7 @@ var buildProduction = function () {
         .pipe(gulp.dest('./build'));
 }
 
-gulp.task("default", ["build", "watch", 'development-server', 'watch-version']);
+gulp.task("default", ["build", "watch", 'development-server']);
 
 gulp.task('watch', function () {
     gulp.watch('src/**/*.js', ['lint']);
