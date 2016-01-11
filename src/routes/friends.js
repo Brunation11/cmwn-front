@@ -27,6 +27,9 @@ const PENDING = 'Request Pending';
 
 var Page = React.createClass({
     getInitialState: function () {
+        HttpManager.GET({url: GLOBALS.API_URL + 'users?include=roles,flips,images', handleErrors: false}).then(res => {
+            this.friends = res.response.data;
+        });
         return {};
     },
     addFriend: function (item, e) {
@@ -59,6 +62,8 @@ var Page = React.createClass({
         Toast.error(FRIEND_PROBLEM);
     },
     transformFriend: function (type, item) {
+        var realFriend = _.find(this.friends, friend => friend.uuid === item.uuid);
+        item = realFriend;
         item.relationship = type;
         console.log(item);
         item.image = _.has(item, 'images.data[0].url') ? item.images.data[0].url : DefaultProfile;
