@@ -22,6 +22,10 @@ import 'media/logo.png';
 
 document.domain = 'changemyworldnow.com';
 
+if (window.location.protocol != 'https:') {
+    window.location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+}
+
 var App = React.createClass({
     componentWillMount: function () {
         Errors.onError(this.globalUpdate);
