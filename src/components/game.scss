@@ -1,4 +1,5 @@
 .game {
+    padding-bottom: 35px;
 
     iframe {
         width: calc(75vh * 1.77);
@@ -6,5 +7,12 @@
         transform: translateX(-50%);
         left: 50%;
         position: relative;
+    }
+
+    button {
+        z-index: 2;
+        position: absolute;
+        bottom: 15px;
+        left: 15px;
     }
 }
