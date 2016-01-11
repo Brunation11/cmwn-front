@@ -30,7 +30,7 @@ var Page = React.createClass({
     addFriend: function (item, e) {
         e.stopPropagation();
         e.preventDefault();
-        HttpManager.POST({url: GLOBALS.API_URL + 'friends/', handleErrors: false}, {
+        HttpManager.POST({url: GLOBALS.API_URL + 'friends', handleErrors: false}, {
             'user_id': item.uuid
         }).then(() => {
             this.refs.datasource.getData().then(this.forceUpdate);
@@ -54,6 +54,14 @@ var Page = React.createClass({
             </Panel>
         );
     },
+    renderFlipsEarned: function (item) {
+        if (item.roles && item.roles.data && !~item.roles.data.indexOf('Student')) {
+            return null;
+        }
+        return (
+            <p className="userFlips">{item.flips} Flips Earned</p>
+        );
+    },
     renderFlip: function (item){
         return (
             <div className="flip">
@@ -74,7 +82,7 @@ var Page = React.createClass({
                     </div>
                     <p className="linkText" >{item.username}</p>
                 </Link>
-                <p className="userFlips">{item.flips} Flips Earned</p>
+                {this.renderFlipsEarned(item)}
             </div>
         );
     },
@@ -82,10 +90,9 @@ var Page = React.createClass({
         return (
            <Layout className="friends-page">
                 <form>
-                    <Fetcher ref="datasource" url={ GLOBALS.API_URL + 'suggestedfriends'} renderNoData={this.renderNoData} transform={data => {
+                    <Fetcher ref="datasource" url={ GLOBALS.API_URL + 'suggestedfriends?include=roles,flips,images'} renderNoData={this.renderNoData} transform={data => {
                         data = _.map(data, item => {
-                            item.image = _.has(item, 'images.data.url') ? item.images.data.url : DefaultProfile;
-                            item.flips = item.flips == null ? Math.floor(Math.random() * 10) : item.flips;
+                            item.image = _.has(item, 'images.data[0].url') ? item.images.data[0].url : DefaultProfile;
                             return item;
                         });
                         return data;

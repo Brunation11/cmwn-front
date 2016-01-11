@@ -60,9 +60,18 @@ var Page = React.createClass({
     },
     transformFriend: function (type, item) {
         item.relationship = type;
-        item.image = _.has(item, 'images.data.url') ? item.images.data.url : DefaultProfile;
-        item.flips = item.flips == null ? Math.floor(Math.random() * 10) : item.flips;
+        console.log(item);
+        item.image = _.has(item, 'images.data[0].url') ? item.images.data[0].url : DefaultProfile;
+        item.flips = item.flips == null ? 0 : item.flips.data.length;
         return item;
+    },
+    renderFlipsEarned: function (item) {
+        if (item.roles && item.roles.data && !~item.roles.data.indexOf('Student')) {
+            return null;
+        }
+        return (
+            <p className="userFlips">{item.flips} Flips Earned</p>
+        );
     },
     renderFlip: function (item){
         return (
@@ -80,7 +89,7 @@ var Page = React.createClass({
                     </div>
                     <p className="linkText" >{item.username}</p>
                 </Link>
-                <p className="userFlips">{item.flips} Flips Earned</p>
+                {this.renderFlipsEarned(item)}
             </div>
         );
     },
@@ -88,7 +97,7 @@ var Page = React.createClass({
         return (
            <Layout className="friends-page">
                 <form>
-                    <Fetcher ref="fetcher" url={ GLOBALS.API_URL + 'friends'} transform={data => {
+                    <Fetcher ref="fetcher" url={ GLOBALS.API_URL + 'friends?include=roles,images,flips'} transform={data => {
                         data = [].concat(
                             _.map(data.friendrequests, this.transformFriend.bind(this, 'requested')),
                             _.map(data.acceptedfriends, this.transformFriend.bind(this, 'accepted')),
