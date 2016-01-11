@@ -5,7 +5,8 @@ import {Button, Glyphicon} from 'react-bootstrap';
 import Authorization from 'components/authorization';
 import EventManager from 'components/event_manager';
 
-import LOGO_URL from 'media/logo.png';
+//import LOGO_URL from 'media/logo.png';
+import LOGO_URL from 'media/logoalpha.png';
 import LOGOUT_URL from 'media/pt_logout_on.png';
 
 const LOGOUT = 'logout';
