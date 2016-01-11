@@ -63,9 +63,10 @@ var Page = React.createClass({
     },
     transformFriend: function (type, item) {
         var realFriend = _.find(this.friends, friend => friend.uuid === item.uuid);
-        item = realFriend;
+        if (realFriend != null) {
+            item = realFriend;
+        }
         item.relationship = type;
-        console.log(item);
         item.image = _.has(item, 'images.data[0].url') ? item.images.data[0].url : DefaultProfile;
         item.flips = item.flips == null ? 0 : item.flips.data.length;
         return item;
