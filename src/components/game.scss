@@ -1,7 +1,10 @@
 .game {
 
     iframe {
-        width: 100%;
+        width: calc(75vh * 1.77);
         height: 75vh;
+        transform: translateX(-50%);
+        left: 50%;
+        position: relative;
     }
 }
