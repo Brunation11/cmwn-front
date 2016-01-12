@@ -22,6 +22,14 @@
         <!-- endinject -->
     </head>
     <body>
+<?php 
+    echo '<p>Hello World</p>';
+    if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') {
+        header('X-Forwarded-Proto: https');
+    } else {
+        header('X-Forwarded-Proto: http');
+    }
+?>
         <div id="pageerror"><a href="/login"> </a></div>
         <div id="cmwn-app"></div>
         <!--[if lt IE 9]>

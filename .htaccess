@@ -3,11 +3,13 @@ Options +FollowSymLinks +ExecCGI
 <IfModule mod_rewrite.c>
 
 RewriteEngine On
+RewriteCond %{REQUEST_URI}  !(\.pdf|\.css|\.png|\.jpg|\.gif|\.jpeg|\.bmp|\.js|\.ico|\.woff|\.php)$
+RewriteCond %{HTTPS} =on [OR]
 RewriteCond %{HTTP:X-Forwarded-Proto} =https
-RewriteCond %{REQUEST_URI}  !(\.pdf|\.css|\.png|\.jpg|\.gif|\.jpeg|\.bmp|\.js|\.ico|\.woff)$
-RewriteRule (.*)  index.html [QSA,L]
+RewriteRule (.*)  index.php [QSA,L]
 
-RewriteCond %{HTTP:X-Forwarded-Proto} =http
+RewriteCond %{HTTP:X-Forwarded-Proto} =http [OR]
+RewriteCond %{HTTPS} !=on
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L]
 
 
