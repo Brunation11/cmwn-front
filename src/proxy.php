@@ -18,18 +18,39 @@ define( 'CSAJAX_FILTERS', true );
  * If set to false, $valid_requests should hold the whole URL ( without the parameters ) i.e. http://example.com/this/is/long/url/
  * Recommended value: false (for security reasons - do not forget that anyone can access your proxy)
  */
-define( 'CSAJAX_FILTER_DOMAIN', false );
+define( 'CSAJAX_FILTER_DOMAIN', true );
 
 /**
  * Set debugging to true to receive additional messages - really helpful on development
  */
-define( 'CSAJAX_DEBUG', false );
+define( 'CSAJAX_DEBUG', true );
 
 /**
  * A set of valid cross domain requests
  */
 $valid_requests = array(
 	// 'example.com'
+    '*.changemyworldnow.com',
+    'loc.changemyworldnow.com',
+    'dev.changemyworldnow.com',
+    'changemyworldnow.com',
+    'lapi.changemyworldnow.com',
+    'papi.changemyworldnow.com',
+    'api.changemyworldnow.com',
+    'http://*.changemyworldnow.com',
+    'http://loc.changemyworldnow.com',
+    'http://dev.changemyworldnow.com',
+    'http://changemyworldnow.com',
+    'http://lapi.changemyworldnow.com',
+    'http://papi.changemyworldnow.com',
+    'http://api.changemyworldnow.com',
+    'https://*.changemyworldnow.com',
+    'https://loc.changemyworldnow.com',
+    'https://dev.changemyworldnow.com',
+    'https://changemyworldnow.com',
+    'https://lapi.changemyworldnow.com',
+    'https://papi.changemyworldnow.com',
+    'https://api.changemyworldnow.com'
 );
 
 /* * * STOP EDITING HERE UNLESS YOU KNOW WHAT YOU ARE DOING * * */
