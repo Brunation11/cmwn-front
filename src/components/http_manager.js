@@ -78,10 +78,12 @@ var _getRequestPromise = function (method, request, body, headers) {
 };
 
 var _makeRequest = function (verb, requests){
+    var isIe9 = !!~document.getElementsByTagName('html')[0].className.indexOf('ie9');
     var promises = _.map(requests, req => {
         var abort;
         var promise = new Promise((res, rej) => {
             var xhr = new XMLHttpRequest();
+            var url;
             abort = () => { //Promise constructor does not expose `this`, must attach outside
                 xhr.abort();
                 res(null);
@@ -92,7 +94,11 @@ var _makeRequest = function (verb, requests){
                     if (xhr.readyState !== 4) {
                         return;
                     }
+                    console.log('this is for reaaaaaaal');
                     try {
+                        eval('debugger;');
+                        console.log(JSON.stringify(xhr))
+                        console.log(JSON.stringify(xhr.response))
                         response = (_.isObject(xhr.response) ? xhr.response : JSON.parse(xhr.response));
                     } catch (err) {
                         response = xhr.response;
@@ -110,9 +116,23 @@ var _makeRequest = function (verb, requests){
                         req.url += `&_token=${this._token}`;
                     }
                 }
-                xhr.open(verb, req.url, true);
 
-                xhr.withCredentials = true;
+                xhr.onload = () => { };
+
+                //if (!isIe9) {
+                    url = req.url;
+                //} else {
+                //    url = '/proxy.php?csurl=' + req.url;
+                //}
+
+                xhr.open(verb, url, true);
+
+                if (!isIe9) {
+                    xhr.withCredentials = true;
+                    //xhr.setRequestHeader('X-Proxy-URL', req.url);
+                } else {
+                    //xhr.setRequestHeader('X-Proxy-URL', req.url);
+                }
                 _.each(req.headers, (header, key) => {
                     xhr.setRequestHeader(key, header);
                 });
@@ -131,7 +151,16 @@ var _makeRequest = function (verb, requests){
                         return acc;
                     }, new FormData());
                 }
-                xhr.send(req.body);
+                xhr.onprogress = function (){ };
+                xhr.ontimeout = function (){ };
+                xhr.onerror = function () { };
+                setTimeout(function () {
+                    if (verb.toLowerCase() === 'get') {
+                        xhr.send();
+                    } else {
+                        xhr.send(req.body);
+                    }
+                }, 0);
             } catch (err) {
                 rej(err);
             }
