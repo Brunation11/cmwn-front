@@ -29,9 +29,9 @@
         <script>
             xdomain.debug = true;
             xdomain.slaves({
-                'https://*.changemyworldnow.com': '/proxy.php',
-                'https://papi.changemyworldnow.com': '/proxy.php',
-                'https://changemyworldnow.com': '/proxy.php'
+                'https://*.changemyworldnow.com': '/proxy.html',
+                'https://papi.changemyworldnow.com': '/proxy.html',
+                'https://changemyworldnow.com': '/proxy.html'
             });
         </script>
     </head>
