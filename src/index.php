@@ -52,7 +52,7 @@
         <![endif]-->
         <!--[if IE]>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.3.14/polyfill.min.js"></script>
-
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/flexie/1.0.3/flexie.min.js"></script>
         <![endif]-->
         <script>
             var style = document.createElement('style');
