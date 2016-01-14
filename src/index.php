@@ -26,14 +26,16 @@
         <!-- inject:env -->
         <!-- endinject -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/xdomain/0.7.3/xdomain.min.js" ></script>
-        <script>
-            xdomain.debug = true;
-            xdomain.slaves({
-                'https://*.changemyworldnow.com': '/proxy.html',
-                'https://papi.changemyworldnow.com': '/proxy.html',
-                'https://changemyworldnow.com': '/proxy.html'
-            });
-        </script>
+        <!--[if IE]>
+            <script>
+                xdomain.debug = true;
+                xdomain.slaves({
+                    'https://*.changemyworldnow.com': '/proxy.html',
+                    'https://papi.changemyworldnow.com': '/proxy.html',
+                    'https://changemyworldnow.com': '/proxy.html'
+                });
+            </script>
+        <![endif]-->
     </head>
     <body>
         <div id="pageerror"><a href="/login"> </a></div>

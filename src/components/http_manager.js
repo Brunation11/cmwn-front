@@ -113,7 +113,6 @@ var _makeRequest = function (verb, requests){
                     }
                 }
 
-                xhr.onload = () => { };
 
                 url = req.url;
 
@@ -139,15 +138,19 @@ var _makeRequest = function (verb, requests){
                         return acc;
                     }, new FormData());
                 }
-                xhr.onprogress = function () {};
-                xhr.ontimeout = function () {};
-                xhr.onerror = function () {};
+                //ie9 dislikes these events being undefined
+                xhr.onload = _.noop;
+                xhr.onprogress = _.noop;
+                xhr.ontimeout = _.noop;
+                xhr.onerror = _.noop;
+                //timeout handles issue where ie9 will fail requests instantaneously on blocked thread
                 setTimeout(function () {
                     if (verb.toLowerCase() === 'get') {
                         xhr.send();
                     } else if(!isIe9) {
                         xhr.send(req.body);
                     } else {
+                        /** @TODO MPR, 1/13/16: This is not the ideal way to handle this.*/
                         body = _.reduce(req.body, (a, v, k) => {
                             a += window.encodeURIComponent(k) + '=' + window.encodeURIComponent(v) + '&';
                             return a;
