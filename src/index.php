@@ -25,8 +25,8 @@
         <!-- endinject -->
         <!-- inject:env -->
         <!-- endinject -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/xdomain/0.7.3/xdomain.min.js" ></script>
         <!--[if IE]>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/xdomain/0.7.3/xdomain.min.js" ></script>
             <script>
                 xdomain.debug = true;
                 xdomain.slaves({
