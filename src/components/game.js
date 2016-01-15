@@ -67,6 +67,12 @@ var Game = React.createClass({
     clearEvent: function () {
         window.removeEventListener('game-event', this.gameEventHandler);
     },
+    dispatchPlatformEvent(type, data) {
+        /** TODO: MPR, 1/15/16: Polyfill event */
+        var event = new Event('platform-event');
+        _.defaults(event, {type, data});
+        this.refs.gameRef.dispatchEvent(event);
+    },
     makeFullScreen: function () {
         ReactDOM.findDOMNode(this.refs.gameRef).webkitRequestFullScreen();
     },
@@ -78,8 +84,9 @@ var Game = React.createClass({
             <div className="game">
                 <iframe ref="gameRef" src={this.props.url} />
                 <Button onClick={this.makeFullScreen}><Glyphicon glyph="fullscreen" /> Full Screen</Button>
+                <Button className={ClassNames({hidden: this.props.isTeacher})} onClick={this.dispatchPlatformEvent('toggle-demo-mode')}><Glyphicon glyph="fullscreen" /> Full Screen</Button>
             </div>
-        );
+        ) ;
     }
 });
 
