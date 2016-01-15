@@ -5,6 +5,9 @@ import {Carousel, CarouselItem, Button, Modal} from 'react-bootstrap';
 
 import Toast from 'components/toast';
 import History from 'components/history';
+import GLOBALS from 'components/globals';
+import HttpManager from 'components/http_manager';
+import Authorization from 'components/authorization';
 
 import 'routes/home.scss';
 import LOGO_URL from 'media/logo.png';
@@ -36,6 +39,7 @@ const COPY = {
         WORK: 'Work with Us',
         CONTACT: 'Contact Us',
         LOGIN: 'Login',
+        DEMO: 'Demo',
         SIGNUP: 'School Signup',
         WATCH: 'Watch the video'
     },
@@ -202,6 +206,9 @@ var Header = React.createClass({
             contactOpen: false,
         };
     },
+    componentWillMount: function () {
+        this.getToken();
+    },
     componentDidMount: function () {
         this.renderCaptcha();
     },
@@ -213,6 +220,40 @@ var Header = React.createClass({
             //unhelpful, unbreaking 'container not empty' error. Ignoring.
             return err;
         }
+    },
+    getToken: function () {
+        var req = HttpManager.GET({url: `${GLOBALS.API_URL}csrf_token`, withCredentials: true, withoutToken: true, withoutXSRF: true});
+        req.then(res => {
+            this.setState({_token: res.response.token});
+            HttpManager.setToken(res.response.token);
+        });
+    },
+    login: function () {
+        var req, req2;
+        req2 = HttpManager.POST({
+            url: `${GLOBALS.API_URL}create_demo_student`
+        });
+        req2.then(createRes => {
+            req = HttpManager.POST({
+                url: `${GLOBALS.API_URL}auth/login`,
+                withCredentials: true,
+                withoutXSRF: true,
+                handleErrors: false
+            }, {}, {
+                'X-CSRF-TOKEN': this.state._token,
+                'Authorization': `Basic ${window.btoa(createRes.response.data.username + '@changemyworldnow.com:demo123')}`
+            });
+            req.then(res => {
+                if (res.status < 300 && res.status >= 200) {
+                    Authorization.reloadUser();
+                    History.replaceState(null, '/profile');
+                } else {
+                    throw res;
+                }
+            }).catch(() => {
+                // @TODO MPR, 12/22/15: Alert user of error
+            });
+        });
     },
     renderCaptcha: function () {
         var captchas = document.getElementsByClassName('grecaptcha');
@@ -241,6 +282,9 @@ var Header = React.createClass({
     },
     loginAlert: function () {
         History.replaceState(null, '/login');
+    },
+    launchDemo: function () {
+        this.login();
     },
     signupAlert: function () {
         Toast.success(COPY.ALERTS.SIGNUP.TEXT);
@@ -280,6 +324,9 @@ var Header = React.createClass({
                     </Button>
                     <Button id="login" className="purple" onClick={this.loginAlert}>
                         {COPY.BUTTONS.LOGIN}
+                    </Button>
+                    <Button id="demo" className="blue" onClick={this.launchDemo}>
+                        {COPY.BUTTONS.DEMO}
                     </Button>
                 </div>
             </div>
