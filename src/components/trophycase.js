@@ -33,7 +33,7 @@ var Trophycase = React.createClass({
     },
     renderCase: function (props) {
         var complete, inProgress;
-        if (props.data.length === 0) {
+        if (props.data && props.data.length === 0) {
             return null;
         }
         complete = _.filter(props.data, item => item.progress === 100);
