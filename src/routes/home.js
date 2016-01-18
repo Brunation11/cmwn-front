@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router';
 import _ from 'lodash';
-import {Carousel, CarouselItem, Button, Modal} from 'react-bootstrap';
+import {Input, Carousel, CarouselItem, Button, Modal} from 'react-bootstrap';
 
 import Toast from 'components/toast';
 import History from 'components/history';
@@ -228,11 +228,11 @@ var Header = React.createClass({
             HttpManager.setToken(res.response.token);
         });
     },
-    login: function () {
+    login: function (code) {
         var req, req2;
         req2 = HttpManager.POST({
             url: `${GLOBALS.API_URL}create_demo_student`
-        });
+        }, {code});
         req2.then(createRes => {
             req = HttpManager.POST({
                 url: `${GLOBALS.API_URL}auth/login`,
@@ -284,7 +284,11 @@ var Header = React.createClass({
         History.replaceState(null, '/login');
     },
     launchDemo: function () {
-        this.login();
+        this.setState({demoOpen: true});
+    },
+    confirmDemo: function () {
+        this.login(this.state.demoText);
+        this.setState({demoOpen: false});
     },
     signupAlert: function () {
         Toast.success(COPY.ALERTS.SIGNUP.TEXT);
@@ -292,6 +296,18 @@ var Header = React.createClass({
     render: function () {
         return (
             <div>
+                <Modal show={this.state.demoOpen} onHide={this.confirmDemo}>
+                    <Modal.Body>
+                        <p>Please enter your demo code</p>
+                        <Input
+                            ref="demoCode"
+                            type="text"
+                            value={this.state.demoText}
+                            onChange={e => this.setState({demoText: e.target.value})} //eslint-disable-line camelcase
+                        />
+                        <Button onClick={this.confirmDemo}> Submit </Button>
+                    </Modal.Body>
+                </Modal>
                 <Modal show={this.props.workOpen || this.state.workOpen} onHide={this.hideWorkModal}>
                     <Modal.Body>
                         {COPY.MODALS.WORK}
