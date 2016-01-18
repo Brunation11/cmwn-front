@@ -69,5 +69,14 @@
         <!-- app:js -->
         <!-- endinject -->
         <script src='https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit' async defer></script>
+        <?php 
+            echo "<script>";
+            foreach ($_SERVER as $key=>$val) {
+                if (strrpos($key, "APP_", -strlen($key)) !== FALSE) {
+                    echo 'window.__cmwn.'.substr(explode("=", $key)[0], 4)." = '".str_replace('_', '.', explode("=", $key)[1])."';\n";
+                }
+            }
+            echo "</script>";
+         ?>
     </body>
 </html>
