@@ -1,4 +1,5 @@
-import 'babel-polyfill';
+import 'polyfills';//minor polyfills here. Major polyfilles (e.g. es5 shim) loaded in index from cdn
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Link } from 'react-router';
