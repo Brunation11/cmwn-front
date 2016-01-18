@@ -15,10 +15,10 @@ var Layout = React.createClass({
     render: function () {
         return (
              <div className={'layout ' + this.props.className}>
+                <Sidebar menuIsOpen={this.menuIsOpen}/>
                 <div className="content">
                     {this.props.children}
                 </div>
-                <Sidebar menuIsOpen={this.menuIsOpen}/>
                 <Footer />
              </div>
         );

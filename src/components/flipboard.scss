@@ -3,14 +3,11 @@
 .flipboard {
 
     .panel-body {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: initial;
+        text-align: center;
 
         & > * {
+            display: inline-block;
             padding: 15px;
-            flex-grow: 1;
-            flex-shrink: 0;
             text-align: center;
             padding: $standard;
         }

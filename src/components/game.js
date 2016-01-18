@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'lodash';
+import Screenfull from 'screenfull';
 
 import {Button, Glyphicon} from 'react-bootstrap';
 
@@ -68,7 +69,10 @@ var Game = React.createClass({
         window.removeEventListener('game-event', this.gameEventHandler);
     },
     makeFullScreen: function () {
-        ReactDOM.findDOMNode(this.refs.gameRef).webkitRequestFullScreen();
+        if (Screenfull.enabled) {
+            Screenfull.request(ReactDOM.findDOMNode(this.refs.gameRef));
+        }
+        //ReactDOM.findDOMNode(this.refs.gameRef).webkitRequestFullScreen();
     },
     render: function () {
         if (this.props.url == null) {

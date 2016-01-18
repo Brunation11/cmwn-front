@@ -25,8 +25,8 @@
         <!-- endinject -->
         <!-- inject:env -->
         <!-- endinject -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/xdomain/0.7.3/xdomain.min.js" ></script>
         <!--[if IE]>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/xdomain/0.7.3/xdomain.min.js" ></script>
             <script>
                 xdomain.debug = true;
                 xdomain.slaves({
@@ -56,6 +56,21 @@
             <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.3.14/polyfill.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/flexie/1.0.3/flexie.min.js"></script>
         <![endif]-->
+        <script type="text/javascript">
+            var isIE10 = false;
+            /*@cc_on
+                if (/^10/.test(@_jscript_version)) {
+                    isIE10 = true;
+                }
+            @*/
+            if (isIE10) {
+                var fileref=document.createElement('script');
+                fileref.setAttribute("type","text/javascript");
+                fileref.setAttribute("src", "https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.3.14/polyfill.min.js");
+                document.head.appendChild(fileref);
+                document.getElementsByTagName('html')[0].className = 'ie10';
+            }
+        </script>
         <script>
             var style = document.createElement('style');
             style.appendChild(document.createTextNode(''));
