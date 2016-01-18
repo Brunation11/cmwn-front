@@ -127,7 +127,7 @@ gulp.task("build-prod", executeAsProcess('gulp build', ['build', '--development'
 gulp.task("build-production", executeAsProcess('gulp build', ['build', '--development']));
 
 gulp.task('index', ['primary-style', 'webpack:build', 'explicit-utf-8', 'sri'], function () {
-    var target = gulp.src('./src/index.html');
+    var target = gulp.src('./src/index.php');
     var sriHashes = JSON.parse(fs.readFileSync('./build/sri.json'));
 
     return target

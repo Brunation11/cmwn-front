@@ -78,10 +78,12 @@ var _getRequestPromise = function (method, request, body, headers) {
 };
 
 var _makeRequest = function (verb, requests){
+    var isIe9 = !!~document.getElementsByTagName('html')[0].className.indexOf('ie9');
     var promises = _.map(requests, req => {
         var abort;
         var promise = new Promise((res, rej) => {
             var xhr = new XMLHttpRequest();
+            var url, body;
             abort = () => { //Promise constructor does not expose `this`, must attach outside
                 xhr.abort();
                 res(null);
@@ -110,9 +112,14 @@ var _makeRequest = function (verb, requests){
                         req.url += `&_token=${this._token}`;
                     }
                 }
-                xhr.open(verb, req.url, true);
+
+
+                url = req.url;
+
+                xhr.open(verb, url, true);
 
                 xhr.withCredentials = true;
+
                 _.each(req.headers, (header, key) => {
                     xhr.setRequestHeader(key, header);
                 });
@@ -131,7 +138,26 @@ var _makeRequest = function (verb, requests){
                         return acc;
                     }, new FormData());
                 }
-                xhr.send(req.body);
+                //ie9 dislikes these events being undefined
+                xhr.onload = _.noop;
+                xhr.onprogress = _.noop;
+                xhr.ontimeout = _.noop;
+                xhr.onerror = _.noop;
+                //timeout handles issue where ie9 will fail requests instantaneously on blocked thread
+                setTimeout(function () {
+                    if (verb.toLowerCase() === 'get') {
+                        xhr.send();
+                    } else if(!isIe9) {
+                        xhr.send(req.body);
+                    } else {
+                        /** @TODO MPR, 1/13/16: This is not the ideal way to handle this.*/
+                        body = _.reduce(req.body, (a, v, k) => {
+                            a += window.encodeURIComponent(k) + '=' + window.encodeURIComponent(v) + '&';
+                            return a;
+                        }, '');
+                        xhr.send(body);
+                    }
+                }, 0);
             } catch (err) {
                 rej(err);
             }
