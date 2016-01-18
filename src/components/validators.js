@@ -13,8 +13,17 @@ var required = function (str) {
     return 'error';
 };
 
-var length = function (str, min = 3) {
+var min = function (min, str) {
+    min = min == null ? 3 : min;
     if (str && str.length > min) {
+        return 'success';
+    }
+    return 'error';
+};
+
+var max = function (max, str) {
+    max = max == null ? 25 : max;
+    if (str && str.length < max) {
         return 'success';
     }
     return 'error';
@@ -28,6 +37,10 @@ var email = function (str) {
     /** from http://stackoverflow.com/questions/46155/validate-email-address-in-javascript */
     var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
     return re.test(str) ? 'success' : 'error';
+};
+
+var regex = function (test, str) {
+    return test.test(str) ? 'success' : 'error';
 };
 
 /**
@@ -45,8 +58,10 @@ var Validate = function (str) {
 };
 
 Validate.required = required;
-Validate.len = length;
+Validate.min = min;
+Validate.max = max;
 Validate.date = date;
 Validate.email = email;
+Validate.regex = regex;
 export default Validate;
 

@@ -58,7 +58,7 @@ var Form = React.createClass({
         return (
             <form {...self.props}>
                 {React.Children.map(self.props.children, child => {
-                    var validationFn, propsForChild, props;
+                    var validationFn, propsForChild, props, validators;
 
                     if (child == null) {
                         return child;
@@ -68,22 +68,39 @@ var Form = React.createClass({
 
                     if (props.validate != null) {
                         propsForChild = Immutable.Map(props);
+                        validators = [].concat(props.validate);
 
-                        if (_.isFunction(props.validate)) {
-                            validationFn = () => {
-                                if (self && self.refs && child.ref && self.refs[child.ref] && _.isFunction(self.refs[child.ref].getValue())) {
-                                    return props.validate(self.refs[child.ref].getValue());
+                        validationFn = _.reduce(validators, (a, v) => {
+                            if (_.isFunction(v)) {
+                                return a(() => {
+                                    if (self && self.refs && child.ref && self.refs[child.ref] && _.isFunction(self.refs[child.ref].getValue)) {
+                                        return v(self.refs[child.ref].getValue());
+                                    }
+                                    return 'success';
+                                });
+                            } else {
+                                return a(() => {
+                                    if (self && self.refs && child.ref && self.refs[child.ref] && _.isFunction(self.refs[child.ref].getValue)) {
+                                        return Validator.call(child, self.refs[child.ref].getValue(), ...v.split(','));
+                                    }
+                                    return 'success';
+                                });
+                            }
+                        }, function (chainValidator) {
+                            var chainer = function (chainValidator_) {
+                                var lastValidator = this;
+                                if (chainValidator_ == null) {
+                                    return lastValidator();
                                 }
-                                return 'success';
+
+                                return chainer.bind(() => {
+                                    return _.isFunction(lastValidator) ?
+                                        lastValidator() === 'error' ? 'error' : chainValidator_() :
+                                        chainValidator_();
+                                });
                             };
-                        } else {
-                            validationFn = () => {
-                                if (self && self.refs && child.ref && self.refs[child.ref] && _.isFunction(self.refs[child.ref].getValue)) {
-                                    return Validator.call(child, self.refs[child.ref].getValue(), ...props.validate.split(','));
-                                }
-                                return 'success';
-                            };
-                        }
+                            return chainer(chainValidator);
+                        });
 
                         propsForChild = propsForChild.set('validate', validationFn);
                         propsForChild = propsForChild.set('ref', child.ref);

@@ -123,8 +123,11 @@ var Fields = React.createClass({
                         value={this.state.username}
                         placeholder="Username"
                         label="Username"
-                        validate="required"
                         ref="usernameInput"
+                        validate={[
+                            Validate.max.bind(null, 25),
+                            Validate.regex.bind(null, /^[a-zA-Z0-9_-]+$/),
+                        ]}
                         name="usernameInput"
                         validationEvent="onBlur"
                         hasFeedback
