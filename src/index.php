@@ -96,13 +96,6 @@
             rg4js('apiKey', 'DU/YhFbNbg3/tpaTjYBtvw==');
             rg4js('enableCrashReporting', true);
             rg4js('enablePulse', true);
-            rg4js('setUser', {
-              identifier: 'users_email_address_or_unique_id@domain.com',
-              isAnonymous: false,
-              email: 'users_email_address@domain.com',
-              firstName: 'Firstname',
-              fullName: 'Firstname Lastname'
-            });
         </script>
         <!-- rollbar -->
         <!-- errorception in head -->

@@ -44,6 +44,11 @@ class _Authorization {
             }
             this._resolve(res.response.data);
             EventManager.update('userChanged', res.response.data.uuid);
+            rg4js('setUser', { //eslint-disable-line no-undef
+                identifier: res.response.data.uuid,
+                isAnonymous: false,
+                email: res.response.data.username
+            });
         }).catch(() => {
             //user is not logged in.
             this.logout();
