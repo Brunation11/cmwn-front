@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import { Router, Link } from 'react-router';
 
 import GlobalHeader from 'components/global_header';
+import Log from 'components/log';
 import History from 'components/history';
 import GLOBALS from 'components/globals';
 import PublicRoutes from 'public_routes';
@@ -103,10 +104,15 @@ const routes = {
 };
 
 function run() {
+    window._bootstrap_attempts = window._bootstrap_attempts || 0; //eslint-disable-line camelcase
     try {
+        Log.info('Application started');
         ReactDOM.render(<Router history={History} routes={routes} />, document.getElementById('cmwn-app'));
     } catch (err) {
-        //@TODO MPR, 11/31/15: attempt to rebootstrap to homepage on unhandled exception
+        Log.warn('Application bootstrap failed, attempting to recover. Attempt ' + window._bootstrap_attempts + ' out of 5');
+        if (window._bootstrap_attempts < 5) {
+            window.setTimeout(run, 500);
+        }
         Errors.show404(); /** @TODO MPR, 11/31/15: create distinct "something went wrong" error page */
     }
 }
