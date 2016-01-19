@@ -69,6 +69,10 @@
         <!-- app:js -->
         <!-- endinject -->
         <script src='https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit' async defer></script>
+        <script
+          src="//d2wy8f7a9ursnm.cloudfront.net/bugsnag-2.min.js"
+          data-apikey="c0924f5c3e76f5826be7f38644d1aead">
+        </script>
         <?php 
             echo "<script>";
             foreach ($_SERVER as $key=>$val) {
