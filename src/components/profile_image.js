@@ -27,11 +27,11 @@ var Image = React.createClass({
         } else {
             HttpManager.GET({url: `${GLOBALS.API_URL}users/${this.props.uuid}/image`, handleErrors: false})
                 .then(res => {
-                    if (res && res.response && res.response.data && _.isString(res.response.data[0].url)) {
-                        this.setState({profileImage: res.response.data[0].url});
+                    if (res && res.response && res.response.data && _.isString(_.last(res.response.data).url)) {
+                        this.setState({profileImage: _.last(res.response.data).url});
                     }
                 }).catch(() => {
-                   Toast.error(NO_IMAGE);
+                    Toast.error(NO_IMAGE);
                 });
         }
     },
