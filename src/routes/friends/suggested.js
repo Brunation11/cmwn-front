@@ -35,8 +35,6 @@ var Page = React.createClass({
         }).then(() => {
             this.refs.datasource.getData().then(this.forceUpdate);
         }).catch(this.friendErr);
-        item.relationship = 'Pending';
-        this.forceUpdate;
     },
     friendErr: function () {
         Toast.error(FRIEND_PROBLEM);
@@ -59,7 +57,7 @@ var Page = React.createClass({
             return null;
         }
         return (
-            <p className="userFlips">{item.flips} Flips Earned</p>
+            <p className="userFlips">{item.flips.data.length} Flips Earned</p>
         );
     },
     renderFlip: function (item){
