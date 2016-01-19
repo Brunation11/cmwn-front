@@ -134,7 +134,6 @@ var Profile = React.createClass({
                      <EditLink base="/profile" uuid={this.state.uuid} canUpdate={this.state.can_update} />
                      <ProfileImage className={ClassNames({hidden: this.state.uuid === Authorization.currentUser.uuid})} uuid={this.state.uuid} link-below={true}/>
                      <div className="info">
-                        <p><strong>Name</strong>: {this.state.first_name} {this.state.last_name}</p>
                         <p><strong>Classes</strong>: {_.map(this.state.groups.data, item => item.title).join(', ')}</p>
                      </div>
                  </div>
