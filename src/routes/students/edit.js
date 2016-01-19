@@ -3,6 +3,7 @@ import _ from 'lodash';
 import {Button, Input, Panel} from 'react-bootstrap';
 
 import HttpManager from 'components/http_manager';
+import Toast from 'components/toast';
 import Authorization from 'components/authorization';
 import Layout from 'layouts/two_col';
 import GLOBALS from 'components/globals';
@@ -48,6 +49,10 @@ var Fields = React.createClass({
                 //job: this.state.dob,
                 //email: this.state.email,
                 username: this.state.username
+            }).then(() => {
+                Toast.success('Profile Updated');
+            }).catch(() => {
+                Toast.error('There was a problem updating your profile. Please try again later.');
             });
         }
     },
