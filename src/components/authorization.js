@@ -25,7 +25,6 @@ class _Authorization {
     logout() {
         window.localStorage.setItem('com.cmwn.platform.userName', null);
         window.localStorage.setItem('com.cmwn.platform.userId', null);
-        window.localStorage.setItem('com.cmwn.platform.fullName', null);
         window.localStorage.setItem('com.cmwn.platform.profileImage', null);
         window.localStorage.setItem('com.cmwn.platform.roles', null);
         EventManager.update('userChanged', null);
@@ -33,7 +32,6 @@ class _Authorization {
     reloadUser() {
         var getUser = HttpManager.GET({url: `${GLOBALS.API_URL}users/me?include=images,roles`, handleErrors: false});
         getUser.then(res => {
-            window.localStorage.setItem('com.cmwn.platform.fullName', res.response.data.first_name + ' ' + res.response.data.last_name);
             window.localStorage.setItem('com.cmwn.platform.userName', res.response.data.username);
             window.localStorage.setItem('com.cmwn.platform.userId', res.response.data.uuid);
             if (res.response.data.roles) {
@@ -57,7 +55,6 @@ class _Authorization {
     }
     get currentUser() {
         return {
-            fullname: window.localStorage['com.cmwn.platform.fullName'],
             username: window.localStorage['com.cmwn.platform.userName'],
             roles: window.localStorage['com.cmwn.platform.roles'],
             profileImage: window.localStorage['com.cmwn.platform.profileImage'],
