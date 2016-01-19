@@ -33,6 +33,9 @@ class Logger {
         }
         trackJs.console.error(...arguments); //eslint-disable-line no-undef
         Rollbar.error(...arguments); //eslint-disable-line no-undef
+        Bugsnag.notifyException(...arguments); //eslint-disable-line no-undef
+        Raven.captureException(...arguments); //eslint-disable-line no-undef
+        Raygun.send(...arguments); //eslint-disable-line no-undef
     }
 }
 
