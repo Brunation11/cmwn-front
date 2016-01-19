@@ -27,6 +27,10 @@ body {
     }
 }
 
+h1, h2, h3 {
+    font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
+}
+
 #pageerror, #triggerederror {
     background: url("media/404.png") #fff;
     position: fixed;

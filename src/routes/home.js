@@ -307,7 +307,7 @@ var Header = React.createClass({
             <div>
                 <Modal show={this.state.demoOpen} onHide={this.confirmDemo}>
                     <Modal.Body>
-                        <p>Please enter your demo code</p>
+                        <h2 class="access">Please enter your Special Access Code</h2>
                         <Input
                             ref="demoCode"
                             type="text"
@@ -347,11 +347,11 @@ var Header = React.createClass({
                     <Button id="signup" className="green" onClick={this.displaySignupModal}>
                         {COPY.BUTTONS.SIGNUP}
                     </Button>
-                    <Button id="login" className="purple" onClick={this.loginAlert}>
+                    <Button id="login" className="hidden" onClick={this.loginAlert}>
                         {COPY.BUTTONS.LOGIN}
                     </Button>
-                    <Button id="demo" className="blue" onClick={this.launchDemo}>
-                        {COPY.BUTTONS.DEMO}
+                    <Button id="demo" className="purple" onClick={this.launchDemo}>
+                        {COPY.BUTTONS.LOGIN}
                     </Button>
                 </div>
             </div>
