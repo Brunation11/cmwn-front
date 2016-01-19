@@ -4,6 +4,7 @@ import _ from 'lodash';
 import {Input, Carousel, CarouselItem, Button, Modal} from 'react-bootstrap';
 
 import Toast from 'components/toast';
+import Log from 'components/log';
 import History from 'components/history';
 import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
@@ -222,6 +223,7 @@ var Header = React.createClass({
         } catch (err) {
             //captcha doesnt always clean itself up nicely, throws its own
             //unhelpful, unbreaking 'container not empty' error. Ignoring.
+            Log.warn(err, 'Captcha not fully destroyed');
             return err;
         }
     },
@@ -254,18 +256,21 @@ var Header = React.createClass({
                 req.then(res => {
                     if (res.status < 300 && res.status >= 200) {
                         Authorization.reloadUser();
+                        Log.info('User login successful');
                         History.replaceState(null, '/profile');
                     } else {
                         throw res;
                     }
-                }).catch(() => {
+                }).catch(e => {
                     Toast.success(ERRORS.BAD_PASS);
+                    Log.log(e, 'Invalid login');
                 });
             } else {
                 throw createRes;
             }
-        }).catch(() => {
+        }).catch(e => {
             Toast.success(ERRORS.BAD_PASS);
+            Log.log(e, 'Invalid login');
         });
     },
     renderCaptcha: function () {

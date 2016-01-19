@@ -9,6 +9,8 @@
  */
 import _ from 'lodash';
 
+import Log from 'components/log';
+
 var _pendingChanges = [];
 var _state = {};
 var _pendingChangeTracker = {};
@@ -48,6 +50,7 @@ var _commitChanges = function (id) {
             handlers = _.get(_changeHandlers, change.key);
             _.each(handlers, handle => handle(change.val));
         } catch(err) {
+            Log.error(err, 'Exception generated during event cycle', change, _pendingChanges);
             change.resolver(err);//we resolve here to allow other changes to continue updating.
         }
     });

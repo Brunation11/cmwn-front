@@ -3,6 +3,7 @@ import _ from 'lodash';
 import Immutable from 'immutable';
 
 import HttpManager from 'components/http_manager';
+import Log from 'components/log';
 
 var Fetcher = React.createClass({
     getInitialState: function () {
@@ -23,7 +24,7 @@ var Fetcher = React.createClass({
         return urlData.then(res => {
             if (res.response.data == null) {
                 this.data = res.response;
-                console.warn('An endpoint has returned an unexpected result (No Data Property). Attempting to proceed.'); //eslint-disable-line no-console
+                Log.warn('An endpoint has returned an unexpected result (No Data Property). Attempting to proceed.'); //eslint-disable-line no-console
             } else {
                 this.data = res.response.data;
             }
@@ -34,8 +35,8 @@ var Fetcher = React.createClass({
             return Promise.resolve(this.data);
         }).catch(err => {
             /** @TODO MPR, 10/18/15: Implement error page */
-            console.info(err); //eslint-disable-line no-console
-            this.data = this.props.data;
+            Log.info(err); //eslint-disable-line no-console
+            this.data = this.props.data || [];
             this.forceUpdate();
             return Promise.resolve(this.data);
         });

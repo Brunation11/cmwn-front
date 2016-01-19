@@ -7,6 +7,7 @@ import Toast from 'components/toast';
 import HttpManager from 'components/http_manager';
 import Authorization from 'components/authorization';
 import GLOBALS from 'components/globals';
+import Log from 'components/log';
 
 import 'components/profile_image.scss';
 
@@ -30,8 +31,9 @@ var Image = React.createClass({
                     if (res && res.response && res.response.data && _.isString(_.last(res.response.data).url)) {
                         this.setState({profileImage: _.last(res.response.data).url});
                     }
-                }).catch(() => {
+                }).catch(e => {
                     Toast.error(NO_IMAGE);
+                    Log.error(e, 'Image could not be extracted from user');
                 });
         }
     },
@@ -66,6 +68,7 @@ var Image = React.createClass({
                     Toast.error(MODERATION);
                 }).catch(() => {
                     Toast.error(UPLOAD_ERROR);
+                    Log.error(e, 'Failed image upload');
                 });
             });
             /* eslint-enable camelcase */

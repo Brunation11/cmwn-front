@@ -1,6 +1,7 @@
 import _ from 'lodash';
 
 import GLOBALS from 'components/globals';
+import Log from 'components/log';
 import HttpManager from 'components/http_manager';
 import PrivateRoutes from 'private_routes';
 import History from 'components/history';
@@ -27,6 +28,7 @@ class _Authorization {
         window.localStorage.setItem('com.cmwn.platform.userId', null);
         window.localStorage.setItem('com.cmwn.platform.profileImage', null);
         window.localStorage.setItem('com.cmwn.platform.roles', null);
+        Log.info('User logout successful');
         EventManager.update('userChanged', null);
     }
     reloadUser() {
@@ -45,6 +47,8 @@ class _Authorization {
             this._resolve(res.response.data);
             EventManager.update('userChanged', res.response.data.uuid);
 
+            Log.info(`User ${res.response.data.uuid} logged in`);
+
             //configure trackers to logged in user
             rg4js('setUser', { //eslint-disable-line no-undef
                 identifier: res.response.data.uuid,
@@ -62,7 +66,8 @@ class _Authorization {
                 email: res.response.data.username,
                 id: res.response.data.uuid
             });
-        }).catch(() => {
+        }).catch(e => {
+            Log.error(e, 'Error encountered during login. Logging out.');
             //user is not logged in.
             this.logout();
             if (window.location.pathname !== '/login' && window.location.pathname !== '/login/') {

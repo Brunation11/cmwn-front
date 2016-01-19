@@ -5,6 +5,7 @@ import {Link} from 'react-router';
 import {Button} from 'react-bootstrap';
 
 import Fetcher from 'components/fetcher';
+import Log from 'components/log';
 import HttpManager from 'components/http_manager';
 import FlipBoard from 'components/flipboard';
 import GLOBALS from 'components/globals';
@@ -58,8 +59,9 @@ var Page = React.createClass({
         e.stopPropagation();
         e.preventDefault();
     },
-    friendErr: function () {
+    friendErr: function (e) {
         Toast.error(FRIEND_PROBLEM);
+        Log.error(e, 'Friend request failed');
     },
     transformFriend: function (type, item) {
         var realFriend = _.find(this.friends, friend => friend.uuid === item.uuid);
