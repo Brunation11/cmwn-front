@@ -89,7 +89,7 @@ var Game = React.createClass({
         return (
             <div className="game">
                 <iframe ref="gameRef" src={this.props.url} />
-                <Button onClick={this.makeFullScreen}><Glyphicon glyph="fullscreen" />{FULLSCREEN}</Button>
+                <Button onClick={this.makeFullScreen}><Glyphicon glyph="fullscreen" /> {FULLSCREEN}</Button>
                 <Button className={ClassNames({hidden: this.props.isTeacher})} onClick={() => this.dispatchPlatformEvent('toggle-demo-mode')}>{DEMO_MODE}</Button>
             </div>
         ) ;

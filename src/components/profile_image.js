@@ -49,6 +49,7 @@ var Image = React.createClass({
                 cloud_name: 'changemyworldnow',
                 upload_preset: 'public-profile-image',
                 multiple: false,
+                resource_type: 'image',
                 cropping: 'server',
                 gravity: 'custom',
                 cropping_aspect_ratio: 1,
