@@ -55,6 +55,8 @@ class _Authorization {
             });
 
             trackJs.configure({userId: res.response.data.uuid}); //eslint-disable-line no-undef
+
+            Rollbar.configure({payload: {person: {id: res.response.data.uuid, username: res.response.data.username}}}); //eslint-disable-line no-undef
         }).catch(() => {
             //user is not logged in.
             this.logout();
