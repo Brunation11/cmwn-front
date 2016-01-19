@@ -71,9 +71,9 @@ var Game = React.createClass({
     },
     dispatchPlatformEvent(name, data) {
         /** TODO: MPR, 1/15/16: Polyfill event */
-        var event = new Event('platform-event');
+        var event = new Event('platform-event', {bubbles: true, cancelable: false});
         _.defaults(event, {type: 'platform-event', name, data});
-        this.refs.gameRef.dispatchEvent(event);
+        ReactDOM.findDOMNode(this.refs.gameRef).contentWindow.dispatchEvent(event);
     },
     makeFullScreen: function () {
         ReactDOM.findDOMNode(this.refs.gameRef).webkitRequestFullScreen();
