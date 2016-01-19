@@ -73,7 +73,7 @@
             echo "<script>";
             foreach ($_SERVER as $key=>$val) {
                 if (strrpos($key, "APP_", -strlen($key)) !== FALSE) {
-                    echo 'window.__cmwn.'.substr(explode("=", $key)[0], 4)." = '".str_replace('_', '.', explode("=", $key)[1])."';\n";
+                    echo 'window.__cmwn.'.substr($key, 4)." = '".str_replace('_', '.', $val)."';\n";
                 }
             }
             echo "</script>";
