@@ -94,6 +94,10 @@ const COPY = {
     }
 };
 
+const ERRORS = {
+    BAD_PASS: 'Sorry, that wasn\'t quite right. Please try again.'
+};
+
 const SOURCES = {
     LOGO: '',
     SLIDEBG: [
@@ -255,13 +259,13 @@ var Header = React.createClass({
                         throw res;
                     }
                 }).catch(() => {
-                    Toast.success('Sorry, that wasn\'t quite right. Please try again.');
+                    Toast.success(ERRORS.BAD_PASS);
                 });
             } else {
                 throw createRes;
             }
         }).catch(() => {
-            Toast.success('Sorry, that wasn\'t quite right. Please try again.');
+            Toast.success(ERRORS.BAD_PASS);
         });
     },
     renderCaptcha: function () {
