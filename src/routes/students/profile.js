@@ -102,7 +102,7 @@ var Profile = React.createClass({
     renderFlip: function (item){
         return (
             <div className="flip fill">
-                <a onClick={this.showModal.bind(this, 'https://games-dev.changemyworldnow.com/' + item.uuid + '/index.html')} >
+                <a onClick={this.showModal.bind(this, GLOBALS.GAME_URL + item.uuid + '/index.html')} >
                     <div className="item">
                         <span className="overlay">
                             <span className="heading">{item.title}</span>
@@ -134,7 +134,6 @@ var Profile = React.createClass({
                      <EditLink base="/profile" uuid={this.state.uuid} canUpdate={this.state.can_update} />
                      <ProfileImage className={ClassNames({hidden: this.state.uuid === Authorization.currentUser.uuid})} uuid={this.state.uuid} link-below={true}/>
                      <div className="info">
-                        <p><strong>Name</strong>: {this.state.first_name} {this.state.last_name}</p>
                         <p><strong>Classes</strong>: {_.map(this.state.groups.data, item => item.title).join(', ')}</p>
                      </div>
                  </div>

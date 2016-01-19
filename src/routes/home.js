@@ -1,10 +1,13 @@
 import React from 'react';
 import {Link} from 'react-router';
 import _ from 'lodash';
-import {Carousel, CarouselItem, Button, Modal} from 'react-bootstrap';
+import {Input, Carousel, CarouselItem, Button, Modal} from 'react-bootstrap';
 
 import Toast from 'components/toast';
 import History from 'components/history';
+import GLOBALS from 'components/globals';
+import HttpManager from 'components/http_manager';
+import Authorization from 'components/authorization';
 
 import 'routes/home.scss';
 import LOGO_URL from 'media/logo.png';
@@ -36,6 +39,7 @@ const COPY = {
         WORK: 'Work with Us',
         CONTACT: 'Contact Us',
         LOGIN: 'Login',
+        DEMO: 'Demo',
         SIGNUP: 'School Signup',
         WATCH: 'Watch the video'
     },
@@ -202,6 +206,9 @@ var Header = React.createClass({
             contactOpen: false,
         };
     },
+    componentWillMount: function () {
+        this.getToken();
+    },
     componentDidMount: function () {
         this.renderCaptcha();
     },
@@ -213,6 +220,49 @@ var Header = React.createClass({
             //unhelpful, unbreaking 'container not empty' error. Ignoring.
             return err;
         }
+    },
+    getToken: function () {
+        var req = HttpManager.GET({url: `${GLOBALS.API_URL}csrf_token`, withCredentials: true, withoutToken: true, withoutXSRF: true});
+        req.then(res => {
+            this.setState({_token: res.response.token});
+            HttpManager.setToken(res.response.token);
+        });
+    },
+    login: function (code) {
+        var req, req2;
+        req2 = HttpManager.POST({
+            url: `${GLOBALS.API_URL}create_demo_student`,
+            withCredentials: true,
+            withoutXSRF: true,
+            handleErrors: false
+        }, {code});
+        req2.then(createRes => {
+            if (createRes.status < 300 && createRes.status >= 200) {
+                req = HttpManager.POST({
+                    url: `${GLOBALS.API_URL}auth/login`,
+                    withCredentials: true,
+                    withoutXSRF: true,
+                    handleErrors: false
+                }, {}, {
+                    'X-CSRF-TOKEN': this.state._token,
+                    'Authorization': `Basic ${window.btoa(createRes.response.data.username + '@changemyworldnow.com:demo123')}`
+                });
+                req.then(res => {
+                    if (res.status < 300 && res.status >= 200) {
+                        Authorization.reloadUser();
+                        History.replaceState(null, '/profile');
+                    } else {
+                        throw res;
+                    }
+                }).catch(() => {
+                    Toast.success('Sorry, that wasn\'t quite right. Please try again.');
+                });
+            } else {
+                throw createRes;
+            }
+        }).catch(() => {
+            Toast.success('Sorry, that wasn\'t quite right. Please try again.');
+        });
     },
     renderCaptcha: function () {
         var captchas = document.getElementsByClassName('grecaptcha');
@@ -242,12 +292,31 @@ var Header = React.createClass({
     loginAlert: function () {
         History.replaceState(null, '/login');
     },
+    launchDemo: function () {
+        this.setState({demoOpen: true});
+    },
+    confirmDemo: function () {
+        this.login(this.state.demoText);
+        this.setState({demoOpen: false});
+    },
     signupAlert: function () {
         Toast.success(COPY.ALERTS.SIGNUP.TEXT);
     },
     render: function () {
         return (
             <div>
+                <Modal show={this.state.demoOpen} onHide={this.confirmDemo}>
+                    <Modal.Body>
+                        <p>Please enter your demo code</p>
+                        <Input
+                            ref="demoCode"
+                            type="text"
+                            value={this.state.demoText}
+                            onChange={e => this.setState({demoText: e.target.value})} //eslint-disable-line camelcase
+                        />
+                        <Button onClick={this.confirmDemo}> Submit </Button>
+                    </Modal.Body>
+                </Modal>
                 <Modal show={this.props.workOpen || this.state.workOpen} onHide={this.hideWorkModal}>
                     <Modal.Body>
                         {COPY.MODALS.WORK}
@@ -280,6 +349,9 @@ var Header = React.createClass({
                     </Button>
                     <Button id="login" className="purple" onClick={this.loginAlert}>
                         {COPY.BUTTONS.LOGIN}
+                    </Button>
+                    <Button id="demo" className="blue" onClick={this.launchDemo}>
+                        {COPY.BUTTONS.DEMO}
                     </Button>
                 </div>
             </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ClassNames from 'classnames';
 import _ from 'lodash';
 
 import {Button, Glyphicon} from 'react-bootstrap';
@@ -29,6 +30,7 @@ var Game = React.createClass({
         return {
             onFlipEarned: _.noop,
             onSave: _.noop,
+            isTeacher: false,
             gameState: {}
         };
     },
@@ -67,6 +69,12 @@ var Game = React.createClass({
     clearEvent: function () {
         window.removeEventListener('game-event', this.gameEventHandler);
     },
+    dispatchPlatformEvent(name, data) {
+        /** TODO: MPR, 1/15/16: Polyfill event */
+        var event = new Event('platform-event', {bubbles: true, cancelable: false});
+        _.defaults(event, {type: 'platform-event', name, data});
+        ReactDOM.findDOMNode(this.refs.gameRef).contentWindow.dispatchEvent(event);
+    },
     makeFullScreen: function () {
         ReactDOM.findDOMNode(this.refs.gameRef).webkitRequestFullScreen();
     },
@@ -78,8 +86,9 @@ var Game = React.createClass({
             <div className="game">
                 <iframe ref="gameRef" src={this.props.url} />
                 <Button onClick={this.makeFullScreen}><Glyphicon glyph="fullscreen" /> Full Screen</Button>
+                <Button className={ClassNames({hidden: this.props.isTeacher})} onClick={() => this.dispatchPlatformEvent('toggle-demo-mode')}><Glyphicon glyph="fullscreen" /> Full Screen</Button>
             </div>
-        );
+        ) ;
     }
 });
 
