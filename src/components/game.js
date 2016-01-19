@@ -2,12 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import ClassNames from 'classnames';
 import _ from 'lodash';
-
 import {Button, Glyphicon} from 'react-bootstrap';
+
+import Log from 'components/log';
 
 import 'components/game.scss';
 
 const EVENT_PREFIX = '_e_';
+
+const FULLSCREEN = 'Full Screen';
+const DEMO_MODE = 'Demo Mode';
 
 /**
  * Game wrapper iframe component.
@@ -53,7 +57,7 @@ var Game = React.createClass({
     },
    /** end of default events */
     gameEventHandler: function (e) {
-        console.log('Heard Event:', e); //eslint-disable-line no-console
+        Log.log('Heard Event:', e); //eslint-disable-line no-console
         if (e.name != null) {
             if (_.isFunction(this[EVENT_PREFIX + e.name])) {
                 this[EVENT_PREFIX + e.name](...arguments);
@@ -85,8 +89,8 @@ var Game = React.createClass({
         return (
             <div className="game">
                 <iframe ref="gameRef" src={this.props.url} />
-                <Button onClick={this.makeFullScreen}><Glyphicon glyph="fullscreen" /> Full Screen</Button>
-                <Button className={ClassNames({hidden: this.props.isTeacher})} onClick={() => this.dispatchPlatformEvent('toggle-demo-mode')}><Glyphicon glyph="fullscreen" /> Full Screen</Button>
+                <Button onClick={this.makeFullScreen}><Glyphicon glyph="fullscreen" />{FULLSCREEN}</Button>
+                <Button className={ClassNames({hidden: this.props.isTeacher})} onClick={() => this.dispatchPlatformEvent('toggle-demo-mode')}>{DEMO_MODE}</Button>
             </div>
         ) ;
     }
