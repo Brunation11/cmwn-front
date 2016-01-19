@@ -13,7 +13,7 @@ var required = function (str) {
     return 'error';
 };
 
-var min = function (min, str) {
+var min = function (min, str) { //eslint-disable-line no-shadow
     min = min == null ? 3 : min;
     if (str && str.length > min) {
         return 'success';
@@ -21,7 +21,7 @@ var min = function (min, str) {
     return 'error';
 };
 
-var max = function (max, str) {
+var max = function (max, str) { //eslint-disable-line no-shadow
     max = max == null ? 25 : max;
     if (str && str.length < max) {
         return 'success';

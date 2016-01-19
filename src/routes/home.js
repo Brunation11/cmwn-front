@@ -231,28 +231,37 @@ var Header = React.createClass({
     login: function (code) {
         var req, req2;
         req2 = HttpManager.POST({
-            url: `${GLOBALS.API_URL}create_demo_student`
+            url: `${GLOBALS.API_URL}create_demo_student`,
+            withCredentials: true,
+            withoutXSRF: true,
+            handleErrors: false
         }, {code});
         req2.then(createRes => {
-            req = HttpManager.POST({
-                url: `${GLOBALS.API_URL}auth/login`,
-                withCredentials: true,
-                withoutXSRF: true,
-                handleErrors: false
-            }, {}, {
-                'X-CSRF-TOKEN': this.state._token,
-                'Authorization': `Basic ${window.btoa(createRes.response.data.username + '@changemyworldnow.com:demo123')}`
-            });
-            req.then(res => {
-                if (res.status < 300 && res.status >= 200) {
-                    Authorization.reloadUser();
-                    History.replaceState(null, '/profile');
-                } else {
-                    throw res;
-                }
-            }).catch(() => {
-                // @TODO MPR, 12/22/15: Alert user of error
-            });
+            if (createRes.status < 300 && createRes.status >= 200) {
+                req = HttpManager.POST({
+                    url: `${GLOBALS.API_URL}auth/login`,
+                    withCredentials: true,
+                    withoutXSRF: true,
+                    handleErrors: false
+                }, {}, {
+                    'X-CSRF-TOKEN': this.state._token,
+                    'Authorization': `Basic ${window.btoa(createRes.response.data.username + '@changemyworldnow.com:demo123')}`
+                });
+                req.then(res => {
+                    if (res.status < 300 && res.status >= 200) {
+                        Authorization.reloadUser();
+                        History.replaceState(null, '/profile');
+                    } else {
+                        throw res;
+                    }
+                }).catch(() => {
+                    Toast.success('Sorry, that wasn\'t quite right. Please try again.');
+                });
+            } else {
+                throw createRes;
+            }
+        }).catch(() => {
+            Toast.success('Sorry, that wasn\'t quite right. Please try again.');
         });
     },
     renderCaptcha: function () {
