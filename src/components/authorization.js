@@ -44,11 +44,17 @@ class _Authorization {
             }
             this._resolve(res.response.data);
             EventManager.update('userChanged', res.response.data.uuid);
+
+            //configure trackers to logged in user
             rg4js('setUser', { //eslint-disable-line no-undef
                 identifier: res.response.data.uuid,
                 isAnonymous: false,
-                email: res.response.data.username
+                email: res.response.data.username,
+                firstName: res.response.data.username,
+                fullName: res.response.data.username
             });
+
+            trackJs.configure({userId: res.response.data.uuid}); //eslint-disable-line no-undef
         }).catch(() => {
             //user is not logged in.
             this.logout();

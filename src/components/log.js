@@ -7,16 +7,19 @@ class Logger {
         if (GLOBALS.MODE.toLowerCase() === 'dev' || GLOBALS.MODE.toLowerCase() === 'development') {
             console.info(...arguments);
         }
+        trackJs.console.info(...arguments); //eslint-disable-line no-undef
     }
     log() {
         if (GLOBALS.MODE.toLowerCase() === 'dev' || GLOBALS.MODE.toLowerCase() === 'development') {
             console.log(...arguments);
         }
+        trackJs.console.log(...arguments); //eslint-disable-line no-undef
     }
     warn() {
         if (GLOBALS.MODE.toLowerCase() === 'dev' || GLOBALS.MODE.toLowerCase() === 'development') {
             console.warn(...arguments);
         }
+        trackJs.console.warn(...arguments); //eslint-disable-line no-undef
     }
     error() {
         if (GLOBALS.MODE.toLowerCase() === 'dev' || GLOBALS.MODE.toLowerCase() === 'development') {
@@ -25,6 +28,7 @@ class Logger {
                 debugger;
             }
         }
+        trackJs.console.error(...arguments); //eslint-disable-line no-undef
     }
 }
 
