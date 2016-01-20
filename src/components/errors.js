@@ -23,37 +23,37 @@ var renderErrors = function () {
 
 var show403 = function () {
     _errors.push(
-        <div id="triggerederror 403Error"><a href="/profile"> </a></div>
+        <div id="triggerederror" className="403Error"><a href="/profile"> </a></div>
     );
     _.each(_handlers, handler => handler());
-    Log().error('displayed 403', window.location, Authorization.currentUser);
+    Log().error('displayed 403', ...arguments, window.location, Authorization.currentUser);
     EventManager.update('errorChange', _errors);
 };
 
 var show404 = function () {
     _errors.push(
-        <div id="triggerederror 404Error"><a href="/profile"> </a></div>
+        <div id="triggerederror" className="404Error"><a href="/profile"> </a></div>
     );
     _.each(_handlers, handler => handler());
-    Log().error('Displayed 404', window.location, Authorization.currentUser);
+    Log().error('Displayed 404', ...arguments, window.location, Authorization.currentUser);
     EventManager.update('errorChange', _errors);
 };
 
 var show500 = function () {
     _errors.push(
-        <div id="triggerederror 500Error"><a href="/profile"> </a></div>
+        <div id="triggerederror" className="500Error"><a href="/profile"> </a></div>
     );
     _.each(_handlers, handler => handler());
-    Log().error('Displayed 500', window.location, Authorization.currentUser);
+    Log().error('Displayed 500', ...arguments, window.location, Authorization.currentUser);
     EventManager.update('errorChange', _errors);
 };
 
 var showApplication = function () {
     _errors.push(
-        <div id="triggerederror applicationError"><a href="/profile"> </a></div>
+        <div id="triggerederror" className="applicationError"><a href="/profile"> </a></div>
     );
     _.each(_handlers, handler => handler());
-    Log().error('Displayed Application Error', window.location, Authorization.currentUser);
+    Log().error('Displayed Application Error', ...arguments, window.location, Authorization.currentUser);
     EventManager.update('errorChange', _errors);
 };
 

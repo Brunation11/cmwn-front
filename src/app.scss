@@ -32,7 +32,7 @@ h1, h2, h3 {
 }
 
 #pageerror, #triggerederror {
-    background: url("media/404.png") #fff;
+    background: url("media/generic_error.png") #fff;
     position: fixed;
     display: block;
     top: 0px;
@@ -44,6 +44,19 @@ h1, h2, h3 {
     z-index: 2000;
     background-size: contain;
     border: 15px solid #fff;
+
+    &.403Error {
+        background: url("media/403_error.png") #fff;
+    }
+    &.404Error {
+        background: url("media/404_error.png") #fff;
+    }
+    &.500Error {
+        background: url("media/500_error.png") #fff;
+    }
+    &.applicationError {
+        background: url("media/generic_error.png") #fff;
+    }
 }
 
 #cmwn-app {

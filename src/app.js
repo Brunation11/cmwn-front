@@ -122,7 +122,7 @@ function run() {
         if (window._bootstrap_attempts < 5) {
             window.setTimeout(run, 500);
         }
-        Errors.show404(); /** @TODO MPR, 11/31/15: create distinct "something went wrong" error page */
+        Errors.showApplication(err);
     }
 }
 
