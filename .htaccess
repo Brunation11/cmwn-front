@@ -4,7 +4,7 @@ Options +FollowSymLinks +ExecCGI
 
 RewriteEngine On
 
-RewriteCond %{HTTP:X-Forwarded-Proto} =http [OR]
+RewriteCond %{HTTP:X-Forwarded-Proto} =http
 #RewriteCond %{HTTPS} =off
 #RewriteRule ^(.*) https://%{HTTP_HOST}/$1
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R,L]
