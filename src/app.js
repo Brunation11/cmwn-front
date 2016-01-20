@@ -115,7 +115,7 @@ function run() {
             console.info = _.noop; //eslint-disable-line no-console
             console.log = _.noop; //eslint-disable-line no-console
             console.warn = _.noop; //eslint-disable-line no-console
-            console.error = _.noop; //eslint-disable-line no-console
+            /**let errors surface*/
         }
     } catch (err) {
         Log.warn('Application bootstrap failed, attempting to recover. Attempt ' + window._bootstrap_attempts + ' out of 5');
