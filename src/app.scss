@@ -32,7 +32,6 @@ h1, h2, h3 {
 }
 
 #pageerror, #triggerederror {
-    background: url("media/generic_error.png") #fff;
     position: fixed;
     display: block;
     top: 0px;
@@ -41,22 +40,44 @@ h1, h2, h3 {
     right: 0px;
     background-position: center;
     background-repeat: no-repeat;
+    background-color: #fff;
     z-index: 2000;
     background-size: contain;
     border: 15px solid #fff;
 
-    &.403Error {
-        background: url("media/403_error.png") #fff;
+    a {
+        cursor: pointer;
+        position: fixed;
+        top: 0px;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
     }
-    &.404Error {
-        background: url("media/404_error.png") #fff;
+    &.error403 {
+        background-image: url("media/403_error.png");
     }
-    &.500Error {
-        background: url("media/500_error.png") #fff;
+    &.error404 {
+        background-image: url("media/404_error.png");
     }
-    &.applicationError {
-        background: url("media/generic_error.png") #fff;
+    &.error500 {
+        background-image: url("media/500_error.png");
+
+        a {
+            bottom: 42vh;
+        }
+
+        a.gohome {
+            top: 58vh;
+            bottom: 0px;
+        }
     }
+    &.applicationerror {
+        background-image: url("media/generic_error.png");
+    }
+}
+
+#pageerror {
+    background: url("media/generic_error.png") #fff;
 }
 
 #cmwn-app {

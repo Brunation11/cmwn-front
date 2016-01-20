@@ -22,38 +22,45 @@ var renderErrors = function () {
 };
 
 var show403 = function () {
+    var redirect = window.setTimeout(function () {
+        History.replaceState(null, '/profile');
+        window.location.reload();
+    }, 5000);
+    History.listenBeforeUnload(() => {
+        window.clearTimeout(redirect);
+    });
     _errors.push(
-        <div id="triggerederror" className="403Error"><a href="/profile"> </a></div>
+        <div id="triggerederror" className="error403"><a href="/profile"> </a></div>
     );
     _.each(_handlers, handler => handler());
-    Log().error('displayed 403', ...arguments, window.location, Authorization.currentUser);
+    Log.error('displayed 403', ...arguments, window.location, Authorization.currentUser);
     EventManager.update('errorChange', _errors);
 };
 
 var show404 = function () {
     _errors.push(
-        <div id="triggerederror" className="404Error"><a href="/profile"> </a></div>
+        <div id="triggerederror" className="error404"><a href="/profile"> </a></div>
     );
     _.each(_handlers, handler => handler());
-    Log().error('Displayed 404', ...arguments, window.location, Authorization.currentUser);
+    Log.error('Displayed 404', ...arguments, window.location, Authorization.currentUser);
     EventManager.update('errorChange', _errors);
 };
 
 var show500 = function () {
     _errors.push(
-        <div id="triggerederror" className="500Error"><a href="/profile"> </a></div>
+        <div id="triggerederror" className="error500"><a href="/profile" className="gohome"> </a><a onClick={() => window.location.reload()}> </a></div>
     );
     _.each(_handlers, handler => handler());
-    Log().error('Displayed 500', ...arguments, window.location, Authorization.currentUser);
+    Log.error('Displayed 500', ...arguments, window.location, Authorization.currentUser);
     EventManager.update('errorChange', _errors);
 };
 
 var showApplication = function () {
     _errors.push(
-        <div id="triggerederror" className="applicationError"><a href="/profile"> </a></div>
+        <div id="triggerederror" className="applicationerror"><a href="/profile"> </a></div>
     );
     _.each(_handlers, handler => handler());
-    Log().error('Displayed Application Error', ...arguments, window.location, Authorization.currentUser);
+    Log.error('Displayed Application Error', ...arguments, window.location, Authorization.currentUser);
     EventManager.update('errorChange', _errors);
 };
 
