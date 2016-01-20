@@ -21,12 +21,39 @@ var renderErrors = function () {
     );
 };
 
-var show404 = function () {
+var show403 = function () {
     _errors.push(
-        <div id="triggerederror"><a href="/login"> </a></div>
+        <div id="triggerederror 403Error"><a href="/profile"> </a></div>
     );
     _.each(_handlers, handler => handler());
-    Log().error('404', window.location, Authorization.currentUser);
+    Log().error('displayed 403', window.location, Authorization.currentUser);
+    EventManager.update('errorChange', _errors);
+};
+
+var show404 = function () {
+    _errors.push(
+        <div id="triggerederror 404Error"><a href="/profile"> </a></div>
+    );
+    _.each(_handlers, handler => handler());
+    Log().error('Displayed 404', window.location, Authorization.currentUser);
+    EventManager.update('errorChange', _errors);
+};
+
+var show500 = function () {
+    _errors.push(
+        <div id="triggerederror 500Error"><a href="/profile"> </a></div>
+    );
+    _.each(_handlers, handler => handler());
+    Log().error('Displayed 500', window.location, Authorization.currentUser);
+    EventManager.update('errorChange', _errors);
+};
+
+var showApplication = function () {
+    _errors.push(
+        <div id="triggerederror applicationError"><a href="/profile"> </a></div>
+    );
+    _.each(_handlers, handler => handler());
+    Log().error('Displayed Application Error', window.location, Authorization.currentUser);
     EventManager.update('errorChange', _errors);
 };
 
@@ -42,5 +69,5 @@ var clearErrors = function () {
 //make sure these clear when the back button is hit
 window.onpopstate = clearErrors;
 
-export default {renderErrors, show404, onError, clearErrors};
+export default {renderErrors, show403, show404, show500, showApplication, onError, clearErrors};
 
