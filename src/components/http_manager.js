@@ -8,6 +8,7 @@ import _ from 'lodash';
 
 import History from 'components/history';
 import Errors from 'components/errors';
+import Log from 'components/log';
 
 const APP_COOKIE_NAME = 'cmwn_token';
 
@@ -56,7 +57,7 @@ var _getRequestPromise = function (method, request, body, headers) {
 
             if (res[0].status > 499) {
                 /** @TODO MPR, 12/2/15: Implement catastrophic error page */
-                console.error('Unrecoverable server error.'); //eslint-disable-line no-console
+                Log.error('Unrecoverable server error.', res); //eslint-disable-line no-console
             } else if (res[0].status === 403) {
                 /** @TODO MPR, 11/18/15: Implement error page */
                 History.replaceState(null, '/profile');
@@ -70,14 +71,11 @@ var _getRequestPromise = function (method, request, body, headers) {
             }
             return Promise.resolve(res[0]);
         }).catch(err => {
-            if (request[0].handleErrors === false || method !== 'GET') {//assume non-gets are not navigational
+            if (request[0].handleErrors === false || method !== 'GET') { //assume non-gets are not navigational
                 return Promise.reject(err);
             } else {
-                console.info(err); //eslint-disable-line no-console
+                Log.info(err, 'Unhandled server exception', request); //eslint-disable-line no-console
                 Errors.show404();
-                //Unhandled API error probably indicates a failed preflight with no status, treat as
-                //if the user is unauthenticated and redirect to login
-                //History.replaceState(null, '/login');
             }
         });
     }
@@ -105,6 +103,7 @@ var _makeRequest = function (verb, requests){
                         response = (_.isObject(xhr.response) ? xhr.response : JSON.parse(xhr.response));
                     } catch (err) {
                         response = xhr.response;
+                        Log.info(err, 'recieved non-standard data format from api');
                     }
                     return res({
                         status: xhr.status,
@@ -167,6 +166,7 @@ var _makeRequest = function (verb, requests){
                 }, 0);
             } catch (err) {
                 rej(err);
+                Log.error(err, 'Unhandled http request error');
             }
         });
         promise.abort = abort;

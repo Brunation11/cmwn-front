@@ -1,3 +1,5 @@
+@import 'variables';
+
 .game {
     padding-bottom: 35px;
     text-align: center;
@@ -5,12 +7,15 @@
     iframe {
         width: calc(75vh * 1.77);
         height: 75vh;
+        display: block;
+        margin: auto;
+        padding-bottom: $standard;
     }
 
     button {
         z-index: 2;
-        position: absolute;
         bottom: 15px;
-        left: 15px;
+        display: inline-block;
+        float: left;
     }
 }

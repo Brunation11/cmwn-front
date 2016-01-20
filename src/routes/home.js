@@ -4,6 +4,7 @@ import _ from 'lodash';
 import {Input, Carousel, CarouselItem, Button, Modal} from 'react-bootstrap';
 
 import Toast from 'components/toast';
+import Log from 'components/log';
 import History from 'components/history';
 import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
@@ -92,6 +93,10 @@ const COPY = {
 
         SIGNUP: <span><p>We are so excited about your interest to work with us!</p><p>Click <a href="mailto:&#106;&#111;&#110;&#105;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#099;&#097;&#116;&#104;&#121;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;?subject=Sign up with CMWN&body=Thank you for your interest in Change My World Now!%0D%0A%0D%0AIf you would like to launch Change My World Now in your school please provide the following information and someone from our team will contact you.%0D%0A%0D%0AYour Name:%0D%0AYour School:%0D%0AYour Email:%0D%0ASchool Grades:%0D%0APrincipal Name:%0D%0ASchool Phone:%0D%0ACity/State:">here</a> to contact us.</p></span>
     }
+};
+
+const ERRORS = {
+    BAD_PASS: 'Sorry, that wasn\'t quite right. Please try again.'
 };
 
 const SOURCES = {
@@ -218,6 +223,7 @@ var Header = React.createClass({
         } catch (err) {
             //captcha doesnt always clean itself up nicely, throws its own
             //unhelpful, unbreaking 'container not empty' error. Ignoring.
+            Log.warn(err, 'Captcha not fully destroyed');
             return err;
         }
     },
@@ -250,18 +256,21 @@ var Header = React.createClass({
                 req.then(res => {
                     if (res.status < 300 && res.status >= 200) {
                         Authorization.reloadUser();
+                        Log.info('User login successful');
                         History.replaceState(null, '/profile');
                     } else {
                         throw res;
                     }
-                }).catch(() => {
-                    Toast.success('Sorry, that wasn\'t quite right. Please try again.');
+                }).catch(e => {
+                    Toast.success(ERRORS.BAD_PASS);
+                    Log.log(e, 'Invalid login');
                 });
             } else {
                 throw createRes;
             }
-        }).catch(() => {
-            Toast.success('Sorry, that wasn\'t quite right. Please try again.');
+        }).catch(e => {
+            Toast.success(ERRORS.BAD_PASS);
+            Log.log(e, 'Invalid login');
         });
     },
     renderCaptcha: function () {

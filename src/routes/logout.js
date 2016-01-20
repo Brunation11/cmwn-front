@@ -2,6 +2,7 @@ import React from 'react';
 import Loader from 'react-loader';
 
 import Layout from 'layouts/one_col';
+import Log from 'components/log';
 import Authorization from 'components/authorization';
 import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
@@ -30,10 +31,13 @@ var loaderOptions = {
 var Page = React.createClass({
     componentDidMount: function () {
         var logout = HttpManager.GET({url: GLOBALS.API_URL + 'auth/logout', handleErrors: false});
+        Log.info('User logout initiated');
         Authorization.logout();
         logout.then(() => {
+            Log.info('Session successfully terminated.');
             window.location.href = '/login';
-        }).catch(() => {
+        }).catch(e => {
+            Log.warn(e, 'User logout "failed", proceeding.');
             window.location.href = '/login';
         });
     },
