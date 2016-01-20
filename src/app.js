@@ -110,7 +110,7 @@ function run() {
         Log.info('Application started');
         ReactDOM.render(<Router history={History} routes={routes} />, document.getElementById('cmwn-app'));
         console.log('%cWoah there, World Changer!', 'font-weight: bold; color: red; font-size: 60px; font-family: Helvetica, Impact, Arial, sans-serif; text-shadow: 2px 2px grey;'); //eslint-disable-line no-console
-        console.log('%cChangeMyWorldNow will never ask you to enter any of your information in this space, or ask you to paste anything here. For your security, we recommend you close this console.', 'font-weight: bold; color: #2CC4F4; font-size: 25px; font-family: Helvetica, Impact, Arial, sans-serif;') //eslint-disable-line no-console
+        console.log('%cChangeMyWorldNow will never ask you to enter any of your information in this space, or ask you to paste anything here. For your security, we recommend you close this console.', 'font-weight: bold; color: #2CC4F4; font-size: 25px; font-family: Helvetica, Impact, Arial, sans-serif;'); //eslint-disable-line no-console
         if (GLOBALS.MODE.toLowerCase() === 'prod' || GLOBALS.MODE.toLowerCase() === 'production') {
             console.info = _.noop; //eslint-disable-line no-console
             console.log = _.noop; //eslint-disable-line no-console

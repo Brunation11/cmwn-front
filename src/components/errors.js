@@ -3,6 +3,8 @@ import _ from 'lodash';
 
 import History from 'components/history';
 import EventManager from 'components/event_manager';
+import Log from 'components/log';
+import Authorization from 'components/authorization';
 
 var _errors = [];
 var _handlers = [];
@@ -24,6 +26,7 @@ var show404 = function () {
         <div id="triggerederror"><a href="/login"> </a></div>
     );
     _.each(_handlers, handler => handler());
+    Log().error('404', window.location, Authorization.currentUser);
     EventManager.update('errorChange', _errors);
 };
 
