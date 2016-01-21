@@ -23,8 +23,6 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/humane-js/3.2.2/themes/flatty.min.css" crossorigin="anonymous">
         <!-- inject:style -->
         <!-- endinject -->
-        <!-- inject:env -->
-        <!-- endinject -->
         <!-- raygun -->
         <script type="text/javascript">
           !function(a,b,c,d,e,f,g,h){a.RaygunObject=e,a[e]=a[e]||function(){
@@ -60,6 +58,17 @@
                 });
             </script>
         <![endif]-->
+        <!-- inject:env -->
+        <!-- endinject -->
+        <?php 
+            echo "<script>";
+            foreach ($_SERVER as $key=>$val) {
+                if (strrpos($key, "APP_", -strlen($key)) !== FALSE) {
+                    echo 'window.__cmwn.'.substr($key, 4)." = '".str_replace('_', '.', $val)."';\n";
+                }
+            }
+            echo "</script>";
+         ?>
     </head>
     <body>
         <div id="pageerror"><a href="/login"> </a></div>
@@ -125,14 +134,5 @@
           ga('send', 'pageview');
 
         </script>
-        <?php 
-            echo "<script>";
-            foreach ($_SERVER as $key=>$val) {
-                if (strrpos($key, "APP_", -strlen($key)) !== FALSE) {
-                    echo 'window.__cmwn.'.substr($key, 4)." = '".str_replace('_', '.', $val)."';\n";
-                }
-            }
-            echo "</script>";
-         ?>
     </body>
 </html>
