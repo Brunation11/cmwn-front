@@ -18,6 +18,9 @@ class BrowserDetector {
     isIe9() {
         return !!~document.getElementsByTagName('html')[0].className.indexOf('ie9');
     }
+    isIe10() {
+        return !!~document.getElementsByTagName('html')[0].className.indexOf('ie10');
+    }
 }
 
 var Detector = new BrowserDetector();
