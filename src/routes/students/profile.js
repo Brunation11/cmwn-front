@@ -4,6 +4,7 @@ import ClassNames from 'classnames';
 import {Panel, Modal} from 'react-bootstrap';
 
 import Layout from 'layouts/two_col';
+import Detector from 'components/browser_detector';
 import ProfileImage from 'components/profile_image';
 import FlipBoard from 'components/flipboard';
 import Game from 'components/game';
@@ -23,6 +24,7 @@ const HEADINGS = {
     ARCADE: 'Take Action'
 };
 const PLAY = 'Play Now!';
+const BROWSER_NOT_SUPPORTED = <span>Sorry! Your browser or device is currently not supported for this game. We are working to add support soon, but until then please try again on a computer with an up-to-date browser. ChangeMyWorldNow reccomends <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">Google Chrome</a></span>;
 
 var Page = React.createClass({
     getInitialState: function () {
@@ -38,7 +40,9 @@ var Page = React.createClass({
                 self.forceUpdate();
             });
         }
-        return {};
+        return {
+            isStudent: false
+        };
     },
     componentWillReceiveProps: function () {
         if (self.currentLoc !== document.location.pathname) {
@@ -74,6 +78,7 @@ var Profile = React.createClass({
             } else if (this.state.canupdate != null){
                 this.setState({'can_update': this.state.canupdate});
             }
+            this.resolveRole();
             this.forceUpdate();
         });
         this.resolveRole();
@@ -99,6 +104,17 @@ var Profile = React.createClass({
     hideModal: function () {
         this.setState({gameOn: false});
     },
+    renderGame: function () {
+        if (Detector.isMobileOrTablet() || Detector.isIe9()) {
+            return BROWSER_NOT_SUPPORTED;
+        }
+        return (
+            <div>
+                <Game isTeacher={!this.state.isStudent} url={this.state.gameUrl} onExit={() => this.setState({gameOn: false})}/>
+                <a onClick={() => this.setState({gameOn: false})} className="modal-close">(close)</a>
+            </div>
+        );
+    },
     renderFlip: function (item){
         return (
             <div className="flip fill">
@@ -122,8 +138,7 @@ var Profile = React.createClass({
            <Layout className="profile">
                 <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal} keyboard={false} backdrop="static">
                     <Modal.Body>
-                        <Game url={this.state.gameUrl} onExit={() => this.setState({gameOn: false})}/>
-                        <a onClick={() => this.setState({gameOn: false})} className="modal-close">(close)</a>
+                        {this.renderGame()}
                     </Modal.Body>
                 </Modal>
                <Trophycase className={ClassNames({hidden: !this.state.isStudent})} data={this.state} />
