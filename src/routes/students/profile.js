@@ -38,7 +38,9 @@ var Page = React.createClass({
                 self.forceUpdate();
             });
         }
-        return {};
+        return {
+            isStudent: false
+        };
     },
     componentWillReceiveProps: function () {
         if (self.currentLoc !== document.location.pathname) {
@@ -74,6 +76,7 @@ var Profile = React.createClass({
             } else if (this.state.canupdate != null){
                 this.setState({'can_update': this.state.canupdate});
             }
+            this.resolveRole();
             this.forceUpdate();
         });
         this.resolveRole();
