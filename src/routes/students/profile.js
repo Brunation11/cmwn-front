@@ -106,7 +106,12 @@ var Profile = React.createClass({
     },
     renderGame: function () {
         if (Detector.isMobileOrTablet() || Detector.isIe9()) {
-            return BROWSER_NOT_SUPPORTED;
+            return (
+                <div>
+                    {BROWSER_NOT_SUPPORTED}
+                    <p><a onClick={() => this.setState({gameOn: false})} >(close)</a></p>
+                </div>
+            );
         }
         return (
             <div>

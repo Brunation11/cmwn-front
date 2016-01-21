@@ -1,6 +1,6 @@
 
 
-class Detector {
+class BrowserDetector {
     constructor(){}
     isMobile() {
         var check = false;
@@ -15,6 +15,12 @@ class Detector {
     isIe() {
         return !!~document.getElementsByTagName('html')[0].className.indexOf('ie');
     }
+    isIe9() {
+        return !!~document.getElementsByTagName('html')[0].className.indexOf('ie9');
+    }
 }
 
+var Detector = new BrowserDetector();
+
 export default Detector;
+
