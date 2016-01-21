@@ -24,7 +24,7 @@ const HEADINGS = {
     ARCADE: 'Take Action'
 };
 const PLAY = 'Play Now!';
-const BROWSER_NOT_SUPPORTED = <span>Sorry! Your browser or device is currently not supported for this game. We are working to add support soon, but until then please try again on a computer with an up-to-date browser. ChangeMyWorldNow reccomends <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">Google Chrome</a></span>;
+const BROWSER_NOT_SUPPORTED = <span><p>For the best viewing experience we reccomend the desktop version in Chrome</p><p>If you don't have chrome, <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">download it for free here</a>.</p></span>;
 
 var Page = React.createClass({
     getInitialState: function () {
