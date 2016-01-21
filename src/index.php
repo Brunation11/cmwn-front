@@ -23,8 +23,19 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/humane-js/3.2.2/themes/flatty.min.css" crossorigin="anonymous">
         <!-- inject:style -->
         <!-- endinject -->
-        <!-- inject:env -->
-        <!-- endinject -->
+        <!-- raygun -->
+        <script type="text/javascript">
+          !function(a,b,c,d,e,f,g,h){a.RaygunObject=e,a[e]=a[e]||function(){
+          (a[e].o=a[e].o||[]).push(arguments)},f=b.createElement(c),g=b.getElementsByTagName(c)[0],
+          f.async=1,f.src=d,g.parentNode.insertBefore(f,g),h=a.onerror,a.onerror=function(b,c,d,f,g){
+          h&&h(b,c,d,f,g),g||(g=new Error(b)),a[e].q=a[e].q||[],a[e].q.push({
+          e:g})}}(window,document,"script","//cdn.raygun.io/raygun4js/raygun.min.js","rg4js");
+        </script>
+        <script type="text/javascript">
+            rg4js('apiKey', 'DU/YhFbNbg3/tpaTjYBtvw==');
+            rg4js('enableCrashReporting', true);
+            rg4js('enablePulse', true);
+        </script>
         <!-- errorception -->
         <script>
             (function(_,e,rr,s){_errs=[s];var c=_.onerror;_.onerror=function(){var a=arguments;_errs.push(a);
@@ -47,6 +58,17 @@
                 });
             </script>
         <![endif]-->
+        <!-- inject:env -->
+        <!-- endinject -->
+        <?php 
+            echo "<script>";
+            foreach ($_SERVER as $key=>$val) {
+                if (strrpos($key, "APP_", -strlen($key)) !== FALSE) {
+                    echo 'window.__cmwn.'.substr($key, 4)." = '".str_replace('_', '.', $val)."';\n";
+                }
+            }
+            echo "</script>";
+         ?>
     </head>
     <body>
         <div id="pageerror"><a href="/login"> </a></div>
@@ -87,21 +109,8 @@
         <script>
             Raven.config('https://bf5b4d5092204c3894a80d732212823d@app.getsentry.com/64252').install();
         </script>
-        <!-- raygun -->
-        <script type="text/javascript">
-          !function(a,b,c,d,e,f,g,h){a.RaygunObject=e,a[e]=a[e]||function(){
-          (a[e].o=a[e].o||[]).push(arguments)},f=b.createElement(c),g=b.getElementsByTagName(c)[0],
-          f.async=1,f.src=d,g.parentNode.insertBefore(f,g),h=a.onerror,a.onerror=function(b,c,d,f,g){
-          h&&h(b,c,d,f,g),g||(g=new Error(b)),a[e].q=a[e].q||[],a[e].q.push({
-          e:g})}}(window,document,"script","//cdn.raygun.io/raygun4js/raygun.min.js","rg4js");
-        </script>
-        <script type="text/javascript">
-            rg4js('apiKey', 'DU/YhFbNbg3/tpaTjYBtvw==');
-            rg4js('enableCrashReporting', true);
-            rg4js('enablePulse', true);
-        </script>
         <!-- rollbar -->
-        <!-- errorception in head -->
+        <!-- raygun and errorception in head -->
         <script>
         var _rollbarConfig = {
             accessToken: "4635aacc2d3645a48e99c947e3a75a8d",
@@ -125,14 +134,5 @@
           ga('send', 'pageview');
 
         </script>
-        <?php 
-            echo "<script>";
-            foreach ($_SERVER as $key=>$val) {
-                if (strrpos($key, "APP_", -strlen($key)) !== FALSE) {
-                    echo 'window.__cmwn.'.substr($key, 4)." = '".str_replace('_', '.', $val)."';\n";
-                }
-            }
-            echo "</script>";
-         ?>
     </body>
 </html>

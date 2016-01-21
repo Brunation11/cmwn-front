@@ -56,16 +56,13 @@ var _getRequestPromise = function (method, request, body, headers) {
             }
 
             if (res[0].status > 499) {
-                /** @TODO MPR, 12/2/15: Implement catastrophic error page */
-                Log.error('Unrecoverable server error.', res); //eslint-disable-line no-console
+                Errors.show500(res);
             } else if (res[0].status === 403) {
-                /** @TODO MPR, 11/18/15: Implement error page */
-                History.replaceState(null, '/profile');
+                Errors.show403(res);
             } else if (res[0].status === 404) {
-                Errors.show404();
+                Errors.show404(res);
             } else if (res[0].status > 399) {
-                /** @TODO MPR, 11/18/15: Implement error page */
-                History.replaceState(null, '/profile');
+                Errors.showApplication(res);
             } else if (res[0].status === 0 || res[0].response == null || res[0].response.length === 0 && request[0].url.indexOf('logout') === -1) {
                 throw 'no data recieved';
             }
@@ -74,8 +71,7 @@ var _getRequestPromise = function (method, request, body, headers) {
             if (request[0].handleErrors === false || method !== 'GET') { //assume non-gets are not navigational
                 return Promise.reject(err);
             } else {
-                Log.info(err, 'Unhandled server exception', request); //eslint-disable-line no-console
-                Errors.show404();
+                Errors.showApplication(err, request);
             }
         });
     }
