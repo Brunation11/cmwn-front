@@ -16,7 +16,7 @@ var Fetcher = React.createClass({
             renderNoData: (() => null)
         };
     },
-    componentWillMount: function () {
+    componentDidMount: function () {
         this.getData();
     },
     getData: function () {

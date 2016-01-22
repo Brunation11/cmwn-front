@@ -211,10 +211,8 @@ var Header = React.createClass({
             contactOpen: false,
         };
     },
-    componentWillMount: function () {
-        this.getToken();
-    },
     componentDidMount: function () {
+        this.getToken();
         this.renderCaptcha();
     },
     componentDidUpdate: function () {

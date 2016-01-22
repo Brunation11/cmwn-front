@@ -28,7 +28,7 @@ var FriendList = React.createClass({
             pendingHidden: true
         };
     },
-    componentWillMount: function () {
+    componentDidMount: function () {
         HttpManager.GET(GLOBALS.API_URL + 'friends').then(responses => {
             this.pending = responses.response.pendingfriends;
             this.requests = responses.response.pendingfriends;

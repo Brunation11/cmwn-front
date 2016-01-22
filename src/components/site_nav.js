@@ -8,7 +8,7 @@ import Log from 'components/log';
 
 
 var SiteNav = React.createClass({
-    componentWillMount: function () {
+    componentDidMount: function () {
         this.menuItems = [];
         this.getMenuItems();
     },

@@ -26,10 +26,8 @@ var Page = React.createClass({
             _token: ''
         };
     },
-    componentWillMount: function () {
-        this.getToken();
-    },
     componentDidMount: function () {
+        this.getToken();
         window.document.addEventListener('keydown', this.login);
     },
     componentWillUnmount: function () {
