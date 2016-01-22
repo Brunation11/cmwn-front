@@ -3,6 +3,7 @@ import _ from 'lodash';
 import {Button, Input, Panel} from 'react-bootstrap';
 
 import HttpManager from 'components/http_manager';
+import Log from 'components/log';
 import Toast from 'components/toast';
 import Authorization from 'components/authorization';
 import Layout from 'layouts/two_col';
@@ -19,6 +20,8 @@ const HEADINGS = {
     PASSWORD: 'Update Password'
 };
 const SUSPEND = 'Suspend Account';
+const INVALID_SUBMISSION = 'Invalid submission. Please update fields highlighted in red and submit again';
+const BAD_UPDATE = 'There was a problem updating your profile. Please try again later.';
 
 var Fields = React.createClass({
     getInitialState: function () {
@@ -73,8 +76,11 @@ var Fields = React.createClass({
             HttpManager.POST(`${GLOBALS.API_URL}users/${this.state.uuid}`, postData).then(() => {
                 Toast.success('Profile Updated');
             }).catch(() => {
-                Toast.error('There was a problem updating your profile. Please try again later.');
+                Toast.error(BAD_UPDATE);
+                Log.log('Server refused profile update', postData);
             });
+        } else {
+            Toast.error(INVALID_SUBMISSION);
         }
     },
     renderParentFields: function () {
