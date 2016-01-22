@@ -67,7 +67,7 @@ class _Authorization {
                 id: res.response.data.uuid
             });
         }).catch(e => {
-            Log.error(e, 'Error encountered during login. Logging out.');
+            Log.log(e, 'Error encountered during authorization check. Logging out.');
             //user is not logged in.
             this.logout();
             if (window.location.pathname !== '/login' && window.location.pathname !== '/login/') {

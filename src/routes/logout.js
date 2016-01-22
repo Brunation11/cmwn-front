@@ -35,9 +35,11 @@ var Page = React.createClass({
         Authorization.logout();
         logout.then(() => {
             Log.info('Session successfully terminated.');
+            delete window.__USER_UNAUTHORIZED;
             window.location.href = '/login';
         }).catch(e => {
             Log.warn(e, 'User logout "failed", proceeding.');
+            delete window.__USER_UNAUTHORIZED;
             window.location.href = '/login';
         });
     },
