@@ -62,11 +62,11 @@ var Fields = React.createClass({
         var postData = {
             username: this.state.username
         };
-        if (this.state.email) {
-            postData.email = this.state.email;
-        }
         if (!this.state.isStudent) {
-            postData.gender = this.state.sex;
+            if (this.state.email) {
+                postData.email = this.state.email;
+            }
+            postData.gender = this.state.gender;
         }
         if (this.refs.formRef.isValid()) {
             HttpManager.POST(`${GLOBALS.API_URL}users/${this.state.uuid}`, postData).then(() => {
@@ -143,10 +143,7 @@ var Fields = React.createClass({
                 placeholder="Email"
                 label="Email"
                 ref="emailInput"
-                validate={[
-                    Validate.max.bind(null, 25),
-                    Validate.regex.bind(null, /^[a-zA-Z0-9_-]+$/),
-                ]}
+                validate="required"
                 name="emailInput"
                 validationEvent="onBlur"
                 disabled={this.state.isStudent}
@@ -208,16 +205,16 @@ var Fields = React.createClass({
                     />
                     <Input
                         type="select"
-                        value={this.state.sex}
+                        value={this.state.gender}
                         placeholder="Gender"
                         label="Gender"
                         validate="required"
-                        ref="sexInput"
-                        name="sexInput"
-                        onChange={e => this.setState({sex: e.target.value})}
+                        ref="genderInput"
+                        name="genderInput"
+                        onChange={e => this.setState({gender: e.target.value})}
                         disabled={this.state.isStudent}
                     >
-                            <option value="" disabled >Select gender</option>
+                            <option value="" >Select gender</option>
                             <option value="female">Female</option>
                             <option value="male">Male</option>
                             <option value="other">Other</option>
