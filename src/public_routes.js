@@ -7,8 +7,19 @@ import Signup from 'routes/teachers/signup';
 
 import 'routes/logout.scss';
 
+var redirect = function (path) {
+    return function (nextState, transition) {
+        _.each(nextState.params, (v, k) => {
+            path = path.replace(`:${k}`, v);
+        });
+
+        transition(null, path);
+    };
+};
+
 var routes = [
     { path: 'home(/)', component: Home},
+    { path: 'grown-ups/partnerships-media/ginas-ink(/)', onEnter: redirect('/')},
     { path: 'teachers/signup(/)', component: Signup },
     { path: 'logout(/)', component: Logout },
     { path: 'login(/)', component: Login}
