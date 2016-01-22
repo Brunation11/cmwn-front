@@ -26,6 +26,12 @@ var Fields = React.createClass({
         state.uuid = this.props.uuid;
         return state;
     },
+    componentDidMount: function () {
+        this.resolveRole();
+    },
+    componentWillReceiveProps: function () {
+        this.resolveRole();
+    },
     suspendAccount: function () {
     },
     removeParent: function (i) {
@@ -40,16 +46,30 @@ var Fields = React.createClass({
         parents.push({name: 'Jane Adams'});
         this.setState({parents});
     },
+    resolveRole: function () {
+        var newState = {};
+        if (this.state.roles == null) {
+            return;
+        }
+        if (this.state.data.roles && ~this.state.data.roles.data.indexOf('Student')) {
+            newState.isStudent = true;
+        } else {
+            newState.isStudent = false;
+        }
+        this.setState(newState);
+    },
     submitData: function () {
+        var postData = {
+            username: this.state.username
+        };
+        if (this.state.email) {
+            postData.email = this.state.email;
+        }
+        if (!this.state.isStudent) {
+            postData.gender = this.state.sex;
+        }
         if (this.refs.formRef.isValid()) {
-            HttpManager.POST(`${GLOBALS.API_URL}users/${this.state.uuid}`, {
-                //first_name: this.state.first_name, //eslint-disable-line camelcase
-                //last_name: this.state.last_name, //eslint-disable-line camelcase
-                //sex: this.state.sex,
-                //job: this.state.dob,
-                //email: this.state.email,
-                username: this.state.username
-            }).then(() => {
+            HttpManager.POST(`${GLOBALS.API_URL}users/${this.state.uuid}`, postData).then(() => {
                 Toast.success('Profile Updated');
             }).catch(() => {
                 Toast.error('There was a problem updating your profile. Please try again later.');
@@ -112,6 +132,29 @@ var Fields = React.createClass({
         );
     },
     renderTeacherInputs: function () {},
+    renderEmail: function () {
+        if (this.state.isStudent || this.state.email == null) {
+            return null;
+        }
+        return (
+            <Input
+                type="text"
+                value={this.state.email}
+                placeholder="Email"
+                label="Email"
+                ref="emailInput"
+                validate={[
+                    Validate.max.bind(null, 25),
+                    Validate.regex.bind(null, /^[a-zA-Z0-9_-]+$/),
+                ]}
+                name="emailInput"
+                validationEvent="onBlur"
+                disabled={this.state.isStudent}
+                hasFeedback
+                onChange={e => this.setState({email: e.target.value})} //eslint-disable-line camelcase
+            />
+        );
+    },
     render: function () {
         if (this.props.data == null || this.props.data.can_update === false) {
             return null;
@@ -138,6 +181,7 @@ var Fields = React.createClass({
                         hasFeedback
                         onChange={e => this.setState({username: e.target.value})} //eslint-disable-line camelcase
                     />
+                    {this.renderEmail()}
                     <Input
                         type="text"
                         value={this.state.first_name}
@@ -171,7 +215,7 @@ var Fields = React.createClass({
                         ref="sexInput"
                         name="sexInput"
                         onChange={e => this.setState({sex: e.target.value})}
-                        disabled
+                        disabled={this.state.isStudent}
                     >
                             <option value="" disabled >Select gender</option>
                             <option value="female">Female</option>
