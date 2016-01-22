@@ -3,6 +3,7 @@ import _ from 'lodash';
 import ClassNames from 'classnames';
 import {Link} from 'react-router';
 import {Button} from 'react-bootstrap';
+import Shortid from 'shortid';
 
 import Fetcher from 'components/fetcher';
 import Log from 'components/log';
@@ -78,12 +79,12 @@ var Page = React.createClass({
             return null;
         }
         return (
-            <p className="userFlips">{item.flips} Flips Earned</p>
+            <p className="userFlips" key={Shortid.generate()}>{item.flips} Flips Earned</p>
         );
     },
     renderFlip: function (item){
         return (
-            <div className="flip">
+            <div className="flip" key={Shortid.generate()}>
                 <Link to={`/student/${item.uuid}`}>
                     <div className="item">
                         <span className="overlay">

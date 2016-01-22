@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import Shortid from 'shortid';
 
 import {Panel} from 'react-bootstrap';
 
@@ -15,7 +16,7 @@ var FlipBoard = React.createClass({
         return {
             header: 'Flipboard',
             transform: _.identity,
-            renderFlip: () => <div className="flip"></div>
+            renderFlip: () => <div className="flip" key={Shortid.generate()}></div>
         };
     },
     componentWillReceiveProps: function (nextProps) {

@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
+import Shortid from 'shortid';
 
 import FlipBoard from 'components/flipboard';
 //import HttpManager from 'components/http_manager';
@@ -16,7 +17,7 @@ const HOME = 'Home';
 var Users = React.createClass({
     renderFlip: function (item){
         return (
-            <div className="flip">
+            <div className="flip" key={Shortid.generate()}>
                 <a href={`/users/${item.uuid}`/** @TODO MPR, 12/7/15: very much need to switch on type, CORE-149*/}>
                     <img src={DefaultProfile}></img><p>{`${item.first_name} ${item.last_name}`}</p>
                 </a>

@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from 'react-router';
 import _ from 'lodash';
 import {Input, Carousel, CarouselItem, Button, Modal} from 'react-bootstrap';
+import Shortid from 'shortid';
 
 import Toast from 'components/toast';
 import Log from 'components/log';
@@ -380,12 +381,12 @@ var Layout = React.createClass({
                     <div className="content-group message">
                         <img alt="Change My World Now" src={KIDS_URL} />
                         <h2>{COPY.HEADINGS.WORLD_HELP}</h2>
-                        {_.map(COPY.PARAGRAPHS, text => <p>{text}</p>)}
+                        {_.map(COPY.PARAGRAPHS, text => <p key={Shortid.generate()}>{text}</p>)}
                     </div>
                     <div className="content-group partners">
                         <h2>{COPY.HEADINGS.PARTNERS}</h2>
                         <div className="logos">
-                            {_.map(SOURCES.PARTNERS, url => <div className="cell" style={{backgroundImage: `url(${url})`}}></div>)}
+                            {_.map(SOURCES.PARTNERS, url => <div className="cell" style={{backgroundImage: `url(${url})`}} key={Shortid.generate()}></div>)}
                         </div>
                     </div>
                     <footer className="links">

@@ -1,4 +1,5 @@
 import React from 'react';
+import Shortid from 'shortid';
 
 import GLOBALS from 'components/globals';
 import Layout from 'layouts/two_col';
@@ -13,7 +14,7 @@ const TITLE = 'MY SCHOOLS';
 var Organizations = React.createClass({
     renderFlip: function (item){
         return (
-            <div className="flip"><a href={`/organization/${item.uuid}`}><img src={DefaultProfile}></img><p>{`${item.title}`}</p></a></div>
+            <div className="flip" key={Shortid.generate()}><a href={`/organization/${item.uuid}`}><img src={DefaultProfile}></img><p>{`${item.title}`}</p></a></div>
         );
     },
     render: function () {

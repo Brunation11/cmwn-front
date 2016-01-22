@@ -1,6 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import ClassNames from 'classnames';
+import Shortid from 'shortid';
 import {Panel, Modal} from 'react-bootstrap';
 
 import Layout from 'layouts/two_col';
@@ -122,7 +123,7 @@ var Profile = React.createClass({
     },
     renderFlip: function (item){
         return (
-            <div className="flip fill">
+            <div className="flip fill" key={Shortid.generate()}>
                 <a onClick={this.showModal.bind(this, GLOBALS.GAME_URL + item.uuid + '/index.html')} >
                     <div className="item">
                         <span className="overlay">
