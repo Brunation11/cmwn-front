@@ -24,6 +24,7 @@ var Fields = React.createClass({
     getInitialState: function () {
         var state = _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {};
         state.uuid = this.props.uuid;
+        state.isStudent = true;
         return state;
     },
     componentDidMount: function () {
@@ -51,7 +52,7 @@ var Fields = React.createClass({
         if (this.state.roles == null) {
             return;
         }
-        if (this.state.data.roles && ~this.state.data.roles.data.indexOf('Student')) {
+        if (~this.state.roles.data.indexOf('Student')) {
             newState.isStudent = true;
         } else {
             newState.isStudent = false;
@@ -64,7 +65,7 @@ var Fields = React.createClass({
         };
         if (!this.state.isStudent) {
             if (this.state.email) {
-                postData.email = this.state.email;
+                //postData.email = this.state.email;
             }
             postData.gender = this.state.gender;
         }
@@ -146,7 +147,7 @@ var Fields = React.createClass({
                 validate="required"
                 name="emailInput"
                 validationEvent="onBlur"
-                disabled={this.state.isStudent}
+                disabled
                 hasFeedback
                 onChange={e => this.setState({email: e.target.value})} //eslint-disable-line camelcase
             />
@@ -326,7 +327,7 @@ var ChangePassword = React.createClass({
 var Edit = React.createClass({
     getInitialState: function () {
         this.uuid = this.props.params.id || Authorization.currentUser.uuid;
-        this.url = GLOBALS.API_URL + 'users/' + this.uuid;
+        this.url = GLOBALS.API_URL + 'users/' + this.uuid + '?include=roles';
         return {};
     },
     render: function () {
