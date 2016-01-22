@@ -47,7 +47,7 @@ class _Authorization {
             this._resolve(res.response.data);
             EventManager.update('userChanged', res.response.data.uuid);
 
-            Log.info(`User ${res.response.data.uuid} logged in`);
+            Log.info(`User ${res.response.data.uuid} authorized`);
 
             //configure trackers to logged in user
             rg4js('setUser', { //eslint-disable-line no-undef
