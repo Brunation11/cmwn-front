@@ -17,7 +17,7 @@ var routes = [
 routes.hasPath = function (path) {
     path = path[0] === '/' ? path.slice(1) : path;
     return _.reduce(routes, (a, v) => {
-        return a || v.indexOf(path) === 0;
+        return a || v.path.indexOf(path) === 0;
     }, false);
 };
 
