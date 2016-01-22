@@ -15,7 +15,7 @@
             @font-face {
                 font-family: "CMWNJadeRegular";
                 src: url("/fonts/cmwn.woff") format("woff");
-   :        }
+            }
         </style>
         <!-- inject:reset -->
         <!-- endinject -->
