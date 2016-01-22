@@ -130,7 +130,7 @@ var Profile = React.createClass({
                             <span className="text">{item.description}</span>
                             <span className="play">{PLAY}</span>
                         </span>
-                        <object data={'https://games.changemyworldnow.com/' + item.uuid + '/thumb.jpg'} type="image/png" >
+                        <object data={GLOBALS.GAME_URL + item.uuid + '/thumb.jpg'} type="image/png" >
                             <img src={FlipBgDefault}></img>
                         </object>
                     </div>
