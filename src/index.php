@@ -65,6 +65,7 @@
     <body>
         <div id="pageerror"><a href="/login"> </a></div>
         <div id="cmwn-app"></div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.3.14/polyfill.min.js"></script>
         <!--[if lte IE 9]>
             <script>
             (function(){
@@ -78,7 +79,6 @@
             <script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-sham.js"></script>
         <![endif]-->
         <!--[if IE]>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.3.14/polyfill.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/flexie/1.0.3/flexie.min.js"></script>
         <![endif]-->
         <script type="text/javascript">
@@ -90,10 +90,6 @@
             @*/
             if(isIE10){
                 document.getElementsByTagName('html')[0].className += ' ie ie10';
-                var fileref=document.createElement('script');
-                fileref.setAttribute('type','text/javascript');
-                fileref.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.3.14/polyfill.min.js');
-                document.getElementsByTagName('head')[0].appendChild(fileref);
             }
         </script>
         <script>
