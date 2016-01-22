@@ -36,14 +36,6 @@
             rg4js('enableCrashReporting', true);
             rg4js('enablePulse', true);
         </script>
-        <!-- errorception -->
-        <script>
-            (function(_,e,rr,s){_errs=[s];var c=_.onerror;_.onerror=function(){var a=arguments;_errs.push(a);
-            c&&c.apply(this,a)};var b=function(){var c=e.createElement(rr),b=e.getElementsByTagName(rr)[0];
-            c.src="//beacon.errorception.com/"+s+".js";c.async=!0;b.parentNode.insertBefore(c,b)};
-            _.addEventListener?_.addEventListener("load",b,!1):_.attachEvent("onload",b)})
-            (window,document,"script","569e734344bba7895e00056b");
-        </script>
         <!-- BEGIN TRACKJS -->
         <script type="text/javascript">window._trackJs = { token: '85b3f3dda6db486aa65502e797c76040' };</script>
         <script type="text/javascript" src="https://d2zah9y47r7bi2.cloudfront.net/releases/current/tracker.js"></script>
