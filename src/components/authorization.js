@@ -1,6 +1,7 @@
 import _ from 'lodash';
 
 import GLOBALS from 'components/globals';
+import Log from 'components/log';
 import HttpManager from 'components/http_manager';
 import PrivateRoutes from 'private_routes';
 import History from 'components/history';
@@ -25,28 +26,48 @@ class _Authorization {
     logout() {
         window.localStorage.setItem('com.cmwn.platform.userName', null);
         window.localStorage.setItem('com.cmwn.platform.userId', null);
-        window.localStorage.setItem('com.cmwn.platform.fullName', null);
         window.localStorage.setItem('com.cmwn.platform.profileImage', null);
         window.localStorage.setItem('com.cmwn.platform.roles', null);
+        Log.info('User logout successful');
         EventManager.update('userChanged', null);
     }
     reloadUser() {
         var getUser = HttpManager.GET({url: `${GLOBALS.API_URL}users/me?include=images,roles`, handleErrors: false});
         getUser.then(res => {
-            window.localStorage.setItem('com.cmwn.platform.fullName', res.response.data.first_name + ' ' + res.response.data.last_name);
             window.localStorage.setItem('com.cmwn.platform.userName', res.response.data.username);
             window.localStorage.setItem('com.cmwn.platform.userId', res.response.data.uuid);
             if (res.response.data.roles) {
                 window.localStorage.setItem('com.cmwn.platform.roles', res.response.data.roles.data);
             }
-            if (res.response.data.images && res.response.data.images.data.length && _.isString(res.response.data.images.data[0].url)) {
-                window.localStorage.setItem('com.cmwn.platform.profileImage', res.response.data.images.data[0].url);
+            if (res.response.data.images && res.response.data.images.data.length && _.isString(_.last(res.response.data.images.data).url)) {
+                window.localStorage.setItem('com.cmwn.platform.profileImage', _.last(res.response.data.images.data).url);
             } else {
                 window.localStorage.setItem('com.cmwn.platform.profileImage', GLOBALS.DEFAULT_PROFILE);
             }
             this._resolve(res.response.data);
             EventManager.update('userChanged', res.response.data.uuid);
-        }).catch(() => {
+
+            Log.info(`User ${res.response.data.uuid} logged in`);
+
+            //configure trackers to logged in user
+            rg4js('setUser', { //eslint-disable-line no-undef
+                identifier: res.response.data.uuid,
+                isAnonymous: false,
+                email: res.response.data.username,
+                firstName: res.response.data.username,
+                fullName: res.response.data.username
+            });
+
+            trackJs.configure({userId: res.response.data.uuid}); //eslint-disable-line no-undef
+
+            Rollbar.configure({payload: {person: {id: res.response.data.uuid, username: res.response.data.username}}}); //eslint-disable-line no-undef
+
+            Raven.setUserContext({ //eslint-disable-line no-undef
+                email: res.response.data.username,
+                id: res.response.data.uuid
+            });
+        }).catch(e => {
+            Log.log(e, 'Error encountered during authorization check. Logging out.');
             //user is not logged in.
             this.logout();
             if (window.location.pathname !== '/login' && window.location.pathname !== '/login/') {
@@ -57,7 +78,6 @@ class _Authorization {
     }
     get currentUser() {
         return {
-            fullname: window.localStorage['com.cmwn.platform.fullName'],
             username: window.localStorage['com.cmwn.platform.userName'],
             roles: window.localStorage['com.cmwn.platform.roles'],
             profileImage: window.localStorage['com.cmwn.platform.profileImage'],

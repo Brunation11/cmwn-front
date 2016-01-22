@@ -1,10 +1,14 @@
 import React from 'react';
 import {Link} from 'react-router';
 import _ from 'lodash';
-import {Carousel, CarouselItem, Button, Modal} from 'react-bootstrap';
+import {Input, Carousel, CarouselItem, Button, Modal} from 'react-bootstrap';
 
 import Toast from 'components/toast';
+import Log from 'components/log';
 import History from 'components/history';
+import GLOBALS from 'components/globals';
+import HttpManager from 'components/http_manager';
+import Authorization from 'components/authorization';
 
 import 'routes/home.scss';
 import LOGO_URL from 'media/logo.png';
@@ -36,6 +40,7 @@ const COPY = {
         WORK: 'Work with Us',
         CONTACT: 'Contact Us',
         LOGIN: 'Login',
+        DEMO: 'Demo',
         SIGNUP: 'School Signup',
         WATCH: 'Watch the video'
     },
@@ -88,6 +93,10 @@ const COPY = {
 
         SIGNUP: <span><p>We are so excited about your interest to work with us!</p><p>Click <a href="mailto:&#106;&#111;&#110;&#105;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#099;&#097;&#116;&#104;&#121;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;?subject=Sign up with CMWN&body=Thank you for your interest in Change My World Now!%0D%0A%0D%0AIf you would like to launch Change My World Now in your school please provide the following information and someone from our team will contact you.%0D%0A%0D%0AYour Name:%0D%0AYour School:%0D%0AYour Email:%0D%0ASchool Grades:%0D%0APrincipal Name:%0D%0ASchool Phone:%0D%0ACity/State:">here</a> to contact us.</p></span>
     }
+};
+
+const ERRORS = {
+    BAD_PASS: 'Sorry, that wasn\'t quite right. Please try again.'
 };
 
 const SOURCES = {
@@ -202,6 +211,9 @@ var Header = React.createClass({
             contactOpen: false,
         };
     },
+    componentWillMount: function () {
+        this.getToken();
+    },
     componentDidMount: function () {
         this.renderCaptcha();
     },
@@ -211,8 +223,55 @@ var Header = React.createClass({
         } catch (err) {
             //captcha doesnt always clean itself up nicely, throws its own
             //unhelpful, unbreaking 'container not empty' error. Ignoring.
+            Log.warn(err, 'Captcha not fully destroyed');
             return err;
         }
+    },
+    getToken: function () {
+        var req = HttpManager.GET({url: `${GLOBALS.API_URL}csrf_token`, withCredentials: true, withoutToken: true, withoutXSRF: true});
+        req.then(res => {
+            this.setState({_token: res.response.token});
+            HttpManager.setToken(res.response.token);
+        });
+    },
+    login: function (code) {
+        var req, req2;
+        req2 = HttpManager.POST({
+            url: `${GLOBALS.API_URL}create_demo_student`,
+            withCredentials: true,
+            withoutXSRF: true,
+            handleErrors: false
+        }, {code});
+        req2.then(createRes => {
+            if (createRes.status < 300 && createRes.status >= 200) {
+                req = HttpManager.POST({
+                    url: `${GLOBALS.API_URL}auth/login`,
+                    withCredentials: true,
+                    withoutXSRF: true,
+                    handleErrors: false
+                }, {}, {
+                    'X-CSRF-TOKEN': this.state._token,
+                    'Authorization': `Basic ${window.btoa(createRes.response.data.username + '@changemyworldnow.com:demo123')}`
+                });
+                req.then(res => {
+                    if (res.status < 300 && res.status >= 200) {
+                        Authorization.reloadUser();
+                        Log.info('User login successful');
+                        History.replaceState(null, '/profile');
+                    } else {
+                        throw res;
+                    }
+                }).catch(e => {
+                    Toast.success(ERRORS.BAD_PASS);
+                    Log.log(e, 'Invalid login');
+                });
+            } else {
+                throw createRes;
+            }
+        }).catch(e => {
+            Toast.success(ERRORS.BAD_PASS);
+            Log.log(e, 'Invalid login');
+        });
     },
     renderCaptcha: function () {
         var captchas = document.getElementsByClassName('grecaptcha');
@@ -242,12 +301,31 @@ var Header = React.createClass({
     loginAlert: function () {
         History.replaceState(null, '/login');
     },
+    launchDemo: function () {
+        this.setState({demoOpen: true});
+    },
+    confirmDemo: function () {
+        this.login(this.state.demoText);
+        this.setState({demoOpen: false});
+    },
     signupAlert: function () {
         Toast.success(COPY.ALERTS.SIGNUP.TEXT);
     },
     render: function () {
         return (
             <div>
+                <Modal show={this.state.demoOpen} onHide={this.confirmDemo}>
+                    <Modal.Body>
+                        <h2 class="access">Please enter your Special Access Code</h2>
+                        <Input
+                            ref="demoCode"
+                            type="text"
+                            value={this.state.demoText}
+                            onChange={e => this.setState({demoText: e.target.value})} //eslint-disable-line camelcase
+                        />
+                        <Button onClick={this.confirmDemo}> Submit </Button>
+                    </Modal.Body>
+                </Modal>
                 <Modal show={this.props.workOpen || this.state.workOpen} onHide={this.hideWorkModal}>
                     <Modal.Body>
                         {COPY.MODALS.WORK}
@@ -278,7 +356,10 @@ var Header = React.createClass({
                     <Button id="signup" className="green" onClick={this.displaySignupModal}>
                         {COPY.BUTTONS.SIGNUP}
                     </Button>
-                    <Button id="login" className="purple" onClick={this.loginAlert}>
+                    <Button id="login" className="hidden" onClick={this.loginAlert}>
+                        {COPY.BUTTONS.LOGIN}
+                    </Button>
+                    <Button id="demo" className="purple" onClick={this.launchDemo}>
                         {COPY.BUTTONS.LOGIN}
                     </Button>
                 </div>

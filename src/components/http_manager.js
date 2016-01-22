@@ -8,6 +8,8 @@ import _ from 'lodash';
 
 import History from 'components/history';
 import Errors from 'components/errors';
+import Log from 'components/log';
+import PublicRoutes from 'public_routes';
 
 const APP_COOKIE_NAME = 'cmwn_token';
 
@@ -38,6 +40,9 @@ var _makeRequestObj = function (requests, body = '', headers = {}) {
 
 var _getRequestPromise = function (method, request, body, headers) {
     var promise;
+    if (window.__USER_UNAUTHORIZED) {
+        return Promise.resolve({data: []});
+    }
     request = _makeRequestObj(request, body, headers);
     if (!_.isArray(request)) {
         request = [request];
@@ -45,32 +50,40 @@ var _getRequestPromise = function (method, request, body, headers) {
     promise = _makeRequest.call(this, method, request);
     if (request.length === 1) {
         return promise.then((res) => {
+            if (res[0].status === 401 && !PublicRoutes.hasPath(window.location.pathname)) {
+                //if we have encountered an unauthorized user, we want to cancel all
+                //further requests until the user can be fully logged out
+                window.__USER_UNAUTHORIZED = true;
+                //force user to login screen on any 401, via the logout, regardless of access pattern
+                History.replaceState(null, '/logout');
+            }
+
+            if (window.location.pathname === '/login' || window.location.pathname === '/logout') {
+                //don't display errors occuring during login and logout, they are handled separately
+                return Promise.resolve(res[0]);
+            }
+
+            if (request[0].handleErrors === false && res[0].status > 399) {
+                throw 'Server error.';
+            }
+
             if (res[0].status > 499) {
-                /** @TODO MPR, 12/2/15: Implement catastrophic error page */
-                console.error('Unrecoverable server error.'); //eslint-disable-line no-console
-            } else if (res[0].status === 401) {
-                History.replaceState(null, '/login');
+                Errors.show500(res);
             } else if (res[0].status === 403) {
-                /** @TODO MPR, 11/18/15: Implement error page */
-                History.replaceState(null, '/profile');
+                Errors.show403(res);
             } else if (res[0].status === 404) {
-                Errors.show404();
+                Errors.show404(res);
             } else if (res[0].status > 399) {
-                /** @TODO MPR, 11/18/15: Implement error page */
-                History.replaceState(null, '/profile');
+                Errors.showApplication(res);
             } else if (res[0].status === 0 || res[0].response == null || res[0].response.length === 0 && request[0].url.indexOf('logout') === -1) {
                 throw 'no data recieved';
             }
             return Promise.resolve(res[0]);
         }).catch(err => {
-            if (request[0].handleErrors === false || method !== 'GET') {//assume non-gets are not navigational
+            if (request[0].handleErrors === false || method !== 'GET') { //assume non-gets are not navigational
                 return Promise.reject(err);
             } else {
-                console.info(err); //eslint-disable-line no-console
-                Errors.show404();
-                //Unhandled API error probably indicates a failed preflight with no status, treat as
-                //if the user is unauthenticated and redirect to login
-                //History.replaceState(null, '/login');
+                Errors.showApplication(err, request);
             }
         });
     }
@@ -98,6 +111,7 @@ var _makeRequest = function (verb, requests){
                         response = (_.isObject(xhr.response) ? xhr.response : JSON.parse(xhr.response));
                     } catch (err) {
                         response = xhr.response;
+                        Log.info(err, 'recieved non-standard data format from api');
                     }
                     return res({
                         status: xhr.status,
@@ -160,6 +174,7 @@ var _makeRequest = function (verb, requests){
                 }, 0);
             } catch (err) {
                 rej(err);
+                Log.error(err, 'Unhandled http request error');
             }
         });
         promise.abort = abort;

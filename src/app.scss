@@ -27,8 +27,11 @@ body {
     }
 }
 
+h1, h2, h3 {
+    font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
+}
+
 #pageerror, #triggerederror {
-    background: url("media/404.png") #fff;
     position: fixed;
     display: block;
     top: 0px;
@@ -37,9 +40,44 @@ body {
     right: 0px;
     background-position: center;
     background-repeat: no-repeat;
+    background-color: #fff;
     z-index: 2000;
     background-size: contain;
     border: 15px solid #fff;
+
+    a {
+        cursor: pointer;
+        position: fixed;
+        top: 0px;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+    }
+    &.error403 {
+        background-image: url("media/403_error.png");
+    }
+    &.error404 {
+        background-image: url("media/404_error.png");
+    }
+    &.error500 {
+        background-image: url("media/500_error.png");
+
+        a {
+            bottom: 42vh;
+        }
+
+        a.gohome {
+            top: 58vh;
+            bottom: 0px;
+        }
+    }
+    &.applicationerror {
+        background-image: url("media/generic_error.png");
+    }
+}
+
+#pageerror {
+    background: url("media/generic_error.png") #fff;
 }
 
 #cmwn-app {

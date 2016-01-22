@@ -3,6 +3,8 @@ import _ from 'lodash';
 import {Button, Input, Panel} from 'react-bootstrap';
 
 import HttpManager from 'components/http_manager';
+import Log from 'components/log';
+import Toast from 'components/toast';
 import Authorization from 'components/authorization';
 import Layout from 'layouts/two_col';
 import GLOBALS from 'components/globals';
@@ -18,12 +20,21 @@ const HEADINGS = {
     PASSWORD: 'Update Password'
 };
 const SUSPEND = 'Suspend Account';
+const INVALID_SUBMISSION = 'Invalid submission. Please update fields highlighted in red and submit again';
+const BAD_UPDATE = 'There was a problem updating your profile. Please try again later.';
 
 var Fields = React.createClass({
     getInitialState: function () {
         var state = _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {};
         state.uuid = this.props.uuid;
+        state.isStudent = true;
         return state;
+    },
+    componentDidMount: function () {
+        this.resolveRole();
+    },
+    componentWillReceiveProps: function () {
+        this.resolveRole();
     },
     suspendAccount: function () {
     },
@@ -39,16 +50,37 @@ var Fields = React.createClass({
         parents.push({name: 'Jane Adams'});
         this.setState({parents});
     },
+    resolveRole: function () {
+        var newState = {};
+        if (this.state.roles == null) {
+            return;
+        }
+        if (~this.state.roles.data.indexOf('Student')) {
+            newState.isStudent = true;
+        } else {
+            newState.isStudent = false;
+        }
+        this.setState(newState);
+    },
     submitData: function () {
+        var postData = {
+            username: this.state.username
+        };
+        if (!this.state.isStudent) {
+            if (this.state.email) {
+                //postData.email = this.state.email;
+            }
+            postData.gender = this.state.gender;
+        }
         if (this.refs.formRef.isValid()) {
-            HttpManager.POST(`${GLOBALS.API_URL}users/${this.state.uuid}`, {
-                //first_name: this.state.first_name, //eslint-disable-line camelcase
-                //last_name: this.state.last_name, //eslint-disable-line camelcase
-                //sex: this.state.sex,
-                //job: this.state.dob,
-                //email: this.state.email,
-                username: this.state.username
+            HttpManager.POST(`${GLOBALS.API_URL}users/${this.state.uuid}`, postData).then(() => {
+                Toast.success('Profile Updated');
+            }).catch(() => {
+                Toast.error(BAD_UPDATE);
+                Log.log('Server refused profile update', postData);
             });
+        } else {
+            Toast.error(INVALID_SUBMISSION);
         }
     },
     renderParentFields: function () {
@@ -107,6 +139,26 @@ var Fields = React.createClass({
         );
     },
     renderTeacherInputs: function () {},
+    renderEmail: function () {
+        if (this.state.isStudent || this.state.email == null) {
+            return null;
+        }
+        return (
+            <Input
+                type="text"
+                value={this.state.email}
+                placeholder="Email"
+                label="Email"
+                ref="emailInput"
+                validate="required"
+                name="emailInput"
+                validationEvent="onBlur"
+                disabled
+                hasFeedback
+                onChange={e => this.setState({email: e.target.value})} //eslint-disable-line camelcase
+            />
+        );
+    },
     render: function () {
         if (this.props.data == null || this.props.data.can_update === false) {
             return null;
@@ -115,7 +167,7 @@ var Fields = React.createClass({
             <Panel header={HEADINGS.EDIT_TITLE} className="standard edit-profile">
                 <div className="left">
                     <ProfileImage uuid={this.props.uuid} link-below={true}/>
-                    <p><a onClick={this.suspendAccount}>{SUSPEND}</a></p>
+                    <p className="hidden"><a onClick={this.suspendAccount}>{SUSPEND}</a></p>
                 </div>
                 <div className="right"><Form ref="formRef">
                     <Input
@@ -123,13 +175,17 @@ var Fields = React.createClass({
                         value={this.state.username}
                         placeholder="Username"
                         label="Username"
-                        validate="required"
                         ref="usernameInput"
+                        validate={[
+                            Validate.max.bind(null, 25),
+                            Validate.regex.bind(null, /^[a-zA-Z0-9_-]+$/),
+                        ]}
                         name="usernameInput"
                         validationEvent="onBlur"
                         hasFeedback
                         onChange={e => this.setState({username: e.target.value})} //eslint-disable-line camelcase
                     />
+                    {this.renderEmail()}
                     <Input
                         type="text"
                         value={this.state.first_name}
@@ -156,16 +212,16 @@ var Fields = React.createClass({
                     />
                     <Input
                         type="select"
-                        value={this.state.sex}
+                        value={this.state.gender}
                         placeholder="Gender"
                         label="Gender"
                         validate="required"
-                        ref="sexInput"
-                        name="sexInput"
-                        onChange={e => this.setState({sex: e.target.value})}
-                        disabled
+                        ref="genderInput"
+                        name="genderInput"
+                        onChange={e => this.setState({gender: e.target.value})}
+                        disabled={this.state.isStudent}
                     >
-                            <option value="" disabled >Select gender</option>
+                            <option value="" >Select gender</option>
                             <option value="female">Female</option>
                             <option value="male">Male</option>
                             <option value="other">Other</option>
@@ -277,7 +333,7 @@ var ChangePassword = React.createClass({
 var Edit = React.createClass({
     getInitialState: function () {
         this.uuid = this.props.params.id || Authorization.currentUser.uuid;
-        this.url = GLOBALS.API_URL + 'users/' + this.uuid;
+        this.url = GLOBALS.API_URL + 'users/' + this.uuid + '?include=roles';
         return {};
     },
     render: function () {

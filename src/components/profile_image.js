@@ -7,11 +7,14 @@ import Toast from 'components/toast';
 import HttpManager from 'components/http_manager';
 import Authorization from 'components/authorization';
 import GLOBALS from 'components/globals';
+import Log from 'components/log';
 
 import 'components/profile_image.scss';
 
 const PIC_ALT = 'Profile Picture';
 const UPLOAD_ERROR = 'There was a problem uploading your image. Please refresh the page and try again.';
+const MODERATION = 'Your image has been submitted for moderation and should appear shortly.';
+const NO_IMAGE = 'There was a problem displaying your profile image. Please refresh the page to try again';
 
 var Image = React.createClass({
     getInitialState: function () {
@@ -25,11 +28,12 @@ var Image = React.createClass({
         } else {
             HttpManager.GET({url: `${GLOBALS.API_URL}users/${this.props.uuid}/image`, handleErrors: false})
                 .then(res => {
-                    if (res && res.response && res.response.data && _.isString(res.response.data[0].url)) {
-                        this.setState({profileImage: res.response.data[0].url});
+                    if (res && res.response && res.response.data && _.isString(_.last(res.response.data).url)) {
+                        this.setState({profileImage: _.last(res.response.data).url});
                     }
-                }).catch(() => {
-                    /** @TODO MPR, 12/21/15: Display alert */
+                }).catch(e => {
+                    Toast.error(NO_IMAGE);
+                    Log.error(e, 'Image could not be extracted from user');
                 });
         }
     },
@@ -45,6 +49,7 @@ var Image = React.createClass({
                 cloud_name: 'changemyworldnow',
                 upload_preset: 'public-profile-image',
                 multiple: false,
+                resource_type: 'image',
                 cropping: 'server',
                 gravity: 'custom',
                 cropping_aspect_ratio: 1,
@@ -60,8 +65,11 @@ var Image = React.createClass({
                     url: result[0].secure_url,
                     imageable_id: Authorization.currentUser.uuid,
                     cloudinary_id: result[0].public_id
+                }).then(() => {
+                    Toast.error(MODERATION);
                 }).catch(() => {
-                    /** @TODO MPR, 12/22/15: alert user of failure*/
+                    Toast.error(UPLOAD_ERROR);
+                    Log.error(e, 'Failed image upload');
                 });
             });
             /* eslint-enable camelcase */

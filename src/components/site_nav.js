@@ -4,6 +4,7 @@ import _ from 'lodash';
 
 import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
+import Log from 'components/log';
 
 
 var SiteNav = React.createClass({
@@ -17,8 +18,7 @@ var SiteNav = React.createClass({
             this.menuItems = _.map(_.pairs(res.response.data[0]), (value) => ({text: value[0], url: value[1]}));
             this.forceUpdate();
         }).catch(err => {
-            /** @TODO MPR, 10/18/15: Implement error page */
-            console.info(err); //eslint-disable-line no-console
+            Log.warn(err, 'could not load menu'); //eslint-disable-line no-console
         });
 
     },

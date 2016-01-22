@@ -4,6 +4,7 @@ import ClassNames from 'classnames';
 import {Panel, Modal} from 'react-bootstrap';
 
 import Layout from 'layouts/two_col';
+import Detector from 'components/browser_detector';
 import ProfileImage from 'components/profile_image';
 import FlipBoard from 'components/flipboard';
 import Game from 'components/game';
@@ -23,6 +24,7 @@ const HEADINGS = {
     ARCADE: 'Take Action'
 };
 const PLAY = 'Play Now!';
+const BROWSER_NOT_SUPPORTED = <span><p>For the best viewing experience we reccomend the desktop version in Chrome</p><p>If you don't have chrome, <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">download it for free here</a>.</p></span>;
 
 var Page = React.createClass({
     getInitialState: function () {
@@ -38,7 +40,9 @@ var Page = React.createClass({
                 self.forceUpdate();
             });
         }
-        return {};
+        return {
+            isStudent: false
+        };
     },
     componentWillReceiveProps: function () {
         if (self.currentLoc !== document.location.pathname) {
@@ -74,6 +78,7 @@ var Profile = React.createClass({
             } else if (this.state.canupdate != null){
                 this.setState({'can_update': this.state.canupdate});
             }
+            this.resolveRole();
             this.forceUpdate();
         });
         this.resolveRole();
@@ -99,17 +104,33 @@ var Profile = React.createClass({
     hideModal: function () {
         this.setState({gameOn: false});
     },
+    renderGame: function () {
+        if (Detector.isMobileOrTablet() || Detector.isIe9() || Detector.isIe10()) {
+            return (
+                <div>
+                    {BROWSER_NOT_SUPPORTED}
+                    <p><a onClick={() => this.setState({gameOn: false})} >(close)</a></p>
+                </div>
+            );
+        }
+        return (
+            <div>
+                <Game isTeacher={!this.state.isStudent} url={this.state.gameUrl} onExit={() => this.setState({gameOn: false})}/>
+                <a onClick={() => this.setState({gameOn: false})} className="modal-close">(close)</a>
+            </div>
+        );
+    },
     renderFlip: function (item){
         return (
             <div className="flip fill">
-                <a onClick={this.showModal.bind(this, 'https://games.changemyworldnow.com/' + item.uuid + '/index.html')} >
+                <a onClick={this.showModal.bind(this, GLOBALS.GAME_URL + item.uuid + '/index.html')} >
                     <div className="item">
                         <span className="overlay">
                             <span className="heading">{item.title}</span>
                             <span className="text">{item.description}</span>
                             <span className="play">{PLAY}</span>
                         </span>
-                        <object data={'https://games.changemyworldnow.com/' + item.uuid + '/thumb.jpg'} type="image/png" >
+                        <object data={GLOBALS.GAME_URL + item.uuid + '/thumb.jpg'} type="image/png" >
                             <img src={FlipBgDefault}></img>
                         </object>
                     </div>
@@ -122,8 +143,7 @@ var Profile = React.createClass({
            <Layout className="profile">
                 <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal} keyboard={false} backdrop="static">
                     <Modal.Body>
-                        <Game url={this.state.gameUrl} onExit={() => this.setState({gameOn: false})}/>
-                        <a onClick={() => this.setState({gameOn: false})} className="modal-close">(close)</a>
+                        {this.renderGame()}
                     </Modal.Body>
                 </Modal>
                <Trophycase className={ClassNames({hidden: !this.state.isStudent})} data={this.state} />
@@ -134,7 +154,6 @@ var Profile = React.createClass({
                      <EditLink base="/profile" uuid={this.state.uuid} canUpdate={this.state.can_update} />
                      <ProfileImage className={ClassNames({hidden: this.state.uuid === Authorization.currentUser.uuid})} uuid={this.state.uuid} link-below={true}/>
                      <div className="info">
-                        <p><strong>Name</strong>: {this.state.first_name} {this.state.last_name}</p>
                         <p><strong>Classes</strong>: {_.map(this.state.groups.data, item => item.title).join(', ')}</p>
                      </div>
                  </div>

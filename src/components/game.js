@@ -1,13 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import _ from 'lodash';
 import Screenfull from 'screenfull';
+import ClassNames from 'classnames';
+import _ from 'lodash';
 
 import {Button, Glyphicon} from 'react-bootstrap';
+
+import Log from 'components/log';
 
 import 'components/game.scss';
 
 const EVENT_PREFIX = '_e_';
+
+const FULLSCREEN = 'Full Screen';
+const DEMO_MODE = 'Demo Mode';
 
 /**
  * Game wrapper iframe component.
@@ -30,6 +36,7 @@ var Game = React.createClass({
         return {
             onFlipEarned: _.noop,
             onSave: _.noop,
+            isTeacher: false,
             gameState: {}
         };
     },
@@ -52,7 +59,7 @@ var Game = React.createClass({
     },
    /** end of default events */
     gameEventHandler: function (e) {
-        console.log('Heard Event:', e); //eslint-disable-line no-console
+        Log.log('Heard Event:', e); //eslint-disable-line no-console
         if (e.name != null) {
             if (_.isFunction(this[EVENT_PREFIX + e.name])) {
                 this[EVENT_PREFIX + e.name](...arguments);
@@ -68,11 +75,16 @@ var Game = React.createClass({
     clearEvent: function () {
         window.removeEventListener('game-event', this.gameEventHandler);
     },
+    dispatchPlatformEvent(name, data) {
+        /** TODO: MPR, 1/15/16: Polyfill event */
+        var event = new Event('platform-event', {bubbles: true, cancelable: false});
+        _.defaults(event, {type: 'platform-event', name, data});
+        ReactDOM.findDOMNode(this.refs.gameRef).contentWindow.dispatchEvent(event);
+    },
     makeFullScreen: function () {
         if (Screenfull.enabled) {
             Screenfull.request(ReactDOM.findDOMNode(this.refs.gameRef));
         }
-        //ReactDOM.findDOMNode(this.refs.gameRef).webkitRequestFullScreen();
     },
     render: function () {
         if (this.props.url == null) {
@@ -81,9 +93,10 @@ var Game = React.createClass({
         return (
             <div className="game">
                 <iframe ref="gameRef" src={this.props.url} />
-                <Button onClick={this.makeFullScreen}><Glyphicon glyph="fullscreen" /> Full Screen</Button>
+                <Button onClick={this.makeFullScreen}><Glyphicon glyph="fullscreen" /> {FULLSCREEN}</Button>
+                <Button className={ClassNames({hidden: !this.props.isTeacher})} onClick={() => this.dispatchPlatformEvent('toggle-demo-mode')}>{DEMO_MODE}</Button>
             </div>
-        );
+        ) ;
     }
 });
 

@@ -5,6 +5,7 @@ import {Link} from 'react-router';
 import {Button} from 'react-bootstrap';
 
 import Fetcher from 'components/fetcher';
+import Log from 'components/log';
 import HttpManager from 'components/http_manager';
 import FlipBoard from 'components/flipboard';
 import GLOBALS from 'components/globals';
@@ -58,8 +59,9 @@ var Page = React.createClass({
         e.stopPropagation();
         e.preventDefault();
     },
-    friendErr: function () {
+    friendErr: function (e) {
         Toast.error(FRIEND_PROBLEM);
+        Log.error(e, 'Friend request failed');
     },
     transformFriend: function (type, item) {
         var realFriend = _.find(this.friends, friend => friend.uuid === item.uuid);
@@ -86,8 +88,8 @@ var Page = React.createClass({
                     <div className="item">
                         <span className="overlay">
                             <div className="relwrap"><div className="abswrap">
-                                <Button onClick={this.doNothing} className={ClassNames('blue standard', {faded: item.relationship !== 'requested'})}>{PENDING}</Button>
-                                <Button onClick={this.acceptRequest.bind(this, item)} className={ClassNames('blue standard', {faded: item.relationship !== 'pending'})}>{REQUESTED}</Button>
+                                <Button onClick={this.doNothing} className={ClassNames('blue standard', {faded: item.relationship !== 'pending'})}>{PENDING}</Button>
+                                <Button onClick={this.acceptRequest.bind(this, item)} className={ClassNames('blue standard', {faded: item.relationship !== 'requested'})}>{REQUESTED}</Button>
                                 <Button className="purple standard">{PROFILE}</Button>
                             </div></div>
                         </span>

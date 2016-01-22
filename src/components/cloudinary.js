@@ -1,5 +1,8 @@
 import _ from 'lodash';
+
 import Loader from 'components/loader';
+import Toast from 'components/toast';
+import Log from 'components/log';
 
 const CLOUDINARY_URLS = [
     '//widget.cloudinary.com/global/all.js'
@@ -10,6 +13,8 @@ const CLOUDINARY_URLS = [
 //    'jquery.fileupload.js',
 //    'jquery.cloudinary.js'
 ];
+
+const UPLOAD_ERROR = 'Your image could not be uploaded at this time. Please try again later.';
 
 /**
  * Singleton. Used to manage lazy loading the cloudinary instance
@@ -35,6 +40,7 @@ class _Cloudinary {
                     try {
                         Loader(url, res);
                     } catch (err) {
+                        Log.warn('Cloudinary could not load');
                         rej(err);
                     }
                 });
@@ -44,8 +50,8 @@ class _Cloudinary {
                 this.instance = window.cloudinary;
                 callback(e); //intentionally stripping additional args
             }).catch( err => {
-                /** @TODO MPR, 11/13/15: gracefully handle cloudinary load failures, warning the user they
-                 * will not be able to upload at this time. Possibly give option to refresh*/
+                Toast.error(UPLOAD_ERROR);
+                Log.error('Cloudinary not loaded');
                 callback(null, err);
             });
         } else {

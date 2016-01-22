@@ -4,6 +4,7 @@ import {Button, Input} from 'react-bootstrap';
 
 import Layout from 'layouts/one_col';
 import Toast from 'components/toast';
+import Log from 'components/log';
 import History from 'components/history';
 import HttpManager from 'components/http_manager';
 import Authorization from 'components/authorization';
@@ -56,12 +57,14 @@ var Page = React.createClass({
             req.then(res => {
                 if (res.status < 300 && res.status >= 200) {
                     Authorization.reloadUser();
+                    Log.info(e, 'User login success');
                     History.replaceState(null, '/profile');
                 } else {
                     throw res;
                 }
             }).catch(() => {
                 Toast.error(ERRORS.LOGIN);
+                Log.log(e, 'Invalid login');
             });
         }
     },

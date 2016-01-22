@@ -6,12 +6,16 @@ import _ from 'lodash';
 import HttpManager from 'components/http_manager';
 import Toggler from 'components/toggler';
 import GLOBALS from 'components/globals';
+import Log from 'components/log';
+import Toast from 'components/toast';
 
 import 'components/friend_list.scss';
 
 const HEADING = 'Friends';
 const REQUESTS = 'Friend Requests';
 const PENDING = 'Pending Friends';
+
+const FRIEND_ERROR = 'Your friends could not be retrieved at this time. Please try again in a little while.';
 
 var FriendList = React.createClass({
     getInitialState: function () {
@@ -30,8 +34,9 @@ var FriendList = React.createClass({
             this.requests = responses.response.pendingfriends;
             this.accepted = responses.response.acceptedfriends;
             this.forceUpdate();
-        }).catch(() => {
-            /** @TODO MPR, 12/22/15: alert user*/
+        }).catch(e => {
+            Toast.error(FRIEND_ERROR);
+            Log.error(e, 'Friend list was unable to load');
         });
     },
     toggleFriends: function () {
