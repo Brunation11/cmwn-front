@@ -9,6 +9,7 @@ import _ from 'lodash';
 import History from 'components/history';
 import Errors from 'components/errors';
 import Log from 'components/log';
+import PublicRoutes from 'public_routes';
 
 const APP_COOKIE_NAME = 'cmwn_token';
 
@@ -39,6 +40,9 @@ var _makeRequestObj = function (requests, body = '', headers = {}) {
 
 var _getRequestPromise = function (method, request, body, headers) {
     var promise;
+    if (window.__USER_UNAUTHORIZED) {
+        return Promise.resolve({data: []});
+    }
     request = _makeRequestObj(request, body, headers);
     if (!_.isArray(request)) {
         request = [request];
@@ -46,9 +50,17 @@ var _getRequestPromise = function (method, request, body, headers) {
     promise = _makeRequest.call(this, method, request);
     if (request.length === 1) {
         return promise.then((res) => {
-            if (res[0].status === 401) {
+            if (res[0].status === 401 && !PublicRoutes.hasPath(window.location.pathname)) {
+                //if we have encountered an unauthorized user, we want to cancel all
+                //further requests until the user can be fully logged out
+                window.__USER_UNAUTHORIZED = true;
                 //force user to login screen on any 401, via the logout, regardless of access pattern
                 History.replaceState(null, '/logout');
+            }
+
+            if (window.location.pathname === '/login' || window.location.pathname === '/logout') {
+                //don't display errors occuring during login and logout, they are handled separately
+                return Promise.resolve(res[0]);
             }
 
             if (request[0].handleErrors === false && res[0].status > 399) {

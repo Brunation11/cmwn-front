@@ -36,14 +36,6 @@
             rg4js('enableCrashReporting', true);
             rg4js('enablePulse', true);
         </script>
-        <!-- errorception -->
-        <script>
-            (function(_,e,rr,s){_errs=[s];var c=_.onerror;_.onerror=function(){var a=arguments;_errs.push(a);
-            c&&c.apply(this,a)};var b=function(){var c=e.createElement(rr),b=e.getElementsByTagName(rr)[0];
-            c.src="//beacon.errorception.com/"+s+".js";c.async=!0;b.parentNode.insertBefore(c,b)};
-            _.addEventListener?_.addEventListener("load",b,!1):_.attachEvent("onload",b)})
-            (window,document,"script","569e734344bba7895e00056b");
-        </script>
         <!-- BEGIN TRACKJS -->
         <script type="text/javascript">window._trackJs = { token: '85b3f3dda6db486aa65502e797c76040' };</script>
         <script type="text/javascript" src="https://d2zah9y47r7bi2.cloudfront.net/releases/current/tracker.js"></script>
@@ -73,6 +65,7 @@
     <body>
         <div id="pageerror"><a href="/login"> </a></div>
         <div id="cmwn-app"></div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.3.14/polyfill.min.js"></script>
         <!--[if lte IE 9]>
             <script>
             (function(){
@@ -86,7 +79,6 @@
             <script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-sham.js"></script>
         <![endif]-->
         <!--[if IE]>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.3.14/polyfill.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/flexie/1.0.3/flexie.min.js"></script>
         <![endif]-->
         <script type="text/javascript">
@@ -98,10 +90,6 @@
             @*/
             if(isIE10){
                 document.getElementsByTagName('html')[0].className += ' ie ie10';
-                var fileref=document.createElement('script');
-                fileref.setAttribute('type','text/javascript');
-                fileref.setAttribute('src', 'https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.3.14/polyfill.min.js');
-                document.getElementsByTagName('head')[0].appendChild(fileref);
             }
         </script>
         <script>

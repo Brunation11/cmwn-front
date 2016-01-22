@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import Home from 'routes/home';
 import Logout from 'routes/logout';
 import Login from 'routes/login';
@@ -11,6 +13,13 @@ var routes = [
     { path: 'logout(/)', component: Logout },
     { path: 'login(/)', component: Login}
 ];
+
+routes.hasPath = function (path) {
+    path = path[0] === '/' ? path.slice(1) : path;
+    return _.reduce(routes, (a, v) => {
+        return a || v.path.indexOf(path) === 0;
+    }, false);
+};
 
 export default routes;
 
