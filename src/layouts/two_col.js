@@ -5,12 +5,13 @@ import Footer from 'components/footer';
 import EventManager from 'components/event_manager';
 
 var Layout = React.createClass({
-    componentWillMount: function () {
+    getInitialState: function () {
+        return {menuIsOpen: false};
+    },
+    componentDidMount: function () {
         EventManager.listen('menuIsOpen', val => {
-            this.menuIsOpen = val;
-            this.forceUpdate();
+            this.setState({menuIsOpen: val});
         });
-        EventManager.update('menuIsOpen', false);
     },
     render: function () {
         return (
@@ -18,7 +19,7 @@ var Layout = React.createClass({
                 <div className="content">
                     {this.props.children}
                 </div>
-                <Sidebar menuIsOpen={this.menuIsOpen}/>
+                <Sidebar menuIsOpen={this.state.menuIsOpen}/>
                 <Footer />
              </div>
         );
