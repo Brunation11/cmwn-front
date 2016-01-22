@@ -9,6 +9,7 @@ import _ from 'lodash';
 import History from 'components/history';
 import Errors from 'components/errors';
 import Log from 'components/log';
+import PublicRoutes from 'public_routes';
 
 const APP_COOKIE_NAME = 'cmwn_token';
 
@@ -46,7 +47,7 @@ var _getRequestPromise = function (method, request, body, headers) {
     promise = _makeRequest.call(this, method, request);
     if (request.length === 1) {
         return promise.then((res) => {
-            if (res[0].status === 401) {
+            if (res[0].status === 401 && !PublicRoutes.hasPath(window.location.pathname)) {
                 //force user to login screen on any 401, via the logout, regardless of access pattern
                 History.replaceState(null, '/logout');
             }
