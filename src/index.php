@@ -38,7 +38,7 @@
         </script>
         <!-- BEGIN TRACKJS -->
         <script type="text/javascript">window._trackJs = { token: '85b3f3dda6db486aa65502e797c76040' };</script>
-        <script type="text/javascript" src="https://d2zah9y47r7bi2.cloudfront.net/releases/current/tracker.js"></script>
+        <script type="text/javascript" src="https://d2zah9y47r7bi2.cloudfront.net/releases/current/tracker.js" crossorigin="anonymous"></script>
         <!--[if IE]>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/xdomain/0.7.3/xdomain.min.js" crossorigin="anonymous"></script>
             <script>
@@ -65,7 +65,7 @@
     <body>
         <div id="pageerror"><a href="/login"> </a></div>
         <div id="cmwn-app"></div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.3.14/polyfill.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.3.14/polyfill.min.js" crossorigin="anonymous"></script>
         <!--[if lte IE 9]>
             <script>
             (function(){
@@ -90,6 +90,7 @@
             @*/
             if(isIE10){
                 document.getElementsByTagName('html')[0].className += ' ie ie10';
+                var fileref=document.createElement('script');
                 fileref.setAttribute("type","text/javascript");
                 fileref.setAttribute("src", "https://cdnjs.cloudflare.com/ajax/libs/xdomain/0.7.3/xdomain.min.js");
                 document.head.appendChild(fileref);
@@ -112,7 +113,7 @@
           data-apikey="c0924f5c3e76f5826be7f38644d1aead">
         </script>
         <!-- sentry -->
-        <script src="https://cdn.ravenjs.com/2.0.5/raven.min.js"></script>
+        <script src="https://cdn.ravenjs.com/2.0.5/raven.min.js" crossorigin="anonymous"></script>
         <script>
             Raven.config('https://bf5b4d5092204c3894a80d732212823d@app.getsentry.com/64252').install();
         </script>
