@@ -41,6 +41,7 @@
         <script type="text/javascript" src="https://d2zah9y47r7bi2.cloudfront.net/releases/current/tracker.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/xdomain/0.7.3/xdomain.min.js" ></script>
         <!--[if IE]>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/xdomain/0.7.3/xdomain.min.js" ></script>
             <script>
                 xdomain.debug = true;
                 xdomain.slaves({
