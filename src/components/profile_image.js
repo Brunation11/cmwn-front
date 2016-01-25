@@ -28,7 +28,7 @@ var Image = React.createClass({
         } else {
             HttpManager.GET({url: `${GLOBALS.API_URL}users/${this.props.uuid}/image`, handleErrors: false})
                 .then(res => {
-                    if (res && res.response && res.response.data && _.isString(_.last(res.response.data).url)) {
+                    if (res && res.response && res.response.data && res.response.data.length && _.isString(_.last(res.response.data).url)) {
                         this.setState({profileImage: _.last(res.response.data).url});
                     }
                 }).catch(e => {
