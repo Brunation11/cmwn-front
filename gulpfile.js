@@ -149,6 +149,8 @@ gulp.task('index', ['primary-style', 'webpack:build', 'explicit-utf-8', 'sri'], 
                 //note: we aren't actually doing anything with app.js, but a file is mandatory
                 var output = '<script>';
                 output += '\nwindow.__cmwn = {};';
+                output += '\nwindow.__cmwn.MODE = "local";';
+                output += '\nwindow.__cmwn.VERSION = "' + appPackage.version + '";';
                 _.each(process.env, function (value, key) {
                     if(key.indexOf(APP_PREFIX) === 0) {
                         console.log('Writing ' + key + ' : ' + value);
@@ -162,8 +164,6 @@ gulp.task('index', ['primary-style', 'webpack:build', 'explicit-utf-8', 'sri'], 
         .pipe(inject(gulp.src('./src/app.js', {read: false}), {
             starttag: '<!-- app:js -->',
             transform: function () {
-                /* Disabling SRI until such a time as chrome correctly generates hashes of files containing non-ascii characters: https://code.google.com/p/chromium/issues/detail?id=527286,  https://code.google.com/p/chromium/issues/detail?id=527436
-                */
                 if (mode === 'production' || mode === 'prod') {
                     return '<script src="/cmwn-' + appPackage.version + '.js" integrity="' + sriHashes['build/cmwn-' + appPackage.version + '.js'] + '" crossorigin="anonymous"></script>';
                 }

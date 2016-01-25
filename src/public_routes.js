@@ -20,6 +20,11 @@ var redirect = function (path) {
 var routes = [
     { path: 'home(/)', component: Home},
     { path: 'grown-ups/partnerships-media/ginas-ink(/)', onEnter: redirect('/')},
+    { path: 'grown-ups/partnerships-media/press-room/live-interviews(/)', onEnter: redirect('/')},
+    { path: 'whats-my-story/my-interests/your-mark/lifestyle-design/your-own-zone(/)', onEnter: redirect('/')},
+    { path: 'for-grown-ups/partnerships-media/our-partners(/)', onEnter: redirect('/')},
+    { path: 'whats-my-story/my-interests/your-mark(/)', onEnter: redirect('/')},
+    { path: 'for-grown-ups/partnerships-media/press-room/blog-posts(/)', onEnter: redirect('/')},
     { path: 'teachers/signup(/)', component: Signup },
     { path: 'logout(/)', component: Logout },
     { path: 'login(/)', component: Login}

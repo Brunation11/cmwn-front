@@ -4,6 +4,7 @@ import {Link} from 'react-router';
 import {Panel} from 'react-bootstrap';
 
 import Layout from 'layouts/two_col';
+import Shortid from 'shortid';
 import FlipBoard from 'components/flipboard';
 import FlipBgDefault from 'media/icon_class_blue.png';
 import GLOBALS from 'components/globals';
@@ -44,9 +45,9 @@ var Page = React.createClass({
             this.forceUpdate();
         });
     },
-    renderFlip: function (item, i){
+    renderFlip: function (item){
         return (
-            <div className="flip" key={i}><Link to={`/group/${item.uuid}/profile`}><img src={FlipBgDefault}></img><p>{item.title}</p></Link></div>
+            <div className="flip" key={Shortid.generate()}><Link to={`/group/${item.uuid}/profile`}><img src={FlipBgDefault}></img><p>{item.title}</p></Link></div>
         );
     },
     render: function () {

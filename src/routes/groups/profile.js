@@ -4,6 +4,7 @@ import {Link} from 'react-router';
 import {Panel} from 'react-bootstrap';
 
 import Layout from 'layouts/two_col';
+import Shortid from 'shortid';
 import Authorization from 'components/authorization';
 import FlipBoard from 'components/flipboard';
 import GLOBALS from 'components/globals';
@@ -62,12 +63,12 @@ var Page = React.createClass({
             return null;
         }
         return (
-            <p className="userFlips">0 Flips Earned</p>
+            <p className="userFlips" key={Shortid.generate()}>0 Flips Earned</p>
         );
     },
     renderFlip: function (item){
         return (
-            <div className="flip">
+            <div className="flip" key={Shortid.generate()}>
                 <Link to={`/student/${item.uuid.toString()}`}><img src={item.images.data.length ? item.images.data[0].url : DefaultProfile}></img>
                     <p className="linkText" >{item.username}</p>
                 </Link>

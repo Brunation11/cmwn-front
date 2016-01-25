@@ -1,4 +1,5 @@
 import React from 'react';
+import Shortid from 'shortid';
 
 //import HttpManager from 'components/http_manager';
 import FlipBoard from 'components/flipboard';
@@ -14,7 +15,7 @@ const TITLE = 'MY CLASSES';
 var Groups = React.createClass({
     renderFlip: function (item){
         return (
-            <div className="flip">
+            <div className="flip" key={Shortid.generate()}>
                 <a href={`/group/${item.uuid}`/** @TODO MPR, 12/7/15: very much need to switch on type, CORE-149*/}>
                     <img src={DefaultProfile}></img><p>{`${item.title}`}</p>
                 </a>

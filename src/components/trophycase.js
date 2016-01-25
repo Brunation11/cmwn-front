@@ -2,6 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import {Panel} from 'react-bootstrap';
 import {Link} from 'react-router';
+import Shortid from 'shortid';
 
 import Fetcher from 'components/fetcher';
 import GLOBALS from 'components/globals';
@@ -20,14 +21,14 @@ var Trophycase = React.createClass({
     renderPartial: function (items) {
         return (
            <div className="flip-list">
-               {_.map(items, (item, i) => (<Link to="" key={i}><img src={`/flips/${item.uuid}.png`} ></img><div className="partial" style={{height: `${item.progress}%`}} ><img src={`/flips/${item.uuid}_grey.png`} ></img></div></Link>))}
+               {_.map(items, (item) => (<Link to="" key={Shortid.generate()}><img src={`/flips/${item.uuid}.png`} ></img><div className="partial" style={{height: `${item.progress}%`}} ><img src={`/flips/${item.uuid}_grey.png`} ></img></div></Link>))}
            </div>
         );
     },
     renderComplete: function (items) {
         return (
            <div className="flip-list">
-               {_.map(items, (item, i) => (<Link to="" key={i}><img src={`/flips/${item.uuid}.png`} ></img></Link>))}
+               {_.map(items, (item) => (<Link to="" key={Shortid.generate()}><img src={`/flips/${item.uuid}.png`} ></img></Link>))}
            </div>
         );
     },

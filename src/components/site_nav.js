@@ -8,7 +8,7 @@ import Log from 'components/log';
 
 
 var SiteNav = React.createClass({
-    componentWillMount: function () {
+    componentDidMount: function () {
         this.menuItems = [];
         this.getMenuItems();
     },
@@ -23,7 +23,7 @@ var SiteNav = React.createClass({
 
     },
     renderNavItems: function () {
-        return _.map(this.menuItems, item => (<li key={`(${item.text}) ${item.url}`}><Link to={item.url}>{item.text}</Link></li>));
+        return _.map(this.menuItems, item => (<li key={`(${item.text})-${item.url}`}><Link to={item.url}>{item.text}</Link></li>));
     },
     render: function () {
         return (
