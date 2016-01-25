@@ -20,7 +20,6 @@ import TeacherProfile from 'routes/teachers/profile';
 import TeacherEdit from 'routes/teachers/edit';
 import ParentProfile from 'routes/parents/profile';
 import ParentEdit from 'routes/parents/edit';
-import Sitemap from 'sitemap';
 
 var redirect = function (path) {
     return function (nextState, transition) {
@@ -34,7 +33,6 @@ var redirect = function (path) {
 
 var routes = [
     { path: 'auth/logout(/)', onEnter: redirect('/logout')},
-    { path: 'sitemap(/)', component: Sitemap },
     { path: 'users(/)', component: Users },
     { path: 'profile(/)', component: Profile},
     { path: 'games(/)', component: Profile},
