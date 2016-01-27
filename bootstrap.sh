@@ -15,8 +15,8 @@ if ! [ -L /var/www ]; then
 fi
 sudo cp /etc/apache2/mods-available/socache_shmcb.load /etc/apache2/mods-enabled/
 sudo cp /etc/apache2/mods-available/ssl.* /etc/apache2/mods-enabled/
-sudo cp mods-available/proxy_http.load mods-enabled/
-sudo cp mods-available/rewrite.load mods-enabled/
+sudo cp /etc/apache2/mods-available/proxy_http.load /etc/apache2/mods-enabled/
+sudo cp /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled/
 sudo rm /etc/apache2/sites-enabled/000-default.conf
 sudo a2enmod headers
 sudo a2enmod proxy
