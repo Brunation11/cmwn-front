@@ -9,7 +9,9 @@ RewriteCond %{HTTP:X-Forwarded-Proto} =http
 #RewriteRule ^(.*) https://%{HTTP_HOST}/$1
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R,L]
 
-RewriteCond %{REQUEST_URI}  !\.(pdf|css|png|jpg|gif|jpeg|bmp|js|ico|woff|php)$
+#RewriteCond %{REQUEST_URI}  !\.(pdf|css|png|jpg|gif|jpeg|bmp|js|ico|woff|php)$
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule (.*)  index.php [QSA]
 
 </IfModule>
