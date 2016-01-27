@@ -34,17 +34,13 @@ var Edit = React.createClass({
             if (!res.response.data.can_update) { //eslint-disable-line camel_case
                 History.replaceState(null, `/organization/${this.props.params.id}/profile`);
             }
-            this.setState({
-                code: this.organization.code,
-                title: this.organization.title,
-                description: this.organization.description
-            });
+            this.setState(this.organization);
         });
     },
     submitData: function () {
     },
     render: function () {
-        if (this.state.organization == null || !this.state.organization.can_update) {
+        if (this.state.uuid == null || !this.state.can_update) {
             return null;
         }
         return (
@@ -55,7 +51,7 @@ var Edit = React.createClass({
                     value={this.state.title}
                     placeholder="title"
                     label="Title"
-                    bsStyle={Validate.len(this.state.title)}
+                    bsStyle={Validate.min(3, this.state.title)}
                     hasFeedback
                     ref="titleInput"
                     onChange={() => this.setState({title: this.refs.titleInput.getValue()})}
