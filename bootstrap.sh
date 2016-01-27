@@ -7,7 +7,7 @@ apt-get install -y nodejs
 apt-get install -y npm
 apt-get install -y build-essential
 npm install -g gulp babel webpack
-(cd /var/www && npm install && gulp build --development)
+(cd /vagrant && npm install && gulp build --development)
 if ! [ -L /var/www ]; then
   rm -rf /var/www
   mkdir -p /vagrant/build
