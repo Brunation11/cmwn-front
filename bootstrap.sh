@@ -3,8 +3,11 @@
 apt-get update
 apt-get install -y apache2
 apt-get install -y php5-common libapache2-mod-php5 php5-cli
-apt-get install nodejs
-apt-get install npm
+apt-get install -y nodejs
+apt-get install -y npm
+apt-get install -y build-essential
+npm install -g gulp babel webpack
+(cd /var/www && npm install && gulp build --development)
 if ! [ -L /var/www ]; then
   rm -rf /var/www
   mkdir -p /vagrant/build
