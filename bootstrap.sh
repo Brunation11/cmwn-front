@@ -3,6 +3,8 @@
 apt-get update
 apt-get install -y apache2
 apt-get install -y php5-common libapache2-mod-php5 php5-cli
+apt-get install nodejs
+apt-get install npm
 if ! [ -L /var/www ]; then
   rm -rf /var/www
   mkdir -p /vagrant/build
@@ -16,4 +18,5 @@ sudo rm /etc/apache2/sites-enabled/000-default.conf
 sudo a2enmod headers
 sudo a2enmod proxy
 cp /vagrant/vhosts.conf /etc/apache2/sites-enabled/
+sudo apache2ctl start
 sudo apache2ctl graceful
