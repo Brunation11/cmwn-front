@@ -21,5 +21,6 @@ sudo rm /etc/apache2/sites-enabled/000-default.conf
 sudo a2enmod headers
 sudo a2enmod proxy
 cp /vagrant/vhosts.conf /etc/apache2/sites-enabled/
+cp /vagrant/variables.conf /etc/apache2/conf-enabled/
 sudo apache2ctl start
 sudo apache2ctl graceful
