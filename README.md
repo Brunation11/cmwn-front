@@ -2,54 +2,24 @@
 ChangeMyWorldNow platform frontend (react)
 ## Getting running
 ### Environment
-First, you will need Node, NPM, and Gulp installed on your system and available in your system path. 
-Here is my setup for mac, using brew:
-```
-# I also strongly encourage you to install homebrew, just to make your life easier
-# If you dont feel like it, there are installers for node/npm at https://nodejs.org/en/download/
-#install homebrew
-ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-#install node
-brew install node
-#install npm
-brew install npm
-#install gulp, start here if you didnt want to use brew
-npm install -g gulp
-```
+1) Install virtualbox (`brew install virtualbox` or https://www.virtualbox.org/wiki/Downloads) and vagrant (`brew install vagrant` or https://www.vagrantup.com/downloads.html)
+2) Clone this repo (git@github.com:ginasink/cmwn-front.git) somewhere and switch to this branch (max/vagrant-up)
+3) Add the following 2 entries to your hosts file:
+   ```
+      192.168.33.10 loc.changemyworldnow.com
+      192.168.33.10 api-loc.changemyworldnow.com
+   ```
+4.a) If you want anything other than the homepage to work, setup a local API server by following https://github.com/ginasink/cmwn-platform/wiki/Local-API-Setup (Note: This setup assumes that the default Homestead static IP is used (192.168.10.10). If for some reason you need to change this, you will also need to update vhosts.conf to reflect this change)
+4.b) Alternatively, if you prefer to point your local api to api-dev, simply update the value in variables.conf
+5) Run `vagrant up`.
+6) Once this completes, navigate to https://api-loc.changemyworldnow.com and https://loc.changemyworldnow.com . You will see certificate security errors due to a self-signed cert. Allow the browser to proceed for *both* urls
+7) Your local frontend is now configured.
 
-### Local Setup
-once you have all of those set up, clone this repo and navigate to whereever you cloned it
-then run
-```
-npm install
-gulp
-```
-### Viewing the site
-The site is now up on http://localhost You'll need to set up a changemyworldnow.com subdomain, as our security policies will deny any other urls.
-To do so, add the following entries to your hosts file in order to hit the api (only the first is required at this stage, but may as well add them all now):
-```
-#local dev server
-127.0.0.1       loc.changemyworldnow.com
-#local api server (setup instructions below
-127.0.0.1       lapi.changemyworldnow.com
-192.168.10.10       proxy.changemyworldnow.com
-```
-You may replace the loc and lapi subdomains with whatever you wish. proxy is used by the express dev server to forward any localhost requests on port 3001 to the local API server, which makes virtualized cross-browser testing easier. The process of setting up a local API server is described below.
 
-### Local api 
-If you want to use the local API, add the  hosts entries for the api: 
-```
-127.0.0.1       lapi.changemyworldnow.com
-192.168.10.10 proxy.changemyworldnow.com
-```
-Then, follow these instructions to set it up: https://github.com/ginasink/cmwn-platform/wiki/Local-API-Setup   
-You can control what api URL the frontend looks for with an environment variable. Use 
-`export APP_API_URL=lapi.changemyworldnow.com:3001/` to set this. Add this to your `.bash_profile` if you want it to always be set, but make sure you change it to api.changemyworldnow before a production build and deploy. Also note the trailing slash on the variable, which should be present regardless of what the URL is set to.
-
-## Environment Variables
-Any local environment variable you have beginning with `APP_` will be available via the `components/globals` module 
-in javascript. To access them, import the module and access them by name:    
-```
-import GLOBALS from 'components/globals'; //note all caps. All globals are constant and cannot be modified
-GLOBALS.API_URL; // === your local $APP_API_URL. Note that the APP_ prefix is dropped
-```
+ Note that this setup is not ideal for active development on the frontend itself, as commands must be issued to the build tools via vagrant, as`vagrant ssh -c (cd /vagrant && YOUR COMMAND)`. Common examples:
+- HRM Dev mode: `vagrant ssh -c (cd /vagrant && gulp)`
+- Production build: 'vagrant ssh -c (cd /vagrant && gulp build --production)'
+- Add dependency: `vagrant ssh -c (cd /vagrant && npm install someDep --save)`
+Alternatively, local file changes will be refleccted in the vagrant, so if one desires to work entriely around the concept of a vagrant box, install npm and gulp locally and just run the commands locally as normal.
+Additionally, for environmental changes (e.g. changes to .conf files), run `vagrant reload --provision` to reload everything inside the vagrant.
+Until I work out a less annoying way to run commands from the host into the vagrant, just set up local aliases for the above three commands.
