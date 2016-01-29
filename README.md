@@ -2,7 +2,7 @@
 ChangeMyWorldNow platform frontend (react)
 ## Getting running
 ### Environment
-1) Install virtualbox (`brew install virtualbox` or https://www.virtualbox.org/wiki/Downloads) and vagrant (`brew install vagrant` or https://www.vagrantup.com/downloads.html)   
+1) Install virtualbox (`brew install virtualbox` or https://www.virtualbox.org/wiki/Downloads) and vagrant (https://www.vagrantup.com/downloads.html)   
 2) Clone this repo (git@github.com:ginasink/cmwn-front.git) somewhere and switch to this branch (max/vagrant-up)   
 3) Add the following 2 entries to your hosts file:
    ```
