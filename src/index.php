@@ -37,12 +37,16 @@
         <!-- inject:env -->
         <!-- endinject -->
         <?php 
-            echo "<script>";
+            echo "<script>\n";
+            echo "window.__cmwn = window.__cmwn || {};\n";
             foreach ($_SERVER as $key=>$val) {
                 if (strrpos($key, "APP_", -strlen($key)) !== FALSE) {
                     echo 'window.__cmwn.'.substr($key, 4)." = '".str_replace('_', '.', $val)."';\n";
                 }
             }
+            $package = file_get_contents('../package.json');
+            $packageJSON = json_decode($package, true);
+            echo "window.__cmwn.VERSION = '".$packageJSON['version']."';\n";
             echo "</script>";
          ?>
     </head>
