@@ -104,6 +104,7 @@ var Profile = React.createClass({
     },
     hideModal: function () {
         this.setState({gameOn: false});
+        this.refs.gameRef.dispatchPlatformEvent('quit');
     },
     renderGame: function () {
         if (Detector.isMobileOrTablet() || Detector.isIe9() || Detector.isIe10()) {
@@ -116,8 +117,8 @@ var Profile = React.createClass({
         }
         return (
             <div>
-                <Game isTeacher={!this.state.isStudent} url={this.state.gameUrl} onExit={() => this.setState({gameOn: false})}/>
-                <a onClick={() => this.setState({gameOn: false})} className="modal-close">(close)</a>
+                <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl} onExit={() => this.setState({gameOn: false})}/>
+                <a onClick={this.hideModal} className="modal-close">(close)</a>
             </div>
         );
     },
