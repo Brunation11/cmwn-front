@@ -20,7 +20,7 @@ const HEADINGS = {
     PASSWORD: 'Update Password'
 };
 const ERRORS = {
-    BAD_PASS: 'Sorry, there was a problem updating your password'
+    BAD_PASS: 'Sorry, there was a problem updating your password.'
 };
 const SUSPEND = 'Suspend Account';
 const INVALID_SUBMISSION = 'Invalid submission. Please update fields highlighted in red and submit again';
@@ -78,9 +78,9 @@ var Fields = React.createClass({
         if (this.refs.formRef.isValid()) {
             HttpManager.POST(`${GLOBALS.API_URL}users/${this.state.uuid}`, postData).then(() => {
                 Toast.success('Profile Updated');
-            }).catch(() => {
-                Toast.error(BAD_UPDATE);
-                Log.log('Server refused profile update', postData);
+            }).catch(err => {
+                Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
+                Log.log('Server refused profile update', err, postData);
             });
         } else {
             Toast.error(INVALID_SUBMISSION);
@@ -283,8 +283,7 @@ var ChangePassword = React.createClass({
             });
             update.then(() => {})
                 .catch(err => {
-                    /** #TODO MPR, 12/22/15: handle failure */
-                    Log.warn('Update password failed', err);
+                    Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
                     Toast.error(ERRORS.BAD_PASS);
                 });
         } else {
