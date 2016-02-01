@@ -1,5 +1,7 @@
 import _ from 'lodash';
 
+import Log from 'components/log';
+
 var Util = {
     /**
      *  Takes in a nested json object and extracts properties from its data
@@ -27,10 +29,19 @@ var Util = {
     },
     /** from http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript */
     uuid: function () {
+        Log.warn('uuid deprecated. Use ShortId');
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);//eslint-disable-line eqeqeq
             return v.toString(16);
         });
+    },
+    setPageTitle: function (text) {
+        var titleElem = document.getElementsByTagName('title')[0];
+        var title = document.createTextNode(text);
+        while (titleElem.lastChild) {
+            titleElem.removeChild(titleElem.lastChild);
+        }
+        titleElem.appendChild(title);
     }
 };
 
