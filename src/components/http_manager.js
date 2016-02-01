@@ -146,7 +146,6 @@ var _makeRequest = function (verb, requests){
                 if (req.asJSON) {
                     req.body = JSON.stringify(req.body);
                 } else {
-                    /** @TODO MPR, 11/19/15: Polyfill formdata*/
                     req.body = _.reduce(req.body, (acc, val, key) => {
                         acc.append(key, val);
                         return acc;

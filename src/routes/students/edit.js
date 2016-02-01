@@ -19,6 +19,9 @@ const HEADINGS = {
     EDIT_TITLE: 'Info',
     PASSWORD: 'Update Password'
 };
+const ERRORS = {
+    BAD_PASS: 'Sorry, there was a problem updating your password'
+};
 const SUSPEND = 'Suspend Account';
 const INVALID_SUBMISSION = 'Invalid submission. Please update fields highlighted in red and submit again';
 const BAD_UPDATE = 'There was a problem updating your profile. Please try again later.';
@@ -279,8 +282,10 @@ var ChangePassword = React.createClass({
                 'user_uuid': this.props.uuid
             });
             update.then(() => {})
-                .catch(() => {
+                .catch(err => {
                     /** #TODO MPR, 12/22/15: handle failure */
+                    Log.warn('Update password failed', err);
+                    Toast.error(ERRORS.BAD_PASS);
                 });
         } else {
             this.setState({extraProps: {bsStyle: 'error'}});

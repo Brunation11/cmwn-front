@@ -42,8 +42,6 @@ var Page = React.createClass({
         urlData.then(res => {
             Util.normalize(res.response, 'users', []);
             this.group = res.response.data;
-            /** @TODO MPR, 12/21/15: Remove this line once CORE-146 and CORE-219 are done*/
-            res.response.data.can_update = res.response.data.can_update || res.response.data.canupdate; //eslint-disable-line
             this.forceUpdate();
         });
     },
