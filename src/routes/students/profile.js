@@ -15,6 +15,7 @@ import Fetcher from 'components/fetcher';
 import EditLink from 'components/edit_link';
 import Trophycase from 'components/trophycase';
 import GLOBALS from 'components/globals';
+import Util from 'components/util';
 
 import FlipBgDefault from 'media/flip-placeholder-white.png';
 
@@ -25,11 +26,13 @@ const HEADINGS = {
     ARCADE: 'Take Action'
 };
 const PLAY = 'Play Now!';
+const PAGE_TITLE = 'Profile';
 const BROWSER_NOT_SUPPORTED = <span><p>For the best viewing experience we reccomend the desktop version in Chrome</p><p>If you don't have chrome, <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">download it for free here</a>.</p></span>;
 
 var Page = React.createClass({
     getInitialState: function () {
         var self = this;
+        Util.setPageTitle(PAGE_TITLE);
         self.uuid = self.props.params.id || Authorization.currentUser.uuid;
         self.url = GLOBALS.API_URL + 'users/' + self.uuid + '?include=roles,groups,images';
         self.currentLoc = document.location.pathname;
