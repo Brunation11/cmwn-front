@@ -3,6 +3,8 @@ import {Button, Input} from 'react-bootstrap';
 //import Cookie from 'cookie';
 
 import Layout from 'layouts/one_col';
+import Log from 'components/log';
+import Toast from 'components/toast';
 import History from 'components/history';
 import HttpManager from 'components/http_manager';
 import Authorization from 'components/authorization';
@@ -15,6 +17,10 @@ const LABELS = {
     LAST_NAME: 'Last Name',
     PASSWORD: 'Password',
     SUBMIT: 'SUBMIT'
+};
+
+const ERRORS = {
+    LOGIN: 'There was a problem with signup. Please refresh the page and try again.'
 };
 
 var Page = React.createClass({
@@ -66,10 +72,13 @@ var Page = React.createClass({
                         Authorization.reloadUser();
                         History.replaceState(null, '/profile');
                     } else {
-                        throw res;
+                        Toast.error(ERRORS.LOGIN);
+                        Log.log(res, 'Invalid login', req);
                     }
-                }).catch(() => {
+                }).catch((err) => {
                     // @TODO MPR, 12/22/15: Alert user of error
+                    Toast.error(ERRORS.LOGIN);
+                    Log.log(err, 'Invalid login');
                 });
             });
         }
