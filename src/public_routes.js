@@ -3,7 +3,7 @@ import _ from 'lodash';
 import Home from 'routes/home';
 import Logout from 'routes/logout';
 import Login from 'routes/login';
-import Signup from 'routes/teachers_signup';
+import Signup from 'routes/teacher_signup';
 
 import 'routes/logout.scss';
 
