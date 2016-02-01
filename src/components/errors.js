@@ -21,7 +21,7 @@ var renderErrors = function () {
     );
 };
 
-var show403 = function () {
+var show403 = function (url) {
     var redirect = window.setTimeout(function () {
         History.replaceState(null, '/profile');
         window.location.reload();
@@ -33,7 +33,7 @@ var show403 = function () {
         <div id="triggerederror" className="error403"><a href="/profile"> </a></div>
     );
     _.each(_handlers, handler => handler());
-    Log.error('displayed 403', ...arguments, window.location, Authorization.currentUser);
+    Log.error('displayed 403: ' + url, ...arguments, window.location, Authorization.currentUser);
     EventManager.update('errorChange', _errors);
 };
 
@@ -42,25 +42,25 @@ var show404 = function () {
         <div id="triggerederror" className="error404"><a href="/profile"> </a></div>
     );
     _.each(_handlers, handler => handler());
-    Log.error('Displayed 404', ...arguments, window.location, Authorization.currentUser);
+    Log.error('Displayed 404: ' + window.location.pathname, ...arguments, window.location, Authorization.currentUser);
     EventManager.update('errorChange', _errors);
 };
 
-var show500 = function () {
+var show500 = function (url) {
     _errors.push(
         <div id="triggerederror" className="error500"><a href="/profile" className="gohome"> </a><a onClick={() => window.location.reload()}> </a></div>
     );
     _.each(_handlers, handler => handler());
-    Log.error('Displayed 500', ...arguments, window.location, Authorization.currentUser);
+    Log.error('Displayed 500: ' + url, ...arguments, window.location, Authorization.currentUser);
     EventManager.update('errorChange', _errors);
 };
 
-var showApplication = function () {
+var showApplication = function (err) {
     _errors.push(
         <div id="triggerederror" className="applicationerror"><a href="/profile"> </a></div>
     );
     _.each(_handlers, handler => handler());
-    Log.error('Displayed Application Error', ...arguments, window.location, Authorization.currentUser);
+    Log.error('Displayed Application Error: ' + (err && err.message != null ? err.message : err), ...arguments, window.location, Authorization.currentUser);
     EventManager.update('errorChange', _errors);
 };
 
