@@ -50,22 +50,7 @@ class _Authorization {
             Log.info(`User ${res.response.data.uuid} authorized`);
 
             //configure trackers to logged in user
-            rg4js('setUser', { //eslint-disable-line no-undef
-                identifier: res.response.data.uuid,
-                isAnonymous: false,
-                email: res.response.data.username,
-                firstName: res.response.data.username,
-                fullName: res.response.data.username
-            });
-
-            trackJs.configure({userId: res.response.data.uuid}); //eslint-disable-line no-undef
-
             Rollbar.configure({payload: {person: {id: res.response.data.uuid, username: res.response.data.username}}}); //eslint-disable-line no-undef
-
-            Raven.setUserContext({ //eslint-disable-line no-undef
-                email: res.response.data.username,
-                id: res.response.data.uuid
-            });
         }).catch(e => {
             Log.log(e, 'Error encountered during authorization check. Logging out.');
             //user is not logged in.
