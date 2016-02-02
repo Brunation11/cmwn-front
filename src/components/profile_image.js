@@ -69,7 +69,7 @@ var Image = React.createClass({
                     Toast.error(MODERATION);
                 }).catch(() => {
                     Toast.error(UPLOAD_ERROR);
-                    Log.error(e, 'Failed image upload');
+                    Log.warn(e, 'Failed image upload');
                 });
             });
             /* eslint-enable camelcase */

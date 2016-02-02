@@ -6,8 +6,6 @@ import _ from 'lodash';
 
 import {Button, Glyphicon} from 'react-bootstrap';
 
-import Log from 'components/log';
-
 import 'components/game.scss';
 
 const EVENT_PREFIX = '_e_';
