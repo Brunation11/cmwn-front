@@ -44,7 +44,7 @@
                     echo 'window.__cmwn.'.substr($key, 4)." = '".str_replace('_', '.', $val)."';\n";
                 }
             }
-            $package = file_get_contents('../package.json');
+            $package = file_get_contents('./package.json');
             $packageJSON = json_decode($package, true);
             echo "window.__cmwn.VERSION = '".$packageJSON['version']."';\n";
             echo "</script>";
