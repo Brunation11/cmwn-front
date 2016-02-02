@@ -1,3 +1,4 @@
+.vagrant
 node_modules
 build
 **/*.swp
@@ -7,3 +8,5 @@ build
 bumpVersion.sh
 npm-debug.log.*
 .brackets.json
+.vagrant
+.vagrant/**/*
