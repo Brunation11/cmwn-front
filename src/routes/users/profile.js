@@ -19,7 +19,7 @@ import Util from 'components/util';
 
 import FlipBgDefault from 'media/flip-placeholder-white.png';
 
-import 'routes/students/profile.scss';
+import 'routes/users/profile.scss';
 
 const HEADINGS = {
     ACTION: 'Profile',

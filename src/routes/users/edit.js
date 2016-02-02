@@ -13,7 +13,7 @@ import Fetcher from 'components/fetcher';
 import ProfileImage from 'components/profile_image';
 import Form from 'components/form';
 
-import 'routes/students/edit.scss';
+import 'routes/users/edit.scss';
 
 const HEADINGS = {
     EDIT_TITLE: 'Info',

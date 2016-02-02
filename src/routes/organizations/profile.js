@@ -12,7 +12,7 @@ import HttpManager from 'components/http_manager';
 import EditLink from 'components/edit_link';
 import Util from 'components/util';
 
-import 'routes/students/profile.scss';
+import 'routes/users/profile.scss';
 
 const HEADINGS = {
     ALL_CLASSES: 'All Classes',
