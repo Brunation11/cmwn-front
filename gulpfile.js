@@ -223,6 +223,8 @@ gulp.task('primary-style', function (done) {
 
     var htaccess = gulp.src('./.htaccess').pipe(gulp.dest('./build'));
 
+    var packageJson = gulp.src('./package.json').pipe(gulp.dest('./build'));
+
     var fonts = gulp.src('./src/media/fonts/*.*').pipe(gulp.dest('./build/fonts'));
 
     var reset = gulp.src('./src/reset.css').pipe(gulp.dest('./build'));
@@ -277,3 +279,4 @@ gulp.task('lint', function () {
         // lint error, return the stream and pipe to failAfterError last.
 //        .pipe(eslint.failAfterError());
 });
+

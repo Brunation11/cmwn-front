@@ -23,22 +23,6 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/humane-js/3.2.2/themes/flatty.min.css" crossorigin="anonymous">
         <!-- inject:style -->
         <!-- endinject -->
-        <!-- raygun -->
-        <script type="text/javascript">
-          !function(a,b,c,d,e,f,g,h){a.RaygunObject=e,a[e]=a[e]||function(){
-          (a[e].o=a[e].o||[]).push(arguments)},f=b.createElement(c),g=b.getElementsByTagName(c)[0],
-          f.async=1,f.src=d,g.parentNode.insertBefore(f,g),h=a.onerror,a.onerror=function(b,c,d,f,g){
-          h&&h(b,c,d,f,g),g||(g=new Error(b)),a[e].q=a[e].q||[],a[e].q.push({
-          e:g})}}(window,document,"script","//cdn.raygun.io/raygun4js/raygun.min.js","rg4js");
-        </script>
-        <script type="text/javascript">
-            rg4js('apiKey', 'DU/YhFbNbg3/tpaTjYBtvw==');
-            rg4js('enableCrashReporting', true);
-            rg4js('enablePulse', true);
-        </script>
-        <!-- BEGIN TRACKJS -->
-        <script type="text/javascript">window._trackJs = { token: '85b3f3dda6db486aa65502e797c76040' };</script>
-        <script type="text/javascript" src="https://d2zah9y47r7bi2.cloudfront.net/releases/current/tracker.js" crossorigin="anonymous"></script>
         <!--[if IE]>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/xdomain/0.7.3/xdomain.min.js" crossorigin="anonymous"></script>
             <script>
@@ -53,12 +37,16 @@
         <!-- inject:env -->
         <!-- endinject -->
         <?php 
-            echo "<script>";
+            echo "<script>\n";
+            echo "window.__cmwn = window.__cmwn || {};\n";
             foreach ($_SERVER as $key=>$val) {
                 if (strrpos($key, "APP_", -strlen($key)) !== FALSE) {
                     echo 'window.__cmwn.'.substr($key, 4)." = '".str_replace('_', '.', $val)."';\n";
                 }
             }
+            $package = file_get_contents('../package.json');
+            $packageJSON = json_decode($package, true);
+            echo "window.__cmwn.VERSION = '".$packageJSON['version']."';\n";
             echo "</script>";
          ?>
     </head>
@@ -107,18 +95,7 @@
                 style.sheet.insertRule('#pageerror{display:none;}', 0);
             }
         </script>
-        <!-- bugsnag -->
-        <script
-          src="//d2wy8f7a9ursnm.cloudfront.net/bugsnag-2.min.js"
-          data-apikey="c0924f5c3e76f5826be7f38644d1aead">
-        </script>
-        <!-- sentry -->
-        <script src="https://cdn.ravenjs.com/2.0.5/raven.min.js" crossorigin="anonymous"></script>
-        <script>
-            Raven.config('https://bf5b4d5092204c3894a80d732212823d@app.getsentry.com/64252').install();
-        </script>
         <!-- rollbar -->
-        <!-- raygun and errorception in head -->
         <script>
         var _rollbarConfig = {
             accessToken: "4635aacc2d3645a48e99c947e3a75a8d",
