@@ -3,7 +3,7 @@ import 'polyfills';//minor polyfills here. Major polyfilles (e.g. es5 shim) load
 import React from 'react';
 import _ from 'lodash';
 import ReactDOM from 'react-dom';
-import { Router, Link } from 'react-router';
+import { Router } from 'react-router';
 
 import GlobalHeader from 'components/global_header';
 import Log from 'components/log';
@@ -14,7 +14,6 @@ import PrivateRoutes from 'private_routes';
 import EventManager from 'components/event_manager';
 
 import Errors from 'components/errors';
-import Layout from 'layouts/one_col';
 import Home from 'routes/home';
 
 //import 'reset.css';
@@ -63,31 +62,6 @@ var App = React.createClass({
 
 var Landing = React.createClass({
     render: function () {
-        //var redirect;
-        if (GLOBALS.MODE != null && (~GLOBALS.MODE.indexOf('dev') || ~GLOBALS.MODE.indexOf('development'))) {
-            return (
-                <Layout>
-                    <h1>Welcome</h1>
-                    <p>This is a temporary landing page for ease of navigation to site sections
-                    as they are constructed.</p>
-                    <p>
-                        <Link to="/districts">districts</Link>
-                    </p>
-                    <p>
-                        <Link to="/organizations">organizations</Link>
-                    </p>
-                    <p>
-                        <Link to="/groups">groups</Link>
-                    </p>
-                </Layout>
-            );
-        }
-        //redirect = window.setTimeout(function () {
-        //    History.replaceState(null, '/profile');
-        //}, 10000);
-        //History.listenBeforeUnload(() => {
-        //    window.clearTimeout(redirect);
-        //});
         Errors.show404();
         return (
             <div> </div>
