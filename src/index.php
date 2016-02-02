@@ -71,6 +71,7 @@
         <![endif]-->
         <script type="text/javascript">
             var isIE10 = false;
+            var fileref;
             /*@cc_on
                 if (/^10/.test(@_jscript_version)) {
                     isIE10 = true;
@@ -78,11 +79,20 @@
             @*/
             if(isIE10){
                 document.getElementsByTagName('html')[0].className += ' ie ie10';
-                var fileref=document.createElement('script');
+                fileref=document.createElement('script');
                 fileref.setAttribute("type","text/javascript");
                 fileref.setAttribute("src", "https://cdnjs.cloudflare.com/ajax/libs/xdomain/0.7.3/xdomain.min.js");
                 document.head.appendChild(fileref);
-                document.getElementsByTagName('html')[0].className = 'ie10';
+            }
+            //polyfill localstorage
+            try {
+                storage.setItem(testKey, '1');
+                storage.removeItem(testKey);
+            } catch (error) {
+                fileref=document.createElement('script');
+                fileref.setAttribute("type","text/javascript");
+                fileref.setAttribute("src", "//cdnjs.cloudflare.com/ajax/libs/localStorage/2.0.1/localStorage.min.js");
+                document.head.appendChild(fileref);
             }
         </script>
         <script>
