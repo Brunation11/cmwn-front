@@ -104,8 +104,20 @@ function run() {
 
 const loadedStates = ['complete', 'loaded', 'interactive'];
 
+
+//from http://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript-jquery
+var hashCode = function (s){
+  return s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0); //eslint-disable-line
+};
+
 if (Rollbar && ~window.__cmwn.MODE.indexOf('prod')){ //eslint-disable-line no-undef
     Rollbar.configure({reportLevel: 'error'}); //eslint-disable-line no-undef
+}
+if (Rollbar != null) {
+    Rollbar.configure({checkIgnore: function (isUncaught, args, payload) {
+        return isUncaught === true || payload.data.level === 'debug';
+    }
+});
 }
 if (loadedStates.indexOf(document.readyState) !== -1 && document.getElementById('cmwn-app')) {
     run();
