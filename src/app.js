@@ -104,6 +104,9 @@ function run() {
 
 const loadedStates = ['complete', 'loaded', 'interactive'];
 
+if (Rollbar && ~window.__cmwn.MODE.indexOf('prod')){ //eslint-disable-line no-undef
+    Rollbar.configure({reportLevel: 'error'}); //eslint-disable-line no-undef
+}
 if (loadedStates.indexOf(document.readyState) !== -1 && document.getElementById('cmwn-app')) {
     run();
     console.info('running'); //eslint-disable-line
