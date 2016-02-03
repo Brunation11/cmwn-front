@@ -14,7 +14,7 @@ import GroupEdit from 'routes/groups/edit';
 import GroupProfile from 'routes/groups/profile';
 import Friends from 'routes/friends';
 import SuggestedFriends from 'routes/friends/suggested';
-import Profile from 'routes/user/profile';
+import Profile from 'routes/users/profile';
 import StudentEdit from 'routes/users/edit';
 
 var redirect = function (path) {
