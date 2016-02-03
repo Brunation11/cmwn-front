@@ -69,7 +69,7 @@ var Landing = React.createClass({
     }
 });
 
-const routes = {
+var routes = {
     path: '/',
     component: App,
     indexRoute: {component: Landing},
@@ -81,7 +81,8 @@ const routes = {
 function run() {
     window._bootstrap_attempts = window._bootstrap_attempts || 0; //eslint-disable-line camelcase
     try {
-        Log.info('Application started');
+        debugger;
+        window._bootstrap_attempts++;
         ReactDOM.render(<Router history={History} routes={routes} />, document.getElementById('cmwn-app'));
         console.log('%cWoah there, World Changer!', 'font-weight: bold; color: red; font-size: 60px; font-family: Helvetica, Impact, Arial, sans-serif; text-shadow: 2px 2px grey;'); //eslint-disable-line no-console
         console.log('%cChangeMyWorldNow will never ask you to enter any of your information in this space, or ask you to paste anything here. For your security, we recommend you close this console.', 'font-weight: bold; color: #2CC4F4; font-size: 25px; font-family: Helvetica, Impact, Arial, sans-serif;'); //eslint-disable-line no-console
@@ -91,12 +92,14 @@ function run() {
             console.warn = _.noop; //eslint-disable-line no-console
             /**let errors surface*/
         }
+        Log.info('Application started');
     } catch (err) {
-        Log.warn('Application bootstrap failed, attempting to recover. Attempt ' + window._bootstrap_attempts + ' out of 5');
+        Log.info('Application bootstrap failed, attempting to recover. Attempt ' + window._bootstrap_attempts + ' out of 5');
         if (window._bootstrap_attempts < 5) {
             window.setTimeout(run, 500);
+        } else {
+            Errors.showApplication(err);
         }
-        Errors.showApplication(err);
     }
 }
 
@@ -108,4 +111,9 @@ if (loadedStates.indexOf(document.readyState) !== -1 && document.getElementById(
 } else {
     window.addEventListener('DOMContentLoaded', run, false);
 }
+
+window.__cmwn.interactiveDebug = function () {
+    window.debugging = true;
+    Rollbar.configure({reportLevel: 'info'}); //eslint-disable-line
+};
 
