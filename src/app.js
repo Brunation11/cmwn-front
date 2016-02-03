@@ -81,7 +81,6 @@ var routes = {
 function run() {
     window._bootstrap_attempts = window._bootstrap_attempts || 0; //eslint-disable-line camelcase
     try {
-        debugger;
         window._bootstrap_attempts++;
         ReactDOM.render(<Router history={History} routes={routes} />, document.getElementById('cmwn-app'));
         console.log('%cWoah there, World Changer!', 'font-weight: bold; color: red; font-size: 60px; font-family: Helvetica, Impact, Arial, sans-serif; text-shadow: 2px 2px grey;'); //eslint-disable-line no-console
