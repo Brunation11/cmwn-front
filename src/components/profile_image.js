@@ -33,7 +33,7 @@ var Image = React.createClass({
                     }
                 }).catch(e => {
                     Toast.error(NO_IMAGE);
-                    Log.error(e, 'Image could not be extracted from user');
+                    Log.debug(e, 'Image could not be extracted from user');
                 });
         }
     },
@@ -69,7 +69,7 @@ var Image = React.createClass({
                     Toast.error(MODERATION);
                 }).catch(() => {
                     Toast.error(UPLOAD_ERROR);
-                    Log.warn(e, 'Failed image upload');
+                    Log.error(e, 'Failed image upload');
                 });
             });
             /* eslint-enable camelcase */
