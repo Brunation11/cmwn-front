@@ -68,15 +68,15 @@ var _getRequestPromise = function (method, request, body, headers) {
             }
 
             if (res[0].status > 499) {
-                Errors.show500(request[0].url, res);
+                Errors.show500(res);
             } else if (res[0].status === 403) {
-                Errors.show403(request[0].url, res);
+                Errors.show403(res);
             } else if (res[0].status === 404) {
-                Errors.show404(request[0].url, res);
+                Errors.show404(res);
             } else if (res[0].status > 399) {
                 Errors.showApplication(res);
             } else if (res[0].status === 0 || res[0].response == null || res[0].response.length === 0 && request[0].url.indexOf('logout') === -1) {
-                throw 'no data recieved from ' + request[0].url;
+                throw 'no data recieved';
             }
             return Promise.resolve(res[0]);
         }).catch(err => {
