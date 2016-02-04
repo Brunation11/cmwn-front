@@ -113,11 +113,20 @@ var hashCode = function (s){
 if (Rollbar && ~window.__cmwn.MODE.indexOf('prod')){ //eslint-disable-line no-undef
     Rollbar.configure({reportLevel: 'error'}); //eslint-disable-line no-undef
 }
-if (Rollbar != null) {
-    Rollbar.configure({checkIgnore: function (isUncaught, args, payload) {
-        return isUncaught === true || payload.data.level === 'debug';
-    }
-});
+if (Rollbar != null) { //eslint-disable-line no-undef
+    //Quick and dirty leading edge throttle on rapid fire events
+    Rollbar.configure({checkIgnore: function (isUncaught, args, payload) { //eslint-disable-line
+        var key = hashCode((args[1] && args[1].toString()) || (args[2] && args[2].toString()) || args.join(' '));
+        window.__cmwn._loggerevents = window.__cmwn._loggerevents || {};
+        if (window.__cmwn._loggerevents[key] == null) {
+            window.__cmwn._loggerevents[key] = Date.now();
+            return false;
+        } else if (window.__cmwn._loggerevents[key] - Date.now() > 60000) {
+            window.__cmwn._loggerevents[key] = Date.now();
+            return false;
+        }
+        return true;
+    }});
 }
 if (loadedStates.indexOf(document.readyState) !== -1 && document.getElementById('cmwn-app')) {
     run();
