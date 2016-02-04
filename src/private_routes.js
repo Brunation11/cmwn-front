@@ -16,6 +16,7 @@ import Friends from 'routes/friends';
 import SuggestedFriends from 'routes/friends/suggested';
 import Profile from 'routes/users/profile';
 import StudentEdit from 'routes/users/edit';
+import Game from 'routes/game';
 
 var redirect = function (path) {
     return function (nextState, transition) {
@@ -32,6 +33,7 @@ var routes = [
     { path: 'users(/)', component: Users },
     { path: 'profile(/)', component: Profile},
     { path: 'games(/)', component: Profile},
+    { path: 'game/:game(/)', component: Game},
     { path: 'profile/edit(/)', component: StudentEdit },
     { path: 'profile/:id/edit(/)', component: StudentEdit },
     { path: 'student/:id(/)', component: Profile},
