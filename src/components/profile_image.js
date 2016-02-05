@@ -33,7 +33,7 @@ var Image = React.createClass({
                     }
                 }).catch(e => {
                     Toast.error(NO_IMAGE);
-                    Log.error(e, 'Image could not be extracted from user');
+                    Log.debug(e, 'Image could not be extracted from user');
                 });
         }
     },

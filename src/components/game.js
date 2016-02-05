@@ -6,8 +6,6 @@ import _ from 'lodash';
 
 import {Button, Glyphicon} from 'react-bootstrap';
 
-import Log from 'components/log';
-
 import 'components/game.scss';
 
 const EVENT_PREFIX = '_e_';
@@ -59,7 +57,6 @@ var Game = React.createClass({
     },
    /** end of default events */
     gameEventHandler: function (e) {
-        Log.log('Heard Event:', e); //eslint-disable-line no-console
         if (e.name != null) {
             if (_.isFunction(this[EVENT_PREFIX + e.name])) {
                 this[EVENT_PREFIX + e.name](...arguments);

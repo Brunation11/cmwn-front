@@ -58,10 +58,11 @@ var Page = React.createClass({
                     Log.info(e, 'User login success');
                     History.replaceState(null, '/profile');
                 } else {
-                    throw res;
+                    Toast.error(ERRORS.LOGIN + (res.response && res.response.data && res.response.data.message ? ' Message: ' + res.response.data.message : ''));
+                    Log.log(res, 'Invalid login.', req);
                 }
-            }).catch(() => {
-                Toast.error(ERRORS.LOGIN);
+            }).catch(err => {
+                Toast.error(ERRORS.LOGIN + (err.message ? ' Message: ' + err.message : ''));
                 Log.log(e, 'Invalid login');
             });
         }

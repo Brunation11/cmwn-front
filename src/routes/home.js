@@ -258,17 +258,19 @@ var Header = React.createClass({
                         Log.info('User login successful');
                         History.replaceState(null, '/profile');
                     } else {
-                        throw res;
+                        Toast.error(ERRORS.BAD_PASS);
+                        Log.log(req, 'Invalid login');
                     }
                 }).catch(e => {
-                    Toast.success(ERRORS.BAD_PASS);
+                    Toast.error(ERRORS.BAD_PASS);
                     Log.log(e, 'Invalid login');
                 });
             } else {
-                throw createRes;
+                Toast.error(ERRORS.BAD_PASS);
+                Log.log(req, 'Invalid login');
             }
         }).catch(e => {
-            Toast.success(ERRORS.BAD_PASS);
+            Toast.error(ERRORS.BAD_PASS);
             Log.log(e, 'Invalid login');
         });
     },

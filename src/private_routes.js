@@ -14,12 +14,9 @@ import GroupEdit from 'routes/groups/edit';
 import GroupProfile from 'routes/groups/profile';
 import Friends from 'routes/friends';
 import SuggestedFriends from 'routes/friends/suggested';
-import Profile from 'routes/students/profile';
-import StudentEdit from 'routes/students/edit';
-import TeacherProfile from 'routes/teachers/profile';
-import TeacherEdit from 'routes/teachers/edit';
-import ParentProfile from 'routes/parents/profile';
-import ParentEdit from 'routes/parents/edit';
+import Profile from 'routes/users/profile';
+import StudentEdit from 'routes/users/edit';
+import Game from 'routes/game';
 
 var redirect = function (path) {
     return function (nextState, transition) {
@@ -36,17 +33,12 @@ var routes = [
     { path: 'users(/)', component: Users },
     { path: 'profile(/)', component: Profile},
     { path: 'games(/)', component: Profile},
+    { path: 'game/:game(/)', component: Game},
     { path: 'profile/edit(/)', component: StudentEdit },
     { path: 'profile/:id/edit(/)', component: StudentEdit },
     { path: 'student/:id(/)', component: Profile},
     { path: 'student/edit(/)', component: StudentEdit },
     { path: 'student/:id/edit(/)', component: StudentEdit },
-    { path: 'teacher/:id(/)', component: TeacherProfile },
-    { path: 'teacher/:id/profile(/)', component: TeacherProfile },
-    { path: 'teacher/:id/edit(/)', component: TeacherEdit },
-    { path: 'parent/:id(/)', component: ParentProfile },
-    { path: 'parent/:id/profile(/)', component: ParentProfile },
-    { path: 'parent/:id/edit(/)', component: ParentEdit },
     { path: 'districts(/)', component: Districts},
     { path: 'district(/)', onEnter: redirect('/districts')},
     { path: 'district/:id(/)', component: DistrictView},

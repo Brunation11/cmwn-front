@@ -69,7 +69,7 @@ var Landing = React.createClass({
     }
 });
 
-const routes = {
+var routes = {
     path: '/',
     component: App,
     indexRoute: {component: Landing},
@@ -81,7 +81,7 @@ const routes = {
 function run() {
     window._bootstrap_attempts = window._bootstrap_attempts || 0; //eslint-disable-line camelcase
     try {
-        Log.info('Application started');
+        window._bootstrap_attempts++;
         ReactDOM.render(<Router history={History} routes={routes} />, document.getElementById('cmwn-app'));
         console.log('%cWoah there, World Changer!', 'font-weight: bold; color: red; font-size: 60px; font-family: Helvetica, Impact, Arial, sans-serif; text-shadow: 2px 2px grey;'); //eslint-disable-line no-console
         console.log('%cChangeMyWorldNow will never ask you to enter any of your information in this space, or ask you to paste anything here. For your security, we recommend you close this console.', 'font-weight: bold; color: #2CC4F4; font-size: 25px; font-family: Helvetica, Impact, Arial, sans-serif;'); //eslint-disable-line no-console
@@ -91,21 +91,52 @@ function run() {
             console.warn = _.noop; //eslint-disable-line no-console
             /**let errors surface*/
         }
+        Log.info('Application started');
     } catch (err) {
-        Log.warn('Application bootstrap failed, attempting to recover. Attempt ' + window._bootstrap_attempts + ' out of 5');
+        Log.info('Application bootstrap failed, attempting to recover. Attempt ' + window._bootstrap_attempts + ' out of 5');
         if (window._bootstrap_attempts < 5) {
             window.setTimeout(run, 500);
+        } else {
+            Errors.showApplication(err);
         }
-        Errors.showApplication(err);
     }
 }
 
 const loadedStates = ['complete', 'loaded', 'interactive'];
 
+
+//from http://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript-jquery
+var hashCode = function (s){
+  return s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0); //eslint-disable-line
+};
+
+if (Rollbar && ~window.__cmwn.MODE.indexOf('prod')){ //eslint-disable-line no-undef
+    Rollbar.configure({reportLevel: 'error'}); //eslint-disable-line no-undef
+}
+if (Rollbar != null) { //eslint-disable-line no-undef
+    //Quick and dirty leading edge throttle on rapid fire events
+    Rollbar.configure({checkIgnore: function (isUncaught, args, payload) { //eslint-disable-line
+        var key = hashCode((args[1] && args[1].toString()) || (args[2] && args[2].toString()) || args.join(' '));
+        window.__cmwn._loggerevents = window.__cmwn._loggerevents || {};
+        if (window.__cmwn._loggerevents[key] == null) {
+            window.__cmwn._loggerevents[key] = Date.now();
+            return false;
+        } else if (window.__cmwn._loggerevents[key] - Date.now() > 60000) {
+            window.__cmwn._loggerevents[key] = Date.now();
+            return false;
+        }
+        return true;
+    }});
+}
 if (loadedStates.indexOf(document.readyState) !== -1 && document.getElementById('cmwn-app')) {
     run();
     console.info('running'); //eslint-disable-line
 } else {
     window.addEventListener('DOMContentLoaded', run, false);
 }
+
+window.__cmwn.interactiveDebug = function () {
+    window.debugging = true;
+    Rollbar.configure({reportLevel: 'info'}); //eslint-disable-line
+};
 

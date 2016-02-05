@@ -19,7 +19,7 @@ import Util from 'components/util';
 
 import FlipBgDefault from 'media/flip-placeholder-white.png';
 
-import 'routes/students/profile.scss';
+import 'routes/users/profile.scss';
 
 const HEADINGS = {
     ACTION: 'Profile',
@@ -110,7 +110,7 @@ var Profile = React.createClass({
         this.refs.gameRef.dispatchPlatformEvent('quit');
     },
     renderGame: function () {
-        if (Detector.isMobileOrTablet() || Detector.isIe9() || Detector.isIe10()) {
+        if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe9() || Detector.isIe10())) {
             return (
                 <div>
                     {BROWSER_NOT_SUPPORTED}

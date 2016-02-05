@@ -40,7 +40,7 @@ class _Cloudinary {
                     try {
                         Loader(url, res);
                     } catch (err) {
-                        Log.warn('Cloudinary could not load');
+                        Log.warn('Cloudinary was not loaded into page load', err);
                         rej(err);
                     }
                 });
@@ -51,7 +51,7 @@ class _Cloudinary {
                 callback(e); //intentionally stripping additional args
             }).catch( err => {
                 Toast.error(UPLOAD_ERROR);
-                Log.error('Cloudinary not loaded');
+                Log.error('Cloudinary failed to load', err);
                 callback(null, err);
             });
         } else {

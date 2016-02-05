@@ -36,7 +36,7 @@ var FriendList = React.createClass({
             this.forceUpdate();
         }).catch(e => {
             Toast.error(FRIEND_ERROR);
-            Log.error(e, 'Friend list was unable to load');
+            Log.debug(e, 'Friend list was unable to load');
         });
     },
     toggleFriends: function () {

@@ -2,33 +2,28 @@
 import GLOBALS from 'components/globals';
 
 class Logger {
-    constructor() { }
-    info() {
-        if (GLOBALS.MODE.toLowerCase() === 'dev' || GLOBALS.MODE.toLowerCase() === 'development') {
-            console.info('%c User Action: ', 'color: #d0e2ec;', ...arguments);
-        }
-        Rollbar.info(...arguments); //eslint-disable-line no-undef
-    }
-    log() {
-        if (GLOBALS.MODE.toLowerCase() === 'dev' || GLOBALS.MODE.toLowerCase() === 'development') {
-            console.log('%c System: ', 'color: #bfe2ca;', ...arguments);
-        }
-        Rollbar.log(...arguments); //eslint-disable-line no-undef
-    }
-    warn() {
-        if (GLOBALS.MODE.toLowerCase() === 'dev' || GLOBALS.MODE.toLowerCase() === 'development') {
-            console.warn('%c Warning: ', 'color: #fed88f;', ...arguments);
-        }
-        Rollbar.warn(...arguments); //eslint-disable-line no-undef
-    }
-    error() {
-        if (GLOBALS.MODE.toLowerCase() === 'dev' || GLOBALS.MODE.toLowerCase() === 'development') {
-            console.error('%c Error: ', 'color: #f4858e; font-weight: bold;', ...arguments);
-            if (GLOBALS.debugging === true || window.debugging === true || this.debugging === true) {
-                debugger;
+    constructor() {
+        console.log('logger init');
+        this.info = this.write('info', 'User Action', '#d0e2ec');
+        this.log = this.write('log', 'System', '#bfe2ca');
+        this.warn = this.write('warn', 'Warning', '#fed88f');
+        this.error = function () {
+            this.write('error', 'Error', '#f4858e')(...arguments);
+            if (GLOBALS.MODE.toLowerCase() === 'local' || GLOBALS.MODE.toLowerCase() === 'dev' || GLOBALS.MODE.toLowerCase() === 'development') {
+                if (GLOBALS.debugging === true || window.debugging === true || this.debugging === true) {
+                    debugger;
+                }
             }
-        }
-        Rollbar.error(...arguments); //eslint-disable-line no-undef
+        };
+    }
+    write(verb, label, color) {
+        return function () {
+            console.log('logger called', ...arguments);
+            if (GLOBALS.MODE.toLowerCase() === 'local' || GLOBALS.MODE.toLowerCase() === 'dev' || GLOBALS.MODE.toLowerCase() === 'development') {
+                console[verb](`%c ${label}: `, `color: ${color};`, ...arguments);
+            }
+            Rollbar[verb](...arguments); //eslint-disable-line no-undef
+        };
     }
 }
 

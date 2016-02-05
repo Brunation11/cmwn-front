@@ -4,6 +4,8 @@ import {Button, Input} from 'react-bootstrap';
 
 import Layout from 'layouts/one_col';
 import History from 'components/history';
+import Toast from 'components/toast';
+import Log from 'components/log';
 import HttpManager from 'components/http_manager';
 import Authorization from 'components/authorization';
 import GLOBALS from 'components/globals';
@@ -15,6 +17,10 @@ const LABELS = {
     LAST_NAME: 'Last Name',
     PASSWORD: 'Password',
     SUBMIT: 'SUBMIT'
+};
+
+const ERRORS = {
+    NO_LOGIN: 'Signup failed. Please refresh and try again.'
 };
 
 var Page = React.createClass({
@@ -37,6 +43,9 @@ var Page = React.createClass({
         req.then(res => {
             this.setState({_token: res.response.token});
             HttpManager.setToken(res.response.token);
+        }).catch(err => {
+            Toast.error(ERRORS.NO_LOGIN + (err.message ? ' Message: ' + err.message : ''));
+            Log.error('Teacher creation failed', err, req);
         });
     },
     login: function (e) {
@@ -68,8 +77,9 @@ var Page = React.createClass({
                     } else {
                         throw res;
                     }
-                }).catch(() => {
-                    // @TODO MPR, 12/22/15: Alert user of error
+                }).catch(err => {
+                    Toast.error(ERRORS.NO_LOGIN + (err.message ? ' Message: ' + err.message : ''));
+                    Log.error('Teacher creation failed', err, req);
                 });
             });
         }

@@ -68,15 +68,15 @@ var _getRequestPromise = function (method, request, body, headers) {
             }
 
             if (res[0].status > 499) {
-                Errors.show500(res);
+                Errors.show500(request[0].url, res);
             } else if (res[0].status === 403) {
-                Errors.show403(res);
+                Errors.show403(request[0].url, res);
             } else if (res[0].status === 404) {
-                Errors.show404(res);
+                Errors.show404(request[0].url, res);
             } else if (res[0].status > 399) {
                 Errors.showApplication(res);
             } else if (res[0].status === 0 || res[0].response == null || res[0].response.length === 0 && request[0].url.indexOf('logout') === -1) {
-                throw 'no data recieved';
+                throw 'no data recieved from ' + request[0].url;
             }
             return Promise.resolve(res[0]);
         }).catch(err => {
@@ -146,7 +146,6 @@ var _makeRequest = function (verb, requests){
                 if (req.asJSON) {
                     req.body = JSON.stringify(req.body);
                 } else {
-                    /** @TODO MPR, 11/19/15: Polyfill formdata*/
                     req.body = _.reduce(req.body, (acc, val, key) => {
                         acc.append(key, val);
                         return acc;
