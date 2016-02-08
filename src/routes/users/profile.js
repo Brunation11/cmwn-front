@@ -26,6 +26,7 @@ const HEADINGS = {
     ARCADE: 'Take Action'
 };
 const PLAY = 'Play Now!';
+const COMING_SOON = 'Coming Soon!';
 const PAGE_TITLE = 'Profile';
 const BROWSER_NOT_SUPPORTED = <span><p>For the best viewing experience we reccomend the desktop version in Chrome</p><p>If you don't have chrome, <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">download it for free here</a>.</p></span>;
 
@@ -126,14 +127,22 @@ var Profile = React.createClass({
         );
     },
     renderFlip: function (item){
+        var onClick, playText;
+        if (item.coming_soon === true) {
+            onClick = _.noop;
+            playText = COMING_SOON;
+        } else {
+            onClick = this.showModal.bind(this, GLOBALS.GAME_URL + item.uuid + '/index.html');
+            playText = PLAY;
+        }
         return (
             <div className="flip fill" key={Shortid.generate()}>
-                <a onClick={this.showModal.bind(this, GLOBALS.GAME_URL + item.uuid + '/index.html')} >
+                <a onClick={onClick} >
                     <div className="item">
                         <span className="overlay">
                             <span className="heading">{item.title}</span>
                             <span className="text">{item.description}</span>
-                            <span className="play">{PLAY}</span>
+                            <span className="play">{playText}</span>
                         </span>
                         <object data={GLOBALS.GAME_URL + item.uuid + '/thumb.jpg'} type="image/png" >
                             <img src={FlipBgDefault}></img>
@@ -163,7 +172,15 @@ var Profile = React.createClass({
                      </div>
                  </div>
                </Panel>
-               <Fetcher className={ClassNames({hidden: this.state.uuid !== Authorization.currentUser.uuid})} url={GLOBALS.API_URL + 'games'} >
+               <Fetcher className={ClassNames({hidden: this.state.uuid !== Authorization.currentUser.uuid})} url={GLOBALS.API_URL + 'games'} transform={data => {
+                    return data.concat({
+                        uuid: "drought-out",
+                        title: "DroughtOUT",
+                        description: "Want to be part of the solution for the biggest issue in our world? You came to the right place! Starts right here!",
+                        created_at: "2015-12-11 15:33:36",
+                        coming_soon: true
+                    });
+               }}>
                    <FlipBoard
                        renderFlip={this.renderFlip}
                        header={HEADINGS.ARCADE}
