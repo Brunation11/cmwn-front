@@ -1,7 +1,10 @@
 import React from 'react';
 import _ from 'lodash';
+
 import Classnames from 'classnames';
 import Shortid from 'shortid';
+
+import 'components/feed.scss';
 
 var Page = React.createClass({
     getDefaultProps: function () {
@@ -10,24 +13,35 @@ var Page = React.createClass({
             transform: _.identity
         };
     },
-    renderItem: function () {
+    renderItems: function () {
         if (this.props.data == null) {
             return null;
         }
         return _.map(this.props.transform(this.props.data), item => {
+            var date = new Date(item.created_at);
+            var options = {
+                weekday: 'long', month: 'short', day: 'numeric'
+            };
             return (
-                <li className={item.style} key={Shortid.generate()}>
+                <li className={'feed-item ' + item.style} key={Shortid.generate()}>
+                    <p className="source">
+                        <span className="source-image" style={{backgroundImage: 'url(' + item.sourceImage + ')'}}></span>
+                        <span className="source-user">{item.source}</span><span className="source-posted" > posted</span>
+                        <span className="source-date">{date.toLocaleDateString('en-us', options)}</span>
+                    </p>
+                    <div className="message">
+                        {(_.isString(item.message) ? item.message : _.map(item.message, message => <message.type {...message.attributes}>{message.text}</message.type>))}
+                    </div>
                     <img src={item.image} />
-                    <span>{item.message}</span>
                 </li>
            );
         });
     },
     render: function () {
         return (
-           <div className={Classnames('feed', ...this.props.className)}>
+           <div className={Classnames('feed', this.props.className)}>
                <ol>
-                    {this.renderItem}
+                    {this.renderItems()}
                </ol>
            </div>
         );
