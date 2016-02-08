@@ -1,5 +1,10 @@
+@import 'variables';
+
 .feed {
 
+    a {
+        color: $cmwn-purple;
+    }
     .source-image {
         height: 40px;
         display: inline-block;
@@ -21,7 +26,7 @@
             float: left;
         }
         .message {
-            padding: 15px;
+            padding: $standard;
             display: inline-block;
 
             p {
@@ -35,8 +40,8 @@
     li.feed-item {
         margin: 7.5px 30px;
         border: #ddd solid 1px;
-        padding: 15px;
-        border-radius: 15px;
+        padding: $standard;
+        border-radius: $standard;
         overflow: auto;
     }
 }
