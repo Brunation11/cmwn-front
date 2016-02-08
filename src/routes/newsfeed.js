@@ -17,7 +17,10 @@ var Page = React.createClass({
                     return _.map(data, item => {
                         return {
                             style: 'standard',
-                            image: GLOBALS.GAME_URL + item.uuid + '/thumb.jpg',
+                            image: {
+                                url: GLOBALS.GAME_URL + item.uuid + '/thumb.jpg',
+                                href: '/profile?open=' + item.uuid
+                            },
                             message: [
                                 {type: 'p', text: 'New Game!'},
                                 {type: 'h3', text: item.title},

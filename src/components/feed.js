@@ -32,7 +32,7 @@ var Page = React.createClass({
                     <div className="message">
                         {(_.isString(item.message) ? item.message : _.map(item.message, message => <message.type {...message.attributes}>{message.text}</message.type>))}
                     </div>
-                    <img src={item.image} />
+                    <a className="image" href={item.image.href || ''}><img src={item.image.url || item.image} /></a>
                 </li>
            );
         });
