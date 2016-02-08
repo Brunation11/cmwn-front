@@ -78,7 +78,7 @@
                     isIE10 = true;
                 }
             @*/
-            if (!(window.ActiveXObject) && "ActiveXObject" in window && navigator.userAgent.match(/Trident.*rv[ :]*11\./) {
+            if (!(window.ActiveXObject) && "ActiveXObject" in window && navigator.userAgent.match(/Trident.*rv[ :]*11\./)) {
                 document.getElementsByTagName('html')[0].className += ' ie ie11';
             }
             if (isIE10){
