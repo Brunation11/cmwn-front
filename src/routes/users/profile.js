@@ -18,6 +18,7 @@ import GLOBALS from 'components/globals';
 import Util from 'components/util';
 
 import FlipBgDefault from 'media/flip-placeholder-white.png';
+import ComingSoon from 'media/coming-soon.png';
 
 import 'routes/users/profile.scss';
 
@@ -144,6 +145,7 @@ var Profile = React.createClass({
                             <span className="text">{item.description}</span>
                             <span className="play">{playText}</span>
                         </span>
+                        <img src={ComingSoon} className={ClassNames('coming-soon', { hidden: !item.coming_soon})} />
                         <object data={GLOBALS.GAME_URL + item.uuid + '/thumb.jpg'} type="image/png" >
                             <img src={FlipBgDefault}></img>
                         </object>
