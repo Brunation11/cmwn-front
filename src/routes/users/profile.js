@@ -3,6 +3,7 @@ import _ from 'lodash';
 import ClassNames from 'classnames';
 import Shortid from 'shortid';
 import {Panel, Modal} from 'react-bootstrap';
+import QueryString from 'query-string';
 
 import Layout from 'layouts/two_col';
 import Detector from 'components/browser_detector';
@@ -86,6 +87,9 @@ var Profile = React.createClass({
             this.forceUpdate();
         });
         this.resolveRole();
+        if (QueryString.parse(location.search).open != null) {
+            this.showModal(GLOBALS.GAME_URL + QueryString.parse(location.search).open + '/index.html');
+        }
     },
     componentWillReceiveProps: function () {
         this.resolveRole();

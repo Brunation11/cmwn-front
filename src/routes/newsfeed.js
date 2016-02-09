@@ -29,7 +29,7 @@ var Page = React.createClass({
                             ],
                             source: 'ChangeMyWorldNow',
                             sourceImage: cmwnIcon,
-                            created_at: item.created_at
+                            created_at: item.created_at //eslint-disable-line
                         };
                     });
                 }}>
