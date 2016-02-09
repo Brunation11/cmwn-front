@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import {Panel} from 'react-bootstrap';
+import {Panel, Button} from 'react-bootstrap'; //eslint-disable-line no-unused-vars
 
 import Fetcher from 'components/fetcher';
 import Feed from 'components/feed';
@@ -28,7 +28,9 @@ var Page = React.createClass({
                                     {type: 'p', text: 'New Game!'},
                                     {type: 'h3', text: item.title},
                                     {type: 'p', text: item.description},
-                                    {type: 'a', text: 'Play Now', attributes: {href: '/profile?open=' + item.uuid}},
+                                    {type: Button, text: 'Play Now', attributes: {'className': 'standard purple', onClick: () => {
+                                        window.location.href = '/profile?open=' + item.uuid;
+                                    }}},
                                 ],
                                 source: 'ChangeMyWorldNow',
                                 sourceImage: cmwnIcon,
