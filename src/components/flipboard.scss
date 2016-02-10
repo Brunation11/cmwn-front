@@ -2,8 +2,11 @@
 
 .flipboard {
 
+     img {
+         vertical-align: initial;
+     }
+
     .panel-body {
-        text-align: center;
 
         & > * {
             display: inline-block;
@@ -29,7 +32,8 @@
         &.fill {
             padding: 5px;
             border: 0;
-            max-width: $max-flip-size;
+            max-width: 50%;
+            width: 100%;
             margin-top: 0;
             margin-bottom: 0;
 
@@ -67,10 +71,6 @@
                 font-size: 1.1rem;
                 text-decoration: underline;
                 text-transform: uppercase;
-            }
-
-            img {
-                max-width: $flip-standard-size;
             }
         }
 
