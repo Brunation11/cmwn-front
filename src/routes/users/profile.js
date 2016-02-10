@@ -128,7 +128,7 @@ var Profile = React.createClass({
     },
     renderFlip: function (item){
         var onClick, playText;
-        if (item.coming_soon === true) {
+        if (item.coming_soon) {
             onClick = _.noop;
             playText = COMING_SOON;
         } else {
@@ -185,7 +185,7 @@ var Profile = React.createClass({
                        array[currentIndex] = array[randomIndex];
                        array[randomIndex] = temporaryValue;
                    }
-                   return array;
+                   return _.filter(array, v => !v.coming_soon).concat(_.filter(array, v => v.coming_soon));
                }}>
                    <FlipBoard
                        renderFlip={this.renderFlip}
