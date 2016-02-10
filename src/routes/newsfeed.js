@@ -10,7 +10,10 @@ import Layout from 'layouts/two_col';
 
 import cmwnIcon from 'media/cmwn_icon.png';
 
+import 'routes/newsfeed.scss';
+
 const PAGETITLE = 'My News Feed';
+
 var Page = React.createClass({
     render: function () {
         return (
@@ -25,7 +28,7 @@ var Page = React.createClass({
                                     href: '/profile?open=' + item.uuid
                                 },
                                 message: [
-                                    {type: 'p', text: 'New Game!'},
+                                    {type: 'p', text: 'New Game!', attributes: {'className': 'new-game'}},
                                     {type: 'h3', text: item.title},
                                     {type: 'p', text: item.description},
                                     {type: Button, text: 'Play Now', attributes: {'className': 'standard purple', onClick: () => {
