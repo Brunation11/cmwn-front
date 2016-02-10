@@ -27,4 +27,13 @@
             padding-right: 15px;
         }
     }
+
+    .item > .coming-soon {
+        background-image: url(../../media/coming-soon.png);
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
 }

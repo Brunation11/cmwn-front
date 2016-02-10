@@ -26,6 +26,7 @@ const HEADINGS = {
     ARCADE: 'Take Action'
 };
 const PLAY = 'Play Now!';
+const COMING_SOON = 'Coming Soon!';
 const PAGE_TITLE = 'Profile';
 const BROWSER_NOT_SUPPORTED = <span><p>For the best viewing experience we reccomend the desktop version in Chrome</p><p>If you don't have chrome, <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">download it for free here</a>.</p></span>;
 
@@ -110,7 +111,7 @@ var Profile = React.createClass({
         this.refs.gameRef.dispatchPlatformEvent('quit');
     },
     renderGame: function () {
-        if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe9() || Detector.isIe10())) {
+        if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe9() || Detector.isIe10() || Detector.isIe11())) {
             return (
                 <div>
                     {BROWSER_NOT_SUPPORTED}
@@ -126,15 +127,24 @@ var Profile = React.createClass({
         );
     },
     renderFlip: function (item){
+        var onClick, playText;
+        if (item.coming_soon === true) {
+            onClick = _.noop;
+            playText = COMING_SOON;
+        } else {
+            onClick = this.showModal.bind(this, GLOBALS.GAME_URL + item.uuid + '/index.html');
+            playText = PLAY;
+        }
         return (
             <div className="flip fill" key={Shortid.generate()}>
-                <a onClick={this.showModal.bind(this, GLOBALS.GAME_URL + item.uuid + '/index.html')} >
+                <a onClick={onClick} >
                     <div className="item">
                         <span className="overlay">
                             <span className="heading">{item.title}</span>
                             <span className="text">{item.description}</span>
-                            <span className="play">{PLAY}</span>
+                            <span className="play">{playText}</span>
                         </span>
+                        <div className={ClassNames('coming-soon', { hidden: !item.coming_soon})} />
                         <object data={GLOBALS.GAME_URL + item.uuid + '/thumb.jpg'} type="image/png" >
                             <img src={FlipBgDefault}></img>
                         </object>

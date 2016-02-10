@@ -21,6 +21,9 @@ class BrowserDetector {
     isIe10() {
         return !!~document.getElementsByTagName('html')[0].className.indexOf('ie10');
     }
+    isIe11() {
+        return !!~document.getElementsByTagName('html')[0].className.indexOf('ie11');
+    }
 }
 
 var Detector = new BrowserDetector();
