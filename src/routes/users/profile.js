@@ -174,7 +174,13 @@ var Profile = React.createClass({
                  </div>
                </Panel>
                <Fetcher className={ClassNames({hidden: this.state.uuid !== Authorization.currentUser.uuid})} url={GLOBALS.API_URL + 'games'} transform={array => {
-                   var currentIndex = array.length, temporaryValue, randomIndex;
+                   var currentIndex, temporaryValue, randomIndex;
+                   if (array == null) {
+                       array = [];
+                   } else if (!_.isArray(array)) {
+                       array = [].concat(array);
+                   }
+                   currentIndex = array.length;
                     // While there remain elements to shuffle...
                    while (0 !== currentIndex) {
                        // Pick a remaining element...
