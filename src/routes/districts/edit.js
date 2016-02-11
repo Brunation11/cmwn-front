@@ -2,10 +2,19 @@ import React from 'react';
 import {Button, Input, Panel} from 'react-bootstrap';
 
 import HttpManager from 'components/http_manager';
-import Layout from 'layouts/two_col';
 import GLOBALS from 'components/globals';
 import Validate from 'components/validators';
 import History from 'components/history';
+import Form from 'components/form';
+import Log from 'components/log';
+import Toast from 'components/toast';
+
+import Layout from 'layouts/two_col';
+
+const ERRORS = {
+    BAD_UPDATE: 'There was a problem updating your profile. Please try again later.',
+    INVALID_SUBMISSION: 'Invalid submission. Please update fields highlighted in red and submit again'
+};
 
 const HEADINGS = {
     EDIT_TITLE: 'Info'
@@ -40,7 +49,7 @@ var Edit = React.createClass({
     submitData: function () {
     },
     render: function () {
-        if (this.state.district == null || !this.state.district.can_update) {
+        if (this.district == null || !this.district.can_update) {
             return null;
         }
         return (
@@ -68,6 +77,50 @@ var Edit = React.createClass({
               </Panel>
            </Layout>
          );
+    }
+});
+
+var CreateOrganization = React.createClass({
+    getInitialState: function () {
+        return {
+            title: ''
+        };
+    },
+    submitData: function () {
+        var postData = {
+            username: this.state.username
+        };
+        if (this.refs.formRef.isValid()) {
+            HttpManager.POST(`${GLOBALS.API_URL}organization`, postData).then(res => {
+                if (res.response && res.response.data && res.response.data.uuid) {
+                    History.replaceState(null, `/organization/${res.response.data.uuid}?message=created`);
+                }
+            }).catch(err => {
+                Toast.error(ERRORS.BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
+                Log.log('Server refused school create', err, postData);
+            });
+        } else {
+            Toast.error(ERRORS.INVALID_SUBMISSION);
+        }
+    },
+    render: function () {
+        return (
+        <Panel>
+            <Form ref="formRef">
+                <Input
+                    type="text"
+                    value={this.state.title}
+                    placeholder="School Name"
+                    label="School Name"
+                    validate="required"
+                    ref="titleInput"
+                    name="titleInput"
+                    onChange={e => this.setState({title: e.target.value})} //eslint-disable-line camelcase
+                />
+                <Button onClick={this.submitData}> Create </Button>
+            </Form>
+        </Panel>
+        );
     }
 });
 
