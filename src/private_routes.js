@@ -17,7 +17,6 @@ import SuggestedFriends from 'routes/friends/suggested';
 import Profile from 'routes/users/profile';
 import StudentEdit from 'routes/users/edit';
 import Game from 'routes/game';
-import NewsFeed from 'routes/newsfeed';
 
 var redirect = function (path) {
     return function (nextState, transition) {
@@ -33,7 +32,6 @@ var routes = [
     { path: 'auth/logout(/)', onEnter: redirect('/logout')},
     { path: 'users(/)', component: Users },
     { path: 'profile(/)', component: Profile},
-    { path: 'feed(/)', component: NewsFeed},
     { path: 'games(/)', component: Profile},
     { path: 'game/:game(/)', component: Game},
     { path: 'profile/edit(/)', component: StudentEdit },
