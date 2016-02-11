@@ -17,19 +17,19 @@ const ERRORS = {
 var Page = React.createClass({
     getInitialState: function () {
         return {
-            title: ''
+            title: '',
+            districtId: 1,
+            code: ''
         };
     },
     submitData: function () {
         var postData = {
-            username: this.state.username
+            title: this.state.title,
+            systemId: this.state.districtId,
+            systemid: this.state.districtId,
+            system_id: this.state.districtId,
+            code: this.state.code
         };
-        if (!this.state.isStudent) {
-            if (this.state.email) {
-                //postData.email = this.state.email;
-            }
-            postData.gender = this.state.gender;
-        }
         if (this.refs.formRef.isValid()) {
             HttpManager.POST(`${GLOBALS.API_URL}districts`, postData).then(res => {
                 if (res.response && res.response.data && res.response.data.uuid) {
@@ -56,6 +56,27 @@ var Page = React.createClass({
                         ref="titleInput"
                         name="titleInput"
                         onChange={e => this.setState({title: e.target.value})} //eslint-disable-line camelcase
+                    />
+                    <Input
+                        type="select"
+                        value={this.state.districtId}
+                        label="District ID"
+                        validate="required"
+                        ref="districtIdInput"
+                        name="districtIdInput"
+                        onChange={e => this.setState({districtId: e.target.value})}
+                    >
+                            <option value="1">NYDOE</option>
+                    </Input>
+                    <Input
+                        type="text"
+                        value={this.state.code}
+                        placeholder="School Code"
+                        label="School Code"
+                        validate="required"
+                        ref="codeInput"
+                        name="codeInput"
+                        onChange={e => this.setState({code: e.target.value})} //eslint-disable-line camelcase
                     />
                     <Button onClick={this.submitData}> Create </Button>
                 </Form>
