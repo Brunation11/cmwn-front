@@ -31,7 +31,7 @@ var Page = React.createClass({
             code: this.state.code
         };
         if (this.refs.formRef.isValid()) {
-            HttpManager.POST(`${GLOBALS.API_URL}districts`, postData).then(res => {
+            HttpManager.POST({url: `${GLOBALS.API_URL}districts`, handleErrors: false}, postData).then(res => {
                 if (res.response && res.response.data && res.response.data.uuid) {
                     History.replaceState(null, `/districts/${res.response.data.uuid}?message=created`);
                 }

@@ -11,7 +11,7 @@ import Toast from 'components/toast';
 import Layout from 'layouts/two_col';
 
 const ERRORS = {
-    BAD_UPDATE: 'There was a problem updating your profile. Please try again later.',
+    BAD_UPDATE: 'Could not create school. Please try again later.',
     INVALID_SUBMISSION: 'Invalid submission. Please update fields highlighted in red and submit again'
 };
 
@@ -93,11 +93,12 @@ var CreateOrganization = React.createClass({
             code: this.state.code
         };
         if (this.refs.formRef.isValid()) {
-            HttpManager.POST(`${GLOBALS.API_URL}organizations`, postData).then(res => {
+            HttpManager.POST({url: `${GLOBALS.API_URL}organizations`, handleErrors: false}, postData).then(res => {
                 if (res.response && res.response.data && res.response.data.uuid) {
                     History.replaceState(null, `/organization/${res.response.data.uuid}?message=created`);
                 }
             }).catch(err => {
+                console.log(JSON.stringify(err));
                 Toast.error(ERRORS.BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
                 Log.log('Server refused school create', err, postData);
             });
