@@ -74,6 +74,7 @@ var Edit = React.createClass({
                  />
                  <Button onClick={this.submitData} > Save </Button>
               </Panel>
+              <CreateOrganization districtId={this.props.params.id}/>
            </Layout>
          );
     }
@@ -87,10 +88,12 @@ var CreateOrganization = React.createClass({
     },
     submitData: function () {
         var postData = {
-            username: this.state.username
+            title: this.state.title,
+            district: this.props.districtId,
+            code: this.state.code
         };
         if (this.refs.formRef.isValid()) {
-            HttpManager.POST(`${GLOBALS.API_URL}organization`, postData).then(res => {
+            HttpManager.POST(`${GLOBALS.API_URL}organizations`, postData).then(res => {
                 if (res.response && res.response.data && res.response.data.uuid) {
                     History.replaceState(null, `/organization/${res.response.data.uuid}?message=created`);
                 }
@@ -115,6 +118,16 @@ var CreateOrganization = React.createClass({
                     ref="titleInput"
                     name="titleInput"
                     onChange={e => this.setState({title: e.target.value})} //eslint-disable-line camelcase
+                />
+                <Input
+                    type="text"
+                    value={this.state.code}
+                    placeholder="School Code"
+                    label="School Code"
+                    validate="required"
+                    ref="codeInput"
+                    name="codeInput"
+                    onChange={e => this.setState({code: e.target.value})} //eslint-disable-line camelcase
                 />
                 <Button onClick={this.submitData}> Create </Button>
             </Form>
