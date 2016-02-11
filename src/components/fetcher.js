@@ -7,7 +7,7 @@ import Log from 'components/log';
 
 var Fetcher = React.createClass({
     getInitialState: function () {
-        this.data = this.props.data;
+        this.data = this.props.transform(this.props.data);
         return {};
     },
     getDefaultProps: function () {
@@ -31,12 +31,14 @@ var Fetcher = React.createClass({
             if (_.isArray(this.props.data)) {
                 this.data = this.data.concat(this.props.data);
             }
+            this.data = this.props.transform(this.data);
             this.forceUpdate();
             return Promise.resolve(this.data);
         }).catch(err => {
             /** @TODO MPR, 10/18/15: Implement error page */
             Log.info(err); //eslint-disable-line no-console
             this.data = this.props.data || [];
+            this.data = this.props.transform(this.data);
             this.forceUpdate();
             return Promise.resolve(this.data);
         });
@@ -44,6 +46,7 @@ var Fetcher = React.createClass({
     render: function () {
         var propsForChild;
         var props = this.props || {};
+
         if (this.data == null || (_.isArray(this.data) && this.data.length === 0)) {
             return (
                 <div className={this.props.className}>{this.props.renderNoData()}</div>
@@ -54,7 +57,7 @@ var Fetcher = React.createClass({
             .remove('url')
             .remove('children')
             .remove('transform')
-            .set('data', this.props.transform(this.data));
+            .set('data', this.data);
         return (
             <div className={this.props.className}>
                 {React.Children.map(this.props.children, child => React.cloneElement(child, propsForChild.toObject()))}
