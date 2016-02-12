@@ -1,4 +1,5 @@
 /*eslint-disable */
+require('babel-core/register');//for mocha to use es6
 var gulp = require('gulp');
 var gulpif = require('gulp-if');
 var del = require('del');
@@ -23,6 +24,7 @@ var inject = require('gulp-inject');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var mergeStream = require('merge-stream');
 var sri = require('gulp-sri');
+var mocha = require('gulp-mocha');
 
 /** @const */
 var APP_PREFIX = 'APP_';
@@ -278,5 +280,10 @@ gulp.task('lint', function () {
         // To have the process exit with an error code (1) on
         // lint error, return the stream and pipe to failAfterError last.
 //        .pipe(eslint.failAfterError());
+});
+
+gulp.task('test', function () {
+    return gulp.src('src/**/*.test.js', {read: false})
+         .pipe(mocha({reporter: 'nyan'}))
 });
 
