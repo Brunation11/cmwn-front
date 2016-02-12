@@ -72,7 +72,7 @@ var Footer = React.createClass({
                     <a onClick={this.displayContact}>
                         {COPY.BUTTONS.CONTACT}
                     </a>
-                    <a href='/terms' target="_blank">
+                    <a href="/terms" target="_blank">
                         {COPY.BUTTONS.TERMS}
                     </a>
                 </footer>
