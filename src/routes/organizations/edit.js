@@ -3,6 +3,7 @@ import {Button, Input, Panel, FormControls} from 'react-bootstrap';
 import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
 import Validate from 'components/validators';
+import Toast from 'components/toast';
 import History from 'components/history';
 import Form from 'components/form';
 
@@ -89,12 +90,21 @@ var BulkUpload = React.createClass({
           <Panel header={HEADINGS.UPLOAD} className="standard">
             <iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe"></iframe>
             <Form ref="formRef" method="post" target="dummyframe" encType="multipart/form-data" action={`${GLOBALS.API_URL}admin/importexcel`}
-                onsubmit={e => {
+                onSubmit={e => {
+                    debugger;
                     try {
                         e.preventDefault();
+                        if(!this.refs.formRef.isValid()) {
+                            Toast.error('Please fill out all required fields');
+                            return false;
+                        } else if (this.state.tos === false) {
+                            Toast.error('You must agree to the terms to submit import.');
+                            return false;
+                        }
                     } catch (err) {
                         return false;
                     }
+                    Toast.success('Import submitted for processing');
                 }}
             >
                 <input type="hidden" name="_token" value={HttpManager.token} />
