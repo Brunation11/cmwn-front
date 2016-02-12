@@ -105,7 +105,7 @@ var buildProduction = function () {
 gulp.task("default", ["build", "watch", 'development-server']);
 
 gulp.task('watch', function () {
-    gulp.watch('src/**/*.js', ['lint']);
+    gulp.watch('src/**/*.js', ['test', 'lint']);
 });
 
 gulp.task('watch-version', function () {
@@ -284,6 +284,6 @@ gulp.task('lint', function () {
 
 gulp.task('test', function () {
     return gulp.src('src/**/*.test.js', {read: false})
-         .pipe(mocha({reporter: 'nyan'}))
+         .pipe(mocha({reporter: 'min'}))
 });
 
