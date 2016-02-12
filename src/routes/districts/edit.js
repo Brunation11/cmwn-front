@@ -2,10 +2,18 @@ import React from 'react';
 import {Button, Input, Panel} from 'react-bootstrap';
 
 import HttpManager from 'components/http_manager';
-import Layout from 'layouts/two_col';
 import GLOBALS from 'components/globals';
-import Validate from 'components/validators';
 import History from 'components/history';
+import Form from 'components/form';
+import Log from 'components/log';
+import Toast from 'components/toast';
+
+import Layout from 'layouts/two_col';
+
+const ERRORS = {
+    BAD_UPDATE: 'Could not create school. Please try again later.',
+    INVALID_SUBMISSION: 'Invalid submission. Please update fields highlighted in red and submit again'
+};
 
 const HEADINGS = {
     EDIT_TITLE: 'Info'
@@ -40,7 +48,7 @@ var Edit = React.createClass({
     submitData: function () {
     },
     render: function () {
-        if (this.state.district == null || !this.state.district.can_update) {
+        if (this.district == null || !this.district.can_update) {
             return null;
         }
         return (
@@ -51,7 +59,7 @@ var Edit = React.createClass({
                     value={this.state.title}
                     placeholder="title"
                     label="Title"
-                    bsStyle={Validate.len(this.state.title)}
+                    validate="required"
                     hasFeedback
                     ref="titleInput"
                     onChange={() => this.setState({title: this.refs.titleInput.getValue()})}
@@ -66,8 +74,66 @@ var Edit = React.createClass({
                  />
                  <Button onClick={this.submitData} > Save </Button>
               </Panel>
+              <CreateOrganization districtId={this.props.params.id}/>
            </Layout>
          );
+    }
+});
+
+var CreateOrganization = React.createClass({
+    getInitialState: function () {
+        return {
+            title: ''
+        };
+    },
+    submitData: function () {
+        var postData = {
+            title: this.state.title,
+            district: this.props.districtId,
+            code: this.state.code
+        };
+        if (this.refs.formRef.isValid()) {
+            HttpManager.POST({url: `${GLOBALS.API_URL}organizations`, handleErrors: false}, postData).then(res => {
+                if (res.response && res.response.data && res.response.data.uuid) {
+                    History.replaceState(null, `/organization/${res.response.data.uuid}?message=created`);
+                }
+            }).catch(err => {
+                console.log(JSON.stringify(err));
+                Toast.error(ERRORS.BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
+                Log.log('Server refused school create', err, postData);
+            });
+        } else {
+            Toast.error(ERRORS.INVALID_SUBMISSION);
+        }
+    },
+    render: function () {
+        return (
+        <Panel>
+            <Form ref="formRef">
+                <Input
+                    type="text"
+                    value={this.state.title}
+                    placeholder="School Name"
+                    label="School Name"
+                    validate="required"
+                    ref="titleInput"
+                    name="titleInput"
+                    onChange={e => this.setState({title: e.target.value})} //eslint-disable-line camelcase
+                />
+                <Input
+                    type="text"
+                    value={this.state.code}
+                    placeholder="School Code"
+                    label="School Code"
+                    validate="required"
+                    ref="codeInput"
+                    name="codeInput"
+                    onChange={e => this.setState({code: e.target.value})} //eslint-disable-line camelcase
+                />
+                <Button onClick={this.submitData}> Create </Button>
+            </Form>
+        </Panel>
+        );
     }
 });
 

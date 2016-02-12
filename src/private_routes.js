@@ -4,6 +4,7 @@ import Users from 'routes/users';
 import Districts from 'routes/districts';
 import DistrictView from 'routes/districts/view';
 import DistrictEdit from 'routes/districts/edit';
+import DistrictCreate from 'routes/districts/create';
 import Organizations from 'routes/organizations';
 import OrganizationView from 'routes/organizations/view';
 import OrganizationEdit from 'routes/organizations/edit';
@@ -41,12 +42,13 @@ var routes = [
     { path: 'student/:id/edit(/)', component: StudentEdit },
     { path: 'districts(/)', component: Districts},
     { path: 'district(/)', onEnter: redirect('/districts')},
+    { path: 'district/create(/)', component: DistrictCreate},
     { path: 'district/:id(/)', component: DistrictView},
-    { path: 'districts/:id(/)', onEnter: redirect('/district/:id(/)')},
+    { path: 'districts/:id(/)', onEnter: redirect('/district/:id')},
     { path: 'district/:id/view(/)', component: DistrictView},
-    { path: 'districts/:id/view(/)', onEnter: redirect('/district/:id/view(/)')},
+    { path: 'districts/:id/view(/)', onEnter: redirect('/district/:id/view')},
     { path: 'district/:id/edit(/)', component: DistrictEdit},
-    { path: 'districts:id/edit(/)', onEnter: redirect('/district/id:edit(/)')},
+    { path: 'districts:id/edit(/)', onEnter: redirect('/district/id:edit')},
     { path: 'organizations(/)', component: Organizations},
     { path: 'organization(/)', onEnter: redirect('/organizations')},
     { path: 'organization/:id(/)', component: OrganizationProfile},

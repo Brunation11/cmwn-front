@@ -6,10 +6,14 @@ import HttpManager from 'components/http_manager';
 import Layout from 'layouts/two_col';
 import GLOBALS from 'components/globals';
 import History from 'components/history';
+import EditLink from 'components/edit_link';
 
 const HEADINGS = {
     TITLE: 'Info',
     ID: 'ID',
+    NAME: 'District Name',
+    CODE: 'District Code',
+    SYSTEM: 'School System ID',
     DESCRIPTION: 'Description',
     CREATED: 'Created'
 };
@@ -17,8 +21,6 @@ const BREADCRUMB = {
     HOME: 'Home',
     DISTRICTS: 'Districts'
 };
-const EDIT_LINK = 'Edit';
-
 
 var View = React.createClass({
     componentWillMount: function () {
@@ -35,15 +37,8 @@ var View = React.createClass({
             this.forceUpdate();
         });
     },
-    renderEditLink: function () {
-        if (GLOBALS.CURRENT_USER.ID === window.parseInt(this.props.params.id)) {
-            /** @TODO MPR, 10/4/15: Add check for user is admin*/
-            return <Link to={`/district/${this.props.params.id}/edit`} >({EDIT_LINK})</Link>;
-        }
-        return null;
-    },
     render: function () {
-        if (this.state.district == null || !this.state.district.can_update) {
+        if (this.district == null || !this.district.can_update) {
             return null;
         }
         return (
@@ -55,11 +50,13 @@ var View = React.createClass({
                     <span>{this.district.title}</span>
                 </div>
                 <Panel header={HEADINGS.TITLE} className="standard">
-                    <p>
-                        {this.renderEditLink()}
-                    </p>
+                    <EditLink base="/district" uuid={this.district.uuid} canUpdate={this.district.can_update} />
                     <br />
-                    <p>{`${HEADINGS.ID}: ${this.district.id}`}</p>
+                    <p>{`${HEADINGS.NAME}: ${this.district.title}`}</p>
+                    <br />
+                    <p>{`${HEADINGS.CODE}: ${this.district.code}`}</p>
+                    <br />
+                    <p>{`${HEADINGS.SYSTEM}: ${this.district.system_id}`}</p>
                     <br />
                     <p>{`${HEADINGS.DESCRIPTION}: ${this.district.description}`}</p>
                     <br />
