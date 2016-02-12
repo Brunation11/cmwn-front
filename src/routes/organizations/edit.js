@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Input, Panel} from 'react-bootstrap';
+import {Button, Input, Panel, FormControls} from 'react-bootstrap';
 import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
 import Validate from 'components/validators';
@@ -16,6 +16,8 @@ const HEADINGS = {
 const LABELS = {
     SUBMIT: 'Submit'
 };
+
+const TERMS_COPY = <span>By checking the box below, you agree that you have read, understand, and accept <a href="/terms">ChangeMyWorldNow.com's terms and conditions</a>.</span>;
 
 var Edit = React.createClass({
     getInitialState: function () {
@@ -68,6 +70,7 @@ var Edit = React.createClass({
                  />
                  <Button onClick={this.submitData} > Save </Button>
               </Panel>
+              <BulkUpload orgId={this.props.params.id}/>
            </Layout>
          );
     }
@@ -75,8 +78,11 @@ var Edit = React.createClass({
 
 var BulkUpload = React.createClass({
     getInitialState: function () {
-        studentCode: '',
-        teacherCode: ''
+        return {
+            studentCode: '',
+            teacherCode: '',
+            tos: false
+        };
     },
     render: function () {
         return (
@@ -85,15 +91,15 @@ var BulkUpload = React.createClass({
             <Form ref="formRef" method="post" target="dummyframe" encType="multipart/form-data" action={`${GLOBALS.API_URL}admin/importexcel`}
                 onsubmit={e => {
                     try {
-                        e.preventDefault()
+                        e.preventDefault();
                     } catch (err) {
                         return false;
                     }
                 }}
             >
                 <input type="hidden" name="_token" value={HttpManager.token} />
-                <input type="hidden" name="organizations" value={this.props.params.id} />
-                <input type="hidden" name="organization_id" value={this.props.params.id} />
+                <input type="hidden" name="organizations" value={this.props.orgId} />
+                <input type="hidden" name="organization_id" value={this.props.orgId} />
                 <Input type="file" name="yourcsv" chars="40" label="Upload Spreadsheet"/>
                 <Input
                     type="text"
@@ -115,6 +121,16 @@ var BulkUpload = React.createClass({
                     name="student_code"
                     onChange={e => this.setState({studentCode: e.target.value})} //eslint-disable-line camelcase
                 />
+                <FormControls.Static value={TERMS_COPY} />
+                <Input
+                    type="checkbox"
+                    checked={this.state.tos}
+                    ref="tosInput"
+                    label="I accept the terms and conditions."
+                    name="tos"
+                    onChange={e => this.setState({tos: e.target.value})} //eslint-disable-line camelcase
+                />
+                <br />
                 <Button type="submit" >{LABELS.SUBMIT}</Button>
             </Form>
           </Panel>
