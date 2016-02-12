@@ -34,6 +34,9 @@ class _Authorization {
     reloadUser() {
         var getUser = HttpManager.GET({url: `${GLOBALS.API_URL}users/me?include=images,roles`, handleErrors: false});
         getUser.then(res => {
+            if(res && res.response && res.response.data && res.response.data.mustChangePassword) {
+                window.location.href = '/change-password';
+            }
             window.localStorage.setItem('com.cmwn.platform.userName', res.response.data.username);
             window.localStorage.setItem('com.cmwn.platform.userId', res.response.data.uuid);
             if (res.response.data.roles) {
