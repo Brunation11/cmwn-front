@@ -4,7 +4,6 @@ import ClassNames from 'classnames';
 import Shortid from 'shortid';
 import {Panel, Modal} from 'react-bootstrap';
 
-import Layout from 'layouts/two_col';
 import Detector from 'components/browser_detector';
 import ProfileImage from 'components/profile_image';
 import FlipBoard from 'components/flipboard';
@@ -16,6 +15,9 @@ import EditLink from 'components/edit_link';
 import Trophycase from 'components/trophycase';
 import GLOBALS from 'components/globals';
 import Util from 'components/util';
+import History from 'components/history';
+
+import Layout from 'layouts/two_col';
 
 import FlipBgDefault from 'media/flip-placeholder-white.png';
 
@@ -104,6 +106,12 @@ var Profile = React.createClass({
         this.setState(newState);
     },
     showModal: function (gameUrl) {
+        var urlParts;
+        if (Detector.isMobile() || Detector.isPortrait()) {
+            urlParts = gameUrl.split('/');
+            urlParts.pop(); //discard index.html
+            History.replaceState(null, `/game/${_.last(urlParts)}`);
+        }
         this.setState({gameOn: true, gameUrl});
     },
     hideModal: function () {
