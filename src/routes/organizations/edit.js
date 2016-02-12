@@ -17,7 +17,7 @@ const LABELS = {
     SUBMIT: 'Submit'
 };
 
-const TERMS_COPY = <span>By checking the box below, you agree that you have read, understand, and accept <a href="/terms">ChangeMyWorldNow.com's terms and conditions</a>.</span>;
+const TERMS_COPY = <span>By checking the box below, you agree that you have read, understand, and accept <a href="/terms" target="_blank">ChangeMyWorldNow.com's terms and conditions</a>.</span>;
 
 var Edit = React.createClass({
     getInitialState: function () {
