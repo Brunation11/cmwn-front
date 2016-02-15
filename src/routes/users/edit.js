@@ -21,11 +21,14 @@ const HEADINGS = {
 };
 const ERRORS = {
     BAD_PASS: 'Sorry, there was a problem updating your password.',
-    NO_MATCH: 'Those passwords do not appear to match. Please try again.'
+    NO_MATCH: 'Those passwords do not appear to match. Please try again.',
+    BAD_DELETE: 'Sorry, there was a problem deleting the user. Please refresh and try again.'
 };
-const SUSPEND = 'Suspend Account';
+const SUSPEND = 'Delete Account';
 const INVALID_SUBMISSION = 'Invalid submission. Please update fields highlighted in red and submit again';
 const BAD_UPDATE = 'There was a problem updating your profile. Please try again later.';
+const USER_REMOVED = 'User deleted. You will now be redirected.';
+const CONFIRM_DELETE = 'Are you sure you want to delete this user? This action cannot be undone.';
 
 var Fields = React.createClass({
     getInitialState: function () {
@@ -41,6 +44,16 @@ var Fields = React.createClass({
         this.resolveRole();
     },
     suspendAccount: function () {
+        if (window.confirm(CONFIRM_DELETE)) { //eslint-disable-line no-alert
+            HttpManager.DELETE({url: GLOBALS.API_URL + 'users/' + this.state.uuid, handleErrors: false})
+                .then(() => {
+                    Toast.success(USER_REMOVED);
+                })
+                .catch(err => {
+                    Toast.error(ERRORS.BAD_DELETE);
+                    Log.error('User not deleted: ' + err.message, err);
+                });
+        }
     },
     removeParent: function (i) {
         var self = this;
@@ -171,7 +184,7 @@ var Fields = React.createClass({
             <Panel header={HEADINGS.EDIT_TITLE} className="standard edit-profile">
                 <div className="left">
                     <ProfileImage uuid={this.props.uuid} link-below={true}/>
-                    <p className="hidden"><a onClick={this.suspendAccount}>{SUSPEND}</a></p>
+                    <p><a onClick={this.suspendAccount}>{SUSPEND}</a></p>
                 </div>
                 <div className="right"><Form ref="formRef">
                     <Input
@@ -284,7 +297,7 @@ var ChangePassword = React.createClass({
                 'user_uuid': this.props.uuid
             });
             update.then(() => {
-                Toast.success('Profile Updated');
+                Toast.success('Password Updated');
             }).catch(err => {
                 Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
                 Toast.error(ERRORS.BAD_PASS);
