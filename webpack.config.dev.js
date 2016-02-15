@@ -4,6 +4,7 @@
  */
 var path = require('path');
 var webpack = require('webpack');
+var autoprefixer = require('autoprefixer');
 
 module.exports = {
     devtool: 'eval-source-map',
@@ -27,7 +28,7 @@ module.exports = {
     module: {
         loaders: [{
             test: /\.js$/,
-            loader: 'babel', 
+            loader: 'babel',
             include: path.join(__dirname, 'src'),
             query: {
                 presets: ['react', 'es2015']
@@ -35,11 +36,11 @@ module.exports = {
         },
         {
             test: /\.css$/,
-            loaders: ['style', 'css', 'autoprefixer']
+            loaders: ['style', 'css', 'postcss']
         },
         {
             test: /\.scss$/,
-            loaders: ['style', 'css', 'autoprefixer', 'sass']
+            loaders: ['style', 'css', 'postcss', 'sass']
         },
         {
             test: /\.(jpe?g|png|gif|svg)$/i,
@@ -54,6 +55,9 @@ module.exports = {
     },
     sassLoader: {
         includePaths: [path.resolve(__dirname, './src')]
+    },
+    postcss: function () {
+        return [autoprefixer];
     }
 };
 
