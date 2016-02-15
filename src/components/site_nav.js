@@ -15,7 +15,7 @@ var SiteNav = React.createClass({
     getMenuItems: function () {
         var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'sidebar'});
         urlData.then(res => {
-            this.menuItems = _.map(_.pairs(res.response.data[0]), (value) => ({text: value[0], url: value[1]}));
+            this.menuItems = _.map(_.toPairs(res.response.data[0]), (value) => ({text: value[0], url: value[1]}));
             this.forceUpdate();
         }).catch(err => {
             Log.warn(err, 'could not load menu'); //eslint-disable-line no-console

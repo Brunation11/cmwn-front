@@ -7,7 +7,7 @@ var path = require('path');
 var sourcemaps = require('gulp-sourcemaps');
 var gutil = require("gulp-util");
 var webpack = require("webpack");
-var gulpWebpack = require('gulp-webpack');
+var gulpWebpack = require('webpack-stream');
 var WebpackDevServer = require("webpack-dev-server");
 var webpackDevConfig = require("./webpack.config.dev.js");
 var webpackProdConfig = require("./webpack.config.prod.js");
@@ -72,7 +72,7 @@ var buildDevelopment = function () {
             BABEL_ENV: 'development'
     }});
     return gulp.src('./src/app.js')
-        .pipe(gulpWebpack(Object.create(webpackDevConfig), webpack, function(err, stats) {
+        .pipe(gulpWebpack(webpackDevConfig, null, function(err, stats) {
             if(err) throw new gutil.PluginError("webpack:build-dev", err);
             gutil.log("[webpack:build-dev]", stats.toString({
                 colors: true
@@ -83,7 +83,7 @@ var buildDevelopment = function () {
 
 var buildProduction = function () {
     // modify some webpack config options
-    var myConfig = Object.create(webpackProdConfig);
+    var myConfig = webpackProdConfig;
 
     //mark environment as prod
     env({
