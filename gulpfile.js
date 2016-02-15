@@ -16,7 +16,9 @@ var exec = require('child_process').exec;
 var spawn = require('child_process').spawn;
 var eslint = require('gulp-eslint');
 var fs = require('fs');
-var eslintConfig = JSON.parse(fs.readFileSync('./.eslintrc'));
+var eslintConfigJs = JSON.parse(fs.readFileSync('./.eslintrc'));
+var eslintConfigTest = JSON.parse(fs.readFileSync('./.eslintrc_test'));
+var eslintConfigConfig = JSON.parse(fs.readFileSync('./.eslintrc_config'));
 var env = require('gulp-env');
 var _ = require('lodash');
 var inject = require('gulp-inject');
@@ -267,11 +269,11 @@ gulp.task("webpack:build-production", ['build-warning'], buildProduction);
 gulp.task("webpack:build-dev", ['build-warning'], buildDevelopment);
 gulp.task("webpack:build-development", ['build-warning'], buildDevelopment);
 
-gulp.task('lint', function () {
+gulp.task('lint-js', function () {
     return gulp.src(['src/**/*.js'])
         // eslint() attaches the lint output to the eslint property
         // of the file object so it can be used by other modules.
-        .pipe(eslint(Object.create(eslintConfig)))
+        .pipe(eslint(Object.create(eslintConfigJs)))
         // eslint.format() outputs the lint results to the console.
         // Alternatively use eslint.formatEach() (see Docs).
         .pipe(eslint.format())
@@ -279,4 +281,13 @@ gulp.task('lint', function () {
         // lint error, return the stream and pipe to failAfterError last.
 //        .pipe(eslint.failAfterError());
 });
-
+gulp.task('lint-test', function () {
+    return gulp.src(['src/**/*.js'])
+        .pipe(eslint(Object.create(eslintConfigTest)))
+        .pipe(eslint.format())
+});
+gulp.task('lint-config', function () {
+    return gulp.src(['src/**/*.js'])
+        .pipe(eslint(Object.create(eslintConfigConfig)))
+        .pipe(eslint.format())
+});
