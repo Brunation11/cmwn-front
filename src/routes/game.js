@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Game from 'components/game';
+import History from 'components/history';
 import GLOBALS from 'components/globals';
 
 import Layout from 'layouts/one_col';
@@ -14,7 +15,7 @@ var Page = React.createClass({
     render: function () {
         return (
            <Layout>
-                <Game ref="gameRef" url={this.state.gameUrl} />
+                <Game ref="gameRef" url={this.state.gameUrl} onExit={() => History.replaceState(null, '/profile')}/>
            </Layout>
         );
     }
