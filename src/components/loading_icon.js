@@ -5,7 +5,7 @@ import 'components/loading_icon.scss';
 
 var Page = React.createClass({
     componentDidMount: function () {
-        var LoaderDomElement = ReactDOM.findDOMNode(this.refs.loaderRef);
+        var LoaderDomElement = ReactDOM.findDOMNode(this.refs.loaderRef);//eslint-disable-line no-unused-vars
     },
     render: function () {
         return (

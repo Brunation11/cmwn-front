@@ -91,7 +91,6 @@ var BulkUpload = React.createClass({
             <iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe"></iframe>
             <Form ref="formRef" method="post" target="dummyframe" encType="multipart/form-data" action={`${GLOBALS.API_URL}admin/importexcel`}
                 onSubmit={e => {
-                    debugger;
                     try {
                         e.preventDefault();
                         if(!this.refs.formRef.isValid()) {
