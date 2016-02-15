@@ -20,7 +20,8 @@ const HEADINGS = {
     PASSWORD: 'Update Password'
 };
 const ERRORS = {
-    BAD_PASS: 'Sorry, there was a problem updating your password.'
+    BAD_PASS: 'Sorry, there was a problem updating your password.',
+    NO_MATCH: 'Those passwords do not appear to match. Please try again.'
 };
 const SUSPEND = 'Suspend Account';
 const INVALID_SUBMISSION = 'Invalid submission. Please update fields highlighted in red and submit again';
@@ -275,19 +276,22 @@ var ChangePassword = React.createClass({
     },
     submit: function () {
         if (this.state.confirm === this.state.new) {
-            var update = HttpManager.POST({url: `${GLOBALS.API_URL}/auth/password`}, {
+            var update = HttpManager.POST({url: `${GLOBALS.API_URL}/auth/password`, handleErrors: false}, {
                 'current_password': this.state.current,
                 'password': this.state.new,
                 'password_confirmation': this.state.confirm,
+                'user_id': this.props.uuid,
                 'user_uuid': this.props.uuid
             });
-            update.then(() => {})
-                .catch(err => {
-                    Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
-                    Toast.error(ERRORS.BAD_PASS);
-                });
+            update.then(() => {
+                Toast.success('Profile Updated');
+            }).catch(err => {
+                Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
+                Toast.error(ERRORS.BAD_PASS);
+            });
         } else {
             this.setState({extraProps: {bsStyle: 'error'}});
+            Toast.error(ERRORS.NO_MATCH);
             /** @TODO MPR, 11/19/15: check on change, not submit*/
         }
     },
