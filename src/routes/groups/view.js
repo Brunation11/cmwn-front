@@ -94,14 +94,21 @@ var View = React.createClass({
                 <Paginator data={this.members}>
                     <Table>
                         <Column dataKey="title"
+                            renderHeader="Name"
                             renderCell={(data, row) => (
-                                <a href={`#/organization/${row.uuid}`}>{_.startCase(data)}</a>
+                                <a href={`/users/${row.uuid}`}>{`${row.first_name} ${row.last_name}`}</a>
                             )}
                         />
-                        <Column dataKey="description" />
-                        <Column dataKey="created_at" renderHeader="Created" />
-                        <Column dataKey="updated_at" renderHeader="Last Updated"
-                            renderCell={data => (data == null ? 'never' : data)}
+                        <Column dataKey="username" />
+                        <Column dataKey="active" renderHeader="Active user" renderCell={ (data) => {
+                            return data ? 'Active' : 'Inactive';
+                        }} />
+                        <Column dataKey="updated_at" renderHeader="Update Users"
+                            renderCell={(data, row) => {
+                                return (
+                                    <a href={`/users/${row.uuid}/edit`}>Edit</a>
+                                );
+                            }}
                         />
                     </Table>
                 </Paginator>
