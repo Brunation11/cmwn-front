@@ -33,7 +33,7 @@ class _Authorization {
     }
     reloadUser() {
         var getUser = HttpManager.GET({url: `${GLOBALS.API_URL}users/me?include=images,roles`, handleErrors: false});
-        getUser.then(res => {
+        return getUser.then(res => {
             window.localStorage.setItem('com.cmwn.platform.userName', res.response.data.username);
             window.localStorage.setItem('com.cmwn.platform.userId', res.response.data.uuid);
             if (res.response.data.roles) {
@@ -51,6 +51,7 @@ class _Authorization {
 
             //configure trackers to logged in user
             Rollbar.configure({payload: {person: {id: res.response.data.uuid, username: res.response.data.username}}}); //eslint-disable-line no-undef
+            return Promise.resolve(res.response.data);
         }).catch(e => {
             Log.log(e, 'Error encountered during authorization check. Logging out.');
             //user is not logged in.
