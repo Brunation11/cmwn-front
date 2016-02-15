@@ -37,9 +37,12 @@ module.exports = {
     module: {
         loaders: [{
             test: /\.js$/,
-            loaders: ['babel'],
-            include: path.join(__dirname, 'src')
-        } ,
+            loader: 'babel', 
+            include: path.join(__dirname, 'src'),
+            query: {
+                presets: ['react', 'es2015']
+            }
+        },
         {
             test: /\.css$/,
             loaders: ['style', 'css', 'autoprefixer']
@@ -63,3 +66,4 @@ module.exports = {
         includePaths: [path.resolve(__dirname, './src')]
     }
 };
+

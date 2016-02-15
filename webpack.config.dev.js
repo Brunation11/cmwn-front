@@ -27,7 +27,7 @@ module.exports = {
     module: {
         loaders: [{
             test: /\.js$/,
-            loader: 'babel',
+            loader: 'babel', 
             include: path.join(__dirname, 'src'),
             query: {
                 presets: ['react', 'es2015']
@@ -56,4 +56,6 @@ module.exports = {
         includePaths: [path.resolve(__dirname, './src')]
     }
 };
+
+
 
