@@ -98,7 +98,6 @@ var CreateOrganization = React.createClass({
                     History.replaceState(null, `/organization/${res.response.data.uuid}?message=created`);
                 }
             }).catch(err => {
-                console.log(JSON.stringify(err));
                 Toast.error(ERRORS.BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
                 Log.log('Server refused school create', err, postData);
             });

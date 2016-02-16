@@ -1,4 +1,4 @@
-/**
+/*
  * eventManager.js
  * Singleton. Maintains a list of pending changes to a global weakMap
  * As such, it is not mandatory to keep track of registered values.
