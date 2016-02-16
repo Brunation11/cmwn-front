@@ -279,7 +279,7 @@ gulp.task('webpack:build-dev', ['build-warning'], buildDevelopment);
 gulp.task('webpack:build-development', ['build-warning'], buildDevelopment);
 
 gulp.task('lint-js', function () {
-    return gulp.src(['src/**/*.js'])
+    return gulp.src(['src/**/*.js', '!src/**/*.test.js'])
         // eslint() attaches the lint output to the eslint property
         // of the file object so it can be used by other modules.
         .pipe(eslint(eslintConfigJs))
@@ -304,7 +304,7 @@ gulp.task('lint-config', function () {
 gulp.task('lint', ['lint-js', 'lint-config', 'lint-test']);
 
 gulp.task('test', function () {
-    return gulp.src('src/**/*.test.js', {read: false})
+    return gulp.src(['src/**/*.test.js'], {read: false})
          .pipe(mocha({reporter: 'min'}));
 });
 
