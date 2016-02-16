@@ -27,7 +27,7 @@ var Page = React.createClass({
             title: this.state.title,
             systemId: this.state.districtId,
             systemid: this.state.districtId,
-            system_id: this.state.districtId,
+            system_id: this.state.districtId, //eslint-disable-line camelcase
             code: this.state.code
         };
         if (this.refs.formRef.isValid()) {

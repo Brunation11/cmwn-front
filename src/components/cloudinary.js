@@ -39,7 +39,7 @@ class _Cloudinary {
                 return new Promise((res, rej) => {
                     try {
                         Loader(url, res);
-                    } catch (err) {
+                    } catch(err) {
                         Log.warn('Cloudinary was not loaded into page load', err);
                         rej(err);
                     }

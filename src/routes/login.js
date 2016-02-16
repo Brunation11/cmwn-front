@@ -54,9 +54,10 @@ var Page = React.createClass({
             });
             req.then(res => {
                 if (res.status < 300 && res.status >= 200) {
-                    Authorization.reloadUser();
-                    Log.info(e, 'User login success');
-                    History.replaceState(null, '/profile');
+                    Authorization.reloadUser().then(() => {
+                        Log.info(e, 'User login success');
+                        History.replaceState(null, '/profile');
+                    });
                 } else {
                     Toast.error(ERRORS.LOGIN + (res.response && res.response.data && res.response.data.message ? ' Message: ' + res.response.data.message : ''));
                     Log.log(res, 'Invalid login.', req);

@@ -93,7 +93,7 @@ function run() {
             /**let errors surface*/
         }
         Log.info('Application started');
-    } catch (err) {
+    } catch(err) {
         Log.info('Application bootstrap failed, attempting to recover. Attempt ' + window._bootstrap_attempts + ' out of 5');
         if (window._bootstrap_attempts < 5) {
             window.setTimeout(run, 500);

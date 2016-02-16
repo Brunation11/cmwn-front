@@ -219,7 +219,7 @@ var Header = React.createClass({
     componentDidUpdate: function () {
         try {
             this.renderCaptcha();
-        } catch (err) {
+        } catch(err) {
             //captcha doesnt always clean itself up nicely, throws its own
             //unhelpful, unbreaking 'container not empty' error. Ignoring.
             Log.warn(err, 'Captcha not fully destroyed');
@@ -254,9 +254,10 @@ var Header = React.createClass({
                 });
                 req.then(res => {
                     if (res.status < 300 && res.status >= 200) {
-                        Authorization.reloadUser();
-                        Log.info('User login successful');
-                        History.replaceState(null, '/profile');
+                        Authorization.reloadUser().then(() => {
+                            Log.info('User login successful');
+                            History.replaceState(null, '/profile');
+                        });
                     } else {
                         Toast.error(ERRORS.BAD_PASS);
                         Log.log(req, 'Invalid login');

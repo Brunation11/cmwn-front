@@ -101,7 +101,7 @@ var _makeRequest = function (verb, requests){
                 xhr.abort();
                 res(null);
             };
-            try{
+            try {
                 xhr.onreadystatechange = () => {
                     var response;
                     if (xhr.readyState !== 4) {
@@ -109,7 +109,7 @@ var _makeRequest = function (verb, requests){
                     }
                     try {
                         response = (_.isObject(xhr.response) ? xhr.response : JSON.parse(xhr.response));
-                    } catch (err) {
+                    } catch(err) {
                         response = xhr.response;
                         Log.info(err, 'recieved non-standard data format from api');
                     }
@@ -160,7 +160,7 @@ var _makeRequest = function (verb, requests){
                 setTimeout(function () {
                     if (verb.toLowerCase() === 'get') {
                         xhr.send();
-                    } else if(!isIe9) {
+                    } else if (!isIe9) {
                         xhr.send(req.body);
                     } else {
                         /** @TODO MPR, 1/13/16: This is not the ideal way to handle this.*/
@@ -171,7 +171,7 @@ var _makeRequest = function (verb, requests){
                         xhr.send(body);
                     }
                 }, 0);
-            } catch (err) {
+            } catch(err) {
                 rej(err);
                 Log.error(err, 'Unhandled http request error');
             }
