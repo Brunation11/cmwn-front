@@ -294,7 +294,7 @@ gulp.task('lint-test', function () {
         .pipe(eslint.format());
 });
 gulp.task('lint-config', function () {
-    return gulp.src(['gulpfile.js'])
+    return gulp.src(['gulpfile.js', 'webpack.config.dev.js', 'webpack.config.prod.js'])
         .pipe(eslint(_.defaultsDeep(eslintConfigConfig, eslintConfigJs)))
         .pipe(eslint.format());
 });
