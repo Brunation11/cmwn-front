@@ -254,9 +254,10 @@ var Header = React.createClass({
                 });
                 req.then(res => {
                     if (res.status < 300 && res.status >= 200) {
-                        Authorization.reloadUser();
-                        Log.info('User login successful');
-                        History.replaceState(null, '/profile');
+                        Authorization.reloadUser().then(() => {
+                            Log.info('User login successful');
+                            History.replaceState(null, '/profile');
+                        });
                     } else {
                         Toast.error(ERRORS.BAD_PASS);
                         Log.log(req, 'Invalid login');

@@ -72,8 +72,9 @@ var Page = React.createClass({
                 });
                 req.then(res => {
                     if (res.status < 300 && res.status >= 200) {
-                        Authorization.reloadUser();
-                        History.replaceState(null, '/profile');
+                        Authorization.reloadUser().then(() => {
+                            History.replaceState(null, '/profile');
+                        });
                     } else {
                         throw res;
                     }
