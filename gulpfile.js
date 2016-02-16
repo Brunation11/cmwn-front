@@ -1,4 +1,3 @@
-/*eslint-disable */
 var gulp = require('gulp');
 var gulpif = require('gulp-if');
 var del = require('del');
@@ -273,7 +272,7 @@ gulp.task('lint-js', function () {
     return gulp.src(['src/**/*.js'])
         // eslint() attaches the lint output to the eslint property
         // of the file object so it can be used by other modules.
-        .pipe(eslint(Object.create(eslintConfigJs)))
+        .pipe(eslint(eslintConfigJs))
         // eslint.format() outputs the lint results to the console.
         // Alternatively use eslint.formatEach() (see Docs).
         .pipe(eslint.format())
@@ -287,7 +286,10 @@ gulp.task('lint-test', function () {
         .pipe(eslint.format())
 });
 gulp.task('lint-config', function () {
-    return gulp.src(['src/**/*.js'])
+    return gulp.src(['gulpfile.js'])
         .pipe(eslint(Object.create(eslintConfigConfig)))
         .pipe(eslint.format())
 });
+
+gulp.task("lint", ["lint-js", "lint-config"]);
+
