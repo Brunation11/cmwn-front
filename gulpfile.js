@@ -281,9 +281,10 @@ ___  ______  ______  ______  ______  ______  ______  ______  ______  ______  ___
 gulp.task('default', ['build', 'watch', 'development-server']);
 
 gulp.task('watch', function () {
-    gulp.watch('src/**/*.js', ['test', 'lint']);
+    gulp.watch('src/**/*.js', ['test', 'lint', 'showBuildErrors']);
 });
 
+/** watches changes to the js and regenerates the index and sris accordingly */
 gulp.task('watch-version', function () {
     gulp.watch('build/build.js', ['sri', 'index']);
 });
@@ -359,5 +360,10 @@ gulp.task('lint-config', function () {
 gulp.task('test', function () {
     return gulp.src(['src/**/*.test.js'], {read: false})
          .pipe(mocha({reporter: 'min'}));
+});
+
+//this task is only required when some post-build task intentionally clears the console, as our tests do
+gulp.task('showBuildErrors', function () {
+    console.log(fs.readFileSync('build_errors.log'));
 });
 
