@@ -25,7 +25,7 @@ var FlipBoard = React.createClass({
         });
     },
     render: function () {
-        if(!this.state.data.length) {
+        if (!this.state.data.length) {
             return null;
         }
         return (<div className="flipboard">

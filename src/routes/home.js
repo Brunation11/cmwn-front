@@ -219,7 +219,7 @@ var Header = React.createClass({
     componentDidUpdate: function () {
         try {
             this.renderCaptcha();
-        } catch (err) {
+        } catch(err) {
             //captcha doesnt always clean itself up nicely, throws its own
             //unhelpful, unbreaking 'container not empty' error. Ignoring.
             Log.warn(err, 'Captcha not fully destroyed');
