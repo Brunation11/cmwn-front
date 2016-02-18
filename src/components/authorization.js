@@ -33,7 +33,7 @@ class _Authorization {
     }
     reloadUser() {
         var getUser = HttpManager.GET({url: `${GLOBALS.API_URL}users/me?include=images,roles`, handleErrors: false});
-        getUser.then(res => {
+        return getUser.then(res => {
             if(res && res.response && res.response.data && res.response.data.mustChangePassword) {
                 window.location.href = '/change-password';
             }
@@ -54,6 +54,7 @@ class _Authorization {
 
             //configure trackers to logged in user
             Rollbar.configure({payload: {person: {id: res.response.data.uuid, username: res.response.data.username}}}); //eslint-disable-line no-undef
+            return Promise.resolve(res.response.data);
         }).catch(e => {
             Log.log(e, 'Error encountered during authorization check. Logging out.');
             //user is not logged in.

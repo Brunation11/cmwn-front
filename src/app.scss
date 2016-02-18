@@ -390,8 +390,16 @@ h1, h2, h3 {
             padding: 0;
         }
 
+        .layout {
+            padding-bottom: 4 * $standard;
+        }
+
+        .blocker {
+            display: none;
+        }
+
         .menu {
-            display: block; 
+            display: block;
         }
 
         .logout {
@@ -411,7 +419,7 @@ h1, h2, h3 {
         }
 
         .sidebar {
-            padding: 0;
+            padding: $standard;
             background: #fff;
             position: fixed;
             top: 0;
@@ -421,6 +429,7 @@ h1, h2, h3 {
             overflow-y: scroll;
             transition: right  1s ease-in-out;
             min-height: 100vh;
+            z-index:100;
 
             &.open {
                 right: 0;
@@ -428,6 +437,13 @@ h1, h2, h3 {
 
         }
 
+        .flip.fill {
+            max-width: 100%;
+
+            img, object, .item, .overlay {
+                max-width: 100%;
+            }
+        }
 
     }
 
