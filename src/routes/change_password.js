@@ -49,12 +49,12 @@ var ChangePassword = React.createClass({
             var update = HttpManager.POST({url: `${GLOBALS.API_URL}auth/password`, handleErrors: false}, {
                 'current_password': this.state.current,
                 'password': this.state.new,
-                'password_confirmation': this.state.confirm,
-                'user_id': this.props.uuid,
-                'user_uuid': this.props.uuid
+                'password_confirmation': this.state.confirm
             });
             update.then(() => {
-                History.replaceState(null, '/profile?message=updated');
+                Authorization.reloadUser().then(() => {
+                    History.replaceState(null, '/profile?message=updated');
+                });
             }).catch(err => {
                 Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
                 Toast.error(ERRORS.BAD_PASS);

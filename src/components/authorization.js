@@ -39,6 +39,7 @@ class _Authorization {
                     return Promise.resolve();
                 }
                 window.location.href = '/change-password';
+                return Promise.resolve();
             }
             window.localStorage.setItem('com.cmwn.platform.userName', res.response.data.username);
             window.localStorage.setItem('com.cmwn.platform.userId', res.response.data.uuid);
