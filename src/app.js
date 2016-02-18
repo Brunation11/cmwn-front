@@ -111,10 +111,10 @@ var hashCode = function (s){
   return s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0); //eslint-disable-line
 };
 
-if (Rollbar && ~window.__cmwn.MODE.indexOf('prod')){ //eslint-disable-line no-undef
+if (window.Rollbar && ~window.__cmwn.MODE.indexOf('prod')){ //eslint-disable-line no-undef
     Rollbar.configure({reportLevel: 'error'}); //eslint-disable-line no-undef
 }
-if (Rollbar != null) { //eslint-disable-line no-undef
+if (window.Rollbar != null) { //eslint-disable-line no-undef
     //Quick and dirty leading edge throttle on rapid fire events
     Rollbar.configure({checkIgnore: function (isUncaught, args, payload) { //eslint-disable-line
         var key = hashCode((args[1] && args[1].toString()) || (args[2] && args[2].toString()) || args.join(' '));
@@ -141,3 +141,4 @@ window.__cmwn.interactiveDebug = function () {
     Rollbar.configure({reportLevel: 'info'}); //eslint-disable-line
 };
 
+export default App;
