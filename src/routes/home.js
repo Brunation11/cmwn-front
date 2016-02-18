@@ -43,7 +43,8 @@ const COPY = {
         LOGIN: 'Login',
         DEMO: 'Demo',
         SIGNUP: 'School Signup',
-        WATCH: 'Watch the video'
+        WATCH: 'Watch the video',
+        TERMS: 'Terms & Conditions'
     },
     SLIDES: [
         {
@@ -353,6 +354,9 @@ var Header = React.createClass({
                     <a href="#" onClick={this.displayContactModal}>
                         {COPY.BUTTONS.CONTACT}
                     </a>
+                    <a href="/terms" target="_blank">
+                        {COPY.BUTTONS.TERMS}
+                    </a>
                 </div>
                 <div className="actions">
                     <Button id="signup" className="green" onClick={this.displaySignupModal}>
@@ -398,6 +402,9 @@ var Layout = React.createClass({
                         </a>
                         <a href="#" onClick={this.displayContactModal}>
                             {COPY.BUTTONS.CONTACT}
+                        </a>
+                        <a href="/terms" target="_blank">
+                            {COPY.BUTTONS.TERMS}
                         </a>
                     </footer>
                 </div>
