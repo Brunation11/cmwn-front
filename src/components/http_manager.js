@@ -51,6 +51,10 @@ var _getRequestPromise = function (method, request, body, headers) {
     if (request.length === 1) {
         return promise.then((res) => {
             if (res[0].status === 401 && !PublicRoutes.hasPath(window.location.pathname)) {
+                //are we unauthorized because we need to update our password?
+                if (res[0].response && res[0].response.error && res[0].response.error.code === 'RESET_PASSWORD') {
+                    return Promise.resolve(res[0]);
+                }
                 //if we have encountered an unauthorized user, we want to cancel all
                 //further requests until the user can be fully logged out
                 window.__USER_UNAUTHORIZED = true;
