@@ -3,6 +3,7 @@ import _ from 'lodash';
 import ClassNames from 'classnames';
 import Shortid from 'shortid';
 import {Panel, Modal} from 'react-bootstrap';
+import QueryString from 'query-string';
 
 import Detector from 'components/browser_detector';
 import ProfileImage from 'components/profile_image';
@@ -14,6 +15,7 @@ import Fetcher from 'components/fetcher';
 import EditLink from 'components/edit_link';
 import Trophycase from 'components/trophycase';
 import GLOBALS from 'components/globals';
+import Toast from 'components/toast';
 import Util from 'components/util';
 import History from 'components/history';
 
@@ -31,6 +33,7 @@ const PLAY = 'Play Now!';
 const COMING_SOON = 'Coming Soon!';
 const PAGE_TITLE = 'Profile';
 const BROWSER_NOT_SUPPORTED = <span><p>For the best viewing experience we reccomend the desktop version in Chrome</p><p>If you don't have chrome, <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">download it for free here</a>.</p></span>;
+const PASS_UPDATED = 'You have successfully updated your password. Be sure to remeber it for next time!';
 
 var Page = React.createClass({
     getInitialState: function () {
@@ -89,6 +92,9 @@ var Profile = React.createClass({
             this.forceUpdate();
         });
         this.resolveRole();
+        if (QueryString.parse(location.search).message === 'updated') {
+            Toast.success(PASS_UPDATED);
+        }
     },
     componentWillReceiveProps: function () {
         this.resolveRole();
