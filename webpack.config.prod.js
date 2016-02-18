@@ -1,4 +1,4 @@
-/* eslint-disable */
+/*eslint-env node */
 /**
  * Production Webpack configuration
  */

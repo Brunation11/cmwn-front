@@ -56,7 +56,7 @@ var View = React.createClass({
     renderGroups: function () {
         var links = _.map(this.data.organizations, organization => {
             return (
-                <Link to={`organization/$organization.uuid}`}>
+                <Link to={`organization/${organization.uuid}`}>
                     {organization.title}
                 </Link>
             );
