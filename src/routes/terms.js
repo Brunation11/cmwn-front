@@ -2,6 +2,8 @@ import React from 'react';
 
 import Layout from 'layouts/one_col';
 
+import 'routes/terms.scss';
+
 var Page = React.createClass({
     render: function () {
         return (
@@ -15,7 +17,6 @@ var Page = React.createClass({
 const TERMS = (
 <div>
   <div>
-    <div id="page_1">
       <p className="p0 ft0">CHANGE MY WORLD NOW</p>
 
       <p className="p1 ft1">Privacy Policy and Conditions of Use</p>
@@ -30,8 +31,8 @@ const TERMS = (
       detail below, <span className="ft2">CMWN does not sell, rent or trade personal
       information from kids.</span></p>
 
-      <p className="p4 ft5">By using and accessing CMWN, located at <span className=
-      "ft4">www.changemyworldnow.com</span>, you are accepting and agree to comply with
+      <p className="p4 ft5">By using and accessing CMWN, located at <a href="www.changemyworldnow.com" className=
+      "ft4">www.changemyworldnow.com</a>, you are accepting and agree to comply with
       this Privacy Policy &amp; Conditions of Use.</p>
 
       <p className="p5 ft6">What are the rules for accessing CMWN?</p>
@@ -64,9 +65,9 @@ const TERMS = (
       "ft9">You represent and acknowledge that you are solely responsible for complying
       with the Children&#8217;s Online Privacy Protection Act (&#8220;COPPA&#8221;),
       where applicable. For more information on COPPA and kid&#8217;s privacy, please
-      see</span> <span className=
-      "ft10">http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-</span>
-      <span className="ft10">online</span>.</p>
+      see </span> <a href="http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online" className=
+      "ft10">http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online</a>
+      .</p>
 
       <p className="p12 ft7"><span className="ft8">&#8226;</span><span className=
       "ft9">Where applicable, you must obtain Consent from all parents or guardians whose
@@ -84,12 +85,7 @@ const TERMS = (
       teachers and staff members, and will immediately revoke digital access and require
       return of all</span> log-in information for any individuals no longer enrolled,
       employed, or parents/guardians of students not enrolled at your school. If at
-      any</p>
-
-      <p className="p15 ft13">DB1/ 86578586.1</p>
-    </div>
-
-    <p className="p16 ft5">time you learn a user of CMWN claims to be affiliated with
+      any time you learn a user of CMWN claims to be affiliated with
     your school or district who is not, in fact, affiliated with your school or district,
     you will notify CMWN immediately.</p>
 
@@ -103,8 +99,8 @@ const TERMS = (
     <p className="p18 ft7"><span className="ft8">&#8226;</span><span className="ft9">You
     understand that the school is responsible for complying with COPPA, where applicable,
     which requires Consent for online collection of personal information from children
-    under 13. For more information on COPPA, please see</span>
-    http://www.consumer.ftc.gov/articles/0031-protecting-your- childs-privacy-online.</p>
+    under 13. For more information on COPPA, please see </span><a href="http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online">
+    http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online.</a></p>
 
     <p className="p7 ft3">If you are using CMWN as a Parent or Guardian, the following
     rules also apply:</p>
@@ -158,22 +154,6 @@ const TERMS = (
     address. Through the registration process, we will create an inactive profile for
     parents or guardians of children registered for CMWN and the parent or</p>
 
-    <table cellpadding="0" cellspacing="0" className="t0">
-      <tbody>
-        <tr>
-          <td className="tr0 td0">
-            <p className="p25 ft13">DB1/ 86578586.1</p>
-          </td>
-
-          <td className="tr0 td1">
-            <p className="p26 ft16">2</p>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div id="page_3">
     <p className="p27 ft3">guardian will receive an email inviting them to set-up their
     profile. We encourage parents or guardians to explore CMWN and to create their own
     profile pages and they may share personal information as they do so. Note, however,
@@ -202,7 +182,7 @@ const TERMS = (
 
     <p className="p31 ft5">CMWN uses Google Analytics to monitor our website activity. To
     learn how Google Analytics collects and processes data, please visit:
-    <span className="ft17">www.google.com/policies/privacy/partners</span></p>
+    <a href="www.google.com/policies/privacy/partners" className="ft17"> www.google.com/policies/privacy/partners</a></p>
 
     <p className="p32 ft7"><span className="ft18">Do Not Track Disclosure</span>. Do Not
     Track (DNT) is a privacy preference that users can set in some web browsers, allowing
@@ -239,22 +219,6 @@ const TERMS = (
     as permitted by law. In the event that information is shared in that way, notice will
     be provided to our school partners and posted on our Site.</p>
 
-    <table cellpadding="0" cellspacing="0" className="t1">
-      <tbody>
-        <tr>
-          <td className="tr0 td0">
-            <p className="p25 ft13">DB1/ 86578586.1</p>
-          </td>
-
-          <td className="tr0 td1">
-            <p className="p26 ft16">3</p>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div id="page_4">
     <p className="p36 ft7">In compliance with applicable law, we reserve the right to
     share a child&#8217;s personal information with third parties to the extent required
     by law and to the extent reasonably necessary to protect the security and integrity
@@ -321,22 +285,6 @@ const TERMS = (
     questions about our privacy practices and compliance with California law, please
     contact us as explained below.</p>
 
-    <table cellpadding="0" cellspacing="0" className="t2">
-      <tbody>
-        <tr>
-          <td className="tr0 td0">
-            <p className="p25 ft13">DB1/ 86578586.1</p>
-          </td>
-
-          <td className="tr0 td1">
-            <p className="p26 ft16">4</p>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div id="page_5">
     <p className="p45 ft3"><span className="ft23">Right to Removal of Posted Information
     &#8211; California Minors</span>. If you are under 18 years of age, reside in
     California, and have a registered account with CMWN, you have the right to request
@@ -362,7 +310,7 @@ const TERMS = (
 
     <p className="p49 ft5">If you have questions or need further assistance, you are
     welcome to contact us directly by sending an email with your questions or comments to
-    <span className="ft4">info@changemyworldnow.com</span>. You can also write to us
+    <a href="mailto:info@changemyworldnow.com" className="ft4"> info@changemyworldnow.com</a>. You can also write to us
     at:</p>
 
     <p className="p5 ft3">Change My World Now</p>
@@ -374,20 +322,6 @@ const TERMS = (
     <p className="p50 ft3">2<span className="ft25">nd</span> Floor</p>
 
     <p className="p50 ft3">New York City, NY 10016</p>
-
-    <table cellpadding="0" cellspacing="0" className="t3">
-      <tbody>
-        <tr>
-          <td className="tr0 td0">
-            <p className="p25 ft13">DB1/ 86578586.1</p>
-          </td>
-
-          <td className="tr0 td1">
-            <p className="p26 ft16">5</p>
-          </td>
-        </tr>
-      </tbody>
-    </table>
   </div>
 </div>
 );
