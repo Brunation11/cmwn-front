@@ -36,7 +36,7 @@ var Edit = React.createClass({
         urlData.then(res => {
             this.district = res.response.data;
             if (!this.district.can_update) { //eslint-disable-line camel_case
-                History.replaceState(null, `/district/${this.props.params.id}/profile`);
+                History.replace(`/district/${this.props.params.id}/profile`);
             }
             this.setState({
                 code: this.district.code,
@@ -95,7 +95,7 @@ var CreateOrganization = React.createClass({
         if (this.refs.formRef.isValid()) {
             HttpManager.POST({url: `${GLOBALS.API_URL}organizations`, handleErrors: false}, postData).then(res => {
                 if (res.response && res.response.data && res.response.data.uuid) {
-                    History.replaceState(null, `/organization/${res.response.data.uuid}?message=created`);
+                    History.replace(`/organization/${res.response.data.uuid}?message=created`);
                 }
             }).catch(err => {
                 Toast.error(ERRORS.BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));

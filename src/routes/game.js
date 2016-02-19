@@ -15,7 +15,7 @@ var Page = React.createClass({
     render: function () {
         return (
            <Layout>
-                <Game ref="gameRef" url={this.state.gameUrl} onExit={() => History.replaceState(null, '/profile')}/>
+                <Game ref="gameRef" url={this.state.gameUrl} onExit={() => History.replace('/profile')}/>
            </Layout>
         );
     }

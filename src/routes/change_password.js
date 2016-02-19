@@ -53,7 +53,7 @@ var ChangePassword = React.createClass({
             });
             update.then(() => {
                 Authorization.reloadUser().then(() => {
-                    History.replaceState(null, '/profile?message=updated');
+                    History.replace('/profile?message=updated');
                 });
             }).catch(err => {
                 Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);

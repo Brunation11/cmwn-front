@@ -64,7 +64,7 @@ class _Authorization {
             //user is not logged in.
             this.logout();
             if (window.location.pathname !== '/login' && window.location.pathname !== '/login/') {
-                History.replaceState(null, '/login');
+                History.replace('/login');
                 this._resolve();
             }
         });

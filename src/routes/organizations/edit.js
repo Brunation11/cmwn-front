@@ -37,7 +37,7 @@ var Edit = React.createClass({
         urlData.then(res => {
             this.organization = res.response.data;
             if (!res.response.data.can_update) { //eslint-disable-line camel_case
-                History.replaceState(null, `/organization/${this.props.params.id}/profile`);
+                History.replace(`/organization/${this.props.params.id}/profile`);
             }
             this.setState(this.organization);
         });
@@ -93,14 +93,14 @@ var BulkUpload = React.createClass({
                 onSubmit={e => {
                     try {
                         e.preventDefault();
-                        if(!this.refs.formRef.isValid()) {
+                        if (!this.refs.formRef.isValid()) {
                             Toast.error('Please fill out all required fields');
                             return false;
                         } else if (this.state.tos === false) {
                             Toast.error('You must agree to the terms to submit import.');
                             return false;
                         }
-                    } catch (err) {
+                    } catch(err) {
                         return false;
                     }
                     Toast.success('Import submitted for processing');

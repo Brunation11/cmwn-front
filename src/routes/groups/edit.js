@@ -33,7 +33,7 @@ var Edit = React.createClass({
         urlData.then(res => {
             this.group = res.response.data;
             if (!this.group.can_update) { //eslint-disable-line camel_case
-                History.replaceState(null, `/groups/${this.props.params.id}/profile`);
+                History.replace(`/groups/${this.props.params.id}/profile`);
             }
             this.setState({
                 code: this.group.code,

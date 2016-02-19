@@ -116,7 +116,7 @@ var Profile = React.createClass({
         if (Detector.isMobileOrTablet() || Detector.isPortrait()) {
             urlParts = gameUrl.split('/');
             urlParts.pop(); //discard index.html
-            History.replaceState(null, `/game/${_.last(urlParts)}`);
+            History.replace(`/game/${_.last(urlParts)}`);
         }
         this.setState({gameOn: true, gameUrl});
     },

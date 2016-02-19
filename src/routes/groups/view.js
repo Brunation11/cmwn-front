@@ -35,7 +35,7 @@ var View = React.createClass({
         urlData.then(res => {
             this.data = res.response.data;
             if (!this.data.can_update) { //eslint-disable-line camel_case
-                History.replaceState(null, `/groups/${this.props.params.id}/profile`);
+                History.replace(`/groups/${this.props.params.id}/profile`);
             }
             this.members = Util.normalize(res.response, 'users', []);
             this.forceUpdate();

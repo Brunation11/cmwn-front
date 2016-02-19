@@ -257,7 +257,7 @@ var Header = React.createClass({
                     if (res.status < 300 && res.status >= 200) {
                         Authorization.reloadUser().then(() => {
                             Log.info('User login successful');
-                            History.replaceState(null, '/profile');
+                            History.replace('/profile');
                         });
                     } else {
                         Toast.error(ERRORS.BAD_PASS);
@@ -302,7 +302,7 @@ var Header = React.createClass({
         this.setState({contactOpen: false, showContact: false});
     },
     loginAlert: function () {
-        History.replaceState(null, '/login');
+        History.replace('/login');
     },
     launchDemo: function () {
         this.setState({demoOpen: true});

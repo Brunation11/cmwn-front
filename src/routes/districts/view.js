@@ -32,7 +32,7 @@ var View = React.createClass({
         urlData.then(res => {
             this.district = res.response.data;
             if (!this.district.can_update) { //eslint-disable-line camel_case
-                History.replaceState(null, `/district/${this.props.params.id}/profile`);
+                History.replace(`/district/${this.props.params.id}/profile`);
             }
             this.forceUpdate();
         });

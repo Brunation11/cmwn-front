@@ -60,7 +60,7 @@ var _getRequestPromise = function (method, request, body, headers) {
                     //further requests until the user can be fully logged out
                     window.__USER_UNAUTHORIZED = true;
                     //force user to login screen on any 401, via the logout, regardless of access pattern
-                    History.replaceState(null, '/logout');
+                    History.replace('/logout');
                 }
             }
 
