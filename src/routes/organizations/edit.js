@@ -117,7 +117,7 @@ var BulkUpload = React.createClass({
                     label="Teacher Access Code"
                     validate="required"
                     ref="teacherInput"
-                    name="teacher_code"
+                    name="teacherAccesCode"
                     onChange={e => this.setState({teacherCode: e.target.value})} //eslint-disable-line camelcase
                 />
                 <Input
@@ -127,7 +127,7 @@ var BulkUpload = React.createClass({
                     label="Student Access Code"
                     validate="required"
                     ref="studentInput"
-                    name="student_code"
+                    name="studentAccessCode"
                     onChange={e => this.setState({studentCode: e.target.value})} //eslint-disable-line camelcase
                 />
                 <FormControls.Static value={TERMS_COPY} />
