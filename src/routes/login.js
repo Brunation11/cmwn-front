@@ -56,7 +56,7 @@ var Page = React.createClass({
                 if (res.status < 300 && res.status >= 200) {
                     Authorization.reloadUser().then(() => {
                         Log.info(e, 'User login success');
-                        History.replaceState(null, '/profile');
+                        History.replace('/profile');
                     });
                 } else {
                     Toast.error(ERRORS.LOGIN + (res.response && res.response.data && res.response.data.message ? ' Message: ' + res.response.data.message : ''));

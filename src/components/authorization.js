@@ -34,6 +34,13 @@ class _Authorization {
     reloadUser() {
         var getUser = HttpManager.GET({url: `${GLOBALS.API_URL}users/me?include=images,roles`, handleErrors: false});
         return getUser.then(res => {
+            if (res && res.status === 401 && res.response && res.response.error && res.response.error.code === 'RESET_PASSWORD') {
+                if (~window.location.href.indexOf('change-password')) {
+                    return Promise.resolve();
+                }
+                window.location.href = '/change-password';
+                return Promise.resolve();
+            }
             window.localStorage.setItem('com.cmwn.platform.userName', res.response.data.username);
             window.localStorage.setItem('com.cmwn.platform.userId', res.response.data.uuid);
             if (res.response.data.roles) {
@@ -57,7 +64,7 @@ class _Authorization {
             //user is not logged in.
             this.logout();
             if (window.location.pathname !== '/login' && window.location.pathname !== '/login/') {
-                History.replaceState(null, '/login');
+                History.replace('/login');
                 this._resolve();
             }
         });

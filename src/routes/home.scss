@@ -29,7 +29,7 @@
             color: #000;
         }
 
-        a:first-child {
+        a:not(:last-child) {
             margin-right: 5px;
             padding-right: 5px;
             border-right: solid 1px #000;

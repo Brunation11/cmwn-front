@@ -6,6 +6,7 @@ const COPY = {
     BUTTONS: {
         WORK: 'Work with Us',
         CONTACT: 'Contact Us',
+        TERMS: 'Terms & Conditions'
     },
     MODALS: {
         WORK: <span><p>We are so excited about your interest to work with us!</p><p>Click <a href="mailto:&#106;&#111;&#110;&#105;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#097;&#114;&#114;&#111;&#110;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;?subject=Work With Us!">here</a> to contact us.</p></span>,
@@ -70,6 +71,9 @@ var Footer = React.createClass({
                     </a>
                     <a onClick={this.displayContact}>
                         {COPY.BUTTONS.CONTACT}
+                    </a>
+                    <a href="/terms" target="_blank">
+                        {COPY.BUTTONS.TERMS}
                     </a>
                 </footer>
             </div>

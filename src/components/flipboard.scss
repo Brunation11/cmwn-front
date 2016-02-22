@@ -40,6 +40,7 @@
             .item, img, .overlay, object {
                 width: 100%;
                 max-width: $max-flip-size;
+                max-height: 236px;
                 margin: auto;
                 z-index: 3;
             }

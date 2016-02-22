@@ -50,12 +50,18 @@ var _getRequestPromise = function (method, request, body, headers) {
     promise = _makeRequest.call(this, method, request);
     if (request.length === 1) {
         return promise.then((res) => {
-            if (res[0].status === 401 && !PublicRoutes.hasPath(window.location.pathname)) {
-                //if we have encountered an unauthorized user, we want to cancel all
-                //further requests until the user can be fully logged out
-                window.__USER_UNAUTHORIZED = true;
-                //force user to login screen on any 401, via the logout, regardless of access pattern
-                History.replaceState(null, '/logout');
+            if (res[0].status === 401) {
+                //are we unauthorized because we need to update our password?
+                if (res[0].response && res[0].response.error && res[0].response.error.code === 'RESET_PASSWORD') {
+                    return Promise.resolve(res[0]);
+                }
+                if (!PublicRoutes.hasPath(window.location.pathname)) {
+                    //if we have encountered an unauthorized user, we want to cancel all
+                    //further requests until the user can be fully logged out
+                    window.__USER_UNAUTHORIZED = true;
+                    //force user to login screen on any 401, via the logout, regardless of access pattern
+                    History.replace('/logout');
+                }
             }
 
             if (window.location.pathname === '/login' || window.location.pathname === '/logout') {

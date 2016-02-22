@@ -64,6 +64,14 @@ var Page = React.createClass({
             <p className="userFlips" key={Shortid.generate()}>0 Flips Earned</p>
         );
     },
+    renderAdminLink: function () {
+        if (!this.group.can_update) {
+            return null;
+        }
+        return (
+            <p><a href={`/group/${this.group.uuid}/view`}>Admin view</a></p>
+        );
+    },
     renderFlip: function (item){
         return (
             <div className="flip" key={Shortid.generate()}>
@@ -75,10 +83,13 @@ var Page = React.createClass({
         );
     },
     renderClassInfo: function () {
+        if (!this.group.can_update) {
+            return null;
+        }
         return (
            <Panel header={this.group.title} className="standard">
                <EditLink base="/group" uuid={this.group.uuid} canUpdate={this.group.can_update} />
-               {this.group.description}
+               {this.renderAdminLink()}
            </Panel>
         );
     },
@@ -88,6 +99,7 @@ var Page = React.createClass({
         }
         return (
            <Layout className="groupProfile">
+               {this.renderClassInfo()}
                <FlipBoard renderFlip={this.renderFlip} header={
                  HEADINGS.CLASS + this.group.title
                } data={this.group.users.data} />

@@ -3,6 +3,7 @@ import _ from 'lodash';
 import Home from 'routes/home';
 import Logout from 'routes/logout';
 import Login from 'routes/login';
+import Terms from 'routes/terms';
 import Signup from 'routes/teacher_signup';
 
 import 'routes/logout.scss';
@@ -26,6 +27,7 @@ var routes = [
     { path: 'whats-my-story/my-interests/your-mark(/)', onEnter: redirect('/')},
     { path: 'for-grown-ups/partnerships-media/press-room/blog-posts(/)', onEnter: redirect('/')},
     { path: 'teachers/signup(/)', component: Signup },
+    { path: 'terms(/)', component: Terms },
     { path: 'logout(/)', component: Logout },
     { path: 'login(/)', component: Login}
 ];

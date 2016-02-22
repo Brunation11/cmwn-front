@@ -42,7 +42,7 @@ var View = React.createClass({
         urlData.then(res => {
             Util.normalize(res.response, 'users', []);
             if (!res.response.data.can_update) { //eslint-disable-line camel_case
-                History.replaceState(null, `/organization/${this.props.params.id}/profile`);
+                History.replace(`/organization/${this.props.params.id}/profile`);
             }
             this.setState({
                 organization: res.response.data,
