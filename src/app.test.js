@@ -1,25 +1,41 @@
+/*global describe, before, it */
+import React from 'react'; //eslint-disable-line no-unused-vars
 import assert from 'assert';
+import TestUtils from 'react-addons-test-utils';
 import {expect} from 'chai';
 
 import App from 'app';
 
-describe('Array', function() {
-  describe('#indexOf()', function () {
-    it('should return -1 when the value is not present', function () {
-      assert.equal(-1, [1,2,3].indexOf(5));
-      assert.equal(-1, [1,2,3].indexOf(0));
+describe('Test Utilities', function () {
+    describe('Mocha', function () {
+        it('Tests are functioning.', function () {
+            assert.equal(-1, [1, 2, 3].indexOf(5));
+            assert.equal(-1, [1, 2, 3].indexOf(0));
+        });
     });
-  });
+    describe('Chai', function () {
+        it('Chai syntax loads', function () {
+            var foo = {foo: 'bar'};
+            expect(foo).to.be.a('object');
+            expect(foo.foo).to.equal('bar');
+        });
+    });
 });
 
-describe('Chai', function () {
-    it('should allow chai syntax in tests', function () {
-        var foo = {foo: 'bar'};
-        var beverages = { tea: [ 'chai', 'matcha', 'oolong' ] };
-        expect(foo).to.be.a('string');
-        expect(foo).to.equal('bar');
-        expect(foo).to.have.length(3);
-        expect(beverages).to.have.property('tea').with.length(3);
+
+describe('Application', function () {
+    before('render and locate element', function () {
+        var renderedComponent = TestUtils.renderIntoDocument(
+            <App />
+        );
+        var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'sweater');
+
+        this.appWrapper = inputComponent;
+    });
+    describe('Bootstrap', function () {
+        it('Should insert React elements', function () {
+            expect(TestUtils.isDOMComponent(this.appWrapper)).to.be.ok;
+        });
     });
 });
 
