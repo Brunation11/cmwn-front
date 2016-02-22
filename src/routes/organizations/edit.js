@@ -92,15 +92,17 @@ var BulkUpload = React.createClass({
             <Form ref="formRef" method="post" target="dummyframe" encType="multipart/form-data" action={`${GLOBALS.API_URL}admin/importexcel`}
                 onSubmit={e => {
                     try {
-                        e.preventDefault();
                         if (!this.refs.formRef.isValid()) {
+                        e.preventDefault();
                             Toast.error('Please fill out all required fields');
                             return false;
                         } else if (this.state.tos === false) {
+                        e.preventDefault();
                             Toast.error('You must agree to the terms to submit import.');
                             return false;
                         }
                     } catch(err) {
+                        e.preventDefault();
                         return false;
                     }
                     Toast.success('Import submitted for processing');
@@ -109,7 +111,7 @@ var BulkUpload = React.createClass({
                 <input type="hidden" name="_token" value={HttpManager.token} />
                 <input type="hidden" name="organizations" value={this.props.orgId} />
                 <input type="hidden" name="organization_id" value={this.props.orgId} />
-                <Input type="file" name="yourcsv" chars="40" label="Upload Spreadsheet"/>
+                <Input type="file" name="xlsx" chars="40" label="Upload Spreadsheet"/>
                 <Input
                     type="text"
                     value={this.state.teacherCode}
@@ -117,7 +119,7 @@ var BulkUpload = React.createClass({
                     label="Teacher Access Code"
                     validate="required"
                     ref="teacherInput"
-                    name="teacherAccesCode"
+                    name="teacherAccessCode"
                     onChange={e => this.setState({teacherCode: e.target.value})} //eslint-disable-line camelcase
                 />
                 <Input

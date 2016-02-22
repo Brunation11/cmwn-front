@@ -5,7 +5,6 @@ import {Link} from 'react-router';
 import HttpManager from 'components/http_manager';
 import Layout from 'layouts/two_col';
 import GLOBALS from 'components/globals';
-import Validate from 'components/validators';
 import History from 'components/history';
 
 const HEADINGS = {
@@ -62,7 +61,7 @@ var Edit = React.createClass({
                     value={this.state.title}
                     placeholder="title"
                     label="Title"
-                    bsStyle={Validate.len(this.state.title)}
+                    validate="required"
                     hasFeedback
                     ref="titleInput"
                     onChange={() => this.setState({title: this.refs.titleInput.getValue()})}
