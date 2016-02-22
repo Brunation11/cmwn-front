@@ -69,8 +69,8 @@ var Page = React.createClass({
                     <Input
                         type="text"
                         value={this.state.code}
-                        placeholder="School Code"
-                        label="School Code"
+                        placeholder="District Code"
+                        label="District Code"
                         validate="required"
                         ref="codeInput"
                         name="codeInput"
