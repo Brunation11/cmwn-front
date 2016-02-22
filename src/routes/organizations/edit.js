@@ -1,10 +1,13 @@
 import React from 'react';
-import {Button, Input, Panel} from 'react-bootstrap';
+import {Button, Input, Panel, FormControls} from 'react-bootstrap';
 import HttpManager from 'components/http_manager';
-import Layout from 'layouts/two_col';
 import GLOBALS from 'components/globals';
 import Validate from 'components/validators';
+import Toast from 'components/toast';
 import History from 'components/history';
+import Form from 'components/form';
+
+import Layout from 'layouts/two_col';
 
 const HEADINGS = {
     EDIT_TITLE: 'Info',
@@ -14,6 +17,8 @@ const HEADINGS = {
 const LABELS = {
     SUBMIT: 'Submit'
 };
+
+const TERMS_COPY = <span>By checking the box below, you agree that you have read, understand, and accept <a href="/terms" target="_blank">ChangeMyWorldNow.com's terms and conditions</a>.</span>;
 
 var Edit = React.createClass({
     getInitialState: function () {
@@ -32,7 +37,7 @@ var Edit = React.createClass({
         urlData.then(res => {
             this.organization = res.response.data;
             if (!res.response.data.can_update) { //eslint-disable-line camel_case
-                History.replaceState(null, `/organization/${this.props.params.id}/profile`);
+                History.replace(`/organization/${this.props.params.id}/profile`);
             }
             this.setState(this.organization);
         });
@@ -66,18 +71,81 @@ var Edit = React.createClass({
                  />
                  <Button onClick={this.submitData} > Save </Button>
               </Panel>
-              <Panel header={HEADINGS.UPLOAD} className="standard">
-                <iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe"></iframe>
-                <form method="post" target="dummyframe" encType="multipart/form-data" action={`${GLOBALS.API_URL}admin/importexcel`} onsubmit={e => e.preventDefault()}>
-                    <input type="hidden" name="_token" value={HttpManager.token} />
-                    <input type="hidden" name="organizations" value={this.props.params.id} />
-                    <input type="hidden" name="organization_id" value={this.props.params.id} />
-                    <Input type="file" name="yourcsv" chars="40" label="Upload Spreadsheet"/>
-                    <Button type="submit" >{LABELS.SUBMIT}</Button>
-                </form>
-              </Panel>
+              <BulkUpload orgId={this.props.params.id}/>
            </Layout>
          );
+    }
+});
+
+var BulkUpload = React.createClass({
+    getInitialState: function () {
+        return {
+            studentCode: '',
+            teacherCode: '',
+            tos: false
+        };
+    },
+    render: function () {
+        return (
+          <Panel header={HEADINGS.UPLOAD} className="standard">
+            <iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe"></iframe>
+            <Form ref="formRef" method="post" target="dummyframe" encType="multipart/form-data" action={`${GLOBALS.API_URL}admin/importexcel`}
+                onSubmit={e => {
+                    try {
+                        if (!this.refs.formRef.isValid()) {
+                            e.preventDefault();
+                            Toast.error('Please fill out all required fields');
+                            return false;
+                        } else if (this.state.tos === false) {
+                            e.preventDefault();
+                            Toast.error('You must agree to the terms to submit import.');
+                            return false;
+                        }
+                    } catch(err) {
+                        e.preventDefault();
+                        return false;
+                    }
+                    Toast.success('Import submitted for processing');
+                }}
+            >
+                <input type="hidden" name="_token" value={HttpManager.token} />
+                <input type="hidden" name="organizations" value={this.props.orgId} />
+                <input type="hidden" name="organization_id" value={this.props.orgId} />
+                <Input type="file" name="xlsx" chars="40" label="Upload Spreadsheet"/>
+                <Input
+                    type="text"
+                    value={this.state.teacherCode}
+                    placeholder="Teacher Access Code"
+                    label="Teacher Access Code"
+                    validate="required"
+                    ref="teacherInput"
+                    name="teacherAccessCode"
+                    onChange={e => this.setState({teacherCode: e.target.value})} //eslint-disable-line camelcase
+                />
+                <Input
+                    type="text"
+                    value={this.state.studentCode}
+                    placeholder="Student Access Code"
+                    label="Student Access Code"
+                    validate="required"
+                    ref="studentInput"
+                    name="studentAccessCode"
+                    onChange={e => this.setState({studentCode: e.target.value})} //eslint-disable-line camelcase
+                />
+                <FormControls.Static value={TERMS_COPY} />
+                <Input
+                    type="checkbox"
+                    checked={this.state.tos}
+                    ref="tosInput"
+                    label="I accept the terms and conditions."
+                    name="tos"
+                    onChange={e => this.setState({tos: e.target.value})} //eslint-disable-line camelcase
+                />
+                <br />
+                <Button type="submit" >{LABELS.SUBMIT}</Button>
+            </Form>
+          </Panel>
+        );
     }
 });
 

@@ -25,15 +25,13 @@ var Page = React.createClass({
     submitData: function () {
         var postData = {
             title: this.state.title,
-            systemId: this.state.districtId,
-            systemid: this.state.districtId,
             system_id: this.state.districtId, //eslint-disable-line camelcase
             code: this.state.code
         };
         if (this.refs.formRef.isValid()) {
             HttpManager.POST({url: `${GLOBALS.API_URL}districts`, handleErrors: false}, postData).then(res => {
                 if (res.response && res.response.data && res.response.data.uuid) {
-                    History.replaceState(null, `/districts/${res.response.data.uuid}?message=created`);
+                    History.replace(`/districts/${res.response.data.uuid}?message=created`);
                 }
             }).catch(err => {
                 Toast.error(ERRORS.BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));

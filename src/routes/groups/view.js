@@ -10,6 +10,7 @@ import {Table, Column} from 'components/table';
 import Paginator from 'components/paginator';
 import Util from 'components/util';
 import History from 'components/history';
+import EditLink from 'components/edit_link';
 
 const HEADINGS = {
     TITLE: 'Info',
@@ -18,12 +19,6 @@ const HEADINGS = {
     CREATED: 'Created',
     Organizations: 'Member of: '
 };
-const BREADCRUMB = {
-    HOME: 'Home',
-    GROUPS: 'Groups'
-};
-const EDIT_LINK = 'Edit';
-
 
 var View = React.createClass({
     getInitialState: function () {
@@ -40,18 +35,11 @@ var View = React.createClass({
         urlData.then(res => {
             this.data = res.response.data;
             if (!this.data.can_update) { //eslint-disable-line camel_case
-                History.replaceState(null, `/groups/${this.props.params.id}/profile`);
+                History.replace(`/groups/${this.props.params.id}/profile`);
             }
             this.members = Util.normalize(res.response, 'users', []);
             this.forceUpdate();
         });
-    },
-    renderEditLink: function () {
-        if (GLOBALS.CURRENT_USER.ID === window.parseInt(this.props.params.id)) {
-            /** @TODO MPR, 10/4/15: Add check for user is admin*/
-            return <Link to={`/group/${this.props.params.id}/edit`} >({EDIT_LINK})</Link>;
-        }
-        return null;
     },
     renderGroups: function () {
         var links = _.map(this.data.organizations, organization => {
@@ -72,18 +60,11 @@ var View = React.createClass({
         }
         return (
             <Layout>
-                <h2>{this.data.title}</h2>
-                <div className="breadcrumb">
-                    <Link to="/">{BREADCRUMB.HOME}</Link>
-                    <Link to="/groups">{BREADCRUMB.GROUPS}</Link>
-                    <span>{this.data.title}</span>
-                </div>
-                <Panel header={HEADINGS.TITLE} className="standard">
+                <Panel header={HEADINGS.TITLE + ': ' + this.data.title} className="standard">
+                    <EditLink base="/group" uuid={this.data.uuid} canUpdate={this.data.can_update} />
                     <p>
-                        {this.renderEditLink()}
+                        <a href={`/group/${this.data.uuid}/profile`}>Return to group profile</a>
                     </p>
-                    <br />
-                    <p>{`${HEADINGS.ID}: ${this.data.uuid}`}</p>
                     <br />
                     <p>{this.renderGroups()}</p>
                     <br />
@@ -91,21 +72,29 @@ var View = React.createClass({
                     <br />
                     <p>{`${HEADINGS.CREATED}: ${this.data.created_at}`}</p>
                 </Panel>
-                <Paginator data={this.members}>
-                    <Table>
-                        <Column dataKey="title"
-                            renderCell={(data, row) => (
-                                <a href={`#/organization/${row.uuid}`}>{_.startCase(data)}</a>
-                            )}
-                        />
-                        <Column dataKey="description" />
-                        <Column dataKey="created_at" renderHeader="Created" />
-                        <Column dataKey="updated_at" renderHeader="Last Updated"
-                            renderCell={data => (data == null ? 'never' : data)}
-                        />
-                    </Table>
-                </Paginator>
-
+                <Panel header="Students" className="standard">
+                    <Paginator data={this.members}>
+                        <Table>
+                            <Column dataKey="title"
+                                renderHeader="Name"
+                                renderCell={(data, row) => (
+                                    <a href={`/users/${row.uuid}`}>{`${row.first_name} ${row.last_name}`}</a>
+                                )}
+                            />
+                            <Column dataKey="username" />
+                            <Column dataKey="active" renderHeader="Active user" renderCell={ (data) => {
+                                return data ? 'Active' : 'Inactive';
+                            }} />
+                            <Column dataKey="updated_at" renderHeader="Update Users"
+                                renderCell={(data, row) => {
+                                    return (
+                                        <a href={`/users/${row.uuid}/edit`}>Edit</a>
+                                    );
+                                }}
+                            />
+                        </Table>
+                    </Paginator>
+                </Panel>
            </Layout>
 
         );

@@ -5,7 +5,6 @@ import {Link} from 'react-router';
 import HttpManager from 'components/http_manager';
 import Layout from 'layouts/two_col';
 import GLOBALS from 'components/globals';
-import Validate from 'components/validators';
 import History from 'components/history';
 
 const HEADINGS = {
@@ -33,7 +32,7 @@ var Edit = React.createClass({
         urlData.then(res => {
             this.group = res.response.data;
             if (!this.group.can_update) { //eslint-disable-line camel_case
-                History.replaceState(null, `/groups/${this.props.params.id}/profile`);
+                History.replace(`/groups/${this.props.params.id}/profile`);
             }
             this.setState({
                 code: this.group.code,
@@ -62,7 +61,7 @@ var Edit = React.createClass({
                     value={this.state.title}
                     placeholder="title"
                     label="Title"
-                    bsStyle={Validate.len(this.state.title)}
+                    validate="required"
                     hasFeedback
                     ref="titleInput"
                     onChange={() => this.setState({title: this.refs.titleInput.getValue()})}

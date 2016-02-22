@@ -18,7 +18,7 @@ var Sidebar = React.createClass({
         });
     },
     attemptNavigate: function () {
-        History.replaceState(null, '/profile');
+        History.replace('/profile');
     },
     renderWelcome: function () {
         return (

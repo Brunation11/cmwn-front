@@ -14,11 +14,11 @@ var _renderCell = function (data, row) { //eslint-disable-line
     }
 };
 
-var Column = React.createClass({
+export var Column = React.createClass({
     render: () => null
 });
 
-var Table = React.createClass({
+export var Table = React.createClass({
     renderHeader: function () {
         var childRows;
         if (this.props.renderHeader !== false) {

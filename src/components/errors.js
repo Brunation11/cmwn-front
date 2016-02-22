@@ -10,7 +10,7 @@ var _errors = [];
 var _handlers = [];
 
 var renderErrors = function () {
-    History.listenBeforeUnload(() => {
+    History.listenBefore(() => {
         _errors = [];
         EventManager.update('errorChange', _errors);
     });
@@ -23,10 +23,10 @@ var renderErrors = function () {
 
 var show403 = function (url) {
     var redirect = window.setTimeout(function () {
-        History.replaceState(null, '/profile');
+        History.replace('/profile');
         window.location.reload();
     }, 5000);
-    History.listenBeforeUnload(() => {
+    History.listenBefore(() => {
         window.clearTimeout(redirect);
     });
     _errors.push(
