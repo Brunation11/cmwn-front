@@ -93,11 +93,11 @@ var BulkUpload = React.createClass({
                 onSubmit={e => {
                     try {
                         if (!this.refs.formRef.isValid()) {
-                        e.preventDefault();
+                            e.preventDefault();
                             Toast.error('Please fill out all required fields');
                             return false;
                         } else if (this.state.tos === false) {
-                        e.preventDefault();
+                            e.preventDefault();
                             Toast.error('You must agree to the terms to submit import.');
                             return false;
                         }
