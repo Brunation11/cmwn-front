@@ -58,8 +58,8 @@ describe('Application', function () {
     });
     describe('Routes', function () {
         it('Should load User Profile', function () {
-            var renderedComponent = TestUtils.renderIntoDocument( <Profile />);
-            var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'sweater');
+            var renderedComponent = TestUtils.renderIntoDocument( <Profile id="954d31ae-d689-11e5-bcaa-acbc32a6b1bb"/>);
+            var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'user-profile');
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
         it('Should load User User List', function () {
