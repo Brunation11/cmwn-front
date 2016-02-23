@@ -64,7 +64,7 @@ describe('Application', function () {
         });
         it('Should load User User List', function () {
             var renderedComponent = TestUtils.renderIntoDocument( <Users />);
-            var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'sweater');
+            var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'user-list');
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
         it('Should load District List', function () {

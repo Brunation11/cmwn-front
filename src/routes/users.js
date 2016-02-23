@@ -26,7 +26,7 @@ var Users = React.createClass({
     },
     render: function () {
         return (
-            <Layout>
+            <Layout className="user-list">
                 <header>
                     <h2>{TITLE}</h2>
                     <div className="breadcrumb">
