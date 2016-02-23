@@ -69,7 +69,7 @@ describe('Application', function () {
         });
         it('Should load District List', function () {
             var renderedComponent = TestUtils.renderIntoDocument( <Districts />);
-            var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'sweater');
+            var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'district-list');
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
         it('Should load Edit District', function () {

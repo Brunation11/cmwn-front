@@ -15,7 +15,7 @@ const HOME = 'Home';
 var Districs = React.createClass({
     render: function () {
         return (
-            <Layout>
+            <Layout className="district-list">
                 <header>
                     <h2>{TITLE}</h2>
                     <div className="breadcrumb">
