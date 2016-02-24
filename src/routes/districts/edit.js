@@ -19,6 +19,8 @@ const HEADINGS = {
     EDIT_TITLE: 'Info'
 };
 
+const BAD_UPDATE = 'There was a problem updating your profile. Please try again later.';
+
 var Edit = React.createClass({
     getInitialState: function () {
         this.district = {};
@@ -38,14 +40,20 @@ var Edit = React.createClass({
             if (!this.district.can_update) { //eslint-disable-line camel_case
                 History.replace(`/district/${this.props.params.id}/profile`);
             }
-            this.setState({
-                code: this.district.code,
-                title: this.district.title,
-                description: this.district.description
-            });
+            this.setState(this.district);
         });
     },
     submitData: function () {
+        var postData = {
+            title: this.state.title,
+            description: this.state.description
+        };
+        HttpManager.POST(`${GLOBALS.API_URL}districts/${this.state.uuid}`, postData).then(() => {
+            Toast.success('District Updated');
+        }).catch(err => {
+            Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
+            Log.log('Server refused district update', err, postData);
+        });
     },
     render: function () {
         if (this.district == null || !this.district.can_update) {
