@@ -73,8 +73,8 @@ describe('Application', function () {
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
         it('Should load Edit District', function () {
-            var renderedComponent = TestUtils.renderIntoDocument( <DistrictEdit />);
-            var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'sweater');
+            var renderedComponent = TestUtils.renderIntoDocument( <DistrictEdit id="94cb922a-d689-11e5-ba76-acbc32a6b1bb" />);
+            var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'district-edit');
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
         it('Should load District Admin', function () {

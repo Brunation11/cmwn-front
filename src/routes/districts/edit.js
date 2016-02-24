@@ -23,6 +23,7 @@ var Edit = React.createClass({
     getInitialState: function () {
         this.district = {};
         return {
+            id: this.props.id || this.props.params.id,
             code: '',
             title: '',
             description: ''
@@ -32,11 +33,11 @@ var Edit = React.createClass({
         this.getDistrict();
     },
     getDistrict: function () {
-        var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'districts/' + this.props.params.id});
+        var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'districts/' + this.state.id});
         urlData.then(res => {
             this.district = res.response.data;
             if (!this.district.can_update) { //eslint-disable-line camel_case
-                History.replace(`/district/${this.props.params.id}/profile`);
+                History.replace(`/district/${this.state.id}/profile`);
             }
             this.setState({
                 code: this.district.code,
@@ -52,7 +53,7 @@ var Edit = React.createClass({
             return null;
         }
         return (
-           <Layout>
+           <Layout className="district-edit">
               <Panel header={HEADINGS.EDIT_TITLE} className="standard">
                  <Input
                     type="text"
@@ -74,7 +75,7 @@ var Edit = React.createClass({
                  />
                  <Button onClick={this.submitData} > Save </Button>
               </Panel>
-              <CreateOrganization districtId={this.props.params.id}/>
+              <CreateOrganization districtId={this.state.id}/>
            </Layout>
          );
     }
