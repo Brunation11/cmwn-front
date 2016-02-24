@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import {Button, Input, Panel, FormControls} from 'react-bootstrap';
 import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
@@ -121,7 +122,18 @@ var BulkUpload = React.createClass({
                         e.preventDefault();
                         return false;
                     }
-                    Toast.success('Import submitted for processing');
+                    Toast.success('Import submitted for processing. You will recieve an email once processing is complete.');
+                    window.setTimeout(() => {
+                        this.setState({
+                            studentCode: '',
+                            teacherCode: '',
+                            tos: false
+                        });
+                        ReactDOM.findDOMNode(this.refs.fileInput).value = '';
+                        ReactDOM.findDOMNode(this.refs.fileInput).type = '';
+                        ReactDOM.findDOMNode(this.refs.fileInput).type = 'file';
+                        ReactDOM.findDOMNode(this.refs.formRef).reset();
+                    }, 0);
                 }}
             >
                 <input type="hidden" name="_token" value={HttpManager.token} />
