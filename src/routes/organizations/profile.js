@@ -1,4 +1,6 @@
 import React from 'react';
+import _ from 'lodash';
+
 import {Link} from 'react-router';
 //import _ from 'lodash';
 import {Panel} from 'react-bootstrap';
@@ -11,12 +13,14 @@ import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
 import EditLink from 'components/edit_link';
 import Util from 'components/util';
+import Log from 'components/log';
 
 import 'routes/users/profile.scss';
 
 const HEADINGS = {
     ALL_CLASSES: 'All Classes',
-    MY_CLASSES: 'My Classes'
+    MY_CLASSES: 'My Classes',
+    DISTRICTS: 'Member of Districts'
 };
 
 var Page = React.createClass({
@@ -32,18 +36,27 @@ var Page = React.createClass({
             this.myClasses = res.response.data.groups.data;
             this.forceUpdate();
         }).catch(err => {
-            console.info(err); //eslint-disable-line no-console
+            Log.info(err);
         });
     },
     getOrganization: function () {
-        var urlData = HttpManager.GET({url: `${GLOBALS.API_URL}organizations/${this.props.params.id}?include=groups`});
+        var urlData = HttpManager.GET({url: `${GLOBALS.API_URL}organizations/${this.props.params.id}?include=groups,districts`});
         urlData.then(res => {
             Util.normalize(res.response, 'users', []);
-            /** @TODO MPR, 12/21/15: Remove this line once CORE-146 and CORE-219 are done*/
-            res.response.data.can_update = res.response.data.can_update || res.response.data.canupdate; //eslint-disable-line
+            this.districts = res.response.data.districts.data;
             this.organization = res.response.data;
             this.forceUpdate();
         });
+    },
+    renderDistricts: function () {
+        var links = _.map(this.districts, district => {
+            return (
+                <Link to={`/districts/${district.id}`}>
+                    {district.title}
+                </Link>
+            );
+        });
+        return links;
     },
     renderFlip: function (item){
         return (
@@ -58,6 +71,7 @@ var Page = React.createClass({
            <Layout className="profile">
                <Panel header={this.organization.title} className="standard">
                    <EditLink base="/organization" uuid={this.organization.uuid} canUpdate={this.organization.can_update} />
+                    <p>{`${HEADINGS.DISTRICTS}: `}{this.renderDistricts()}</p>
                    {this.organization.description}
                </Panel>
                <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.MY_CLASSES} data={this.myClasses} />
