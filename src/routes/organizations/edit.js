@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Button, Input, Panel, FormControls} from 'react-bootstrap';
+
+import Log from 'components/log';
 import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
 import Validate from 'components/validators';
@@ -18,6 +20,8 @@ const HEADINGS = {
 const LABELS = {
     SUBMIT: 'Submit'
 };
+
+const BAD_UPDATE = 'There was a problem updating your profile. Please try again later.';
 
 const TERMS_COPY = <span>By checking the box below, you agree that you have read, understand, and accept <a href="/terms" target="_blank">ChangeMyWorldNow.com's terms and conditions</a>.</span>;
 
@@ -48,6 +52,16 @@ var Edit = React.createClass({
         });
     },
     submitData: function () {
+        var postData = {
+            title: this.state.title,
+            description: this.state.description
+        };
+        HttpManager.POST(`${GLOBALS.API_URL}organizations/${this.state.uuid}`, postData).then(() => {
+            Toast.success('District Updated');
+        }).catch(err => {
+            Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
+            Log.log('Server refused district update', err, postData);
+        });
     },
     render: function () {
         if (this.state.uuid == null || !this.state.can_update) {
