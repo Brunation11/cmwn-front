@@ -20,6 +20,10 @@ const LABELS = {
 
 const TERMS_COPY = <span>By checking the box below, you agree that you have read, understand, and accept <a href="/terms" target="_blank">ChangeMyWorldNow.com's terms and conditions</a>.</span>;
 
+var isPassValid = function (password) {
+    return password.length > 8 && ~password.search(/[0-9]+/);
+};
+
 var Edit = React.createClass({
     getInitialState: function () {
         this.organization = {};
@@ -100,6 +104,18 @@ var BulkUpload = React.createClass({
                             e.preventDefault();
                             Toast.error('You must agree to the terms to submit import.');
                             return false;
+                        } else if (this.state.teacherCode === this.state.studentCode) {
+                            e.preventDefault();
+                            Toast.error('Teacher and Student access codes must be different');
+                            return false;
+                        } else if (!isPassValid(this.state.teacherCode) || !isPassValid(this.state.studentCode)) {
+                            e.preventDefault();
+                            Toast.error('Passwords must be a minimum of 8 characters and contain a number.');
+                            return false;
+                        } else if (!this.refs.fileInput.getValue()) {
+                            e.preventDefault();
+                            Toast.error('Please select an XLSX file to import.');
+                            return false;
                         }
                     } catch(err) {
                         e.preventDefault();
@@ -111,7 +127,7 @@ var BulkUpload = React.createClass({
                 <input type="hidden" name="_token" value={HttpManager.token} />
                 <input type="hidden" name="organizations" value={this.props.orgId} />
                 <input type="hidden" name="organization_id" value={this.props.orgId} />
-                <Input type="file" name="xlsx" chars="40" label="Upload Spreadsheet"/>
+                <Input ref="fileInput" type="file" name="xlsx" chars="40" label="Upload Spreadsheet"/>
                 <Input
                     type="text"
                     value={this.state.teacherCode}
@@ -139,7 +155,7 @@ var BulkUpload = React.createClass({
                     ref="tosInput"
                     label="I accept the terms and conditions."
                     name="tos"
-                    onChange={e => this.setState({tos: e.target.value})} //eslint-disable-line camelcase
+                    onChange={e => this.setState({tos: e.target.checked})} //eslint-disable-line camelcase
                 />
                 <br />
                 <Button type="submit" >{LABELS.SUBMIT}</Button>
