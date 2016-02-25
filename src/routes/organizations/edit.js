@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Button, Input, Panel, FormControls} from 'react-bootstrap';
 
-import Log from 'components/log';
 import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
 import Validate from 'components/validators';
+import Log from 'components/log';
 import Toast from 'components/toast';
 import History from 'components/history';
 import Form from 'components/form';
