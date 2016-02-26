@@ -153,7 +153,7 @@ var BulkUpload = React.createClass({
                 <input type="hidden" name="_token" value={HttpManager.token} />
                 <input type="hidden" name="organizations" value={this.props.orgId} />
                 <input type="hidden" name="organization_id" value={this.props.orgId} />
-                <Input ref="fileInput" type="file" name="xlsx" chars="40" label="Upload Spreadsheet"/>
+                <Input ref="fileInput" accept=".xlsx" type="file" name="xlsx" chars="40" label="Upload Spreadsheet"/>
                 <Input
                     type="text"
                     value={this.state.teacherCode}

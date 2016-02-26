@@ -34,7 +34,7 @@ var Districs = React.createClass({
                     var wasSuper = this.isSuperAdmin;
                     this.isSuperAdmin = _.reduce(data, (a, i) => a && i.can_update, true);
                     if (wasSuper !== this.isSuperAdmin) {
-                         window.setTimeout(() => this.forceUpdate(), 0);
+                        window.setTimeout(() => this.forceUpdate(), 0);
                     }
                     return data;
                 }}>
