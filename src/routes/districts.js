@@ -1,6 +1,5 @@
 import React from 'react';
 import _ from 'lodash';
-import {Link} from 'react-router';
 
 //import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
@@ -10,20 +9,35 @@ import Paginator from 'components/paginator';
 import Fetcher from 'components/fetcher';
 
 const TITLE = 'Districts';
-const HOME = 'Home';
+const CREATE_TEXT = 'Create District';
 
 var Districs = React.createClass({
+    renderCreateDistrict: function () {
+        if (!this.isSuperAdmin) {
+            return null;
+        }
+        return (
+            <p><a href={'/districts/create'}>{CREATE_TEXT}</a></p>
+        );
+    },
     render: function () {
         return (
             <Layout>
                 <header>
                     <h2>{TITLE}</h2>
-                    <div className="breadcrumb">
-                        <Link to="/">{HOME}</Link>
-                        {TITLE}
+                    <div >
+                        {this.renderCreateDistrict()}
                     </div>
                 </header>
-                <Fetcher url={GLOBALS.API_URL + 'districts'}>
+                <Fetcher url={GLOBALS.API_URL + 'districts'} transform={data => {
+                    //sure exploiting this side effect in a render method is filthy but its also easy
+                    var wasSuper = this.isSuperAdmin;
+                    this.isSuperAdmin = _.reduce(data, (a, i) => a && i.can_update, true);
+                    if (wasSuper !== this.isSuperAdmin) {
+                         window.setTimeout(() => this.forceUpdate(), 0);
+                    }
+                    return data;
+                }}>
                     <Paginator pageCount={1}>
                         <Table>
                             <Column dataKey="title"
