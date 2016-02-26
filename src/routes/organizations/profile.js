@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import QueryString from 'query-string';
 
 import {Link} from 'react-router';
 //import _ from 'lodash';
@@ -14,6 +15,7 @@ import HttpManager from 'components/http_manager';
 import EditLink from 'components/edit_link';
 import Util from 'components/util';
 import Log from 'components/log';
+import Toast from 'components/toast';
 
 import 'routes/users/profile.scss';
 
@@ -24,6 +26,8 @@ const HEADINGS = {
 };
 
 const ADMIN_TEXT = 'School Dashboard';
+
+const ORG_CREATED = 'School created successfully';
 
 var Page = React.createClass({
     myClasses: [],
@@ -39,6 +43,9 @@ var Page = React.createClass({
     componentDidMount: function () {
         this.getOrganization();
         this.getMyClasses();
+        if (QueryString.parse(location.search).message === 'created') {
+            Toast.success(ORG_CREATED);
+        }
     },
     getMyClasses: function () {
         var fetchOrgs = HttpManager.GET({url: GLOBALS.API_URL + 'users/me?include=groups'});
