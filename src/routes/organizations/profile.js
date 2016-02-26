@@ -23,9 +23,19 @@ const HEADINGS = {
     DISTRICTS: 'Member of Districts'
 };
 
+const ADMIN_TEXT = 'School Dashboard';
+
 var Page = React.createClass({
     myClasses: [],
     organization: null,
+    getInitialState: function () {
+        return {
+            organization: [],
+            districts: [],
+            groups: [],
+            users: []
+        };
+    },
     componentDidMount: function () {
         this.getOrganization();
         this.getMyClasses();
@@ -63,6 +73,14 @@ var Page = React.createClass({
             <div className="flip" key={Shortid.generate()}><Link to={`/group/${item.uuid}/profile`}><img src={FlipBgDefault}></img><p>{item.title}</p></Link></div>
         );
     },
+    renderAdminLink: function () {
+        if (!this.organization.can_update) {
+            return null;
+        }
+        return (
+            <p><a href={`/organization/${this.organization.uuid}/view`}>{ADMIN_TEXT}</a></p>
+        );
+    },
     render: function () {
         if (this.organization == null) {
             return null;
@@ -71,6 +89,7 @@ var Page = React.createClass({
            <Layout className="profile">
                <Panel header={this.organization.title} className="standard">
                    <EditLink base="/organization" uuid={this.organization.uuid} canUpdate={this.organization.can_update} />
+                   {this.renderAdminLink()}
                     <p>{`${HEADINGS.DISTRICTS}: `}{this.renderDistricts()}</p>
                    {this.organization.description}
                </Panel>

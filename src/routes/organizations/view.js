@@ -5,6 +5,7 @@ import {Panel} from 'react-bootstrap';
 
 import HttpManager from 'components/http_manager';
 import Layout from 'layouts/two_col';
+import EditLink from 'components/edit_link';
 import GLOBALS from 'components/globals';
 import {Table, Column} from 'components/table';
 import Paginator from 'components/paginator';
@@ -18,12 +19,8 @@ const HEADINGS = {
     CREATED: 'Created',
     DISTRICTS: 'Districts'
 };
-const BREADCRUMB = {
-    HOME: 'Home',
-    ORGANIZATIONS: 'Organizations'
-};
-const EDIT_LINK = 'Edit';
 
+const ADMIN_TEXT = 'Teacher Dashboard';
 
 var View = React.createClass({
     getInitialState: function () {
@@ -52,13 +49,6 @@ var View = React.createClass({
             });
         });
     },
-    renderEditLink: function () {
-        if (true) { //eslint-disable-line no-constant-condition
-            /** @TODO MPR, 10/4/15: Add check for user is admin*/
-            return <Link to={`/organization/${this.props.params.id}/edit`} >({EDIT_LINK})</Link>;
-        }
-        return null;
-    },
     renderDistricts: function () {
         var links = _.map(this.state.districts, district => {
             return (
@@ -69,6 +59,14 @@ var View = React.createClass({
         });
         return links;
     },
+    renderAdminLink: function () {
+        if (!this.state.organization.can_update) {
+            return null;
+        }
+        return (
+            <p><a href={`/organization/${this.state.organization.uuid}/view`}>{ADMIN_TEXT}</a></p>
+        );
+    },
     render: function () {
         if (this.state.organization == null || !this.state.organization.can_update) {
             return null;
@@ -76,18 +74,8 @@ var View = React.createClass({
         return (
             <Layout>
                 <h2>{this.state.organization.title}</h2>
-                <div className="breadcrumb">
-                    <Link to="/">{BREADCRUMB.HOME}</Link>
-                    <Link to="/organization">{BREADCRUMB.ORGANIZATIONS}</Link>
-                    <span>{this.state.organization.title}</span>
-                </div>
                 <Panel header={HEADINGS.TITLE} className="standard">
-                    <p>
-                        {this.renderEditLink()}
-                    </p>
-                    <br />
-                    <p>{`${HEADINGS.ID}: ${this.state.organization.uuid}`}</p>
-                    <br />
+                   <EditLink base="/organization" uuid={this.state.organization.uuid} canUpdate={this.state.organization.can_update} />
                     <p>{`${HEADINGS.DISTRICTS}: `}{this.renderDistricts()}</p>
                     <br />
                     <p>{`${HEADINGS.DESCRIPTION}: ${this.state.organization.description}`}</p>

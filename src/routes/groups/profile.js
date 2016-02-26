@@ -22,6 +22,8 @@ const HEADINGS = {
     CLASS: 'Class – '
 };
 
+const ADMIN_TEXT = 'Teacher Dashboard';
+
 var Page = React.createClass({
     getInitialState: function () {
         return {
@@ -69,7 +71,7 @@ var Page = React.createClass({
             return null;
         }
         return (
-            <p><a href={`/group/${this.group.uuid}/view`}>Admin view</a></p>
+            <p><a href={`/group/${this.group.uuid}/view`}>{ADMIN_TEXT}</a></p>
         );
     },
     renderFlip: function (item){
