@@ -7,7 +7,10 @@ import Layout from 'layouts/two_col';
 import GLOBALS from 'components/globals';
 import History from 'components/history';
 import EditLink from 'components/edit_link';
+import Toast from 'components/toast';
+import QueryString from 'query-string';
 
+const DISTRICT_CREATED = 'Disctrict created successfully';
 const HEADINGS = {
     TITLE: 'Info',
     ID: 'ID',
@@ -26,6 +29,11 @@ var View = React.createClass({
     componentWillMount: function () {
         this.district = {};
         this.getDistrict();
+    },
+    componentDidMount: function () {
+        if (QueryString.parse(location.search).message === 'created') {
+            Toast.success(DISTRICT_CREATED);
+        }
     },
     getDistrict: function () {
         var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'districts/' + this.props.params.id});

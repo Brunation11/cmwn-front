@@ -16,9 +16,14 @@ const HEADINGS = {
 };
 const ERRORS = {
     BAD_PASS: 'Sorry, there was a problem updating your password.',
+    TOO_SHORT: 'Passwords must contain at least 8 characters, including one number',
     NO_MATCH: 'Those passwords do not appear to match. Please try again.'
 };
 const CHANGE_COPY = 'You are required to change your password before using ChangeMyWorldNow.com. Please update your password using the form below to proceed.';
+
+var isPassValid = function (password) {
+    return password.length > 8 && ~password.search(/[0-9]+/);
+};
 
 var Page = React.createClass({
     getInitialState: function () {
@@ -45,7 +50,10 @@ var ChangePassword = React.createClass({
         };
     },
     submit: function () {
-        if (this.state.confirm === this.state.new) {
+        if (!isPassValid(this.state.new)) {
+            this.setState({extraProps: {bsStyle: 'error'}});
+            Toast.error(ERRORS.TOO_SHORT);
+        } else if (this.state.confirm === this.state.new) {
             var update = HttpManager.POST({url: `${GLOBALS.API_URL}auth/password`, handleErrors: false}, {
                 'current_password': this.state.current,
                 'password': this.state.new,

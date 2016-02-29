@@ -3,9 +3,12 @@ import {Button, Input, Panel} from 'react-bootstrap';
 import {Link} from 'react-router';
 
 import HttpManager from 'components/http_manager';
-import Layout from 'layouts/two_col';
+import Log from 'components/log';
+import Toast from 'components/toast';
 import GLOBALS from 'components/globals';
 import History from 'components/history';
+
+import Layout from 'layouts/two_col';
 
 const HEADINGS = {
     EDIT_TITLE: 'Info'
@@ -14,6 +17,8 @@ const BREADCRUMB = {
     HOME: 'Home',
     GROUPS: 'Groups'
 };
+
+const BAD_UPDATE = 'There was a problem updating your profile. Please try again later.';
 
 var Edit = React.createClass({
     getInitialState: function () {
@@ -34,14 +39,20 @@ var Edit = React.createClass({
             if (!this.group.can_update) { //eslint-disable-line camel_case
                 History.replace(`/groups/${this.props.params.id}/profile`);
             }
-            this.setState({
-                code: this.group.code,
-                title: this.group.title,
-                description: this.group.description
-            });
+            this.setState(this.group);
         });
     },
     submitData: function () {
+        var postData = {
+            title: this.state.title,
+            description: this.state.description
+        };
+        HttpManager.POST(`${GLOBALS.API_URL}groups/${this.state.uuid}`, postData).then(() => {
+            Toast.success('District Updated');
+        }).catch(err => {
+            Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
+            Log.log('Server refused district update', err, postData);
+        });
     },
     render: function () {
         if (this.group == null || !this.group.can_update) {

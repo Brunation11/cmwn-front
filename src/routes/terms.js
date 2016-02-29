@@ -15,7 +15,7 @@ var Page = React.createClass({
 });
 
 const TERMS = (
-<div>
+<div className="terms">
   <div>
       <p className="p0 ft0">CHANGE MY WORLD NOW</p>
 
