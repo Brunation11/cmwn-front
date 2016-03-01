@@ -22,7 +22,7 @@ const ERRORS = {
 const CHANGE_COPY = 'You are required to change your password before using ChangeMyWorldNow.com. Please update your password using the form below to proceed.';
 
 var isPassValid = function (password) {
-    return password.length > 8 && ~password.search(/[0-9]+/);
+    return password.length >= 8 && ~password.search(/[0-9]+/);
 };
 
 var Page = React.createClass({
