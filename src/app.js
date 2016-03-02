@@ -1,6 +1,7 @@
 import 'polyfills';//minor polyfills here. Major polyfilles (e.g. es5 shim) loaded in index from cdn
 
 import React from 'react';
+import { Provider } from 'react-redux';
 import _ from 'lodash';
 import ReactDOM from 'react-dom';
 import { Router } from 'react-router';
@@ -12,6 +13,7 @@ import GLOBALS from 'components/globals';
 import PublicRoutes from 'public_routes';
 import PrivateRoutes from 'private_routes';
 import EventManager from 'components/event_manager';
+import Store from 'components/store';
 
 import Errors from 'components/errors';
 import Home from 'routes/home';
@@ -21,6 +23,7 @@ import 'overrides.scss';
 //import 'app.scss';
 
 import 'media/logo.png';
+
 
 document.domain = 'changemyworldnow.com';
 
@@ -83,7 +86,11 @@ function run() {
     window._bootstrap_attempts = window._bootstrap_attempts || 0; //eslint-disable-line camelcase
     try {
         window._bootstrap_attempts++;
-        ReactDOM.render(<Router history={History} routes={routes} />, document.getElementById('cmwn-app'));
+        ReactDOM.render((
+                <Provider store={Store} >
+                    <Router history={History} routes={routes} />
+                </Provider>
+        ), document.getElementById('cmwn-app'));
         console.log('%cWoah there, World Changer!', 'font-weight: bold; color: red; font-size: 60px; font-family: Helvetica, Impact, Arial, sans-serif; text-shadow: 2px 2px grey;'); //eslint-disable-line no-console
         console.log('%cChangeMyWorldNow will never ask you to enter any of your information in this space, or ask you to paste anything here. For your security, we recommend you close this console.', 'font-weight: bold; color: #2CC4F4; font-size: 25px; font-family: Helvetica, Impact, Arial, sans-serif;'); //eslint-disable-line no-console
         if (GLOBALS.MODE.toLowerCase() === 'prod' || GLOBALS.MODE.toLowerCase() === 'production') {
