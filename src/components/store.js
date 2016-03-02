@@ -1,9 +1,11 @@
-import { createStore } from 'redux';
+import { createStore, compose } from 'redux';
 import Immutable from 'immutable';
 import { combineReducers } from 'redux-immutable';
 //LOCATION_CHANGE is not currently returning correctly, so were hardcoding it
 //import { LOCATION_CHANGE, routerReducer } from 'react-router-redux';
 const LOCATION_CHANGE = '@@router/LOCATION_CHANGE';
+
+import DevTools from 'components/devtools';
 
 const INITIAL_STATE = Immutable.fromJS({
     locationBeforeTransitions: null
@@ -17,6 +19,6 @@ const Store = createStore( combineReducers({
         }
         return state;
     }
-}), Immutable.Map({routing: INITIAL_STATE}));
+}), Immutable.Map({routing: INITIAL_STATE}), compose(DevTools.instrument()));
 
 export default Store;

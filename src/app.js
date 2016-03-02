@@ -14,6 +14,7 @@ import PublicRoutes from 'public_routes';
 import PrivateRoutes from 'private_routes';
 import EventManager from 'components/event_manager';
 import Store from 'components/store';
+import DevTools from 'components/devtools';
 
 import Errors from 'components/errors';
 import Home from 'routes/home';
@@ -23,7 +24,6 @@ import 'overrides.scss';
 //import 'app.scss';
 
 import 'media/logo.png';
-
 
 document.domain = 'changemyworldnow.com';
 
@@ -58,6 +58,7 @@ var App = React.createClass({
                 <div className="sweater">
                     {this.props.children}
                 </div>
+                <DevTools />
             </div>
         );
     }
