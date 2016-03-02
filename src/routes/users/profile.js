@@ -56,7 +56,7 @@ var Page = React.createClass({
     },
     componentWillReceiveProps: function () {
         if (self.currentLoc !== document.location.pathname) {
-            document.location.reload();
+        //    document.location.reload();
         }
     },
     render: function () {

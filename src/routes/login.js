@@ -44,7 +44,7 @@ var Page = React.createClass({
         var req;
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
             req = HttpManager.POST({
-                url: `${GLOBALS.API_URL}auth/login`,
+                url: `${GLOBALS.API_URL}login`,
                 withCredentials: true,
                 withoutXSRF: true,
                 handleErrors: false
@@ -56,11 +56,11 @@ var Page = React.createClass({
                 if (res.status < 300 && res.status >= 200) {
                     Authorization.reloadUser().then(() => {
                         Log.info(e, 'User login success');
-                        History.replace('/profile');
+                        History.push('/profile');
                     });
                 } else {
                     Toast.error(ERRORS.LOGIN + (res.response && res.response.data && res.response.data.message ? ' Message: ' + res.response.data.message : ''));
-                    Log.log(res, 'Invalid login.', req);
+                        Log.log(res, 'Invalid login.', req);
                 }
             }).catch(err => {
                 Toast.error(ERRORS.LOGIN + (err.message ? ' Message: ' + err.message : ''));

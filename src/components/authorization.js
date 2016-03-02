@@ -32,7 +32,7 @@ class _Authorization {
         EventManager.update('userChanged', null);
     }
     reloadUser() {
-        var getUser = HttpManager.GET({url: `${GLOBALS.API_URL}users/me?include=images,roles`, handleErrors: false});
+        var getUser = HttpManager.GET({url: `${GLOBALS.API_URL}`, handleErrors: false});
         return getUser.then(res => {
             if (res && res.status === 401 && res.response && res.response.error && res.response.error.code === 'RESET_PASSWORD') {
                 if (~window.location.href.indexOf('change-password')) {
@@ -62,11 +62,11 @@ class _Authorization {
         }).catch(e => {
             Log.log(e, 'Error encountered during authorization check. Logging out.');
             //user is not logged in.
-            this.logout();
-            if (window.location.pathname !== '/login' && window.location.pathname !== '/login/') {
-                History.replace('/login');
-                this._resolve();
-            }
+            //this.logout();
+            //if (window.location.pathname !== '/login' && window.location.pathname !== '/login/') {
+                //History.replace('/login');
+            //    this._resolve();
+            //}
         });
     }
     get currentUser() {

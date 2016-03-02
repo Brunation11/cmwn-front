@@ -28,9 +28,9 @@ import 'media/logo.png';
 document.domain = 'changemyworldnow.com';
 
 //htaccess should take care of it but if somehow it does not, this should overkill the issue
-if (window.location.protocol !== 'https:') {
-    window.location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
-}
+//if (window.location.protocol !== 'https:') {
+//    window.location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+//}
 
 var App = React.createClass({
     componentWillMount: function () {

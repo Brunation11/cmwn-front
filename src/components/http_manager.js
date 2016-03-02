@@ -60,7 +60,7 @@ var _getRequestPromise = function (method, request, body, headers) {
                     //further requests until the user can be fully logged out
                     window.__USER_UNAUTHORIZED = true;
                     //force user to login screen on any 401, via the logout, regardless of access pattern
-                    History.replace('/logout');
+                    //History.replace('/logout');
                 }
             }
 
@@ -74,13 +74,13 @@ var _getRequestPromise = function (method, request, body, headers) {
             }
 
             if (res[0].status > 499) {
-                Errors.show500(request[0].url, res);
+                //Errors.show500(request[0].url, res);
             } else if (res[0].status === 403) {
-                Errors.show403(request[0].url, res);
+                //Errors.show403(request[0].url, res);
             } else if (res[0].status === 404) {
-                Errors.show404(request[0].url, res);
+                //Errors.show404(request[0].url, res);
             } else if (res[0].status > 399) {
-                Errors.showApplication(res);
+                //Errors.showApplication(res);
             } else if (res[0].status === 0 || res[0].response == null || res[0].response.length === 0 && request[0].url.indexOf('logout') === -1) {
                 throw 'no data recieved from ' + request[0].url;
             }
@@ -89,7 +89,7 @@ var _getRequestPromise = function (method, request, body, headers) {
             if (request[0].handleErrors === false || method !== 'GET') { //assume non-gets are not navigational
                 return Promise.reject(err);
             } else {
-                Errors.showApplication(err, request);
+                //Errors.showApplication(err, request);
             }
         });
     }
@@ -119,8 +119,9 @@ var _makeRequest = function (verb, requests){
                         response = xhr.response;
                         Log.info(err, 'recieved non-standard data format from api');
                     }
+                    console.warn('remove the horrorshow short circuit that is "|| 200"');
                     return res({
-                        status: xhr.status,
+                        status: xhr.status || 200,
                         response,
                         request: xhr
                     });
@@ -138,7 +139,7 @@ var _makeRequest = function (verb, requests){
 
                 xhr.open(verb, url, true);
 
-                xhr.withCredentials = true;
+                //xhr.withCredentials = true;
 
                 _.each(req.headers, (header, key) => {
                     xhr.setRequestHeader(key, header);

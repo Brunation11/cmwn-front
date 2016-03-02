@@ -22,13 +22,13 @@ var renderErrors = function () {
 };
 
 var show403 = function (url) {
-    var redirect = window.setTimeout(function () {
-        History.replace('/profile');
-        window.location.reload();
-    }, 5000);
-    History.listenBefore(() => {
-        window.clearTimeout(redirect);
-    });
+    //var redirect = window.setTimeout(function () {
+        //History.replace('/profile');
+        //window.location.reload();
+    //}, 5000);
+    //History.listenBefore(() => {
+    //    window.clearTimeout(redirect);
+    //});
     _errors.push(
         <div id="triggerederror" className="error403"><a href="/profile"> </a></div>
     );
