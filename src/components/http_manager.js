@@ -113,14 +113,16 @@ var _makeRequest = function (verb, requests){
                     if (xhr.readyState !== 4) {
                         return;
                     }
+                    debugger;
                     try {
                         response = (_.isObject(xhr.response) ? xhr.response : JSON.parse(xhr.response));
                     } catch(err) {
                         response = xhr.response;
                         Log.info(err, 'recieved non-standard data format from api');
                     }
+                    console.warn('remove the horrorshow short circuit that is "|| 200"');
                     return res({
-                        status: xhr.status,
+                        status: xhr.status || 200,
                         response,
                         request: xhr
                     });
@@ -138,7 +140,7 @@ var _makeRequest = function (verb, requests){
 
                 xhr.open(verb, url, true);
 
-                xhr.withCredentials = true;
+                //xhr.withCredentials = true;
 
                 _.each(req.headers, (header, key) => {
                     xhr.setRequestHeader(key, header);
