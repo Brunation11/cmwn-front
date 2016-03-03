@@ -1,24 +1,38 @@
-import { createStore, compose } from 'redux';
-import Immutable from 'immutable';
-import { combineReducers } from 'redux-immutable';
+import { combineReducers, createStore, compose, applyMiddleware } from 'redux';
+import { routerReducer } from 'react-router-redux';
+import thunk from 'redux-thunk';
+import Immutable from 'seamless-immutable';
+
 //LOCATION_CHANGE is not currently returning correctly, so were hardcoding it
 //import { LOCATION_CHANGE, routerReducer } from 'react-router-redux';
 const LOCATION_CHANGE = '@@router/LOCATION_CHANGE';
 
 import DevTools from 'components/devtools';
 
-const INITIAL_STATE = Immutable.fromJS({
+const INITIAL_STATE = Immutable({
     locationBeforeTransitions: null
 });
 
-const Store = createStore( combineReducers({
-    routing: (state = INITIAL_STATE, action) => {
-        //custom immutable router reducer from https://github.com/gajus/redux-immutable
-        if (action.type === LOCATION_CHANGE) {
-            return state.merge({locationBeforeTransitions: action.payload});
-        }
-        return state;
+var pageReducer = (page = {title: 'Change My World Now'}, action) => {
+    var reducers = {
+        CHANGE_TITLE: function () {
+            return page.set('title', action);
+        }.bind(page, action.title)
+    };
+
+    if (action.type in reducers) {
+        return reducers[action.type]();
     }
-}), Immutable.Map({routing: INITIAL_STATE}), compose(DevTools.instrument()));
+    return page;
+};
+
+
+const Store = createStore( combineReducers({
+    page: pageReducer,
+    routing: routerReducer
+}), Immutable({routing: INITIAL_STATE}), compose(
+    applyMiddleware(thunk),
+    DevTools.instrument()
+));
 
 export default Store;

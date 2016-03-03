@@ -136,7 +136,7 @@ var Profile = React.createClass({
         return (
             <div>
                 <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl} onExit={() => this.setState({gameOn: false})}/>
-                <a onClick={this.hideModal} className="modal-close">(close)</a>
+                    <a onClick={this.hideModal} className="modal-close">(close)</a>
             </div>
         );
     },
@@ -187,7 +187,8 @@ var Profile = React.createClass({
                      </div>
                  </div>
                </Panel>
-               <Fetcher className={ClassNames({hidden: this.state.uuid !== Authorization.currentUser.uuid})} url={GLOBALS.API_URL + 'games'} transform={array => {
+               <Fetcher className={ClassNames({hidden: this.state.uuid !== Authorization.currentUser.uuid})} url={GLOBALS.API_URL + 'game'} transform={data => {
+                   var array = data.game;
                    var currentIndex, temporaryValue, randomIndex;
                    if (array == null) {
                        array = [];

@@ -14,6 +14,7 @@ import PublicRoutes from 'public_routes';
 import PrivateRoutes from 'private_routes';
 import EventManager from 'components/event_manager';
 import Store from 'components/store';
+import Util from 'components/util';
 import DevTools from 'components/devtools';
 
 import Errors from 'components/errors';
@@ -113,6 +114,13 @@ function run() {
 
 const loadedStates = ['complete', 'loaded', 'interactive'];
 
+var lastState = Store.getState();
+Store.subscribe(() => {
+    var state = Store.getState();
+    if (state.page.title !== lastState.page.title) {
+        Util.setPageTitle(state.page.title);
+    }
+});
 
 //from http://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript-jquery
 var hashCode = function (s){

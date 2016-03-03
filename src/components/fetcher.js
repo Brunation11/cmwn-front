@@ -22,12 +22,15 @@ var Fetcher = React.createClass({
     getData: function () {
         var urlData = HttpManager.GET({url: this.props.url});
         return urlData.then(res => {
-            if (res.response.data == null) {
+            if (res.response.data == null && res.response._embedded == null) {
                 this.data = res.response;
                 Log.warn('An endpoint has returned an unexpected result (No Data Property). Attempting to proceed.'); //eslint-disable-line no-console
-            } else {
+            } else if (this.response.data != null) {
                 this.data = res.response.data;
+            } else if (this.response._embedded != null) {
+                this.data = res.response._embedded;
             }
+
             if (_.isArray(this.props.data)) {
                 this.data = this.data.concat(this.props.data);
             }
