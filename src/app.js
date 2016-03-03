@@ -114,12 +114,24 @@ function run() {
 
 const loadedStates = ['complete', 'loaded', 'interactive'];
 
-var lastState = Store.getState();
+History.listen(location => {
+    var reducedPath = location.pathname.replace('/', '');
+    var pathContext = _.find(routes.childRoutes, i => i.path.replace('/', '').replace('(', '').replace(')', '') === reducedPath);
+    //you know, at this point we already know whether or not our path 404d...
+    if (pathContext != null) {
+        location = _.defaults(location, pathContext);
+        Store.dispatch({type: 'CHANGE_TITLE', title: location.title});
+    }
+    Store.dispatch({type: 'PATH_CHANGE', location: location});
+});
+
+var lastState = {page: {}};
 Store.subscribe(() => {
     var state = Store.getState();
-    if (state.page.title !== lastState.page.title) {
+    if (state.page && state.page.title !== lastState.page.title) {
         Util.setPageTitle(state.page.title);
     }
+    lastState = Store.getState();
 });
 
 //from http://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript-jquery

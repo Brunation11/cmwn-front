@@ -19,7 +19,7 @@ var redirect = function (path) {
 };
 
 var routes = [
-    { path: 'home(/)', component: Home},
+    { path: 'home(/)', component: Home, title: 'Change My World Now', endpoint: '/'},
     { path: 'grown-ups/partnerships-media/ginas-ink(/)', onEnter: redirect('/')},
     { path: 'grown-ups/partnerships-media/press-room/live-interviews(/)', onEnter: redirect('/')},
     { path: 'whats-my-story/my-interests/your-mark/lifestyle-design/your-own-zone(/)', onEnter: redirect('/')},
@@ -29,7 +29,7 @@ var routes = [
     { path: 'teachers/signup(/)', component: Signup },
     { path: 'terms(/)', component: Terms },
     { path: 'logout(/)', component: Logout },
-    { path: 'login(/)', component: Login}
+    { path: 'login(/)', component: Login, title: 'login', endpoint: '/'}
 ];
 
 routes.hasPath = function (path) {
