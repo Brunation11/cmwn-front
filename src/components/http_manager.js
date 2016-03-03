@@ -113,6 +113,7 @@ var _makeRequest = function (verb, requests){
                     if (xhr.readyState !== 4) {
                         return;
                     }
+                    debugger;
                     try {
                         response = (_.isObject(xhr.response) ? xhr.response : JSON.parse(xhr.response));
                     } catch(err) {
