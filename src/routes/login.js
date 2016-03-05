@@ -48,9 +48,9 @@ var Page = React.createClass({
                 withCredentials: true,
                 withoutXSRF: true,
                 handleErrors: false
-            }, {}, {
-                'X-CSRF-TOKEN': this.state._token,
-                'Authorization': `Basic ${window.btoa(this.refs.login.getValue() + ':' + this.refs.password.getValue())}`
+            }, {
+                'username': this.refs.login.getValue(),
+                'password': this.refs.password.getValue()
             });
             req.then(res => {
                 if (res.status < 300 && res.status >= 200) {
