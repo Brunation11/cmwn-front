@@ -4,6 +4,7 @@ import thunk from 'redux-thunk';
 import Immutable from 'seamless-immutable';
 
 import DevTools from 'components/devtools';
+import ACTION_CONSTANTS from 'components/action_constants';
 
 const INITIAL_STATE = Immutable({
     locationBeforeTransitions: null
@@ -11,7 +12,8 @@ const INITIAL_STATE = Immutable({
 
 var pageReducer = (page = Immutable({title: 'Change My World Now'}), action) => {
     var reducers = {
-        CHANGE_TITLE: function (page, title) {
+        [ACTION_CONSTANTS.PAGE_TITLE]: function (page, title) {
+            debugger;
             return page.set('title', title);
         }.bind(null, page, action.title),
     };
@@ -27,13 +29,13 @@ var locationReducer = (previousLoc = {}, action) => {
     if (!(action.type in reducers) || action.location == null) {
         return previousLoc;
     }
-    reducers.PATH_CHANGE = function (locStore, location) {
+    reducers[ACTION_CONSTANTS.PATH_CHANGE] = function (locStore, location) {
         return location;
     }.bind(null, previousLoc, action.location);
-    reducers.HASH_CHANGE = function (locStore, hash) {
+    reducers[ACTION_CONSTANTS.HASH_CHANGE] = function (locStore, hash) {
         return locStore.merge({hash});
     }.bind(null, previousLoc, action.location.hash);
-    reducers.SEARCH_CHANGE = function (locStore, search) {
+    reducers[ACTION_CONSTANTS.SEARCH_CHANGE] = function (locStore, search) {
         return locStore.merge({search});
     }.bind(null, previousLoc, action.location.search);
 
@@ -49,5 +51,4 @@ const Store = createStore( combineReducers({
     applyMiddleware(thunk),
     DevTools.instrument()
 ));
-
 export default Store;

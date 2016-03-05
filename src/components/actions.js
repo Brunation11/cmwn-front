@@ -1,0 +1,78 @@
+/**
+ * Actions.js
+ * A list of all of the possible actions that can be taken
+ * by the redux dispatch. Properties should be added as
+ * the actions are dispatched, this list exists primarily
+ * to avoid stupid typos, and to give an idea of what listeners
+ * are available to inquisitive devs
+ */
+
+import _ from 'lodash';
+import Immutable from 'seamless-immutable';
+
+import ACTION_CONSTANTS from 'components/action_constants';
+import Store from 'components/store';
+import Log from 'components/log';
+import HttpManager from 'components/http_manager';
+import GLOBALS from 'components/globals';
+
+/**
+ * Generates a dictionary of bound action creator functions.
+ * See http://redux.js.org/docs/basics/Actions.html
+ * The generated functions take 2 parameters:
+ * Data - An object that will be merged with the type to create the action object. Must not include a 'type' property.
+ * Transform - If for whatever reason merging into an object is not the desired behavior, a transform
+ * function can be provided. This will be invoked by the bound action, and itself has two parameter, the type
+ * name, and the passed in data, and should return an action with a type property
+ */
+var generateBasicBoundActions = function (actionNameList) {
+    var dispatch = Store.dispatch;
+    var defaultTransform = function (name, data) {
+        if (data.type != null) {
+            Log.warn('Action data with a type property was passed. This type will be ignored.');
+        }
+        return Immutable(_.defaults({type: name}, data));
+    };
+    var actions = _.reduce(actionNameList, (a, name) => {
+        a[name] = (data, transform = defaultTransform) => {
+            dispatch(transform(name, data));
+        };
+        return a;
+    }, {});
+    return Immutable(actions);
+};
+
+//********** Basic Actions
+var Actions = generateBasicBoundActions(ACTION_CONSTANTS);
+//********** Thunk Actions
+//Thunk actions should be named START_YOUR_ACTION, and should resolve by dispatching an END_YOUR_ACTION
+Actions = Actions.set(ACTION_CONSTANTS.START_PAGE_DATA, function (url) {
+    Store.dispatch((dispatch, getState) => {
+        HttpManager.GET({
+            url: GLOBALS.API_URL + url,
+            handlePageLevelErrors: true
+        }).then(server => {
+            dispatch(getState().merge({type: ACTION_CONSTANTS.END_PAGE_DATA, data: server.response}));
+        }).catch(err => {
+            //NOTE: This is the primary page-level error handling block in the entire application
+            //The only page-level error not handled here will be true 404 errors, which will be handled
+            //in app.js by the router.
+        });
+    });
+});
+
+Actions = Actions.set(ACTION_CONSTANTS.START_AUTHORIZE_APP, function () {
+    Store.dispatch((dispatch, getState) => {
+        HttpManager.GET({
+            url: GLOBALS.API_URL,
+            handlePageLevelErrors: true
+        }).then(server => {
+            dispatch(getState().merge({type: ACTION_CONSTANTS.END_AUTHORIZE_APP, data: server.response}));
+        }).catch(err => {
+            /** @TODO MPR, 3/5/16: Handle Auth Errors*/
+        });
+    });
+});
+
+export default Actions;
+

@@ -16,6 +16,7 @@ import EventManager from 'components/event_manager';
 import Store from 'components/store';
 import Util from 'components/util';
 import DevTools from 'components/devtools';
+import Actions from 'components/actions';
 
 import Errors from 'components/errors';
 import Home from 'routes/home';
@@ -120,9 +121,13 @@ History.listen(location => {
     //you know, at this point we already know whether or not our path 404d...
     if (pathContext != null) {
         location = _.defaults(location, pathContext);
-        Store.dispatch({type: 'CHANGE_TITLE', title: location.title});
+        Actions.START_PAGE_DATA(location.endpoint);
+        //Store.dispatch(Actions.START_PAGE_DATA.merge({ title: location.title}));
+        Actions.PAGE_TITLE({title: location.title});
+        //Store.dispatch(Actions.PAGE_TITLE.merge({ title: location.title}));
     }
-    Store.dispatch({type: 'PATH_CHANGE', location: location});
+    Actions.PATH_CHANGE({location: location});
+    //Store.dispatch(Actions.PATH_CHANGE.merge({location: location}));
 });
 
 var lastState = {page: {}};
