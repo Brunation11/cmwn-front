@@ -116,12 +116,12 @@ function run() {
 const loadedStates = ['complete', 'loaded', 'interactive'];
 
 History.listen(location => {
-    var reducedPath = location.pathname.replace('/', '');
-    var pathContext = _.find(routes.childRoutes, i => i.path.replace('/', '').replace('(', '').replace(')', '') === reducedPath);
+    debugger;
+    var pathContext = _.find(routes.childRoutes, i => Util.matchPathAndExtractParams(i.path, location.pathname) !== false);
     //you know, at this point we already know whether or not our path 404d...
     if (pathContext != null) {
         location = _.defaults(location, pathContext);
-        Actions.START_PAGE_DATA(location.endpoint);
+        Actions.START_PAGE_DATA(Util.replacePathPlaceholdersFromParamObject(location.endpoint, Util.matchPathAndExtractParams(pathContext.path, location.pathname)));
         //Store.dispatch(Actions.START_PAGE_DATA.merge({ title: location.title}));
         Actions.PAGE_TITLE({title: location.title});
         //Store.dispatch(Actions.PAGE_TITLE.merge({ title: location.title}));

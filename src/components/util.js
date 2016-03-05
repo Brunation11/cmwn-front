@@ -42,6 +42,62 @@ var Util = {
             titleElem.removeChild(titleElem.lastChild);
         }
         titleElem.appendChild(title);
+    },
+    /* logic pulled from the react-router source with the non-basic route types removed*/
+    matchPathAndExtractParams(route, path) {
+        var routeArray;
+        var pathArray;
+        var params = {};
+        var routePart, pathPart;
+        route = route.toLowerCase().replace('(', '').replace(')', '');
+        path = path.toLowerCase();
+        if (route.slice(-1) === '/') {
+            route = route.slice(0, -1);
+        }
+        if (route.slice(0, 1) === '/') {
+            route = route.slice(1);
+        }
+        if (path.slice(-1) === '/') {
+            path = path.slice(0, -1);
+        }
+        if (path.slice(0, 1) === '/') {
+            path = path.slice(1);
+        }
+        routeArray = route.split('/');
+        pathArray = path.split('/');
+        if (routeArray.length !== pathArray.length) {
+            return false;
+        }
+        while (routeArray.length) {
+            routePart = routeArray.pop();
+            pathPart = pathArray.pop();
+            if (~routePart.indexOf(':')) {
+                params[routePart.slice(1)] = pathArray;
+            } else {
+                if (routePart.toLowerCase() !== pathPart.toLowerCase()) {
+                    return false;
+                }
+            }
+        }
+        return params;
+    },
+    replacePathPlaceholdersFromParamObject(route, params) {
+        var routeArray = route.split('/');
+        var routePart;
+        var path = '';
+        while (routeArray.length) {
+            routePart = routeArray.shift();
+            if (routePart === '') {
+                continue;
+            } else if (!~routePart.indexOf(';')) {
+                path += routePart + '/';
+            } else if (routePart.slice(1) in params) {
+                path += params[routePart.slice(1)] + '/';
+            } else {
+                throw 'Path could not be constructed; Expected parameter was not passed.';
+            }
+        }
+        return path.slice(0, -1);
     }
 };
 

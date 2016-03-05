@@ -47,6 +47,10 @@ var Actions = generateBasicBoundActions(ACTION_CONSTANTS);
 //********** Thunk Actions
 //Thunk actions should be named START_YOUR_ACTION, and should resolve by dispatching an END_YOUR_ACTION
 Actions = Actions.set(ACTION_CONSTANTS.START_PAGE_DATA, function (url) {
+    if (url === '' || url === '/') {
+        //page has no unique data. Punt to authorize for userdata
+        return;
+    }
     Store.dispatch((dispatch, getState) => {
         HttpManager.GET({
             url: GLOBALS.API_URL + url,

@@ -121,25 +121,26 @@ var _makeRequest = function (verb, requests){
                     }
                     console.warn('remove the horrorshow short circuit that is "|| 200"');
                     return res({
+                        url,
                         status: xhr.status || 200,
                         response,
                         request: xhr
                     });
                 };
-                if (!req.withoutToken && this._token != null && verb === 'GET') {
-                    if (req.url.indexOf('?') === -1) {
-                        req.url += `?_token=${this._token}`;
-                    } else {
-                        req.url += `&_token=${this._token}`;
-                    }
-                }
+                //if (!req.withoutToken && this._token != null && verb === 'GET') {
+                //    if (req.url.indexOf('?') === -1) {
+                //        req.url += `?_token=${this._token}`;
+                //    } else {
+                //        req.url += `&_token=${this._token}`;
+                //    }
+                //}
 
 
                 url = req.url;
 
                 xhr.open(verb, url, true);
 
-                //xhr.withCredentials = true;
+                xhr.withCredentials = true;
 
                 _.each(req.headers, (header, key) => {
                     xhr.setRequestHeader(key, header);

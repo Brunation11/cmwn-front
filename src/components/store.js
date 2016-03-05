@@ -13,7 +13,6 @@ const INITIAL_STATE = Immutable({
 var pageReducer = (page = Immutable({title: 'Change My World Now'}), action) => {
     var reducers = {
         [ACTION_CONSTANTS.PAGE_TITLE]: function (page, title) {
-            debugger;
             return page.set('title', title);
         }.bind(null, page, action.title),
     };
