@@ -16,8 +16,9 @@ import EditLink from 'components/edit_link';
 import Trophycase from 'components/trophycase';
 import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
-import Util from 'components/util';
+//import Util from 'components/util';
 import History from 'components/history';
+import { connect } from 'react-redux';
 
 import Layout from 'layouts/two_col';
 
@@ -31,45 +32,9 @@ const HEADINGS = {
 };
 const PLAY = 'Play Now!';
 const COMING_SOON = 'Coming Soon!';
-const PAGE_TITLE = 'Profile';
+
 const BROWSER_NOT_SUPPORTED = <span><p>For the best viewing experience we reccomend the desktop version in Chrome</p><p>If you don't have chrome, <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">download it for free here</a>.</p></span>;
 const PASS_UPDATED = 'You have successfully updated your password. Be sure to remeber it for next time!';
-
-var Page = React.createClass({
-    getInitialState: function () {
-        var self = this;
-        Util.setPageTitle(PAGE_TITLE);
-        self.uuid = self.props.params.id || Authorization.currentUser.uuid;
-        self.url = GLOBALS.API_URL + 'users/' + self.uuid + '?include=roles,groups,images';
-        self.currentLoc = document.location.pathname;
-        if (self.uuid == null || self.uuid.toLowerCase() === 'null') {
-            //race condition edge case where the profile has loaded before the auth module
-            Authorization.userIsLoaded.then(() => {
-                self.uuid = self.props.params.id || Authorization.currentUser.uuid;
-                self.url = GLOBALS.API_URL + 'users/' + self.uuid + '?include=roles,groups,images';
-                self.forceUpdate();
-            });
-        }
-        return {
-            isStudent: false
-        };
-    },
-    componentWillReceiveProps: function () {
-        if (self.currentLoc !== document.location.pathname) {
-        //    document.location.reload();
-        }
-    },
-    render: function () {
-        if (this.uuid == null || this.uuid.toLowerCase() === 'null') {
-            return null;
-        }
-        return (
-            <Fetcher url={this.url}>
-                <Profile />
-            </Fetcher>
-        );
-    }
-});
 
 var Profile = React.createClass({
     getInitialState: function () {
@@ -96,8 +61,10 @@ var Profile = React.createClass({
             Toast.success(PASS_UPDATED);
         }
     },
-    componentWillReceiveProps: function () {
-        this.resolveRole();
+    componentWillReceiveProps: function (nextProps) {
+        if (nextProps.loading === false && nextProps.data.user_id !== this.props.data.user_id) {
+            this.setState(nextProps.data);
+        }
     },
     resolveRole: function () {
         var newState = {};
@@ -167,6 +134,39 @@ var Profile = React.createClass({
             </div>
         );
     },
+    renderGameList: function () {
+        if (this.props.gameUrl == null) {
+            return null;
+        }
+        return (
+           <Fetcher className={ClassNames({hidden: this.state.uuid !== Authorization.currentUser.uuid})} url={this.props.gameUrl} transform={data => {
+               var array = data.game;
+               var currentIndex, temporaryValue, randomIndex;
+               if (array == null) {
+                   array = [];
+               } else if (!_.isArray(array)) {
+                   array = [].concat(array);
+               }
+               currentIndex = array.length;
+                // While there remain elements to shuffle...
+               while (0 !== currentIndex) {
+                   // Pick a remaining element...
+                   randomIndex = Math.floor(Math.random() * currentIndex);
+                   currentIndex -= 1;
+                   // And swap it with the current element.
+                   temporaryValue = array[currentIndex];
+                   array[currentIndex] = array[randomIndex];
+                   array[randomIndex] = temporaryValue;
+               }
+               return _.filter(array, v => !v.coming_soon).concat(_.filter(array, v => v.coming_soon));
+           }}>
+               <FlipBoard
+                   renderFlip={this.renderFlip}
+                   header={HEADINGS.ARCADE}
+               />
+           </Fetcher>
+        );
+    },
     render: function () {
         return (
            <Layout className="profile">
@@ -177,7 +177,7 @@ var Profile = React.createClass({
                 </Modal>
                <Trophycase className={ClassNames({hidden: !this.state.isStudent})} data={this.state} />
                <Panel header={
-                   ((this.state.uuid === Authorization.currentUser.uuid) ? 'My ' : this.state.username + '\'s ') + HEADINGS.ACTION
+                   ((this.state.user_id === Authorization.currentUser.uuid) ? 'My ' : this.state.username + '\'s ') + HEADINGS.ACTION
                } className={ClassNames('standard', {hidden: !this.state.isStudent && this.state.uuid === Authorization.currentUser.uuid})}>
                <div className="infopanel">
                      <EditLink base="/profile" uuid={this.state.uuid} canUpdate={this.state.can_update} />
@@ -187,36 +187,31 @@ var Profile = React.createClass({
                      </div>
                  </div>
                </Panel>
-               <Fetcher className={ClassNames({hidden: this.state.uuid !== Authorization.currentUser.uuid})} url={GLOBALS.API_URL + 'game'} transform={data => {
-                   var array = data.game;
-                   var currentIndex, temporaryValue, randomIndex;
-                   if (array == null) {
-                       array = [];
-                   } else if (!_.isArray(array)) {
-                       array = [].concat(array);
-                   }
-                   currentIndex = array.length;
-                    // While there remain elements to shuffle...
-                   while (0 !== currentIndex) {
-                       // Pick a remaining element...
-                       randomIndex = Math.floor(Math.random() * currentIndex);
-                       currentIndex -= 1;
-                       // And swap it with the current element.
-                       temporaryValue = array[currentIndex];
-                       array[currentIndex] = array[randomIndex];
-                       array[randomIndex] = temporaryValue;
-                   }
-                   return _.filter(array, v => !v.coming_soon).concat(_.filter(array, v => v.coming_soon));
-               }}>
-                   <FlipBoard
-                       renderFlip={this.renderFlip}
-                       header={HEADINGS.ARCADE}
-                   />
-               </Fetcher>
+               {this.renderGameList()}
            </Layout>
         );
     }
 });
 
+const mapStateToProps = state => {
+    var data = {};
+    var gameUrl = null;
+    var loading = true;
+    if (state.page && state.page.data) {
+        loading = state.page.loading;
+        data = state.page.data;
+        debugger;
+        if (state.page.data._links && state.page.data._links.games) {
+            gameUrl = state.page.data._links.games.href;
+        }
+    }
+    return {
+        data,
+        loading,
+        gameUrl
+    };
+};
+
+var Page = connect(mapStateToProps)(Profile);
 export default Page;
 

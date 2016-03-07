@@ -45,7 +45,7 @@ var routes = [
     { path: 'users/:id(/)', onEnter: redirect('/profile/:id')},
     { path: 'user/:id/edit(/)', onEnter: redirect('/profile/:id/edit')},
     { path: 'users/:id/edit(/)', onEnter: redirect('/profile/:id/edit')},
-    { path: 'student/:id(/)', title: '', endpoint: '', component: Profile},
+    { path: 'student/:id(/)', title: 'Profile', endpoint: 'user/:id', component: Profile},
     { path: 'student/edit(/)', title: '', endpoint: '', component: StudentEdit },
     { path: 'student/:id/edit(/)', title: '', endpoint: '', component: StudentEdit },
     { path: 'districts(/)', title: '', endpoint: '', component: Districts},
