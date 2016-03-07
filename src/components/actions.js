@@ -27,7 +27,7 @@ import GLOBALS from 'components/globals';
  */
 var generateBasicBoundActions = function (actionNameList) {
     var dispatch = Store.dispatch;
-    var defaultTransform = function (name, data) {
+    var defaultTransform = function (name, data = {}) {
         if (data.type != null) {
             Log.warn('Action data with a type property was passed. This type will be ignored.');
         }
@@ -47,16 +47,18 @@ var Actions = generateBasicBoundActions(ACTION_CONSTANTS);
 //********** Thunk Actions
 //Thunk actions should be named START_YOUR_ACTION, and should resolve by dispatching an END_YOUR_ACTION
 Actions = Actions.set(ACTION_CONSTANTS.START_PAGE_DATA, function (url) {
-    if (url === '' || url === '/') {
-        //page has no unique data. Punt to authorize for userdata
-        return;
-    }
-    Store.dispatch((dispatch, getState) => {
+    Store.dispatch((dispatch) => {
+        if (url === '' || url === '/') {
+            //page has no unique data. Punt to authorize for userdata
+            return Promise.resolve().then(() => {
+                dispatch({type: ACTION_CONSTANTS.PAGE_LOADED});
+            });
+        }
         HttpManager.GET({
-            url: GLOBALS.API_URL + url,
+            url: url,
             handlePageLevelErrors: true
         }).then(server => {
-            dispatch(getState().merge({type: ACTION_CONSTANTS.END_PAGE_DATA, data: server.response}));
+            dispatch({type: ACTION_CONSTANTS.END_PAGE_DATA, data: server.response});
         }).catch(err => {
             //NOTE: This is the primary page-level error handling block in the entire application
             //The only page-level error not handled here will be true 404 errors, which will be handled
@@ -66,12 +68,12 @@ Actions = Actions.set(ACTION_CONSTANTS.START_PAGE_DATA, function (url) {
 });
 
 Actions = Actions.set(ACTION_CONSTANTS.START_AUTHORIZE_APP, function () {
-    Store.dispatch((dispatch, getState) => {
+    Store.dispatch((dispatch) => {
         HttpManager.GET({
             url: GLOBALS.API_URL,
             handlePageLevelErrors: true
         }).then(server => {
-            dispatch(getState().merge({type: ACTION_CONSTANTS.END_AUTHORIZE_APP, data: server.response}));
+            dispatch({type: ACTION_CONSTANTS.END_AUTHORIZE_APP, data: server.response});
         }).catch(err => {
             /** @TODO MPR, 3/5/16: Handle Auth Errors*/
         });

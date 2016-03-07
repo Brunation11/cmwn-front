@@ -12,9 +12,19 @@ const INITIAL_STATE = Immutable({
 
 var pageReducer = (page = Immutable({title: 'Change My World Now'}), action) => {
     var reducers = {
-        [ACTION_CONSTANTS.PAGE_TITLE]: function (page, title) {
-            return page.set('title', title);
+        [ACTION_CONSTANTS.PAGE_TITLE]: function (page_, title) {
+            return page_.set('title', title);
         }.bind(null, page, action.title),
+        [ACTION_CONSTANTS.PAGE_LOADING]: function (page_) {
+            return page_.set('loading', true);
+        }.bind(null, page),
+        [ACTION_CONSTANTS.PAGE_LOADED]: function (page_) {
+            return page_.set('loading', false);
+        }.bind(null, page),
+        [ACTION_CONSTANTS.END_PAGE_DATA]: function (page_, data) {
+            page_ = page_.set('loading', false);
+            return page_.set('data', data);
+        }.bind(null, page, action.data)
     };
 
     if (action.type in reducers) {
@@ -23,6 +33,21 @@ var pageReducer = (page = Immutable({title: 'Change My World Now'}), action) => 
     return page;
 };
 
+var authReducer = (currentUser = Immutable({}), action) => {
+    var reducers = {
+        [ACTION_CONSTANTS.END_AUTHORIZE_APP]: function (currentUser_, data) {
+            currentUser_ = currentUser_.set('token', data.token);
+            if (data.user_id != null) {
+                currentUser_ = currentUser_.merge(data);
+            }
+            return currentUser_;
+        }.bind(null, currentUser, action.data)
+    };
+    if (action.type in reducers) {
+        return reducers[action.type]();
+    }
+    return currentUser;
+};
 var locationReducer = (previousLoc = {}, action) => {
     var reducers = {PATH_CHANGE: 0, HASH_CHANGE: 0, SEARCH_CHANGE: 0};
     if (!(action.type in reducers) || action.location == null) {
@@ -44,8 +69,15 @@ var locationReducer = (previousLoc = {}, action) => {
 
 const Store = createStore( combineReducers({
     page: pageReducer,
+    currentUser: authReducer,
     location: locationReducer,
-    routing: routerReducer
+    routing: routerReducer,
+    bootstrapComplete: (isComplete = false, action) => {
+        if (action.type === ACTION_CONSTANTS.FINISH_BOOTSTRAP) {
+            return true;
+        }
+        return isComplete;
+    }
 }), Immutable({routing: INITIAL_STATE}), compose(
     applyMiddleware(thunk),
     DevTools.instrument()

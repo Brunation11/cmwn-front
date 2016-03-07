@@ -34,11 +34,6 @@ var Page = React.createClass({
         window.document.removeEventListener('keydown', this.login);
     },
     getToken: function () {
-        var req = HttpManager.GET({url: `${GLOBALS.API_URL}csrf_token`, withCredentials: true, withoutToken: true, withoutXSRF: true});
-        req.then(res => {
-            this.setState({_token: res.response.token});
-            HttpManager.setToken(res.response.token);
-        });
     },
     login: function (e) {
         var req;
@@ -53,7 +48,6 @@ var Page = React.createClass({
                 'password': this.refs.password.getValue()
             });
             req.then(res => {
-                debugger;
                 if (res.status < 300 && res.status >= 200) {
                     Authorization.reloadUser().then(() => {
                         Log.info(e, 'User login success');

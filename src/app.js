@@ -115,16 +115,39 @@ function run() {
 
 const loadedStates = ['complete', 'loaded', 'interactive'];
 
+var initialPageLoadPostAuth = function (location) {
+    var pageRoute;
+    if (location.endpoint && location.endpoint.indexOf('$') === 0) {
+        //Looking for the string $$ at the beginning of a route to indicate
+        //that it should be pulled directly from the users context
+        if (Store.getState().currentUser._links[location.endpoint.slice(2)] != null) {
+            pageRoute = Store.getState().currentUser._links[location.endpoint.slice(2)].href;
+        } else {
+            throw 'Route could not be loaded, route endpoint not provided for the current user';
+        }
+    } else {
+        pageRoute = GLOBALS.API_URL + Util.replacePathPlaceholdersFromParamObject(
+            location.endpoint,
+            Util.matchPathAndExtractParams(location.path, location.pathname)
+        );
+    }
+    Actions.START_PAGE_DATA(pageRoute);
+    //Store.dispatch(Actions.START_PAGE_DATA.merge({ title: location.title}));
+    Actions.PAGE_TITLE({title: location.title});
+    //Store.dispatch(Actions.PAGE_TITLE.merge({ title: location.title}));
+};
 History.listen(location => {
-    debugger;
     var pathContext = _.find(routes.childRoutes, i => Util.matchPathAndExtractParams(i.path, location.pathname) !== false);
     //you know, at this point we already know whether or not our path 404d...
-    if (pathContext != null) {
-        location = _.defaults(location, pathContext);
-        Actions.START_PAGE_DATA(Util.replacePathPlaceholdersFromParamObject(location.endpoint, Util.matchPathAndExtractParams(pathContext.path, location.pathname)));
-        //Store.dispatch(Actions.START_PAGE_DATA.merge({ title: location.title}));
-        Actions.PAGE_TITLE({title: location.title});
-        //Store.dispatch(Actions.PAGE_TITLE.merge({ title: location.title}));
+    delete pathContext.component; //no need to store this in state.
+    location = _.defaults(location, pathContext);
+    Actions.PAGE_LOADING();
+    Actions.START_AUTHORIZE_APP();
+    //if we were previouslty authenticated, we can attempt to proceed
+    //any subsequent auth failures will interrupt the page load independantly
+    if (Store.getState().currentUser._links != null) {
+        Actions.FINISH_BOOTSTRAP();
+        initialPageLoadPostAuth(location);
     }
     Actions.PATH_CHANGE({location: location});
     //Store.dispatch(Actions.PATH_CHANGE.merge({location: location}));
@@ -135,6 +158,11 @@ Store.subscribe(() => {
     var state = Store.getState();
     if (state.page && state.page.title !== lastState.page.title) {
         Util.setPageTitle(state.page.title);
+    }
+    if (!state.bootstrapComplete && state.currentUser._links != null) {
+        //auth has finished. Complete the initialization
+        Actions.FINISH_BOOTSTRAP();
+        initialPageLoadPostAuth(state.location);
     }
     lastState = Store.getState();
 });

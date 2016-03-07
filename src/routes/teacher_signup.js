@@ -29,24 +29,11 @@ var Page = React.createClass({
             _token: ''
         };
     },
-    componentWillMount: function () {
-        this.getToken();
-    },
     componentDidMount: function () {
         window.document.addEventListener('keydown', this.login);
     },
     componentWillUnmount: function () {
         window.document.removeEventListener('keydown', this.login);
-    },
-    getToken: function () {
-        var req = HttpManager.GET({url: `${GLOBALS.API_URL}csrf_token`, withCredentials: true, withoutToken: true, withoutXSRF: true});
-        req.then(res => {
-            this.setState({_token: res.response.token});
-            HttpManager.setToken(res.response.token);
-        }).catch(err => {
-            Toast.error(ERRORS.NO_LOGIN + (err.message ? ' Message: ' + err.message : ''));
-            Log.error('Teacher creation failed', err, req);
-        });
     },
     login: function (e) {
         var req, req2;
