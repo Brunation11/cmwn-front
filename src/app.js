@@ -17,6 +17,8 @@ import Store from 'components/store';
 import Util from 'components/util';
 import DevTools from 'components/devtools';
 import Actions from 'components/actions';
+import Authorization from 'components/authorization';
+import HttpManager from 'components/http_manager';
 
 import Errors from 'components/errors';
 import Home from 'routes/home';
@@ -132,25 +134,28 @@ var initialPageLoadPostAuth = function (location) {
         );
     }
     Actions.START_PAGE_DATA(pageRoute);
-    //Store.dispatch(Actions.START_PAGE_DATA.merge({ title: location.title}));
     Actions.PAGE_TITLE({title: location.title});
-    //Store.dispatch(Actions.PAGE_TITLE.merge({ title: location.title}));
 };
 History.listen(location => {
     var pathContext = _.find(routes.childRoutes, i => Util.matchPathAndExtractParams(i.path, location.pathname) !== false);
     //you know, at this point we already know whether or not our path 404d...
-    delete pathContext.component; //no need to store this in state.
     location = _.defaults(location, pathContext);
+    location.component = null; //no need to store this in state.
     Actions.PAGE_LOADING();
     Actions.START_AUTHORIZE_APP();
     //if we were previouslty authenticated, we can attempt to proceed
     //any subsequent auth failures will interrupt the page load independantly
-    if (Store.getState().currentUser._links != null) {
+    if (
+        Store.getState().currentUser._links != null && (
+            location.endpoint.indexOf('$') !== 0 ||
+            Store.getState().currentUser._links[location.endpoint.slice(2)] != null
+        )
+    ) {
         Actions.FINISH_BOOTSTRAP();
+        Authorization.storeUser();
         initialPageLoadPostAuth(location);
     }
     Actions.PATH_CHANGE({location: location});
-    //Store.dispatch(Actions.PATH_CHANGE.merge({location: location}));
 });
 
 var lastState = {page: {}};
@@ -161,8 +166,16 @@ Store.subscribe(() => {
     }
     if (!state.bootstrapComplete && state.currentUser._links != null) {
         //auth has finished. Complete the initialization
+        debugger;
         Actions.FINISH_BOOTSTRAP();
+        Authorization.storeUser();
         initialPageLoadPostAuth(state.location);
+    }
+    if (
+            (state.currentUser && lastState.currentUser && state.currentUser.token !== lastState.currentUser.token) ||
+            (state.currentUser && lastState.currentUser == null)
+    ) {
+        HttpManager.setToken(state.currentUser.token);
     }
     lastState = Store.getState();
 });

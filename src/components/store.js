@@ -33,8 +33,27 @@ var pageReducer = (page = Immutable({title: 'Change My World Now'}), action) => 
     return page;
 };
 
-var authReducer = (currentUser = Immutable({}), action) => {
+var storedUserProperties = {};
+if (window.localStorage['com.cmwn.platform.userName'] != null) {
+    storedUserProperties.username = JSON.parse(window.localStorage['com.cmwn.platform.userName']);
+}
+if (window.localStorage['com.cmwn.platform.userId'] != null) {
+    storedUserProperties.user_id = JSON.parse(window.localStorage['com.cmwn.platform.userId']);
+}
+if (window.localStorage['com.cmwn.platform.profileImage'] != null) {
+    storedUserProperties.image = JSON.parse(window.localStorage['com.cmwn.platform.profileImage']);
+}
+if (window.localStorage['com.cmwn.platform.roles'] != null) {
+    storedUserProperties.roles = JSON.parse(window.localStorage['com.cmwn.platform.roles']);
+}
+if (window.localStorage['com.cmwn.platform._links'] != null) {
+    storedUserProperties._links = JSON.parse(window.localStorage['com.cmwn.platform._links']);
+}
+var authReducer = (currentUser = Immutable(storedUserProperties), action) => {
     var reducers = {
+        [ACTION_CONSTANTS.LOGOUT]: function () {
+            return null;
+        },
         [ACTION_CONSTANTS.END_AUTHORIZE_APP]: function (currentUser_, data) {
             currentUser_ = currentUser_.set('token', data.token);
             if (data.user_id != null) {

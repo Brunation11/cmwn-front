@@ -1,6 +1,7 @@
 import _ from 'lodash';
 /** This file exists to resolve a circular dependency between the store and action components*/
 const ACTIONS = [
+    'LOGOUT',
     'PATH_CHANGE',
     'FINISH_BOOTSTRAP',
     'HASH_CHANGE',

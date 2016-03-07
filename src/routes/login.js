@@ -49,13 +49,13 @@ var Page = React.createClass({
             });
             req.then(res => {
                 if (res.status < 300 && res.status >= 200) {
-                    Authorization.reloadUser().then(() => {
+                    Authorization.reloadUser(res.response).then(() => {
                         Log.info(e, 'User login success');
                         History.push('/profile');
                     });
                 } else {
                     Toast.error(ERRORS.LOGIN + (res.response && res.response.data && res.response.data.message ? ' Message: ' + res.response.data.message : ''));
-                        Log.log(res, 'Invalid login.', req);
+                    Log.log(res, 'Invalid login.', req);
                 }
             }).catch(err => {
                 Toast.error(ERRORS.LOGIN + (err.message ? ' Message: ' + err.message : ''));
