@@ -4,6 +4,7 @@ import ClassNames from 'classnames';
 import Shortid from 'shortid';
 import {Panel, Modal} from 'react-bootstrap';
 import QueryString from 'query-string';
+import { connect } from 'react-redux';
 
 import Detector from 'components/browser_detector';
 import ProfileImage from 'components/profile_image';
@@ -11,20 +12,21 @@ import FlipBoard from 'components/flipboard';
 import Game from 'components/game';
 import Authorization from 'components/authorization';
 import EventManager from 'components/event_manager';
-import Fetcher from 'components/fetcher';
 import EditLink from 'components/edit_link';
 import Trophycase from 'components/trophycase';
 import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
 //import Util from 'components/util';
 import History from 'components/history';
-import { connect } from 'react-redux';
+import GenerateDataSource from 'components/datasource';
 
 import Layout from 'layouts/two_col';
 
 import FlipBgDefault from 'media/flip-placeholder-white.png';
 
 import 'routes/users/profile.scss';
+
+const GameWrapper = GenerateDataSource('self', 'profile');
 
 const HEADINGS = {
     ACTION: 'Profile',
@@ -47,18 +49,16 @@ var Profile = React.createClass({
     },
     componentDidMount: function () {
         EventManager.listen('userChanged', () => {
-            /** @TODO MPR, 12/21/15: Remove this conditional once CORE-146 and CORE-219 are done*/
-            if (this.state.canupdate == null && this.state.can_update == null) {
-                this.setState({'can_update': this.state.uuid === Authorization.currentUser.uuid});
-            } else if (this.state.canupdate != null){
-                this.setState({'can_update': this.state.canupdate});
-            }
             this.resolveRole();
             this.forceUpdate();
         });
         this.resolveRole();
         if (QueryString.parse(location.search).message === 'updated') {
             Toast.success(PASS_UPDATED);
+        }
+
+        if (this.props.loading === false && this.props.data) {
+            this.setState(this.props.data);
         }
     },
     componentWillReceiveProps: function (nextProps) {
@@ -113,7 +113,7 @@ var Profile = React.createClass({
             onClick = _.noop;
             playText = COMING_SOON;
         } else {
-            onClick = this.showModal.bind(this, GLOBALS.GAME_URL + item.uuid + '/index.html');
+            onClick = this.showModal.bind(this, GLOBALS.GAME_URL + item.game_id + '/index.html');
             playText = PLAY;
         }
         return (
@@ -126,7 +126,7 @@ var Profile = React.createClass({
                             <span className="play">{playText}</span>
                         </span>
                         <div className={ClassNames('coming-soon', { hidden: !item.coming_soon})} />
-                        <object data={GLOBALS.GAME_URL + item.uuid + '/thumb.jpg'} type="image/png" >
+                        <object data={GLOBALS.GAME_URL + item.game_id + '/thumb.jpg'} type="image/png" >
                             <img src={FlipBgDefault}></img>
                         </object>
                     </div>
@@ -135,11 +135,11 @@ var Profile = React.createClass({
         );
     },
     renderGameList: function () {
-        if (this.props.gameUrl == null) {
+        if (this.state._links == null) {
             return null;
         }
         return (
-           <Fetcher className={ClassNames({hidden: this.state.uuid !== Authorization.currentUser.uuid})} url={this.props.gameUrl} transform={data => {
+           <GameWrapper transform={data => {
                var array = data.game;
                var currentIndex, temporaryValue, randomIndex;
                if (array == null) {
@@ -164,7 +164,7 @@ var Profile = React.createClass({
                    renderFlip={this.renderFlip}
                    header={HEADINGS.ARCADE}
                />
-           </Fetcher>
+           </GameWrapper>
         );
     },
     render: function () {
@@ -200,7 +200,6 @@ const mapStateToProps = state => {
     if (state.page && state.page.data) {
         loading = state.page.loading;
         data = state.page.data;
-        debugger;
         if (state.page.data._links && state.page.data._links.games) {
             gameUrl = state.page.data._links.games.href;
         }

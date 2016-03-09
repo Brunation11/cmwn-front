@@ -28,7 +28,8 @@ const GLOBALS = _.defaults(window.__cmwn, {
         {URL: '/playground', TEXT: 'Cloudinary Image'}
     ],
     PAGINATOR_COUNTS: [10, 25, 50, 250],
-    TOAST_DEFAULT_TIMEOUT: 2000
+    TOAST_DEFAULT_TIMEOUT: 2000,
+    DEFAULT_PAGINATION_ROWS: 25
 });
 
 export default GLOBALS;

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { combineReducers, createStore, compose, applyMiddleware } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import thunk from 'redux-thunk';
@@ -5,6 +6,7 @@ import Immutable from 'seamless-immutable';
 
 import DevTools from 'components/devtools';
 import ACTION_CONSTANTS from 'components/action_constants';
+import GLOBALS from 'components/globals';
 
 const INITIAL_STATE = Immutable({
     locationBeforeTransitions: null
@@ -38,7 +40,7 @@ if (window.localStorage['com.cmwn.platform.userName'] != null) {
     storedUserProperties.username = JSON.parse(window.localStorage['com.cmwn.platform.userName']);
 }
 if (window.localStorage['com.cmwn.platform.userId'] != null) {
-    storedUserProperties.user_id = JSON.parse(window.localStorage['com.cmwn.platform.userId']);
+    storedUserProperties.user_id = JSON.parse(window.localStorage['com.cmwn.platform.userId']); //eslint-disable-line camelcase
 }
 if (window.localStorage['com.cmwn.platform.profileImage'] != null) {
     storedUserProperties.image = JSON.parse(window.localStorage['com.cmwn.platform.profileImage']);
@@ -85,14 +87,55 @@ var locationReducer = (previousLoc = {}, action) => {
     return reducers[action.type]();
 };
 
+var componentReducer = (allComponents = Immutable({}), action) => {
+    var reducers = {
+        [ACTION_CONSTANTS.REGISTER_COMPONENT]: function (component, defaultData) {
+            var resetData = {
+                data: _.defaults({}, defaultData),
+                page_count: 1, //eslint-disable-line camelcase
+                page: 1,
+                total_items: 0, //eslint-disable-line camelcase
+                page_size: GLOBALS.DEFAULT_PAGINATION_ROWS //eslint-disable-line camelcase
+            };
+            if (component == null) {
+                return Immutable(resetData);
+            } else {
+                return component.merge(resetData);
+            }
+        }.bind(null, allComponents[action.endpointIdentifier + '-' + action.componentName], action.defaultData == null ? {} : action.defaultData),
+        [ACTION_CONSTANTS.COMPONENT_LOADED]: function (component) {
+            return component.set('loading', false);
+        }.bind(null, allComponents[action.endpointIdentifier + '-' + action.componentName]),
+        [ACTION_CONSTANTS.COMPONENT_LOADING]: function (component) {
+            return component.set('loading', true);
+        }.bind(null, allComponents[action.endpointIdentifier + '-' + action.componentName]),
+        [ACTION_CONSTANTS.END_COMPONENT_DATA]: function (component) {
+            var extractedEmbedded = _.reduce(action.data._embedded, (a, i) => i);
+            component = component.set('loading', false);
+            component = component.set('response', action.data);
+            component = component.set('data', extractedEmbedded);
+            component = component.set('_links', action.data._links);
+            component = component.set('page_count', action.data.page_count);
+            component = component.set('page_size', action.data.page_size);
+            component = component.set('total_items', action.data.total_items);
+            component = component.set('page', action.data.page);
+            return component;
+        }.bind(null, allComponents[action.endpointIdentifier + '-' + action.componentName]),
+    };
+    if (action.type in reducers) {
+        return allComponents.set(action.endpointIdentifier + '-' + action.componentName, reducers[action.type]());
+    }
+    return allComponents;
+};
 
 const Store = createStore( combineReducers({
     page: pageReducer,
     currentUser: authReducer,
     location: locationReducer,
     routing: routerReducer,
+    components: componentReducer,
     bootstrapComplete: (isComplete = false, action) => {
-        if (action.type === ACTION_CONSTANTS.FINISH_BOOTSTRAP) {
+        if (action.type === ACTION_CONSTANTS.FINISH_BOOTSTRAP || action.type === ACTION_CONSTANTS.END_AUTHORIZE_APP) {
             return true;
         }
         return isComplete;

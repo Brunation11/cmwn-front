@@ -12,7 +12,12 @@ const ACTIONS = [
     'START_PAGE_DATA',
     'END_PAGE_DATA',
     'START_AUTHORIZE_APP',
-    'END_AUTHORIZE_APP'
+    'END_AUTHORIZE_APP',
+    'START_COMPONENT_DATA',
+    'END_COMPONENT_DATA',
+    'COMPONENT_LOADING',
+    'COMPONENT_LOADED',
+    'REGISTER_COMPONENT'
 ];
 
 export default _.reduce(ACTIONS, (a, i) => _.defaults(a, {[i]: i}), {});

@@ -166,7 +166,6 @@ Store.subscribe(() => {
     }
     if (!state.bootstrapComplete && state.currentUser._links != null) {
         //auth has finished. Complete the initialization
-        debugger;
         Actions.FINISH_BOOTSTRAP();
         Authorization.storeUser();
         initialPageLoadPostAuth(state.location);

@@ -80,5 +80,20 @@ Actions = Actions.set(ACTION_CONSTANTS.START_AUTHORIZE_APP, function () {
     });
 });
 
+Actions = Actions.set(ACTION_CONSTANTS.START_COMPONENT_DATA, function (endpointIdentifier, componentName,  onError) {
+    Store.dispatch(dispatch => {
+        var endpoint;
+        if(Store.getState().page.data._links[endpointIdentifier]) {
+            endpoint = 'https://api-local.changemyworldnow.com/game';
+            //endpoint = Store.getState().page._links[endpointIdentifier].href;
+        } else {
+            throw 'Component endpoint could not be resolved';
+        }
+        HttpManager.GET({url: endpoint}).then(server => {
+            dispatch({type: ACTION_CONSTANTS.END_COMPONENT_DATA, data: server.response, endpointIdentifier, componentName});
+        }).catch(onError);
+    });
+});
+
 export default Actions;
 
