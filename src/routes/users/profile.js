@@ -140,7 +140,7 @@ var Profile = React.createClass({
         }
         return (
            <GameWrapper transform={data => {
-               var array = data.game;
+               var array = data;
                var currentIndex, temporaryValue, randomIndex;
                if (array == null) {
                    array = [];

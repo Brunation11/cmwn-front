@@ -5,6 +5,7 @@ import Immutable from 'immutable';
 import HttpManager from 'components/http_manager';
 import Log from 'components/log';
 
+/** Marked for deprecation */
 var Fetcher = React.createClass({
     getInitialState: function () {
         this.data = this.props.transform(this.props.data);

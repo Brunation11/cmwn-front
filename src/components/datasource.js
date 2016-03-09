@@ -9,6 +9,9 @@ import Actions from 'components/actions';
 var GenerateDataSource = function (endpointIdentifier, componentName) {
     Actions.REGISTER_COMPONENT({endpointIdentifier, componentName});
     var Component = React.createClass({
+        getInitialState: function () {
+            return {};
+        },
         getDefaultProps: function () {
             return {
                 renderNoData: () => null,
@@ -17,6 +20,9 @@ var GenerateDataSource = function (endpointIdentifier, componentName) {
         },
         componentDidMount: function () {
             Actions.START_COMPONENT_DATA(endpointIdentifier, componentName, this.props.onError);
+        },
+        componentWillReceiveProps: function (newProps) {
+            this.setState({data: Immutable(this.props.transform(newProps.data.asMutable()))});
         },
         render: function () {
             var propsForChild;
@@ -36,6 +42,7 @@ var GenerateDataSource = function (endpointIdentifier, componentName) {
                 );
             }
 
+            props.data = this.state.data; //we only need this so the transformation will only be applied on new data
             propsForChild = Immutable(props)
                 .set('componentName', componentName)
                 .set('endpointIdentifier', endpointIdentifier);
