@@ -88,6 +88,9 @@ class _Authorization {
     }
     get currentUser() {
         var state = Store.getState();
+        if (state.currentUser == null) {
+            return {};
+        }
         return {
             username: state.currentUser.username,
             roles: state.currentUser.roles,

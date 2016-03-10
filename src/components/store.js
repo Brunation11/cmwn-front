@@ -54,7 +54,7 @@ if (window.localStorage['com.cmwn.platform._links'] != null) {
 var authReducer = (currentUser = Immutable(storedUserProperties), action) => {
     var reducers = {
         [ACTION_CONSTANTS.LOGOUT]: function () {
-            return null;
+            return Immutable({});
         },
         [ACTION_CONSTANTS.END_AUTHORIZE_APP]: function (currentUser_, data) {
             currentUser_ = currentUser_.set('token', data.token);

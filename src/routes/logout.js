@@ -30,7 +30,7 @@ var loaderOptions = {
 
 var Page = React.createClass({
     componentDidMount: function () {
-        var logout = HttpManager.GET({url: GLOBALS.API_URL + 'auth/logout', handleErrors: false});
+        var logout = HttpManager.GET({url: GLOBALS.API_URL + 'logout', handleErrors: false});
         Log.info('User logout initiated');
         Authorization.logout();
         logout.then(() => {
