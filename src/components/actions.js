@@ -46,12 +46,12 @@ var generateBasicBoundActions = function (actionNameList) {
 var Actions = generateBasicBoundActions(ACTION_CONSTANTS);
 //********** Thunk Actions
 //Thunk actions should be named START_YOUR_ACTION, and should resolve by dispatching an END_YOUR_ACTION
-Actions = Actions.set(ACTION_CONSTANTS.START_PAGE_DATA, function (url) {
+Actions = Actions.set(ACTION_CONSTANTS.START_PAGE_DATA, function (url, title) {
     Store.dispatch((dispatch) => {
         if (url === '' || url === '/') {
             //page has no unique data. Punt to authorize for userdata
             return Promise.resolve().then(() => {
-                dispatch({type: ACTION_CONSTANTS.PAGE_LOADED});
+                dispatch({type: ACTION_CONSTANTS.PAGE_LOADED, title});
             });
         }
         HttpManager.GET({
@@ -68,6 +68,10 @@ Actions = Actions.set(ACTION_CONSTANTS.START_PAGE_DATA, function (url) {
 });
 
 Actions = Actions.set(ACTION_CONSTANTS.START_AUTHORIZE_APP, function () {
+    var state = Store.getState();
+    if (state.currentUser.user_id != null) {
+        return;
+    }
     Store.dispatch((dispatch) => {
         HttpManager.GET({
             url: GLOBALS.API_URL,
@@ -80,7 +84,7 @@ Actions = Actions.set(ACTION_CONSTANTS.START_AUTHORIZE_APP, function () {
     });
 });
 
-Actions = Actions.set(ACTION_CONSTANTS.START_COMPONENT_DATA, function (endpointIdentifier, componentName,  onError) {
+Actions = Actions.set(ACTION_CONSTANTS.START_COMPONENT_DATA, function (endpointIdentifier, componentName, onError) {
     Store.dispatch(dispatch => {
         var endpoint;
         if(Store.getState().page.data._links[endpointIdentifier]) {

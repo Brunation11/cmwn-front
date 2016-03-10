@@ -18,15 +18,21 @@ var pageReducer = (page = Immutable({title: 'Change My World Now'}), action) => 
             return page_.set('title', title);
         }.bind(null, page, action.title),
         [ACTION_CONSTANTS.PAGE_LOADING]: function (page_) {
+            page_ = page_.set('initialized', false);
             return page_.set('loading', true);
         }.bind(null, page),
         [ACTION_CONSTANTS.PAGE_LOADED]: function (page_) {
             return page_.set('loading', false);
         }.bind(null, page),
+        [ACTION_CONSTANTS.PAGE_INTITIALIZED]: function (page_) {
+            return page_.set('loading', false);
+        }.bind(null, page),
         [ACTION_CONSTANTS.END_PAGE_DATA]: function (page_, data) {
             page_ = page_.set('loading', false);
-            return page_.set('data', data);
-        }.bind(null, page, action.data)
+            page_ = page_.set('initialized', true);
+            page_ = page_.set('title', data.title);
+            return page_.set('data', data.data);
+        }.bind(null, page, action)
     };
 
     if (action.type in reducers) {

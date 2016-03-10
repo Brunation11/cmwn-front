@@ -133,8 +133,7 @@ var initialPageLoadPostAuth = function (location) {
             Util.matchPathAndExtractParams(location.path, location.pathname)
         );
     }
-    Actions.START_PAGE_DATA(pageRoute);
-    Actions.PAGE_TITLE({title: location.title});
+    Actions.START_PAGE_DATA(pageRoute, {title: location.title});
 };
 History.listen(location => {
     var pathContext = _.find(routes.childRoutes, i => Util.matchPathAndExtractParams(i.path, location.pathname) !== false);
@@ -165,9 +164,11 @@ Store.subscribe(() => {
         Util.setPageTitle(state.page.title);
     }
     if (!state.bootstrapComplete && state.currentUser._links != null) {
-        //auth has finished. Complete the initialization
         Actions.FINISH_BOOTSTRAP();
         Authorization.storeUser();
+    }
+    if ((state.page && !state.page.initialized) && state.currentUser._links != null) {
+        //auth has finished. Complete the initialization
         initialPageLoadPostAuth(state.location);
     }
     if (
