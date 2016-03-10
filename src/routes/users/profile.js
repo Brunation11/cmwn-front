@@ -26,7 +26,7 @@ import FlipBgDefault from 'media/flip-placeholder-white.png';
 
 import 'routes/users/profile.scss';
 
-const GameWrapper = GenerateDataSource('self', 'profile');
+const GameWrapper = GenerateDataSource('games', 'profile');
 
 const HEADINGS = {
     ACTION: 'Profile',

@@ -84,8 +84,7 @@ Actions = Actions.set(ACTION_CONSTANTS.START_COMPONENT_DATA, function (endpointI
     Store.dispatch(dispatch => {
         var endpoint;
         if(Store.getState().page.data._links[endpointIdentifier]) {
-            endpoint = 'https://api-local.changemyworldnow.com/game';
-            //endpoint = Store.getState().page._links[endpointIdentifier].href;
+            endpoint = Store.getState().page.data._links[endpointIdentifier].href;
         } else {
             throw 'Component endpoint could not be resolved';
         }
