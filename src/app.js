@@ -159,6 +159,11 @@ History.listen(location => {
 
 var lastState = {page: {}};
 Store.subscribe(() => {
+    //Note: This function, and all store subscribes, will be invoked once per second
+    //at a minimum, and immediately after any action is dispatched. For this reason,
+    //code here should be kept to an absolute minimum, and care should be taken not
+    //to invoke more than one dispatch per call, as this will result in stack overflow
+    //as this recurs as a result.
     var state = Store.getState();
     if (state.page && state.page.title !== lastState.page.title) {
         Util.setPageTitle(state.page.title);

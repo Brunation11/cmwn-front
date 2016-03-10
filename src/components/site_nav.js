@@ -1,29 +1,32 @@
 import React from 'react';
 import {Link} from 'react-router';
 import _ from 'lodash';
+import { connect } from 'react-redux';
 
-import HttpManager from 'components/http_manager';
-import GLOBALS from 'components/globals';
-import Log from 'components/log';
+const nonMenuLinks = [
+    'me',
+    'self',
+    'forgot',
+    'user_image'
+];
 
-
-var SiteNav = React.createClass({
+var Component = React.createClass({
     componentDidMount: function () {
         this.menuItems = [];
         this.getMenuItems();
     },
-    getMenuItems: function () {
-        var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'sidebar'});
-        urlData.then(res => {
-            this.menuItems = _.map(_.toPairs(res.response.data[0]), (value) => ({text: value[0], url: value[1]}));
-            this.forceUpdate();
-        }).catch(err => {
-            Log.warn(err, 'could not load menu'); //eslint-disable-line no-console
-        });
-
-    },
     renderNavItems: function () {
-        return _.map(this.menuItems, item => (<li key={`(${item.text})-${item.url}`}><Link to={item.url}>{item.text}</Link></li>));
+        debugger;
+        var menuItems = _.reduce(this.props.data, (a, i, k) => {
+            if (!~nonMenuLinks.indexOf(k)) {
+                a.push({
+                    url: '/' + k,
+                    text: i.label == null ? _.startCase(k) : i.label
+                });
+            }
+            return a;
+        }, []);
+        return _.map(menuItems, item => (<li key={`(${item.text})-${item.url}`}><Link to={item.url}>{item.text}</Link></li>));
     },
     render: function () {
         return (
@@ -35,6 +38,17 @@ var SiteNav = React.createClass({
         );
     }
 });
+
+const mapStateToProps = state => {
+    var data = [];
+    state.currentUser;
+    if (state.currentUser && state.currentUser._links) {
+        data = state.currentUser._links;
+    }
+    return { currentUser: state.currentUser, data };
+};
+
+var SiteNav = connect(mapStateToProps)(Component);
 
 export default SiteNav;
 
