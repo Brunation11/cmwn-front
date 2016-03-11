@@ -6,6 +6,7 @@ import {Link} from 'react-router';
 import HttpManager from 'components/http_manager';
 import Log from 'components/log';
 import Toast from 'components/toast';
+import Util from 'components/util';
 
 import Layout from 'layouts/two_col';
 
@@ -51,7 +52,7 @@ var Component = React.createClass({
         });
     },
     render: function () {
-        if (this.props.data.id == null || this.props.data.scope > 6) {
+        if (this.props.data.id == null || Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
         return (

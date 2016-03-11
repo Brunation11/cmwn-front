@@ -19,6 +19,7 @@ var Component = React.createClass({
         );
     },
     render: function () {
+        debugger;
         /** @TODO MPR, 3/8/16: Actually check superuser */
         /*data => {
                     //sure exploiting this side effect in a render method is filthy but its also easy
@@ -41,7 +42,7 @@ var Component = React.createClass({
                     <Table>
                         <Column dataKey="title"
                             renderCell={(data, row) => (
-                                <a href={`/district/${row.user_id}`}>{_.startCase(data)}</a>
+                                <a href={row._links.self.href}>{_.startCase(data)}</a>
                             )}
                         />
                         <Column dataKey="description" />
@@ -61,7 +62,7 @@ const mapStateToProps = state => {
     var loading = true;
     if (state.page && state.page.data) {
         loading = state.page.loading;
-        data = state.page.data._embedded.orgs;
+        data = state.page.data._embedded.org;
     }
     return {
         data,

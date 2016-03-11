@@ -7,6 +7,8 @@ import History from 'components/history';
 import Form from 'components/form';
 import Log from 'components/log';
 import Toast from 'components/toast';
+import GLOBALS from 'components/globals';
+import Util from 'components/util';
 
 import Layout from 'layouts/two_col';
 
@@ -40,7 +42,7 @@ var Component = React.createClass({
             title: this.state.title,
             description: this.state.description
         };
-        HttpManager.POST(this.props.data._links.self.href, postData).then(() => {
+        HttpManager.PUT(this.props.data._links.self.href, postData).then(() => {
             Toast.success('District Updated');
         }).catch(err => {
             Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
@@ -48,7 +50,7 @@ var Component = React.createClass({
         });
     },
     render: function () {
-        if (this.props.data == null || !this.props.data.scope > 6) {
+        if (this.props.data == null || !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
         return (
@@ -74,7 +76,7 @@ var Component = React.createClass({
                  />
                  <Button onClick={this.submitData} > Save </Button>
               </Panel>
-              <CreateOrganization districtId={this.props.params.id} data={this.props.data}/>
+              <CreateOrganization districtId={this.props.params.org_id} data={this.props.data}/>
            </Layout>
          );
     }
@@ -89,13 +91,19 @@ var CreateOrganization = React.createClass({
     submitData: function () {
         var postData = {
             title: this.state.title,
-            district: this.props.data.id,
-            code: this.state.code
+            organization_id: this.props.data.org_id,
+            meta: {
+                code: this.state.code
+            },
+            description: this.state.title
         };
         if (this.refs.formRef.isValid()) {
-            HttpManager.POST({url: this.props.data._links.orgs}, postData).then(res => {
-                if (res.response && res.response.id) {
-                    History.replace(`/organization/${res.response.id}?message=created`);
+            HttpManager.POST({
+                //url: this.props.data._links.orgs
+                url: GLOBALS.API_URL + 'group'
+            }, postData).then(res => {
+                if (res.response && res.response.group_id) {
+                    History.replace(`/organization/${res.response.group_id}?message=created`);
                 }
             }).catch(err => {
                 Toast.error(ERRORS.BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));

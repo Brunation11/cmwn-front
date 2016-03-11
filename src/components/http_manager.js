@@ -150,14 +150,14 @@ var _makeRequest = function (verb, requests){
                 if (_.isObject(req.body)) {
                     req.body = (_.defaults({_token: this._token}, req.body));
                 }
-                if (req.asJSON) {
-                    req.body = JSON.stringify(req.body);
-                    xhr.setRequestHeader('Content-Type', 'application/json');
-                } else {
+                if (req.asFormData) {
                     req.body = _.reduce(req.body, (acc, val, key) => {
                         acc.append(key, val);
                         return acc;
                     }, new FormData());
+                } else {
+                    req.body = JSON.stringify(req.body);
+                    xhr.setRequestHeader('Content-Type', 'application/json');
                 }
                 //ie9 dislikes these events being undefined
                 xhr.onload = _.noop;
