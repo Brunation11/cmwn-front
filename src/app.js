@@ -116,43 +116,92 @@ function run() {
 
 const loadedStates = ['complete', 'loaded', 'interactive'];
 
-var initialPageLoadPostAuth = function (location) {
+var progressivePageLoad = function () {
     var pageRoute;
-    if (location.endpoint && location.endpoint.indexOf('$') === 0) {
-        //Looking for the string $$ at the beginning of a route to indicate
-        //that it should be pulled directly from the users context
-        if (Store.getState().currentUser._links[location.endpoint.slice(2)] != null) {
-            pageRoute = Store.getState().currentUser._links[location.endpoint.slice(2)].href;
-        } else {
-            throw 'Route could not be loaded, route endpoint not provided for the current user';
-        }
-    } else {
-        pageRoute = GLOBALS.API_URL + Util.replacePathPlaceholdersFromParamObject(
-            location.endpoint == null ? '' : location.endpoint,
-            Util.matchPathAndExtractParams(location.path, location.pathname)
-        );
+    var state = Store.getState();
+    if (state.pageLoadingStage.currentStage !== state.pageLoadingStage.lastCompletedStage) {
+        return;
     }
-    Actions.START_PAGE_DATA(pageRoute, {title: location.title});
+    switch (state.pageLoadingStage.currentStage) {
+    case 0: //Fresh Reload. Reset Everything
+        Store.dispatch({
+            type: 'combo',
+            types: ['LOADER_START', 'LOADER_SUCCESS', 'LOADER_ERROR'],
+            sequence: true,
+            payload: [
+                Actions.PAGE_LOADING,
+                Actions.AUTHORIZE_APP
+            ]
+        });
+        break;
+    case 1:
+        Store.dispatch({
+            type: 'combo',
+            types: ['LOADER_START', 'LOADER_SUCCESS', 'LOADER_ERROR'],
+            sequence: true,
+            payload: [
+                Actions.FINISH_BOOTSTRAP
+            ]
+        });
+        break;
+    case 2: //We are authorized. Store the current user and proceed to page load
+        if (
+            (state.location.public) ||
+             (state.currentUser._links != null && state.location.endpoint && (
+                state.location.endpoint.indexOf('$') !== 0 ||
+                Store.getState().currentUser._links[state.location.endpoint.slice(2)] != null
+             ))
+        ) {
+            Authorization.storeUser();
+            if (state.location.endpoint && state.location.endpoint.indexOf('$') === 0) {
+                //Looking for the string $$ at the beginning of a route to indicate
+                //that it should be pulled directly from the users context
+                if (Store.getState().currentUser._links[state.location.endpoint.slice(2)] != null) {
+                    pageRoute = Store.getState().currentUser._links[state.location.endpoint.slice(2)].href;
+                } else {
+                    console.error('Route could not be loaded, route endpoint not provided for the current user');
+                }
+            } else {
+                pageRoute = GLOBALS.API_URL + Util.replacePathPlaceholdersFromParamObject(
+                    state.location.endpoint == null ? '' : state.location.endpoint,
+                    Util.matchPathAndExtractParams(state.location.path, state.location.pathname)
+                );
+            }
+            Store.dispatch({
+                type: 'combo',
+                types: ['LOADER_START', 'LOADER_SUCCESS', 'LOADER_ERROR'],
+                sequence: true,
+                payload: [
+                    Actions.PAGE_DATA.bind(null, pageRoute, {title: state.location.title}),
+                ]
+            });
+        } else {
+            console.error('Endpoint does not exist');
+        }
+        break;
+    case 3:
+        break;
+    case 4:
+        break;
+    case 5:
+        break;
+    case 6:
+        break;
+    case 7:
+        break;
+    case 8:
+        break;
+    case 9:
+        break;
+    }
 };
+
 History.listen(location => {
     var pathContext = _.find(routes.childRoutes, i => Util.matchPathAndExtractParams(i.path, location.pathname) !== false);
     //you know, at this point we already know whether or not our path 404d...
     location = _.defaults(location, pathContext);
     location.component = null; //no need to store this in state.
-    Actions.PAGE_LOADING();
-    Actions.START_AUTHORIZE_APP();
-    //if we were previouslty authenticated, we can attempt to proceed
-    //any subsequent auth failures will interrupt the page load independantly
-    if (
-        Store.getState().currentUser._links != null && location.endpoint && (
-            location.endpoint.indexOf('$') !== 0 ||
-            Store.getState().currentUser._links[location.endpoint.slice(2)] != null
-        )
-    ) {
-        Authorization.storeUser();
-        initialPageLoadPostAuth(location);
-    }
-    Actions.PATH_CHANGE({location: location});
+    Actions.dispatch.PATH_CHANGE({location: location});
 });
 
 var lastState = {page: {}};
@@ -166,20 +215,7 @@ Store.subscribe(() => {
     if (state.page && state.page.title !== lastState.page.title) {
         Util.setPageTitle(state.page.title);
     }
-    if (!state.bootstrapComplete && state.currentUser._links != null) {
-        Authorization.storeUser();
-        Actions.FINISH_BOOTSTRAP();
-    }
-    if ((state.page && !state.page.initialized) && state.currentUser._links != null) {
-        //auth has finished. Complete the initialization
-        initialPageLoadPostAuth(state.location);
-    }
-    if (
-            (state.currentUser && lastState.currentUser && state.currentUser.token !== lastState.currentUser.token) ||
-            (state.currentUser && lastState.currentUser == null)
-    ) {
-        //HttpManager.setToken(state.currentUser.token);
-    }
+    progressivePageLoad();
     lastState = Store.getState();
 });
 

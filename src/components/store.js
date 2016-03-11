@@ -2,6 +2,8 @@ import _ from 'lodash';
 import { combineReducers, createStore, compose, applyMiddleware } from 'redux';
 import { routerReducer } from 'react-router-redux';
 import thunk from 'redux-thunk';
+import combineActionsMiddleware from 'redux-combine-actions';
+import promiseMiddleware from 'redux-promise-middleware';
 import Immutable from 'seamless-immutable';
 
 import DevTools from 'components/devtools';
@@ -133,7 +135,6 @@ var componentReducer = (allComponents = Immutable({}), action) => {
     }
     return allComponents;
 };
-
 const Store = createStore( combineReducers({
     page: pageReducer,
     currentUser: authReducer,
@@ -141,13 +142,26 @@ const Store = createStore( combineReducers({
     routing: routerReducer,
     components: componentReducer,
     bootstrapComplete: (isComplete = false, action) => {
-        if (action.type === ACTION_CONSTANTS.FINISH_BOOTSTRAP || action.type === ACTION_CONSTANTS.END_AUTHORIZE_APP) {
+        if (action.type === ACTION_CONSTANTS.FINISH_BOOTSTRAP) {
             return true;
         }
         return isComplete;
+    },
+    pageLoadingStage: (loaderState = {currentStage: 0, lastCompletedStage: 0}, action) => {
+        if (action.type === ACTION_CONSTANTS.LOADER_START) {
+            return {currentStage: loaderState.currentStage + 1, lastCompletedStage: loaderState.lastCompletedStage};
+        }
+        if (action.type === ACTION_CONSTANTS.LOADER_SUCCESS) {
+            return {currentStage: loaderState.currentStage, lastCompletedStage: loaderState.lastCompletedStage + 1};
+        }
+        if (action.type === ACTION_CONSTANTS.LOADER_ERROR) {
+            console.error('Loader error at stage ' + loaderState);
+        }
+        return loaderState;
     }
 }), Immutable({routing: INITIAL_STATE}), compose(
-    applyMiddleware(thunk),
+    applyMiddleware(thunk,  promiseMiddleware({ promiseTypeSuffixes: ['LOADING', 'SUCCESS', 'ERROR'] }, combineActionsMiddleware)),
     DevTools.instrument()
 ));
+var store = Store;
 export default Store;

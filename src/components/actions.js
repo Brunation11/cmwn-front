@@ -26,7 +26,6 @@ import GLOBALS from 'components/globals';
  * name, and the passed in data, and should return an action with a type property
  */
 var generateBasicBoundActions = function (actionNameList) {
-    var dispatch = Store.dispatch;
     var defaultTransform = function (name, data = {}) {
         if (data.type != null) {
             Log.warn('Action data with a type property was passed. This type will be ignored.');
@@ -35,7 +34,7 @@ var generateBasicBoundActions = function (actionNameList) {
     };
     var actions = _.reduce(actionNameList, (a, name) => {
         a[name] = (data, transform = defaultTransform) => {
-            dispatch(transform(name, data));
+            return (transform(name, data));
         };
         return a;
     }, {});
@@ -46,57 +45,84 @@ var generateBasicBoundActions = function (actionNameList) {
 var Actions = generateBasicBoundActions(ACTION_CONSTANTS);
 //********** Thunk Actions
 //Thunk actions should be named START_YOUR_ACTION, and should resolve by dispatching an END_YOUR_ACTION
-Actions = Actions.set(ACTION_CONSTANTS.START_PAGE_DATA, function (url, title) {
-    Store.dispatch((dispatch) => {
-        if (url === '' || url == null) {
-            //page has no unique data. Punt to authorize for userdata
-            return Promise.resolve().then(() => {
-                dispatch({type: ACTION_CONSTANTS.PAGE_LOADED, title});
-            });
+Actions = Actions.set(ACTION_CONSTANTS.PAGE_DATA, function (url, title) {
+    if (url === '' || url == null) {
+        return {
+            type: ACTION_CONSTANTS.PAGE_DATA,
+            payload: {
+                promise: Promise.resolve({type: ACTION_CONSTANTS.PAGE_LOADED, title})
+            }
+        };
+    }
+    return {
+        types: [
+            'PAGE_DATA_PENDING',
+            'PAGE_DATA_SUCCESS',
+            'PAGE_DATA_ERROR'
+        ],
+        type: ACTION_CONSTANTS.PAGE_DATA,
+        payload: {
+            promise: HttpManager.GET({
+                url: url,
+                handlePageLevelErrors: true
+            })
         }
-        HttpManager.GET({
-            url: url,
-            handlePageLevelErrors: true
-        }).then(server => {
-            dispatch({type: ACTION_CONSTANTS.END_PAGE_DATA, data: server.response});
-        }).catch(err => {
+    };
             //NOTE: This is the primary page-level error handling block in the entire application
             //The only page-level error not handled here will be true 404 errors, which will be handled
             //in app.js by the router.
-        });
-    });
 });
 
-Actions = Actions.set(ACTION_CONSTANTS.START_AUTHORIZE_APP, function () {
-    if (window.localStorage.getItem('cmwn_token') != null) {
-        return;
-    }
-    Store.dispatch((dispatch) => {
-        HttpManager.GET({
-            url: GLOBALS.API_URL,
-            handlePageLevelErrors: true
-        }).then(server => {
-            HttpManager.setToken(server.response.token);
-            dispatch({type: ACTION_CONSTANTS.END_AUTHORIZE_APP, data: server.response});
-        }).catch(err => {
-            /** @TODO MPR, 3/5/16: Handle Auth Errors*/
-        });
-    });
-});
-
-Actions = Actions.set(ACTION_CONSTANTS.START_COMPONENT_DATA, function (endpointIdentifier, componentName, onError) {
-    Store.dispatch(dispatch => {
-        var endpoint;
-        if(Store.getState().page.data._links[endpointIdentifier]) {
-            endpoint = Store.getState().page.data._links[endpointIdentifier].href;
-        } else {
-            throw 'Component endpoint could not be resolved';
+Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
+    //if (window.localStorage.getItem('cmwn_token') != null) {
+    //    return;
+    //}
+    return {
+        types: [
+            'AUTHORIZE_APP_PENDING',
+            'AUTHORIZE_APP_SUCCESS',
+            'AUTHORIZE_APP_ERROR'
+        ],
+        type: ACTION_CONSTANTS.AUTHORIZE_APP,
+        payload: {
+            promise: HttpManager.GET({
+                url: GLOBALS.API_URL,
+                handlePageLevelErrors: true
+            })
+    //                 HttpManager.setToken(server.response.token);
         }
-        HttpManager.GET({url: endpoint}).then(server => {
-            dispatch({type: ACTION_CONSTANTS.END_COMPONENT_DATA, data: server.response, endpointIdentifier, componentName});
-        }).catch(onError);
-    });
+    };
+            /** @TODO MPR, 3/5/16: Handle Auth Errors*/
 });
+
+Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentifier, componentName) {
+    var endpoint;
+    var state = Store.getState();
+    if (state.page.data._links[endpointIdentifier + '-' + componentName]) {
+        endpoint = state.page.data._links[endpointIdentifier + '-' + componentName].href;
+    } else {
+        console.error('Component endpoint could not be resolved');
+        throw 'Component endpoint could not be resolved';
+    }
+    return {
+        types: [
+            'SUBSCRIBER_GET_PENDING',
+            'SUBSCRIBER_GET_SUCCESS',
+            'SUBSCRIBER_GET_ERROR'
+        ],
+        type: ACTION_CONSTANTS.COMPONENT_DATA,
+        payload: {
+            promise: HttpManager.GET({url: endpoint})
+        }
+    };
+});
+
+Actions = Actions.set('dispatch', _.reduce(Actions, (a, i, k) => {
+    a[k] = function () {
+        Store.dispatch(i(...arguments));
+    };
+    return a;
+}, {}));
 
 export default Actions;
 

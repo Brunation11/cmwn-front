@@ -4,6 +4,7 @@ import Immutable from 'seamless-immutable';
 import { connect } from 'react-redux';
 
 import Actions from 'components/actions';
+import Store from 'components/store';
 
 /** Higher Order Component */
 var GenerateDataSource = function (endpointIdentifier, componentName) {
@@ -19,10 +20,18 @@ var GenerateDataSource = function (endpointIdentifier, componentName) {
             };
         },
         componentDidMount: function () {
-            Actions.START_COMPONENT_DATA(endpointIdentifier, componentName, this.props.onError);
+            this.attemptLoadComponentData();
         },
         componentWillReceiveProps: function (newProps) {
+            this.attemptLoadComponentData();
             this.setState({data: Immutable(this.props.transform(newProps.data.asMutable()))});
+        },
+        attemptLoadComponentData: function () {
+            var state = Store.getState();
+            if (state.location.pathname === window.location.pathname && !this.dataRequested) {
+                this.dataRequested = true;
+                Actions.START_COMPONENT_DATA(endpointIdentifier, componentName, this.props.onError);
+            }
         },
         render: function () {
             var propsForChild;

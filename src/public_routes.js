@@ -35,6 +35,7 @@ var routes = [
 routes = _.map(routes, i => {
     //defaults
     i.title = i.title || 'Change My World Now';
+    i.public = true;
     return i;
 });
 
