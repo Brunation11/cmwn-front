@@ -12,6 +12,7 @@ import FlipBoard from 'components/flipboard';
 import FlipBgDefault from 'media/icon_class_blue.png';
 import EditLink from 'components/edit_link';
 import Toast from 'components/toast';
+import Util from 'components/util';
 
 import 'routes/users/profile.scss';
 
@@ -59,11 +60,11 @@ var Component = React.createClass({
         );
     },
     renderAdminLink: function () {
-        if (!this.props.data.can_update) {
+        if (!Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
         return (
-            <p><a href={`/organization/${this.props.data.id}/view`}>{ADMIN_TEXT}</a></p>
+            <p><a href={`/organization/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
         );
     },
     render: function () {
@@ -73,13 +74,13 @@ var Component = React.createClass({
         return (
            <Layout className="profile">
                <Panel header={this.props.data.title} className="standard">
-                   <EditLink base="/organization" uuid={this.props.data.id} canUpdate={this.props.data.scope < 4} />
+                   <EditLink base="/organization" uuid={this.props.data.group_id} canUpdate={Util.decodePermissions(this.props.data.scope).update} />
                    {this.renderAdminLink()}
                     <p>{`${HEADINGS.DISTRICTS}: `}{this.renderDistricts()}</p>
                    {this.props.data.description}
                </Panel>
                <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.MY_CLASSES} data={this.props.data.classes} />
-               <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.ALL_CLASSES} data={this.props.data.groups.data} />
+               <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.ALL_CLASSES} data={this.props.data.groups} transform={() => ([])} />
            </Layout>
         );
     }

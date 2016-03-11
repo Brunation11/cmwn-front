@@ -9,6 +9,7 @@ import Shortid from 'shortid';
 import Authorization from 'components/authorization';
 import FlipBoard from 'components/flipboard';
 import EditLink from 'components/edit_link';
+import Util from 'components/util';
 
 import DefaultProfile from 'media/profile_tranparent.png';
 
@@ -28,6 +29,11 @@ var Component = React.createClass({
             isStudent: true
         };
     },
+    getDefaultProps: function () {
+        return {
+            data: {}
+        };
+    },
     componentDidMount: function () {
         this.setState(this.props.data);
         this.resolveRole();
@@ -39,7 +45,7 @@ var Component = React.createClass({
     resolveRole: function () {
         var newState = {};
         Authorization.userIsLoaded.then(() => {
-            if (~Authorization.currentUser.roles.indexOf('Student')) {
+            if (Authorization.currentuser && Authorization.currentuser.roles && ~Authorization.currentuser.roles.indexOf('Student')) {
                 newState.isStudent = true;
             } else {
                 newState.isStudent = false;
@@ -48,7 +54,7 @@ var Component = React.createClass({
         });
     },
     renderFlipsEarned: function (item) {
-        if (item.roles && item.roles.data && !~item.roles.data.indexOf('Student')) {
+        if (item && item.roles && item.roles.data && !~item.roles.data.indexOf('Student')) {
             return null;
         }
         return (
@@ -56,17 +62,17 @@ var Component = React.createClass({
         );
     },
     renderAdminLink: function () {
-        if (!this.props.data.can_update) {
+        if (!Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
         return (
-            <p><a href={`/group/${this.props.data.id}/view`}>{ADMIN_TEXT}</a></p>
+            <p><a href={`/group/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
         );
     },
     renderFlip: function (item){
         return (
             <div className="flip" key={Shortid.generate()}>
-                <Link to={`/student/${item.id.toString()}`}><img src={item.images.data.length ? item.images.data[0].url : DefaultProfile}></img>
+                <Link to={`/student/${item.group_id.toString()}`}><img src={item.images.data.length ? item.images.data[0].url : DefaultProfile}></img>
                     <p className="linkText" >{item.username}</p>
                 </Link>
                 {this.renderFlipsEarned(item)}
@@ -74,12 +80,12 @@ var Component = React.createClass({
         );
     },
     renderClassInfo: function () {
-        if (this.props.data.id == null || this.props.data.scope > 6) {
+        if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
         return (
            <Panel header={this.props.data.title} className="standard">
-               <EditLink base="/group" uuid={this.props.data.id} canUpdate={this.props.data.scope < 7} />
+               <EditLink base="/group" uuid={this.props.data.group_id} canUpdate={Util.decodePermissions(this.props.data.scope).update} />
                {this.renderAdminLink()}
            </Panel>
         );
@@ -93,7 +99,7 @@ var Component = React.createClass({
                {this.renderClassInfo()}
                <FlipBoard renderFlip={this.renderFlip} header={
                  HEADINGS.CLASS + this.props.data.title
-               } data={this.props.data.users.data} />
+               } data={this.props.data.users} transform={() => ([])} />
            </Layout>
         );
     }
