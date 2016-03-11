@@ -48,7 +48,7 @@ var Actions = generateBasicBoundActions(ACTION_CONSTANTS);
 //Thunk actions should be named START_YOUR_ACTION, and should resolve by dispatching an END_YOUR_ACTION
 Actions = Actions.set(ACTION_CONSTANTS.START_PAGE_DATA, function (url, title) {
     Store.dispatch((dispatch) => {
-        if (url === '' || url === '/') {
+        if (url === '' || url == null) {
             //page has no unique data. Punt to authorize for userdata
             return Promise.resolve().then(() => {
                 dispatch({type: ACTION_CONSTANTS.PAGE_LOADED, title});
