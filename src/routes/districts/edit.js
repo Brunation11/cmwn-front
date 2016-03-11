@@ -1,8 +1,8 @@
 import React from 'react';
 import {Button, Input, Panel} from 'react-bootstrap';
+import { connect } from 'react-redux';
 
 import HttpManager from 'components/http_manager';
-import GLOBALS from 'components/globals';
 import History from 'components/history';
 import Form from 'components/form';
 import Log from 'components/log';
@@ -21,34 +21,26 @@ const HEADINGS = {
 
 const BAD_UPDATE = 'There was a problem updating your profile. Please try again later.';
 
-var Edit = React.createClass({
+var Component = React.createClass({
     getInitialState: function () {
-        this.district = {};
         return {
             code: '',
             title: '',
             description: ''
         };
     },
-    componentWillMount: function () {
-        this.getDistrict();
+    componentDidMount: function () {
+        this.setState(this.props.data);
     },
-    getDistrict: function () {
-        var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'districts/' + this.props.params.id});
-        urlData.then(res => {
-            this.district = res.response.data;
-            if (!this.district.can_update) { //eslint-disable-line camel_case
-                History.replace(`/district/${this.props.params.id}/profile`);
-            }
-            this.setState(this.district);
-        });
+    componentWillReceiveProps: function (newProps) {
+        this.setState(newProps.data);
     },
     submitData: function () {
         var postData = {
             title: this.state.title,
             description: this.state.description
         };
-        HttpManager.POST(`${GLOBALS.API_URL}districts/${this.state.uuid}`, postData).then(() => {
+        HttpManager.POST(this.props.data._links.self.href, postData).then(() => {
             Toast.success('District Updated');
         }).catch(err => {
             Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
@@ -56,7 +48,7 @@ var Edit = React.createClass({
         });
     },
     render: function () {
-        if (this.district == null || !this.district.can_update) {
+        if (this.props.data == null || !this.props.data.scope > 6) {
             return null;
         }
         return (
@@ -82,7 +74,7 @@ var Edit = React.createClass({
                  />
                  <Button onClick={this.submitData} > Save </Button>
               </Panel>
-              <CreateOrganization districtId={this.props.params.id}/>
+              <CreateOrganization districtId={this.props.params.id} data={this.props.data}/>
            </Layout>
          );
     }
@@ -97,13 +89,13 @@ var CreateOrganization = React.createClass({
     submitData: function () {
         var postData = {
             title: this.state.title,
-            district: this.props.districtId,
+            district: this.props.data.id,
             code: this.state.code
         };
         if (this.refs.formRef.isValid()) {
-            HttpManager.POST({url: `${GLOBALS.API_URL}organizations`, handleErrors: false}, postData).then(res => {
-                if (res.response && res.response.data && res.response.data.uuid) {
-                    History.replace(`/organization/${res.response.data.uuid}?message=created`);
+            HttpManager.POST({url: this.props.data._links.orgs}, postData).then(res => {
+                if (res.response && res.response.id) {
+                    History.replace(`/organization/${res.response.id}?message=created`);
                 }
             }).catch(err => {
                 Toast.error(ERRORS.BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
@@ -144,5 +136,19 @@ var CreateOrganization = React.createClass({
     }
 });
 
-export default Edit;
+const mapStateToProps = state => {
+    var data = {};
+    var loading = true;
+    if (state.page && state.page.data) {
+        loading = state.page.loading;
+        data = state.page.data;
+    }
+    return {
+        data,
+        loading
+    };
+};
+
+var Page = connect(mapStateToProps)(Component);
+export default Page;
 

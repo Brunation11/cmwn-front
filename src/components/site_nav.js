@@ -11,12 +11,7 @@ const nonMenuLinks = [
 ];
 
 var Component = React.createClass({
-    componentDidMount: function () {
-        this.menuItems = [];
-        this.getMenuItems();
-    },
     renderNavItems: function () {
-        debugger;
         var menuItems = _.reduce(this.props.data, (a, i, k) => {
             if (!~nonMenuLinks.indexOf(k)) {
                 a.push({

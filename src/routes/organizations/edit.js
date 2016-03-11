@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Button, Input, Panel, FormControls} from 'react-bootstrap';
+import { connect } from 'react-redux';
 
 import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
 import Validate from 'components/validators';
 import Log from 'components/log';
 import Toast from 'components/toast';
-import History from 'components/history';
 import Form from 'components/form';
 
 import Layout from 'layouts/two_col';
@@ -23,15 +23,19 @@ const LABELS = {
 
 const BAD_UPDATE = 'There was a problem updating your profile. Please try again later.';
 
+const ERRORS = {
+    BAD_UPDATE: 'Could not create school. Please try again later.',
+    INVALID_SUBMISSION: 'Invalid submission. Please update fields highlighted in red and submit again'
+};
+
 const TERMS_COPY = <span>By checking the box below, you agree that you have read, understand, and accept <a href="/terms" target="_blank">ChangeMyWorldNow.com's terms and conditions</a>.</span>;
 
 var isPassValid = function (password) {
     return password.length > 8 && ~password.search(/[0-9]+/);
 };
 
-var Edit = React.createClass({
+var Component = React.createClass({
     getInitialState: function () {
-        this.organization = {};
         return {
             code: '',
             title: '',
@@ -39,24 +43,17 @@ var Edit = React.createClass({
         };
     },
     componentWillMount: function () {
-        this.getOrganization();
+        this.setState(this.props.data);
     },
-    getOrganization: function () {
-        var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'organizations/' + this.props.params.id});
-        urlData.then(res => {
-            this.organization = res.response.data;
-            if (!res.response.data.can_update) { //eslint-disable-line camel_case
-                History.replace(`/organization/${this.props.params.id}/profile`);
-            }
-            this.setState(this.organization);
-        });
+    componentWillReceiveProps: function (newProps) {
+        this.setState(newProps.data);
     },
     submitData: function () {
         var postData = {
             title: this.state.title,
             description: this.state.description
         };
-        HttpManager.POST(`${GLOBALS.API_URL}organizations/${this.state.uuid}`, postData).then(() => {
+        HttpManager.POST(this.props.data._links.self, postData).then(() => {
             Toast.success('District Updated');
         }).catch(err => {
             Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
@@ -64,7 +61,7 @@ var Edit = React.createClass({
         });
     },
     render: function () {
-        if (this.state.uuid == null || !this.state.can_update) {
+        if (this.props.data.id == null || this.props.data.scope > 6) {
             return null;
         }
         return (
@@ -90,9 +87,66 @@ var Edit = React.createClass({
                  />
                  <Button onClick={this.submitData} > Save </Button>
               </Panel>
+              <CreateGroup data={this.props.data} />
               <BulkUpload orgId={this.props.params.id}/>
            </Layout>
          );
+    }
+});
+
+var CreateGroup = React.createClass({
+    getInitialState: function () {
+        return {
+            title: ''
+        };
+    },
+    submitData: function () {
+        var postData = {
+            title: this.state.title,
+            district: this.props.data.id,
+            code: this.state.code
+        };
+        if (this.refs.formRef.isValid()) {
+            HttpManager.POST({url: this.props.data._links.groups}, postData).then(res => {
+                if (res.response && res.response.id) {
+                    History.replace(`/group/${res.response.id}?message=created`);
+                }
+            }).catch(err => {
+                Toast.error(ERRORS.BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
+                Log.log('Server refused class create', err, postData);
+            });
+        } else {
+            Toast.error(ERRORS.INVALID_SUBMISSION);
+        }
+    },
+    render: function () {
+        return (
+        <Panel>
+            <Form ref="formRef">
+                <Input
+                    type="text"
+                    value={this.state.title}
+                    placeholder="Class Name"
+                    label="Class Name"
+                    validate="required"
+                    ref="titleInput"
+                    name="titleInput"
+                    onChange={e => this.setState({title: e.target.value})} //eslint-disable-line camelcase
+                />
+                <Input
+                    type="text"
+                    value={this.state.code}
+                    placeholder="Class Code"
+                    label="Class Code"
+                    validate="required"
+                    ref="codeInput"
+                    name="codeInput"
+                    onChange={e => this.setState({code: e.target.value})} //eslint-disable-line camelcase
+                />
+                <Button onClick={this.submitData}> Create </Button>
+            </Form>
+        </Panel>
+        );
     }
 });
 
@@ -191,5 +245,19 @@ var BulkUpload = React.createClass({
     }
 });
 
-export default Edit;
+const mapStateToProps = state => {
+    var data = {};
+    var loading = true;
+    if (state.page && state.page.data) {
+        loading = state.page.loading;
+        data = state.page.data;
+    }
+    return {
+        data,
+        loading
+    };
+};
+
+var Page = connect(mapStateToProps)(Component);
+export default Page;
 

@@ -1,22 +1,21 @@
 import React from 'react';
 import Shortid from 'shortid';
+import { connect } from 'react-redux';
 
 //import HttpManager from 'components/http_manager';
 import FlipBoard from 'components/flipboard';
-import GLOBALS from 'components/globals';
 import Layout from 'layouts/two_col';
 import Paginator from 'components/paginator';
-import Fetcher from 'components/fetcher';
 
 import DefaultProfile from 'media/icon_class_blue.png';
 
 const TITLE = 'MY CLASSES';
 
-var Groups = React.createClass({
+var Component = React.createClass({
     renderFlip: function (item){
         return (
             <div className="flip" key={Shortid.generate()}>
-                <a href={`/group/${item.uuid}`}>
+                <a href={`/group/${item.id}`}>
                     <img src={DefaultProfile}></img><p>{`${item.title}`}</p>
                 </a>
             </div>
@@ -25,15 +24,27 @@ var Groups = React.createClass({
     render: function () {
         return (
             <Layout>
-                <Fetcher url={GLOBALS.API_URL + 'groups'} test="test">
-                    <Paginator data={this.groups} pageCount={1}>
-                        <FlipBoard header={TITLE} renderFlip={this.renderFlip} />
-                    </Paginator>
-               </Fetcher>
+                <Paginator data={this.props.data} pageCount={1}>
+                    <FlipBoard header={TITLE} renderFlip={this.renderFlip} />
+                </Paginator>
             </Layout>
         );
     }
 });
 
-export default Groups;
+const mapStateToProps = state => {
+    var data = [];
+    var loading = true;
+    if (state.page && state.page.data) {
+        loading = state.page.loading;
+        data = state.page.data._embedded.groups;
+    }
+    return {
+        data,
+        loading
+    };
+};
+
+var Page = connect(mapStateToProps)(Component);
+export default Page;
 

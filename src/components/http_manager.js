@@ -119,10 +119,9 @@ var _makeRequest = function (verb, requests){
                         response = xhr.response;
                         Log.info(err, 'recieved non-standard data format from api');
                     }
-                    console.warn('remove the horrorshow short circuit that is "|| 200"');
                     return res({
                         url,
-                        status: xhr.status || 200,
+                        status: xhr.status,
                         response,
                         request: xhr
                     });
@@ -153,6 +152,7 @@ var _makeRequest = function (verb, requests){
                 }
                 if (req.asJSON) {
                     req.body = JSON.stringify(req.body);
+                    xhr.setRequestHeader('Content-Type', 'application/json');
                 } else {
                     req.body = _.reduce(req.body, (acc, val, key) => {
                         acc.append(key, val);

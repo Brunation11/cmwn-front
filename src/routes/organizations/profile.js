@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import QueryString from 'query-string';
-
+import { connect } from 'react-redux';
 import {Link} from 'react-router';
 //import _ from 'lodash';
 import {Panel} from 'react-bootstrap';
@@ -10,11 +10,7 @@ import Layout from 'layouts/two_col';
 import Shortid from 'shortid';
 import FlipBoard from 'components/flipboard';
 import FlipBgDefault from 'media/icon_class_blue.png';
-import GLOBALS from 'components/globals';
-import HttpManager from 'components/http_manager';
 import EditLink from 'components/edit_link';
-import Util from 'components/util';
-import Log from 'components/log';
 import Toast from 'components/toast';
 
 import 'routes/users/profile.scss';
@@ -29,9 +25,7 @@ const ADMIN_TEXT = 'School Dashboard';
 
 const ORG_CREATED = 'School created successfully';
 
-var Page = React.createClass({
-    myClasses: [],
-    organization: null,
+var Component = React.createClass({
     getInitialState: function () {
         return {
             organization: [],
@@ -41,29 +35,13 @@ var Page = React.createClass({
         };
     },
     componentDidMount: function () {
-        this.getOrganization();
-        this.getMyClasses();
+        this.setState(this.props.data);
         if (QueryString.parse(location.search).message === 'created') {
             Toast.success(ORG_CREATED);
         }
     },
-    getMyClasses: function () {
-        var fetchOrgs = HttpManager.GET({url: GLOBALS.API_URL + 'users/me?include=groups'});
-        fetchOrgs.then(res => {
-            this.myClasses = res.response.data.groups.data;
-            this.forceUpdate();
-        }).catch(err => {
-            Log.info(err);
-        });
-    },
-    getOrganization: function () {
-        var urlData = HttpManager.GET({url: `${GLOBALS.API_URL}organizations/${this.props.params.id}?include=groups,districts`});
-        urlData.then(res => {
-            Util.normalize(res.response, 'users', []);
-            this.districts = res.response.data.districts.data;
-            this.organization = res.response.data;
-            this.forceUpdate();
-        });
+    componentWillReceiveProps: function () {
+        this.setState(this.props.data);
     },
     renderDistricts: function () {
         var links = _.map(this.districts, district => {
@@ -77,35 +55,49 @@ var Page = React.createClass({
     },
     renderFlip: function (item){
         return (
-            <div className="flip" key={Shortid.generate()}><Link to={`/group/${item.uuid}/profile`}><img src={FlipBgDefault}></img><p>{item.title}</p></Link></div>
+            <div className="flip" key={Shortid.generate()}><Link to={`/group/${item.id}/profile`}><img src={FlipBgDefault}></img><p>{item.title}</p></Link></div>
         );
     },
     renderAdminLink: function () {
-        if (!this.organization.can_update) {
+        if (!this.props.data.can_update) {
             return null;
         }
         return (
-            <p><a href={`/organization/${this.organization.uuid}/view`}>{ADMIN_TEXT}</a></p>
+            <p><a href={`/organization/${this.props.data.id}/view`}>{ADMIN_TEXT}</a></p>
         );
     },
     render: function () {
-        if (this.organization == null) {
+        if (this.props.data == null) {
             return null;
         }
         return (
            <Layout className="profile">
-               <Panel header={this.organization.title} className="standard">
-                   <EditLink base="/organization" uuid={this.organization.uuid} canUpdate={this.organization.can_update} />
+               <Panel header={this.props.data.title} className="standard">
+                   <EditLink base="/organization" uuid={this.props.data.id} canUpdate={this.props.data.scope < 4} />
                    {this.renderAdminLink()}
                     <p>{`${HEADINGS.DISTRICTS}: `}{this.renderDistricts()}</p>
-                   {this.organization.description}
+                   {this.props.data.description}
                </Panel>
-               <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.MY_CLASSES} data={this.myClasses} />
-               <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.ALL_CLASSES} data={this.organization.groups.data} />
+               <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.MY_CLASSES} data={this.props.data.classes} />
+               <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.ALL_CLASSES} data={this.props.data.groups.data} />
            </Layout>
         );
     }
 });
 
+const mapStateToProps = state => {
+    var data = {};
+    var loading = true;
+    if (state.page && state.page.data) {
+        loading = state.page.loading;
+        data = state.page.data;
+    }
+    return {
+        data,
+        loading
+    };
+};
+
+var Page = connect(mapStateToProps)(Component);
 export default Page;
 

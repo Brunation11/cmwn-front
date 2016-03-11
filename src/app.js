@@ -18,7 +18,6 @@ import Util from 'components/util';
 import DevTools from 'components/devtools';
 import Actions from 'components/actions';
 import Authorization from 'components/authorization';
-import HttpManager from 'components/http_manager';
 
 import Errors from 'components/errors';
 import Home from 'routes/home';
@@ -129,7 +128,7 @@ var initialPageLoadPostAuth = function (location) {
         }
     } else {
         pageRoute = GLOBALS.API_URL + Util.replacePathPlaceholdersFromParamObject(
-            location.endpoint,
+            location.endpoint == null ? '' : location.endpoint,
             Util.matchPathAndExtractParams(location.path, location.pathname)
         );
     }
@@ -145,12 +144,11 @@ History.listen(location => {
     //if we were previouslty authenticated, we can attempt to proceed
     //any subsequent auth failures will interrupt the page load independantly
     if (
-        Store.getState().currentUser._links != null && (
+        Store.getState().currentUser._links != null && location.endpoint && (
             location.endpoint.indexOf('$') !== 0 ||
             Store.getState().currentUser._links[location.endpoint.slice(2)] != null
         )
     ) {
-        Actions.FINISH_BOOTSTRAP();
         Authorization.storeUser();
         initialPageLoadPostAuth(location);
     }
@@ -169,8 +167,8 @@ Store.subscribe(() => {
         Util.setPageTitle(state.page.title);
     }
     if (!state.bootstrapComplete && state.currentUser._links != null) {
-        Actions.FINISH_BOOTSTRAP();
         Authorization.storeUser();
+        Actions.FINISH_BOOTSTRAP();
     }
     if ((state.page && !state.page.initialized) && state.currentUser._links != null) {
         //auth has finished. Complete the initialization
@@ -180,7 +178,7 @@ Store.subscribe(() => {
             (state.currentUser && lastState.currentUser && state.currentUser.token !== lastState.currentUser.token) ||
             (state.currentUser && lastState.currentUser == null)
     ) {
-        HttpManager.setToken(state.currentUser.token);
+        //HttpManager.setToken(state.currentUser.token);
     }
     lastState = Store.getState();
 });
@@ -221,3 +219,4 @@ window.__cmwn.interactiveDebug = function () {
 };
 
 export default App;
+

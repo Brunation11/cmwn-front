@@ -68,8 +68,7 @@ Actions = Actions.set(ACTION_CONSTANTS.START_PAGE_DATA, function (url, title) {
 });
 
 Actions = Actions.set(ACTION_CONSTANTS.START_AUTHORIZE_APP, function () {
-    var state = Store.getState();
-    if (state.currentUser.user_id != null) {
+    if (window.localStorage.getItem('cmwn_token') != null) {
         return;
     }
     Store.dispatch((dispatch) => {
@@ -77,6 +76,7 @@ Actions = Actions.set(ACTION_CONSTANTS.START_AUTHORIZE_APP, function () {
             url: GLOBALS.API_URL,
             handlePageLevelErrors: true
         }).then(server => {
+            HttpManager.setToken(server.response.token);
             dispatch({type: ACTION_CONSTANTS.END_AUTHORIZE_APP, data: server.response});
         }).catch(err => {
             /** @TODO MPR, 3/5/16: Handle Auth Errors*/

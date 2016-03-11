@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import SiteNav from 'components/site_nav';
-import FriendList from 'components/friend_list';
+//import FriendList from 'components/friend_list';
 import ProfileImage from 'components/profile_image';
 import History from 'components/history';
 
@@ -33,7 +33,7 @@ var Component = React.createClass({
                     <ProfileImage user_id={this.props.currentUser.user_id}/>
                 </a>
                 <SiteNav />
-                <FriendList />
+                {''/*<FriendList />*/}
             </div>
         );
     }

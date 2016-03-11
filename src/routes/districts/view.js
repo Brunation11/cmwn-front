@@ -1,11 +1,9 @@
 import React from 'react';
 import {Link} from 'react-router';
 import {Panel} from 'react-bootstrap';
+import { connect } from 'react-redux';
 
-import HttpManager from 'components/http_manager';
 import Layout from 'layouts/two_col';
-import GLOBALS from 'components/globals';
-import History from 'components/history';
 import EditLink from 'components/edit_link';
 import Toast from 'components/toast';
 import QueryString from 'query-string';
@@ -25,55 +23,55 @@ const BREADCRUMB = {
     DISTRICTS: 'Districts'
 };
 
-var View = React.createClass({
-    componentWillMount: function () {
-        this.district = {};
-        this.getDistrict();
-    },
+var Component = React.createClass({
     componentDidMount: function () {
         if (QueryString.parse(location.search).message === 'created') {
             Toast.success(DISTRICT_CREATED);
         }
     },
-    getDistrict: function () {
-        var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'districts/' + this.props.params.id});
-        urlData.then(res => {
-            this.district = res.response.data;
-            if (!this.district.can_update) { //eslint-disable-line camel_case
-                History.replace(`/district/${this.props.params.id}/profile`);
-            }
-            this.forceUpdate();
-        });
-    },
     render: function () {
-        if (this.district == null || !this.district.can_update) {
+        if (this.props.data == null || this.props.data.scope > 6) {
             return null;
         }
         return (
             <Layout>
-                <h2>{this.district.title}</h2>
+                <h2>{this.props.data.title}</h2>
                 <div className="breadcrumb">
                     <Link to="/">{BREADCRUMB.HOME}</Link>
                     <Link to="/districts">{BREADCRUMB.DISTRICTS}</Link>
-                    <span>{this.district.title}</span>
+                    <span>{this.props.data.title}</span>
                 </div>
                 <Panel header={HEADINGS.TITLE} className="standard">
-                    <EditLink base="/district" uuid={this.district.uuid} canUpdate={this.district.can_update} />
+                    <EditLink base="/district" uuid={this.props.data.user_id} canUpdate={this.props.data.can_update} />
                     <br />
-                    <p>{`${HEADINGS.NAME}: ${this.district.title}`}</p>
+                    <p>{`${HEADINGS.NAME}: ${this.props.data.title}`}</p>
                     <br />
-                    <p>{`${HEADINGS.CODE}: ${this.district.code}`}</p>
+                    <p>{`${HEADINGS.CODE}: ${this.props.data.code}`}</p>
                     <br />
-                    <p>{`${HEADINGS.SYSTEM}: ${this.district.system_id}`}</p>
+                    <p>{`${HEADINGS.SYSTEM}: ${this.props.data.system_id}`}</p>
                     <br />
-                    <p>{`${HEADINGS.DESCRIPTION}: ${this.district.description}`}</p>
+                    <p>{`${HEADINGS.DESCRIPTION}: ${this.props.data.description}`}</p>
                     <br />
-                    <p>{`${HEADINGS.CREATED}: ${this.district.created_at}`}</p>
+                    <p>{`${HEADINGS.CREATED}: ${this.props.data.created_at}`}</p>
                 </Panel>
            </Layout>
         );
     }
 });
 
-export default View;
+const mapStateToProps = state => {
+    var data = {};
+    var loading = true;
+    if (state.page && state.page.data) {
+        loading = state.page.loading;
+        data = state.page.data;
+    }
+    return {
+        data,
+        loading
+    };
+};
+
+var Page = connect(mapStateToProps)(Component);
+export default Page;
 

@@ -2,6 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import {Link} from 'react-router';
 import {Panel} from 'react-bootstrap';
+import { connect } from 'react-redux';
 
 import HttpManager from 'components/http_manager';
 import Layout from 'layouts/two_col';
@@ -22,7 +23,7 @@ const HEADINGS = {
 
 const ADMIN_TEXT = 'Teacher Dashboard';
 
-var View = React.createClass({
+var Component = React.createClass({
     getInitialState: function () {
         return {
             organization: [],
@@ -32,22 +33,10 @@ var View = React.createClass({
         };
     },
     componentWillMount: function () {
-        this.getOrganization();
+        this.setState(this.props.data);
     },
-    getOrganization: function () {
-        var urlData = HttpManager.GET({url: `${GLOBALS.API_URL}organizations/${this.props.params.id}?include=districts,users,groups`});
-        urlData.then(res => {
-            Util.normalize(res.response, 'users', []);
-            if (!res.response.data.can_update) { //eslint-disable-line camel_case
-                History.replace(`/organization/${this.props.params.id}/profile`);
-            }
-            this.setState({
-                organization: res.response.data,
-                districts: Util.normalize(res.response, 'districts', []),
-                groups: Util.normalize(res.response, 'groups', []),
-                users: Util.normalize(res.response, 'users', [])
-            });
-        });
+    componentWillReceiveProps: function (newProps) {
+        this.setState(newProps.data);
     },
     renderDistricts: function () {
         var links = _.map(this.state.districts, district => {
@@ -60,27 +49,27 @@ var View = React.createClass({
         return links;
     },
     renderAdminLink: function () {
-        if (!this.state.organization.can_update) {
+        if (this.props.data.scope > 6) {
             return null;
         }
         return (
-            <p><a href={`/organization/${this.state.organization.uuid}/view`}>{ADMIN_TEXT}</a></p>
+            <p><a href={`/organization/${this.props.data.id}/view`}>{ADMIN_TEXT}</a></p>
         );
     },
     render: function () {
-        if (this.state.organization == null || !this.state.organization.can_update) {
+        if (this.props.data.id == null || this.props.data.scope > 6) {
             return null;
         }
         return (
             <Layout>
-                <h2>{this.state.organization.title}</h2>
+                <h2>{this.props.data.title}</h2>
                 <Panel header={HEADINGS.TITLE} className="standard">
-                   <EditLink base="/organization" uuid={this.state.organization.uuid} canUpdate={this.state.organization.can_update} />
+                   <EditLink base="/organization" uuid={this.props.data.id} canUpdate={this.props.data.can_update} />
                     <p>{`${HEADINGS.DISTRICTS}: `}{this.renderDistricts()}</p>
                     <br />
-                    <p>{`${HEADINGS.DESCRIPTION}: ${this.state.organization.description}`}</p>
+                    <p>{`${HEADINGS.DESCRIPTION}: ${this.props.data.description}`}</p>
                     <br />
-                    <p>{`${HEADINGS.CREATED}: ${this.state.organization.created_at}`}</p>
+                    <p>{`${HEADINGS.CREATED}: ${this.props.data.created_at}`}</p>
                 </Panel>
                 <Paginator data={this.state.groups}>
                     <Table>
@@ -117,5 +106,19 @@ var View = React.createClass({
     }
 });
 
-export default View;
+const mapStateToProps = state => {
+    var data = {};
+    var loading = true;
+    if (state.page && state.page.data) {
+        loading = state.page.loading;
+        data = state.page.data;
+    }
+    return {
+        data,
+        loading
+    };
+};
+
+var Page = connect(mapStateToProps)(Component);
+export default Page;
 

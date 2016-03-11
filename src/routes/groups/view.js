@@ -2,14 +2,11 @@ import React from 'react';
 import _ from 'lodash';
 import {Link} from 'react-router';
 import {Panel} from 'react-bootstrap';
+import { connect } from 'react-redux';
 
-import HttpManager from 'components/http_manager';
 import Layout from 'layouts/two_col';
-import GLOBALS from 'components/globals';
 import {Table, Column} from 'components/table';
 import Paginator from 'components/paginator';
-import Util from 'components/util';
-import History from 'components/history';
 import EditLink from 'components/edit_link';
 
 const HEADINGS = {
@@ -20,29 +17,21 @@ const HEADINGS = {
     Organizations: 'Member of: '
 };
 
-var View = React.createClass({
+var Component = React.createClass({
     getInitialState: function () {
-        this.data = {};
+        this.props.data = {};
         this.members = [];
         return {
         };
     },
     componentWillMount: function () {
-        this.getGroup();
+        this.setState(this.props.data);
     },
-    getGroup: function () {
-        var urlData = HttpManager.GET({url: `${GLOBALS.API_URL}groups/${this.props.params.id}?include=users.images,organizations`});
-        urlData.then(res => {
-            this.data = res.response.data;
-            if (!this.data.can_update) { //eslint-disable-line camel_case
-                History.replace(`/groups/${this.props.params.id}/profile`);
-            }
-            this.members = Util.normalize(res.response, 'users', []);
-            this.forceUpdate();
-        });
+    componentWillReceiveProps: function (newProps) {
+        this.setState(newProps.data);
     },
     renderGroups: function () {
-        var links = _.map(this.data.organizations, organization => {
+        var links = _.map(this.props.data.organizations, organization => {
             return (
                 <Link to={`organization/${organization.uuid}`}>
                     {organization.title}
@@ -55,22 +44,22 @@ var View = React.createClass({
         return <span>{`${HEADINGS.GROUPS}: `}{links}</span>;
     },
     render: function () {
-        if (this.data == null || !this.data.can_update) {
+        if (this.props.data.id == null || this.props.data.scope > 6) {
             return null;
         }
         return (
             <Layout>
-                <Panel header={HEADINGS.TITLE + ': ' + this.data.title} className="standard">
-                    <EditLink base="/group" uuid={this.data.uuid} canUpdate={this.data.can_update} />
+                <Panel header={HEADINGS.TITLE + ': ' + this.props.data.title} className="standard">
+                    <EditLink base="/group" uuid={this.props.data.id} canUpdate={this.props.data.scope < 6} />
                     <p>
-                        <a href={`/group/${this.data.uuid}/profile`}>Return to group profile</a>
+                        <a href={`/group/${this.props.data.id}/profile`}>Return to group profile</a>
                     </p>
                     <br />
                     <p>{this.renderGroups()}</p>
                     <br />
-                    <p>{`${HEADINGS.DESCRIPTION}: ${this.data.description}`}</p>
+                    <p>{`${HEADINGS.DESCRIPTION}: ${this.props.data.description}`}</p>
                     <br />
-                    <p>{`${HEADINGS.CREATED}: ${this.data.created_at}`}</p>
+                    <p>{`${HEADINGS.CREATED}: ${this.props.data.created_at}`}</p>
                 </Panel>
                 <Panel header="Students" className="standard">
                     <Paginator data={this.members}>
@@ -78,7 +67,7 @@ var View = React.createClass({
                             <Column dataKey="title"
                                 renderHeader="Name"
                                 renderCell={(data, row) => (
-                                    <a href={`/users/${row.uuid}`}>{`${row.first_name} ${row.last_name}`}</a>
+                                    <a href={`/users/${row.id}`}>{`${row.first_name} ${row.last_name}`}</a>
                                 )}
                             />
                             <Column dataKey="username" />
@@ -88,7 +77,7 @@ var View = React.createClass({
                             <Column dataKey="updated_at" renderHeader="Update Users"
                                 renderCell={(data, row) => {
                                     return (
-                                        <a href={`/users/${row.uuid}/edit`}>Edit</a>
+                                        <a href={`/users/${row.id}/edit`}>Edit</a>
                                     );
                                 }}
                             />
@@ -101,5 +90,19 @@ var View = React.createClass({
     }
 });
 
-export default View;
+const mapStateToProps = state => {
+    var data = {};
+    var loading = true;
+    if (state.page && state.page.data) {
+        loading = state.page.loading;
+        data = state.page.data;
+    }
+    return {
+        data,
+        loading
+    };
+};
+
+var Page = connect(mapStateToProps)(Component);
+export default Page;
 

@@ -2,15 +2,13 @@ import React from 'react';
 import {Link} from 'react-router';
 //import _ from 'lodash';
 import {Panel} from 'react-bootstrap';
+import { connect } from 'react-redux';
 
 import Layout from 'layouts/two_col';
 import Shortid from 'shortid';
 import Authorization from 'components/authorization';
 import FlipBoard from 'components/flipboard';
-import GLOBALS from 'components/globals';
-import HttpManager from 'components/http_manager';
 import EditLink from 'components/edit_link';
-import Util from 'components/util';
 
 import DefaultProfile from 'media/profile_tranparent.png';
 
@@ -24,28 +22,19 @@ const HEADINGS = {
 
 const ADMIN_TEXT = 'Teacher Dashboard';
 
-var Page = React.createClass({
+var Component = React.createClass({
     getInitialState: function () {
         return {
             isStudent: true
         };
     },
-    componentWillMount: function () {
-        this.getGroup();
-    },
     componentDidMount: function () {
+        this.setState(this.props.data);
         this.resolveRole();
     },
     componentWillReceiveProps: function () {
+        this.setState(this.props.data);
         this.resolveRole();
-    },
-    getGroup: function () {
-        var urlData = HttpManager.GET({url: `${GLOBALS.API_URL}groups/${this.props.params.id}?include=users.roles,images,users.flips,users.images`});
-        urlData.then(res => {
-            Util.normalize(res.response, 'users', []);
-            this.group = res.response.data;
-            this.forceUpdate();
-        });
     },
     resolveRole: function () {
         var newState = {};
@@ -67,17 +56,17 @@ var Page = React.createClass({
         );
     },
     renderAdminLink: function () {
-        if (!this.group.can_update) {
+        if (!this.props.data.can_update) {
             return null;
         }
         return (
-            <p><a href={`/group/${this.group.uuid}/view`}>{ADMIN_TEXT}</a></p>
+            <p><a href={`/group/${this.props.data.id}/view`}>{ADMIN_TEXT}</a></p>
         );
     },
     renderFlip: function (item){
         return (
             <div className="flip" key={Shortid.generate()}>
-                <Link to={`/student/${item.uuid.toString()}`}><img src={item.images.data.length ? item.images.data[0].url : DefaultProfile}></img>
+                <Link to={`/student/${item.id.toString()}`}><img src={item.images.data.length ? item.images.data[0].url : DefaultProfile}></img>
                     <p className="linkText" >{item.username}</p>
                 </Link>
                 {this.renderFlipsEarned(item)}
@@ -85,30 +74,44 @@ var Page = React.createClass({
         );
     },
     renderClassInfo: function () {
-        if (!this.group.can_update) {
+        if (this.props.data.id == null || this.props.data.scope > 6) {
             return null;
         }
         return (
-           <Panel header={this.group.title} className="standard">
-               <EditLink base="/group" uuid={this.group.uuid} canUpdate={this.group.can_update} />
+           <Panel header={this.props.data.title} className="standard">
+               <EditLink base="/group" uuid={this.props.data.id} canUpdate={this.props.data.scope < 7} />
                {this.renderAdminLink()}
            </Panel>
         );
     },
     render: function () {
-        if (this.group == null || this.state == null) {
+        if (this.props.data == null || this.state == null) {
             return null;
         }
         return (
            <Layout className="groupProfile">
                {this.renderClassInfo()}
                <FlipBoard renderFlip={this.renderFlip} header={
-                 HEADINGS.CLASS + this.group.title
-               } data={this.group.users.data} />
+                 HEADINGS.CLASS + this.props.data.title
+               } data={this.props.data.users.data} />
            </Layout>
         );
     }
 });
 
+const mapStateToProps = state => {
+    var data = {};
+    var loading = true;
+    if (state.page && state.page.data) {
+        loading = state.page.loading;
+        data = state.page.data;
+    }
+    return {
+        data,
+        loading
+    };
+};
+
+var Page = connect(mapStateToProps)(Component);
 export default Page;
 
