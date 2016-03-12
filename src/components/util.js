@@ -74,7 +74,7 @@ var Util = {
             routePart = routeArray.pop();
             pathPart = pathArray.pop();
             if (~routePart.indexOf(':')) {
-                params[routePart.slice(1)] = pathArray;
+                params[routePart.slice(1)] = pathPart;
             } else {
                 if (routePart.toLowerCase() !== pathPart.toLowerCase()) {
                     return false;
@@ -91,7 +91,7 @@ var Util = {
             routePart = routeArray.shift();
             if (routePart === '') {
                 continue;
-            } else if (!~routePart.indexOf(';')) {
+            } else if (!~routePart.indexOf(':')) {
                 path += routePart + '/';
             } else if (routePart.slice(1) in params) {
                 path += params[routePart.slice(1)] + '/';
@@ -102,7 +102,6 @@ var Util = {
         return path.slice(0, -1);
     },
     attemptComponentLoad(state, endpointIdentifier, componentName) {
-        var pageRoute;
         if (state.pageLoadingStage.currentStage !== state.pageLoadingStage.lastCompletedStage) {
             return;
         }
@@ -118,6 +117,18 @@ var Util = {
             });
             break;
         }
+    },
+    decodePermissions(val) {
+        var bits = (val >>> 0).toString(2);
+        var pad = '0000';
+        bits = pad.substring(0, pad.length - bits.length) + bits;
+        var perms = {
+            create: !!+bits.slice(0, 1),
+            update: !!+bits.slice(1, 2),
+            delete: !!+bits.slice(2, 3)
+        };
+        return {create: true, update: true, delete: true};
+        return perms;
     }
 };
 

@@ -15,7 +15,7 @@ var Component = React.createClass({
     renderFlip: function (item){
         return (
             <div className="flip" key={Shortid.generate()}>
-                <a href={`/group/${item.id}`}>
+                <a href={`/group/${item.group_id}`}>
                     <img src={DefaultProfile}></img><p>{`${item.title}`}</p>
                 </a>
             </div>
@@ -37,7 +37,7 @@ const mapStateToProps = state => {
     var loading = true;
     if (state.page && state.page.data) {
         loading = state.page.loading;
-        data = state.page.data._embedded.groups;
+        data = state.page.data._embedded.group;
     }
     return {
         data,

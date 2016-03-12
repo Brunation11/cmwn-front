@@ -9,6 +9,8 @@ import Validate from 'components/validators';
 import Log from 'components/log';
 import Toast from 'components/toast';
 import Form from 'components/form';
+import Util from 'components/util';
+import History from 'components/history';
 
 import Layout from 'layouts/two_col';
 
@@ -51,17 +53,18 @@ var Component = React.createClass({
     submitData: function () {
         var postData = {
             title: this.state.title,
+            organization_id: this.props.data.organization_id,
             description: this.state.description
         };
-        HttpManager.POST(this.props.data._links.self, postData).then(() => {
-            Toast.success('District Updated');
+        HttpManager.PUT({url: this.props.data._links.self.href}, postData).then(() => {
+            Toast.success('School Updated');
         }).catch(err => {
             Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
             Log.log('Server refused district update', err, postData);
         });
     },
     render: function () {
-        if (this.props.data.id == null || this.props.data.scope > 6) {
+        if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
         return (
@@ -103,13 +106,19 @@ var CreateGroup = React.createClass({
     submitData: function () {
         var postData = {
             title: this.state.title,
-            district: this.props.data.id,
-            code: this.state.code
+            organization_id: this.props.data.organization_id,
+            meta: {
+                code: this.state.code
+            },
+            description: this.state.title
         };
         if (this.refs.formRef.isValid()) {
-            HttpManager.POST({url: this.props.data._links.groups}, postData).then(res => {
-                if (res.response && res.response.id) {
-                    History.replace(`/group/${res.response.id}?message=created`);
+            HttpManager.POST({
+                //url: this.props.data._links.groups
+                url: GLOBALS.API_URL + 'group'
+            }, postData).then(res => {
+                if (res.response && res.response.group_id) {
+                    History.push(`/group/${res.response.group_id}?message=created`);
                 }
             }).catch(err => {
                 Toast.error(ERRORS.BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));

@@ -5,7 +5,11 @@ import {Link} from 'react-router';
 
 import HttpManager from 'components/http_manager';
 import Log from 'components/log';
+import Form from 'components/form';
 import Toast from 'components/toast';
+import Util from 'components/util';
+import History from 'components/history';
+import GLOBALS from 'components/globals';
 
 import Layout from 'layouts/two_col';
 
@@ -41,9 +45,10 @@ var Component = React.createClass({
     submitData: function () {
         var postData = {
             title: this.state.title,
+            organization_id: this.props.data.organization_id,
             description: this.state.description
         };
-        HttpManager.POST(this.props.data._links.self, postData).then(() => {
+        HttpManager.PUT({url: this.props.data._links.self.href}, postData).then(() => {
             Toast.success('Class Updated');
         }).catch(err => {
             Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
@@ -51,7 +56,7 @@ var Component = React.createClass({
         });
     },
     render: function () {
-        if (this.props.data.id == null || this.props.data.scope > 6) {
+        if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
         return (
@@ -63,26 +68,26 @@ var Component = React.createClass({
                     <span>{this.props.data.title}</span>
                 </div>
               <Panel header={HEADINGS.EDIT_TITLE} className="standard">
-                 <Input
+                <Input
                     type="text"
                     value={this.state.title}
-                    placeholder="title"
-                    label="First Name"
+                    placeholder="Class Name"
+                    label="Class Name"
                     validate="required"
-                    hasFeedback
                     ref="titleInput"
-                    onChange={() => this.setState({title: this.refs.titleInput.getValue()})}
-                 />
-                 <Input
+                    name="titleInput"
+                    onChange={e => this.setState({title: e.target.value})} //eslint-disable-line camelcase
+                />
+                <Input
                     type="text"
-                    value={this.state.title}
-                    placeholder="title"
-                    label="Last Name"
+                    value={this.state.description}
+                    placeholder="Description"
+                    label="Description"
                     validate="required"
-                    hasFeedback
-                    ref="titleInput"
-                    onChange={() => this.setState({title: this.refs.titleInput.getValue()})}
-                 />
+                    ref="codeInput"
+                    name="codeInput"
+                    onChange={e => this.setState({description: e.target.value})} //eslint-disable-line camelcase
+                />
                  <Button onClick={this.submitData} > Save </Button>
               </Panel>
               <CreateStudent data={this.props.data}/>
@@ -99,14 +104,20 @@ var CreateStudent = React.createClass({
     },
     submitData: function () {
         var postData = {
-            title: this.state.title,
-            district: this.props.data.id,
-            code: this.state.code
+            first_name: this.state.first,
+            group_id: this.props.data.group_id,
+            last_name: this.state.last,
+            email: this.state.first + '@' + this.state.last + '.com',
+            username: this.state.first + '@' + this.state.last + '.com',
+            type: 'ADULT'
         };
         if (this.refs.formRef.isValid()) {
-            HttpManager.POST({url: this.props.data._links.users}, postData).then(res => {
-                if (res.response && res.response.id) {
-                    History.replace(`/user/${res.response.id}?message=created`);
+            HttpManager.POST({
+                //url: this.props.data._links.users
+                url: GLOBALS.API_URL + 'user'
+            }, postData).then(res => {
+                if (res.response && res.response.user_id) {
+                    History.push(`/user/${res.response.user_id}?message=created`);
                 }
             }).catch(err => {
                 Toast.error(ERRORS.BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
@@ -120,26 +131,26 @@ var CreateStudent = React.createClass({
         return (
         <Panel>
             <Form ref="formRef">
-                <Input
+                 <Input
                     type="text"
-                    value={this.state.title}
-                    placeholder="Class Name"
-                    label="Class Name"
+                    value={this.state.first}
+                    placeholder="First Name"
+                    label="First Name"
                     validate="required"
-                    ref="titleInput"
-                    name="titleInput"
-                    onChange={e => this.setState({title: e.target.value})} //eslint-disable-line camelcase
-                />
-                <Input
+                    hasFeedback
+                    ref="firstInput"
+                    onChange={e => this.setState({first: e.target.value})}
+                 />
+                 <Input
                     type="text"
-                    value={this.state.code}
-                    placeholder="Class Code"
-                    label="Class Code"
+                    value={this.state.last}
+                    placeholder="title"
+                    label="Last Name"
                     validate="required"
-                    ref="codeInput"
-                    name="codeInput"
-                    onChange={e => this.setState({code: e.target.value})} //eslint-disable-line camelcase
-                />
+                    hasFeedback
+                    ref="lastInput"
+                    onChange={e => this.setState({last: e.target.value})}
+                 />
                 <Button onClick={this.submitData}> Create </Button>
             </Form>
         </Panel>

@@ -25,14 +25,16 @@ var Component = React.createClass({
     submitData: function () {
         var postData = {
             title: this.state.title,
-            system_id: this.state.districtId, //eslint-disable-line camelcase
-            code: this.state.code,
+            meta: {
+                system_id: this.state.districtId, //eslint-disable-line camelcase
+                code: this.state.code,
+            },
             description: this.state.title
         };
         if (this.refs.formRef.isValid()) {
             HttpManager.POST({url: this.props.data._links.self.href, asJSON: true}, postData).then(res => {
-                if (res.response && res.response.data && res.response.data.user_id) {
-                    History.replace(`/districts/${res.response.data.user_id}?message=created`);
+                if (res.response && res.response.org_id) {
+                    History.replace('/district/' + res.response.org_id + '?message=created');
                 }
             }).catch(err => {
                 Toast.error(ERRORS.BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));

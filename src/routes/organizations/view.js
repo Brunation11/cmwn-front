@@ -4,10 +4,8 @@ import {Link} from 'react-router';
 import {Panel} from 'react-bootstrap';
 import { connect } from 'react-redux';
 
-import HttpManager from 'components/http_manager';
 import Layout from 'layouts/two_col';
 import EditLink from 'components/edit_link';
-import GLOBALS from 'components/globals';
 import {Table, Column} from 'components/table';
 import Paginator from 'components/paginator';
 import Util from 'components/util';
@@ -53,23 +51,21 @@ var Component = React.createClass({
             return null;
         }
         return (
-            <p><a href={`/organization/${this.props.data.id}/view`}>{ADMIN_TEXT}</a></p>
+            <p><a href={`/organization/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
         );
     },
     render: function () {
-        if (this.props.data.id == null || this.props.data.scope > 6) {
+        if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
         return (
             <Layout>
                 <h2>{this.props.data.title}</h2>
                 <Panel header={HEADINGS.TITLE} className="standard">
-                   <EditLink base="/organization" uuid={this.props.data.id} canUpdate={this.props.data.can_update} />
+                   <EditLink base="/organization" uuid={this.props.data.group_id} canUpdate={Util.decodePermissions(this.props.data.scope).update} />
                     <p>{`${HEADINGS.DISTRICTS}: `}{this.renderDistricts()}</p>
                     <br />
                     <p>{`${HEADINGS.DESCRIPTION}: ${this.props.data.description}`}</p>
-                    <br />
-                    <p>{`${HEADINGS.CREATED}: ${this.props.data.created_at}`}</p>
                 </Panel>
                 <Paginator data={this.state.groups}>
                     <Table>

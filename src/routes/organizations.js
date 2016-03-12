@@ -13,13 +13,13 @@ const TITLE = 'MY SCHOOLS';
 var Component = React.createClass({
     renderFlip: function (item){
         return (
-            <div className="flip" key={Shortid.generate()}><a href={`/organization/${item.id}`}><img src={DefaultProfile}></img><p>{`${item.title}`}</p></a></div>
+            <div className="flip" key={Shortid.generate()}><a href={`/organization/${item.group_id}`}><img src={DefaultProfile}></img><p>{`${item.title}`}</p></a></div>
         );
     },
     render: function () {
         return (
             <Layout>
-                <Paginator pageCount={1}>
+                <Paginator pageCount={1} data={this.props.data}>
                     <FlipBoard header={TITLE} renderFlip={this.renderFlip} />
                 </Paginator>
             </Layout>
@@ -32,7 +32,7 @@ const mapStateToProps = state => {
     var loading = true;
     if (state.page && state.page.data) {
         loading = state.page.loading;
-        data = state.page.data._embedded.groups;
+        data = state.page.data._embedded.group;
     }
     return {
         data,

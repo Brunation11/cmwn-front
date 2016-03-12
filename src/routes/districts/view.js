@@ -1,5 +1,4 @@
 import React from 'react';
-import {Link} from 'react-router';
 import {Panel} from 'react-bootstrap';
 import { connect } from 'react-redux';
 
@@ -7,6 +6,7 @@ import Layout from 'layouts/two_col';
 import EditLink from 'components/edit_link';
 import Toast from 'components/toast';
 import QueryString from 'query-string';
+import Util from 'components/util';
 
 const DISTRICT_CREATED = 'Disctrict created successfully';
 const HEADINGS = {
@@ -18,10 +18,6 @@ const HEADINGS = {
     DESCRIPTION: 'Description',
     CREATED: 'Created'
 };
-const BREADCRUMB = {
-    HOME: 'Home',
-    DISTRICTS: 'Districts'
-};
 
 var Component = React.createClass({
     componentDidMount: function () {
@@ -30,29 +26,24 @@ var Component = React.createClass({
         }
     },
     render: function () {
-        if (this.props.data == null || this.props.data.scope > 6) {
+        var code = this.props.data.meta == null ? '' : this.props.data.meta.code;
+        var systemId = this.props.data.meta == null ? '' : this.props.data.meta.system_id;
+        if (this.props.data.org_id == null || !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
         return (
             <Layout>
                 <h2>{this.props.data.title}</h2>
-                <div className="breadcrumb">
-                    <Link to="/">{BREADCRUMB.HOME}</Link>
-                    <Link to="/districts">{BREADCRUMB.DISTRICTS}</Link>
-                    <span>{this.props.data.title}</span>
-                </div>
                 <Panel header={HEADINGS.TITLE} className="standard">
-                    <EditLink base="/district" uuid={this.props.data.user_id} canUpdate={this.props.data.can_update} />
+                    <EditLink base="/district" uuid={this.props.data.org_id} canUpdate={Util.decodePermissions(this.props.data.scope).update} />
                     <br />
                     <p>{`${HEADINGS.NAME}: ${this.props.data.title}`}</p>
                     <br />
-                    <p>{`${HEADINGS.CODE}: ${this.props.data.code}`}</p>
+                    <p>{`${HEADINGS.CODE}: ${code}`}</p>
                     <br />
-                    <p>{`${HEADINGS.SYSTEM}: ${this.props.data.system_id}`}</p>
+                    <p>{`${HEADINGS.SYSTEM}: ${systemId}`}</p>
                     <br />
                     <p>{`${HEADINGS.DESCRIPTION}: ${this.props.data.description}`}</p>
-                    <br />
-                    <p>{`${HEADINGS.CREATED}: ${this.props.data.created_at}`}</p>
                 </Panel>
            </Layout>
         );

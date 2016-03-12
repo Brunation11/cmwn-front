@@ -8,6 +8,7 @@ import Layout from 'layouts/two_col';
 import {Table, Column} from 'components/table';
 import Paginator from 'components/paginator';
 import EditLink from 'components/edit_link';
+import Util from 'components/util';
 
 const HEADINGS = {
     TITLE: 'Info',
@@ -44,15 +45,15 @@ var Component = React.createClass({
         return <span>{`${HEADINGS.GROUPS}: `}{links}</span>;
     },
     render: function () {
-        if (this.props.data.id == null || this.props.data.scope > 6) {
+        if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
         return (
             <Layout>
                 <Panel header={HEADINGS.TITLE + ': ' + this.props.data.title} className="standard">
-                    <EditLink base="/group" uuid={this.props.data.id} canUpdate={this.props.data.scope < 6} />
+                    <EditLink base="/group" uuid={this.props.data.group_id} canUpdate={this.props.data.scope < 6} />
                     <p>
-                        <a href={`/group/${this.props.data.id}/profile`}>Return to group profile</a>
+                        <a href={`/group/${this.props.data.group_id}/profile`}>Return to group profile</a>
                     </p>
                     <br />
                     <p>{this.renderGroups()}</p>
