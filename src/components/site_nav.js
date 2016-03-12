@@ -40,6 +40,10 @@ const mapStateToProps = state => {
     if (state.currentUser && state.currentUser._links) {
         data = state.currentUser._links;
     }
+    data.groups = {label: 'My Classes'};
+    data.organizations = {label: 'My Schools'};
+    data.districts = {label: 'Districts'};
+    data.logout = {};
     return { currentUser: state.currentUser, data };
 };
 
