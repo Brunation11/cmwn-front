@@ -45,19 +45,24 @@ var pageReducer = (page = Immutable({title: 'Change My World Now'}), action) => 
 };
 
 var storedUserProperties = {};
-if (window.localStorage['com.cmwn.platform.userName'] != null) {
+var userName = window.localStorage['com.cmwn.platform.userName'];
+var userId = window.localStorage['com.cmwn.platform.userId'];
+var profileImage = window.localStorage['com.cmwn.platform.profileImage'];
+var roles = window.localStorage['com.cmwn.platform.roles'];
+var _links = window.localStorage['com.cmwn.platform._links'];
+if (userName != null && userName !== 'null' && userName !== 'undefined') {
     storedUserProperties.username = JSON.parse(window.localStorage['com.cmwn.platform.userName']);
 }
-if (window.localStorage['com.cmwn.platform.userId'] != null) {
+if (userId != null && userId !== 'null' && userId !== 'undefined') {
     storedUserProperties.user_id = JSON.parse(window.localStorage['com.cmwn.platform.userId']); //eslint-disable-line camelcase
 }
-if (window.localStorage['com.cmwn.platform.profileImage'] != null) {
+if (profileImage != null && profileImage !== 'null' && profileImage !== 'undefined') {
     storedUserProperties.image = JSON.parse(window.localStorage['com.cmwn.platform.profileImage']);
 }
-if (window.localStorage['com.cmwn.platform.roles'] != null) {
+if (roles != null && roles !== 'null' && roles !== 'undefined') {
     storedUserProperties.roles = JSON.parse(window.localStorage['com.cmwn.platform.roles']);
 }
-if (window.localStorage['com.cmwn.platform._links'] != null) {
+if (_links != null && _links !== 'null' && _links !== 'undefined') {
     storedUserProperties._links = JSON.parse(window.localStorage['com.cmwn.platform._links']);
 }
 var authReducer = (currentUser = Immutable(storedUserProperties), action) => {
