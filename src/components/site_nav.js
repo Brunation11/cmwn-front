@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router';
 import _ from 'lodash';
+import Immutable from 'seamless-immutable';
 import { connect } from 'react-redux';
 
 const nonMenuLinks = [
@@ -38,13 +39,13 @@ const mapStateToProps = state => {
     var data = [];
     state.currentUser;
     if (state.currentUser && state.currentUser._links) {
-        data = state.currentUser._links;
+        data = state.currentUser._links.asMutable();
     }
     data.groups = {label: 'My Classes'};
     data.organizations = {label: 'My Schools'};
     data.districts = {label: 'Districts'};
     data.logout = {};
-    return { currentUser: state.currentUser, data };
+    return { currentUser: state.currentUser, data: Immutable(data) };
 };
 
 var SiteNav = connect(mapStateToProps)(Component);

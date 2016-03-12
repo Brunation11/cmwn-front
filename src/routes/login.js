@@ -6,6 +6,7 @@ import Layout from 'layouts/one_col';
 import Toast from 'components/toast';
 import Log from 'components/log';
 import History from 'components/history';
+import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
 import Authorization from 'components/authorization';
 
@@ -43,7 +44,8 @@ var Component = React.createClass({
         var req;
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
             req = HttpManager.POST({
-                url: this.props.data._links.login.href,
+                //url: this.props.data._links.login.href,
+                url: GLOBALS.API_URL + 'login'
             }, {
                 'username': this.refs.login.getValue(),
                 'password': this.refs.password.getValue()
