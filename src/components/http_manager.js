@@ -195,7 +195,7 @@ var _makeRequest = function (verb, requests){
 class _HttpManager {
     constructor() {
         var csrf = window.localStorage[APP_COOKIE_NAME];
-        if (csrf != null) {
+        if (csrf != null && csrf !== 'null' && csrf !== 'undefined') {
             this.setToken(csrf);
         }
     }

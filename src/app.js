@@ -119,7 +119,7 @@ const loadedStates = ['complete', 'loaded', 'interactive'];
 var progressivePageLoad = function () {
     var pageRoute;
     var state = Store.getState();
-    if (state.pageLoadingStage.currentStage !== state.pageLoadingStage.lastCompletedStage) {
+    if (state.pageLoadingStage.currentStage !== state.pageLoadingStage.lastCompletedStage || state.pageLoadingStage.currentStage >= 4) {
         return;
     }
     switch (state.pageLoadingStage.currentStage) {
@@ -145,63 +145,53 @@ var progressivePageLoad = function () {
         });
         break;
     case 2: //We are authorized. Store the current user and proceed to page load
-        if (
-            (state.location.public) ||
-             (state.currentUser._links != null && state.location.endpoint && (
-                state.location.endpoint.indexOf('$') !== 0 ||
-                Store.getState().currentUser._links[state.location.endpoint.slice(2)] != null
-             ))
-        ) {
-            Authorization.storeUser();
-            if (state.location.endpoint && state.location.endpoint.indexOf('$') === 0) {
-                //Looking for the string $$ at the beginning of a route to indicate
-                //that it should be pulled directly from the users context
-                if (Store.getState().currentUser._links[state.location.endpoint.slice(2)] != null) {
-                    pageRoute = Store.getState().currentUser._links[state.location.endpoint.slice(2)].href;
-                } else {
-                    console.error('Route could not be loaded, route endpoint not provided for the current user');
-                }
+        Authorization.storeUser();
+        if (state.location.endpoint && state.location.endpoint.indexOf('$') === 0) {
+            //Looking for the string $$ at the beginning of a route to indicate
+            //that it should be pulled directly from the users context
+            if (Store.getState().currentUser._links[state.location.endpoint.slice(2)] != null) {
+                pageRoute = Store.getState().currentUser._links[state.location.endpoint.slice(2)].href;
+            } else if (state.location.endpoint === '$$me'){
+                Log.info('Forcing me route');
+                pageRoute = GLOBALS.API_URL;
             } else {
-                pageRoute = GLOBALS.API_URL + Util.replacePathPlaceholdersFromParamObject(
-                    state.location.endpoint == null ? '' : state.location.endpoint,
-                    Util.matchPathAndExtractParams(state.location.path, state.location.pathname)
-                );
+                Log.error('Route could not be loaded, route endpoint not provided for the current user');
             }
-            Store.dispatch({
-                type: 'combo',
-                types: ['LOADER_START', 'LOADER_SUCCESS', 'LOADER_ERROR'],
-                sequence: true,
-                payload: [
-                    Actions.PAGE_DATA.bind(null, pageRoute, {title: state.location.title}),
-                ]
-            });
         } else {
-            console.error('Endpoint does not exist');
+            pageRoute = GLOBALS.API_URL + Util.replacePathPlaceholdersFromParamObject(
+                state.location.endpoint == null ? '' : state.location.endpoint,
+                Util.matchPathAndExtractParams(state.location.path, state.location.pathname)
+            );
         }
+        Store.dispatch({
+            type: 'combo',
+            types: ['LOADER_START', 'LOADER_SUCCESS', 'LOADER_ERROR'],
+            sequence: true,
+            payload: [
+                Actions.PAGE_DATA.bind(null, pageRoute, {title: state.location.title}),
+            ]
+        });
         break;
-    case 3:
-        break;
+    //Case 3 is for component load, and happens in Util.js
     case 4:
-        break;
-    case 5:
-        break;
-    case 6:
-        break;
-    case 7:
-        break;
-    case 8:
-        break;
-    case 9:
         break;
     }
 };
 
 History.listen(location => {
     var pathContext = _.find(routes.childRoutes, i => Util.matchPathAndExtractParams(i.path, location.pathname) !== false);
+    var nextLoc = _.defaults(location, pathContext);
     //you know, at this point we already know whether or not our path 404d...
-    location = _.defaults(location, pathContext);
-    location.component = null; //no need to store this in state.
-    Actions.dispatch.PATH_CHANGE({location: location});
+    nextLoc.component = null; //no need to store this in state.
+    Store.dispatch({
+        type: 'combo',
+        types: ['PAGE_CHANGE_START', 'PAGE_CHANGE_SUCCESS', 'PAGE_CHANGE_ERROR'],
+        sequence: true,
+        payload: [
+            Actions.RESET_LOADER,
+            Actions.PATH_CHANGE.bind(null, {location: nextLoc})
+        ]
+    });
 });
 
 var lastState = {page: {}};

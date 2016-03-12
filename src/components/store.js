@@ -7,6 +7,7 @@ import promiseMiddleware from 'redux-promise-middleware';
 import Immutable from 'seamless-immutable';
 
 import DevTools from 'components/devtools';
+import Log from 'components/log';
 import ACTION_CONSTANTS from 'components/action_constants';
 import GLOBALS from 'components/globals';
 
@@ -32,7 +33,7 @@ var pageReducer = (page = Immutable({title: 'Change My World Now'}), action) => 
         [ACTION_CONSTANTS.END_PAGE_DATA]: function (page_, data) {
             page_ = page_.set('loading', false);
             page_ = page_.set('initialized', true);
-            page_ = page_.set('title', data.title);
+            page_ = page_.set('title', data.data.title);
             return page_.set('data', data.data);
         }.bind(null, page, action)
     };
@@ -97,20 +98,6 @@ var locationReducer = (previousLoc = {}, action) => {
 
 var componentReducer = (allComponents = Immutable({}), action) => {
     var reducers = {
-        [ACTION_CONSTANTS.REGISTER_COMPONENT]: function (component, defaultData) {
-            var resetData = {
-                data: _.defaults({}, defaultData),
-                page_count: 1, //eslint-disable-line camelcase
-                page: 1,
-                total_items: 0, //eslint-disable-line camelcase
-                page_size: GLOBALS.DEFAULT_PAGINATION_ROWS //eslint-disable-line camelcase
-            };
-            if (component == null) {
-                return Immutable(resetData);
-            } else {
-                return component.merge(resetData);
-            }
-        }.bind(null, allComponents[action.endpointIdentifier + '-' + action.componentName], action.defaultData == null ? {} : action.defaultData),
         [ACTION_CONSTANTS.COMPONENT_LOADED]: function (component) {
             return component.set('loading', false);
         }.bind(null, allComponents[action.endpointIdentifier + '-' + action.componentName]),
@@ -132,6 +119,16 @@ var componentReducer = (allComponents = Immutable({}), action) => {
     };
     if (action.type in reducers) {
         return allComponents.set(action.endpointIdentifier + '-' + action.componentName, reducers[action.type]());
+    } else if (action.type === ACTION_CONSTANTS.REGISTER_COMPONENT) {
+        var actionData = action.defaultData == null ? {} : action.defaultData;
+        var resetData = {
+            data: _.defaults({}, actionData),
+            page_count: 1, //eslint-disable-line camelcase
+            page: 1,
+            total_items: 0, //eslint-disable-line camelcase
+            page_size: GLOBALS.DEFAULT_PAGINATION_ROWS //eslint-disable-line camelcase
+        };
+        return allComponents.merge({[action.endpointIdentifier + '-' + action.componentName]: resetData});
     }
     return allComponents;
 };
@@ -148,20 +145,22 @@ const Store = createStore( combineReducers({
         return isComplete;
     },
     pageLoadingStage: (loaderState = {currentStage: 0, lastCompletedStage: 0}, action) => {
+        if (action.type === ACTION_CONSTANTS.RESET_LOADER) {
+            return {currentStage: 0, lastCompletedStage: 0};
+        }
         if (action.type === ACTION_CONSTANTS.LOADER_START) {
             return {currentStage: loaderState.currentStage + 1, lastCompletedStage: loaderState.lastCompletedStage};
         }
-        if (action.type === ACTION_CONSTANTS.LOADER_SUCCESS) {
+        if (action.type === ACTION_CONSTANTS.LOADER_COMPLETE) {
             return {currentStage: loaderState.currentStage, lastCompletedStage: loaderState.lastCompletedStage + 1};
         }
         if (action.type === ACTION_CONSTANTS.LOADER_ERROR) {
-            console.error('Loader error at stage ' + loaderState);
+            Log.error('Loader error at stage ' + loaderState.currentStage);
         }
         return loaderState;
     }
 }), Immutable({routing: INITIAL_STATE}), compose(
-    applyMiddleware(thunk,  promiseMiddleware({ promiseTypeSuffixes: ['LOADING', 'SUCCESS', 'ERROR'] }, combineActionsMiddleware)),
+    applyMiddleware(combineActionsMiddleware, thunk, promiseMiddleware()),
     DevTools.instrument()
 ));
-var store = Store;
 export default Store;

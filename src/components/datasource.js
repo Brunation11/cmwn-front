@@ -5,10 +5,11 @@ import { connect } from 'react-redux';
 
 import Actions from 'components/actions';
 import Store from 'components/store';
+import Util from 'components/util';
 
 /** Higher Order Component */
 var GenerateDataSource = function (endpointIdentifier, componentName) {
-    Actions.REGISTER_COMPONENT({endpointIdentifier, componentName});
+    Actions.dispatch.REGISTER_COMPONENT({endpointIdentifier, componentName});
     var Component = React.createClass({
         getInitialState: function () {
             return {};
@@ -16,6 +17,7 @@ var GenerateDataSource = function (endpointIdentifier, componentName) {
         getDefaultProps: function () {
             return {
                 renderNoData: () => null,
+                transform: _.identity,
                 onError: _.noop
             };
         },
@@ -23,15 +25,13 @@ var GenerateDataSource = function (endpointIdentifier, componentName) {
             this.attemptLoadComponentData();
         },
         componentWillReceiveProps: function (newProps) {
+            var mutableData = newProps.data.asMutable == null ? newProps.data : newProps.data.asMutable();
             this.attemptLoadComponentData();
-            this.setState({data: Immutable(this.props.transform(newProps.data.asMutable()))});
+            this.setState({data: Immutable(this.props.transform(mutableData))});
         },
         attemptLoadComponentData: function () {
             var state = Store.getState();
-            if (state.location.pathname === window.location.pathname && !this.dataRequested) {
-                this.dataRequested = true;
-                Actions.START_COMPONENT_DATA(endpointIdentifier, componentName, this.props.onError);
-            }
+            Util.attemptComponentLoad(state, endpointIdentifier, componentName, this.props.onError);
         },
         render: function () {
             var propsForChild;

@@ -16,6 +16,7 @@ const ACTIONS = [
     'AUTHORIZE_APP',
     'START_AUTHORIZE_APP',
     'END_AUTHORIZE_APP',
+    'COMPONENT_DATA',
     'START_COMPONENT_DATA',
     'END_COMPONENT_DATA',
     'COMPONENT_LOADING',
@@ -23,7 +24,9 @@ const ACTIONS = [
     'REGISTER_COMPONENT',
     'LOADER_SUCCESS',
     'LOADER_START',
-    'LOADER_ERROR'
+    'LOADER_COMPLETE',
+    'LOADER_ERROR',
+    'RESET_LOADER'
 ];
 
 export default _.reduce(ACTIONS, (a, i) => _.defaults(a, {[i]: i}), {});

@@ -30,7 +30,7 @@ class _Authorization {
         window.localStorage.setItem('com.cmwn.platform.profileImage', null);
         window.localStorage.setItem('com.cmwn.platform.roles', null);
         window.localStorage.setItem('com.cmwn.platform._links', null);
-        Actions.LOGOUT();
+        Actions.dispatch.LOGOUT();
         Log.info('User logout successful');
         EventManager.update('userChanged', null);
     }

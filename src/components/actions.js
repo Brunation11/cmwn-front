@@ -65,7 +65,21 @@ Actions = Actions.set(ACTION_CONSTANTS.PAGE_DATA, function (url, title) {
             promise: HttpManager.GET({
                 url: url,
                 handlePageLevelErrors: true
+            }).then(server => {
+                return Promise.resolve((action, dispatch) => {
+                    dispatch({
+                        type: 'combo',
+                        types: ['DELOADER_START', 'DELOADER_SUCCESS', 'DELOADER_ERROR'],
+                        sequence: true,
+                        payload: [
+                            Actions.END_PAGE_DATA.bind(null, {data: server.response}),
+                            Actions.LOADER_COMPLETE
+                        ]
+                    });
+                    dispatch({type: 'LOADER_COMPLETE'});
+                });
             })
+
         }
     };
             //NOTE: This is the primary page-level error handling block in the entire application
@@ -88,8 +102,21 @@ Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
             promise: HttpManager.GET({
                 url: GLOBALS.API_URL,
                 handlePageLevelErrors: true
+            }).then(server => {
+                return Promise.resolve((action, dispatch) => {
+                    HttpManager.setToken(server.response.token);
+                    dispatch({
+                        type: 'combo',
+                        types: ['DELOADER_START', 'DELOADER_SUCCESS', 'DELOADER_ERROR'],
+                        sequence: true,
+                        payload: [
+                            Actions.END_AUTHORIZE_APP.bind(null, {data: server.response}),
+                            Actions.LOADER_COMPLETE
+                        ]
+                    });
+                    dispatch({type: 'LOADER_COMPLETE'});
+                });
             })
-    //                 HttpManager.setToken(server.response.token);
         }
     };
             /** @TODO MPR, 3/5/16: Handle Auth Errors*/
@@ -100,6 +127,9 @@ Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentif
     var state = Store.getState();
     if (state.page.data._links[endpointIdentifier + '-' + componentName]) {
         endpoint = state.page.data._links[endpointIdentifier + '-' + componentName].href;
+    } else if (endpointIdentifier === 'games') {
+        Log.info('forcing game endpoint');
+        endpoint = GLOBALS.API_URL + 'game';
     } else {
         console.error('Component endpoint could not be resolved');
         throw 'Component endpoint could not be resolved';
@@ -112,7 +142,20 @@ Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentif
         ],
         type: ACTION_CONSTANTS.COMPONENT_DATA,
         payload: {
-            promise: HttpManager.GET({url: endpoint})
+            promise: HttpManager.GET({url: endpoint}).then(server => {
+                return Promise.resolve((action, dispatch, getState) => {
+                    dispatch({
+                        type: 'combo',
+                        types: ['DELOADER_START', 'DELOADER_SUCCESS', 'DELOADER_ERROR'],
+                        sequence: true,
+                        payload: [
+                            Actions.END_COMPONENT_DATA.bind(null, {data: server.response, endpointIdentifier, componentName}),
+                            Actions.LOADER_COMPLETE
+                        ]
+                    });
+                    dispatch({type: 'LOADER_COMPLETE'});
+                })
+            })
         }
     };
 });
