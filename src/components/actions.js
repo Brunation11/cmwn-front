@@ -46,6 +46,8 @@ var Actions = generateBasicBoundActions(ACTION_CONSTANTS);
 //********** Thunk Actions
 //Thunk actions should be named START_YOUR_ACTION, and should resolve by dispatching an END_YOUR_ACTION
 Actions = Actions.set(ACTION_CONSTANTS.PAGE_DATA, function (url, title) {
+    //I do not remember why I wrote this conditional. Commenting it to see what breaks
+    /*
     if (url === '' || url == null) {
         return {
             type: ACTION_CONSTANTS.PAGE_DATA,
@@ -54,6 +56,7 @@ Actions = Actions.set(ACTION_CONSTANTS.PAGE_DATA, function (url, title) {
             }
         };
     }
+    */
     return {
         types: [
             'PAGE_DATA_PENDING',
@@ -72,7 +75,7 @@ Actions = Actions.set(ACTION_CONSTANTS.PAGE_DATA, function (url, title) {
                         types: ['DELOADER_START', 'DELOADER_SUCCESS', 'DELOADER_ERROR'],
                         sequence: true,
                         payload: [
-                            Actions.END_PAGE_DATA.bind(null, {data: server.response}),
+                            Actions.END_PAGE_DATA.bind(null, {data: server.response, title}),
                             Actions.LOADER_COMPLETE
                         ]
                     });
@@ -131,7 +134,7 @@ Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentif
         Log.info('forcing game endpoint');
         endpoint = GLOBALS.API_URL + 'game';
     } else {
-        console.error('Component endpoint could not be resolved');
+        Log.error('Component endpoint could not be resolved');
         throw 'Component endpoint could not be resolved';
     }
     return {
@@ -143,7 +146,7 @@ Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentif
         type: ACTION_CONSTANTS.COMPONENT_DATA,
         payload: {
             promise: HttpManager.GET({url: endpoint}).then(server => {
-                return Promise.resolve((action, dispatch, getState) => {
+                return Promise.resolve((action, dispatch) => {
                     dispatch({
                         type: 'combo',
                         types: ['DELOADER_START', 'DELOADER_SUCCESS', 'DELOADER_ERROR'],
@@ -154,7 +157,7 @@ Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentif
                         ]
                     });
                     dispatch({type: 'LOADER_COMPLETE'});
-                })
+                });
             })
         }
     };

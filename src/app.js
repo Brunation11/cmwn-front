@@ -61,7 +61,6 @@ var App = React.createClass({
                 <div className="sweater">
                     {this.props.children}
                 </div>
-                <DevTools />
             </div>
         );
     }
@@ -168,7 +167,7 @@ var progressivePageLoad = function () {
             types: ['LOADER_START', 'LOADER_SUCCESS', 'LOADER_ERROR'],
             sequence: true,
             payload: [
-                Actions.PAGE_DATA.bind(null, pageRoute, {title: state.location.title}),
+                Actions.PAGE_DATA.bind(null, pageRoute, state.location.title),
             ]
         });
         break;

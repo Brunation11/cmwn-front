@@ -30,11 +30,11 @@ var pageReducer = (page = Immutable({title: 'Change My World Now'}), action) => 
         [ACTION_CONSTANTS.PAGE_INTITIALIZED]: function (page_) {
             return page_.set('loading', false);
         }.bind(null, page),
-        [ACTION_CONSTANTS.END_PAGE_DATA]: function (page_, data) {
+        [ACTION_CONSTANTS.END_PAGE_DATA]: function (page_, action_) {
             page_ = page_.set('loading', false);
             page_ = page_.set('initialized', true);
-            page_ = page_.set('title', data.data.title);
-            return page_.set('data', data.data);
+            page_ = page_.set('title', action_.title);
+            return page_.set('data', action_.data);
         }.bind(null, page, action)
     };
 
