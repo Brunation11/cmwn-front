@@ -5,15 +5,16 @@ import { connect } from 'react-redux';
 import Layout from 'layouts/two_col';
 import {Table, Column} from 'components/table';
 import Paginator from 'components/paginator';
+import History from 'components/history';
 
 const TITLE = 'Districts';
 const CREATE_TEXT = 'Create District';
 
 var Component = React.createClass({
     renderCreateDistrict: function () {
-        if (!this.isSuperAdmin) {
-            return null;
-        }
+        //if (!this.isSuperAdmin) {
+        //    return null;
+        //}
         return (
             <p><a href={'/districts/create'}>{CREATE_TEXT}</a></p>
         );
@@ -41,7 +42,7 @@ var Component = React.createClass({
                     <Table>
                         <Column dataKey="title"
                             renderCell={(data, row) => (
-                                <a href={row._links.self.href}>{_.startCase(data)}</a>
+                                <a onClick={() => History.push('/districts/' + row.org_id)}>{_.startCase(data)}</a>
                             )}
                         />
                         <Column dataKey="description" />
@@ -59,7 +60,7 @@ var Component = React.createClass({
 const mapStateToProps = state => {
     var data = [];
     var loading = true;
-    if (state.page && state.page.data) {
+    if (state.page && state.page.data && state.page.data._embedded && state.page.data._embedded.org) {
         loading = state.page.loading;
         data = state.page.data._embedded.org;
     }

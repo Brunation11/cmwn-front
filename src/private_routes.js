@@ -1,5 +1,7 @@
 import _ from 'lodash';
 
+import History from 'components/history';
+
 import Users from 'routes/users';
 import Districts from 'routes/districts';
 import DistrictView from 'routes/districts/view';

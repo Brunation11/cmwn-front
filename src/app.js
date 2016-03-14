@@ -31,9 +31,9 @@ import 'media/logo.png';
 document.domain = 'changemyworldnow.com';
 
 //htaccess should take care of it but if somehow it does not, this should overkill the issue
-//if (window.location.protocol !== 'https:') {
-//    window.location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
-//}
+if (window.location.protocol !== 'https:') {
+    window.location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+}
 
 var App = React.createClass({
     componentWillMount: function () {
@@ -123,7 +123,7 @@ var progressivePageLoad = function () {
         return;
     }
     switch (state.pageLoadingStage.currentStage) {
-    case 0: //Fresh Reload. Reset Everything
+    case GLOBALS.PAGE_LOAD_STATE.INITIALIZE: //Fresh Reload. Reset Everything
         Store.dispatch({
             type: 'combo',
             types: ['LOADER_START', 'LOADER_SUCCESS', 'LOADER_ERROR'],
@@ -134,7 +134,7 @@ var progressivePageLoad = function () {
             ]
         });
         break;
-    case 1:
+    case GLOBALS.PAGE_LOAD_STATE.BOOTSTRAPPED:
         Store.dispatch({
             type: 'combo',
             types: ['LOADER_START', 'LOADER_SUCCESS', 'LOADER_ERROR'],
@@ -144,7 +144,7 @@ var progressivePageLoad = function () {
             ]
         });
         break;
-    case 2: //We are authorized. Store the current user and proceed to page load
+    case GLOBALS.PAGE_LOAD_STATE.PAGE: //We are authorized. Store the current user and proceed to page load
         Authorization.storeUser();
         if (state.location.endpoint && state.location.endpoint.indexOf('$') === 0) {
             //Looking for the string $$ at the beginning of a route to indicate
@@ -172,15 +172,21 @@ var progressivePageLoad = function () {
             ]
         });
         break;
-    //Case 3 is for component load, and happens in Util.js
-    case 4:
+    //components load after page, and are invoked through on the page, via a Datasource component calling Util.attemptGetComponentData
+    //additional cases should be added here. Be sure to update the globals file with new states. They must be sequential, and 
+    //should always occur on every page load, so as not to block one another.
+    //Make sure final is always last, naturally
+    case GLOBALS.PAGE_LOAD_STATE.FINAL:
         break;
     }
 };
 
 History.listen(location => {
     var pathContext = _.find(routes.childRoutes, i => Util.matchPathAndExtractParams(i.path, location.pathname) !== false);
-    var nextLoc = _.defaults(location, pathContext);
+    if (pathContext.onEnter != null) {
+        return; //don't bother operating on redirects
+    }
+    var nextLoc = _.defaults({}, location, pathContext);
     //you know, at this point we already know whether or not our path 404d...
     nextLoc.component = null; //no need to store this in state.
     Store.dispatch({

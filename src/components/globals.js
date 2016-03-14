@@ -29,7 +29,14 @@ const GLOBALS = _.defaults(window.__cmwn, {
     ],
     PAGINATOR_COUNTS: [10, 25, 50, 250],
     TOAST_DEFAULT_TIMEOUT: 2000,
-    DEFAULT_PAGINATION_ROWS: 25
+    DEFAULT_PAGINATION_ROWS: 25,
+    PAGE_LOAD_STATE: {
+        INITIALIZE: 0,
+        BOOTSTRAPPED: 1,
+        PAGE: 2,
+        COMPONENT: 3,
+        FINAL: 4
+    }
 });
 
 export default GLOBALS;
