@@ -195,7 +195,6 @@ var Profile = React.createClass({
 
 const mapStateToProps = state => {
     var data = {};
-    var gameUrl = null;
     var loading = true;
     if (state.page && state.page.data) {
         loading = state.page.loading;
@@ -206,8 +205,7 @@ const mapStateToProps = state => {
     }
     return {
         data,
-        loading,
-        gameUrl
+        loading
     };
 };
 

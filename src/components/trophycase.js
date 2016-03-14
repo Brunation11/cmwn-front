@@ -55,6 +55,7 @@ var Trophycase = React.createClass({
         );
     },
     render: function () {
+        return null;
         var Self = this;
         return (
             <Fetcher className={'trophycase ' + this.props.className} url={GLOBALS.API_URL + 'flips'} renderNoData={Self.renderCase.bind(this, {})}>

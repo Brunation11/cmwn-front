@@ -19,7 +19,6 @@ var Component = React.createClass({
         );
     },
     render: function () {
-        debugger;
         /** @TODO MPR, 3/8/16: Actually check superuser */
         /*data => {
                     //sure exploiting this side effect in a render method is filthy but its also easy

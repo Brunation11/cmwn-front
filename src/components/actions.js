@@ -81,13 +81,13 @@ Actions = Actions.set(ACTION_CONSTANTS.PAGE_DATA, function (url, title) {
                     });
                     dispatch({type: 'LOADER_COMPLETE'});
                 });
+            }).catch(err => {
+                //NOTE: This is the primary page-level error handling block in the entire application
+                //The only page-level error not handled here will be true 404 errors, which will be handled
+                //in app.js by the router.
             })
-
         }
     };
-            //NOTE: This is the primary page-level error handling block in the entire application
-            //The only page-level error not handled here will be true 404 errors, which will be handled
-            //in app.js by the router.
 });
 
 Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
@@ -119,10 +119,11 @@ Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
                     });
                     dispatch({type: 'LOADER_COMPLETE'});
                 });
+            }).catch(err => {
+                /** @TODO MPR, 3/5/16: Handle Auth Errors*/
             })
         }
     };
-            /** @TODO MPR, 3/5/16: Handle Auth Errors*/
 });
 
 Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentifier, componentName) {

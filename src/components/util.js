@@ -107,6 +107,7 @@ var Util = {
         }
         switch (state.pageLoadingStage.currentStage) {
         case 3: // This always needs to come after page load
+            debugger;
             Store.dispatch({
                 type: 'combo',
                 types: ['LOADER_START', 'LOADER_SUCCESS', 'LOADER_ERROR'],

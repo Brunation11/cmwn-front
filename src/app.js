@@ -61,6 +61,7 @@ var App = React.createClass({
                 <div className="sweater">
                     {this.props.children}
                 </div>
+                <DevTools />
             </div>
         );
     }
