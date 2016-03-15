@@ -184,7 +184,7 @@ var progressivePageLoad = function () {
 
 History.listen(location => {
     var pathContext = _.find(routes.childRoutes, i => Util.matchPathAndExtractParams(i.path, location.pathname) !== false);
-    if (pathContext.onEnter != null) {
+    if (pathContext == null || pathContext.onEnter != null) {
         return; //don't bother operating on redirects
     }
     var nextLoc = _.defaults({}, location, pathContext);

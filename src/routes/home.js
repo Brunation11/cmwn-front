@@ -311,7 +311,7 @@ var Header = React.createClass({
                     <Button id="login" className="hidden" onClick={this.loginAlert}>
                         {COPY.BUTTONS.LOGIN}
                     </Button>
-                    <Button id="demo" className="purple" onClick={this.launchDemo}>
+                    <Button id="demo" className="purple" onClick={this.login}>
                         {COPY.BUTTONS.LOGIN}
                     </Button>
                 </div>
