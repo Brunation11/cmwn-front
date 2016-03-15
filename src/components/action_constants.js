@@ -24,9 +24,11 @@ const ACTIONS = [
     'REGISTER_COMPONENT',
     'LOADER_SUCCESS',
     'LOADER_START',
-    'LOADER_COMPLETE',
+    'ADVANCE_LOAD_STAGE',
     'LOADER_ERROR',
-    'RESET_LOADER'
+    'RESET_LOADER',
+    'COMPONENT_LOADER_COMPLETE',
+    'COMPONENT_REQUESTED'
 ];
 
 export default _.reduce(ACTIONS, (a, i) => _.defaults(a, {[i]: i}), {});

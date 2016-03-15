@@ -3,6 +3,7 @@ import _ from 'lodash';
 import Actions from 'components/actions';
 import Store from 'components/store';
 import Log from 'components/log';
+import GLOBALS from 'components/globals';
 
 var Util = {
     /**
@@ -102,17 +103,20 @@ var Util = {
         return path.slice(0, -1);
     },
     attemptComponentLoad(state, endpointIdentifier, componentName) {
-        if (state.pageLoadingStage.currentStage !== state.pageLoadingStage.lastCompletedStage) {
+        //if (state.pageLoadingStage.currentStage !== state.pageLoadingStage.lastCompletedStage) {
+        //    return;
+        //}
+        if (state.components[endpointIdentifier + '-' + componentName].requested) {
             return;
         }
         switch (state.pageLoadingStage.currentStage) {
-        case 3: // This always needs to come after page load
-            debugger;
+        case GLOBALS.PAGE_LOAD_STATE.COMPONENT: // This always needs to come after page load
             Store.dispatch({
                 type: 'combo',
-                types: ['LOADER_START', 'LOADER_SUCCESS', 'LOADER_ERROR'],
+                types: ['COMPONENT_LOADER_START', 'LOADER_SUCCESS', 'LOADER_ERROR'],
                 sequence: true,
                 payload: [
+                    Actions.COMPONENT_REQUESTED.bind(null, {endpointIdentifier, componentName} ),
                     Actions.COMPONENT_DATA.bind(null, endpointIdentifier, componentName)
                 ]
             });

@@ -9,9 +9,9 @@ import Util from 'components/util';
 
 /** Higher Order Component */
 var GenerateDataSource = function (endpointIdentifier, componentName) {
-    Actions.dispatch.REGISTER_COMPONENT({endpointIdentifier, componentName});
     var Component = React.createClass({
         getInitialState: function () {
+            Actions.dispatch.REGISTER_COMPONENT({endpointIdentifier, componentName});
             return {};
         },
         getDefaultProps: function () {

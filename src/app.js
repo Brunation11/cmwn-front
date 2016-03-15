@@ -119,7 +119,7 @@ const loadedStates = ['complete', 'loaded', 'interactive'];
 var progressivePageLoad = function () {
     var pageRoute;
     var state = Store.getState();
-    if (state.pageLoadingStage.currentStage !== state.pageLoadingStage.lastCompletedStage || state.pageLoadingStage.currentStage >= 4) {
+    if (state.pageLoadingStage.currentStage !== state.pageLoadingStage.lastCompletedStage || state.pageLoadingStage.currentStage >= GLOBALS.PAGE_LOAD_STATE.FINAL) {
         return;
     }
     switch (state.pageLoadingStage.currentStage) {
@@ -140,7 +140,8 @@ var progressivePageLoad = function () {
             types: ['LOADER_START', 'LOADER_SUCCESS', 'LOADER_ERROR'],
             sequence: true,
             payload: [
-                Actions.FINISH_BOOTSTRAP
+                Actions.FINISH_BOOTSTRAP,
+                Actions.ADVANCE_LOAD_STAGE //Note: Finish bootstrap is not async, so loader complete must be called manually
             ]
         });
         break;
@@ -173,7 +174,7 @@ var progressivePageLoad = function () {
         });
         break;
     //components load after page, and are invoked through on the page, via a Datasource component calling Util.attemptGetComponentData
-    //additional cases should be added here. Be sure to update the globals file with new states. They must be sequential, and 
+    //additional cases should be added here. Be sure to update the globals file with new states. They must be sequential, and
     //should always occur on every page load, so as not to block one another.
     //Make sure final is always last, naturally
     case GLOBALS.PAGE_LOAD_STATE.FINAL:

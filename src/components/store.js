@@ -15,35 +15,6 @@ const INITIAL_STATE = Immutable({
     locationBeforeTransitions: null
 });
 
-var pageReducer = (page = Immutable({title: 'Change My World Now'}), action) => {
-    var reducers = {
-        [ACTION_CONSTANTS.PAGE_TITLE]: function (page_, title) {
-            return page_.set('title', title);
-        }.bind(null, page, action.title),
-        [ACTION_CONSTANTS.PAGE_LOADING]: function (page_) {
-            page_ = page_.set('initialized', false);
-            return page_.set('loading', true);
-        }.bind(null, page),
-        [ACTION_CONSTANTS.PAGE_LOADED]: function (page_) {
-            return page_.set('loading', false);
-        }.bind(null, page),
-        [ACTION_CONSTANTS.PAGE_INTITIALIZED]: function (page_) {
-            return page_.set('loading', false);
-        }.bind(null, page),
-        [ACTION_CONSTANTS.END_PAGE_DATA]: function (page_, action_) {
-            page_ = page_.set('loading', false);
-            page_ = page_.set('initialized', true);
-            page_ = page_.set('title', action_.title);
-            return page_.set('data', action_.data);
-        }.bind(null, page, action)
-    };
-
-    if (action.type in reducers) {
-        return reducers[action.type]();
-    }
-    return page;
-};
-
 var storedUserProperties = {};
 var userName = window.localStorage['com.cmwn.platform.userName'];
 var userId = window.localStorage['com.cmwn.platform.userId'];
@@ -83,6 +54,45 @@ var authReducer = (currentUser = Immutable(storedUserProperties), action) => {
     }
     return currentUser;
 };
+
+var pageReducer = (page = Immutable({title: 'Change My World Now'}), action) => {
+    var reducers = {
+        [ACTION_CONSTANTS.PAGE_TITLE]: function (page_, title) {
+            return page_.set('title', title);
+        }.bind(null, page, action.title),
+        [ACTION_CONSTANTS.PAGE_LOADING]: function (page_) {
+            page_ = page_.set('initialized', false);
+            return page_.set('loading', true);
+        }.bind(null, page),
+        [ACTION_CONSTANTS.PAGE_LOADED]: function (page_) {
+            return page_.set('loading', false);
+        }.bind(null, page),
+        [ACTION_CONSTANTS.PAGE_INTITIALIZED]: function (page_) {
+            return page_.set('loading', false);
+        }.bind(null, page),
+        [ACTION_CONSTANTS.END_PAGE_DATA]: function (page_, action_) {
+            page_ = page_.set('loading', false);
+            page_ = page_.set('initialized', true);
+            page_ = page_.set('title', action_.title);
+            page_ = page_.set('data', action_.data);
+            page_ = page_.merge({data: {_links: {
+                user: {href: GLOBALS.API_URL + 'user'},
+                'org::district': {href: GLOBALS.API_URL + 'org'},
+                'group::school': {href: GLOBALS.API_URL + 'group'},
+                'group::class': {href: GLOBALS.API_URL + 'group'},
+                'user::teacher': {href: GLOBALS.API_URL + 'user'},
+                'user::student': {href: GLOBALS.API_URL + 'user'},
+            }}}, {deep: true});
+            return page_;
+        }.bind(null, page, action)
+    };
+
+    if (action.type in reducers) {
+        return reducers[action.type]();
+    }
+    return page;
+};
+
 var locationReducer = (previousLoc = {}, action) => {
     var reducers = {PATH_CHANGE: 0, HASH_CHANGE: 0, SEARCH_CHANGE: 0};
     if (!(action.type in reducers) || action.location == null) {
@@ -101,8 +111,12 @@ var locationReducer = (previousLoc = {}, action) => {
     return reducers[action.type]();
 };
 
-var componentReducer = (allComponents = Immutable({}), action) => {
+var componentReducer = (allComponents = Immutable({_componentsToLoad: 0, _componentsLoaded: 0}), action) => {
+    //single component reducers
     var reducers = {
+        [ACTION_CONSTANTS.COMPONENT_REQUESTED]: function (component) {
+            return component.set('requested', true);
+        }.bind(null, allComponents[action.endpointIdentifier + '-' + action.componentName]),
         [ACTION_CONSTANTS.COMPONENT_LOADED]: function (component) {
             return component.set('loading', false);
         }.bind(null, allComponents[action.endpointIdentifier + '-' + action.componentName]),
@@ -122,17 +136,23 @@ var componentReducer = (allComponents = Immutable({}), action) => {
             return component;
         }.bind(null, allComponents[action.endpointIdentifier + '-' + action.componentName]),
     };
+
+    //component-wide reducers
     if (action.type in reducers) {
         return allComponents.set(action.endpointIdentifier + '-' + action.componentName, reducers[action.type]());
+    } else if (action.type === ACTION_CONSTANTS.COMPONENT_LOADER_COMPLETE) {
+        allComponents = allComponents.set('_componentsLoaded', allComponents._componentsLoaded + 1);
     } else if (action.type === ACTION_CONSTANTS.REGISTER_COMPONENT) {
         var actionData = action.defaultData == null ? {} : action.defaultData;
         var resetData = {
             data: _.defaults({}, actionData),
             page_count: 1, //eslint-disable-line camelcase
             page: 1,
+            requested: false,
             total_items: 0, //eslint-disable-line camelcase
             page_size: GLOBALS.DEFAULT_PAGINATION_ROWS //eslint-disable-line camelcase
         };
+        allComponents = allComponents.set('_componentsToLoad', allComponents._componentsToLoad == null ? 1 : allComponents._componentsToLoad + 1);
         return allComponents.merge({[action.endpointIdentifier + '-' + action.componentName]: resetData});
     }
     return allComponents;
@@ -156,7 +176,7 @@ const Store = createStore( combineReducers({
         if (action.type === ACTION_CONSTANTS.LOADER_START) {
             return {currentStage: loaderState.currentStage + 1, lastCompletedStage: loaderState.lastCompletedStage};
         }
-        if (action.type === ACTION_CONSTANTS.LOADER_COMPLETE) {
+        if (action.type === ACTION_CONSTANTS.ADVANCE_LOAD_STAGE) {
             return {currentStage: loaderState.currentStage, lastCompletedStage: loaderState.lastCompletedStage + 1};
         }
         if (action.type === ACTION_CONSTANTS.LOADER_ERROR) {

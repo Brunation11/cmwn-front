@@ -76,10 +76,9 @@ Actions = Actions.set(ACTION_CONSTANTS.PAGE_DATA, function (url, title) {
                         sequence: true,
                         payload: [
                             Actions.END_PAGE_DATA.bind(null, {data: server.response, title}),
-                            Actions.LOADER_COMPLETE
+                            Actions.ADVANCE_LOAD_STAGE
                         ]
                     });
-                    dispatch({type: 'LOADER_COMPLETE'});
                 });
             }).catch(err => {
                 //NOTE: This is the primary page-level error handling block in the entire application
@@ -114,10 +113,9 @@ Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
                         sequence: true,
                         payload: [
                             Actions.END_AUTHORIZE_APP.bind(null, {data: server.response}),
-                            Actions.LOADER_COMPLETE
+                            Actions.ADVANCE_LOAD_STAGE
                         ]
                     });
-                    dispatch({type: 'LOADER_COMPLETE'});
                 });
             }).catch(err => {
                 /** @TODO MPR, 3/5/16: Handle Auth Errors*/
@@ -129,8 +127,8 @@ Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
 Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentifier, componentName) {
     var endpoint;
     var state = Store.getState();
-    if (state.page.data._links[endpointIdentifier + '-' + componentName]) {
-        endpoint = state.page.data._links[endpointIdentifier + '-' + componentName].href;
+    if (state.page.data._links[endpointIdentifier]) {
+        endpoint = state.page.data._links[endpointIdentifier].href;
     } else if (endpointIdentifier === 'games') {
         Log.info('forcing game endpoint');
         endpoint = GLOBALS.API_URL + 'game';
@@ -154,10 +152,15 @@ Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentif
                         sequence: true,
                         payload: [
                             Actions.END_COMPONENT_DATA.bind(null, {data: server.response, endpointIdentifier, componentName}),
-                            Actions.LOADER_COMPLETE
                         ]
                     });
-                    dispatch({type: 'LOADER_COMPLETE'});
+                    if (state.components._componentsToLoad - 1 === state.components._componentsLoaded) {
+                        Actions.dispatch.LOADER_START();//unlike other stages, we advance this one at the very end, rather than the beginning
+                        Actions.dispatch.COMPONENT_LOADER_COMPLETE();
+                        Actions.dispatch.ADVANCE_LOAD_STAGE();
+                    } else {
+                        Actions.dispatch.COMPONENT_LOADER_COMPLETE();
+                    }
                 });
             })
         }
