@@ -10,10 +10,15 @@ import Authorization from 'components/authorization';
 import FlipBoard from 'components/flipboard';
 import EditLink from 'components/edit_link';
 import Util from 'components/util';
+import GenerateDataSource from 'components/datasource';
 
 import DefaultProfile from 'media/profile_tranparent.png';
 
 import 'routes/groups/profile.scss';
+
+const PAGE_UNIQUE_IDENTIFIER = 'groupProfile';
+
+const UserSource = GenerateDataSource('user', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     MY_CLASSMATES: 'My Classmates',
@@ -72,7 +77,8 @@ var Component = React.createClass({
     renderFlip: function (item){
         return (
             <div className="flip" key={Shortid.generate()}>
-                <Link to={`/student/${item.group_id.toString()}`}><img src={item.images.data.length ? item.images.data[0].url : DefaultProfile}></img>
+                <Link to={`/student/${item.user_id.toString()}`}>
+                    <img src={item.images && item.images.data && item.images.data.length ? item.images.data[0].url : DefaultProfile}></img>
                     <p className="linkText" >{item.username}</p>
                 </Link>
                 {this.renderFlipsEarned(item)}
@@ -80,12 +86,12 @@ var Component = React.createClass({
         );
     },
     renderClassInfo: function () {
-        if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
+        if (this.state.group_id == null || !Util.decodePermissions(this.state.scope).update) {
             return null;
         }
         return (
-           <Panel header={this.props.data.title} className="standard">
-               <EditLink base="/group" uuid={this.props.data.group_id} canUpdate={Util.decodePermissions(this.props.data.scope).update} />
+           <Panel header={this.state.title} className="standard">
+               <EditLink base="/group" uuid={this.state.group_id} canUpdate={Util.decodePermissions(this.state.scope).update} />
                {this.renderAdminLink()}
            </Panel>
         );
@@ -97,9 +103,11 @@ var Component = React.createClass({
         return (
            <Layout className="groupProfile">
                {this.renderClassInfo()}
-               <FlipBoard renderFlip={this.renderFlip} header={
-                 HEADINGS.CLASS + this.props.data.title
-               } data={this.props.data.users} transform={() => ([])} />
+               <UserSource>
+                   <FlipBoard renderFlip={this.renderFlip} header={
+                     HEADINGS.CLASS + this.props.data.title
+                   } />
+               </UserSource>
            </Layout>
         );
     }

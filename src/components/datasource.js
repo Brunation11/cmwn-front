@@ -74,7 +74,8 @@ var GenerateDataSource = function (endpointIdentifier, componentName) {
         return {
             data,
             loading,
-            component
+            component,
+            lastLoadedStage: state.pageLoadingStage.lastCompletedStage
         };
     };
 

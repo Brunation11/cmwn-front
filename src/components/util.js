@@ -103,10 +103,7 @@ var Util = {
         return path.slice(0, -1);
     },
     attemptComponentLoad(state, endpointIdentifier, componentName) {
-        //if (state.pageLoadingStage.currentStage !== state.pageLoadingStage.lastCompletedStage) {
-        //    return;
-        //}
-        if (state.components[endpointIdentifier + '-' + componentName].requested) {
+        if (state.pageLoadingStage.lastCompletedStage !== GLOBALS.PAGE_LOAD_STATE.COMPONENT || state.components[endpointIdentifier + '-' + componentName].requested) {
             return;
         }
         switch (state.pageLoadingStage.currentStage) {

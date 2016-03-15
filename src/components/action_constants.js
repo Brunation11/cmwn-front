@@ -28,7 +28,7 @@ const ACTIONS = [
     'LOADER_ERROR',
     'RESET_LOADER',
     'COMPONENT_LOADER_COMPLETE',
-    'COMPONENT_REQUESTED'
+    'COMPONENT_REQUESTED',
 ];
 
 export default _.reduce(ACTIONS, (a, i) => _.defaults(a, {[i]: i}), {});

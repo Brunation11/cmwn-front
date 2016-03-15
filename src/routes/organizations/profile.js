@@ -5,16 +5,22 @@ import { connect } from 'react-redux';
 import {Link} from 'react-router';
 //import _ from 'lodash';
 import {Panel} from 'react-bootstrap';
+import Shortid from 'shortid';
 
 import Layout from 'layouts/two_col';
-import Shortid from 'shortid';
+
 import FlipBoard from 'components/flipboard';
-import FlipBgDefault from 'media/icon_class_blue.png';
+import GenerateDataSource from 'components/datasource';
 import EditLink from 'components/edit_link';
 import Toast from 'components/toast';
 import Util from 'components/util';
 
 import 'routes/users/profile.scss';
+import FlipBgDefault from 'media/icon_class_blue.png';
+
+const PAGE_UNIQUE_IDENTIFIER = 'groupProfile';
+
+const ClassSource = GenerateDataSource('group::class', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     ALL_CLASSES: 'All Classes',
@@ -79,8 +85,9 @@ var Component = React.createClass({
                     <p>{`${HEADINGS.DISTRICTS}: `}{this.renderDistricts()}</p>
                    {this.props.data.description}
                </Panel>
-               <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.MY_CLASSES} data={this.props.data.classes} />
-               <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.ALL_CLASSES} data={this.props.data.groups} transform={() => ([])} />
+               <ClassSource>
+                   <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.MY_CLASSES} />
+               </ClassSource>
            </Layout>
         );
     }

@@ -6,17 +6,26 @@ import { connect } from 'react-redux';
 
 import Layout from 'layouts/two_col';
 import EditLink from 'components/edit_link';
+import DeleteLink from 'components/delete_link';
 import {Table, Column} from 'components/table';
-import Paginator from 'components/paginator';
 import Util from 'components/util';
 import History from 'components/history';
+import GenerateDataSource from 'components/datasource';
+
+const PAGE_UNIQUE_IDENTIFIER = 'district-view';
+
+const ClassSource = GenerateDataSource('group::class', PAGE_UNIQUE_IDENTIFIER);
+const UserSource = GenerateDataSource('user', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
-    TITLE: 'Info',
+    TITLE: 'School Dashboard: ',
     ID: 'ID',
     DESCRIPTION: 'Description',
     CREATED: 'Created',
-    DISTRICTS: 'Districts'
+    DISTRICTS: 'Districts',
+    SCHOOLS: 'Schools in District',
+    CLASSES: 'Classes in District',
+    USERS: 'Users in District'
 };
 
 const ADMIN_TEXT = 'Teacher Dashboard';
@@ -27,7 +36,8 @@ var Component = React.createClass({
             organization: [],
             districts: [],
             groups: [],
-            users: []
+            users: [],
+            scope: 7
         };
     },
     componentWillMount: function () {
@@ -60,44 +70,60 @@ var Component = React.createClass({
         }
         return (
             <Layout>
-                <h2>{this.props.data.title}</h2>
-                <Panel header={HEADINGS.TITLE} className="standard">
-                   <EditLink base="/organization" uuid={this.props.data.group_id} canUpdate={Util.decodePermissions(this.props.data.scope).update} />
+                <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard">
+                   <EditLink base="/organization" id={this.state.group_id} scope={this.state.scope} />
+                   <DeleteLink base="/organization" id={this.state.group_id} scope={this.state.scope} />
                     <p>{`${HEADINGS.DISTRICTS}: `}{this.renderDistricts()}</p>
                     <br />
                     <p>{`${HEADINGS.DESCRIPTION}: ${this.props.data.description}`}</p>
                 </Panel>
-                <Paginator data={this.state.groups}>
-                    <Table>
-                        <Column dataKey="title"
-                            renderCell={(data, row) => (
-                                <a href={`#/organization/${row.id}`}>{_.startCase(data)}</a>
-                            )}
-                        />
-                        <Column dataKey="description" />
-                        <Column dataKey="created_at" renderHeader="Created" />
-                        <Column dataKey="updated_at" renderHeader="Last Updated"
-                            renderCell={data => (data == null ? 'never' : data)}
-                        />
-                    </Table>
-                </Paginator>
-                <Paginator data={this.state.users}>
-                    <Table>
-                        <Column dataKey="title"
-                            renderCell={(data, row) => (
-                                <a href={`#/organization/${row.id}`}>{_.startCase(data)}</a>
-                            )}
-                        />
-                        <Column dataKey="description" />
-                        <Column dataKey="created_at" renderHeader="Created" />
-                        <Column dataKey="updated_at" renderHeader="Last Updated"
-                            renderCell={data => (data == null ? 'never' : data)}
-                        />
-                    </Table>
-                </Paginator>
-
+                <Panel header={HEADINGS.CLASSES} className="standard">
+                    <a onClick={() => History.push('/groups')}>View All Your Classes</a>
+                    <ClassSource>
+                        <Table>
+                            <Column dataKey="title"
+                                renderCell={(data, row) => (
+                                    <a onClick={() => History.push('/groups/' + row.group_id)}>{_.startCase(data)}</a>
+                                )}
+                            />
+                            <Column dataKey="description" />
+                            <Column dataKey="title" renderHeader="Admin View"
+                                renderCell={(data, row) => (
+                                    <a onClick={() => History.push('/groups/' + row.group_id + '/view')}>Admin View</a>
+                                )}
+                            />
+                            <Column dataKey="title" renderHeader="Edit"
+                                renderCell={(data, row) => (
+                                    <a onClick={() => History.push('/groups/' + row.group_id + '/edit')}>Edit</a>
+                                )}
+                            />
+                        </Table>
+                    </ClassSource>
+                </Panel>
+                <Panel header={HEADINGS.USERS} className="standard">
+                    <a onClick={() => History.push('/users')}>View All Your Users</a>
+                    <UserSource>
+                        <Table>
+                            <Column dataKey="first_name" renderHeader="Name"
+                                renderCell={(data, row) => (
+                                    <a onClick={() => History.push('/user/' + row.user_id)}>{row.first_name + ' ' + row.last_name}</a>
+                                )}
+                            />
+                            <Column dataKey="username" />
+                            <Column dataKey="title" renderHeader="Admin View"
+                                renderCell={(data, row) => (
+                                    <a onClick={() => History.push('/user/' + row.user_id + '/view')}>Admin View</a>
+                                )}
+                            />
+                            <Column dataKey="title" renderHeader="Edit"
+                                renderCell={(data, row) => (
+                                    <a onClick={() => History.push('/user/' + row.user_id + '/edit')}>Edit</a>
+                                )}
+                            />
+                        </Table>
+                    </UserSource>
+                </Panel>
            </Layout>
-
         );
     }
 });
