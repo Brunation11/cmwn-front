@@ -109,18 +109,18 @@ var Component = React.createClass({
                         <Table>
                             <Column dataKey="first_name" renderHeader="Name"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/user/' + row.group_id)}>{row.first_name + ' ' + row.last_name}</a>
+                                    <a onClick={() => History.push('/user/' + row.user_id)}>{row.first_name + ' ' + row.last_name}</a>
                                 )}
                             />
                             <Column dataKey="username" />
                             <Column dataKey="title" renderHeader="Admin View"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/user/' + row.group_id + '/view')}>Admin View</a>
+                                    <a onClick={() => History.push('/user/' + row.user_id + '/view')}>Admin View</a>
                                 )}
                             />
                             <Column dataKey="title" renderHeader="Edit"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/user/' + row.group_id + '/edit')}>Edit</a>
+                                    <a onClick={() => History.push('/user/' + row.user_id + '/edit')}>Edit</a>
                                 )}
                             />
                         </Table>

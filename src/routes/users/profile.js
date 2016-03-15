@@ -18,6 +18,7 @@ import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
 //import Util from 'components/util';
 import History from 'components/history';
+import Store from 'components/store';
 import GenerateDataSource from 'components/datasource';
 
 import Layout from 'layouts/two_col';
@@ -135,7 +136,8 @@ var Profile = React.createClass({
         );
     },
     renderGameList: function () {
-        if (this.state._links == null) {
+        var state = Store.getState();
+        if (this.state._links == null || state.currentUser.user_id !== this.state.user_id) {
             return null;
         }
         return (
@@ -168,6 +170,9 @@ var Profile = React.createClass({
         );
     },
     render: function () {
+        if (this.state.username == null) {
+           return null;
+        }
         return (
            <Layout className="profile">
                 <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal} keyboard={false} backdrop="static">
@@ -199,9 +204,6 @@ const mapStateToProps = state => {
     if (state.page && state.page.data) {
         loading = state.page.loading;
         data = state.page.data;
-        if (state.page.data._links && state.page.data._links.games) {
-            gameUrl = state.page.data._links.games.href;
-        }
     }
     return {
         data,
