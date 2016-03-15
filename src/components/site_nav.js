@@ -44,6 +44,7 @@ const mapStateToProps = state => {
     data.groups = {label: 'My Classes'};
     data.organizations = {label: 'My Schools'};
     data.districts = {label: 'Districts'};
+    data.users = {label: 'Users'};
     data.logout = {};
     return { currentUser: state.currentUser, data: Immutable(data) };
 };
