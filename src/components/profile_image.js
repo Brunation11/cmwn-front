@@ -27,6 +27,7 @@ var Component = React.createClass({
                 this.setState({profileImage: this.props.currentUser.profileImage});
             }
         } else {
+            this.setState({profileImage: GLOBALS.DEFAULT_PROFILE});
             /** @TODO MPR, 3/9/16: get image from server when not available */
             /*HttpManager.GET({url: `${GLOBALS.API_URL}users/${this.props.user_id}/image`, handleErrors: false})
                 .then(res => {

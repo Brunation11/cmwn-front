@@ -1,7 +1,5 @@
 import _ from 'lodash';
 
-import History from 'components/history';
-
 import Users from 'routes/users';
 import Districts from 'routes/districts';
 import DistrictView from 'routes/districts/view';
@@ -19,6 +17,7 @@ import Friends from 'routes/friends';
 import SuggestedFriends from 'routes/friends/suggested';
 import Profile from 'routes/users/profile';
 import StudentEdit from 'routes/users/edit';
+import UserAdmin from 'routes/users/view';
 import Game from 'routes/game';
 import ChangePassword from 'routes/change_password';
 
@@ -41,6 +40,7 @@ var routes = [
     { path: 'game/:game(/)', title: 'Games', endpoint: '/game/:game', component: Game},
     { path: 'profile/edit(/)', title: 'Edit Profile', endpoint: '$$me', component: StudentEdit },
     { path: 'profile/:id/edit(/)', title: 'Edit Profile', endpoint: '/user/:id', component: StudentEdit },
+    { path: 'user/:id/view(/)', title: 'User Admin', endpoint: '/user/:id', component: UserAdmin },
     { path: 'user(/)', onEnter: redirect('/profile')},
     { path: 'users(/)', onEnter: redirect('/profile')},
     { path: 'user/:id(/)', onEnter: redirect('/profile/:id')},

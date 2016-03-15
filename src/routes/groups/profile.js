@@ -38,8 +38,8 @@ var Component = React.createClass({
         this.setState(this.props.data);
         this.resolveRole();
     },
-    componentWillReceiveProps: function () {
-        this.setState(this.props.data);
+    componentWillReceiveProps: function (nextProps) {
+        this.setState(nextProps.data);
         this.resolveRole();
     },
     resolveRole: function () {

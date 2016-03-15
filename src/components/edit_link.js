@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router';
 
-const EDIT = 'edit';
+const EDIT = 'Edit';
 
 var Page = React.createClass({
     render: function () {

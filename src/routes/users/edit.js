@@ -1,22 +1,21 @@
 import React from 'react';
 import _ from 'lodash';
 import {Button, Input, Panel} from 'react-bootstrap';
+import { connect } from 'react-redux';
 
 import HttpManager from 'components/http_manager';
 import Log from 'components/log';
 import Toast from 'components/toast';
-import Authorization from 'components/authorization';
 import Layout from 'layouts/two_col';
 import GLOBALS from 'components/globals';
 import Validate from 'components/validators';
-import Fetcher from 'components/fetcher';
 import ProfileImage from 'components/profile_image';
 import Form from 'components/form';
 
 import 'routes/users/edit.scss';
 
 const HEADINGS = {
-    EDIT_TITLE: 'Info',
+    EDIT_TITLE: 'Edit User: ',
     PASSWORD: 'Update Password'
 };
 const ERRORS = {
@@ -31,22 +30,23 @@ const BAD_UPDATE = 'There was a problem updating your profile. Please try again 
 const USER_REMOVED = 'User deleted. You will now be redirected.';
 const CONFIRM_DELETE = 'Are you sure you want to delete this user? This action cannot be undone.';
 
-var Fields = React.createClass({
+var Component = React.createClass({
     getInitialState: function () {
         var state = _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {};
-        state.uuid = this.props.uuid;
         state.isStudent = true;
         return state;
     },
     componentDidMount: function () {
+        this.setState(this.props.data);
         this.resolveRole();
     },
-    componentWillReceiveProps: function () {
+    componentWillReceiveProps: function (nextProps) {
+        this.setState(nextProps.data);
         this.resolveRole();
     },
     suspendAccount: function () {
         if (window.confirm(CONFIRM_DELETE)) { //eslint-disable-line no-alert
-            HttpManager.DELETE({url: GLOBALS.API_URL + 'users/' + this.state.uuid, handleErrors: false})
+            HttpManager.DELETE({url: GLOBALS.API_URL + 'users/' + this.state.user_id, handleErrors: false})
                 .then(() => {
                     Toast.success(USER_REMOVED);
                 })
@@ -91,7 +91,7 @@ var Fields = React.createClass({
             postData.gender = this.state.gender;
         }
         if (this.refs.formRef.isValid()) {
-            HttpManager.POST(`${GLOBALS.API_URL}users/${this.state.uuid}`, postData).then(() => {
+            HttpManager.PUT(`${GLOBALS.API_URL}users/${this.state.user_id}`, postData).then(() => {
                 Toast.success('Profile Updated');
             }).catch(err => {
                 Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
@@ -178,103 +178,106 @@ var Fields = React.createClass({
         );
     },
     render: function () {
+        var formsDisabled = !this.state.isStudent;
         if (this.props.data == null || this.props.data.can_update === false) {
             return null;
         }
         return (
-            <Panel header={HEADINGS.EDIT_TITLE} className="standard edit-profile">
-                <div className="left">
-                    <ProfileImage uuid={this.props.uuid} link-below={true}/>
-                    <p><a onClick={this.suspendAccount}>{SUSPEND}</a></p>
-                </div>
-                <div className="right"><Form ref="formRef">
-                    <Input
-                        type="text"
-                        value={this.state.username}
-                        placeholder="Username"
-                        label="Username"
-                        ref="usernameInput"
-                        validate={[
-                            Validate.max.bind(null, 25),
-                            Validate.regex.bind(null, /^[a-zA-Z0-9_-]+$/),
-                        ]}
-                        name="usernameInput"
-                        validationEvent="onBlur"
-                        hasFeedback
-                        onChange={e => this.setState({username: e.target.value})} //eslint-disable-line camelcase
-                    />
-                    {this.renderEmail()}
-                    <Input
-                        type="text"
-                        value={this.state.first_name}
-                        placeholder="first name"
-                        label="First Name"
-                        validate="required"
-                        ref="firstnameInput"
-                        name="firstnameInput"
-                        validationEvent="onBlur"
-                        hasFeedback
-                        onChange={e => this.setState({first_name: e.target.value})} //eslint-disable-line camelcase
-                        disabled
-                    />
-                    <Input
-                        type="text"
-                        value={this.state.last_name}
-                        placeholder="last name"
-                        label="Last Name"
-                        validate="required"
-                        ref="lastnameInput"
-                        name="lastnameInput"
-                        onChange={e => this.setState({last_name: e.target.value})} //eslint-disable-line camelcase
-                        disabled
-                    />
-                    <Input
-                        type="select"
-                        value={this.state.gender}
-                        placeholder="Gender"
-                        label="Gender"
-                        validate="required"
-                        ref="genderInput"
-                        name="genderInput"
-                        onChange={e => this.setState({gender: e.target.value})}
-                        disabled={this.state.isStudent}
-                    >
-                            <option value="" >Select gender</option>
-                            <option value="female">Female</option>
-                            <option value="male">Male</option>
-                            <option value="other">Other</option>
-                    </Input>
-                    <Input
-                        type="text"
-                        value={this.state.birthdate}
-                        placeholder="date of birth"
-                        label="Date of Birth"
-                        validate="required"
-                        ref="birthdateInput"
-                        name="birthdateInput"
-                        onChange={e => this.setState({dob: e.target.value})}
-                        disabled
-                    />
-                    {''/*
-                    <Input
-                        type="email"
-                        value={this.state.email}
-                        placeholder="email"
-                        label="email"
-                        validate="required,email"
-                        ref="emailInput"
-                        name="emailInput"
-                        onChange={e => this.setState({email: e.target.value})}
-                    />
-                    <h3>Parent or Guardian</h3>
-                    {this.renderParentFields()}
-                    <p><a onClick={this.addParent}>+ Add parent or guardian</a></p>
-                    <h3>School Information</h3>
-                    {this.renderSchoolInformation()}
-                    */}
-                    <Button onClick={this.submitData}> Save </Button>
-                </Form></div>
-            </Panel>
+           <Layout className="edit-student">
+                <Panel header={HEADINGS.EDIT_TITLE + this.state.first_name + ' ' + this.state.last_name} className="standard edit-profile">
+                    <div className="left">
+                        <ProfileImage user_id={this.props.user_id} link-below={true}/>
+                        <p><a onClick={this.suspendAccount}>{SUSPEND}</a></p>
+                    </div>
+                    <div className="right"><Form ref="formRef">
+                        <Input
+                            type="text"
+                            value={this.state.username}
+                            placeholder="Username"
+                            label="Username"
+                            ref="usernameInput"
+                            validate={[
+                                Validate.max.bind(null, 25),
+                                Validate.regex.bind(null, /^[a-zA-Z0-9_-]+$/),
+                            ]}
+                            name="usernameInput"
+                            validationEvent="onBlur"
+                            hasFeedback
+                            onChange={e => this.setState({username: e.target.value})} //eslint-disable-line camelcase
+                        />
+                        {this.renderEmail()}
+                        <Input
+                            type="text"
+                            value={this.state.first_name}
+                            placeholder="first name"
+                            label="First Name"
+                            validate="required"
+                            ref="firstnameInput"
+                            name="firstnameInput"
+                            validationEvent="onBlur"
+                            hasFeedback
+                            onChange={e => this.setState({first_name: e.target.value})} //eslint-disable-line camelcase
+                            disabled={formsDisabled}
+                        />
+                        <Input
+                            type="text"
+                            value={this.state.last_name}
+                            placeholder="last name"
+                            label="Last Name"
+                            validate="required"
+                            ref="lastnameInput"
+                            name="lastnameInput"
+                            onChange={e => this.setState({last_name: e.target.value})} //eslint-disable-line camelcase
+                            disabled={formsDisabled}
+                        />
+                        <Input
+                            type="select"
+                            value={this.state.gender}
+                            placeholder="Gender"
+                            label="Gender"
+                            validate="required"
+                            ref="genderInput"
+                            name="genderInput"
+                            onChange={e => this.setState({gender: e.target.value})}
+                        >
+                                <option value="" >Select gender</option>
+                                <option value="female">Female</option>
+                                <option value="male">Male</option>
+                                <option value="other">Other</option>
+                        </Input>
+                        <Input
+                            type="text"
+                            value={this.state.birthdate}
+                            placeholder="date of birth"
+                            label="Date of Birth"
+                            validate="required"
+                            ref="birthdateInput"
+                            name="birthdateInput"
+                            onChange={e => this.setState({dob: e.target.value})}
+                            disabled={formsDisabled}
+                        />
+                        {''/*
+                        <Input
+                            type="email"
+                            value={this.state.email}
+                            placeholder="email"
+                            label="email"
+                            validate="required,email"
+                            ref="emailInput"
+                            name="emailInput"
+                            onChange={e => this.setState({email: e.target.value})}
+                        />
+                        <h3>Parent or Guardian</h3>
+                        {this.renderParentFields()}
+                        <p><a onClick={this.addParent}>+ Add parent or guardian</a></p>
+                        <h3>School Information</h3>
+                        {this.renderSchoolInformation()}
+                        */}
+                        <Button onClick={this.submitData}> Save </Button>
+                    </Form></div>
+                </Panel>
+                <ChangePassword uuid={this.state.user_id} />
+            </Layout>
         );
     }
 });
@@ -359,23 +362,19 @@ var ChangePassword = React.createClass({
     }
 });
 
-var Edit = React.createClass({
-    getInitialState: function () {
-        this.uuid = this.props.params.id || Authorization.currentUser.uuid;
-        this.url = GLOBALS.API_URL + 'users/' + this.uuid + '?include=roles';
-        return {};
-    },
-    render: function () {
-        return (
-           <Layout className="edit-student">
-                <Fetcher url={this.url}>
-                    <Fields uuid={this.uuid} />
-                </Fetcher>
-                <ChangePassword uuid={this.uuid} />
-           </Layout>
-         );
+const mapStateToProps = state => {
+    var data = {};
+    var loading = true;
+    if (state.page && state.page.data) {
+        loading = state.page.loading;
+        data = state.page.data;
     }
-});
+    return {
+        data,
+        loading
+    };
+};
 
-export default Edit;
+var Page = connect(mapStateToProps)(Component);
+export default Page;
 
