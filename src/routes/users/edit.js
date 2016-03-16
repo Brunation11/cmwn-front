@@ -11,11 +11,13 @@ import GLOBALS from 'components/globals';
 import Validate from 'components/validators';
 import ProfileImage from 'components/profile_image';
 import Form from 'components/form';
+import Store from 'components/store';
 
 import 'routes/users/edit.scss';
 
 const HEADINGS = {
     EDIT_TITLE: 'Edit User: ',
+    UPDATE_CODE: 'Reset code for user',
     PASSWORD: 'Update Password'
 };
 const ERRORS = {
@@ -276,7 +278,8 @@ var Component = React.createClass({
                         <Button onClick={this.submitData}> Save </Button>
                     </Form></div>
                 </Panel>
-                <ChangePassword uuid={this.state.user_id} />
+                <ChangePassword user_id={this.state.user_id} />
+                <CodeChange user_id={this.state.user_id} />
             </Layout>
         );
     }
@@ -285,6 +288,44 @@ var Component = React.createClass({
 var isPassValid = function (password) {
     return password.length > 8 && ~password.search(/[0-9]+/);
 };
+
+var CodeChange = React.createClass({
+    getInitialState: function () {
+        return {code: ''};
+    },
+    submit: function () {
+        var update = HttpManager.POST({url: `${GLOBALS.API_URL}user/${this.props.user_id}/code`}, {
+            'code': this.state.code
+        });
+        update.then(() => {
+            Toast.success('Code Reset for user. They will need to update their password on next login.');
+        }).catch(err => {
+            Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
+            Toast.error(ERRORS.BAD_PASS);
+        });
+    },
+    render: function () {
+        var state = Store.getState();
+        if (state.currentUser.user_id === this.props.user_id) {
+            return null;
+        }
+        return (
+            <Panel header={HEADINGS.UPDATE_CODE} className="standard"><form>
+                    <Input
+                        type="text"
+                        value={this.state.code}
+                        placeholder="code"
+                        label="Reset Code"
+                        validate="required"
+                        ref="currentInput"
+                        name="currentInput"
+                        onChange={e => this.setState({code: e.target.value})}
+                    />
+                    <Button onClick={this.submit}>Reset Code</Button>
+            </form></Panel>
+        );
+    }
+});
 
 var ChangePassword = React.createClass({
     getInitialState: function () {
@@ -300,12 +341,11 @@ var ChangePassword = React.createClass({
             this.setState({extraProps: {bsStyle: 'error'}});
             Toast.error(ERRORS.TOO_SHORT);
         } else if (this.state.confirm === this.state.new) {
-            var update = HttpManager.POST({url: `${GLOBALS.API_URL}/auth/password`, handleErrors: false}, {
+            var update = HttpManager.POST({url: `${GLOBALS.API_URL}user/${this.props.user_id}/password`}, {
                 'current_password': this.state.current,
                 'password': this.state.new,
                 'password_confirmation': this.state.confirm,
-                'user_id': this.props.uuid,
-                'user_uuid': this.props.uuid
+                'user_id': this.props.user_id,
             });
             update.then(() => {
                 Toast.success('Password Updated');
@@ -320,6 +360,10 @@ var ChangePassword = React.createClass({
         }
     },
     render: function () {
+        var state = Store.getState();
+        if (state.currentUser.user_id !== this.props.user_id) {
+            return null;
+        }
         return (
             <Panel header={HEADINGS.PASSWORD} className="standard">
                 <form>

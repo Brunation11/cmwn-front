@@ -53,7 +53,7 @@ var Component = React.createClass({
     submitData: function () {
         var postData = {
             title: this.state.title,
-            organization_id: this.props.data.organization_id,
+            organization_id: this.props.data.organization_id, //eslint-disable-line camelcase
             description: this.state.description
         };
         HttpManager.PUT({url: this.props.data._links.self.href}, postData).then(() => {
@@ -106,7 +106,7 @@ var CreateGroup = React.createClass({
     submitData: function () {
         var postData = {
             title: this.state.title,
-            organization_id: this.props.data.organization_id,
+            organization_id: this.props.data.organization_id, //eslint-disable-line camelcase
             meta: {
                 code: this.state.code
             },
@@ -171,7 +171,7 @@ var BulkUpload = React.createClass({
         return (
           <Panel header={HEADINGS.UPLOAD} className="standard">
             <iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe"></iframe>
-            <Form ref="formRef" method="post" target="dummyframe" encType="multipart/form-data" action={`${GLOBALS.API_URL}admin/importexcel`}
+            <Form ref="formRef" method="post" target="dummyframe" encType="multipart/form-data" action={`${GLOBALS.API_URL}group/${this.props.orgId}/import`}
                 onSubmit={e => {
                     try {
                         if (!this.refs.formRef.isValid()) {

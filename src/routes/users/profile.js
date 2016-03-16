@@ -170,8 +170,9 @@ var Profile = React.createClass({
         );
     },
     render: function () {
+        var state = Store.getState();
         if (this.state.username == null) {
-           return null;
+            return null;
         }
         return (
            <Layout className="profile">
@@ -183,10 +184,10 @@ var Profile = React.createClass({
                <Trophycase className={ClassNames({hidden: !this.state.isStudent})} data={this.state} />
                <Panel header={
                    ((this.state.user_id === Authorization.currentUser.uuid) ? 'My ' : this.state.username + '\'s ') + HEADINGS.ACTION
-               } className={ClassNames('standard', {hidden: !this.state.isStudent && this.state.uuid === Authorization.currentUser.uuid})}>
+               } className={ClassNames('standard', {hidden: !this.state.isStudent && this.state.user_id === state.currentUser.user_id})}>
                <div className="infopanel">
-                     <EditLink base="/profile" uuid={this.state.uuid} canUpdate={this.state.can_update} />
-                     <ProfileImage className={ClassNames({hidden: this.state.uuid === Authorization.currentUser.uuid})} uuid={this.state.uuid} link-below={true}/>
+                     <EditLink base="/profile" id={this.state.user_id} scope={this.state.scope} />
+                     <ProfileImage className={ClassNames({hidden: this.state.user_id === state.currentUser.user_id})} user_id={this.state.user_id} link-below={true}/>
                      <div className="info">
                         <p><strong>Classes</strong>: {_.map(this.state.groups.data, item => item.title).join(', ')}</p>
                      </div>

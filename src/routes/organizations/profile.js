@@ -62,7 +62,7 @@ var Component = React.createClass({
     },
     renderFlip: function (item){
         return (
-            <div className="flip" key={Shortid.generate()}><Link to={`/group/${item.id}/profile`}><img src={FlipBgDefault}></img><p>{item.title}</p></Link></div>
+            <div className="flip" key={Shortid.generate()}><Link to={`/group/${item.group_id}/profile`}><img src={FlipBgDefault}></img><p>{item.title}</p></Link></div>
         );
     },
     renderAdminLink: function () {

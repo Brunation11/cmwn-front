@@ -15,6 +15,8 @@ const INITIAL_STATE = Immutable({
     locationBeforeTransitions: null
 });
 
+var isAvailable = window.__cmwn.MODE === 'dev' || window.__cmwn.MODE === 'development' || window.__cmwn.MODE === 'local';
+
 var storedUserProperties = {};
 var userName = window.localStorage['com.cmwn.platform.userName'];
 var userId = window.localStorage['com.cmwn.platform.userId'];
@@ -157,6 +159,12 @@ var componentReducer = (allComponents = Immutable({_componentsToLoad: 0, _compon
     }
     return allComponents;
 };
+const composeMiddleware = [
+    applyMiddleware(combineActionsMiddleware, thunk, promiseMiddleware())
+];
+if (isAvailable) {
+    composeMiddleware.push(DevTools.instrument());
+}
 const Store = createStore( combineReducers({
     page: pageReducer,
     currentUser: authReducer,
@@ -184,9 +192,6 @@ const Store = createStore( combineReducers({
         }
         return loaderState;
     }
-}), Immutable({routing: INITIAL_STATE}), compose(
-    applyMiddleware(combineActionsMiddleware, thunk, promiseMiddleware()),
-    DevTools.instrument()
-));
+}), Immutable({routing: INITIAL_STATE}), compose(...composeMiddleware));
 export default Store;
 
