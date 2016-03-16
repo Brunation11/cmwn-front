@@ -214,9 +214,10 @@ var BulkUpload = React.createClass({
                 }}
             >
                 <input type="hidden" name="_token" value={HttpManager.token} />
+                <input type="hidden" name="type" value="Nyc\DoeImporter" />
                 <input type="hidden" name="organizations" value={this.props.orgId} />
                 <input type="hidden" name="organization_id" value={this.props.orgId} />
-                <Input ref="fileInput" accept=".xlsx" type="file" name="xlsx" chars="40" label="Upload Spreadsheet"/>
+                <Input ref="fileInput" accept=".xlsx" type="file" name="file" chars="40" label="Upload Spreadsheet"/>
                 <Input
                     type="text"
                     value={this.state.teacherCode}
@@ -224,7 +225,7 @@ var BulkUpload = React.createClass({
                     label="Teacher Access Code"
                     validate="required"
                     ref="teacherInput"
-                    name="teacherAccessCode"
+                    name="teacher_code"
                     onChange={e => this.setState({teacherCode: e.target.value})} //eslint-disable-line camelcase
                 />
                 <Input
@@ -234,7 +235,7 @@ var BulkUpload = React.createClass({
                     label="Student Access Code"
                     validate="required"
                     ref="studentInput"
-                    name="studentAccessCode"
+                    name="student_code"
                     onChange={e => this.setState({studentCode: e.target.value})} //eslint-disable-line camelcase
                 />
                 <FormControls.Static value={TERMS_COPY} />

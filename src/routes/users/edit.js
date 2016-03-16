@@ -24,7 +24,8 @@ const ERRORS = {
     BAD_PASS: 'Sorry, there was a problem updating your password.',
     NO_MATCH: 'Those passwords do not appear to match. Please try again.',
     TOO_SHORT: 'Passwords must contain at least 8 characters, including one number',
-    BAD_DELETE: 'Sorry, there was a problem deleting the user. Please refresh and try again.'
+    BAD_DELETE: 'Sorry, there was a problem deleting the user. Please refresh and try again.',
+    BAD_RESET: 'This users password could not be reset at this time. Please try again later.'
 };
 const SUSPEND = 'Delete Account';
 const INVALID_SUBMISSION = 'Invalid submission. Please update fields highlighted in red and submit again';
@@ -35,7 +36,7 @@ const CONFIRM_DELETE = 'Are you sure you want to delete this user? This action c
 var Component = React.createClass({
     getInitialState: function () {
         var state = _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {};
-        state.isStudent = true;
+        state = _.defaults({}, state, {isStudent: true});
         return state;
     },
     componentDidMount: function () {
@@ -57,6 +58,15 @@ var Component = React.createClass({
                     Log.error('User not deleted: ' + err.message, err);
                 });
         }
+    },
+    resetPassword: function () {
+        //note: This should only appear for adults, who have email addressed
+        HttpManager.GET(`${GLOBALS.API_URL}users/${this.state.user_id}/reset`).then(() => {
+            Toast.success('Password Reset. This user will recieve an email with further instructions.');
+        }).catch(err => {
+            Toast.error(BAD_RESET + (err.message ? ' Message: ' + err.message : ''));
+            Log.log('Server refused profile update', err, postData);
+        });
     },
     removeParent: function (i) {
         var self = this;
