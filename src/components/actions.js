@@ -15,6 +15,7 @@ import Store from 'components/store';
 import Log from 'components/log';
 import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
+import Errors from 'components/errors';
 
 /**
  * Generates a dictionary of bound action creator functions.
@@ -69,6 +70,9 @@ Actions = Actions.set(ACTION_CONSTANTS.PAGE_DATA, function (url, title) {
                 url: url,
                 handlePageLevelErrors: true
             }).then(server => {
+                if (server.status && (server.status < 200 || server.status >= 300)) {
+                    throw server;
+                }
                 return Promise.resolve((action, dispatch) => {
                     dispatch({
                         type: 'combo',
@@ -81,10 +85,11 @@ Actions = Actions.set(ACTION_CONSTANTS.PAGE_DATA, function (url, title) {
                     });
                 });
             }).catch(err => {
-                Log.error(err);
+                Log.error('Server Error: ' + _.isString(err) ? err : err.status);
                 //NOTE: This is the primary page-level error handling block in the entire application
                 //The only page-level error not handled here will be true 404 errors, which will be handled
                 //in app.js by the router.
+                Errors.handlePageErrors(err);
             })
         }
     };
@@ -157,11 +162,10 @@ Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentif
                             Actions.COMPONENT_LOADER_COMPLETE
                         ]
                     });
-                    debugger;
                     if (state.components._componentsToLoad - 1 === state.components._componentsLoaded) {
                         Actions.dispatch.LOADER_START();//unlike other stages, we advance this one at the very end, rather than the beginning
                         Actions.dispatch.ADVANCE_LOAD_STAGE();
-                    } 
+                    }
                 });
             })
         }
