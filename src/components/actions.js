@@ -81,6 +81,7 @@ Actions = Actions.set(ACTION_CONSTANTS.PAGE_DATA, function (url, title) {
                     });
                 });
             }).catch(err => {
+                Log.error(err);
                 //NOTE: This is the primary page-level error handling block in the entire application
                 //The only page-level error not handled here will be true 404 errors, which will be handled
                 //in app.js by the router.
@@ -119,6 +120,7 @@ Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
                 });
             }).catch(err => {
                 /** @TODO MPR, 3/5/16: Handle Auth Errors*/
+                Log.error(err);
             })
         }
     };
@@ -154,6 +156,7 @@ Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentif
                             Actions.END_COMPONENT_DATA.bind(null, {data: server.response, endpointIdentifier, componentName}),
                         ]
                     });
+                    debugger;
                     if (state.components._componentsToLoad - 1 === state.components._componentsLoaded) {
                         Actions.dispatch.LOADER_START();//unlike other stages, we advance this one at the very end, rather than the beginning
                         Actions.dispatch.COMPONENT_LOADER_COMPLETE();
@@ -161,6 +164,38 @@ Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentif
                     } else {
                         Actions.dispatch.COMPONENT_LOADER_COMPLETE();
                     }
+                });
+            })
+        }
+    };
+});
+
+Actions = Actions.set(ACTION_CONSTANTS.GET_NEXT_COMPONENT_PAGE, function (state, endpointIdentifier, componentName, pageNum) {
+    var endpoint = state.components[endpointIdentifier + '-' + componentName]._links.find
+        .replace('{page}', pageNum)
+        .replace('{count}', state.components[endpointIdentifier + '-' + componentName].page_size);
+    return {
+        type: 'ACTION_CONSTANTS.GET_NEXT_COMPONENT_PAGE',
+        payload: {
+            promise: HttpManager.GET({url: endpoint}).then(server => {
+                return Promise.resolve((action, dispatch) => {
+                    dispatch(Actions.END_GET_NEXT_COMPONENT_PAGE({data: server.response, endpointIdentifier, componentName}));
+                });
+            })
+        }
+    };
+});
+
+Actions = Actions.set(ACTION_CONSTANTS.CHANGE_COMPONENT_ROW_COUNT, function (state, endpointIdentifier, componentName, rowCount) {
+    var endpoint = state.components[endpointIdentifier + '-' + componentName]._links.find
+        .replace('{count}', rowCount)
+        .replace('{page}', state.components[endpointIdentifier + '-' + componentName].page);
+    return {
+        type: 'ACTION_CONSTANTS.CHANGE_COMPONENT_ROW_COUNT',
+        payload: {
+            promise: HttpManager.GET({url: endpoint}).then(server => {
+                return Promise.resolve((action, dispatch) => {
+                    dispatch(Actions.END_CHANGE_COMPONENT_ROW_COUNT({data: server.response, endpointIdentifier, componentName}));
                 });
             })
         }

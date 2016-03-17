@@ -45,7 +45,7 @@ var Component = React.createClass({
     submitData: function () {
         var postData = {
             title: this.state.title,
-            organization_id: this.props.data.organization_id,
+            organization_id: this.props.data.organization_id, //eslint-disable-line camelcase
             description: this.state.description
         };
         HttpManager.PUT({url: this.props.data._links.self.href}, postData).then(() => {
@@ -104,9 +104,9 @@ var CreateStudent = React.createClass({
     },
     submitData: function () {
         var postData = {
-            first_name: this.state.first,
-            group_id: this.props.data.group_id,
-            last_name: this.state.last,
+            first_name: this.state.first, //eslint-disable-line camelcase
+            group_id: this.props.data.group_id, //eslint-disable-line camelcase
+            last_name: this.state.last, //eslint-disable-line camelcase
             email: this.state.first + '@' + this.state.last + '.com',
             username: this.state.first + '@' + this.state.last + '.com',
             type: 'ADULT'

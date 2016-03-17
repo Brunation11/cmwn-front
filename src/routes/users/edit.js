@@ -64,8 +64,8 @@ var Component = React.createClass({
         HttpManager.GET(`${GLOBALS.API_URL}users/${this.state.user_id}/reset`).then(() => {
             Toast.success('Password Reset. This user will recieve an email with further instructions.');
         }).catch(err => {
-            Toast.error(BAD_RESET + (err.message ? ' Message: ' + err.message : ''));
-            Log.log('Server refused profile update', err, postData);
+            Toast.error(ERRORS.BAD_RESET + (err.message ? ' Message: ' + err.message : ''));
+            Log.log('Server refused profile update', err);
         });
     },
     removeParent: function (i) {

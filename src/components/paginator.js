@@ -4,6 +4,8 @@ import _ from 'lodash';
 //import ClassNames from 'classnames';
 
 import GLOBALS from 'components/globals';
+import Actions from 'components/actions';
+import Store from 'components/store';
 
 import 'components/paginator.scss';
 
@@ -45,11 +47,11 @@ var Paginator = React.createClass({
     },
     selectPage: function (pageNum) {
         this.props.onPageChange(pageNum);
-        this.setState({currentPage: pageNum});
+        Actions.GET_NEXT_COMPONENT_PAGE(Store.getState(), this.props.endpointIdentifier, this.props.componentName, pageNum);
     },
     selectRowCount: function (e, count) {
         this.props.onRowCountChange(count);
-        this.setState({rowCount: count});
+        Actions.CHANGE_COMPONENT_ROW_COUNT(Store.getState(), this.props.endpointIdentifier, this.props.componentName, count);
     },
     renderPageSelectors: function () {
         return _.map(_getButtonPattern(this.state.currentPage, this.state.pageCount), value => {

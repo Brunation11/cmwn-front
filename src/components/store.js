@@ -114,6 +114,18 @@ var locationReducer = (previousLoc = {}, action) => {
 };
 
 var componentReducer = (allComponents = Immutable({_componentsToLoad: 0, _componentsLoaded: 0}), action) => {
+    var setComponentData = function (component) {
+        var extractedEmbedded = _.reduce(action.data._embedded, (a, i) => i);
+        component = component.set('loading', false);
+        component = component.set('response', action.data);
+        component = component.set('data', extractedEmbedded);
+        component = component.set('_links', action.data._links);
+        component = component.set('page_count', action.data.page_count);
+        component = component.set('page_size', action.data.page_size);
+        component = component.set('total_items', action.data.total_items);
+        component = component.set('page', action.data.page);
+        return component;
+    };
     //single component reducers
     var reducers = {
         [ACTION_CONSTANTS.COMPONENT_REQUESTED]: function (component) {
@@ -126,16 +138,13 @@ var componentReducer = (allComponents = Immutable({_componentsToLoad: 0, _compon
             return component.set('loading', true);
         }.bind(null, allComponents[action.endpointIdentifier + '-' + action.componentName]),
         [ACTION_CONSTANTS.END_COMPONENT_DATA]: function (component) {
-            var extractedEmbedded = _.reduce(action.data._embedded, (a, i) => i);
-            component = component.set('loading', false);
-            component = component.set('response', action.data);
-            component = component.set('data', extractedEmbedded);
-            component = component.set('_links', action.data._links);
-            component = component.set('page_count', action.data.page_count);
-            component = component.set('page_size', action.data.page_size);
-            component = component.set('total_items', action.data.total_items);
-            component = component.set('page', action.data.page);
-            return component;
+            return setComponentData(component);
+        }.bind(null, allComponents[action.endpointIdentifier + '-' + action.componentName]),
+        [ACTION_CONSTANTS.END_GET_NEXT_COMPONENT_PAGE]: function (component) {
+            return setComponentData(component);
+        }.bind(null, allComponents[action.endpointIdentifier + '-' + action.componentName]),
+        [ACTION_CONSTANTS.END_CHANGE_COMPONENT_ROW_COUNT]: function (component) {
+            return setComponentData(component);
         }.bind(null, allComponents[action.endpointIdentifier + '-' + action.componentName]),
     };
 
