@@ -2,24 +2,14 @@ import React from 'react';
 import _ from 'lodash';
 import ClassNames from 'classnames';
 import Shortid from 'shortid';
-import {Panel, Modal} from 'react-bootstrap';
-import QueryString from 'query-string';
 import { connect } from 'react-redux';
 
 import Detector from 'components/browser_detector';
-import ProfileImage from 'components/profile_image';
 import FlipBoard from 'components/flipboard';
 import Game from 'components/game';
-import Authorization from 'components/authorization';
-import EventManager from 'components/event_manager';
-import EditLink from 'components/edit_link';
-import Trophycase from 'components/trophycase';
 import GLOBALS from 'components/globals';
-import Toast from 'components/toast';
-//import Util from 'components/util';
-import History from 'components/history';
-import Store from 'components/store';
 import GenerateDataSource from 'components/datasource';
+import History from 'components/history';
 
 import Layout from 'layouts/two_col';
 
@@ -27,7 +17,7 @@ import FlipBgDefault from 'media/flip-placeholder-white.png';
 
 import 'routes/users/profile.scss';
 
-const GameWrapper = GenerateDataSource('games', 'profile');
+const GameWrapper = GenerateDataSource('games', 'games-list');
 
 const HEADINGS = {
     ACTION: 'Profile',
@@ -37,7 +27,6 @@ const PLAY = 'Play Now!';
 const COMING_SOON = 'Coming Soon!';
 
 const BROWSER_NOT_SUPPORTED = <span><p>For the best viewing experience we reccomend the desktop version in Chrome</p><p>If you don't have chrome, <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">download it for free here</a>.</p></span>;
-const PASS_UPDATED = 'You have successfully updated your password. Be sure to remeber it for next time!';
 
 var Profile = React.createClass({
     getInitialState: function () {
@@ -47,37 +36,6 @@ var Profile = React.createClass({
         }, _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {},
         {groups: {data: []}});
         return state;
-    },
-    componentDidMount: function () {
-        EventManager.listen('userChanged', () => {
-            this.resolveRole();
-            this.forceUpdate();
-        });
-        this.resolveRole();
-        if (QueryString.parse(location.search).message === 'updated') {
-            Toast.success(PASS_UPDATED);
-        }
-
-        if (this.props.loading === false && this.props.data) {
-            this.setState(this.props.data);
-        }
-    },
-    componentWillReceiveProps: function (nextProps) {
-        if (nextProps.loading === false && nextProps.data.user_id !== this.props.data.user_id) {
-            this.setState(nextProps.data);
-        }
-    },
-    resolveRole: function () {
-        var newState = {};
-        if (this.props.data == null) {
-            return;
-        }
-        if (this.props.data.roles && ~this.props.data.roles.data.indexOf('Student')) {
-            newState.isStudent = true;
-        } else {
-            newState.isStudent = false;
-        }
-        this.setState(newState);
     },
     showModal: function (gameUrl) {
         var urlParts;
@@ -136,10 +94,6 @@ var Profile = React.createClass({
         );
     },
     renderGameList: function () {
-        var state = Store.getState();
-        if (this.state._links == null || state.currentUser.user_id !== this.state.user_id) {
-            return null;
-        }
         return (
            <GameWrapper transform={data => {
                var array = data;
@@ -170,29 +124,8 @@ var Profile = React.createClass({
         );
     },
     render: function () {
-        var state = Store.getState();
-        if (this.state.username == null) {
-            return null;
-        }
         return (
-           <Layout className="profile">
-                <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal} keyboard={false} backdrop="static">
-                    <Modal.Body>
-                        {this.renderGame()}
-                    </Modal.Body>
-                </Modal>
-               <Trophycase className={ClassNames({hidden: !this.state.isStudent})} data={this.state} />
-               <Panel header={
-                   ((this.state.user_id === Authorization.currentUser.uuid) ? 'My ' : this.state.username + '\'s ') + HEADINGS.ACTION
-               } className={ClassNames('standard', {hidden: !this.state.isStudent && this.state.user_id === state.currentUser.user_id})}>
-               <div className="infopanel">
-                     <EditLink base="/profile" id={this.state.user_id} scope={this.state.scope} />
-                     <ProfileImage className={ClassNames({hidden: this.state.user_id === state.currentUser.user_id})} user_id={this.state.user_id} link-below={true}/>
-                     <div className="info">
-                        <p><strong>Classes</strong>: {_.map(this.state.groups.data, item => item.title).join(', ')}</p>
-                     </div>
-                 </div>
-               </Panel>
+           <Layout className="games">
                {this.renderGameList()}
            </Layout>
         );

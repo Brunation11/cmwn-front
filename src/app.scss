@@ -83,6 +83,12 @@ h1, h2, h3 {
 
 #pageerror {
     background: url("media/generic_error.png") #fff;
+    animation: fadein 4s;
+}
+
+@keyframes fadein {
+    from {opacity: 0;}
+    to {opacity: 1}
 }
 
 #cmwn-app {

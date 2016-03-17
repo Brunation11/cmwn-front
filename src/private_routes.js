@@ -19,6 +19,7 @@ import Profile from 'routes/users/profile';
 import StudentEdit from 'routes/users/edit';
 import UserAdmin from 'routes/users/view';
 import Game from 'routes/game';
+import Games from 'routes/games';
 import ChangePassword from 'routes/change_password';
 
 var redirect = function (path) {
@@ -36,7 +37,7 @@ var routes = [
     { path: 'change-password(/)', title: 'Password Change', component: ChangePassword },
     { path: 'users(/)', title: 'Users', endpoint: '/user', component: Users },
     { path: 'profile(/)', title: 'Profile', endpoint: '$$me', component: Profile},
-    { path: 'games(/)', title: 'Games', endpoint: '/game', component: Profile},
+    { path: 'games(/)', title: 'Games', component: Games},
     { path: 'game/:game(/)', title: 'Games', endpoint: '/game/:game', component: Game},
     { path: 'profile/edit(/)', title: 'Edit Profile', endpoint: '$$me', component: StudentEdit },
     { path: 'profile/:id/edit(/)', title: 'Edit Profile', endpoint: '/user/:id', component: StudentEdit },
