@@ -8,5 +8,5 @@ global.window.Rollbar = null;
 global.window.__cmwn = {};
 //global.window.__cmwn
 //global.window.__cmwn.
-
+document = global.document;
 require('./build/test.js');

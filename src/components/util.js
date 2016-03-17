@@ -41,7 +41,11 @@ var Util = {
     setPageTitle: function (text) {
         var titleElem = document.getElementsByTagName('title')[0];
         var title = document.createTextNode(text);
-        while (titleElem.lastChild) {
+        if (titleElem == null) {
+            titleElem = document.createElement('title');
+            document.getElementsByTagName('head')[0].appendChild(titleElem);
+        }
+        while (titleElem && titleElem.lastChild) {
             titleElem.removeChild(titleElem.lastChild);
         }
         titleElem.appendChild(title);

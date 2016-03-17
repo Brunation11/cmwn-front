@@ -26,6 +26,7 @@ const BAD_UPDATE = 'There was a problem updating your profile. Please try again 
 var Component = React.createClass({
     getInitialState: function () {
         return {
+            id: this.props.id || this.props.params.id,
             code: '',
             title: '',
             description: ''
@@ -54,7 +55,7 @@ var Component = React.createClass({
             return null;
         }
         return (
-           <Layout>
+           <Layout className="district-edit">
               <Panel header={HEADINGS.EDIT_TITLE} className="standard">
                  <Input
                     type="text"
@@ -91,7 +92,7 @@ var CreateOrganization = React.createClass({
     submitData: function () {
         var postData = {
             title: this.state.title,
-            organization_id: this.props.data.org_id,
+            organization_id: this.props.data.org_id, //eslint-disable-line camelcase
             meta: {
                 code: this.state.code
             },
