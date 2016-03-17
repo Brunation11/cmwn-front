@@ -33,7 +33,7 @@ const ERRORS = {
 const TERMS_COPY = <span>By checking the box below, you agree that you have read, understand, and accept <a href="/terms" target="_blank">ChangeMyWorldNow.com's terms and conditions</a>.</span>;
 
 var isPassValid = function (password) {
-    return password.length > 8 && ~password.search(/[0-9]+/);
+    return password.length >= 8 && ~password.search(/[0-9]+/);
 };
 
 var Component = React.createClass({
