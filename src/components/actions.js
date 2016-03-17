@@ -154,16 +154,14 @@ Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentif
                         sequence: true,
                         payload: [
                             Actions.END_COMPONENT_DATA.bind(null, {data: server.response, endpointIdentifier, componentName}),
+                            Actions.COMPONENT_LOADER_COMPLETE
                         ]
                     });
                     debugger;
                     if (state.components._componentsToLoad - 1 === state.components._componentsLoaded) {
                         Actions.dispatch.LOADER_START();//unlike other stages, we advance this one at the very end, rather than the beginning
-                        Actions.dispatch.COMPONENT_LOADER_COMPLETE();
                         Actions.dispatch.ADVANCE_LOAD_STAGE();
-                    } else {
-                        Actions.dispatch.COMPONENT_LOADER_COMPLETE();
-                    }
+                    } 
                 });
             })
         }
