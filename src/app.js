@@ -184,11 +184,16 @@ var progressivePageLoad = function () {
 
 History.listen(location => {
     var pathContext = _.find(routes.childRoutes, i => Util.matchPathAndExtractParams(i.path, location.pathname) !== false);
-    if (pathContext == null || pathContext.onEnter != null) {
+    if (pathContext.onEnter != null) {
         return; //don't bother operating on redirects
     }
+
+    if (pathContext == null) {
+        //at this point we already know whether or not our path 404d...
+        Errors.show404();
+        return;
+    }
     var nextLoc = _.defaults({}, location, pathContext);
-    //you know, at this point we already know whether or not our path 404d...
     nextLoc.component = null; //no need to store this in state.
     Store.dispatch({
         type: 'combo',

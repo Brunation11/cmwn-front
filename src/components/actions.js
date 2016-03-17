@@ -124,8 +124,10 @@ Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
                     });
                 });
             }).catch(err => {
-                /** @TODO MPR, 3/5/16: Handle Auth Errors*/
                 Log.error(err);
+                if (window.location.pathname !== '/login' && window.location.pathname !== '/login/') {
+                    History.push('/login');
+                }
             })
         }
     };
