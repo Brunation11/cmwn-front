@@ -83,7 +83,8 @@ h1, h2, h3 {
 
 #pageerror {
     background: url("media/generic_error.png") #fff;
-    animation: fadein 4s;
+    animation: fadein 1s;
+    animation-delay: 5s
 }
 
 @keyframes fadein {

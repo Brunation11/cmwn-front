@@ -83,7 +83,7 @@ var _makeRequest = function (verb, requests){
                         url,
                         status: xhr.status,
                         response,
-                        request: _.defaults({}, req, {xhr})
+                        request: _.defaults({body: ''}, req, {xhr})
                     });
                 };
                 //if (!req.withoutToken && this._token != null && verb === 'GET') {
