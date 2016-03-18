@@ -19,13 +19,9 @@ const GLOBALS = _.defaults(window.__cmwn, {
     },
     TOP_NAV: [
         {URL: '/', TEXT: 'Home'},
-        {URL: '/members', TEXT: 'Members'},
-        {URL: '/roles', TEXT: 'Roles'},
         {URL: '/districts', TEXT: 'Districts'},
-        {URL: '/orgainizations', TEXT: 'Organizations'},
-        {URL: '/groups', TEXT: 'Groups'},
-        {URL: 'uploadcsv', TEXT: 'Upload CSV'},
-        {URL: '/playground', TEXT: 'Cloudinary Image'}
+        {URL: '/schools', TEXT: 'Schools'},
+        {URL: '/classes', TEXT: 'Classes'},
     ],
     PAGINATOR_COUNTS: [10, 25, 50, 250],
     TOAST_DEFAULT_TIMEOUT: 2000,

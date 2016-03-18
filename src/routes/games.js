@@ -33,8 +33,7 @@ var Profile = React.createClass({
         var state = _.defaults({
             gameOn: false,
             gameId: -1
-        }, _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {},
-        {groups: {data: []}});
+        }, _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {});
         return state;
     },
     showModal: function (gameUrl) {

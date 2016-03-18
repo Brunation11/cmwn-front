@@ -3,7 +3,6 @@ import _ from 'lodash';
 import QueryString from 'query-string';
 import { connect } from 'react-redux';
 import {Link} from 'react-router';
-//import _ from 'lodash';
 import {Panel} from 'react-bootstrap';
 import Shortid from 'shortid';
 
@@ -18,7 +17,7 @@ import Util from 'components/util';
 import 'routes/users/profile.scss';
 import FlipBgDefault from 'media/icon_class_blue.png';
 
-const PAGE_UNIQUE_IDENTIFIER = 'groupProfile';
+const PAGE_UNIQUE_IDENTIFIER = 'classProfile';
 
 const ClassSource = GenerateDataSource('group::class', PAGE_UNIQUE_IDENTIFIER);
 
@@ -28,16 +27,16 @@ const HEADINGS = {
     DISTRICTS: 'Member of Districts'
 };
 
-const ADMIN_TEXT = 'School Dashboard';
+const ADMIN_TEXT = 'School Administrative Dashboard';
 
 const ORG_CREATED = 'School created successfully';
 
 var Component = React.createClass({
     getInitialState: function () {
         return {
-            organization: [],
+            school: [],
             districts: [],
-            groups: [],
+            classes: [],
             users: []
         };
     },
@@ -62,7 +61,7 @@ var Component = React.createClass({
     },
     renderFlip: function (item){
         return (
-            <div className="flip" key={Shortid.generate()}><Link to={`/group/${item.group_id}/profile`}><img src={FlipBgDefault}></img><p>{item.title}</p></Link></div>
+            <div className="flip" key={Shortid.generate()}><Link to={`/class/${item.group_id}/profile`}><img src={FlipBgDefault}></img><p>{item.title}</p></Link></div>
         );
     },
     renderAdminLink: function () {
@@ -70,7 +69,7 @@ var Component = React.createClass({
             return null;
         }
         return (
-            <p><a href={`/organization/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
+            <p><a href={`/school/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
         );
     },
     render: function () {
@@ -80,7 +79,7 @@ var Component = React.createClass({
         return (
            <Layout className="profile">
                <Panel header={this.props.data.title} className="standard">
-                   <EditLink base="/organization" uuid={this.props.data.group_id} canUpdate={Util.decodePermissions(this.props.data.scope).update} />
+                   <EditLink base="/school" uuid={this.props.data.group_id} canUpdate={Util.decodePermissions(this.props.data.scope).update} />
                    {this.renderAdminLink()}
                     <p>{`${HEADINGS.DISTRICTS}: `}{this.renderDistricts()}</p>
                    {this.props.data.description}

@@ -18,7 +18,7 @@ const ClassSource = GenerateDataSource('group::class', PAGE_UNIQUE_IDENTIFIER);
 const UserSource = GenerateDataSource('user', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
-    TITLE: 'School Dashboard: ',
+    TITLE: 'School Administrative Dashboard: ',
     ID: 'ID',
     DESCRIPTION: 'Description',
     CREATED: 'Created',
@@ -33,9 +33,9 @@ const ADMIN_TEXT = 'Teacher Dashboard';
 var Component = React.createClass({
     getInitialState: function () {
         return {
-            organization: [],
+            school: [],
             districts: [],
-            groups: [],
+            classes: [],
             users: [],
             scope: 7
         };
@@ -61,7 +61,7 @@ var Component = React.createClass({
             return null;
         }
         return (
-            <p><a href={`/organization/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
+            <p><a href={`/school/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
         );
     },
     render: function () {
@@ -71,30 +71,30 @@ var Component = React.createClass({
         return (
             <Layout>
                 <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard">
-                   <EditLink base="/organization" id={this.state.group_id} scope={this.state.scope} />
-                   <DeleteLink base="/organization" id={this.state.group_id} scope={this.state.scope} />
+                   <EditLink base="/school" id={this.state.group_id} scope={this.state.scope} />
+                   <DeleteLink base="/school" id={this.state.group_id} scope={this.state.scope} />
                     <p>{`${HEADINGS.DISTRICTS}: `}{this.renderDistricts()}</p>
                     <br />
                     <p>{`${HEADINGS.DESCRIPTION}: ${this.props.data.description}`}</p>
                 </Panel>
                 <Panel header={HEADINGS.CLASSES} className="standard">
-                    <a onClick={() => History.push('/groups')}>View All Your Classes</a>
+                    <a onClick={() => History.push('/classes')}>View All Your Classes</a>
                     <ClassSource>
                         <Table>
                             <Column dataKey="title"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/groups/' + row.group_id)}>{_.startCase(data)}</a>
+                                    <a onClick={() => History.push('/class/' + row.group_id)}>{_.startCase(data)}</a>
                                 )}
                             />
                             <Column dataKey="description" />
                             <Column dataKey="title" renderHeader="Admin View"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/groups/' + row.group_id + '/view')}>Admin View</a>
+                                    <a onClick={() => History.push('/class/' + row.group_id + '/view')}>Admin View</a>
                                 )}
                             />
                             <Column dataKey="title" renderHeader="Edit"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/groups/' + row.group_id + '/edit')}>Edit</a>
+                                    <a onClick={() => History.push('/class/' + row.group_id + '/edit')}>Edit</a>
                                 )}
                             />
                         </Table>

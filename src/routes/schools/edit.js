@@ -54,7 +54,7 @@ var Component = React.createClass({
     submitData: function () {
         var postData = {
             title: this.state.title,
-            organization_id: this.props.data.organization_id, //eslint-disable-line camelcase
+            group_id: this.props.data.group_id, //eslint-disable-line camelcase
             description: this.state.description
         };
         HttpManager.PUT({url: this.props.data._links.self.href}, postData).then(() => {
@@ -91,14 +91,14 @@ var Component = React.createClass({
                  />
                  <Button onClick={this.submitData} > Save </Button>
               </Panel>
-              <CreateGroup data={this.props.data} />
-              <BulkUpload orgId={this.props.params.id}/>
+              <CreateClass data={this.props.data} />
+              <BulkUpload organization_id={this.props.params.id}/>
            </Layout>
          );
     }
 });
 
-var CreateGroup = React.createClass({
+var CreateClass = React.createClass({
     getInitialState: function () {
         return {
             title: ''
@@ -107,6 +107,7 @@ var CreateGroup = React.createClass({
     submitData: function () {
         var postData = {
             title: this.state.title,
+            parent_id: this.props.data.group_id, //eslint-disable-line camelcase
             organization_id: this.props.data.organization_id, //eslint-disable-line camelcase
             meta: {
                 code: this.state.code
@@ -115,11 +116,11 @@ var CreateGroup = React.createClass({
         };
         if (this.refs.formRef.isValid()) {
             HttpManager.POST({
-                //url: this.props.data._links.groups
+                //url: this.props.data._links['group:class']
                 url: GLOBALS.API_URL + 'group'
             }, postData).then(res => {
                 if (res.response && res.response.group_id) {
-                    History.push(`/group/${res.response.group_id}?message=created`);
+                    History.push(`/class/${res.response.group_id}?message=created`);
                 }
             }).catch(err => {
                 Toast.error(ERRORS.BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
@@ -216,8 +217,8 @@ var BulkUpload = React.createClass({
             >
                 <input type="hidden" name="_token" value={HttpManager.token} />
                 <input type="hidden" name="type" value="Nyc\DoeImporter" />
-                <input type="hidden" name="organizations" value={this.props.orgId} />
-                <input type="hidden" name="organization_id" value={this.props.orgId} />
+                <input type="hidden" name="organization" value={this.props.organization_id} />
+                <input type="hidden" name="organization_id" value={this.props.organization_id} />
                 <Input ref="fileInput" accept=".xlsx" type="file" name="file" chars="40" label="Upload Spreadsheet"/>
                 <Input
                     type="text"

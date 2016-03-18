@@ -19,7 +19,7 @@ const HEADINGS = {
 };
 const BREADCRUMB = {
     HOME: 'Home',
-    GROUPS: 'Groups'
+    CLASSES: 'Classes'
 };
 
 const BAD_UPDATE = 'There was a problem updating your profile. Please try again later.';
@@ -65,7 +65,7 @@ var Component = React.createClass({
                 <h2>{this.props.data.title}</h2>
                 <div className="breadcrumb">
                     <Link to="/">{BREADCRUMB.HOME}</Link>
-                    <Link to="/groups">{BREADCRUMB.GROUPS}</Link>
+                    <Link to="/classes">{BREADCRUMB.CLASSES}</Link>
                     <span>{this.props.data.title}</span>
                 </div>
               <Panel header={HEADINGS.EDIT_TITLE + this.props.data.title} className="standard">

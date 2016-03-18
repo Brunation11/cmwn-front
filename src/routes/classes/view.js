@@ -12,16 +12,16 @@ import DeleteLink from 'components/delete_link';
 import Util from 'components/util';
 import GenerateDataSource from 'components/datasource';
 
-const PAGE_UNIQUE_IDENTIFIER = 'groupProfile';
+const PAGE_UNIQUE_IDENTIFIER = 'classProfile';
 
 const UserSource = GenerateDataSource('user', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
-    TITLE: 'Class',
+    TITLE: 'Class Administrative Dashboard: ',
     ID: 'ID',
     DESCRIPTION: 'Description',
     CREATED: 'Created',
-    Organizations: 'Member of: '
+    CLASSES: 'Member of: '
 };
 
 var Component = React.createClass({
@@ -35,17 +35,17 @@ var Component = React.createClass({
         this.setState(nextProps.data);
     },
     renderSchools: function () {
-        var links = _.map(this.props.data.organizations, organization => {
+        var links = _.map(this.props.data.schools, school => {
             return (
-                <Link to={`organization/${organization.uuid}`}>
-                    {organization.title}
+                <Link to={`school/${school.uuid}`}>
+                    {school.title}
                 </Link>
             );
         });
         if (!links.length) {
             return null;
         }
-        return <span>{`${HEADINGS.GROUPS}: `}{links}</span>;
+        return <span>{`${HEADINGS.CLASSES}: `}{links}</span>;
     },
     render: function () {
         if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
@@ -53,11 +53,11 @@ var Component = React.createClass({
         }
         return (
             <Layout>
-                <Panel header={HEADINGS.TITLE + ': ' + this.props.data.title} className="standard">
-                    <EditLink base="/group" id={this.state.group_id} scope={this.state.scope} />
-                    <DeleteLink base="/group" id={this.state.group_id} scope={this.state.scope} />
+                <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard">
+                    <EditLink base="/class" id={this.state.group_id} scope={this.state.scope} />
+                    <DeleteLink base="/class" id={this.state.group_id} scope={this.state.scope} />
                     <p>
-                        <a href={`/group/${this.props.data.group_id}/profile`}>Return to group profile</a>
+                        <a href={`/class/${this.props.data.group_id}/profile`}>Return to class page</a>
                     </p>
                     <br />
                     <p>{`${HEADINGS.DESCRIPTION}: ${this.props.data.description}`}</p>
@@ -96,7 +96,7 @@ var Component = React.createClass({
 });
 
 const mapStateToProps = state => {
-    var data = {};
+    var data = {title: ''};
     var loading = true;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;

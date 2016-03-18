@@ -243,6 +243,18 @@ var Component = React.createClass({
                             disabled={formsDisabled}
                         />
                         <Input
+                            type="text"
+                            value={this.state.birthdate}
+                            placeholder="date of birth"
+                            label="Date of Birth"
+                            validate="required"
+                            ref="birthdateInput"
+                            name="birthdateInput"
+                            onChange={e => this.setState({dob: e.target.value})}
+                            disabled={formsDisabled}
+                        />
+                        {''/*
+                        <Input
                             type="select"
                             value={this.state.gender}
                             placeholder="Gender"
@@ -257,18 +269,6 @@ var Component = React.createClass({
                                 <option value="male">Male</option>
                                 <option value="other">Other</option>
                         </Input>
-                        <Input
-                            type="text"
-                            value={this.state.birthdate}
-                            placeholder="date of birth"
-                            label="Date of Birth"
-                            validate="required"
-                            ref="birthdateInput"
-                            name="birthdateInput"
-                            onChange={e => this.setState({dob: e.target.value})}
-                            disabled={formsDisabled}
-                        />
-                        {''/*
                         <Input
                             type="email"
                             value={this.state.email}

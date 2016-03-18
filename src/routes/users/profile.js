@@ -45,7 +45,7 @@ var Profile = React.createClass({
             gameOn: false,
             gameId: -1
         }, _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {},
-        {groups: {data: []}});
+        {classes: {data: []}});
         return state;
     },
     componentDidMount: function () {
@@ -189,7 +189,7 @@ var Profile = React.createClass({
                      <EditLink base="/profile" id={this.state.user_id} scope={this.state.scope} />
                      <ProfileImage className={ClassNames({hidden: this.state.user_id === state.currentUser.user_id})} user_id={this.state.user_id} link-below={true}/>
                      <div className="info">
-                        <p><strong>Classes</strong>: {_.map(this.state.groups.data, item => item.title).join(', ')}</p>
+                        <p><strong>Classes</strong>: {_.map(this.state.classes.data, item => item.title).join(', ')}</p>
                      </div>
                  </div>
                </Panel>

@@ -58,46 +58,46 @@ var Component = React.createClass({
                     <p>{`${HEADINGS.DESCRIPTION}: ${this.props.data.description}`}</p>
                 </Panel>
                 <Panel header={HEADINGS.SCHOOLS} className="standard">
-                    <a onClick={() => History.push('/organizations')}>View All Your Schools</a>
+                    <a onClick={() => History.push('/schools')}>View All Your Schools</a>
                     <SchoolSource>
                         <Table>
                             <Column dataKey="title"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/organization/' + row.group_id)}>{_.startCase(data)}</a>
+                                    <a onClick={() => History.push('/school/' + row.group_id)}>{_.startCase(data)}</a>
                                 )}
                             />
                             <Column dataKey="description" />
                             <Column dataKey="title" renderHeader="Admin View"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/organization/' + row.group_id + '/view')}>Admin View</a>
+                                    <a onClick={() => History.push('/school/' + row.group_id + '/view')}>Admin View</a>
                                 )}
                             />
                             <Column dataKey="title" renderHeader="Edit"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/organization/' + row.group_id + '/edit')}>Edit</a>
+                                    <a onClick={() => History.push('/school/' + row.group_id + '/edit')}>Edit</a>
                                 )}
                             />
                         </Table>
                     </SchoolSource>
                 </Panel>
                 <Panel header={HEADINGS.CLASSES} className="standard">
-                    <a onClick={() => History.push('/groups')}>View All Your Classes</a>
+                    <a onClick={() => History.push('/classes')}>View All Your Classes</a>
                     <ClassSource>
                         <Table>
                             <Column dataKey="title"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/groups/' + row.group_id)}>{_.startCase(data)}</a>
+                                    <a onClick={() => History.push('/class/' + row.group_id)}>{_.startCase(data)}</a>
                                 )}
                             />
                             <Column dataKey="description" />
                             <Column dataKey="title" renderHeader="Admin View"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/groups/' + row.group_id + '/view')}>Admin View</a>
+                                    <a onClick={() => History.push('/class/' + row.group_id + '/view')}>Admin View</a>
                                 )}
                             />
                             <Column dataKey="title" renderHeader="Edit"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/groups/' + row.group_id + '/edit')}>Edit</a>
+                                    <a onClick={() => History.push('/class/' + row.group_id + '/edit')}>Edit</a>
                                 )}
                             />
                         </Table>
