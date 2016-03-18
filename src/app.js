@@ -61,20 +61,20 @@ II?+I,,,,,,,,,,,,,,,,:,,,::::++=~~::,,,......................,,.,,.,,,,,,,,,,,,,
  *
  * ## Structure of this application
  * From here, there are three primary code folders: templates, routes, and components
- * Templates are simply page wrappers that provide structure and style. Headers, footers and sidebars are 
+ * Templates are simply page wrappers that provide structure and style. Headers, footers and sidebars are
  * configured here
  * Routes contain the actual pages which will be loaded by the router. The folder structure of routes should
- * exactly match the intended route url, dynamic route segments nonwithstanding (/schools/my-school/profile 
+ * exactly match the intended route url, dynamic route segments nonwithstanding (/schools/my-school/profile
  * will be located in /routes/schools/profile.js). Each route component must export exactly one route object.
  * The top tag in each route component should be a template. If a page requires custom styles, these should be
- * in a matching .scss file in the same folder (/routes/schools/profile.scss in our prior example). In this 
+ * in a matching .scss file in the same folder (/routes/schools/profile.scss in our prior example). In this
  * case, the page's template should have a unique classname applied to it, and this classname should wrap all
- * styles to isolate them from other pages. Each route must expect to load one primary API endpoint for its 
+ * styles to isolate them from other pages. Each route must expect to load one primary API endpoint for its
  * initial load (see route definitions section)
  * Components are reusable, generic components that are employed throughout pages. They may or may not provide
  * their own data, but regardless should always prefer to intake data through a `data` react prop. For example
  * `<myComponent data={some.custom.data} />`. Many components expect their children to accept a data property.
- * Components with custom styles should follow the same rules for class isolation as routes. 
+ * Components with custom styles should follow the same rules for class isolation as routes.
  *
  * ## Route Definitions
  * Routes are defined in the root of the application in public_routes.js and private_routes.js. These files
@@ -85,7 +85,7 @@ II?+I,,,,,,,,,,,,,,,,:,,,::::++=~~::,,,......................,,.,,.,,,,,,,,,,,,,
  *
  * ## Page Lifecycle
  * Our pages' data is exposed via a Redux store. What this means is that all data is immutable, and page state
- * can only be updated using the Store.dispatch method. Generally, this is handled for you. Each page load 
+ * can only be updated using the Store.dispatch method. Generally, this is handled for you. Each page load
  * consists of several distinct steps, which are dependent on the prior step:
  * 1) Transition: clear prior data, if there is any. Update the current url parameters (state.location)
  * 2) Authorization: Bound to the "/" api endpoint, which either provides the HAL links available to an
@@ -96,15 +96,16 @@ II?+I,,,,,,,,,,,,,,,,:,,,::::++=~~::,,,......................,,.,,.,,,,,,,,,,,,,
  * by the Page Data step as HAL links. All component data is loaded simultaneously here.
  *
  * ## Important Components
- * The following components handle the generic data flow through the system and their purpose may not be as
+ * The following components handle the generic data flow through the app and their purpose may not be as
  * immediately obvious as components representing UI elements or utility functions. The following components
- * handle nearly all data processing and async requests for the entire app:
+ * handle nearly all data processing and async requests for the entire app. If you are unsure about where a
+ * particular page behavior is originating, it is extremely likely it is in one of the following files:
  * ### action_constants.js
  * a flat list of all Redux actions the application is consuming. If adding actions,
  * they must always be added here before being attached to behavior in actions.js or consumed in store.js
  * ### store.js
  * contains all Redux reducers. A reducer takes data provided by an action that has been dispatched
- * and integrates it into the application state. The store then issues an update event to all pages and 
+ * and integrates it into the application state. The store then issues an update event to all pages and
  * components. All application data is processed in this file, and all Redux data middleware is applied here.
  * ### actions.js
  * binds action constants to behavior. All auth, page, and component HTTP requests are issued
@@ -113,6 +114,7 @@ II?+I,,,,,,,,,,,,,,,,:,,,::::++=~~::,,,......................,,.,,.,,,,,,,,,,,,,
  * higher-order (factory) component that binds keys to HAL links, and registers components
  * with the application.
  */
+
 import 'polyfills';//minor polyfills here. Major polyfilles (e.g. es5 shim) loaded in index from cdn
 
 import React from 'react';
@@ -150,6 +152,10 @@ if (window.location.protocol !== 'https:') {
     window.location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
 }
 
+//█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
+//█  1. Top Level React Components
+//█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
+
 var App = React.createClass({
     componentWillMount: function () {
         Errors.onError(this.globalUpdate);
@@ -182,7 +188,7 @@ var App = React.createClass({
     }
 });
 
-
+/** Default route. Currently does nothing except display a 404, as this loading indicates no route found**/
 var Landing = React.createClass({
     render: function () {
         Errors.show404();
@@ -192,6 +198,7 @@ var Landing = React.createClass({
     }
 });
 
+/** List of all routes. As-is, routes cannot be loaded dynamically at runtime, and must be registered here first **/
 var routes = {
     path: '/',
     component: App,
@@ -201,35 +208,10 @@ var routes = {
     ]),
 };
 
-function run() {
-    window._bootstrap_attempts = window._bootstrap_attempts || 0; //eslint-disable-line camelcase
-    try {
-        window._bootstrap_attempts++;
-        ReactDOM.render((
-                <Provider store={Store} >
-                    <Router history={History} routes={routes} />
-                </Provider>
-        ), document.getElementById('cmwn-app'));
-        console.log('%cWoah there, World Changer!', 'font-weight: bold; color: red; font-size: 60px; font-family: Helvetica, Impact, Arial, sans-serif; text-shadow: 2px 2px grey;'); //eslint-disable-line no-console
-        console.log('%cChangeMyWorldNow will never ask you to enter any of your information in this space, or ask you to paste anything here. For your security, we recommend you close this console.', 'font-weight: bold; color: #2CC4F4; font-size: 25px; font-family: Helvetica, Impact, Arial, sans-serif;'); //eslint-disable-line no-console
-        if (GLOBALS.MODE.toLowerCase() === 'prod' || GLOBALS.MODE.toLowerCase() === 'production') {
-            console.info = _.noop; //eslint-disable-line no-console
-            console.log = _.noop; //eslint-disable-line no-console
-            console.warn = _.noop; //eslint-disable-line no-console
-            /**let errors surface*/
-        }
-        Log.info('Application started');
-    } catch(err) {
-        Log.info('Application bootstrap failed, attempting to recover. Attempt ' + window._bootstrap_attempts + ' out of 5');
-        if (window._bootstrap_attempts < 5) {
-            window.setTimeout(run, 500);
-        } else {
-            Errors.showApplication(err);
-        }
-    }
-}
 
-const loadedStates = ['complete', 'loaded', 'interactive'];
+//█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
+//█  2. Page Lifecycle Definition
+//█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
 
 var progressivePageLoad = function () {
     var pageRoute;
@@ -297,6 +279,10 @@ var progressivePageLoad = function () {
     }
 };
 
+//█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
+//█  3. Events occurring on transition. DO NOT ISSUE SIDE EFFECTS. Dispatch actions via the store.
+//█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
+
 History.listen(location => {
     var pathContext = _.find(routes.childRoutes, i => Util.matchPathAndExtractParams(i.path, location.pathname) !== false);
     if (pathContext == null) {
@@ -322,6 +308,10 @@ History.listen(location => {
     });
 });
 
+//█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
+//█  4. App Level Store Subscription. Runs **VERY** frequently, so be careful what you add here.
+//█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
+
 var lastState = {page: {}};
 Store.subscribe(() => {
     //Note: This function, and all store subscribes, will be invoked once per second
@@ -337,14 +327,22 @@ Store.subscribe(() => {
     lastState = Store.getState();
 });
 
+//█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
+//█  5. Error Tracker and Logging Initialzation
+//█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
+
+/** We need to generate a hash of the errors being generated to prevent them from firing too frequently**/
 //from http://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript-jquery
 var hashCode = function (s){
   return s.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0); //eslint-disable-line
 };
 
+//Only report errors in production
 if (window.Rollbar && ~window.__cmwn.MODE.indexOf('prod')){ //eslint-disable-line no-undef
     Rollbar.configure({reportLevel: 'error'}); //eslint-disable-line no-undef
 }
+//Dynamic rollbar configuration for throttling. Static configuration happens in index.php
+//User configuration happens in Authorization.js (soon will be moved to actions.js)
 if (window.Rollbar != null) { //eslint-disable-line no-undef
     //Quick and dirty leading edge throttle on rapid fire events
     Rollbar.configure({checkIgnore: function (isUncaught, args, payload) { //eslint-disable-line
@@ -360,6 +358,55 @@ if (window.Rollbar != null) { //eslint-disable-line no-undef
         return true;
     }});
 }
+
+/** Function enabling an interactive debugging mode via the console **/
+window.__cmwn.interactiveDebug = function () {
+    window.debugging = true;
+    Rollbar.configure({reportLevel: 'info'}); //eslint-disable-line
+};
+
+
+//█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
+//█  6. Application Bootstrap
+//█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
+
+/**
+ * Attaches the App is attached to the Routes, which are then attached to the Router, which is then attached
+ * to the redux store via the provider. This provider is then rendered in the React shadow dom, and then is
+ * appended to the the actual dom node with ID cmwn-app as soon as it is available.
+ * Also outputs the console warning if this is successful, and will attempt to re-bootstrap up to 5 times
+ * if any of these steps fail. A generic application error is shown if this fails.
+ **/
+function run() {
+    window._bootstrap_attempts = window._bootstrap_attempts || 0; //eslint-disable-line camelcase
+    try {
+        window._bootstrap_attempts++;
+        ReactDOM.render((
+                <Provider store={Store} >
+                    <Router history={History} routes={routes} />
+                </Provider>
+        ), document.getElementById('cmwn-app'));
+        console.log('%cWoah there, World Changer!', 'font-weight: bold; color: red; font-size: 60px; font-family: Helvetica, Impact, Arial, sans-serif; text-shadow: 2px 2px grey;'); //eslint-disable-line no-console
+        console.log('%cChangeMyWorldNow will never ask you to enter any of your information in this space, or ask you to paste anything here. For your security, we recommend you close this console.', 'font-weight: bold; color: #2CC4F4; font-size: 25px; font-family: Helvetica, Impact, Arial, sans-serif;'); //eslint-disable-line no-console
+        if (GLOBALS.MODE.toLowerCase() === 'prod' || GLOBALS.MODE.toLowerCase() === 'production') {
+            console.info = _.noop; //eslint-disable-line no-console
+            console.log = _.noop; //eslint-disable-line no-console
+            console.warn = _.noop; //eslint-disable-line no-console
+            /**let errors surface*/
+        }
+        Log.info('Application started');
+    } catch(err) {
+        Log.info('Application bootstrap failed, attempting to recover. Attempt ' + window._bootstrap_attempts + ' out of 5');
+        if (window._bootstrap_attempts < 5) {
+            window.setTimeout(run, 500);
+        } else {
+            Errors.showApplication(err);
+        }
+    }
+}
+
+const loadedStates = ['complete', 'loaded', 'interactive'];
+
 if (loadedStates.indexOf(document.readyState) !== -1 && document.getElementById('cmwn-app')) {
     run();
     console.info('running'); //eslint-disable-line
@@ -367,10 +414,6 @@ if (loadedStates.indexOf(document.readyState) !== -1 && document.getElementById(
     window.addEventListener('DOMContentLoaded', run, false);
 }
 
-window.__cmwn.interactiveDebug = function () {
-    window.debugging = true;
-    Rollbar.configure({reportLevel: 'info'}); //eslint-disable-line
-};
-
+// We only need to export this for testing purposes. It is never imported in production.
 export default App;
 
