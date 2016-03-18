@@ -18,7 +18,8 @@ const ERRORS = {
 };
 
 const HEADINGS = {
-    EDIT_TITLE: 'Info'
+    EDIT_TITLE: 'Edit District: ',
+    CREATE_SCHOOL: 'Create School in this District'
 };
 
 const BAD_UPDATE = 'There was a problem updating your profile. Please try again later.';
@@ -55,7 +56,7 @@ var Component = React.createClass({
         }
         return (
            <Layout>
-              <Panel header={HEADINGS.EDIT_TITLE} className="standard">
+              <Panel header={HEADINGS.EDIT_TITLE + this.props.data.title} className="standard">
                  <Input
                     type="text"
                     value={this.state.title}
@@ -115,7 +116,7 @@ var CreateOrganization = React.createClass({
     },
     render: function () {
         return (
-        <Panel>
+        <Panel header={HEADINGS.CREATE_SCHOOL} className="standard">
             <Form ref="formRef">
                 <Input
                     type="text"
@@ -145,7 +146,7 @@ var CreateOrganization = React.createClass({
 });
 
 const mapStateToProps = state => {
-    var data = {};
+    var data = {title: ''};
     var loading = true;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;

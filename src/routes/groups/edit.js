@@ -14,7 +14,8 @@ import GLOBALS from 'components/globals';
 import Layout from 'layouts/two_col';
 
 const HEADINGS = {
-    EDIT_TITLE: 'Info'
+    EDIT_TITLE: 'Edit Class: ',
+    CREATE_USER: 'Create User in this Class'
 };
 const BREADCRUMB = {
     HOME: 'Home',
@@ -67,7 +68,7 @@ var Component = React.createClass({
                     <Link to="/groups">{BREADCRUMB.GROUPS}</Link>
                     <span>{this.props.data.title}</span>
                 </div>
-              <Panel header={HEADINGS.EDIT_TITLE} className="standard">
+              <Panel header={HEADINGS.EDIT_TITLE + this.props.data.title} className="standard">
                 <Input
                     type="text"
                     value={this.state.title}
@@ -129,7 +130,7 @@ var CreateStudent = React.createClass({
     },
     render: function () {
         return (
-        <Panel>
+        <Panel header={HEADINGS.CREATE_USER} className="standard">
             <Form ref="formRef">
                  <Input
                     type="text"
@@ -159,7 +160,7 @@ var CreateStudent = React.createClass({
 });
 
 const mapStateToProps = state => {
-    var data = {};
+    var data = {title: ''};
     var loading = true;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;

@@ -15,8 +15,9 @@ import History from 'components/history';
 import Layout from 'layouts/two_col';
 
 const HEADINGS = {
-    EDIT_TITLE: 'Info',
-    UPLOAD: 'Data Import'
+    EDIT_TITLE: 'Edit School: ',
+    UPLOAD: 'Data Import',
+    CREATE_CLASS: 'Create a Class in this School'
 };
 
 const LABELS = {
@@ -69,7 +70,7 @@ var Component = React.createClass({
         }
         return (
            <Layout>
-              <Panel header={HEADINGS.EDIT_TITLE} className="standard">
+              <Panel header={HEADINGS.EDIT_TITLE + this.props.data.title} className="standard">
                  <Input
                     type="text"
                     value={this.state.title}
@@ -130,7 +131,7 @@ var CreateGroup = React.createClass({
     },
     render: function () {
         return (
-        <Panel>
+        <Panel header={HEADINGS.CREATE_CLASS} className="standard">
             <Form ref="formRef">
                 <Input
                     type="text"
@@ -256,7 +257,7 @@ var BulkUpload = React.createClass({
 });
 
 const mapStateToProps = state => {
-    var data = {};
+    var data = {title: ''};
     var loading = true;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
