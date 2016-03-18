@@ -2,6 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import {Button, Input, Panel} from 'react-bootstrap';
 import { connect } from 'react-redux';
+import DatePicker from 'react-bootstrap-date-picker';
 
 import HttpManager from 'components/http_manager';
 import Log from 'components/log';
@@ -36,20 +37,32 @@ const CONFIRM_DELETE = 'Are you sure you want to delete this user? This action c
 var Component = React.createClass({
     getInitialState: function () {
         var state = _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {};
-        state = _.defaults({}, state, {isStudent: true});
+        state = _.defaults({}, state, {isStudent: true, dob: new Date().toISOString()});
         return state;
     },
     componentDidMount: function () {
-        this.setState(this.props.data);
+        var state;
+        if (this.props.data && this.props.data.birthdate) {
+            state = _.defaults({}, this.props.data, {dob: new Date(1000 * this.props.data.birthdate).toISOString()});
+        } else {
+            state = this.props.data;
+        }
+        this.setState(state);
         this.resolveRole();
     },
     componentWillReceiveProps: function (nextProps) {
-        this.setState(nextProps.data);
+        var state;
+        if (nextProps.data && nextProps.data.birthdate) {
+            state = _.defaults({}, nextProps.data, {dob: new Date(1000 * nextProps.data.birthdate).toISOString()});
+        } else {
+            state = nextProps.data;
+        }
+        this.setState(state);
         this.resolveRole();
     },
     suspendAccount: function () {
         if (window.confirm(CONFIRM_DELETE)) { //eslint-disable-line no-alert
-            HttpManager.DELETE({url: GLOBALS.API_URL + 'users/' + this.state.user_id, handleErrors: false})
+            HttpManager.DELETE({url: GLOBALS.API_URL + 'user/' + this.state.user_id, handleErrors: false})
                 .then(() => {
                     Toast.success(USER_REMOVED);
                 })
@@ -61,7 +74,7 @@ var Component = React.createClass({
     },
     resetPassword: function () {
         //note: This should only appear for adults, who have email addressed
-        HttpManager.GET(`${GLOBALS.API_URL}users/${this.state.user_id}/reset`).then(() => {
+        HttpManager.GET(`${GLOBALS.API_URL}user/${this.state.user_id}/reset`).then(() => {
             Toast.success('Password Reset. This user will recieve an email with further instructions.');
         }).catch(err => {
             Toast.error(ERRORS.BAD_RESET + (err.message ? ' Message: ' + err.message : ''));
@@ -93,17 +106,22 @@ var Component = React.createClass({
         this.setState(newState);
     },
     submitData: function () {
+        /** @TODO MPR, 3/18/16: Remove unneeded fields*/
         var postData = {
-            username: this.state.username
+            username: this.state.username,
+            first_name: this.state.first_name, //eslint-disable-line camelcase
+            last_name: this.state.last_name //eslint-disable-line camelcase
         };
-        if (!this.state.isStudent) {
-            if (this.state.email) {
-                //postData.email = this.state.email;
-            }
-            postData.gender = this.state.gender;
-        }
+        //if (!this.state.isStudent) {
+        //    if (this.state.email) {
+        postData.email = this.state.email;
+        //    }
+        postData.gender = this.state.gender;
+        postData.birthdate = this.state.birthdate;
+        postData.type = this.state.type;
+        //}
         if (this.refs.formRef.isValid()) {
-            HttpManager.PUT(`${GLOBALS.API_URL}users/${this.state.user_id}`, postData).then(() => {
+            HttpManager.PUT(`${GLOBALS.API_URL}user/${this.state.user_id}`, postData).then(() => {
                 Toast.success('Profile Updated');
             }).catch(err => {
                 Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
@@ -242,16 +260,17 @@ var Component = React.createClass({
                             onChange={e => this.setState({last_name: e.target.value})} //eslint-disable-line camelcase
                             disabled={formsDisabled}
                         />
-                        <Input
+                        <DatePicker
                             type="text"
-                            value={this.state.birthdate}
+                            value={this.state.dob}
                             placeholder="date of birth"
                             label="Date of Birth"
-                            validate="required"
                             ref="birthdateInput"
                             name="birthdateInput"
-                            onChange={e => this.setState({dob: e.target.value})}
+                            clearButtonElement="x"
+                            onChange={value => this.setState({dob: value, birthdate: Date.parse(value)})}
                             disabled={formsDisabled}
+                            calendarPlacement="top"
                         />
                         {''/*
                         <Input
