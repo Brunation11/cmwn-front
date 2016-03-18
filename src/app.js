@@ -195,13 +195,13 @@ History.listen(location => {
     }
 
     var nextLoc = _.defaults({}, location, pathContext);
+    Actions.dispatch.RESET_LOADER(); //This very much needs to run sync at this exact moment.
     nextLoc.component = null; //no need to store this in state.
     Store.dispatch({
         type: 'combo',
         types: ['PAGE_CHANGE_START', 'PAGE_CHANGE_SUCCESS', 'PAGE_CHANGE_ERROR'],
         sequence: true,
         payload: [
-            Actions.RESET_LOADER,
             Actions.PATH_CHANGE.bind(null, {location: nextLoc})
         ]
     });

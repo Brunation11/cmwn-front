@@ -136,7 +136,7 @@ Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
 Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentifier, componentName) {
     var endpoint;
     var state = Store.getState();
-    if (state.page.data._links[endpointIdentifier]) {
+    if (state.page && state.page.data && state.page.data._links[endpointIdentifier] != null) {
         endpoint = state.page.data._links[endpointIdentifier].href;
     } else if (endpointIdentifier === 'games') {
         Log.info('forcing game endpoint');

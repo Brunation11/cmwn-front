@@ -91,7 +91,7 @@ var CreateOrganization = React.createClass({
     submitData: function () {
         var postData = {
             title: this.state.title,
-            organization_id: this.props.data.org_id,
+            organization_id: this.props.data.org_id, //eslint-disable-line camelcase
             meta: {
                 code: this.state.code
             },
@@ -147,7 +147,7 @@ var CreateOrganization = React.createClass({
 const mapStateToProps = state => {
     var data = {};
     var loading = true;
-    if (state.page && state.page.data) {
+    if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
     }

@@ -63,6 +63,7 @@ var pageReducer = (page = Immutable({title: 'Change My World Now'}), action) => 
         }.bind(null, page, action.title),
         [ACTION_CONSTANTS.PAGE_LOADING]: function (page_) {
             page_ = page_.set('initialized', false);
+            page_ = page_.without('data');
             return page_.set('loading', true);
         }.bind(null, page),
         [ACTION_CONSTANTS.PAGE_LOADED]: function (page_) {
@@ -196,7 +197,11 @@ const Store = createStore( combineReducers({
             return {currentStage: loaderState.currentStage, lastCompletedStage: loaderState.lastCompletedStage + 1};
         }
         if (action.type === ACTION_CONSTANTS.LOADER_ERROR) {
-            Log.error('Loader error at stage ' + loaderState.currentStage);
+            if (action.error) {
+                Log.error('Loader error at stage ' + loaderState.currentStage + ' : ' + action.payload);
+            } else {
+                Log.error('Loader error at stage ' + loaderState.currentStage);
+            }
         }
         return loaderState;
     }
