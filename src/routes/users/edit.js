@@ -216,7 +216,7 @@ var Component = React.createClass({
            <Layout className="edit-student">
                 <Panel header={HEADINGS.EDIT_TITLE + this.state.first_name + ' ' + this.state.last_name} className="standard edit-profile">
                     <div className="left">
-                        <ProfileImage user_id={this.props.user_id} link-below={true}/>
+                        <ProfileImage user_id={this.props.data.user_id} link-below={true}/>
                         <p><a onClick={this.suspendAccount}>{SUSPEND}</a></p>
                     </div>
                     <div className="right"><Form ref="formRef">
