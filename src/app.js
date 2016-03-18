@@ -371,8 +371,8 @@ window.__cmwn.interactiveDebug = function () {
 //█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
 
 /**
- * Attaches the App is attached to the Routes, which are then attached to the Router, which is then attached
- * to the redux store via the provider. This provider is then rendered in the React shadow dom, and then is
+ * Attaches the App component to the routes, which are then attached to the Router, which is then attached
+ * to the redux store via the Provider. This Provider is then rendered in the React shadow dom, and then is
  * appended to the the actual dom node with ID cmwn-app as soon as it is available.
  * Also outputs the console warning if this is successful, and will attempt to re-bootstrap up to 5 times
  * if any of these steps fail. A generic application error is shown if this fails.

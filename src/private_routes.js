@@ -5,14 +5,14 @@ import Districts from 'routes/districts';
 import DistrictView from 'routes/districts/view';
 import DistrictEdit from 'routes/districts/edit';
 import DistrictCreate from 'routes/districts/create';
-import Organizations from 'routes/organizations';
-import OrganizationView from 'routes/organizations/view';
-import OrganizationEdit from 'routes/organizations/edit';
-import OrganizationProfile from 'routes/organizations/profile';
-import Groups from 'routes/groups';
-import GroupView from 'routes/groups/view';
-import GroupEdit from 'routes/groups/edit';
-import GroupProfile from 'routes/groups/profile';
+import Schools from 'routes/schools';
+import SchoolView from 'routes/schools/view';
+import SchoolEdit from 'routes/schools/edit';
+import SchoolProfile from 'routes/schools/profile';
+import Classes from 'routes/classes';
+import ClassView from 'routes/classes/view';
+import ClassEdit from 'routes/classes/edit';
+import ClassProfile from 'routes/classes/profile';
 import Friends from 'routes/friends';
 import SuggestedFriends from 'routes/friends/suggested';
 import Profile from 'routes/users/profile';
@@ -60,26 +60,26 @@ var routes = [
     { path: 'districts/:id/view(/)', onEnter: redirect('/district/:id/view')},
     { path: 'district/:id/edit(/)', title: 'Edit District', endpoint: '/org/:id', component: DistrictEdit},
     { path: 'districts:id/edit(/)', onEnter: redirect('/district/id:edit')},
-    { path: 'organizations(/)', title: 'Organization', endpoint: '/group', component: Organizations},
-    { path: 'organization(/)', onEnter: redirect('/organizations')},
-    { path: 'organization/:id(/)', title: 'Organization', endpoint: '/group/:id', component: OrganizationProfile},
-    { path: 'organizations/:id(/)', onEnter: redirect('/organization/:id')},
-    { path: 'organization/:id/view(/)', title: 'Organization', endpoint: '/group/:id', component: OrganizationView},
-    { path: 'organizations/:id/view(/)', onEnter: redirect('/organization/:id/view')},
-    { path: 'organization/:id/edit(/)', title: 'Edit Organization', endpoint: '/group/:id', component: OrganizationEdit},
-    { path: 'organizations/:id/edit(/)', onEnter: redirect('/organization/:id/edit')},
-    { path: 'organization/:id/profile(/)', title: 'Organization', endpoint: '/group/:id', component: OrganizationProfile},
-    { path: 'organizations/:id/profile(/)', onEnter: redirect('/organization/:id/profile')},
-    { path: 'groups(/)', title: 'Groups', endpoint: '/group', component: Groups},
-    { path: 'group(/)', onEnter: redirect('/groups')},
-    { path: 'group/:id(/)', title: 'Groups', endpoint: '/group/:id', component: GroupProfile},
-    { path: 'groups/:id(/)', onEnter: redirect('/group/:id')},
-    { path: 'group/:id/view(/)', title: 'Groups', endpoint: '/group/:id', component: GroupView},
-    { path: 'groups/:id/view(/)', onEnter: redirect('/group/:id/view')},
-    { path: 'group/:id/edit(/)', title: 'Edit Groups', endpoint: '/group/:id', component: GroupEdit},
-    { path: 'groups/:id/edit(/)', onEnter: redirect('/group/:id/edit')},
-    { path: 'group/:id/profile(/)', title: 'Groups', endpoint: '/group/:id', component: GroupProfile},
-    { path: 'groups/:id/profile(/)', onEnter: redirect('/group/:id/profile')},
+    { path: 'schools(/)', title: 'School', endpoint: '/class', component: Schools},
+    { path: 'school(/)', onEnter: redirect('/schools')},
+    { path: 'school/:id(/)', title: 'School', endpoint: '/class/:id', component: SchoolProfile},
+    { path: 'schools/:id(/)', onEnter: redirect('/school/:id')},
+    { path: 'school/:id/view(/)', title: 'School', endpoint: '/class/:id', component: SchoolView},
+    { path: 'schools/:id/view(/)', onEnter: redirect('/school/:id/view')},
+    { path: 'school/:id/edit(/)', title: 'Edit School', endpoint: '/class/:id', component: SchoolEdit},
+    { path: 'schools/:id/edit(/)', onEnter: redirect('/school/:id/edit')},
+    { path: 'school/:id/profile(/)', title: 'School', endpoint: '/class/:id', component: SchoolProfile},
+    { path: 'schools/:id/profile(/)', onEnter: redirect('/school/:id/profile')},
+    { path: 'classes(/)', title: 'Classes', endpoint: '/class', component: Classes},
+    { path: 'class(/)', onEnter: redirect('/classes')},
+    { path: 'class/:id(/)', title: 'Classes', endpoint: '/class/:id', component: ClassProfile},
+    { path: 'classes/:id(/)', onEnter: redirect('/class/:id')},
+    { path: 'class/:id/view(/)', title: 'Classes', endpoint: '/class/:id', component: ClassView},
+    { path: 'classes/:id/view(/)', onEnter: redirect('/class/:id/view')},
+    { path: 'class/:id/edit(/)', title: 'Edit Classes', endpoint: '/class/:id', component: ClassEdit},
+    { path: 'classes/:id/edit(/)', onEnter: redirect('/class/:id/edit')},
+    { path: 'class/:id/profile(/)', title: 'Classes', endpoint: '/class/:id', component: ClassProfile},
+    { path: 'classes/:id/profile(/)', onEnter: redirect('/class/:id/profile')},
     { path: 'friends(/)', title: 'Friends', endpoint: '/friend', component: Friends},
     { path: 'friends/suggested(/)', title: 'Suggested Friends', endpoint: '/friend', component: SuggestedFriends},
     { path: 'suggestedfriends(/)', onEnter: redirect('/friends/suggested')}
