@@ -42,11 +42,6 @@ const mapStateToProps = state => {
     if (state.currentUser && state.currentUser._links) {
         data = state.currentUser._links.asMutable();
     }
-    data.classes = {label: 'My Classes'};
-    data.schools = {label: 'My Schools'};
-    data.districts = {label: 'Districts'};
-    data.users = {label: 'Users'};
-    data.logout = {};
     return { currentUser: state.currentUser, data: Immutable(data) };
 };
 

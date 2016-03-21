@@ -57,7 +57,6 @@ var Component = React.createClass({
                         History.push('/profile');
                     });
                 } else {
-                    debugger;
                     Toast.error(ERRORS.LOGIN + (res.response && res.response.data && res.response.data.message ? ' Message: ' + res.response.data.message : ''));
                     Log.log(res, 'Invalid login.', req);
                 }

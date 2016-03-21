@@ -285,13 +285,13 @@ var progressivePageLoad = function () {
 
 History.listen(location => {
     var pathContext = _.find(routes.childRoutes, i => Util.matchPathAndExtractParams(i.path, location.pathname) !== false);
-    if (pathContext == null) {
+    if (pathContext == null && location.pathname !== '/') {
         //at this point we already know whether or not our path 404d...
         Errors.show404();
         return;
     }
 
-    if (pathContext.onEnter != null) {
+    if (pathContext == null || pathContext.onEnter != null) {
         return; //don't bother operating on redirects
     }
 

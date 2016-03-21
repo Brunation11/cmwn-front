@@ -77,14 +77,6 @@ var pageReducer = (page = Immutable({title: 'Change My World Now'}), action) => 
             page_ = page_.set('initialized', true);
             page_ = page_.set('title', action_.title);
             page_ = page_.set('data', action_.data);
-            page_ = page_.merge({data: {_links: {
-                user: {href: GLOBALS.API_URL + 'user'},
-                'org::district': {href: GLOBALS.API_URL + 'org'},
-                'group::school': {href: GLOBALS.API_URL + 'group'},
-                'group::class': {href: GLOBALS.API_URL + 'group'},
-                'user::teacher': {href: GLOBALS.API_URL + 'user'},
-                'user::student': {href: GLOBALS.API_URL + 'user'},
-            }}}, {deep: true});
             return page_;
         }.bind(null, page, action)
     };

@@ -47,17 +47,6 @@ var Actions = generateBasicBoundActions(ACTION_CONSTANTS);
 //********** Thunk Actions
 //Thunk actions should be named START_YOUR_ACTION, and should resolve by dispatching an END_YOUR_ACTION
 Actions = Actions.set(ACTION_CONSTANTS.PAGE_DATA, function (url, title) {
-    //I do not remember why I wrote this conditional. Commenting it to see what breaks
-    /*
-    if (url === '' || url == null) {
-        return {
-            type: ACTION_CONSTANTS.PAGE_DATA,
-            payload: {
-                promise: Promise.resolve({type: ACTION_CONSTANTS.PAGE_LOADED, title})
-            }
-        };
-    }
-    */
     return {
         types: [
             'PAGE_DATA_PENDING',
@@ -138,9 +127,6 @@ Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentif
     var state = Store.getState();
     if (state.page && state.page.data && state.page.data._links[endpointIdentifier] != null) {
         endpoint = state.page.data._links[endpointIdentifier].href;
-    } else if (endpointIdentifier === 'games') {
-        Log.info('forcing game endpoint');
-        endpoint = GLOBALS.API_URL + 'game';
     } else {
         Log.error('Component endpoint could not be resolved');
         throw 'Component endpoint could not be resolved';
