@@ -249,9 +249,6 @@ var progressivePageLoad = function () {
             //that it should be pulled directly from the users context
             if (Store.getState().currentUser._links[state.location.endpoint.slice(2)] != null) {
                 pageRoute = Store.getState().currentUser._links[state.location.endpoint.slice(2)].href;
-            } else if (state.location.endpoint === '$$me'){
-                Log.info('Forcing me route');
-                pageRoute = GLOBALS.API_URL;
             } else {
                 Log.error('Route could not be loaded, route endpoint not provided for the current user');
             }
