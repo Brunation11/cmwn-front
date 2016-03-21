@@ -14,7 +14,7 @@ import GenerateDataSource from 'components/datasource';
 
 const PAGE_UNIQUE_IDENTIFIER = 'district-view';
 
-const ClassSource = GenerateDataSource('group::class', PAGE_UNIQUE_IDENTIFIER);
+const ClassSource = GenerateDataSource('group_class', PAGE_UNIQUE_IDENTIFIER);
 const UserSource = GenerateDataSource('user', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {

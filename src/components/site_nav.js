@@ -15,7 +15,7 @@ var Component = React.createClass({
     renderNavItems: function () {
         var menuItems = _.reduce(this.props.data, (a, i, k) => {
             if (!~nonMenuLinks.indexOf(k)) {
-                var link = ~k.indexOf(':') ? k.split(':')[1] : k;
+                var link = ~k.indexOf('_') ? k.split('_')[1] : k;
                 a.push({
                     url: '/' + link,
                     text: i.label == null ? _.startCase(link) : i.label

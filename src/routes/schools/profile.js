@@ -19,7 +19,7 @@ import FlipBgDefault from 'media/icon_class_blue.png';
 
 const PAGE_UNIQUE_IDENTIFIER = 'classProfile';
 
-const ClassSource = GenerateDataSource('group::class', PAGE_UNIQUE_IDENTIFIER);
+const ClassSource = GenerateDataSource('group_class', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     ALL_CLASSES: 'All Classes',
