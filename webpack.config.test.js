@@ -7,7 +7,7 @@ var webpack = require('webpack');
 var autoprefixer = require('autoprefixer');
 
 module.exports = {
-    devtool: 'eval',
+    devtool: 'cheap-source-map',
     resolve: {
         root: path.resolve('./src'),
         extensions: ['', '.js']

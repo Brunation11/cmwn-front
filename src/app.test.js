@@ -2,6 +2,7 @@
 import React from 'react'; //eslint-disable-line no-unused-vars
 import assert from 'assert';
 import TestUtils from 'react-addons-test-utils';
+import { Provider } from 'react-redux';
 import {expect} from 'chai';
 
 import Users from 'routes/users';
@@ -9,22 +10,31 @@ import Districts from 'routes/districts';
 import DistrictView from 'routes/districts/view';
 import DistrictEdit from 'routes/districts/edit';
 import DistrictCreate from 'routes/districts/create';
-import Organizations from 'routes/organizations';
-import OrganizationView from 'routes/organizations/view';
-import OrganizationEdit from 'routes/organizations/edit';
-import OrganizationProfile from 'routes/organizations/profile';
-import Groups from 'routes/groups';
-import GroupView from 'routes/groups/view';
-import GroupEdit from 'routes/groups/edit';
-import GroupProfile from 'routes/groups/profile';
+import Schools from 'routes/schools';
+import SchoolView from 'routes/schools/view';
+import SchoolEdit from 'routes/schools/edit';
+import SchoolProfile from 'routes/schools/profile';
+import Classes from 'routes/classes';
+import ClassView from 'routes/classes/view';
+import ClassEdit from 'routes/classes/edit';
+import ClassProfile from 'routes/classes/profile';
 import Friends from 'routes/friends';
 import SuggestedFriends from 'routes/friends/suggested';
 import Profile from 'routes/users/profile';
 import StudentEdit from 'routes/users/edit';
 import Game from 'routes/game';
 import ChangePassword from 'routes/change_password';
+import Store from 'components/store';
 
 import App from 'app';
+
+var testComponentWithStore = function (component) {
+    return TestUtils.renderIntoDocument(
+        <Provider store={Store} >
+            {component}
+        </Provider>
+    );
+};
 
 describe('Test Utilities', function () {
     describe('Mocha', function () {
@@ -48,7 +58,7 @@ describe('Application', function () {
         var renderedComponent = TestUtils.renderIntoDocument(
             <App />
         );
-        var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'sweater');
+        var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'layout');
 
         this.appWrapper = inputComponent;
     });
@@ -59,97 +69,97 @@ describe('Application', function () {
     });
     describe('Routes', function () {
         it('Should load User Profile', function () {
-            var renderedComponent = TestUtils.renderIntoDocument( <Profile id="954d31ae-d689-11e5-bcaa-acbc32a6b1bb"/>);
+            var renderedComponent = testComponentWithStore( <Profile id="954d31ae-d689-11e5-bcaa-acbc32a6b1bb"/>);
             var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'user-profile');
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
         it('Should load User User List', function () {
-            var renderedComponent = TestUtils.renderIntoDocument( <Users />);
+            var renderedComponent = testComponentWithStore( <Users />);
             var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'user-list');
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
         it('Should load District List', function () {
-            var renderedComponent = TestUtils.renderIntoDocument( <Districts />);
+            var renderedComponent = testComponentWithStore( <Districts />);
             var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'district-list');
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
         it('Should load Edit District', function () {
-            var renderedComponent = TestUtils.renderIntoDocument( <DistrictEdit id="94cb922a-d689-11e5-ba76-acbc32a6b1bb" />);
+            var renderedComponent = testComponentWithStore( <DistrictEdit id="94cb922a-d689-11e5-ba76-acbc32a6b1bb" />);
             var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'district-edit');
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
         it('Should load District Admin', function () {
-            var renderedComponent = TestUtils.renderIntoDocument( <DistrictView />);
+            var renderedComponent = testComponentWithStore( <DistrictView />);
             var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'sweater');
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
         it('Should load District Create', function () {
-            var renderedComponent = TestUtils.renderIntoDocument( <DistrictCreate />);
+            var renderedComponent = testComponentWithStore( <DistrictCreate />);
             var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'sweater');
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
-        it('Should load Organization List', function () {
-            var renderedComponent = TestUtils.renderIntoDocument( <Organizations />);
+        it('Should load School List', function () {
+            var renderedComponent = testComponentWithStore( <Schools />);
             var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'sweater');
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
-        it('Should load Edit Organization', function () {
-            var renderedComponent = TestUtils.renderIntoDocument( <OrganizationEdit />);
+        it('Should load Edit School', function () {
+            var renderedComponent = testComponentWithStore( <SchoolEdit />);
             var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'sweater');
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
-        it('Should load Organization Profile', function () {
-            var renderedComponent = TestUtils.renderIntoDocument( <OrganizationProfile />);
+        it('Should load School Profile', function () {
+            var renderedComponent = testComponentWithStore( <SchoolProfile />);
             var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'sweater');
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
-        it('Should load Organization Admin', function () {
-            var renderedComponent = TestUtils.renderIntoDocument( <OrganizationView />);
+        it('Should load School Admin', function () {
+            var renderedComponent = testComponentWithStore( <SchoolView />);
             var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'sweater');
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
-        it('Should load Group List', function () {
-            var renderedComponent = TestUtils.renderIntoDocument( <Groups />);
+        it('Should load Class List', function () {
+            var renderedComponent = testComponentWithStore( <Classes />);
             var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'sweater');
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
-        it('Should load Edit Group', function () {
-            var renderedComponent = TestUtils.renderIntoDocument( <GroupEdit />);
+        it('Should load Edit Class', function () {
+            var renderedComponent = testComponentWithStore( <ClassEdit />);
             var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'sweater');
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
-        it('Should load Group Profile', function () {
-            var renderedComponent = TestUtils.renderIntoDocument( <GroupProfile />);
+        it('Should load Class Profile', function () {
+            var renderedComponent = testComponentWithStore( <ClassProfile />);
             var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'sweater');
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
-        it('Should load Group Admin', function () {
-            var renderedComponent = TestUtils.renderIntoDocument( <GroupView />);
+        it('Should load Class Admin', function () {
+            var renderedComponent = testComponentWithStore( <ClassView />);
             var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'sweater');
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
         it('Should load Edit Student', function () {
-            var renderedComponent = TestUtils.renderIntoDocument( <StudentEdit />);
+            var renderedComponent = testComponentWithStore( <StudentEdit />);
             var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'sweater');
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
         it('Should load Friend List', function () {
-            var renderedComponent = TestUtils.renderIntoDocument( <Friends />);
+            var renderedComponent = testComponentWithStore( <Friends />);
             var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'sweater');
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
         it('Should load Suggested Friends', function () {
-            var renderedComponent = TestUtils.renderIntoDocument( <SuggestedFriends />);
+            var renderedComponent = testComponentWithStore( <SuggestedFriends />);
             var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'sweater');
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
         it('Should load Single Game', function () {
-            var renderedComponent = TestUtils.renderIntoDocument( <Game />);
+            var renderedComponent = testComponentWithStore( <Game />);
             var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'sweater');
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
         it('Should load Forced Change Password', function () {
-            var renderedComponent = TestUtils.renderIntoDocument( <ChangePassword />);
+            var renderedComponent = testComponentWithStore( <ChangePassword />);
             var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'sweater');
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });

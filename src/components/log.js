@@ -20,7 +20,9 @@ class Logger {
             if (GLOBALS.MODE.toLowerCase() === 'local' || GLOBALS.MODE.toLowerCase() === 'dev' || GLOBALS.MODE.toLowerCase() === 'development') {
                 console[verb](`%c ${label}: `, `color: ${color};`, ...arguments);
             }
-            Rollbar[verb](...arguments); //eslint-disable-line no-undef
+            if (window.Rollbar[verb] != null) {
+                window.Rollbar[verb](...arguments); //eslint-disable-line no-undef
+            }
         };
     }
 }
