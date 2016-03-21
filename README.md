@@ -24,3 +24,5 @@ ChangeMyWorldNow platform frontend (react)
 Alternatively, local file changes will be refleccted in the vagrant, so if one desires to work entriely around the concept of a vagrant box, install npm and gulp locally and just run the commands locally as normal.   
 Additionally, for environmental changes (e.g. changes to .conf files), run `vagrant reload --provision` to reload everything inside the vagrant.   
 Until I work out a less annoying way to run commands from the host into the vagrant, just set up local aliases for the above three commands.   
+
+build tests with `webpack src/app.test.js --target node --config webpack.config.test.js` and run with `mocha smoke.js`
