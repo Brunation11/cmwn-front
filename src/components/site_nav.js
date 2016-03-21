@@ -15,9 +15,10 @@ var Component = React.createClass({
     renderNavItems: function () {
         var menuItems = _.reduce(this.props.data, (a, i, k) => {
             if (!~nonMenuLinks.indexOf(k)) {
+                var link = ~k.indexOf(':') ? k.split(':')[1] : k;
                 a.push({
-                    url: '/' + k,
-                    text: i.label == null ? _.startCase(k) : i.label
+                    url: '/' + link,
+                    text: i.label == null ? _.startCase(link) : i.label
                 });
             }
             return a;
@@ -41,8 +42,8 @@ const mapStateToProps = state => {
     if (state.currentUser && state.currentUser._links) {
         data = state.currentUser._links.asMutable();
     }
-    data.groups = {label: 'My Classes'};
-    data.organizations = {label: 'My Schools'};
+    data.classes = {label: 'My Classes'};
+    data.schools = {label: 'My Schools'};
     data.districts = {label: 'Districts'};
     data.users = {label: 'Users'};
     data.logout = {};

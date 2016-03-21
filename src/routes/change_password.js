@@ -54,7 +54,7 @@ var ChangePassword = React.createClass({
             this.setState({extraProps: {bsStyle: 'error'}});
             Toast.error(ERRORS.TOO_SHORT);
         } else if (this.state.confirm === this.state.new) {
-            var update = HttpManager.POST({url: `${GLOBALS.API_URL}auth/password`, handleErrors: false}, {
+            var update = HttpManager.POST({url: `${GLOBALS.API_URL}password`}, {
                 'current_password': this.state.current,
                 'password': this.state.new,
                 'password_confirmation': this.state.confirm

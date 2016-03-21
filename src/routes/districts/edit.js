@@ -18,7 +18,8 @@ const ERRORS = {
 };
 
 const HEADINGS = {
-    EDIT_TITLE: 'Info'
+    EDIT_TITLE: 'Edit District: ',
+    CREATE_SCHOOL: 'Create School in this District'
 };
 
 const BAD_UPDATE = 'There was a problem updating your profile. Please try again later.';
@@ -55,8 +56,8 @@ var Component = React.createClass({
             return null;
         }
         return (
-           <Layout className="district-edit">
-              <Panel header={HEADINGS.EDIT_TITLE} className="standard">
+           <Layout>
+              <Panel header={HEADINGS.EDIT_TITLE + this.props.data.title} className="standard">
                  <Input
                     type="text"
                     value={this.state.title}
@@ -77,13 +78,13 @@ var Component = React.createClass({
                  />
                  <Button onClick={this.submitData} > Save </Button>
               </Panel>
-              <CreateOrganization districtId={this.props.params.org_id} data={this.props.data}/>
+              <CreateSchool districtId={this.props.data.org_id} data={this.props.data}/>
            </Layout>
          );
     }
 });
 
-var CreateOrganization = React.createClass({
+var CreateSchool = React.createClass({
     getInitialState: function () {
         return {
             title: ''
@@ -92,7 +93,7 @@ var CreateOrganization = React.createClass({
     submitData: function () {
         var postData = {
             title: this.state.title,
-            organization_id: this.props.data.org_id, //eslint-disable-line camelcase
+            organization_id: this.props.districtId, //eslint-disable-line camelcase
             meta: {
                 code: this.state.code
             },
@@ -104,7 +105,7 @@ var CreateOrganization = React.createClass({
                 url: GLOBALS.API_URL + 'group'
             }, postData).then(res => {
                 if (res.response && res.response.group_id) {
-                    History.replace(`/organization/${res.response.group_id}?message=created`);
+                    History.replace(`/school/${res.response.group_id}?message=created`);
                 }
             }).catch(err => {
                 Toast.error(ERRORS.BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
@@ -116,7 +117,7 @@ var CreateOrganization = React.createClass({
     },
     render: function () {
         return (
-        <Panel>
+        <Panel header={HEADINGS.CREATE_SCHOOL} className="standard">
             <Form ref="formRef">
                 <Input
                     type="text"
@@ -146,9 +147,9 @@ var CreateOrganization = React.createClass({
 });
 
 const mapStateToProps = state => {
-    var data = {};
+    var data = {title: ''};
     var loading = true;
-    if (state.page && state.page.data) {
+    if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
     }

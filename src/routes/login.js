@@ -57,6 +57,7 @@ var Component = React.createClass({
                         History.push('/profile');
                     });
                 } else {
+                    debugger;
                     Toast.error(ERRORS.LOGIN + (res.response && res.response.data && res.response.data.message ? ' Message: ' + res.response.data.message : ''));
                     Log.log(res, 'Invalid login.', req);
                 }
@@ -116,7 +117,7 @@ var Component = React.createClass({
 const mapStateToProps = state => {
     var data = {};
     var loading = true;
-    if (state.page && state.page.data) {
+    if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
     }

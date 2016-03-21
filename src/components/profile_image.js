@@ -7,6 +7,7 @@ import Toast from 'components/toast';
 import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
 import Log from 'components/log';
+import Store from 'components/store';
 
 import 'components/profile_image.scss';
 
@@ -22,7 +23,8 @@ var Component = React.createClass({
         };
     },
     componentDidMount: function () {
-        if (this.props.user_id === this.props.currentUser.user_id) {
+        var state = Store.getState();
+        if (this.props.user_id === state.currentUser.user_id) {
             if (this.props.currentUser.profileImage) {
                 this.setState({profileImage: this.props.currentUser.profileImage});
             }

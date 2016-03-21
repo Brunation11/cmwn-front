@@ -11,7 +11,6 @@ import Util from 'components/util';
 var GenerateDataSource = function (endpointIdentifier, componentName) {
     var Component = React.createClass({
         getInitialState: function () {
-            Actions.dispatch.REGISTER_COMPONENT({endpointIdentifier, componentName});
             return {};
         },
         getDefaultProps: function () {
@@ -20,6 +19,9 @@ var GenerateDataSource = function (endpointIdentifier, componentName) {
                 transform: _.identity,
                 onError: _.noop
             };
+        },
+        componentWillMount: function () {
+            Actions.dispatch.REGISTER_COMPONENT({endpointIdentifier, componentName});
         },
         componentDidMount: function () {
             this.attemptLoadComponentData();

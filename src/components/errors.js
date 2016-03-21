@@ -2,6 +2,7 @@ import React from 'react'; //eslint-disable-line no-unused-vars
 import _ from 'lodash';
 
 import History from 'components/history';
+import PublicRoutes from 'public_routes';
 import EventManager from 'components/event_manager';
 import Log from 'components/log';
 import Authorization from 'components/authorization';
@@ -73,8 +74,56 @@ var clearErrors = function () {
     EventManager.update('errorChange', _errors);
 };
 
+var handlePageErrors = function (res) {
+    if (res.status === 401) {
+        //are we unauthorized because we need to update our password?
+        if (res.response && res.response.error && res.response.error.code === 'RESET_PASSWORD') {
+            if (!~window.location.href.indexOf('change-password')) {
+                History.push('/change-password');
+            }
+            return;
+        }
+        if (!PublicRoutes.hasPath(window.location.pathname)) {
+            //if we have encountered an unauthorized user, we want to cancel all
+            //further requests until the user can be fully logged out
+            window.__USER_UNAUTHORIZED = true;
+            //force user to login screen on any 401, via the logout, regardless of access pattern
+            //History.replace('/logout');
+        }
+    }
+
+    if (window.location.pathname === '/login' || window.location.pathname === '/logout') {
+        //don't display errors occuring during login and logout, they are handled separately
+        return;
+    }
+
+    if (res.request.handlePageLevelErrors !== true && res.status > 399) {
+        //defer error handling to component
+        throw {message: 'Server Error', response: res};
+    }
+
+    if (res.request.method !== 'GET') {
+        //This should not be reached, but if by some misconfiguration it is, do not display errors to the user
+        Log.warn('Non GET request attempted to display page level error');
+        return;
+    }
+
+    if (res.status > 499) {
+        show500(res.request.url, res);
+    } else if (res.status === 403) {
+        show403(res.request.url, res);
+    } else if (res.status === 404) {
+        show404(res.request.url, res);
+    } else if (res.status > 399) {
+        showApplication(res);
+    } else if (res.status === 0 || res.response == null || res.response.length === 0 && res.request.url.indexOf('logout') === -1) {
+        showApplication(res);
+        throw 'Invalid status (' + res.status + ') or corrupt/empty data recieved from ' + res.request.url;
+    }
+};
+
 //make sure these clear when the back button is hit
 window.onpopstate = clearErrors;
 
-export default {renderErrors, show403, show404, show500, showApplication, onError, clearErrors};
+export default {renderErrors, show403, show404, show500, showApplication, onError, clearErrors, handlePageErrors};
 

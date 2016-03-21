@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'; //eslint-disable-line no-unused-vars
 import LogMonitor from 'redux-devtools-log-monitor';
 import DockMonitor from 'redux-devtools-dock-monitor';
 import { createDevTools } from 'redux-devtools';
@@ -7,8 +7,9 @@ var isAvailable = window.__cmwn.MODE === 'dev' || window.__cmwn.MODE === 'develo
 var isVisible = window.__cmwn.MODE === 'local';
 var DevTools = createDevTools(
   <DockMonitor toggleVisibilityKey="ctrl-h"
+               defaultIsVisible={isVisible}
                changePositionKey="ctrl-q">
-    <LogMonitor theme="tomorrow" expandStateRoot={isVisible} />
+    <LogMonitor theme="tomorrow" />
   </DockMonitor>
 );
 

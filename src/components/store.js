@@ -17,27 +17,26 @@ const INITIAL_STATE = Immutable({
 
 var isAvailable = window.__cmwn.MODE === 'dev' || window.__cmwn.MODE === 'development' || window.__cmwn.MODE === 'local';
 
+var populate = function (host, key, storageKey) {
+    var prop = window.localStorage[storageKey];
+
+    if (prop != null && prop !== 'null' && prop !== 'undefined') {
+        try {
+            host[key] = JSON.parse(prop);
+        } catch(err) {
+            host[key] = prop;
+        }
+    }
+};
+
 var storedUserProperties = {};
-var userName = window.localStorage['com.cmwn.platform.userName'];
-var userId = window.localStorage['com.cmwn.platform.userId'];
-var profileImage = window.localStorage['com.cmwn.platform.profileImage'];
-var roles = window.localStorage['com.cmwn.platform.roles'];
-var _links = window.localStorage['com.cmwn.platform._links'];
-if (userName != null && userName !== 'null' && userName !== 'undefined') {
-    storedUserProperties.username = JSON.parse(window.localStorage['com.cmwn.platform.userName']);
-}
-if (userId != null && userId !== 'null' && userId !== 'undefined') {
-    storedUserProperties.user_id = JSON.parse(window.localStorage['com.cmwn.platform.userId']); //eslint-disable-line camelcase
-}
-if (profileImage != null && profileImage !== 'null' && profileImage !== 'undefined') {
-    storedUserProperties.image = JSON.parse(window.localStorage['com.cmwn.platform.profileImage']);
-}
-if (roles != null && roles !== 'null' && roles !== 'undefined') {
-    storedUserProperties.roles = JSON.parse(window.localStorage['com.cmwn.platform.roles']);
-}
-if (_links != null && _links !== 'null' && _links !== 'undefined') {
-    storedUserProperties._links = JSON.parse(window.localStorage['com.cmwn.platform._links']);
-}
+
+populate(storedUserProperties, 'username', 'com.cmwn.platform.userName');
+populate(storedUserProperties, 'user_id', 'com.cmwn.platform.userId');
+populate(storedUserProperties, 'image', 'com.cmwn.platform.profileImage');
+populate(storedUserProperties, 'roles', 'com.cmwn.platform.roles');
+populate(storedUserProperties, '_links', 'com.cmwn.platform._links');
+
 var authReducer = (currentUser = Immutable(storedUserProperties), action) => {
     var reducers = {
         [ACTION_CONSTANTS.LOGOUT]: function () {
@@ -64,6 +63,7 @@ var pageReducer = (page = Immutable({title: 'Change My World Now'}), action) => 
         }.bind(null, page, action.title),
         [ACTION_CONSTANTS.PAGE_LOADING]: function (page_) {
             page_ = page_.set('initialized', false);
+            page_ = page_.without('data');
             return page_.set('loading', true);
         }.bind(null, page),
         [ACTION_CONSTANTS.PAGE_LOADED]: function (page_) {
@@ -197,7 +197,11 @@ const Store = createStore( combineReducers({
             return {currentStage: loaderState.currentStage, lastCompletedStage: loaderState.lastCompletedStage + 1};
         }
         if (action.type === ACTION_CONSTANTS.LOADER_ERROR) {
-            Log.error('Loader error at stage ' + loaderState.currentStage);
+            if (action.error) {
+                Log.error('Loader error at stage ' + loaderState.currentStage + ' : ' + action.payload);
+            } else {
+                Log.error('Loader error at stage ' + loaderState.currentStage);
+            }
         }
         return loaderState;
     }

@@ -15,7 +15,7 @@ var Component = React.createClass({
     renderFlip: function (item){
         return (
             <div className="flip" key={Shortid.generate()}>
-                <a href={`/group/${item.group_id}`}>
+                <a href={`/class/${item.group_id}`}>
                     <img src={DefaultProfile}></img><p>{`${item.title}`}</p>
                 </a>
             </div>

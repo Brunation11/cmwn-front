@@ -1,11 +1,12 @@
 import React from 'react';
+import QueryString from 'query-string';
 import {Link} from 'react-router';
-//import _ from 'lodash';
 import {Panel} from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import Layout from 'layouts/two_col';
 import Shortid from 'shortid';
+import Toast from 'components/toast';
 import Authorization from 'components/authorization';
 import FlipBoard from 'components/flipboard';
 import EditLink from 'components/edit_link';
@@ -14,9 +15,9 @@ import GenerateDataSource from 'components/datasource';
 
 import DefaultProfile from 'media/profile_tranparent.png';
 
-import 'routes/groups/profile.scss';
+import 'routes/classes/profile.scss';
 
-const PAGE_UNIQUE_IDENTIFIER = 'groupProfile';
+const PAGE_UNIQUE_IDENTIFIER = 'classProfile';
 
 const UserSource = GenerateDataSource('user', PAGE_UNIQUE_IDENTIFIER);
 
@@ -26,7 +27,9 @@ const HEADINGS = {
     CLASS: 'Class – '
 };
 
-const ADMIN_TEXT = 'Teacher Dashboard';
+const ADMIN_TEXT = 'Class Administrative Dashboard';
+
+const CLASS_CREATED = 'Class created.';
 
 var Component = React.createClass({
     getInitialState: function () {
@@ -42,6 +45,9 @@ var Component = React.createClass({
     componentDidMount: function () {
         this.setState(this.props.data);
         this.resolveRole();
+        if (QueryString.parse(location.search).message === 'created') {
+            Toast.success(CLASS_CREATED);
+        }
     },
     componentWillReceiveProps: function (nextProps) {
         this.setState(nextProps.data);
@@ -71,7 +77,7 @@ var Component = React.createClass({
             return null;
         }
         return (
-            <p><a href={`/group/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
+            <p><a href={`/class/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
         );
     },
     renderFlip: function (item){
@@ -91,7 +97,7 @@ var Component = React.createClass({
         }
         return (
            <Panel header={this.state.title} className="standard">
-               <EditLink base="/group" uuid={this.state.group_id} canUpdate={Util.decodePermissions(this.state.scope).update} />
+               <EditLink base="/class" uuid={this.state.group_id} canUpdate={Util.decodePermissions(this.state.scope).update} />
                {this.renderAdminLink()}
            </Panel>
         );
@@ -101,7 +107,7 @@ var Component = React.createClass({
             return null;
         }
         return (
-           <Layout className="groupProfile">
+           <Layout className="classProfile">
                {this.renderClassInfo()}
                <UserSource>
                    <FlipBoard renderFlip={this.renderFlip} header={
@@ -116,7 +122,7 @@ var Component = React.createClass({
 const mapStateToProps = state => {
     var data = {};
     var loading = true;
-    if (state.page && state.page.data) {
+    if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
     }
