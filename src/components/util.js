@@ -4,6 +4,7 @@ import Actions from 'components/actions';
 import Store from 'components/store';
 import Log from 'components/log';
 import GLOBALS from 'components/globals';
+import EventManager from 'components/event_manager';
 
 var Util = {
     /**
@@ -110,6 +111,7 @@ var Util = {
         if (state.pageLoadingStage.lastCompletedStage !== GLOBALS.PAGE_LOAD_STATE.COMPONENT || state.components[endpointIdentifier + '-' + componentName].requested) {
             return;
         }
+        debugger;
         switch (state.pageLoadingStage.currentStage) {
         case GLOBALS.PAGE_LOAD_STATE.COMPONENT: // This always needs to come after page load
             Store.dispatch({
@@ -133,8 +135,17 @@ var Util = {
             update: !!+bits.slice(1, 2),
             delete: !!+bits.slice(2, 3)
         };
-        return {create: true, update: true, delete: true};
         return perms;
+    },
+    logout() {
+        window.localStorage.setItem('com.cmwn.platform.userName', null);
+        window.localStorage.setItem('com.cmwn.platform.userId', null);
+        window.localStorage.setItem('com.cmwn.platform.profileImage', null);
+        window.localStorage.setItem('com.cmwn.platform.roles', null);
+        window.localStorage.setItem('com.cmwn.platform._links', null);
+        Actions.dispatch.LOGOUT();
+        Log.info('User logout successful');
+        EventManager.update('userChanged', null);
     }
 };
 

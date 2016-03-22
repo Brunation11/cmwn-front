@@ -89,14 +89,6 @@ var _makeRequest = function (verb, requests){
                         request: _.defaults({body: ''}, req, {xhr})
                     });
                 };
-                //if (!req.withoutToken && this._token != null && verb === 'GET') {
-                //    if (req.url.indexOf('?') === -1) {
-                //        req.url += `?_token=${this._token}`;
-                //    } else {
-                //        req.url += `&_token=${this._token}`;
-                //    }
-                //}
-
 
                 url = req.url;
 

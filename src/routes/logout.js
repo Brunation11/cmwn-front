@@ -3,9 +3,9 @@ import Loader from 'react-loader';
 
 import Layout from 'layouts/one_col';
 import Log from 'components/log';
-import Authorization from 'components/authorization';
 import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
+import Util from 'components/util';
 
 import 'routes/logout.scss';
 
@@ -32,7 +32,7 @@ var Page = React.createClass({
     componentDidMount: function () {
         var logout = HttpManager.GET({url: GLOBALS.API_URL + 'logout', handleErrors: false});
         Log.info('User logout initiated');
-        Authorization.logout();
+        Util.logout();
         logout.then(() => {
             Log.info('Session successfully terminated.');
             delete window.__USER_UNAUTHORIZED;

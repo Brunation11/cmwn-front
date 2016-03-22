@@ -65,6 +65,13 @@ var showApplication = function (err) {
     EventManager.update('errorChange', _errors);
 };
 
+var handle401 = function (err) {
+    Log.error('User not authenticated: ' + window.location.pathname + ': ' + _.isString(err) ? err : err.message);
+    if (window.location.pathname !== '/logout' && window.location.pathname !== '/logout/' && window.location.pathname !== '/login' && window.location.pathname !== '/login/') {
+        History.push('/logout');
+    }
+};
+
 var onError = function (callback) {
     _handlers.push(callback);
 };
@@ -88,7 +95,8 @@ var handlePageErrors = function (res) {
             //further requests until the user can be fully logged out
             window.__USER_UNAUTHORIZED = true;
             //force user to login screen on any 401, via the logout, regardless of access pattern
-            //History.replace('/logout');
+            handle401();
+            return;
         }
     }
 
@@ -125,5 +133,5 @@ var handlePageErrors = function (res) {
 //make sure these clear when the back button is hit
 window.onpopstate = clearErrors;
 
-export default {renderErrors, show403, show404, show500, showApplication, onError, clearErrors, handlePageErrors};
+export default {renderErrors, handle401, show403, show404, show500, showApplication, onError, clearErrors, handlePageErrors};
 

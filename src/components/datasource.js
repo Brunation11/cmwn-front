@@ -21,7 +21,7 @@ var GenerateDataSource = function (endpointIdentifier, componentName) {
             };
         },
         componentWillMount: function () {
-            Actions.dispatch.REGISTER_COMPONENT({endpointIdentifier, componentName});
+            Actions.dispatch.REGISTER_COMPONENT({endpointIdentifier: this.props.endpointIdentifier, componentName: this.props.componentName});
         },
         componentDidMount: function () {
             this.attemptLoadComponentData();
@@ -33,7 +33,7 @@ var GenerateDataSource = function (endpointIdentifier, componentName) {
         },
         attemptLoadComponentData: function () {
             var state = Store.getState();
-            Util.attemptComponentLoad(state, endpointIdentifier, componentName, this.props.onError);
+            Util.attemptComponentLoad(state, this.props.endpointIdentifier, componentName, this.props.onError);
         },
         render: function () {
             var propsForChild;
@@ -55,8 +55,8 @@ var GenerateDataSource = function (endpointIdentifier, componentName) {
 
             props.data = this.state.data; //we only need this so the transformation will only be applied on new data
             propsForChild = Immutable(props)
-                .set('componentName', componentName)
-                .set('endpointIdentifier', endpointIdentifier);
+                .set('componentName', this.props.componentName)
+                .set('endpointIdentifier', this.props.endpointIdentifier);
             return (
                 <div className={this.props.className}>
                     {React.Children.map(this.props.children, child => React.cloneElement(child, propsForChild))}
@@ -74,6 +74,8 @@ var GenerateDataSource = function (endpointIdentifier, componentName) {
             data = component.data;
         }
         return {
+            endpointIdentifier,
+            componentName,
             data,
             loading,
             component,

@@ -12,7 +12,6 @@ import Immutable from 'seamless-immutable';
 
 import ACTION_CONSTANTS from 'components/action_constants';
 import Store from 'components/store';
-import History from 'components/history';
 import Log from 'components/log';
 import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
@@ -83,9 +82,6 @@ Actions = Actions.set(ACTION_CONSTANTS.PAGE_DATA, function (url, title) {
 });
 
 Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
-    //if (window.localStorage.getItem('cmwn_token') != null) {
-    //    return;
-    //}
     return {
         types: [
             'AUTHORIZE_APP_PENDING',
@@ -101,15 +97,7 @@ Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
                 return Promise.resolve((action, dispatch) => {
                     HttpManager.setToken(server.response.token);
                     if (server.response.user_id == null) {
-                        window.localStorage.setItem('com.cmwn.platform.userName', null);
-                        window.localStorage.setItem('com.cmwn.platform.userId', null);
-                        window.localStorage.setItem('com.cmwn.platform.profileImage', null);
-                        window.localStorage.setItem('com.cmwn.platform.roles', null);
-                        window.localStorage.setItem('com.cmwn.platform._links', null);
-                        Log.error('User not authenticated');
-                        if (window.location.pathname !== '/login' && window.location.pathname !== '/login/') {
-                            History.push('/login');
-                        }
+                        Errors.handle401();
                     } else {
                         dispatch({
                             type: 'combo',
@@ -122,16 +110,11 @@ Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
                         });
                     }
                 }).catch(err => {
-                    Log.error(err);
-                    if (window.location.pathname !== '/login' && window.location.pathname !== '/login/') {
-                        History.push('/login');
-                    }
+                    Errors.handle401(err);
                 });
             }).catch(err => {
                 Log.error(err);
-                if (window.location.pathname !== '/login' && window.location.pathname !== '/login/') {
-                    History.push('/login');
-                }
+                Errors.handle401(err);
             })
         }
     };
@@ -142,6 +125,10 @@ Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentif
     var state = Store.getState();
     if (state.page && state.page.data && state.page.data._links[endpointIdentifier] != null) {
         endpoint = state.page.data._links[endpointIdentifier].href;
+    } else if (state.currentUser && state.currentUser._links[endpointIdentifier] != null) {
+        /* @TODO MPR, 3/22/16: This conditional should not exist, and only is here as a stopgap while the me endpoint does not 
+         * exactly match the authenticated / endpoint. */
+        endpoint = state.currentUser._links[endpointIdentifier].href;
     } else {
         Log.error('Component endpoint could not be resolved');
         throw 'Component endpoint could not be resolved';
