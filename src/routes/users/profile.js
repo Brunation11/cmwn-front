@@ -27,7 +27,9 @@ import FlipBgDefault from 'media/flip-placeholder-white.png';
 
 import 'routes/users/profile.scss';
 
-const GameWrapper = GenerateDataSource('games', 'profile');
+const PAGE_UNIQUE_IDENTIFIER = 'profile';
+
+const GameWrapper = GenerateDataSource('games', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     ACTION: 'Profile',
@@ -54,7 +56,7 @@ var Profile = React.createClass({
             this.forceUpdate();
         });
         this.resolveRole();
-        if (QueryString.parse(location.search).message === 'updated') {
+        if (QueryString.parse(window.location.search).message === 'updated') {
             Toast.success(PASS_UPDATED);
         }
 
@@ -175,7 +177,7 @@ var Profile = React.createClass({
             return null;
         }
         return (
-           <Layout className="profile">
+           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal} keyboard={false} backdrop="static">
                     <Modal.Body>
                         {this.renderGame()}
@@ -213,5 +215,6 @@ const mapStateToProps = state => {
 };
 
 var Page = connect(mapStateToProps)(Profile);
+Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
 

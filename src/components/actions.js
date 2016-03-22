@@ -12,6 +12,7 @@ import Immutable from 'seamless-immutable';
 
 import ACTION_CONSTANTS from 'components/action_constants';
 import Store from 'components/store';
+import History from 'components/history';
 import Log from 'components/log';
 import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
@@ -102,15 +103,32 @@ Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
             }).then(server => {
                 return Promise.resolve((action, dispatch) => {
                     HttpManager.setToken(server.response.token);
-                    dispatch({
-                        type: 'combo',
-                        types: ['DELOADER_START', 'DELOADER_SUCCESS', 'DELOADER_ERROR'],
-                        sequence: true,
-                        payload: [
-                            Actions.END_AUTHORIZE_APP.bind(null, {data: server.response}),
-                            Actions.ADVANCE_LOAD_STAGE
-                        ]
-                    });
+                    if (server.response.user_id == null) {
+                        window.localStorage.setItem('com.cmwn.platform.userName', null);
+                        window.localStorage.setItem('com.cmwn.platform.userId', null);
+                        window.localStorage.setItem('com.cmwn.platform.profileImage', null);
+                        window.localStorage.setItem('com.cmwn.platform.roles', null);
+                        window.localStorage.setItem('com.cmwn.platform._links', null);
+                        Log.error('User not authenticated');
+                        if (window.location.pathname !== '/login' && window.location.pathname !== '/login/') {
+                            History.push('/login');
+                        }
+                    } else {
+                        dispatch({
+                            type: 'combo',
+                            types: ['DELOADER_START', 'DELOADER_SUCCESS', 'DELOADER_ERROR'],
+                            sequence: true,
+                            payload: [
+                                Actions.END_AUTHORIZE_APP.bind(null, {data: server.response}),
+                                Actions.ADVANCE_LOAD_STAGE
+                            ]
+                        });
+                    }
+                }).catch(err => {
+                    Log.error(err);
+                    if (window.location.pathname !== '/login' && window.location.pathname !== '/login/') {
+                        History.push('/login');
+                    }
                 });
             }).catch(err => {
                 Log.error(err);

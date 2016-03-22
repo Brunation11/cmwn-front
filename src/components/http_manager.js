@@ -48,8 +48,10 @@ var _getRequestPromise = function (method, request, body, headers) {
     promise = _makeRequest.call(this, method, request);
     if (request.length === 1) {
         return promise.then((res) => {
+            debugger;
             return Promise.resolve(res[0]);
         }).catch(err => {
+            debugger;
             return Promise.reject(err);
         });
     }
@@ -105,7 +107,7 @@ var _makeRequest = function (verb, requests){
                     xhr.setRequestHeader(key, header);
                 });
                 if (!req.withoutXSRF && this._token != null) {
-                    xhr.setRequestHeader('X-CSRF-TOKEN', this._token);
+                    xhr.setRequestHeader('X-CSRF', this._token);
                 }
                 if (_.isObject(req.body)) {
                     req.body = (_.defaults({_token: this._token}, req.body));

@@ -70,7 +70,7 @@ describe('Application', function () {
     describe('Routes', function () {
         it('Should load User Profile', function () {
             var renderedComponent = testComponentWithStore( <Profile id="954d31ae-d689-11e5-bcaa-acbc32a6b1bb"/>);
-            var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'user-profile');
+            var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, Profile._IDENTIFIER);
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
         it('Should load User User List', function () {
@@ -85,7 +85,7 @@ describe('Application', function () {
         });
         it('Should load Edit District', function () {
             var renderedComponent = testComponentWithStore( <DistrictEdit id="94cb922a-d689-11e5-ba76-acbc32a6b1bb" />);
-            var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, 'district-edit');
+            var inputComponent = TestUtils.findRenderedDOMComponentWithClass(renderedComponent, DistrictEdit._IDENTIFIER);
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
         it('Should load District Admin', function () {

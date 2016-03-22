@@ -24,6 +24,8 @@ const HEADINGS = {
 
 const BAD_UPDATE = 'There was a problem updating your profile. Please try again later.';
 
+const PAGE_UNIQUE_IDENTIFIER = 'district-edit';
+
 var Component = React.createClass({
     getInitialState: function () {
         return {
@@ -56,7 +58,7 @@ var Component = React.createClass({
             return null;
         }
         return (
-           <Layout>
+           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
               <Panel header={HEADINGS.EDIT_TITLE + this.props.data.title} className="standard">
                  <Input
                     type="text"
@@ -160,5 +162,6 @@ const mapStateToProps = state => {
 };
 
 var Page = connect(mapStateToProps)(Component);
+Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
 
