@@ -2,7 +2,6 @@ import _ from 'lodash';
 
 import Log from 'components/log';
 import HttpManager from 'components/http_manager';
-import PrivateRoutes from 'private_routes';
 import History from 'components/history';
 import EventManager from 'components/event_manager';
 import Store from 'components/store';

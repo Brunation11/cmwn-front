@@ -37,6 +37,10 @@ module.exports = {
     ],
     module: {
         loaders: [{
+            test: /dev-reducers/,
+            loader: 'null'
+        },
+        {
             test: /\.js$/,
             loader: 'babel',
             include: path.join(__dirname, 'src'),

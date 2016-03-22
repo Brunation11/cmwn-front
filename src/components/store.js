@@ -7,6 +7,7 @@ import promiseMiddleware from 'redux-promise-middleware';
 import Immutable from 'seamless-immutable';
 
 import DevTools from 'components/devtools';
+import DevReducers from 'components/dev_reducers';
 import Log from 'components/log';
 import ACTION_CONSTANTS from 'components/action_constants';
 import GLOBALS from 'components/globals';
@@ -28,6 +29,8 @@ var populate = function (host, key, storageKey) {
         }
     }
 };
+
+var devReducer = isAvailable ? DevReducers : _.identity();
 
 var storedUserProperties = {};
 
@@ -166,6 +169,7 @@ const composeMiddleware = [
 if (isAvailable) {
     composeMiddleware.push(DevTools.instrument());
 }
+devReducer();
 const Store = createStore( combineReducers({
     page: pageReducer,
     currentUser: authReducer,

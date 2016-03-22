@@ -33,6 +33,12 @@ const ERRORS = {
 
 const TERMS_COPY = <span>By checking the box below, you agree that you have read, understand, and accept <a href="/terms" target="_blank">ChangeMyWorldNow.com's terms and conditions</a>.</span>;
 
+var checkPerms = function (data) {
+    if (data && data.scope && !Util.decodePermissions(data.scope).update) {
+        History.push('/school/' + data.group_id);
+    }
+};
+
 var isPassValid = function (password) {
     return password.length >= 8 && ~password.search(/[0-9]+/);
 };
@@ -65,6 +71,8 @@ var Component = React.createClass({
         });
     },
     render: function () {
+        var util = Util;
+        debugger;
         if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
@@ -92,7 +100,7 @@ var Component = React.createClass({
                  <Button onClick={this.submitData} > Save </Button>
               </Panel>
               <CreateClass data={this.props.data} />
-              <BulkUpload organization_id={this.props.params.id}/>
+              <BulkUpload url={this.props.data._links.import} />
            </Layout>
          );
     }
@@ -170,10 +178,13 @@ var BulkUpload = React.createClass({
         };
     },
     render: function () {
+        if (this.props.url == null) {
+            return;
+        }
         return (
           <Panel header={HEADINGS.UPLOAD} className="standard">
             <iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe"></iframe>
-            <Form ref="formRef" method="post" target="dummyframe" encType="multipart/form-data" action={`${GLOBALS.API_URL}group/${this.props.orgId}/import`}
+            <Form ref="formRef" method="post" target="dummyframe" encType="multipart/form-data" action={this.props.url}
                 onSubmit={e => {
                     try {
                         if (!this.refs.formRef.isValid()) {

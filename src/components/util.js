@@ -111,7 +111,6 @@ var Util = {
         if (state.pageLoadingStage.lastCompletedStage !== GLOBALS.PAGE_LOAD_STATE.COMPONENT || state.components[endpointIdentifier + '-' + componentName].requested) {
             return;
         }
-        debugger;
         switch (state.pageLoadingStage.currentStage) {
         case GLOBALS.PAGE_LOAD_STATE.COMPONENT: // This always needs to come after page load
             Store.dispatch({
@@ -131,9 +130,9 @@ var Util = {
         var pad = '0000';
         bits = pad.substring(0, pad.length - bits.length) + bits;
         var perms = {
-            create: !!+bits.slice(0, 1),
-            update: !!+bits.slice(1, 2),
-            delete: !!+bits.slice(2, 3)
+            create: !!+bits.slice(-3),
+            update: !!+bits.slice(-2),
+            delete: !!+bits.slice(-1)
         };
         return perms;
     },
