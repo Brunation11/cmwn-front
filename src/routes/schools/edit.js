@@ -71,8 +71,6 @@ var Component = React.createClass({
         });
     },
     render: function () {
-        var util = Util;
-        debugger;
         if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
@@ -179,7 +177,7 @@ var BulkUpload = React.createClass({
     },
     render: function () {
         if (this.props.url == null) {
-            return;
+            return null;
         }
         return (
           <Panel header={HEADINGS.UPLOAD} className="standard">

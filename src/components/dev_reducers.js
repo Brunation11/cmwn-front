@@ -1,7 +1,7 @@
 
 
-var reducer = function () {
-    console.log('worked');
+var reducer = function (state, action) {
+    return state;
 };
 
 export default reducer;

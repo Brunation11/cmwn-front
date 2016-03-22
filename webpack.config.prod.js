@@ -37,7 +37,7 @@ module.exports = {
     ],
     module: {
         loaders: [{
-            test: /dev-reducers/,
+            test: /dev_reducers/,
             loader: 'null'
         },
         {

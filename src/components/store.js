@@ -169,38 +169,44 @@ const composeMiddleware = [
 if (isAvailable) {
     composeMiddleware.push(DevTools.instrument());
 }
-devReducer();
-const Store = createStore( combineReducers({
-    page: pageReducer,
-    currentUser: authReducer,
-    location: locationReducer,
-    routing: routerReducer,
-    components: componentReducer,
-    bootstrapComplete: (isComplete = false, action) => {
-        if (action.type === ACTION_CONSTANTS.FINISH_BOOTSTRAP) {
-            return true;
-        }
-        return isComplete;
-    },
-    pageLoadingStage: (loaderState = {currentStage: 0, lastCompletedStage: 0}, action) => {
-        if (action.type === ACTION_CONSTANTS.RESET_LOADER) {
-            return {currentStage: 0, lastCompletedStage: 0};
-        }
-        if (action.type === ACTION_CONSTANTS.LOADER_START) {
-            return {currentStage: loaderState.currentStage + 1, lastCompletedStage: loaderState.lastCompletedStage};
-        }
-        if (action.type === ACTION_CONSTANTS.ADVANCE_LOAD_STAGE) {
-            return {currentStage: loaderState.currentStage, lastCompletedStage: loaderState.lastCompletedStage + 1};
-        }
-        if (action.type === ACTION_CONSTANTS.LOADER_ERROR) {
-            if (action.error) {
-                Log.error('Loader error at stage ' + loaderState.currentStage + ' : ' + action.payload);
-            } else {
-                Log.error('Loader error at stage ' + loaderState.currentStage);
+
+const Store = createStore( function (state = {}, action) {
+    state = combineReducers({
+        page: pageReducer,
+        currentUser: authReducer,
+        location: locationReducer,
+        routing: routerReducer,
+        components: componentReducer,
+        bootstrapComplete: (isComplete = false, action_) => {
+            if (action_.type === ACTION_CONSTANTS.FINISH_BOOTSTRAP) {
+                return true;
             }
+            return isComplete;
+        },
+        pageLoadingStage: (loaderState = {currentStage: 0, lastCompletedStage: 0}, action_) => {
+            if (action_.type === ACTION_CONSTANTS.RESET_LOADER) {
+                return {currentStage: 0, lastCompletedStage: 0};
+            }
+            if (action_.type === ACTION_CONSTANTS.LOADER_START) {
+                return {currentStage: loaderState.currentStage + 1, lastCompletedStage: loaderState.lastCompletedStage};
+            }
+            if (action_.type === ACTION_CONSTANTS.ADVANCE_LOAD_STAGE) {
+                return {currentStage: loaderState.currentStage, lastCompletedStage: loaderState.lastCompletedStage + 1};
+            }
+            if (action_.type === ACTION_CONSTANTS.LOADER_ERROR) {
+                if (action_.error) {
+                    Log.error('Loader error at stage ' + loaderState.currentStage + ' : ' + action_.payload);
+                } else {
+                    Log.error('Loader error at stage ' + loaderState.currentStage);
+                }
+            }
+            return loaderState;
         }
-        return loaderState;
+    })(state, action);
+    if (isAvailable) {
+        state = devReducer(state, action);
     }
-}), Immutable({routing: INITIAL_STATE}), compose(...composeMiddleware));
+    return state;
+}, Immutable({routing: INITIAL_STATE}), compose(...composeMiddleware));
 export default Store;
 
