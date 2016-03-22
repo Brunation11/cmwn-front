@@ -47,8 +47,11 @@ var _getRequestPromise = function (method, request, body, headers) {
     request = _.map([].concat(request), i => _.defaults(i, {method}));
     promise = _makeRequest.call(this, method, request);
     if (request.length === 1) {
-        return promise.then((res) => {
-            return Promise.resolve(res[0]);
+        return promise.then((server) => {
+            if (server[0].status == null || server[0].status < 200 || server[0].status >= 300) {
+                throw server[0];
+            }
+            return Promise.resolve(server[0]);
         }).catch(err => {
             return Promise.reject(err);
         });

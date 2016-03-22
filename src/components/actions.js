@@ -60,9 +60,6 @@ Actions = Actions.set(ACTION_CONSTANTS.PAGE_DATA, function (url, title) {
                 url: url,
                 handlePageLevelErrors: true
             }).then(server => {
-                if (server.status && (server.status < 200 || server.status >= 300)) {
-                    throw server;
-                }
                 return Promise.resolve((action, dispatch) => {
                     dispatch({
                         type: 'combo',
@@ -75,11 +72,11 @@ Actions = Actions.set(ACTION_CONSTANTS.PAGE_DATA, function (url, title) {
                     });
                 });
             }).catch(err => {
-                Log.error('Server Error: ' + _.isString(err) ? err : err.status);
                 //NOTE: This is the primary page-level error handling block in the entire application
                 //The only page-level error not handled here will be true 404 errors, which will be handled
                 //in app.js by the router.
                 Errors.handlePageErrors(err);
+                Log.error('Server Error: ' + _.isString(err) ? err : err.status);
             })
         }
     };
