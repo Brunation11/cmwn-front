@@ -48,10 +48,8 @@ var _getRequestPromise = function (method, request, body, headers) {
     promise = _makeRequest.call(this, method, request);
     if (request.length === 1) {
         return promise.then((res) => {
-            debugger;
             return Promise.resolve(res[0]);
         }).catch(err => {
-            debugger;
             return Promise.reject(err);
         });
     }
