@@ -51,6 +51,10 @@ var Component = React.createClass({
                 'password': this.refs.password.getValue()
             });
             req.then(res => {
+                if (res.response && res.response.status && res.response.detail && res.response.status === 401 && res.response.detail.toLowerCase() === 'change password') {
+                    History.push('/change-password');
+                    return;
+                }
                 if (res.status < 300 && res.status >= 200) {
                     Authorization.reloadUser(res.response).then(() => {
                         Log.info(e, 'User login success');
@@ -60,8 +64,12 @@ var Component = React.createClass({
                     Toast.error(ERRORS.LOGIN + (res.response && res.response.data && res.response.data.message ? ' Message: ' + res.response.data.message : ''));
                     Log.log(res, 'Invalid login.', req);
                 }
-            }).catch(err => {
-                Toast.error(ERRORS.LOGIN + (err.message ? ' Message: ' + err.message : ''));
+            }).catch(res=> {
+                if (res.response && res.response.status && res.response.detail && res.response.status === 401 && res.response.detail.toLowerCase() === 'change password') {
+                    History.push('/change-password');
+                    return;
+                }
+                Toast.error(ERRORS.LOGIN + (res.detail ? ' Message: ' + res.detail : ''));
                 Log.log(e, 'Invalid login');
             });
         }
