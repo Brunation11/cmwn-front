@@ -98,7 +98,7 @@ var Component = React.createClass({
                  <Button onClick={this.submitData} > Save </Button>
               </Panel>
               <CreateClass data={this.props.data} />
-              <BulkUpload url={this.props.data._links.import} />
+              <BulkUpload url={this.props.data._links.import.href} />
            </Layout>
          );
     }
