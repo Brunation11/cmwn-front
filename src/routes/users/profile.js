@@ -37,6 +37,7 @@ const HEADINGS = {
 };
 const PLAY = 'Play Now!';
 const COMING_SOON = 'Coming Soon!';
+const CLASSES = 'Classes';
 
 const BROWSER_NOT_SUPPORTED = <span><p>For the best viewing experience we reccomend the desktop version in Chrome</p><p>If you don't have chrome, <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">download it for free here</a>.</p></span>;
 const PASS_UPDATED = 'You have successfully updated your password. Be sure to remeber it for next time!';
@@ -171,6 +172,17 @@ var Profile = React.createClass({
            </GameWrapper>
         );
     },
+    renderClassList: function () {
+        if (!this.state || !this.state._embedded || !this.state._embedded.group_class) {
+            return null;
+        }
+        return (
+            <p>
+                <strong>{CLASSES} </strong>:
+                {_.map(this.state._embedded.group_class, item => item.title).join(', ')}
+            </p>
+        );
+    },
     render: function () {
         var state = Store.getState();
         if (this.state.username == null) {
@@ -191,7 +203,7 @@ var Profile = React.createClass({
                      <EditLink base="/profile" id={this.state.user_id} scope={this.state.scope} />
                      <ProfileImage className={ClassNames({hidden: this.state.user_id === state.currentUser.user_id})} user_id={this.state.user_id} link-below={true}/>
                      <div className="info">
-                        <p><strong>Classes</strong>: {_.map(this.state.classes.data, item => item.title).join(', ')}</p>
+                        {this.renderClassList()}
                      </div>
                  </div>
                </Panel>
