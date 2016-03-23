@@ -30,7 +30,7 @@ var populate = function (host, key, storageKey) {
     }
 };
 
-var devReducer = isAvailable ? DevReducers : _.identity();
+var devReducer = _.isFunction(DevReducers) && isAvailable ? DevReducers : _.identity();
 
 var storedUserProperties = {};
 
@@ -166,7 +166,7 @@ var componentReducer = (allComponents = Immutable({_componentsToLoad: 0, _compon
 const composeMiddleware = [
     applyMiddleware(combineActionsMiddleware, thunk, promiseMiddleware())
 ];
-if (isAvailable) {
+if (isAvailable && DevTools && DevTools.instrument != null) {
     composeMiddleware.push(DevTools.instrument());
 }
 
@@ -203,7 +203,7 @@ const Store = createStore( function (state = {}, action) {
             return loaderState;
         }
     })(state, action);
-    if (isAvailable) {
+    if (_.isFunction(DevReducers) && isAvailable) {
         state = devReducer(state, action);
     }
     return state;

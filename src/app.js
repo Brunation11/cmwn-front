@@ -145,12 +145,23 @@ import 'overrides.scss';
 
 import 'media/logo.png';
 
-document.domain = 'changemyworldnow.com';
-
 //htaccess should take care of it but if somehow it does not, this should overkill the issue
 if (window.location.protocol !== 'https:') {
     window.location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
 }
+
+document.domain = 'changemyworldnow.com';
+
+var renderDevTool = () => {
+    if (_.isFunction(DevTools) && (~GLOBALS.MODE.indexOf('local') || ~GLOBALS.MODE.indexOf('dev'))) {
+        return <DevTools />;
+    }
+    return null;
+};
+
+//if (~GLOBALS.MODE.indexOf('local') || ~GLOBALS.MODE.indexOf('dev')) {
+//    devTool = () => <DevTools />;
+//}
 
 //█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
 //█  1. Top Level React Components
@@ -182,7 +193,7 @@ var App = React.createClass({
                 <div className="sweater">
                     {this.props.children}
                 </div>
-                <DevTools />
+                {renderDevTool()}
             </div>
         );
     }
