@@ -65,7 +65,7 @@ h1, h2, h3 {
         background-image: url("media/404_error.png");
     }
     &.error500 {
-        background-image: url("media/500_error.png");
+        background-image: url("media/500_error_alt.png");
 
         a {
             bottom: 42vh;
@@ -77,14 +77,20 @@ h1, h2, h3 {
         }
     }
     &.applicationerror {
-        background-image: url("media/generic_error.png");
+        background-image: url("media/generic_error_alt.png");
     }
 }
 
 #pageerror {
+    opacity: 0;
     background: url("media/generic_error.png") #fff;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     animation: fadein 1s;
-    animation-delay: 5s
+    animation-delay: 5s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
 }
 
 @keyframes fadein {

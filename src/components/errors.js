@@ -5,7 +5,9 @@ import History from 'components/history';
 import PublicRoutes from 'public_routes';
 import EventManager from 'components/event_manager';
 import Log from 'components/log';
+import Store from 'components/log';
 import Authorization from 'components/authorization';
+import Util from 'components/util';
 import PrivateRoutes from 'private_routes';
 
 var _errors = [];
@@ -49,8 +51,13 @@ var show404 = function () {
 };
 
 var show500 = function (url) {
+    var state = Store.getState();
+    var link = '/login';
+    if (state.currentUser.user_id != null) {
+        link = '/profile';
+    }
     _errors.push(
-        <div id="triggerederror" className="error500"><a href="/profile" className="gohome"> </a><a onClick={() => window.location.reload()}> </a></div>
+        <div id="triggerederror" className="error500"><a href={link} className="gohome"> </a><a onClick={() => window.location.reload()}> </a></div>
     );
     _.each(_handlers, handler => handler());
     Log.error('Displayed 500: ' + url, ...arguments, window.location, Authorization.currentUser);
@@ -58,8 +65,13 @@ var show500 = function (url) {
 };
 
 var showApplication = function (err) {
+    var state = Store.getState();
+    var link = '/login';
+    if (state.currentUser.user_id != null) {
+        link = '/profile';
+    }
     _errors.push(
-        <div id="triggerederror" className="applicationerror"><a href="/profile"> </a></div>
+        <div id="triggerederror" className="applicationerror"><a href={link}> </a></div>
     );
     _.each(_handlers, handler => handler());
     Log.error('Displayed Application Error: ' + (err && err.message != null ? err.message : err), ...arguments, window.location, Authorization.currentUser);
@@ -68,7 +80,13 @@ var showApplication = function (err) {
 
 var handle401 = function (err) {
     err = err || '';
-    if (window.location.pathname !== '/' && _.reduce(PrivateRoutes, (acc, path) => acc || path.path.indexOf(window.location.pathname.slice(1)) === 0, false)) {
+    if (
+        window.location.pathname !== '/' &&
+        _.reduce(PrivateRoutes, (acc, path) =>
+            acc ||
+            Util.matchPathAndExtractParams(path.path, window.location.pathname) !== false
+        , false)
+    ) {
         Log.info('User not authenticated, page: ' + window.location.pathname + ' message: ' + (_.isString(err) ? err : err.message));
         if (window.location.pathname !== '/logout' && window.location.pathname !== '/logout/' && window.location.pathname !== '/login' && window.location.pathname !== '/login/') {
             History.push('/logout');
