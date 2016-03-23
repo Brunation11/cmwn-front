@@ -88,7 +88,7 @@ var clearErrors = function () {
 var handlePageErrors = function (res) {
     if (res.status === 401) {
         //are we unauthorized because we need to update our password?
-        if (res.response && res.response.error && res.response.error.code === 'RESET_PASSWORD') {
+        if (res.response && res.response.error && res.response.error.detail.toLowerCase() === 'change password') {
             if (!~window.location.href.indexOf('change-password')) {
                 History.push('/change-password');
             }
