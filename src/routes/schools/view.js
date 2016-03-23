@@ -23,9 +23,8 @@ const HEADINGS = {
     DESCRIPTION: 'Description',
     CREATED: 'Created',
     DISTRICTS: 'Districts',
-    SCHOOLS: 'Schools in District',
-    CLASSES: 'Classes in District',
-    USERS: 'Users in District'
+    CLASSES: 'Classes in School',
+    USERS: 'Users in School'
 };
 
 const ADMIN_TEXT = 'Teacher Dashboard';
