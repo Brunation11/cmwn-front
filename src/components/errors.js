@@ -82,6 +82,7 @@ var handle401 = function (err) {
     err = err || '';
     if (
         window.location.pathname !== '/' &&
+        window.location.pathname !== '/change-password' &&
         _.reduce(PrivateRoutes, (acc, path) =>
             acc ||
             Util.matchPathAndExtractParams(path.path, window.location.pathname) !== false
