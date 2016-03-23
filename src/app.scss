@@ -177,6 +177,10 @@ h1, h2, h3 {
         cursor: pointer;
     }
 
+    img {
+        user-drag: none;
+    }
+
     .sidebar{
         order: 1;
         flex-grow: 0;
