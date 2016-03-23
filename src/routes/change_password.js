@@ -1,6 +1,5 @@
 import React from 'react';
 
-import Authorization from 'components/authorization';
 import HttpManager from 'components/http_manager';
 import Log from 'components/log';
 import History from 'components/history';
@@ -27,14 +26,13 @@ var isPassValid = function (password) {
 
 var Page = React.createClass({
     getInitialState: function () {
-        this.uuid = Authorization.currentUser.uuid;
         return {};
     },
     render: function () {
         return (
            <Layout className="change-password">
                 {CHANGE_COPY}
-                <ChangePassword uuid={this.uuid} />
+                <ChangePassword />
            </Layout>
          );
     }
@@ -55,14 +53,12 @@ var ChangePassword = React.createClass({
             Toast.error(ERRORS.TOO_SHORT);
         } else if (this.state.confirm === this.state.new) {
             var update = HttpManager.POST({url: `${GLOBALS.API_URL}password`}, {
-                'current_password': this.state.current,
+//                'current_password': this.state.current,
                 'password': this.state.new,
                 'password_confirmation': this.state.confirm
             });
             update.then(() => {
-                Authorization.reloadUser().then(() => {
-                    History.replace('/profile?message=updated');
-                });
+                History.replace('/profile?message=updated');
             }).catch(err => {
                 Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
                 Toast.error(ERRORS.BAD_PASS);
@@ -77,7 +73,7 @@ var ChangePassword = React.createClass({
         return (
             <Panel header={HEADINGS.PASSWORD} className="standard">
                 <form>
-                <Input
+{''/*                <Input
                     type="password"
                     value={this.state.current}
                     placeholder="********"
@@ -87,6 +83,7 @@ var ChangePassword = React.createClass({
                     name="currentInput"
                     onChange={e => this.setState({current: e.target.value})}
                 />
+*/}
                 <Input
                     type="password"
                     value={this.state.new}
