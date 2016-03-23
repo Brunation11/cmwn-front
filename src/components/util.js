@@ -126,14 +126,20 @@ var Util = {
         }
     },
     decodePermissions(val) {
-        var bits = (val >>> 0).toString(2);
-        var pad = '0000';
-        bits = pad.substring(0, pad.length - bits.length) + bits;
         var perms = {
-            create: !!+bits.slice(-3),
-            update: !!+bits.slice(-2),
-            delete: !!+bits.slice(-1)
+            create: true, update: true, delete: true
         };
+        var pad = '0000';
+        var bits;
+        if (val !== -1) {
+            bits = (val >>> 0).toString(2);
+            bits = pad.substring(0, pad.length - bits.length) + bits;
+            perms = {
+                create: !!+bits.slice(-3),
+                update: !!+bits.slice(-2),
+                delete: !!+bits.slice(-1)
+            };
+        }
         return perms;
     },
     logout() {
