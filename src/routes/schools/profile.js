@@ -50,14 +50,22 @@ var Component = React.createClass({
         this.setState(this.props.data);
     },
     renderDistricts: function () {
-        var links = _.map(this.districts, district => {
+        if (!this.props.data || !this.props.data._embedded || !this.props.data._embedded.organization || this.props.data._embedded.organization.district) {
+            return null;
+        }
+        var links = _.map(this.props.data._embedded.organization.district, district => {
             return (
-                <Link to={`/districts/${district.id}`}>
+                <Link to={`/districts/${district.org_id}`}>
                     {district.title}
                 </Link>
             );
         });
-        return links;
+        return (
+            <p>
+                {`${HEADINGS.DISTRICTS}: `}
+                {links}
+            </p>
+        );
     },
     renderFlip: function (item){
         return (
@@ -81,7 +89,7 @@ var Component = React.createClass({
                <Panel header={this.props.data.title} className="standard">
                    <EditLink base="/school" uuid={this.props.data.group_id} canUpdate={Util.decodePermissions(this.props.data.scope).update} />
                    {this.renderAdminLink()}
-                    <p>{`${HEADINGS.DISTRICTS}: `}{this.renderDistricts()}</p>
+                   {this.renderDistricts()}
                    {this.props.data.description}
                </Panel>
                <ClassSource>
