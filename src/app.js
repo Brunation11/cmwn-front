@@ -159,9 +159,26 @@ var renderDevTool = () => {
     return null;
 };
 
-//if (~GLOBALS.MODE.indexOf('local') || ~GLOBALS.MODE.indexOf('dev')) {
-//    devTool = () => <DevTools />;
-//}
+//this section disables right clicking on images to dissuade downloading.
+var oncontextmenu = document.oncontextmenu;
+var onmousedown = document.onmousedown;
+document.oncontextmenu = function (e) {
+    if (e.target.nodeName === 'IMG') {
+        return false;
+    }
+    if (_.isFunction(oncontextmenu)) {
+        oncontextmenu(...arguments);
+    }
+};
+document.captureEvents(Event.MOUSEDOWN);
+document.onmousedown = function (e) {
+    if (e.target.nodeName === 'IMG') {
+        return false;
+    }
+    if (_.isFunction(onmousedown)) {
+        onmousedown(...arguments);
+    }
+};
 
 //█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
 //█  1. Top Level React Components
