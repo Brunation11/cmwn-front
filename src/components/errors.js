@@ -68,7 +68,7 @@ var showApplication = function (err) {
 
 var handle401 = function (err) {
     err = err || '';
-    if (window.location.pathname !== '/' && _.reduce(PrivateRoutes, (acc, path) => acc || path.path.indexOf(window.location.pathname) === 0, false)) {
+    if (window.location.pathname !== '/' && _.reduce(PrivateRoutes, (acc, path) => acc || path.path.indexOf(window.location.pathname.slice(1)) === 0, false)) {
         Log.info('User not authenticated, page: ' + window.location.pathname + ' message: ' + (_.isString(err) ? err : err.message));
         if (window.location.pathname !== '/logout' && window.location.pathname !== '/logout/' && window.location.pathname !== '/login' && window.location.pathname !== '/login/') {
             History.push('/logout');
