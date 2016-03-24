@@ -2,10 +2,8 @@ import React from 'react';
 import Shortid from 'shortid';
 import { connect } from 'react-redux';
 
-//import HttpManager from 'components/http_manager';
 import FlipBoard from 'components/flipboard';
 import Layout from 'layouts/two_col';
-import Paginator from 'components/paginator';
 
 import DefaultProfile from 'media/icon_class_blue.png';
 
@@ -24,9 +22,7 @@ var Component = React.createClass({
     render: function () {
         return (
             <Layout>
-                <Paginator data={this.props.data} pageCount={1}>
-                    <FlipBoard header={TITLE} renderFlip={this.renderFlip} />
-                </Paginator>
+                <FlipBoard data={this.props.data} header={TITLE} renderFlip={this.renderFlip} />
             </Layout>
         );
     }

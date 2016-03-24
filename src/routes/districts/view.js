@@ -10,6 +10,7 @@ import QueryString from 'query-string';
 import Util from 'components/util';
 import History from 'components/history';
 import GenerateDataSource from 'components/datasource';
+import Text from 'components/nullable_text';
 import {Table, Column} from 'components/table';
 
 const DISTRICT_CREATED = 'Disctrict created successfully';
@@ -39,8 +40,8 @@ var Component = React.createClass({
         }
     },
     render: function () {
-        var code = this.props.data.meta == null ? '' : this.props.data.meta.code;
-        var systemId = this.props.data.meta == null ? '' : this.props.data.meta.system_id;
+        var code = this.props.data.meta == null ? null : this.props.data.meta.code;
+        var systemId = this.props.data.meta == null ? null : this.props.data.meta.system_id;
         if (this.props.data.org_id == null || !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
@@ -49,13 +50,13 @@ var Component = React.createClass({
                 <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard">
                     <EditLink base="/district" uuid={this.props.data.org_id} canUpdate={Util.decodePermissions(this.props.data.scope).update} />
                     <br />
-                    <p>{`${HEADINGS.NAME}: ${this.props.data.title}`}</p>
+                    <Text label={`${HEADINGS.NAME}: `} text={this.props.data.title}><p></p></Text>
                     <br />
-                    <p>{`${HEADINGS.CODE}: ${code}`}</p>
+                    <Text label={`${HEADINGS.CODE}: `} text={code}><p></p></Text>
                     <br />
-                    <p>{`${HEADINGS.SYSTEM}: ${systemId}`}</p>
+                    <Text label={`${HEADINGS.SYSTEM}: `} text={systemId}><p></p></Text>
                     <br />
-                    <p>{`${HEADINGS.DESCRIPTION}: ${this.props.data.description}`}</p>
+                    <Text label={`${HEADINGS.DESCRIPTION}: `} text={this.props.data.description}><p></p></Text>
                 </Panel>
                 <Panel header={HEADINGS.SCHOOLS} className="standard">
                     <a onClick={() => History.push('/schools')}>View All Your Schools</a>

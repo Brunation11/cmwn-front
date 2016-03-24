@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 import Layout from 'layouts/two_col';
 import {Table, Column} from 'components/table';
-import Paginator from 'components/paginator';
 import History from 'components/history';
 
 const TITLE = 'Districts';
@@ -38,20 +37,18 @@ var Component = React.createClass({
                         {this.renderCreateDistrict()}
                     </div>
                 </header>
-                <Paginator pageCount={1} data={this.props.data}>
-                    <Table>
-                        <Column dataKey="title"
-                            renderCell={(data, row) => (
-                                <a onClick={() => History.push('/districts/' + row.org_id)}>{_.startCase(data)}</a>
-                            )}
-                        />
-                        <Column dataKey="description" />
-                        <Column dataKey="created_at" renderHeader="Created" />
-                        <Column dataKey="updated_at" renderHeader="Last Updated"
-                            renderCell={data => (data == null ? 'never' : data)}
-                        />
-                    </Table>
-                </Paginator>
+                <Table data={this.props.data}>
+                    <Column dataKey="title"
+                        renderCell={(data, row) => (
+                            <a onClick={() => History.push('/districts/' + row.org_id)}>{_.startCase(data)}</a>
+                        )}
+                    />
+                    <Column dataKey="description" />
+                    <Column dataKey="created_at" renderHeader="Created" />
+                    <Column dataKey="updated_at" renderHeader="Last Updated"
+                        renderCell={data => (data == null ? 'never' : data)}
+                    />
+                </Table>
             </Layout>
         );
     }

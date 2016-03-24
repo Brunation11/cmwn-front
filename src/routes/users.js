@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import FlipBoard from 'components/flipboard';
 //import HttpManager from 'components/http_manager';
 import Layout from 'layouts/two_col';
-import Paginator from 'components/paginator';
 
 import DefaultProfile from 'media/profile_tranparent.png';
 
@@ -33,9 +32,7 @@ var Component = React.createClass({
                         {TITLE}
                     </div>
                 </header>
-                <Paginator pageCount={1} data={this.props.data}>
-                    <FlipBoard renderFlip={this.renderFlip} />
-                </Paginator>
+                <FlipBoard data={this.props.data} renderFlip={this.renderFlip} />
             </Layout>
         );
     }
