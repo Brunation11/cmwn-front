@@ -9,6 +9,7 @@ import {Table, Column} from 'components/table';
 import Paginator from 'components/paginator';
 import EditLink from 'components/edit_link';
 import DeleteLink from 'components/delete_link';
+import Text from 'components/nullable_text';
 import Util from 'components/util';
 import GenerateDataSource from 'components/datasource';
 
@@ -60,9 +61,9 @@ var Component = React.createClass({
                         <a href={`/class/${this.props.data.group_id}/profile`}>Return to class page</a>
                     </p>
                     <br />
-                    <p>{`${HEADINGS.DESCRIPTION}: ${this.props.data.description}`}</p>
+                    <Text label={`${HEADINGS.DESCRIPTION}: `} text={this.props.data.description}><p></p></Text>
                     <br />
-                    <p>{`${HEADINGS.CREATED}: ${this.props.data.created_at}`}</p>
+                    <Text label={`${HEADINGS.CREATED}: `} text={this.props.data.created_at}><p></p></Text>
                 </Panel>
                 <Panel header="Students" className="standard">
                     <UserSource>

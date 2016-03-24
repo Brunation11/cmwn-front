@@ -29,7 +29,8 @@ var Component = React.createClass({
                 system_id: this.state.districtId, //eslint-disable-line camelcase
                 code: this.state.code,
             },
-            description: this.state.title
+            description: this.state.title,
+            type: 'district'
         };
         if (this.refs.formRef.isValid()) {
             HttpManager.POST({url: this.props.data._links.self.href, asJSON: true}, postData).then(res => {

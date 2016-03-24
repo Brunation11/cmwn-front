@@ -9,6 +9,7 @@ import EditLink from 'components/edit_link';
 import DeleteLink from 'components/delete_link';
 import {Table, Column} from 'components/table';
 import Util from 'components/util';
+import Paragraph from 'components/conditional_paragraph';
 import History from 'components/history';
 import GenerateDataSource from 'components/datasource';
 
@@ -46,7 +47,13 @@ var Component = React.createClass({
         this.setState(newProps.data);
     },
     renderDistricts: function () {
-        var links = _.map(this.state.districts, district => {
+        if (!this.state || this.state._embedded == null) {
+            return null;
+        }
+        var links = _.map(this.state._embedded.organizations, district => {
+            if (district.type !== 'district') {
+                return null;
+            }
             return (
                 <Link to={`/districts/${district.id}`}>
                     {district.title}
@@ -72,9 +79,10 @@ var Component = React.createClass({
                 <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard">
                    <EditLink base="/school" id={this.state.group_id} scope={this.state.scope} />
                    <DeleteLink base="/school" id={this.state.group_id} scope={this.state.scope} />
-                    <p>{`${HEADINGS.DISTRICTS}: `}{this.renderDistricts()}</p>
-                    <br />
-                    <p>{`${HEADINGS.DESCRIPTION}: ${this.props.data.description}`}</p>
+                   <Paragraph>
+                       <p pre={`${HEADINGS.DISTRICTS}: `}>{this.renderDistricts()}</p>
+                       <p pre={`${HEADINGS.DESCRIPTION}: `}>{this.props.data.description}</p>
+                   </Paragraph>
                 </Panel>
                 <Panel header={HEADINGS.CLASSES} className="standard">
                     <a onClick={() => History.push('/classes')}>View All Your Classes</a>

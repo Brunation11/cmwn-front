@@ -99,7 +99,8 @@ var CreateSchool = React.createClass({
             meta: {
                 code: this.state.code
             },
-            description: this.state.title
+            description: this.state.title,
+            type: 'school'
         };
         if (this.refs.formRef.isValid()) {
             HttpManager.POST({
