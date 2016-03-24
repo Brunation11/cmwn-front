@@ -163,7 +163,6 @@ Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentif
 });
 
 Actions = Actions.set(ACTION_CONSTANTS.GET_NEXT_COMPONENT_PAGE, function (state, endpointIdentifier, componentName, pageNum) {
-    debugger;
     var endpoint = state.components[endpointIdentifier + '-' + componentName]._links.find
         .replace('{page}', pageNum)
         .replace('{count}', state.components[endpointIdentifier + '-' + componentName].page_size);

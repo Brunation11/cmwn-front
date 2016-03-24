@@ -7,9 +7,17 @@ import { connect } from 'react-redux';
 const nonMenuLinks = [
     'me',
     'self',
+    'profile',
+    'games',
     'forgot',
     'user_image'
 ];
+
+var addHardcodedEntries = function (menuItems) {
+    menuItems.unshift({url: '/profile', text: 'Action Items'});
+    menuItems.push({url: '/profile/edit', text: 'Edit My Profile'});
+    return menuItems;
+};
 
 var Component = React.createClass({
     renderNavItems: function () {
@@ -23,6 +31,7 @@ var Component = React.createClass({
             }
             return a;
         }, []);
+        menuItems = addHardcodedEntries(menuItems);
         return _.map(menuItems, item => (<li key={`(${item.text})-${item.url}`}><Link to={item.url}>{item.text}</Link></li>));
     },
     render: function () {
