@@ -1,3 +1,4 @@
+/** @TODO MPR, 3/23/16: MARKED FOR DEPRECATON **/
 import React from 'react';
 import _ from 'lodash';
 import Immutable from 'immutable';

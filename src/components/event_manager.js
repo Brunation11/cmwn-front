@@ -1,3 +1,4 @@
+/** @TODO MPR, 3/23/16: MARKED FOR DEPRECATON **/
 /*
  * eventManager.js
  * Singleton. Maintains a list of pending changes to a global weakMap

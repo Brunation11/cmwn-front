@@ -1,3 +1,4 @@
+/** @TODO MPR, 3/23/16: MARKED FOR DEPRECATON **/
 import _ from 'lodash';
 
 import Log from 'components/log';
