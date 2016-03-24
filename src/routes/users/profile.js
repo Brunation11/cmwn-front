@@ -40,7 +40,7 @@ const COMING_SOON = 'Coming Soon!';
 const CLASSES = 'Classes';
 
 const BROWSER_NOT_SUPPORTED = <span><p>For the best viewing experience we reccomend the desktop version in Chrome</p><p>If you don't have chrome, <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">download it for free here</a>.</p></span>;
-const PASS_UPDATED = 'You have successfully updated your password. Be sure to remeber it for next time!';
+const PASS_UPDATED = 'You have successfully updated your password.<br />Be sure to remeber it for next time!';
 
 var Profile = React.createClass({
     getInitialState: function () {
