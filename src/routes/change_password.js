@@ -4,6 +4,7 @@ import HttpManager from 'components/http_manager';
 import Log from 'components/log';
 import History from 'components/history';
 import Toast from 'components/toast';
+import Store from 'components/store';
 import GLOBALS from 'components/globals';
 import {Panel, Button, Input} from 'react-bootstrap';
 
@@ -47,7 +48,17 @@ var ChangePassword = React.createClass({
             extraProps: {}
         };
     },
+    componentDidMount: function () {
+        var state = Store.getState();
+        if (state.currentUser.user_id != null) {
+            window.location.href = '/logout';
+        }
+    },
     submit: function () {
+        var state = Store.getState();
+        if (state.currentUser.user_id != null) {
+            window.location.href = '/logout';
+        }
         if (!isPassValid(this.state.new)) {
             this.setState({extraProps: {bsStyle: 'error'}});
             Toast.error(ERRORS.TOO_SHORT);
