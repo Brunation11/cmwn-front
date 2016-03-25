@@ -33,6 +33,8 @@ const ACTIONS = [
     'RESET_LOADER',
     'COMPONENT_LOADER_COMPLETE',
     'COMPONENT_REQUESTED',
+    'START_RELOAD_PAGE',
+    'END_RELOAD_PAGE',
 ];
 
 export default _.reduce(ACTIONS, (a, i) => _.defaults(a, {[i]: i}), {});

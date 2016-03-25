@@ -55,7 +55,7 @@ var authReducer = (currentUser = Immutable(storedUserProperties), action) => {
             //with its own url template binding rules, but for the time being
             //there is no difference between /users and /org/my-org/users
             currentUser_ = currentUser_.setIn(['_links', 'user'], _.defaults(
-                {label: 'Friends and Network', view_url: '/users'},
+                {label: 'Friends and Network', view_url: '/users'}, // eslint-disable-line camelcase
                 action.data._embedded.organizations[0]._links.org_users
             ));
             return currentUser_;
@@ -87,6 +87,10 @@ var pageReducer = (page = Immutable({title: 'Change My World Now'}), action) => 
             page_ = page_.set('loading', false);
             page_ = page_.set('initialized', true);
             page_ = page_.set('title', action_.title);
+            page_ = page_.set('data', action_.data);
+            return page_;
+        }.bind(null, page, action),
+        [ACTION_CONSTANTS.END_RELOAD_PAGE]: function (page_, action_) {
             page_ = page_.set('data', action_.data);
             return page_;
         }.bind(null, page, action)

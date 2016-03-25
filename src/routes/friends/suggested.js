@@ -1,6 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import {Link} from 'react-router';
+import { connect } from 'react-redux';
 import {Panel, Button} from 'react-bootstrap';
 
 import Fetcher from 'components/fetcher';
@@ -10,11 +11,15 @@ import Toast from 'components/toast';
 import ClassNames from 'classnames';
 import History from 'components/history';
 import HttpManager from 'components/http_manager';
+import Actions from 'components/actions';
+
 import Layout from 'layouts/two_col';
 
 import 'routes/friends/suggested.scss';
 
 import DefaultProfile from 'media/profile_tranparent.png';
+
+const PAGE_UNIQUE_IDENTIFIER = 'suggested-friends';
 
 const NO_FRIENDS = <div>You are already friends with everyone in your group. <br /> Great Work! <br /> Let's Take Action!</div>;
 const HEADINGS = {
@@ -26,11 +31,21 @@ const REQUESTED = 'Request Sent';
 const ACCEPT = 'Accept';
 const PROFILE = 'View Profile';
 
-var Page = React.createClass({
+var Component = React.createClass({
+    componentDidMount: function () {
+        if (this.props.loading === false && this.props.data) {
+            this.setState(this.props.data);
+        }
+    },
+    componentWillReceiveProps: function (nextProps) {
+        if (nextProps.loading === false && nextProps.data.user_id !== this.props.data.user_id) {
+            this.setState(nextProps.data);
+        }
+    },
     addFriend: function (item, e) {
         e.stopPropagation();
         e.preventDefault();
-        HttpManager.POST({url: GLOBALS.API_URL + 'friends', handleErrors: false}, {
+        HttpManager.POST({url: this.state._links.friend}, {
             'user_id': item.uuid
         }).then(() => {
             this.refs.datasource.getData().then(this.forceUpdate);
@@ -86,7 +101,7 @@ var Page = React.createClass({
     },
     render: function () {
         return (
-           <Layout className="friends-page">
+           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <form>
                     <Fetcher ref="datasource" url={ GLOBALS.API_URL + 'suggestedfriends?include=roles,flips,images'} renderNoData={this.renderNoData} transform={data => {
                         data = _.map(data, item => {
@@ -103,5 +118,20 @@ var Page = React.createClass({
     }
 });
 
+const mapStateToProps = state => {
+    var data = {};
+    var loading = true;
+    if (state.page && state.page.data != null) {
+        loading = state.page.loading;
+        data = state.page.data;
+    }
+    return {
+        data,
+        loading
+    };
+};
+
+var Page = connect(mapStateToProps)(Component);
+Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
 

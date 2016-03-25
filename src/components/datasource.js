@@ -35,12 +35,16 @@ var GenerateDataSource = function (endpointIdentifier, componentName) {
             var state = Store.getState();
             Util.attemptComponentLoad(state, this.props.endpointIdentifier, componentName, this.props.onError);
         },
+        reloadComponentData: function () {
+            /** @TODO MPR, 3/24/16: Implement this action **/
+            Actions.dispatch.RELOAD_COMPONENT({endpointIdentifier: this.props.endpointIdentifier, componentName: this.props.componentName});
+        },
         render: function () {
             var propsForChild;
             var props = _.reduce(this.props, (a, i, k) => {
                 //we have to do this dumb copy because creating an immutable
-                //out of dom nodes crashes overflows the call stack and
-                //we cant delete the read only member children
+                //out of dom nodes overflows the call stack and
+                //we cant just delete the read only member children
                 if (k !== 'children' && k !== 'transform') {
                     a[k] = i;
                 }

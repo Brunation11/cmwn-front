@@ -42,45 +42,11 @@ var generateBasicBoundActions = function (actionNameList) {
     return Immutable(actions);
 };
 
-//********** Basic Actions
+//********** Basic Action Creators
 var Actions = generateBasicBoundActions(ACTION_CONSTANTS);
-//********** Thunk Actions
-//Thunk actions should be named START_YOUR_ACTION, and should resolve by dispatching an END_YOUR_ACTION
-Actions = Actions.set(ACTION_CONSTANTS.PAGE_DATA, function (url, title) {
-    return {
-        types: [
-            'PAGE_DATA_PENDING',
-            'PAGE_DATA_SUCCESS',
-            'PAGE_DATA_ERROR'
-        ],
-        type: ACTION_CONSTANTS.PAGE_DATA,
-        payload: {
-            promise: HttpManager.GET({
-                url: url,
-                handlePageLevelErrors: true
-            }).then(server => {
-                return Promise.resolve((action, dispatch) => {
-                    dispatch({
-                        type: 'combo',
-                        types: ['DELOADER_START', 'DELOADER_SUCCESS', 'DELOADER_ERROR'],
-                        sequence: true,
-                        payload: [
-                            Actions.END_PAGE_DATA.bind(null, {data: server.response, title}),
-                            Actions.ADVANCE_LOAD_STAGE
-                        ]
-                    });
-                });
-            }).catch(err => {
-                //NOTE: This is the primary page-level error handling block in the entire application
-                //The only page-level error not handled here will be true 404 errors, which will be handled
-                //in app.js by the router.
-                Errors.handlePageErrors(err);
-                Log.error('Server Error: ' + _.isString(err) ? err : err.status);
-            })
-        }
-    };
-});
 
+//********** Thunk Action Creators
+//Thunk actions should be named START_YOUR_ACTION, and should resolve by dispatching an END_YOUR_ACTION
 Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
     return {
         types: [
@@ -116,6 +82,50 @@ Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
                 Log.error(err);
                 Errors.handle401(err);
             })
+        }
+    };
+});
+
+Actions = Actions.set(ACTION_CONSTANTS.PAGE_DATA, function (url, title) {
+    return {
+        types: [
+            'PAGE_DATA_PENDING',
+            'PAGE_DATA_SUCCESS',
+            'PAGE_DATA_ERROR'
+        ],
+        type: ACTION_CONSTANTS.PAGE_DATA,
+        payload: {
+            promise: HttpManager.GET({
+                url: url,
+                handlePageLevelErrors: true
+            }).then(server => {
+                return Promise.resolve((action, dispatch) => {
+                    dispatch({
+                        type: 'combo',
+                        types: ['DELOADER_START', 'DELOADER_SUCCESS', 'DELOADER_ERROR'], /** @TODO MPR, 3/24/16: Change these dumb names **/
+                        sequence: true,
+                        payload: [
+                            Actions.END_PAGE_DATA.bind(null, {data: server.response, title}),
+                            Actions.ADVANCE_LOAD_STAGE
+                        ]
+                    });
+                });
+            }).catch(err => {
+                //NOTE: This is the primary page-level error handling block in the entire application
+                //The only page-level error not handled here will be true 404 errors, which will be handled
+                //in app.js by the router.
+                Errors.handlePageErrors(err);
+                Log.error('Server Error: ' + _.isString(err) ? err : err.status);
+            })
+        }
+    };
+});
+
+Actions = Actions.set(ACTION_CONSTANTS.START_RELOAD_PAGE, function (state) {
+    return {
+        type: ACTION_CONSTANTS.END_RELOAD_PAGE,
+        payload: {
+            promise: HttpManager.GET({url: state.page.data._links.self})
         }
     };
 });
