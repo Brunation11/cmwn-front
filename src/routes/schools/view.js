@@ -16,7 +16,7 @@ import GenerateDataSource from 'components/datasource';
 const PAGE_UNIQUE_IDENTIFIER = 'district-view';
 
 const ClassSource = GenerateDataSource('group_class', PAGE_UNIQUE_IDENTIFIER);
-const UserSource = GenerateDataSource('group_user', PAGE_UNIQUE_IDENTIFIER);
+const UserSource = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     TITLE: 'School Administrative Dashboard: ',

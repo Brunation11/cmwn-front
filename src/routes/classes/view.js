@@ -15,7 +15,7 @@ import GenerateDataSource from 'components/datasource';
 
 const PAGE_UNIQUE_IDENTIFIER = 'classProfile';
 
-const UserSource = GenerateDataSource('group_user', PAGE_UNIQUE_IDENTIFIER);
+const UserSource = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     TITLE: 'Class Administrative Dashboard: ',

@@ -31,7 +31,7 @@ const PAGE_UNIQUE_IDENTIFIER = 'district-view';
 
 const SchoolSource = GenerateDataSource('group_school', PAGE_UNIQUE_IDENTIFIER);
 const ClassSource = GenerateDataSource('group_class', PAGE_UNIQUE_IDENTIFIER);
-const UserSource = GenerateDataSource('org_user', PAGE_UNIQUE_IDENTIFIER);
+const UserSource = GenerateDataSource('org_users', PAGE_UNIQUE_IDENTIFIER);
 
 var Component = React.createClass({
     componentDidMount: function () {
