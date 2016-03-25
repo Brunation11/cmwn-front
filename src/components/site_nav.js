@@ -25,7 +25,7 @@ var Component = React.createClass({
             if (!~nonMenuLinks.indexOf(k)) {
                 var link = ~k.indexOf('_') ? k.split('_')[1] : k;
                 a.push({
-                    url: '/' + link,
+                    url: i.view_url || '/' + link,
                     text: i.label == null ? _.startCase(link) : i.label
                 });
             }

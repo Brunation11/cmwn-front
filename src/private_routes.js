@@ -35,7 +35,7 @@ var redirect = function (path) {
 var routes = [
     { path: 'auth/logout(/)', onEnter: redirect('/logout')},
     { path: 'change-password(/)', title: 'Password Change', component: ChangePassword },
-    { path: 'users(/)', title: 'Users', endpoint: '/user', component: Users },
+    { path: 'users(/)', title: 'Users', endpoint: '$$user', component: Users },
     { path: 'profile(/)', title: 'Profile', endpoint: '$$self', component: Profile},
     { path: 'games(/)', title: 'Games', component: Games},
     { path: 'game/:game(/)', title: 'Games', endpoint: '/game/:game', component: Game},

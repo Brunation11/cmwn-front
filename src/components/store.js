@@ -50,6 +50,14 @@ var authReducer = (currentUser = Immutable(storedUserProperties), action) => {
             if (data.user_id != null) {
                 currentUser_ = currentUser_.merge(data);
             }
+            //hardcoding users to their first organization for the time being
+            //eventually this will need to be broken out into a fourth section
+            //with its own url template binding rules, but for the time being
+            //there is no difference between /users and /org/my-org/users
+            currentUser_ = currentUser_.setIn(['_links', 'user'], _.defaults(
+                {label: 'Friends and Network', view_url: '/users'},
+                action.data._embedded.organizations[0]._links.org_users
+            ));
             return currentUser_;
         }.bind(null, currentUser, action.data)
     };
