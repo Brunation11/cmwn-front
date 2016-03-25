@@ -30,6 +30,7 @@ import 'routes/users/profile.scss';
 const PAGE_UNIQUE_IDENTIFIER = 'profile';
 
 const GameWrapper = GenerateDataSource('games', PAGE_UNIQUE_IDENTIFIER);
+const FlipSource = GenerateDataSource('flips', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     ACTION: 'Profile',
@@ -195,7 +196,9 @@ var Profile = React.createClass({
                         {this.renderGame()}
                     </Modal.Body>
                 </Modal>
-               <Trophycase className={ClassNames({hidden: !this.state.isStudent})} data={this.state} />
+               <FlipSource>
+                   <Trophycase className={ClassNames({hidden: !this.state.isStudent})} />
+               </FlipSource>
                <Panel header={
                    ((this.state.user_id === Authorization.currentUser.uuid) ? 'My ' : this.state.username + '\'s ') + HEADINGS.ACTION
                } className={ClassNames('standard', {hidden: !this.state.isStudent && this.state.user_id === state.currentUser.user_id})}>
