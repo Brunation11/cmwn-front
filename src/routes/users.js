@@ -41,9 +41,9 @@ var Component = React.createClass({
 const mapStateToProps = state => {
     var data = {};
     var loading = true;
-    if (state.page && state.page.data && state.page.data._embedded && state.page.data._embedded.user) {
+    if (state.page && state.page.data && state.page.data._embedded && state.page.data._embedded.items) {
         loading = state.page.loading;
-        data = state.page.data._embedded.user;
+        data = state.page.data._embedded.items;
     }
     return {
         data,
