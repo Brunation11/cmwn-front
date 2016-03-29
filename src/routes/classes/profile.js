@@ -7,11 +7,11 @@ import { connect } from 'react-redux';
 import Layout from 'layouts/two_col';
 import Shortid from 'shortid';
 import Toast from 'components/toast';
-import Authorization from 'components/authorization';
 import FlipBoard from 'components/flipboard';
 import EditLink from 'components/edit_link';
 import Util from 'components/util';
 import GenerateDataSource from 'components/datasource';
+import Store from 'components/store';
 
 import DefaultProfile from 'media/profile_tranparent.png';
 
@@ -55,14 +55,13 @@ var Component = React.createClass({
     },
     resolveRole: function () {
         var newState = {};
-        Authorization.userIsLoaded.then(() => {
-            if (Authorization.currentuser && Authorization.currentuser.roles && ~Authorization.currentuser.roles.indexOf('Student')) {
-                newState.isStudent = true;
-            } else {
-                newState.isStudent = false;
-            }
-            this.setState(newState);
-        });
+        var state = Store.getState();
+        if (state.currentUser && state.currentUser.type !== 'CHILD') {
+            newState.isStudent = false;
+        } else {
+            newState.isStudent = true;
+        }
+        this.setState(newState);
     },
     renderFlipsEarned: function (item) {
         if (item && item.roles && item.roles.data && !~item.roles.data.indexOf('Student')) {

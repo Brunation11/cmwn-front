@@ -73,13 +73,11 @@ var Profile = React.createClass({
     },
     resolveRole: function () {
         var newState = {};
-        if (this.props.data == null) {
-            return;
-        }
-        if (this.props.data.roles && ~this.props.data.roles.data.indexOf('Student')) {
-            newState.isStudent = true;
-        } else {
+        var state = Store.getState();
+        if (state.currentUser && state.currentUser.type !== 'CHILD') {
             newState.isStudent = false;
+        } else {
+            newState.isStudent = true;
         }
         this.setState(newState);
     },
@@ -88,7 +86,7 @@ var Profile = React.createClass({
         if (Detector.isMobileOrTablet() || Detector.isPortrait()) {
             urlParts = gameUrl.split('/');
             urlParts.pop(); //discard index.html
-            History.replace(`/game/${_.last(urlParts)}`);
+            History.push(`/game/${_.last(urlParts)}`);
         }
         this.setState({gameOn: true, gameUrl});
     },

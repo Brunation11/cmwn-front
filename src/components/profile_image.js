@@ -69,7 +69,6 @@ var Component = React.createClass({
                 self.setState({profileImage: result[0].secure_url});
                 HttpManager.POST({url: this.props.data.user_image.href}, {
                     url: result[0].secure_url,
-                    user_id: this.props.currentUser.user_id,
                     image_id: result[0].public_id
                 }).then(() => {
                     Toast.error(MODERATION);
