@@ -56,7 +56,7 @@ class _Authorization {
         Log.info(`User ${user.user_id} authorized`);
 
         //configure trackers to logged in user
-        Rollbar.configure({payload: {person: {id: user.user_id, username: user.username}}}); //eslint-disable-line no-undef
+//        Rollbar.configure({payload: {person: {id: user.user_id, username: user.username}}}); //eslint-disable-line no-undef
         return Promise.resolve(user);
     }
     reloadUser(newUser) {

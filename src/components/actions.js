@@ -62,6 +62,9 @@ Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
             }).then(server => {
                 return Promise.resolve((action, dispatch) => {
                     HttpManager.setToken(server.response.token);
+                    //configure trackers to logged in user
+                    Rollbar.configure({payload: {person: {id: server.response.user_id, username: server.response.username}}}); //eslint-disable-line no-undef
+
                     if (server.response.user_id == null) {
                         Errors.handle401();
                     } else {
