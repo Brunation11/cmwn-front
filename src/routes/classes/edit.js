@@ -1,7 +1,6 @@
 import React from 'react';
 import {Button, Input, Panel} from 'react-bootstrap';
 import { connect } from 'react-redux';
-import {Link} from 'react-router';
 
 import HttpManager from 'components/http_manager';
 import Log from 'components/log';
@@ -16,10 +15,6 @@ import Layout from 'layouts/two_col';
 const HEADINGS = {
     EDIT_TITLE: 'Edit Class: ',
     CREATE_USER: 'Create User in this Class'
-};
-const BREADCRUMB = {
-    HOME: 'Home',
-    CLASSES: 'Classes'
 };
 
 const BAD_UPDATE = 'There was a problem updating your profile. Please try again later.';
@@ -62,12 +57,6 @@ var Component = React.createClass({
         }
         return (
            <Layout>
-                <h2>{this.props.data.title}</h2>
-                <div className="breadcrumb">
-                    <Link to="/">{BREADCRUMB.HOME}</Link>
-                    <Link to="/classes">{BREADCRUMB.CLASSES}</Link>
-                    <span>{this.props.data.title}</span>
-                </div>
               <Panel header={HEADINGS.EDIT_TITLE + this.props.data.title} className="standard">
                 <Input
                     type="text"
