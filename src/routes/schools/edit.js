@@ -61,6 +61,7 @@ var Component = React.createClass({
         var postData = {
             title: this.state.title,
             group_id: this.props.data.group_id, //eslint-disable-line camelcase
+            organization_id: this.props.data.organization_id, //eslint-disable-line camelcase
             description: this.state.description
         };
         HttpManager.PUT({url: this.props.data._links.self.href}, postData).then(() => {
