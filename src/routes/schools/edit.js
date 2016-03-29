@@ -52,9 +52,11 @@ var Component = React.createClass({
         };
     },
     componentWillMount: function () {
+        checkPerms(this.props.data);
         this.setState(this.props.data);
     },
     componentWillReceiveProps: function (newProps) {
+        checkPerms(this.props.data);
         this.setState(newProps.data);
     },
     submitData: function () {
@@ -98,14 +100,14 @@ var Component = React.createClass({
                  />
                  <Button onClick={this.submitData} > Save </Button>
               </Panel>
-              <CreateClass data={this.props.data} />
+              {''/*<CreateClass data={this.props.data} />*/}
               <BulkUpload url={this.props.data._links.import.href} />
            </Layout>
          );
     }
 });
 
-var CreateClass = React.createClass({
+var CreateClass = React.createClass({ //eslint-disable-line no-unused-vars
     getInitialState: function () {
         return {
             title: ''
