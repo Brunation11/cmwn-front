@@ -41,7 +41,7 @@ class _Authorization {
         window.localStorage.setItem('com.cmwn.platform.userName', JSON.stringify(user.username));
         window.localStorage.setItem('com.cmwn.platform.userId', JSON.stringify(user.user_id));
         window.localStorage.setItem('com.cmwn.platform._links', JSON.stringify(user._links));
-        //@TODO MPR, 3/7/16: Need to actually recieve these two fields
+        /** @TODO MPR, 3/7/16: Need to actually recieve these two fields
         //if (res.response.data.roles) {
         //    window.localStorage.setItem('com.cmwn.platform.roles', res.response.data.roles.data);
         //}
@@ -49,7 +49,7 @@ class _Authorization {
         //    window.localStorage.setItem('com.cmwn.platform.profileImage', _.last(res.response.data.images.data).url);
         //} else {
         //    window.localStorage.setItem('com.cmwn.platform.profileImage', GLOBALS.DEFAULT_PROFILE);
-        //}
+        //} */
         this._resolve(user);
         EventManager.update('userChanged', user.user_id);
 
@@ -66,7 +66,7 @@ class _Authorization {
         } else {
             getUser = HttpManager.GET({url: Store.getState().currentUser._links.me.href});
             return getUser.then(res => {
-                //@TODO MPR, 3/7/16: This should move to errors.js
+                /* @TODO MPR, 3/7/16: This should move to errors.js */
                 if (res && res.status === 401 && res.response && res.response.error && res.response.error.code === 'RESET_PASSWORD') {
                     if (~window.location.href.indexOf('change-password')) {
                         return Promise.resolve();

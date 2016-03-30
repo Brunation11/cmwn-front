@@ -64,7 +64,7 @@ var Component = React.createClass({
                     Toast.error(ERRORS.LOGIN + (res.response && res.response.data && res.response.data.message ? ' Message: ' + res.response.data.message : ''));
                     Log.log(res, 'Invalid login.', req);
                 }
-            }).catch(res=> {
+            }).catch(res => {
                 if (res.response && res.response.status && res.response.detail && res.response.status === 401 && res.response.detail.toLowerCase() === 'change password') {
                     History.push('/change-password');
                     return;

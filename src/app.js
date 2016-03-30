@@ -170,7 +170,8 @@ document.oncontextmenu = function (e) {
         oncontextmenu(...arguments);
     }
 };
-document.captureEvents(Event.MOUSEDOWN);
+//document.captureEvents = document.captureEvents || _.noop;
+//document.captureEvents(Event.MOUSEDOWN);
 document.onmousedown = function (e) {
     if (e.target.nodeName === 'IMG') {
         return false;
