@@ -143,7 +143,7 @@ Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentif
          * exactly match the authenticated / endpoint. */
         endpoint = state.currentUser._links[endpointIdentifier].href;
     } else {
-        throw 'Component endpoint could not be resolved';
+        throw 'Component endpoint ' + endpointIdentifier + ' could not be resolved';
     }
     return {
         types: [

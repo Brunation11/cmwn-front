@@ -3,7 +3,6 @@ import _ from 'lodash';
 
 var Component = React.createClass({
     render: function () {
-        debugger;
         if (this.props.children == null) {
             return null;
         }

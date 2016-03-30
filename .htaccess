@@ -51,7 +51,8 @@ default-src \
  frame-src \
     https://*.changemyworldnow.com \
     https://widget.cloudinary.com \
-    https://*.viddler.com; \
+    https://*.viddler.com \
+    https://*.google.com; \
  frame-ancestors 'none'; \
  child-src \
     https://changemyworldnow.com:* \
@@ -80,7 +81,8 @@ default-src \
     https://*.bugsnag.com \
     https://*.trackjs.com \
     https://*.google-analytics.com \
-    http://*.cloudinary.com; \
+    http://*.cloudinary.com \
+    https://*.google.com; \
  form-action \
     https://changemyworldnow.com:* \
     https://*.changemyworldnow.com:*; \

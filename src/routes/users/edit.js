@@ -209,7 +209,6 @@ var Component = React.createClass({
         if (this.props.data == null || this.props.data.can_update === false) {
             return null;
         }
-        debugger;
         return (
            <Layout className="edit-student">
                 <Panel header={HEADINGS.EDIT_TITLE + this.state.first_name + ' ' + this.state.last_name} className="standard edit-profile">
