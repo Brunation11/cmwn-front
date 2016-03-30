@@ -95,13 +95,11 @@ var Component = React.createClass({
     },
     resolveRole: function () {
         var newState = {};
-        if (this.state.roles == null) {
-            return;
-        }
-        if (~this.state.roles.data.indexOf('Student')) {
-            newState.isStudent = true;
-        } else {
+        var state = Store.getState();
+        if (state.currentUser && state.currentUser.type !== 'CHILD') {
             newState.isStudent = false;
+        } else {
+            newState.isStudent = true;
         }
         this.setState(newState);
     },
@@ -208,10 +206,10 @@ var Component = React.createClass({
         );
     },
     render: function () {
-        var formsDisabled = !this.state.isStudent;
         if (this.props.data == null || this.props.data.can_update === false) {
             return null;
         }
+        debugger;
         return (
            <Layout className="edit-student">
                 <Panel header={HEADINGS.EDIT_TITLE + this.state.first_name + ' ' + this.state.last_name} className="standard edit-profile">
@@ -232,6 +230,7 @@ var Component = React.createClass({
                             ]}
                             name="usernameInput"
                             validationEvent="onBlur"
+                            disabled={this.state.isStudent}
                             hasFeedback
                             onChange={e => this.setState({username: e.target.value})} //eslint-disable-line camelcase
                         />
@@ -247,7 +246,7 @@ var Component = React.createClass({
                             validationEvent="onBlur"
                             hasFeedback
                             onChange={e => this.setState({first_name: e.target.value})} //eslint-disable-line camelcase
-                            disabled={formsDisabled}
+                            disabled={this.state.isStudent}
                         />
                         <Input
                             type="text"
@@ -258,7 +257,7 @@ var Component = React.createClass({
                             ref="lastnameInput"
                             name="lastnameInput"
                             onChange={e => this.setState({last_name: e.target.value})} //eslint-disable-line camelcase
-                            disabled={formsDisabled}
+                            disabled={this.state.isStudent}
                         />
                         <DatePicker
                             type="text"
@@ -269,7 +268,7 @@ var Component = React.createClass({
                             name="birthdateInput"
                             clearButtonElement="x"
                             onChange={value => this.setState({dob: value, birthdate: Date.parse(value)})}
-                            disabled={formsDisabled}
+                            disabled={this.state.isStudent}
                             calendarPlacement="top"
                         />
                         {''/*

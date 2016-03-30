@@ -62,14 +62,12 @@ var Profile = React.createClass({
             Toast.success(PASS_UPDATED);
         }
 
-        if (this.props.loading === false && this.props.data) {
+        if (this.props.data) {
             this.setState(this.props.data);
         }
     },
     componentWillReceiveProps: function (nextProps) {
-        if (nextProps.loading === false && nextProps.data.user_id !== this.props.data.user_id) {
-            this.setState(nextProps.data);
-        }
+        this.setState(nextProps.data);
     },
     resolveRole: function () {
         var newState = {};
