@@ -185,6 +185,9 @@ if (isAvailable && DevTools && DevTools.instrument != null) {
 }
 
 const Store = createStore( function (state = {}, action) {
+    if (action.error) {
+        Log.error(action.payload);
+    }
     state = combineReducers({
         page: pageReducer,
         currentUser: authReducer,
