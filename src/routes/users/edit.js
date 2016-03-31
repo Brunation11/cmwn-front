@@ -10,6 +10,7 @@ import Toast from 'components/toast';
 import Layout from 'layouts/two_col';
 import GLOBALS from 'components/globals';
 import Validate from 'components/validators';
+import Util from 'components/util';
 import ProfileImage from 'components/profile_image';
 import Form from 'components/form';
 import Store from 'components/store';
@@ -206,7 +207,10 @@ var Component = React.createClass({
         );
     },
     render: function () {
-        if (this.props.data == null || this.props.data.can_update === false) {
+        /** @TODO MPR, 3/30/16: enable hiding edit for users without scope*/
+        if (this.props.data == null || this.props.data.user_id == null
+                // || !Util.decodePermissions(this.props.data.scope).update
+        ) {
             return null;
         }
         return (
