@@ -27,9 +27,13 @@ var GenerateDataSource = function (endpointIdentifier, componentName) {
             this.attemptLoadComponentData();
         },
         componentWillReceiveProps: function (newProps) {
-            var mutableData = newProps.data.asMutable == null ? newProps.data : newProps.data.asMutable();
+            var mutableData;
             this.attemptLoadComponentData();
-            this.setState({data: Immutable(this.props.transform(mutableData))});
+
+            if (!_.isEqual(newProps.data, this.props.data)) {
+                mutableData = newProps.data.asMutable == null ? newProps.data : newProps.data.asMutable();
+                this.setState({data: Immutable(this.props.transform(mutableData))});
+            }
         },
         attemptLoadComponentData: function () {
             var state = Store.getState();
