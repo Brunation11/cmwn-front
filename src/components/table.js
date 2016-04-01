@@ -40,7 +40,11 @@ export var Table = React.createClass({
         return null;
     },
     renderRow: function (row, i) {
-        var cells = React.Children.map(this.props.children, col => {
+        var cells;
+        if (row == null) {
+            return null;
+        }
+        cells = React.Children.map(this.props.children, col => {
             return (<td key={col.props.dataKey} className={col.props.className}>{_renderCell.call(col, row[col.props.dataKey], row)}</td>);
         });
         return (
