@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import {Tabs, Tab} from 'react-bootstrap';
+import {Panel, Tabs, Tab} from 'react-bootstrap';
 import {Link} from 'react-router';
 import Shortid from 'shortid';
 import { connect } from 'react-redux';
@@ -14,6 +14,10 @@ import Layout from 'layouts/two_col';
 import DefaultProfile from 'media/profile_tranparent.png';
 
 const TITLE = 'My Friends and Network'; /** @TODO MPR, 12/3/15: May need to swap this based on user type */
+
+const HEADINGS = {
+    MANAGE: 'Mange Users'
+};
 
 var Component = React.createClass({
     getInitialState: function () {
@@ -46,13 +50,15 @@ var Component = React.createClass({
             );
         }
         return (
-            <Table data={data}>
+            <Table data={data} className="admin">
                 {cols}
             </Table>
         );
     },
     renderAdminView: function () {
         var children = _.filter(this.props.data, {type: 'CHILD'});
+        children = children || [];
+        children.push({first_name: 'a', last_name: 'b', username: 'ooo', type: 'CHILD', birthdate: 'tuesday', gender: 'yes'});
         var adults = _.filter(this.props.data, {type: 'ADULT'});
         var tabIndex = 1;
         var tabs = [];
@@ -66,16 +72,18 @@ var Component = React.createClass({
         }
         if (adults && adults.length) {
             tabs.push(
-                <Tab eventKey={tabIndex} title={'Adults'}>
+                <Tab className="admin" eventKey={tabIndex} title={'Adults'}>
                     {this.renderUserTable(adults)}
                 </Tab>
             );
             tabIndex++;
         }
         return (
-            <Tabs activeKey={this.state.key} onSelect={this.handleSelect} >
-                {tabs}
-            </Tabs>
+            <Panel header={HEADINGS.MANAGE} >
+                <Tabs activeKey={this.state.key} onSelect={this.handleSelect} >
+                    {tabs}
+                </Tabs>
+            </Panel>
         );
     },
     renderChildView: function () {

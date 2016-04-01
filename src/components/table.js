@@ -58,7 +58,7 @@ export var Table = React.createClass({
             return null;
         }
         return (
-            <table className="datatable" cellSpacing="0" cellPadding="0">
+            <table className={this.props.className + ' ' + 'datatable'} cellSpacing="0" cellPadding="0">
                 {this.renderHeader()}
                 <tbody>
                     {_.map(this.props.data, this.renderRow)}
