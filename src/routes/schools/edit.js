@@ -11,6 +11,7 @@ import Toast from 'components/toast';
 import Form from 'components/form';
 import Util from 'components/util';
 import History from 'components/history';
+import Store from 'components/store';
 
 import Layout from 'layouts/two_col';
 
@@ -180,7 +181,11 @@ var BulkUpload = React.createClass({
         };
     },
     render: function () {
+        var state = Store.getState();
         if (this.props.url == null) {
+            return null;
+        }
+        if (!state.currentUser || !state.currentUser._embedded || !state.currentUser._embedded.groups || !state.currentUser._embedded.groups.length || state.currentUser._embedded.groups._links.import == null) {
             return null;
         }
         return (

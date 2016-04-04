@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import {Panel, Tabs, Tab} from 'react-bootstrap';
+import {Panel, Tabs, Tab, Button} from 'react-bootstrap';
 import {Link} from 'react-router';
 import Shortid from 'shortid';
 import { connect } from 'react-redux';
@@ -10,6 +10,8 @@ import {Table, Column} from 'components/table';
 import FlipBoard from 'components/flipboard';
 //import HttpManager from 'components/http_manager';
 import Layout from 'layouts/two_col';
+
+import 'routes/users.scss';
 
 import DefaultProfile from 'media/profile_tranparent.png';
 
@@ -39,7 +41,11 @@ var Component = React.createClass({
     },
     renderUserTable: function (data) {
         var cols = [
-            <Column dataKey="user_id"></Column>,
+            <Column dataKey="user_id" renderHeader="Name" renderCell={(id, row) => {
+                return (
+                        <Link to={'/users/' + id}>{`${row.last_name}, ${row.first_name}`}</Link>
+                        );
+            }}></Column>,
             <Column dataKey="username"></Column>,
             <Column dataKey="gender"></Column>,
             <Column dataKey="birthdate"></Column>
@@ -54,6 +60,18 @@ var Component = React.createClass({
                 {cols}
             </Table>
         );
+    },
+    renderImport: function () {
+        var state = Store.getState();
+        if (!state.currentUser || !state.currentUser._embedded || !state.currentUser._embedded.groups || !state.currentUser._embedded.groups.length || state.currentUser._embedded.groups._links.import == null) {
+        //if (!state.currentUser || !state.currentUser._embedded || !state.currentUser._embedded.groups || !state.currentUser._embedded.groups.length) {
+            return null;
+        }
+        return (
+                <Button className="standard purple" onClick={ () => {
+                    History.push('/schools/' + state.currentUser._embedded.groups[0].group_id + '/edit');
+                }} >Import Spreadsheet</Button>
+                );
     },
     renderAdminView: function () {
         var children = _.filter(this.props.data, {type: 'CHILD'});
@@ -73,14 +91,18 @@ var Component = React.createClass({
         if (adults && adults.length) {
             tabs.push(
                 <Tab className="admin" eventKey={tabIndex} title={'Adults'}>
-                    {this.renderUserTable(adults)}
-                </Tab>
+                    {this.renderUserTable(adults)} </Tab>
             );
             tabIndex++;
         }
         return (
             <Panel header={HEADINGS.MANAGE} className="standard" >
-                <Tabs className="standard" activeKey={this.state.key} onSelect={this.handleSelect} >
+                <div className="clear">
+                    <span className="buttons-right">
+                        {this.renderImport()}
+                    </span>
+                </div>
+                <Tabs className="tabs standard" activeKey={this.state.key} onSelect={this.handleSelect} >
                     {tabs}
                 </Tabs>
             </Panel>
