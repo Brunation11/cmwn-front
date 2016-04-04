@@ -66,5 +66,19 @@
         tr {
             color: black;
         }
+
+        thead {
+            border-bottom: 1px solid black;
+        }
+
+        tbody {
+        
+            tr {
+            
+                td {
+                    border: 0;
+                }
+            }
+        }
     }
 }

@@ -79,8 +79,8 @@ var Component = React.createClass({
             tabIndex++;
         }
         return (
-            <Panel header={HEADINGS.MANAGE} >
-                <Tabs activeKey={this.state.key} onSelect={this.handleSelect} >
+            <Panel header={HEADINGS.MANAGE} className="standard" >
+                <Tabs className="standard" activeKey={this.state.key} onSelect={this.handleSelect} >
                     {tabs}
                 </Tabs>
             </Panel>
