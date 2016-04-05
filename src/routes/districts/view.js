@@ -48,7 +48,10 @@ var Component = React.createClass({
         return (
             <Layout>
                 <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard">
-                    <EditLink base="/district" uuid={this.props.data.org_id} canUpdate={Util.decodePermissions(this.props.data.scope).update} />
+                    <p className="right" >
+                        <EditLink className="purple" text="Edit District" base="/district" uuid={this.props.data.org_id} canUpdate={Util.decodePermissions(this.props.data.scope).update} />
+                        <EditLink className="green" text="Create School" base="/district" uuid={this.props.data.org_id} canUpdate={Util.decodePermissions(this.props.data.scope).create} />
+                    </p>
                     <br />
                     <Text label={`${HEADINGS.NAME}: `} text={this.props.data.title}><p></p></Text>
                     <br />
@@ -61,7 +64,7 @@ var Component = React.createClass({
                 <Panel header={HEADINGS.SCHOOLS} className="standard">
                     <a onClick={() => History.push('/schools')}>View All Your Schools</a>
                     <SchoolSource>
-                        <Table>
+                        <Table className="admin">
                             <Column dataKey="title"
                                 renderCell={(data, row) => (
                                     <a onClick={() => History.push('/school/' + row.group_id)}>{_.startCase(data)}</a>
@@ -84,7 +87,7 @@ var Component = React.createClass({
                 <Panel header={HEADINGS.CLASSES} className="standard">
                     <a onClick={() => History.push('/classes')}>View All Your Classes</a>
                     <ClassSource>
-                        <Table>
+                        <Table className="admin">
                             <Column dataKey="title"
                                 renderCell={(data, row) => (
                                     <a onClick={() => History.push('/class/' + row.group_id)}>{_.startCase(data)}</a>
@@ -107,7 +110,7 @@ var Component = React.createClass({
                 <Panel header={HEADINGS.USERS} className="standard">
                     <a onClick={() => History.push('/users')}>View All Your Users</a>
                     <UserSource>
-                        <Table>
+                        <Table className="admin">
                             <Column dataKey="first_name" renderHeader="Name"
                                 renderCell={(data, row) => (
                                     <a onClick={() => History.push('/user/' + row.user_id)}>{row.first_name + ' ' + row.last_name}</a>
