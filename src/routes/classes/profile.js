@@ -97,7 +97,7 @@ var Component = React.createClass({
         return (
            <Panel header={this.state.title} className="standard">
                <p className="right" >
-                   <EditLink className="green" text="Edit Class" base="/class" uuid={this.state.group_id} canUpdate={Util.decodePermissions(this.state.scope).update} />
+                   <EditLink className="purple" text="Edit Class" base="/class" uuid={this.state.group_id} canUpdate={Util.decodePermissions(this.state.scope).update} />
                </p>
                {this.renderAdminLink()}
            </Panel>
