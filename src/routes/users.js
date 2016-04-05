@@ -18,7 +18,7 @@ import DefaultProfile from 'media/profile_tranparent.png';
 const TITLE = 'My Friends and Network'; /** @TODO MPR, 12/3/15: May need to swap this based on user type */
 
 const HEADINGS = {
-    MANAGE: 'Mange Users'
+    MANAGE: 'Manage Users'
 };
 
 var Component = React.createClass({

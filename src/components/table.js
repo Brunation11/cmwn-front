@@ -3,6 +3,8 @@ import _ from 'lodash';
 
 import 'components/table.scss';
 
+const BREADCRUMBS = 'Return to class list';
+
 //we include the second param here purely to indicate to
 //the reader that it may be passed to a custom renderCell
 //(as may additional unnamed params
@@ -23,7 +25,9 @@ export var Table = React.createClass({
         var childRows;
         if (this.props.renderHeader !== false) {
             childRows = React.Children.map(this.props.children, elem => {
-                if (_.isFunction(elem.props.renderHeader)) {
+                if (!_.isObject(elem)) {
+                    return <td>elem</td>;
+                } else if (_.isFunction(elem.props.renderHeader)) {
                     return <td className={elem.props.className}>{elem.props.renderHeader()}</td>;
                 } else if (_.isString(elem.props.renderHeader)) {
                     return <td className={elem.props.className}>{_.startCase(elem.props.renderHeader)}</td>;

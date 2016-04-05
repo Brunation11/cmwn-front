@@ -26,6 +26,8 @@ const HEADINGS = {
     CLASSES: 'Member of: '
 };
 
+const BREADCRUMBS = '< Return to school profile';
+
 var Component = React.createClass({
     getInitialState: function () {
         return {scope: 7};
@@ -61,12 +63,19 @@ var Component = React.createClass({
                 }} >Import Spreadsheet</Button>
                 );
     },
+    renderBreadcrumb: function () {
+        if (!this.page || this.page.organization_id == null) {
+            return null;
+        }
+        return <Link to={'/school/' + this.page.organization_id} >{BREADCRUMBS}</Link>;
+    },
     render: function () {
         if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
         return (
             <Layout>
+                {this.renderBreadcrumb()}
                 <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard">
                     <EditLink base="/class" id={this.state.group_id} scope={this.state.scope} />
                     <DeleteLink base="/class" id={this.state.group_id} scope={this.state.scope} />
@@ -78,29 +87,37 @@ var Component = React.createClass({
                     <br />
                     <Text label={`${HEADINGS.CREATED}: `} text={this.props.data.created_at}><p></p></Text>
                 </Panel>
-                <Panel header="Students" className="standard">
+                <Panel header="Class Users" className="standard">
                     <div className="clear">
                         <span className="buttons-right">
                             {this.renderImport()}
                         </span>
                     </div>
-                    <UserSource>
+                    <UserSource transform={users => {
+                        return _.map(users, user => {
+                            user = user.set('role', user.type === 'CHILD' ? 'Student' : 'Faculty');
+                            return user;
+                        });
+                    }}>
                         <Paginator >
                             <Table className="admin">
                                 <Column dataKey="title"
                                     renderHeader="Name"
                                     renderCell={(data, row) => (
-                                        <a href={`/users/${row.id}`}>{`${row.first_name} ${row.last_name}`}</a>
+                                        <a href={`/users/${row.user_id}`}>{`${row.first_name} ${row.last_name}`}</a>
                                     )}
                                 />
                                 <Column dataKey="username" />
-                                <Column dataKey="active" renderHeader="Active user" renderCell={ (data) => {
-                                    return data ? 'Active' : 'Inactive';
+                                <Column dataKey="role" renderHeader="User Type" renderCell={(data) => {
+                                    return data;
+                                }}></Column>
+                                <Column dataKey="active" renderHeader="Active User" renderCell={ (data) => {
+                                    return data !== false ? 'Active' : 'Inactive';
                                 }} />
                                 <Column dataKey="updated_at" renderHeader="Update Users"
                                     renderCell={(data, row) => {
                                         return (
-                                            <a href={`/users/${row.id}/edit`}>Edit</a>
+                                            <a href={`/users/${row.user_id}/edit`}>Edit</a>
                                         );
                                     }}
                                 />
