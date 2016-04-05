@@ -11,6 +11,7 @@ import EditLink from 'components/edit_link';
 import DeleteLink from 'components/delete_link';
 import Text from 'components/nullable_text';
 import Util from 'components/util';
+import Store from 'components/store';
 import GenerateDataSource from 'components/datasource';
 
 const PAGE_UNIQUE_IDENTIFIER = 'classProfile';
@@ -48,6 +49,18 @@ var Component = React.createClass({
         }
         return <span>{`${HEADINGS.CLASSES}: `}{links}</span>;
     },
+    renderImport: function () {
+        var state = Store.getState();
+        if (!state.currentUser || !state.currentUser._embedded || !state.currentUser._embedded.groups || !state.currentUser._embedded.groups.length || state.currentUser._embedded.groups[0]._links.import == null) {
+        //if (!state.currentUser || !state.currentUser._embedded || !state.currentUser._embedded.groups || !state.currentUser._embedded.groups.length) {
+            return null;
+        }
+        return (
+                <Button className="standard purple" onClick={ () => {
+                    History.push('/schools/' + state.currentUser._embedded.groups[0].group_id + '/edit');
+                }} >Import Spreadsheet</Button>
+                );
+    },
     render: function () {
         if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
             return null;
@@ -66,9 +79,14 @@ var Component = React.createClass({
                     <Text label={`${HEADINGS.CREATED}: `} text={this.props.data.created_at}><p></p></Text>
                 </Panel>
                 <Panel header="Students" className="standard">
+                    <div className="clear">
+                        <span className="buttons-right">
+                            {this.renderImport()}
+                        </span>
+                    </div>
                     <UserSource>
                         <Paginator >
-                            <Table>
+                            <Table className="admin">
                                 <Column dataKey="title"
                                     renderHeader="Name"
                                     renderCell={(data, row) => (

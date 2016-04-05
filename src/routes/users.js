@@ -63,7 +63,7 @@ var Component = React.createClass({
     },
     renderImport: function () {
         var state = Store.getState();
-        if (!state.currentUser || !state.currentUser._embedded || !state.currentUser._embedded.groups || !state.currentUser._embedded.groups.length || state.currentUser._embedded.groups._links.import == null) {
+        if (!state.currentUser || !state.currentUser._embedded || !state.currentUser._embedded.groups || !state.currentUser._embedded.groups.length || state.currentUser._embedded.groups[0]._links.import == null) {
         //if (!state.currentUser || !state.currentUser._embedded || !state.currentUser._embedded.groups || !state.currentUser._embedded.groups.length) {
             return null;
         }
@@ -76,7 +76,6 @@ var Component = React.createClass({
     renderAdminView: function () {
         var children = _.filter(this.props.data, {type: 'CHILD'});
         children = children || [];
-        children.push({first_name: 'a', last_name: 'b', username: 'ooo', type: 'CHILD', birthdate: 'tuesday', gender: 'yes'});
         var adults = _.filter(this.props.data, {type: 'ADULT'});
         var tabIndex = 1;
         var tabs = [];

@@ -185,7 +185,8 @@ var BulkUpload = React.createClass({
         if (this.props.url == null) {
             return null;
         }
-        if (!state.currentUser || !state.currentUser._embedded || !state.currentUser._embedded.groups || !state.currentUser._embedded.groups.length || state.currentUser._embedded.groups._links.import == null) {
+        debugger;
+        if (state.page.data == null || state.page.data._links.import == null) {
             return null;
         }
         return (
