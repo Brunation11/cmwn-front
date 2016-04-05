@@ -46,8 +46,8 @@ var Component = React.createClass({
             Toast.success(ORG_CREATED);
         }
     },
-    componentWillReceiveProps: function () {
-        this.setState(this.props.data);
+    componentWillReceiveProps: function (nextProps) {
+        this.setState(nextProps.data);
     },
     renderDistricts: function () {
         if (!this.props.data || !this.props.data._embedded || !this.props.data._embedded.organization || this.props.data._embedded.organization.district) {
@@ -80,6 +80,14 @@ var Component = React.createClass({
             <p><a href={`/school/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
         );
     },
+    renderImport: function () {
+        if (this.state == null || this.state._links == null || this.state._links.import == null) {
+            return null;
+        }
+        return (
+            <EditLink className="green" base="/school" id={this.state.group_id} scope={this.state.scope} text="Import Spreadsheets"/>
+        );
+    },
     render: function () {
         if (this.props.data == null) {
             return null;
@@ -87,7 +95,10 @@ var Component = React.createClass({
         return (
            <Layout className="profile">
                <Panel header={this.props.data.title} className="standard">
-                   <EditLink base="/school" uuid={this.props.data.group_id} canUpdate={Util.decodePermissions(this.props.data.scope).update} />
+                   <p className="right" >
+                       <EditLink className="purple" text="Edit School" base="/school" uuid={this.state.group_id} canUpdate={Util.decodePermissions(this.state.scope).update} />
+                       {this.renderImport()}
+                   </p>
                    {this.renderAdminLink()}
                    {this.renderDistricts()}
                    {this.props.data.description}

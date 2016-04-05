@@ -90,6 +90,9 @@ var Component = React.createClass({
                         {this.renderImport()}
                         <DeleteLink className="purple" base="/school" id={this.state.group_id} scope={this.state.scope} text="Delete this school" />
                     </p>
+                    <p>
+                        <a href={`/school/${this.props.data.group_id}/profile`}>Return to school profile</a>
+                    </p>
                    <Paragraph>
                        <p pre={`${HEADINGS.DISTRICTS}: `}>{this.renderDistricts()}</p>
                        <p pre={`${HEADINGS.DESCRIPTION}: `}>{this.props.data.description}</p>
