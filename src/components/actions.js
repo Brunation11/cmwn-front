@@ -143,7 +143,8 @@ Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentif
          * exactly match the authenticated / endpoint. */
         endpoint = state.currentUser._links[endpointIdentifier].href;
     } else {
-        throw 'Component endpoint ' + endpointIdentifier + ' could not be resolved';
+        Log.info('HAL Link for component endpoint ' + endpointIdentifier + ' could not be resolved in component ' + componentName + '. Component will not be displayed. This is not necessarily an error, and the server inteded to hide this component for this user.');
+        return {type: 'noop', action: {endpointIdentifier, componentName, reason: 'Endpoint not found'}};
     }
     return {
         types: [
@@ -176,6 +177,7 @@ Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentif
 
 Actions = Actions.set(ACTION_CONSTANTS.GET_NEXT_COMPONENT_PAGE, function (state, endpointIdentifier, componentName, pageNum) {
     var endpoint = state.components[endpointIdentifier + '-' + componentName]._links.find
+
         .replace('{page}', pageNum)
         .replace('{count}', state.components[endpointIdentifier + '-' + componentName].page_size);
     return {
