@@ -21,24 +21,28 @@ var Page = React.createClass({
             last: this.props.last
         };
     },
-    reloadUsername: function () {
+    reloadChildUsername: function () {
+        HttpManager.GET().then(server => {}).catch(err => {});
     },
-    setUsername: function () {
-    
+    setChildUsername: function () {
+        HttpManager.GET().then(server => {}).catch(err => {});
     },
-    renderAdmin: function () {},
+    updateAdultUsername: function () {
+        HttpManager.GET().then(server => {}).catch(err => {});
+    },
+    renderAdult: function () {},
     renderChild: function () {
         return (
            <div>
-                <Confirm.Component ref='confirm' title={CHANGE} sure={BUTTONS.CONFIRM} cancel={BUTTONS.CANCEL} />
-                <Button onClick={this.reloadUsername}><Glyphicon glyph="repeat" /> {BUTTONS.GET}</Button>
-                <Button onClick={this.setUsername}>{BUTTONS.SET}</Button>
+                <Confirm.Component ref="confirm" title={CHANGE} sure={BUTTONS.CONFIRM} cancel={BUTTONS.CANCEL} />
+                <Button onClick={this.reloadChildUsername}><Glyphicon glyph="repeat" /> {BUTTONS.GET}</Button>
+                <Button onClick={this.setChildUsername}>{BUTTONS.SET}</Button>
            </div>
         );
     },
     render: function () {
         var displayUpdate;
-        if () {
+        if (this.props.userType === 'CHILD') {
             displayUpdate = this.renderChild;
         } else {
             displayUpdate = this.renderAdult;

@@ -2,6 +2,7 @@ import React from 'react';
 
 import HttpManager from 'components/http_manager';
 import Log from 'components/log';
+import UpdateUsername from 'components/update_username';
 import History from 'components/history';
 import Toast from 'components/toast';
 import Store from 'components/store';
@@ -82,44 +83,47 @@ var ChangePassword = React.createClass({
     },
     render: function () {
         return (
-            <Panel header={HEADINGS.PASSWORD} className="standard">
-                <form>
-{''/*                <Input
-                    type="password"
-                    value={this.state.current}
-                    placeholder="********"
-                    label="Current Password"
-                    validate="required"
-                    ref="currentInput"
-                    name="currentInput"
-                    onChange={e => this.setState({current: e.target.value})}
-                />
-*/}
-                <Input
-                    type="password"
-                    value={this.state.new}
-                    placeholder="********"
-                    label="New Password"
-                    validate="required"
-                    ref="newInput"
-                    name="newInput"
-                    onChange={e => this.setState({new: e.target.value})}
-                    {...this.state.extraProps}
-                />
-                <Input
-                    type="password"
-                    value={this.state.confirm}
-                    placeholder="********"
-                    label="Confirm Password"
-                    validate="required"
-                    ref="confirmInput"
-                    name="confirmInput"
-                    onChange={e => this.setState({confirm: e.target.value})}
-                    {...this.state.extraProps}
-                />
-                <Button onClick={this.submit}>Update</Button>
-                </form>
-            </Panel>
+            <div>
+                <Panel header={HEADINGS.PASSWORD} className="standard">
+                    <form>
+    {''/*                <Input
+                        type="password"
+                        value={this.state.current}
+                        placeholder="********"
+                        label="Current Password"
+                        validate="required"
+                        ref="currentInput"
+                        name="currentInput"
+                        onChange={e => this.setState({current: e.target.value})}
+                    />
+    */}
+                    <Input
+                        type="password"
+                        value={this.state.new}
+                        placeholder="********"
+                        label="New Password"
+                        validate="required"
+                        ref="newInput"
+                        name="newInput"
+                        onChange={e => this.setState({new: e.target.value})}
+                        {...this.state.extraProps}
+                    />
+                    <Input
+                        type="password"
+                        value={this.state.confirm}
+                        placeholder="********"
+                        label="Confirm Password"
+                        validate="required"
+                        ref="confirmInput"
+                        name="confirmInput"
+                        onChange={e => this.setState({confirm: e.target.value})}
+                        {...this.state.extraProps}
+                    />
+                    <Button onClick={this.submit}>Update</Button>
+                    </form>
+                </Panel>
+                <UpdateUsername />
+            </div>
         );
     }
 });
