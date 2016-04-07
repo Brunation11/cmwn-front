@@ -11,6 +11,7 @@ import Layout from 'layouts/two_col';
 import GLOBALS from 'components/globals';
 import Validate from 'components/validators';
 import Util from 'components/util';
+import UpdateUsername from 'components/update_username';
 import ProfileImage from 'components/profile_image';
 import Form from 'components/form';
 import Store from 'components/store';
@@ -309,6 +310,7 @@ var Component = React.createClass({
                         <Button onClick={this.submitData}> Save </Button>
                     </Form></div>
                 </Panel>
+                <UpdateUsername username={this.state.username} />
                 <ChangePassword user_id={this.state.user_id} />
                 <CodeChange user_id={this.state.user_id} />
             </Layout>

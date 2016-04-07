@@ -67,7 +67,6 @@ var Page = React.createClass({
            <div>
                 <h3>{this.props.copy}</h3>
                 <p>Current Username: {this.state.username}</p>
-                <p>Last Username: {this.state.last}</p>
                 <p>Original Username: {this.state.original}</p>
                 <b>Current Option: (love this option? Be sure to remember to hit "set" to make it yours forever!)</b>
                 <Input
