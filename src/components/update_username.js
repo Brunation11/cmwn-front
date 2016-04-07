@@ -1,10 +1,17 @@
 import React from 'react';
-import {Panel, Button, Glyphicon} from 'react-bootstrap';
-import Confirm from 'react-bootstrap-confirm';
+import ClassNames from 'classnames';
+import {Input, Panel, Button, Glyphicon} from 'react-bootstrap';
+import Alertify from 'alertify.js';
 
 import HttpManager from 'components/http_manager';
 
+import 'components/update_username.scss';
+
+const IDENTIFIER = 'change-username';
+
 const CHANGE = 'Update your Username';
+const CONFIRM_SET = 'Are you sure? Once you leave this page, you will not be able to change back to {1}.';
+const CONFIRM_RESET = 'Are you sure? If you change back to {0} you may not be able to return to {1}.';
 
 const BUTTONS = {
     CONFIRM: 'Yes, change it!',
@@ -18,14 +25,37 @@ var Page = React.createClass({
     getInitialState: function () {
         return {
             username: this.props.username,
-            last: this.props.last
+            option: this.props.username,
+            last: this.props.username,
+            original: this.props.username
+        };
+    },
+    getDefaultProps: function () {
+        return {
+            copy: ''
         };
     },
     reloadChildUsername: function () {
-        HttpManager.GET().then(server => {}).catch(err => {});
+        HttpManager.GET({url: 'https://api-dev.changemyworldnow.com/user-name'}).then(server => {
+            this.setState({last: this.state.option, option: server.response.user_name});
+        }).catch(err => {});
     },
     setChildUsername: function () {
-        HttpManager.GET().then(server => {}).catch(err => {});
+        Alertify
+            .okBtn(BUTTONS.CONFIRM)
+            .cancelBtn(BUTTONS.CANCEL)
+            .confirm(CONFIRM_SET, () => {
+                HttpManager.POST({url: 'https://api-dev.changemyworldnow.com/user-name'}, {user_name: this.state.option}).then(server => {
+                    this.setState({username: this.state.option});
+                }).catch(err => {});
+            }
+        );
+    },
+    resetLast: function () {
+        this.setState({option: this.state.last, last: this.state.option});
+    },
+    resetOriginal: function () {
+        this.setState({option: this.state.original, last: this.state.option});
     },
     updateAdultUsername: function () {
         HttpManager.GET().then(server => {}).catch(err => {});
@@ -34,21 +64,36 @@ var Page = React.createClass({
     renderChild: function () {
         return (
            <div>
-                <Confirm.Component ref="confirm" title={CHANGE} sure={BUTTONS.CONFIRM} cancel={BUTTONS.CANCEL} />
-                <Button onClick={this.reloadChildUsername}><Glyphicon glyph="repeat" /> {BUTTONS.GET}</Button>
-                <Button onClick={this.setChildUsername}>{BUTTONS.SET}</Button>
+                <h3>{this.props.copy}</h3>
+                <p>Current Username: {this.state.username}</p>
+                <p>Last Username: {this.state.last}</p>
+                <p>Original Username: {this.state.original}</p>
+                <b>Current Option (love this option? Be sure to remember to hit "set" to make it yours forever!):</b>
+                <Input
+                    type="text"
+                    value={this.state.option}
+                    disabled
+                />
+                <Button className="standard purple" onClick={this.reloadChildUsername}><Glyphicon glyph="repeat" /> {BUTTONS.GET}</Button>
+                <Button className="standard green" onClick={this.setChildUsername}>{BUTTONS.SET}</Button>
+                <p>
+                    <br />
+                    <a onClick={this.resetLast}>Select Last Option: {this.state.last}</a>
+                    <br />
+                    <a onClick={this.resetOriginal}>Select Original: {this.state.original}</a>
+                </p>
            </div>
         );
     },
     render: function () {
         var displayUpdate;
-        if (this.props.userType === 'CHILD') {
+//        if (this.props.userType === 'CHILD') {
             displayUpdate = this.renderChild;
-        } else {
-            displayUpdate = this.renderAdult;
-        }
+//        } else {
+//            displayUpdate = this.renderAdult;
+//        }
         return (
-           <Panel>
+           <Panel header={CHANGE} className={"standard " + IDENTIFIER}>
                {displayUpdate()}
            </Panel>
         );
@@ -56,5 +101,4 @@ var Page = React.createClass({
 });
 
 export default Page;
-
 
