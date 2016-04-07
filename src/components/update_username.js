@@ -4,20 +4,21 @@ import {Input, Panel, Button, Glyphicon} from 'react-bootstrap';
 import Alertify from 'alertify.js';
 
 import HttpManager from 'components/http_manager';
+import Util from 'components/util';
 
 import 'components/update_username.scss';
 
 const IDENTIFIER = 'change-username';
 
 const CHANGE = 'Update your Username';
-const CONFIRM_SET = 'Are you sure? Once you leave this page, you will not be able to change back to {1}.';
+const CONFIRM_SET = 'Are you sure? Once you leave this page, you will not be able to change back to {0}.';
 const CONFIRM_RESET = 'Are you sure? If you change back to {0} you may not be able to return to {1}.';
 
 const BUTTONS = {
     CONFIRM: 'Yes, change it!',
     CANCEL: 'No, go back.',
     GET: 'Generate New Name',
-    SET: 'Set {0} Selected as Username',
+    SET: 'Set {0} as my Username',
     LAST: 'Reset to {0}'
 };
 
@@ -44,7 +45,7 @@ var Page = React.createClass({
         Alertify
             .okBtn(BUTTONS.CONFIRM)
             .cancelBtn(BUTTONS.CANCEL)
-            .confirm(CONFIRM_SET, () => {
+            .confirm(Util.formatString(CONFIRM_SET, this.state.original), () => {
                 HttpManager.POST({url: 'https://api-dev.changemyworldnow.com/user-name'}, {user_name: this.state.option}).then(server => {
                     this.setState({username: this.state.option});
                 }).catch(err => {});
@@ -68,14 +69,14 @@ var Page = React.createClass({
                 <p>Current Username: {this.state.username}</p>
                 <p>Last Username: {this.state.last}</p>
                 <p>Original Username: {this.state.original}</p>
-                <b>Current Option (love this option? Be sure to remember to hit "set" to make it yours forever!):</b>
+                <b>Current Option: (love this option? Be sure to remember to hit "set" to make it yours forever!)</b>
                 <Input
                     type="text"
                     value={this.state.option}
                     disabled
                 />
                 <Button className="standard purple" onClick={this.reloadChildUsername}><Glyphicon glyph="repeat" /> {BUTTONS.GET}</Button>
-                <Button className="standard green" onClick={this.setChildUsername}>{BUTTONS.SET}</Button>
+                <Button className="standard green" onClick={this.setChildUsername}>{Util.formatString(BUTTONS.SET, this.state.option)}</Button>
                 <p>
                     <br />
                     <a onClick={this.resetLast}>Select Last Option: {this.state.last}</a>

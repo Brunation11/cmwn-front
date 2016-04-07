@@ -151,6 +151,14 @@ var Util = {
         Actions.dispatch.LOGOUT();
         Log.info('User logout successful');
         EventManager.update('userChanged', null);
+    },
+    formatString() {
+        var args = Array.prototype.slice.call(arguments);
+        var templateString = args.shift();
+        _.each(args, (arg, k) => {
+            templateString = templateString.replace('{' + k + '}', arg);
+        });
+        return templateString;
     }
 };
 
