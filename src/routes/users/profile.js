@@ -199,7 +199,9 @@ var Profile = React.createClass({
                    ((this.state.user_id === Authorization.currentUser.uuid) ? 'My ' : this.state.username + '\'s ') + HEADINGS.ACTION
                } className={ClassNames('standard', {hidden: !this.state.isStudent && this.state.user_id === state.currentUser.user_id})}>
                <div className="infopanel">
-                     <EditLink base="/profile" id={this.state.user_id} scope={this.state.scope} />
+                     <div className="right">
+                         <EditLink className="purple" base="/profile" id={this.state.user_id} scope={this.state.scope} />
+                     </div>
                      <ProfileImage className={ClassNames({hidden: this.state.user_id === state.currentUser.user_id})} user_id={this.state.user_id} link-below={true}/>
                      <div className="info">
                         {this.renderClassList()}
