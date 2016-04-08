@@ -70,6 +70,14 @@ var Component = React.createClass({
             <p><a href={`/school/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
         );
     },
+    renderImport: function () {
+        if (this.state == null || this.state._links.import == null) {
+            return null;
+        }
+        return (
+            <EditLink className="green" base="/school" id={this.state.group_id} scope={this.state.scope} text="Import Spreadsheets"/>
+        );
+    },
     render: function () {
         if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
             return null;
@@ -77,8 +85,11 @@ var Component = React.createClass({
         return (
             <Layout>
                 <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard">
-                   <EditLink base="/school" id={this.state.group_id} scope={this.state.scope} />
-                   <DeleteLink base="/school" id={this.state.group_id} scope={this.state.scope} />
+                    <p className="right" >
+                        <EditLink className="purple" base="/school" id={this.state.group_id} scope={this.state.scope} text="Edit this school"/>
+                        {this.renderImport()}
+                        <DeleteLink className="purple" base="/school" id={this.state.group_id} scope={this.state.scope} text="Delete this school" />
+                    </p>
                    <Paragraph>
                        <p pre={`${HEADINGS.DISTRICTS}: `}>{this.renderDistricts()}</p>
                        <p pre={`${HEADINGS.DESCRIPTION}: `}>{this.props.data.description}</p>
