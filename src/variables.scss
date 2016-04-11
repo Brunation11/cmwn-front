@@ -32,3 +32,6 @@ $min-base-font-size: 12px;
 $device-font-size: 2vmax;
 $base-font-size: 15px;
 $max-base-font-size: 18px;
+//z-index scopes (note that bootstrap styles start at 1000)
+$z-nav: 500;
+$z-override: 1100;
