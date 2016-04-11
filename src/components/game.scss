@@ -23,6 +23,7 @@
     }
 
     &.fullscreen {
+        z-index: $z-override;
         position: fixed;
         width: 105vw;
         height: 105vh;
