@@ -19,6 +19,9 @@ const INITIAL_STATE = Immutable({
 var isAvailable = window.__cmwn.MODE === 'dev' || window.__cmwn.MODE === 'development' || window.__cmwn.MODE === 'local';
 
 var populate = function (host, key, storageKey) {
+    if (window.localStorage == null) {
+        return null;
+    }
     var prop = window.localStorage[storageKey];
 
     if (prop != null && prop !== 'null' && prop !== 'undefined') {
@@ -45,6 +48,11 @@ var authReducer = (currentUser = Immutable(storedUserProperties), action) => {
         [ACTION_CONSTANTS.LOGOUT]: function () {
             return Immutable({});
         },
+        [ACTION_CONSTANTS.NO_USER_AUTHORIZED]: function (currentUser_, data) {
+            currentUser_ = currentUser_.set('token', data.token);
+            currentUser_ = currentUser_.merge(data);
+            return currentUser_;
+        }.bind(null, currentUser, action.data),
         [ACTION_CONSTANTS.END_AUTHORIZE_APP]: function (currentUser_, data) {
             currentUser_ = currentUser_.set('token', data.token);
             if (data.user_id != null) {

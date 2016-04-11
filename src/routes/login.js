@@ -9,6 +9,7 @@ import History from 'components/history';
 import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
 import Authorization from 'components/authorization';
+import Store from 'components/store';
 
 const LABELS = {
     LOGIN: 'Email',
@@ -51,7 +52,7 @@ var Component = React.createClass({
                 'password': this.refs.password.getValue()
             });
             req.then(res => {
-                if (res.response && res.response.status && res.response.detail && res.response.status === 401 && res.response.detail.toLowerCase() === 'change password') {
+                if (res.response && res.response.status && res.response.detail && res.response.status === 401 && res.response.detail.toLowerCase() === 'reset_password') {
                     History.push('/change-password');
                     return;
                 }
@@ -65,7 +66,7 @@ var Component = React.createClass({
                     Log.log(res, 'Invalid login.', req);
                 }
             }).catch(res => {
-                if (res.response && res.response.status && res.response.detail && res.response.status === 401 && res.response.detail.toLowerCase() === 'change password') {
+                if (res.response && res.response.status && res.response.detail && res.response.status === 401 && res.response.detail.toLowerCase() === 'reset_password') {
                     History.push('/change-password');
                     return;
                 }
@@ -76,9 +77,13 @@ var Component = React.createClass({
     },
     forgotPass: function (e) {
         var req;
+        var state = Store.getState();
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
+            //I know it might seem strange to track "currentUser", but even
+            //unauthenticated visitors have a session and are allowed to take
+            //a handful of actions, like forgot.
             req = HttpManager.POST({
-                url: this.props.data._links.forgot.href,
+                url: state.currentUser._links.forgot.href,
             }, {
                 'email': this.refs.reset.getValue(),
             });
