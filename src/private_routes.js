@@ -24,11 +24,12 @@ import ChangePassword from 'routes/change_password';
 
 var redirect = function (path) {
     return function (nextState, transition) {
+        var nextPath = path;
         _.each(nextState.params, (v, k) => {
-            path = path.replace(`:${k}`, v);
+            nextPath = nextPath.replace(`:${k}`, v);
         });
 
-        transition(null, path);
+        transition(null, nextPath);
     };
 };
 

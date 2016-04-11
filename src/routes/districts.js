@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 
@@ -40,7 +41,7 @@ var Component = React.createClass({
                 <Table data={this.props.data}>
                     <Column dataKey="title"
                         renderCell={(data, row) => (
-                            <a onClick={() => History.push('/districts/' + row.org_id)}>{_.startCase(data)}</a>
+                            <Link to={'/districts/' + row.org_id}>{_.startCase(data)}</Link>
                         )}
                     />
                     <Column dataKey="description" />
