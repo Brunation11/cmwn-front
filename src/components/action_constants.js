@@ -35,6 +35,7 @@ const ACTIONS = [
     'COMPONENT_REQUESTED',
     'START_RELOAD_PAGE',
     'END_RELOAD_PAGE',
+    'NO_USER_AUTHORIZED',
 ];
 
 export default _.reduce(ACTIONS, (a, i) => _.defaults(a, {[i]: i}), {});

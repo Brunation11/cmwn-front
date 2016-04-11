@@ -9,6 +9,7 @@ import History from 'components/history';
 import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
 import Authorization from 'components/authorization';
+import Store from 'components/store';
 
 const LABELS = {
     LOGIN: 'Email',
@@ -76,9 +77,13 @@ var Component = React.createClass({
     },
     forgotPass: function (e) {
         var req;
+        var state = Store.getState();
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
+            //I know it might seem strange to track "currentUser", but even
+            //unauthenticated visitors have a session and are allowed to take
+            //a handful of actions, like forgot.
             req = HttpManager.POST({
-                url: this.props.data._links.forgot.href,
+                url: state.currentUser._links.forgot.href,
             }, {
                 'email': this.refs.reset.getValue(),
             });
