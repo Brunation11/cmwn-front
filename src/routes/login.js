@@ -51,7 +51,7 @@ var Component = React.createClass({
                 'password': this.refs.password.getValue()
             });
             req.then(res => {
-                if (res.response && res.response.status && res.response.detail && res.response.status === 401 && res.response.detail.toLowerCase() === 'change password') {
+                if (res.response && res.response.status && res.response.detail && res.response.status === 401 && res.response.detail.toLowerCase() === 'reset_password') {
                     History.push('/change-password');
                     return;
                 }
@@ -65,7 +65,7 @@ var Component = React.createClass({
                     Log.log(res, 'Invalid login.', req);
                 }
             }).catch(res => {
-                if (res.response && res.response.status && res.response.detail && res.response.status === 401 && res.response.detail.toLowerCase() === 'change password') {
+                if (res.response && res.response.status && res.response.detail && res.response.status === 401 && res.response.detail.toLowerCase() === 'reset_password') {
                     History.push('/change-password');
                     return;
                 }
