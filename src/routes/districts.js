@@ -1,30 +1,38 @@
 import React from 'react';
+import { Link } from 'react-router';
 import _ from 'lodash';
-import {Button, Panel} from 'react-bootstrap';
+import {Panel} from 'react-bootstrap';
 import { connect } from 'react-redux';
 
-import Layout from 'layouts/two_col';
 import {Table, Column} from 'components/table';
-import History from 'components/history';
+import Store from 'components/store';
 
-const TITLE = 'Districts';
+import Layout from 'layouts/two_col';
+
+const TITLE = 'My Districts';
 const CREATE_TEXT = 'Create District';
 
 var Component = React.createClass({
     renderCreateDistrict: function () {
-        /** @TODO MPR, 3/8/16: Actually check superuser */
-        return (
-            <p><a href={'/districts/create'}>{CREATE_TEXT}</a></p>
-        );
+        var state = Store.getState();
+        if (state.currentUser.scope === -1) {
+            return (
+                <p><a href={'/districts/create'}>{CREATE_TEXT}</a></p>
+            );
+        }
+        return null;
     },
     render: function () {
         return (
             <Layout className="district-list">
-                <Panel header="My Districts" className="standard" >
+                <Panel header={TITLE} className="standard" >
+                    <div >
+                        {this.renderCreateDistrict()}
+                    </div>
                     <Table data={this.props.data} className="admin">
                         <Column dataKey="title"
                             renderCell={(data, row) => (
-                                <a onClick={() => History.push('/districts/' + row.org_id)}>{_.startCase(data)}</a>
+                                <Link to={'/districts/' + row.org_id}>{_.startCase(data)}</Link>
                             )}
                         />
                         <Column dataKey="description" />

@@ -3,6 +3,7 @@ import _ from 'lodash';
 import {Button, Input, Panel} from 'react-bootstrap';
 import { connect } from 'react-redux';
 import DatePicker from 'react-bootstrap-date-picker';
+import Moment from 'moment';
 
 import HttpManager from 'components/http_manager';
 import Log from 'components/log';
@@ -117,7 +118,7 @@ var Component = React.createClass({
         postData.email = this.state.email;
         //    }
         postData.gender = this.state.gender;
-        postData.birthdate = this.state.birthdate;
+        postData.birthdate = Moment(this.state.birthdate).format('YYYY-MM-DD');
         postData.type = this.state.type;
         //}
         if (this.refs.formRef.isValid()) {
