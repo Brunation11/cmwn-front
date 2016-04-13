@@ -84,7 +84,7 @@ var Component = React.createClass({
                     </p>
                     {this.renderBreadcrumb()}
                     <p>
-                        <a href={`/class/${this.props.data.group_id}/profile`}>Return to class profile</a>
+                        <Link to={`/class/${this.props.data.group_id}/profile`}>Return to class profile</Link>
                     </p>
                     <br />
                     <Text label={`${HEADINGS.DESCRIPTION}: `} text={this.props.data.description}><p></p></Text>
@@ -103,7 +103,7 @@ var Component = React.createClass({
                                 <Column dataKey="title"
                                     renderHeader="Name"
                                     renderCell={(data, row) => (
-                                        <a href={`/users/${row.user_id}`}>{`${row.first_name} ${row.last_name}`}</a>
+                                        <Link to={`/users/${row.user_id}`}>{`${row.first_name} ${row.last_name}`}</Link>
                                     )}
                                 />
                                 <Column dataKey="username" />
@@ -116,7 +116,7 @@ var Component = React.createClass({
                                 <Column dataKey="updated_at" renderHeader="Update Users"
                                     renderCell={(data, row) => {
                                         return (
-                                            <a href={`/users/${row.user_id}/edit`}>Edit</a>
+                                            <Link href={`/users/${row.user_id}/edit`}>Edit</Link>
                                         );
                                     }}
                                 />
