@@ -3,6 +3,7 @@ import _ from 'lodash';
 import {Button, Input, Panel} from 'react-bootstrap';
 import { connect } from 'react-redux';
 import DatePicker from 'react-bootstrap-date-picker';
+import ClassNames from 'classnames';
 import Moment from 'moment';
 
 import HttpManager from 'components/http_manager';
@@ -314,7 +315,7 @@ var Component = React.createClass({
                         <Button onClick={this.submitData}> Save </Button>
                     </Form></div>
                 </Panel>
-                <ChangePassword user_id={this.state.user_id} />
+                <ChangePassword className={ClassNames({hidden: this.state.type !== 'CHILD'})} user_id={this.state.user_id} />
                 <CodeChange user_id={this.state.user_id} />
             </Layout>
         );
