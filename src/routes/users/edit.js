@@ -15,6 +15,7 @@ import Util from 'components/util';
 import UpdateUsername from 'components/update_username';
 import ProfileImage from 'components/profile_image';
 import Form from 'components/form';
+import DropdownDatepicker from 'components/dropdown_datepicker';
 import Store from 'components/store';
 
 import 'routes/users/edit.scss';
@@ -276,6 +277,9 @@ var Component = React.createClass({
                             disabled={this.state.isStudent}
                             calendarPlacement="top"
                         />
+                        <DropdownDatepicker value={this.state.dob} onChange={date => {
+                            this.setState({dob: date, birthdate: Date.parse(date)});
+                        }} />
                         {''/*
                         <Input
                             type="select"
