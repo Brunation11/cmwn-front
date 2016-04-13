@@ -36,12 +36,12 @@ var redirect = function (path) {
 var routes = [
     { path: 'auth/logout(/)', onEnter: redirect('/logout')},
     { path: 'change-password(/)', title: 'Password Change', component: ChangePassword },
-    { path: 'users(/)', title: 'Users', endpoint: '$$user', component: Users },
     { path: 'profile(/)', title: 'Profile', endpoint: '$$self', component: Profile},
     { path: 'games(/)', title: 'Games', component: Games},
     { path: 'game/:game(/)', title: 'Games', endpoint: '/game/:game', component: Game},
     { path: 'profile/edit(/)', title: 'Edit Profile', endpoint: '$$self', component: StudentEdit },
     { path: 'profile/:id/edit(/)', title: 'Edit Profile', endpoint: '/user/:id', component: StudentEdit },
+    { path: 'users(/)', title: 'Users', endpoint: '$$user', component: Users },
     { path: 'user/:id/view(/)', title: 'User Admin', endpoint: '/user/:id', component: UserAdmin },
     { path: 'user(/)', onEnter: redirect('/profile')},
     { path: 'user/:id(/)', onEnter: redirect('/profile/:id')},

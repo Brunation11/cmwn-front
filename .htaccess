@@ -77,6 +77,7 @@ default-src \
  img-src \
     https://changemyworldnow.com:* \
     https://*.changemyworldnow.com:* \
+    https://stats.g.doubleclick.net \
     https://*.cloudinary.com \
     https://*.bugsnag.com \
     https://*.trackjs.com \

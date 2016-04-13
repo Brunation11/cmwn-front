@@ -95,6 +95,8 @@ var _makeRequest = function (verb, requests){
                 xhr.open(verb, url, true);
 
                 xhr.withCredentials = true;
+                
+                xhr.setRequestHeader('Accept', 'application/json');
 
                 _.each(req.headers, (header, key) => {
                     xhr.setRequestHeader(key, header);

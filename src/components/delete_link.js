@@ -1,4 +1,5 @@
 import React from 'react';
+import {Button} from 'react-bootstrap';
 
 import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
@@ -50,9 +51,7 @@ var Page = React.createClass({
             return null;
         }
         return (
-            <p>
-                <a onClick={this.suspendAccount}>{DELETE}</a>
-            </p>
+            <Button className={this.props.className + ' standard'} onClick={this.suspendAccount} >{this.props.text ? this.props.text : DELETE}</Button>
         );
     }
 });

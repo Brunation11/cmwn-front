@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {Link} from 'react-router';
 import {Button, Input, Panel, FormControls} from 'react-bootstrap';
 import { connect } from 'react-redux';
 
@@ -11,6 +12,7 @@ import Toast from 'components/toast';
 import Form from 'components/form';
 import Util from 'components/util';
 import History from 'components/history';
+import Store from 'components/store';
 
 import Layout from 'layouts/two_col';
 
@@ -80,6 +82,8 @@ var Component = React.createClass({
         return (
            <Layout>
               <Panel header={HEADINGS.EDIT_TITLE + this.props.data.title} className="standard">
+                  <Link to={'/school/' + this.props.data.group_id + '/view'}>Return to School Dashboard</Link>
+                  <br />
                  <Input
                     type="text"
                     value={this.state.title}
@@ -180,7 +184,11 @@ var BulkUpload = React.createClass({
         };
     },
     render: function () {
+        var state = Store.getState();
         if (this.props.url == null) {
+            return null;
+        }
+        if (state.page.data == null || state.page.data._links.import == null) {
             return null;
         }
         return (

@@ -11,6 +11,7 @@ import Toast from 'components/toast';
 import Layout from 'layouts/two_col';
 import GLOBALS from 'components/globals';
 import Validate from 'components/validators';
+import Util from 'components/util';
 import ProfileImage from 'components/profile_image';
 import Form from 'components/form';
 import DropdownDatepicker from 'components/dropdown_datepicker';
@@ -45,7 +46,7 @@ var Component = React.createClass({
     componentDidMount: function () {
         var state;
         if (this.props.data && this.props.data.birthdate) {
-            state = _.defaults({}, this.props.data, {dob: new Date(1000 * this.props.data.birthdate).toISOString()});
+            state = _.defaults({}, this.props.data, {dob: new Date(this.props.data.birthdate).toISOString()});
         } else {
             state = this.props.data;
         }
@@ -55,7 +56,7 @@ var Component = React.createClass({
     componentWillReceiveProps: function (nextProps) {
         var state;
         if (nextProps.data && nextProps.data.birthdate) {
-            state = _.defaults({}, nextProps.data, {dob: new Date(1000 * nextProps.data.birthdate).toISOString()});
+            state = _.defaults({}, nextProps.data, {dob: new Date(nextProps.data.birthdate).toISOString()});
         } else {
             state = nextProps.data;
         }
@@ -208,7 +209,10 @@ var Component = React.createClass({
         );
     },
     render: function () {
-        if (this.props.data == null || this.props.data.can_update === false) {
+        /** @TODO MPR, 3/30/16: enable hiding edit for users without scope*/
+        if (this.props.data == null || this.props.data.user_id == null
+                // || !Util.decodePermissions(this.props.data.scope).update
+        ) {
             return null;
         }
         return (

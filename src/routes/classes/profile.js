@@ -19,7 +19,7 @@ import 'routes/classes/profile.scss';
 
 const PAGE_UNIQUE_IDENTIFIER = 'classProfile';
 
-const UserSource = GenerateDataSource('user', PAGE_UNIQUE_IDENTIFIER);
+const UserSource = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     MY_CLASSMATES: 'My Classmates',
@@ -96,7 +96,9 @@ var Component = React.createClass({
         }
         return (
            <Panel header={this.state.title} className="standard">
-               <EditLink base="/class" uuid={this.state.group_id} canUpdate={Util.decodePermissions(this.state.scope).update} />
+               <p className="right" >
+                   <EditLink className="purple" text="Edit Class" base="/class" uuid={this.state.group_id} canUpdate={Util.decodePermissions(this.state.scope).update} />
+               </p>
                {this.renderAdminLink()}
            </Panel>
         );
