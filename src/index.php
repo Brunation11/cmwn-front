@@ -98,8 +98,8 @@
             }
             try {
                 //will fail in private safari
-                window.localStorage.setItem(testKey, '1');
-                window.localstorage.removeItem(testKey);
+                window.localStorage.setItem('testKey', '1');
+                window.localStorage.removeItem('testKey');
             } catch (error) {
                 //we dont rely on localstorage as a source of truth
                 //so we can safely ignore these errors

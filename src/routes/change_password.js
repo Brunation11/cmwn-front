@@ -54,7 +54,7 @@ var ChangePassword = React.createClass({
     componentDidMount: function () {
         var state = Store.getState();
         if (state.currentUser.user_id != null) {
-//            window.location.href = '/logout';
+            window.location.href = '/logout';
         }
     },
     submit: function () {
