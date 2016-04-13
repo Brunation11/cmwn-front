@@ -41,7 +41,7 @@ const COMING_SOON = 'Coming Soon!';
 const CLASSES = 'Classes';
 
 const BROWSER_NOT_SUPPORTED = <span><p>For the best viewing experience we reccomend the desktop version in Chrome</p><p>If you don't have chrome, <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">download it for free here</a>.</p></span>;
-const PASS_UPDATED = 'You have successfully updated your password.<br />Be sure to remeber it for next time!';
+const PASS_UPDATED = 'You have successfully updated your password.<br />Be sure to remember it for next time!';
 
 var Profile = React.createClass({
     getInitialState: function () {
@@ -199,7 +199,9 @@ var Profile = React.createClass({
                    ((this.state.user_id === Authorization.currentUser.uuid) ? 'My ' : this.state.username + '\'s ') + HEADINGS.ACTION
                } className={ClassNames('standard', {hidden: !this.state.isStudent && this.state.user_id === state.currentUser.user_id})}>
                <div className="infopanel">
-                     <EditLink base="/profile" id={this.state.user_id} scope={this.state.scope} />
+                     <div className="right">
+                         <EditLink className="purple" base="/profile" id={this.state.user_id} scope={this.state.scope} />
+                     </div>
                      <ProfileImage className={ClassNames({hidden: this.state.user_id === state.currentUser.user_id})} user_id={this.state.user_id} link-below={true}/>
                      <div className="info">
                         {this.renderClassList()}

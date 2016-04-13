@@ -1,5 +1,6 @@
 import React from 'react';
 import {Button, Input, Panel} from 'react-bootstrap';
+import {Link} from 'react-router';
 import { connect } from 'react-redux';
 
 import HttpManager from 'components/http_manager';
@@ -58,6 +59,8 @@ var Component = React.createClass({
         return (
            <Layout>
               <Panel header={HEADINGS.EDIT_TITLE + this.props.data.title} className="standard">
+                <Link to={'/class/' + this.props.data.group_id + '/view'}>Return to Class Dashboard</Link>
+                <br />
                 <Input
                     type="text"
                     value={this.state.title}

@@ -90,14 +90,21 @@
                 document.head.appendChild(fileref);
             }
             //polyfill localstorage
-            try {
-                storage.setItem(testKey, '1');
-                storage.removeItem(testKey);
-            } catch (error) {
+            if (window.localStorage == null) {
                 fileref=document.createElement('script');
                 fileref.setAttribute("type","text/javascript");
                 fileref.setAttribute("src", "//cdnjs.cloudflare.com/ajax/libs/localStorage/2.0.1/localStorage.min.js");
                 document.head.appendChild(fileref);
+            }
+            try {
+                //will fail in private safari
+                window.localStorage.setItem('testKey', '1');
+                window.localStorage.removeItem('testKey');
+            } catch (error) {
+                //we dont rely on localstorage as a source of truth
+                //so we can safely ignore these errors
+                Storage.prototype._setItem = Storage.prototype.setItem;
+                Storage.prototype.setItem = function() {};
             }
         </script>
         <script>

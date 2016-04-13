@@ -1,7 +1,8 @@
 import React from 'react';
-import {Link} from 'react-router';
+import {Button} from 'react-bootstrap';
 
 import Util from 'components/util';
+import History from 'components/history';
 
 const EDIT = 'Edit';
 
@@ -30,9 +31,7 @@ var Page = React.createClass({
             return null;
         }
         return (
-            <p>
-                <Link to={`${this.state.base}/${this.state.uuid}/edit`} >{EDIT}</Link>
-            </p>
+            <Button className={this.props.className + ' standard'} onClick={() => History.push(`${this.state.base}/${this.state.uuid}/edit`)} >{this.props.text ? this.props.text : EDIT}</Button>
         );
     }
 });

@@ -185,6 +185,9 @@ if (isAvailable && DevTools && DevTools.instrument != null) {
 }
 
 const Store = createStore( function (state = {}, action) {
+    if (action.error) {
+        Log.error(action.payload);
+    }
     state = combineReducers({
         page: pageReducer,
         currentUser: authReducer,
@@ -209,7 +212,7 @@ const Store = createStore( function (state = {}, action) {
             }
             if (action_.type === ACTION_CONSTANTS.LOADER_ERROR) {
                 if (loaderState.currentStage === GLOBALS.PAGE_LOAD_STATE.COMPONENT) {
-                    Log.info('HAL link required for component load not provided. Will not load because: ' + action.payload);
+                    Log.error('HAL link required for component load not provided. Will not load because: ' + action.payload);
                 } else if (action_.error) {
                     Log.error('Loader error at stage ' + loaderState.currentStage + ' : ' + action_.payload);
                 } else {

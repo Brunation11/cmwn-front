@@ -4,8 +4,11 @@
 //**//
 
 $cmwn-jade-font: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
+$helvetica: "Helvetica Neue", Helvetica, Arial, sans-serif;
 //*************************colors************************
 $cmwn-blue: #2CC4F4;
+$cmwn-blue-light: lighten(#2CC4F4, 10%);
+$cmwn-blue-dark: darken(#2CC4F4, 10%);
 $cmwn-green: #47B72C;
 $cmwn-purple: #7829BB;
 $rule-light-gray: #E6E6E6; // 10% Gray
