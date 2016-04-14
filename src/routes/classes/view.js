@@ -116,7 +116,7 @@ var Component = React.createClass({
                                 <Column dataKey="updated_at" renderHeader="Update Users"
                                     renderCell={(data, row) => {
                                         return (
-                                            <Link href={`/users/${row.user_id}/edit`}>Edit</Link>
+                                            <Link to={`/users/${row.user_id}/edit`}>Edit</Link>
                                         );
                                     }}
                                 />
