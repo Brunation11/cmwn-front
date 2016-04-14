@@ -25,10 +25,10 @@ const BUTTONS = {
 var Page = React.createClass({
     getInitialState: function () {
         return {
-            username: this.props.username,
-            option: this.props.username,
-            last: this.props.username,
-            original: this.props.username
+            username: this.props.username.slice(0, -3),
+            option: this.props.username.slice(0, -3),
+            last: this.props.username.slice(0, -3),
+            original: this.props.username.slice(0, -3)
         };
     },
     getDefaultProps: function () {
