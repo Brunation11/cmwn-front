@@ -78,7 +78,7 @@ var Component = React.createClass({
     },
     resetPassword: function () {
         //note: This should only appear for adults, who have email addressed
-        HttpManager.GET(`${GLOBALS.API_URL}user/${this.state.user_id}/reset`).then(() => {
+        HttpManager.GET(this.props.data._links.forgot.href, {email: this.props.data.email}).then(() => {
             Toast.success('Password Reset. This user will recieve an email with further instructions.');
         }).catch(err => {
             Toast.error(ERRORS.BAD_RESET + (err.message ? ' Message: ' + err.message : ''));
@@ -210,9 +210,7 @@ var Component = React.createClass({
         );
     },
     render: function () {
-        /** @TODO MPR, 3/30/16: enable hiding edit for users without scope*/
-        if (this.props.data == null || this.props.data.user_id == null
-                // || !Util.decodePermissions(this.props.data.scope).update
+        if (this.props.data == null || this.props.data.user_id == null || !Util.decodePermissions(this.props.data.scope).update
         ) {
             return null;
         }
@@ -378,7 +376,7 @@ var ChangePassword = React.createClass({
             this.setState({extraProps: {bsStyle: 'error'}});
             Toast.error(ERRORS.TOO_SHORT);
         } else if (this.state.confirm === this.state.new) {
-            var update = HttpManager.POST({url: `${GLOBALS.API_URL}user/${this.props.user_id}/password`}, {
+            var update = HttpManager.POST({url: `${GLOBALS.API_URL}password/${this.props.user_id}`}, {
                 'current_password': this.state.current,
                 'password': this.state.new,
                 'password_confirmation': this.state.confirm,
