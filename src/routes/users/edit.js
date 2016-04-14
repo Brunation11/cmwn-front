@@ -13,6 +13,7 @@ import Layout from 'layouts/two_col';
 import GLOBALS from 'components/globals';
 import Validate from 'components/validators';
 import Util from 'components/util';
+import UpdateUsername from 'components/update_username';
 import ProfileImage from 'components/profile_image';
 import Form from 'components/form';
 import DropdownDatepicker from 'components/dropdown_datepicker';
@@ -313,7 +314,8 @@ var Component = React.createClass({
                         <Button onClick={this.submitData}> Save </Button>
                     </Form></div>
                 </Panel>
-                <ChangePassword className={ClassNames({hidden: this.state.type !== 'CHILD'})} user_id={this.state.user_id} />
+                <UpdateUsername className={ClassNames({hidden: this.state.type !== 'CHILD'})} username={this.state.username} />
+                <ChangePassword user_id={this.state.user_id} />
                 <CodeChange user_id={this.state.user_id} />
             </Layout>
         );

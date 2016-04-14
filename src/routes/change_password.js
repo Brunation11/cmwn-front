@@ -2,6 +2,7 @@ import React from 'react';
 
 import HttpManager from 'components/http_manager';
 import Log from 'components/log';
+import UpdateUsername from 'components/update_username';
 import History from 'components/history';
 import Toast from 'components/toast';
 import Store from 'components/store';
@@ -20,6 +21,8 @@ const ERRORS = {
     NO_MATCH: 'Those passwords do not appear to match. Please try again.'
 };
 const CHANGE_COPY = 'You are required to change your password before using ChangeMyWorldNow.com. Please update your password using the form below to proceed.';
+
+const USERNAME_COPY = 'You may also optionally set a different username from the one automatically assigned to you.';
 
 var isPassValid = function (password) {
     return password.length >= 8 && ~password.search(/[0-9]+/);
@@ -51,7 +54,7 @@ var ChangePassword = React.createClass({
     componentDidMount: function () {
         var state = Store.getState();
         if (state.currentUser.user_id != null) {
-            window.location.href = '/logout';
+//            window.location.href = '/logout';
         }
     },
     submit: function () {
@@ -82,44 +85,47 @@ var ChangePassword = React.createClass({
     },
     render: function () {
         return (
-            <Panel header={HEADINGS.PASSWORD} className="standard">
-                <form>
-{''/*                <Input
-                    type="password"
-                    value={this.state.current}
-                    placeholder="********"
-                    label="Current Password"
-                    validate="required"
-                    ref="currentInput"
-                    name="currentInput"
-                    onChange={e => this.setState({current: e.target.value})}
-                />
-*/}
-                <Input
-                    type="password"
-                    value={this.state.new}
-                    placeholder="********"
-                    label="New Password"
-                    validate="required"
-                    ref="newInput"
-                    name="newInput"
-                    onChange={e => this.setState({new: e.target.value})}
-                    {...this.state.extraProps}
-                />
-                <Input
-                    type="password"
-                    value={this.state.confirm}
-                    placeholder="********"
-                    label="Confirm Password"
-                    validate="required"
-                    ref="confirmInput"
-                    name="confirmInput"
-                    onChange={e => this.setState({confirm: e.target.value})}
-                    {...this.state.extraProps}
-                />
-                <Button onClick={this.submit}>Update</Button>
-                </form>
-            </Panel>
+            <div>
+                <Panel header={HEADINGS.PASSWORD} className="standard">
+                    <form>
+    {''/*                <Input
+                        type="password"
+                        value={this.state.current}
+                        placeholder="********"
+                        label="Current Password"
+                        validate="required"
+                        ref="currentInput"
+                        name="currentInput"
+                        onChange={e => this.setState({current: e.target.value})}
+                    />
+    */}
+                    <Input
+                        type="password"
+                        value={this.state.new}
+                        placeholder="********"
+                        label="New Password"
+                        validate="required"
+                        ref="newInput"
+                        name="newInput"
+                        onChange={e => this.setState({new: e.target.value})}
+                        {...this.state.extraProps}
+                    />
+                    <Input
+                        type="password"
+                        value={this.state.confirm}
+                        placeholder="********"
+                        label="Confirm Password"
+                        validate="required"
+                        ref="confirmInput"
+                        name="confirmInput"
+                        onChange={e => this.setState({confirm: e.target.value})}
+                        {...this.state.extraProps}
+                    />
+                    <Button onClick={this.submit}>Update</Button>
+                    </form>
+                </Panel>
+                <UpdateUsername username="neat_max" copy={USERNAME_COPY}/>
+            </div>
         );
     }
 });
