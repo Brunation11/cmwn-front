@@ -1,5 +1,4 @@
 import React from 'react';
-import ClassNames from 'classnames';
 import {Input, Panel, Button, Glyphicon} from 'react-bootstrap';
 import Alertify from 'alertify.js';
 
@@ -25,10 +24,10 @@ const BUTTONS = {
 var Page = React.createClass({
     getInitialState: function () {
         return {
-            username: this.props.username,
-            option: this.props.username,
-            last: this.props.username,
-            original: this.props.username
+            username: this.props.username.slice(0, -3),
+            option: this.props.username.slice(0, -3),
+            last: this.props.username.slice(0, -3),
+            original: this.props.username.slice(0, -3)
         };
     },
     getDefaultProps: function () {
@@ -93,7 +92,7 @@ var Page = React.createClass({
 //            displayUpdate = this.renderAdult;
 //        }
         return (
-           <Panel header={CHANGE} className={"standard " + IDENTIFIER}>
+           <Panel  header={CHANGE} className={this.props.className + " standard " + IDENTIFIER}>
                {displayUpdate()}
            </Panel>
         );

@@ -41,7 +41,17 @@ var Page = React.createClass({
         var day = nextState.day || this.state.day,
             month = nextState.month || this.state.month,
             year = nextState.year || this.state.year;
+        if (!year || !month || !day) {
+            return null;
+        }
         return Moment(`${year}-${month}-${day}`).format('YYYY-MM-DD');
+    },
+    reset: function () {
+        this.setState({
+            year: 0,
+            month: 0,
+            day: 0
+        });
     },
     renderMonthOptions: function () {
         var items = [
@@ -71,7 +81,7 @@ var Page = React.createClass({
     },
     renderYearOptions: function () {
         var items = [
-            <option value="" >Select Month</option>
+            <option value={0} >Select Month</option>
         ];
         var currentYear = new Date().getFullYear();
 

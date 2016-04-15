@@ -3,6 +3,7 @@ import _ from 'lodash';
 import {Button, Input, Panel} from 'react-bootstrap';
 import { connect } from 'react-redux';
 import DatePicker from 'react-bootstrap-date-picker';
+import ClassNames from 'classnames';
 import Moment from 'moment';
 
 import HttpManager from 'components/http_manager';
@@ -78,7 +79,7 @@ var Component = React.createClass({
     },
     resetPassword: function () {
         //note: This should only appear for adults, who have email addressed
-        HttpManager.GET(`${GLOBALS.API_URL}user/${this.state.user_id}/reset`).then(() => {
+        HttpManager.GET(this.props.data._links.forgot.href, {email: this.props.data.email}).then(() => {
             Toast.success('Password Reset. This user will recieve an email with further instructions.');
         }).catch(err => {
             Toast.error(ERRORS.BAD_RESET + (err.message ? ' Message: ' + err.message : ''));
@@ -114,12 +115,14 @@ var Component = React.createClass({
             first_name: this.state.first_name, //eslint-disable-line camelcase
             last_name: this.state.last_name //eslint-disable-line camelcase
         };
-        //if (!this.state.isStudent) {
+        if (!this.state.isStudent) {
         //    if (this.state.email) {
-        postData.email = this.state.email;
-        //    }
+            postData.email = this.state.email;
+        }
         postData.gender = this.state.gender;
-        postData.birthdate = Moment(this.state.birthdate).format('YYYY-MM-DD');
+        if (!isNaN(this.state.birthdate) && !_.isString(this.state.birthdate)) {
+            postData.birthdate = Moment(this.state.birthdate).format('YYYY-MM-DD');
+        }
         postData.type = this.state.type;
         //}
         if (this.refs.formRef.isValid()) {
@@ -210,9 +213,8 @@ var Component = React.createClass({
         );
     },
     render: function () {
-        /** @TODO MPR, 3/30/16: enable hiding edit for users without scope*/
-        if (this.props.data == null || this.props.data.user_id == null
-                // || !Util.decodePermissions(this.props.data.scope).update
+        var self = this;
+        if (this.props.data == null || this.props.data.user_id == null || !Util.decodePermissions(this.props.data.scope).update
         ) {
             return null;
         }
@@ -273,11 +275,16 @@ var Component = React.createClass({
                             ref="birthdateInput"
                             name="birthdateInput"
                             clearButtonElement="x"
-                            onChange={value => this.setState({dob: value, birthdate: Date.parse(value)})}
+                            onChange={value => {
+                                if (value == null) {
+                                    self.refs.dropdownDatepicker.reset();
+                                }
+                                self.setState({dob: value, birthdate: Date.parse(value)});
+                            }}
                             disabled={this.state.isStudent}
                             calendarPlacement="top"
                         />
-                        <DropdownDatepicker value={this.state.dob} onChange={date => {
+                        <DropdownDatepicker ref="dropdownDatepicker" disabled={this.state.isStudent} value={this.state.dob} onChange={date => {
                             this.setState({dob: date, birthdate: Date.parse(date)});
                         }} />
                         {''/*
@@ -315,7 +322,7 @@ var Component = React.createClass({
                         <Button onClick={this.submitData}> Save </Button>
                     </Form></div>
                 </Panel>
-                <UpdateUsername username={this.state.username} />
+                <UpdateUsername className={ClassNames({hidden: this.state.type !== 'CHILD'})} username={this.state.username} />
                 <ChangePassword user_id={this.state.user_id} />
                 <CodeChange user_id={this.state.user_id} />
             </Layout>
@@ -379,7 +386,7 @@ var ChangePassword = React.createClass({
             this.setState({extraProps: {bsStyle: 'error'}});
             Toast.error(ERRORS.TOO_SHORT);
         } else if (this.state.confirm === this.state.new) {
-            var update = HttpManager.POST({url: `${GLOBALS.API_URL}user/${this.props.user_id}/password`}, {
+            var update = HttpManager.POST({url: `${GLOBALS.API_URL}password/${this.props.user_id}`}, {
                 'current_password': this.state.current,
                 'password': this.state.new,
                 'password_confirmation': this.state.confirm,
