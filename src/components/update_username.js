@@ -1,5 +1,4 @@
 import React from 'react';
-import ClassNames from 'classnames';
 import {Input, Panel, Button, Glyphicon} from 'react-bootstrap';
 import Alertify from 'alertify.js';
 
@@ -93,7 +92,7 @@ var Page = React.createClass({
 //            displayUpdate = this.renderAdult;
 //        }
         return (
-           <Panel header={CHANGE} className={"standard " + IDENTIFIER}>
+           <Panel  header={CHANGE} className={this.props.className + " standard " + IDENTIFIER}>
                {displayUpdate()}
            </Panel>
         );
