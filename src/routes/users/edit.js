@@ -109,19 +109,20 @@ var Component = React.createClass({
         this.setState(newState);
     },
     submitData: function () {
+        var birthdate = Moment(this.state.birthdate);
         /** @TODO MPR, 3/18/16: Remove unneeded fields*/
         var postData = {
             username: this.state.username,
             first_name: this.state.first_name, //eslint-disable-line camelcase
             last_name: this.state.last_name //eslint-disable-line camelcase
         };
-        if (!this.state.isStudent) {
+        //if (!this.state.isStudent) {
         //    if (this.state.email) {
-            postData.email = this.state.email;
-        }
+        postData.email = this.state.email;
+        //}
         postData.gender = this.state.gender;
-        if (!isNaN(this.state.birthdate) && !_.isString(this.state.birthdate)) {
-            postData.birthdate = Moment(this.state.birthdate).format('YYYY-MM-DD');
+        if (birthdate.isValid()) {
+            postData.birthdate = birthdate.format('YYYY-MM-DD');
         }
         postData.type = this.state.type;
         //}
@@ -276,6 +277,10 @@ var Component = React.createClass({
                             name="birthdateInput"
                             clearButtonElement="x"
                             onChange={value => {
+                                if (self.state.isStudent) {
+                                    self.setState({dob: this.state.dob});
+                                    return;
+                                }
                                 if (value == null) {
                                     self.refs.dropdownDatepicker.reset();
                                 }
