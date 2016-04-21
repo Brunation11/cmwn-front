@@ -2,7 +2,7 @@ import React from 'react';
 import {Button, Input, Tabs, Tab} from 'react-bootstrap';
 import { connect } from 'react-redux';
 
-import Layout from 'layouts/one_col';
+import Util from 'components/util';
 import Toast from 'components/toast';
 import Log from 'components/log';
 import History from 'components/history';
@@ -10,6 +10,8 @@ import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
 import Authorization from 'components/authorization';
 import Store from 'components/store';
+
+import Layout from 'layouts/one_col';
 
 const LABELS = {
     LOGIN: 'Email',
@@ -44,6 +46,7 @@ var Component = React.createClass({
     login: function (e) {
         var req;
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
+            Util.logout();
             req = HttpManager.POST({
                 //url: this.props.data._links.login.href,
                 url: GLOBALS.API_URL + 'login'
