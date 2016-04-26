@@ -38,6 +38,11 @@ var Game = React.createClass({
             gameState: {}
         };
     },
+    getInitialState: function () {
+        return {
+            fullscreenFallback: false
+        };
+    },
     componentWillMount: function () {
         this.setEvent();
     },
@@ -48,29 +53,40 @@ var Game = React.createClass({
      * default events. These will always fire regardless of whether or not
      * there is an event defined in addition to the submission behavior
      */
-    [EVENT_PREFIX + 'flipped']: function () {
+    [EVENT_PREFIX + 'Flipped']: function () {
     },
-    [EVENT_PREFIX + 'save']: function () {
+    [EVENT_PREFIX + 'Save']: function () {
     },
-    [EVENT_PREFIX + 'init']: function (e) {
+    [EVENT_PREFIX + 'Exit']: function () {
+        this.setState({fullscreenFallback: false});
+    },
+    [EVENT_PREFIX + 'Init']: function (e) {
         e.respond(this.props.gameState);
     },
    /** end of default events */
     gameEventHandler: function (e) {
         if (e.name != null) {
             if (_.isFunction(this[EVENT_PREFIX + e.name])) {
-                this[EVENT_PREFIX + e.name](...arguments);
+                this[EVENT_PREFIX + _.capitalize(e.name)](...arguments);
             }
-            if(_.isFunction(this.props['on' + _.capitalize(e.name)])) {
+            if (_.isFunction(this.props['on' + _.capitalize(e.name)])) {
                 this.props['on' + _.capitalize(e.name)](...arguments);
             }
         }
     },
     setEvent: function () {
         window.addEventListener('game-event', this.gameEventHandler);
+        window.addEventListener('keydown', this.listenForEsc);
     },
     clearEvent: function () {
         window.removeEventListener('game-event', this.gameEventHandler);
+        window.removeEventListener('keydown', this.listenForEsc);
+    },
+    listenForEsc: function (e) {
+        var self = this;
+        if (e.keyCode === 27 || e.charCode === 27) {
+            self.setState({fullscreenFallback: false});
+        }
     },
     dispatchPlatformEvent(name, data) {
         /** TODO: MPR, 1/15/16: Polyfill event */
@@ -79,8 +95,11 @@ var Game = React.createClass({
         ReactDOM.findDOMNode(this.refs.gameRef).contentWindow.dispatchEvent(event);
     },
     makeFullScreen: function () {
+        var self = this;
         if (Screenfull.enabled) {
-            Screenfull.request(ReactDOM.findDOMNode(this.refs.gameRef));
+            Screenfull.request(ReactDOM.findDOMNode(self.refs.gameRef));
+        } else {
+            self.setState({fullscreenFallback: true});
         }
     },
     render: function () {
@@ -88,10 +107,10 @@ var Game = React.createClass({
             return null;
         }
         return (
-            <div className="game">
+            <div ref="wrapRef" className={ClassNames('game', {fullscreen: this.state.fullscreenFallback})}>
                 <iframe ref="gameRef" src={this.props.url} />
-                <Button onClick={this.makeFullScreen}><Glyphicon glyph="fullscreen" /> {FULLSCREEN}</Button>
-                <Button className={ClassNames({hidden: !this.props.isTeacher})} onClick={() => this.dispatchPlatformEvent('toggle-demo-mode')}>{DEMO_MODE}</Button>
+                <Button className="purple standard" onClick={this.makeFullScreen}><Glyphicon glyph="fullscreen" /> {FULLSCREEN}</Button>
+                <Button className={ClassNames('green standard', {hidden: !this.props.isTeacher})} onClick={() => this.dispatchPlatformEvent('toggle-demo-mode')}>{DEMO_MODE}</Button>
             </div>
         ) ;
     }

@@ -1,4 +1,8 @@
-import CreateBrowserHistory from 'history/lib/createBrowserHistory';
-import UseBeforeUnload from 'history/lib/useBeforeUnload';
+import { browserHistory} from 'react-router';
+import { syncHistoryWithStore } from 'react-router-redux';
 
-export default UseBeforeUnload(CreateBrowserHistory)();
+import Store from 'components/store';
+
+const history = syncHistoryWithStore(browserHistory, Store);
+
+export default history;

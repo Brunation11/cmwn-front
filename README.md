@@ -6,8 +6,8 @@ ChangeMyWorldNow platform frontend (react)
 2) Clone this repo (git@github.com:ginasink/cmwn-front.git) somewhere and switch to this branch (max/vagrant-up)   
 3) Add the following 2 entries to your hosts file:
    ```
-      192.168.33.10 loc.changemyworldnow.com
-      192.168.33.10 api-loc.changemyworldnow.com
+      192.168.33.10 local.changemyworldnow.com
+      192.168.33.10 api-local.changemyworldnow.com
    ```
 4.a) If you want anything other than the homepage to work, setup a local API server by following https://github.com/ginasink/cmwn-platform/wiki/Local-API-Setup (Note: This setup assumes that the default Homestead static IP is used (192.168.10.10). If for some reason you need to change this, you will also need to update vhosts.conf to reflect this change)   
 4.b) Alternatively, if you prefer to point your local api to api-dev, simply update the value in variables.conf   
@@ -24,3 +24,5 @@ ChangeMyWorldNow platform frontend (react)
 Alternatively, local file changes will be refleccted in the vagrant, so if one desires to work entriely around the concept of a vagrant box, install npm and gulp locally and just run the commands locally as normal.   
 Additionally, for environmental changes (e.g. changes to .conf files), run `vagrant reload --provision` to reload everything inside the vagrant.   
 Until I work out a less annoying way to run commands from the host into the vagrant, just set up local aliases for the above three commands.   
+
+build tests with `webpack src/app.test.js --target node --config webpack.config.test.js` and run with `mocha smoke.js`

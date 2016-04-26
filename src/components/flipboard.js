@@ -25,14 +25,16 @@ var FlipBoard = React.createClass({
         });
     },
     render: function () {
-        if(!this.state.data.length) {
+        if (!this.state.data.length) {
             return null;
         }
-        return (<div className="flipboard">
-            <Panel header={this.props.header} className="standard">
-                {_.map(this.state.data, (item, i) => this.props.renderFlip(item, i))}
-            </Panel>
-        </div>);
+        return (
+            <div className="flipboard">
+                <Panel header={this.props.header} className="standard">
+                    {_.map(this.state.data, (item, i) => this.props.renderFlip(item, i))}
+                </Panel>
+            </div>
+        );
     }
 });
 

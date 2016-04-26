@@ -34,7 +34,7 @@ var GlobalHeader = React.createClass({
         return null;
     },
     renderLogout: function () {
-        if (Authorization.currentUser.username == null || Authorization.currentUser.username.toLowerCase() === 'null') {
+        if (!~window.location.href.indexOf('change-password') && (Authorization.currentUser.username == null || Authorization.currentUser.username.toLowerCase() === 'null')) {
             return null;
         }
         return (

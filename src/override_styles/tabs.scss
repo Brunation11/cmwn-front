@@ -1,0 +1,45 @@
+@import 'variables';
+
+$tab-overlap: 4px;
+
+.standard > .nav-tabs {
+    border-bottom: 1px solid $cmwn-blue;
+    
+    li {
+        background: $cmwn-blue;
+        box-shadow: inset 0px -37px 40px -37px #333;
+        border-radius: 5px;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        margin-right: -$tab-overlap;
+        border: 1px solid $cmwn-blue;
+
+        a {
+            font-family: $helvetica;
+            color: white;
+            letter-spacing: 1px;
+            border: 0;
+            padding: 5px 20px;
+            width: 100px;
+            text-align: center;
+            margin-left: $tab-overlap / 2;
+            margin-right: 0px;
+
+        }
+        
+        &.active {
+            background: white;
+            z-index: 1;
+            box-shadow: none;
+            border: 1px solid $cmwn-blue;
+            border-bottom-color: transparent;
+            margin-left: 0;
+
+            a {
+                color: $cmwn-blue;
+                border: 0;
+            }
+        }
+    }
+}
+

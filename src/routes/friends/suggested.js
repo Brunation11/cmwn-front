@@ -1,20 +1,24 @@
 import React from 'react';
 import _ from 'lodash';
 import {Link} from 'react-router';
+import { connect } from 'react-redux';
 import {Panel, Button} from 'react-bootstrap';
 
-import Fetcher from 'components/fetcher';
 import FlipBoard from 'components/flipboard';
-import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
 import ClassNames from 'classnames';
 import History from 'components/history';
 import HttpManager from 'components/http_manager';
+import Actions from 'components/actions';
+import Store from 'components/store';
+
 import Layout from 'layouts/two_col';
 
 import 'routes/friends/suggested.scss';
 
 import DefaultProfile from 'media/profile_tranparent.png';
+
+const PAGE_UNIQUE_IDENTIFIER = 'suggested-friends';
 
 const NO_FRIENDS = <div>You are already friends with everyone in your group. <br /> Great Work! <br /> Let's Take Action!</div>;
 const HEADINGS = {
@@ -26,14 +30,14 @@ const REQUESTED = 'Request Sent';
 const ACCEPT = 'Accept';
 const PROFILE = 'View Profile';
 
-var Page = React.createClass({
+var Component = React.createClass({
     addFriend: function (item, e) {
         e.stopPropagation();
         e.preventDefault();
-        HttpManager.POST({url: GLOBALS.API_URL + 'friends', handleErrors: false}, {
-            'user_id': item.uuid
+        HttpManager.POST({url: this.state._links.friend}, {
+            'user_id': item.user_id
         }).then(() => {
-            this.refs.datasource.getData().then(this.forceUpdate);
+            Actions.dispatch.START_RELOAD_PAGE(Store.getState());
         }).catch(this.friendErr);
     },
     friendErr: function () {
@@ -85,23 +89,39 @@ var Page = React.createClass({
         );
     },
     render: function () {
+        if (this.props.data) {
+            return this.renderNoData();
+        }
         return (
-           <Layout className="friends-page">
+           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <form>
-                    <Fetcher ref="datasource" url={ GLOBALS.API_URL + 'suggestedfriends?include=roles,flips,images'} renderNoData={this.renderNoData} transform={data => {
+                    <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.SUGGESTED} data={this.props.data} transform={data => {
                         data = _.map(data, item => {
                             item.image = _.has(item, 'images.data[0].url') ? item.images.data[0].url : DefaultProfile;
                             return item;
                         });
                         return data;
-                    }}>
-                       <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.SUGGESTED} />
-                    </Fetcher>
+                    }} />
                 </form>
            </Layout>
         );
     }
 });
 
+const mapStateToProps = state => {
+    var data = [];
+    var loading = true;
+    if (state.page && state.page.data != null && state.page.data._embedded && state.page.data._embedded.friends) {
+        loading = state.page.loading;
+        data = state.page.data._embedded.friends;
+    }
+    return {
+        data,
+        loading
+    };
+};
+
+var Page = connect(mapStateToProps)(Component);
+Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
 

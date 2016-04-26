@@ -1,13 +1,13 @@
 import React from 'react';
-import _ from 'lodash';
 import Classnames from 'classnames';
+import { connect } from 'react-redux';
 
 import Cloudinary from 'components/cloudinary';
 import Toast from 'components/toast';
 import HttpManager from 'components/http_manager';
-import Authorization from 'components/authorization';
 import GLOBALS from 'components/globals';
 import Log from 'components/log';
+import Store from 'components/store';
 
 import 'components/profile_image.scss';
 
@@ -16,17 +16,22 @@ const UPLOAD_ERROR = 'There was a problem uploading your image. Please refresh t
 const MODERATION = 'Your image has been submitted for moderation and should appear shortly.';
 const NO_IMAGE = 'There was a problem displaying your profile image. Please refresh the page to try again';
 
-var Image = React.createClass({
+var Component = React.createClass({
     getInitialState: function () {
         return {
             profileImage: GLOBALS.DEFAULT_PROFILE
         };
     },
     componentDidMount: function () {
-        if (this.props.uuid === Authorization.currentUser.uuid) {
-            this.setState({profileImage: Authorization.currentUser.profileImage});
+        var state = Store.getState();
+        if (this.props.user_id === state.currentUser.user_id) {
+            if (this.props.currentUser.profileImage) {
+                this.setState({profileImage: this.props.currentUser.profileImage});
+            }
         } else {
-            HttpManager.GET({url: `${GLOBALS.API_URL}users/${this.props.uuid}/image`, handleErrors: false})
+            this.setState({profileImage: GLOBALS.DEFAULT_PROFILE});
+            /** @TODO MPR, 3/9/16: get image from server when not available */
+            /*HttpManager.GET({url: `${GLOBALS.API_URL}users/${this.props.user_id}/image`, handleErrors: false})
                 .then(res => {
                     if (res && res.response && res.response.data && res.response.data.length && _.isString(_.last(res.response.data).url)) {
                         this.setState({profileImage: _.last(res.response.data).url});
@@ -35,6 +40,7 @@ var Image = React.createClass({
                     Toast.error(NO_IMAGE);
                     Log.debug(e, 'Image could not be extracted from user');
                 });
+            */
         }
     },
     startUpload: function (e) {
@@ -61,10 +67,9 @@ var Image = React.createClass({
                     }
                 }
                 self.setState({profileImage: result[0].secure_url});
-                HttpManager.POST({url: `${GLOBALS.API_URL}users/${this.props.uuid}/image`}, {
+                HttpManager.POST({url: this.props.data.user_image.href}, {
                     url: result[0].secure_url,
-                    imageable_id: Authorization.currentUser.uuid,
-                    cloudinary_id: result[0].public_id
+                    image_id: result[0].public_id
                 }).then(() => {
                     Toast.error(MODERATION);
                 }).catch(() => {
@@ -88,7 +93,7 @@ var Image = React.createClass({
         );
     },
     render: function () {
-        if (this.props.uuid == null) {
+        if (this.props.user_id == null) {
             return null;
         }
         return (
@@ -100,6 +105,17 @@ var Image = React.createClass({
         );
     }
 });
+
+const mapStateToProps = state => {
+    var data = [];
+    state.currentUser;
+    if (state.currentUser && state.currentUser._links) {
+        data = state.currentUser._links;
+    }
+    return { currentUser: state.currentUser, data };
+};
+
+var Image = connect(mapStateToProps)(Component);
 
 export default Image;
 

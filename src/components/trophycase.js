@@ -4,9 +4,6 @@ import {Panel} from 'react-bootstrap';
 import {Link} from 'react-router';
 import Shortid from 'shortid';
 
-import Fetcher from 'components/fetcher';
-import GLOBALS from 'components/globals';
-
 import 'components/trophycase.scss';
 
 import DISABLED_FLIP from 'media/flip-disabled.png';
@@ -18,6 +15,21 @@ const HEADINGS = {
 };
 
 var Trophycase = React.createClass({
+    getInitialState: function () {
+        return {
+            flips: []
+        };
+    },
+    componentDidMount: function () {
+        if (this.props.data && this.props.data._embedded && this.props.data._embedded.flips) {
+            this.setState({flips: this.props.data._embedded.flips});
+        }
+    },
+    componentWillReceiveProps: function (nextProps) {
+        if (nextProps.data && nextProps.data._embedded && nextProps.data._embedded.flips) {
+            this.setState({flips: nextProps.data._embedded.flips});
+        }
+    },
     renderPartial: function (items) {
         return (
            <div className="flip-list">
@@ -32,13 +44,13 @@ var Trophycase = React.createClass({
            </div>
         );
     },
-    renderCase: function (props) {
+    renderCase: function () {
         var complete, inProgress;
-        if (props.data && props.data.length === 0) {
+        if (this.state && !this.state.flips.length) {
             return null;
         }
-        complete = _.filter(props.data, item => item.progress === 100);
-        inProgress = _.difference(props.data, complete);
+        complete = _.filter(this.state.flips, item => item.progress === 100);
+        inProgress = _.difference(this.state.flips, complete);
         return (
             <Panel className="standard" header={HEADINGS.FLIPBOARD}>
                 <div className="earned">
@@ -55,11 +67,8 @@ var Trophycase = React.createClass({
         );
     },
     render: function () {
-        var Self = this;
         return (
-            <Fetcher className={'trophycase ' + this.props.className} url={GLOBALS.API_URL + 'flips'} renderNoData={Self.renderCase.bind(this, {})}>
-                <Self.renderCase />
-            </Fetcher>
+            this.renderCase()
         );
     }
 });

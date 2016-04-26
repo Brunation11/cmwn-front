@@ -65,7 +65,7 @@ h1, h2, h3 {
         background-image: url("media/404_error.png");
     }
     &.error500 {
-        background-image: url("media/500_error.png");
+        background-image: url("media/500_error_alt.png");
 
         a {
             bottom: 42vh;
@@ -77,12 +77,25 @@ h1, h2, h3 {
         }
     }
     &.applicationerror {
-        background-image: url("media/generic_error.png");
+        background-image: url("media/generic_error_alt.png");
     }
 }
 
 #pageerror {
+    opacity: 0;
     background: url("media/generic_error.png") #fff;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    animation: fadein 1s;
+    animation-delay: 5s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadein {
+    from {opacity: 0;}
+    to {opacity: 1}
 }
 
 #cmwn-app {
@@ -164,6 +177,10 @@ h1, h2, h3 {
         cursor: pointer;
     }
 
+    img {
+        user-drag: none;
+    }
+
     .sidebar{
         order: 1;
         flex-grow: 0;
@@ -221,7 +238,7 @@ h1, h2, h3 {
                 color: #000;
             }
 
-            a:first-child {
+            a:not(:last-child) {
                 margin-right: 5px;
                 padding-right: 5px;
                 border-right: solid 1px #000;
@@ -306,61 +323,6 @@ h1, h2, h3 {
         }
     }
 
-    table {
-        width: 100%;
-        border-spacing: 0;
-        border-collapse: collapse;
-        background: url(media/blue-header-bg.jpg);
-        background-color: $cmwn-blue;
-        background-size: 100% auto;
-        //border-right: 1px solid #fff;
-        //border-top: 1px solid #ddd;
-        
-        td {
-            padding: $standard / 2;
-            //border-left: 1px solid #ddd;
-        }
-
-        thead {
-
-            tr {
-                color: #fff;
-                text-transform: uppercase;
-                font-size: 1.2rem;
-                font-family: $cmwn-jade-font;
-                filter: blur(0);
-                -webkit-font-smoothing: antialiased;
-            }
-
-            td {
-                white-space: pre;
-                //border-left: #fff solid 1px;
-            }
-        }
-
-        tbody {
-
-            tr {
-                //border-bottom: 1px solid #ddd;
-                background: #fff;
-
-                td {
-                    border-left: 2px solid #fff;
-                    border-right: 2px solid #fff;
-                }
-                &:nth-child(even) {
-                    background: #eee;
-
-                    td {
-                        border-left: 2px solid #eee;
-                        border-right: 2px solid #eee;
-                    }
-                }
-            }
-        }
-
-
-    }
 
     h1, h2, h3 {
         font-family: $cmwn-jade-font;
@@ -380,6 +342,18 @@ h1, h2, h3 {
         font-size: 1.5rem;
     }
 
+    .right {
+        float: right;
+    }
+
+    .left {
+        float: left;
+    }
+
+    .clear {
+        clear: both;
+    }
+
     @media (max-width: $device-max-break) {
         font-size: $min-base-font-size; //IE vmax fallback
         //overflow: auto;
@@ -390,8 +364,16 @@ h1, h2, h3 {
             padding: 0;
         }
 
+        .layout {
+            padding-bottom: 4 * $standard;
+        }
+
+        .blocker {
+            display: none;
+        }
+
         .menu {
-            display: block; 
+            display: block;
         }
 
         .logout {
@@ -411,7 +393,7 @@ h1, h2, h3 {
         }
 
         .sidebar {
-            padding: 0;
+            padding: $standard;
             background: #fff;
             position: fixed;
             top: 0;
@@ -421,6 +403,7 @@ h1, h2, h3 {
             overflow-y: scroll;
             transition: right  1s ease-in-out;
             min-height: 100vh;
+            z-index:100;
 
             &.open {
                 right: 0;
@@ -428,6 +411,13 @@ h1, h2, h3 {
 
         }
 
+        .flip.fill {
+            max-width: 100%;
+
+            img, object, .item, .overlay {
+                max-width: 100%;
+            }
+        }
 
     }
 

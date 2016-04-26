@@ -1,48 +1,57 @@
 import React from 'react';
 import _ from 'lodash';
-import {Link} from 'react-router';
+import {Button, Panel} from 'react-bootstrap';
+import { connect } from 'react-redux';
 
-//import HttpManager from 'components/http_manager';
-import GLOBALS from 'components/globals';
 import Layout from 'layouts/two_col';
 import {Table, Column} from 'components/table';
-import Paginator from 'components/paginator';
-import Fetcher from 'components/fetcher';
+import History from 'components/history';
 
 const TITLE = 'Districts';
-const HOME = 'Home';
+const CREATE_TEXT = 'Create District';
 
-var Districs = React.createClass({
+var Component = React.createClass({
+    renderCreateDistrict: function () {
+        /** @TODO MPR, 3/8/16: Actually check superuser */
+        return (
+            <p><a href={'/districts/create'}>{CREATE_TEXT}</a></p>
+        );
+    },
     render: function () {
         return (
-            <Layout>
-                <header>
-                    <h2>{TITLE}</h2>
-                    <div className="breadcrumb">
-                        <Link to="/">{HOME}</Link>
-                        {TITLE}
-                    </div>
-                </header>
-                <Fetcher url={GLOBALS.API_URL + 'districts'}>
-                    <Paginator pageCount={1}>
-                        <Table>
-                            <Column dataKey="title"
-                                renderCell={(data, row) => (
-                                    <a href={`/district/${row.uuid}`}>{_.startCase(data)}</a>
-                                )}
-                            />
-                            <Column dataKey="description" />
-                            <Column dataKey="created_at" renderHeader="Created" />
-                            <Column dataKey="updated_at" renderHeader="Last Updated"
-                                renderCell={data => (data == null ? 'never' : data)}
-                            />
-                        </Table>
-                    </Paginator>
-               </Fetcher>
+            <Layout className="district-list">
+                <Panel header="My Districts" className="standard" >
+                    <Table data={this.props.data} className="admin">
+                        <Column dataKey="title"
+                            renderCell={(data, row) => (
+                                <a onClick={() => History.push('/districts/' + row.org_id)}>{_.startCase(data)}</a>
+                            )}
+                        />
+                        <Column dataKey="description" />
+                        <Column dataKey="created_at" renderHeader="Created" />
+                        <Column dataKey="updated_at" renderHeader="Last Updated"
+                            renderCell={data => (data == null ? 'never' : data)}
+                        />
+                    </Table>
+                </Panel>
             </Layout>
         );
     }
 });
 
-export default Districs;
+const mapStateToProps = state => {
+    var data = [];
+    var loading = true;
+    if (state.page && state.page.data && state.page.data._embedded && state.page.data._embedded.org) {
+        loading = state.page.loading;
+        data = state.page.data._embedded.org;
+    }
+    return {
+        data,
+        loading
+    };
+};
+
+var Page = connect(mapStateToProps)(Component);
+export default Page;
 

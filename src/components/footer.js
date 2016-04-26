@@ -1,16 +1,18 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
 
+import Log from 'components/log';
 
 const COPY = {
     BUTTONS: {
         WORK: 'Work with Us',
         CONTACT: 'Contact Us',
+        TERMS: 'Terms & Conditions'
     },
     MODALS: {
         WORK: <span><p>We are so excited about your interest to work with us!</p><p>Click <a href="mailto:&#106;&#111;&#110;&#105;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#097;&#114;&#114;&#111;&#110;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;?subject=Work With Us!">here</a> to contact us.</p></span>,
 
-        PRECAPTCHA: 'Thanks for your interest! Please check the box below to display contact information.',
+        PRECAPTCHA: 'Thanks for your interest!',
         CONTACT: <span>
             <p>Postage can be sent to:</p>
             <p>600 Third Ave<br />2nd Floor<br />New York, NY 10016<br /></p>
@@ -26,8 +28,22 @@ var Footer = React.createClass({
         return {
             viewOpen: false,
             workOpen: false,
-            contactOpen: false
+            contactOpen: false,
+            showContact: true
         };
+    },
+    componentDidMount: function () {
+        this.renderCaptcha();
+    },
+    componentDidUpdate: function () {
+        try {
+            this.renderCaptcha();
+        } catch(err) {
+            //captcha doesnt always clean itself up nicely, throws its own
+            //unhelpful, unbreaking 'container not empty' error. Ignoring.
+            Log.warn(err, 'Captcha not fully destroyed');
+            return err;
+        }
     },
     displayWork: function () {
         this.setState({ workOpen: true });
@@ -60,7 +76,6 @@ var Footer = React.createClass({
                 <Modal show={this.state.contactOpen} onHide={this.closeContact}>
                     <Modal.Body>
                         {COPY.MODALS.PRECAPTCHA}
-                        <div className="grecaptcha"></div>
                         {this.state.showContact ? COPY.MODALS.CONTACT : ''}
                     </Modal.Body>
                 </Modal>
@@ -70,6 +85,9 @@ var Footer = React.createClass({
                     </a>
                     <a onClick={this.displayContact}>
                         {COPY.BUTTONS.CONTACT}
+                    </a>
+                    <a href="/terms" target="_blank">
+                        {COPY.BUTTONS.TERMS}
                     </a>
                 </footer>
             </div>

@@ -7,9 +7,6 @@ import Shortid from 'shortid';
 import Toast from 'components/toast';
 import Log from 'components/log';
 import History from 'components/history';
-import GLOBALS from 'components/globals';
-import HttpManager from 'components/http_manager';
-import Authorization from 'components/authorization';
 
 import 'routes/home.scss';
 import LOGO_URL from 'media/logo.png';
@@ -43,7 +40,8 @@ const COPY = {
         LOGIN: 'Login',
         DEMO: 'Demo',
         SIGNUP: 'School Signup',
-        WATCH: 'Watch the video'
+        WATCH: 'Watch the video',
+        TERMS: 'Terms & Conditions'
     },
     SLIDES: [
         {
@@ -94,10 +92,6 @@ const COPY = {
 
         SIGNUP: <span><p>We are so excited about your interest to work with us!</p><p>Click <a href="mailto:&#106;&#111;&#110;&#105;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#099;&#097;&#116;&#104;&#121;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;?subject=Sign up with CMWN&body=Thank you for your interest in Change My World Now!%0D%0A%0D%0AIf you would like to launch Change My World Now in your school please provide the following information and someone from our team will contact you.%0D%0A%0D%0AYour Name:%0D%0AYour School:%0D%0AYour Email:%0D%0ASchool Grades:%0D%0APrincipal Name:%0D%0ASchool Phone:%0D%0ACity/State:">here</a> to contact us.</p></span>
     }
-};
-
-const ERRORS = {
-    BAD_PASS: 'Sorry, that wasn\'t quite right. Please try again.'
 };
 
 const SOURCES = {
@@ -213,66 +207,20 @@ var Header = React.createClass({
         };
     },
     componentDidMount: function () {
-        this.getToken();
         this.renderCaptcha();
     },
     componentDidUpdate: function () {
         try {
             this.renderCaptcha();
-        } catch (err) {
+        } catch(err) {
             //captcha doesnt always clean itself up nicely, throws its own
             //unhelpful, unbreaking 'container not empty' error. Ignoring.
             Log.warn(err, 'Captcha not fully destroyed');
             return err;
         }
     },
-    getToken: function () {
-        var req = HttpManager.GET({url: `${GLOBALS.API_URL}csrf_token`, withCredentials: true, withoutToken: true, withoutXSRF: true});
-        req.then(res => {
-            this.setState({_token: res.response.token});
-            HttpManager.setToken(res.response.token);
-        });
-    },
-    login: function (code) {
-        var req, req2;
-        req2 = HttpManager.POST({
-            url: `${GLOBALS.API_URL}create_demo_student`,
-            withCredentials: true,
-            withoutXSRF: true,
-            handleErrors: false
-        }, {code});
-        req2.then(createRes => {
-            if (createRes.status < 300 && createRes.status >= 200) {
-                req = HttpManager.POST({
-                    url: `${GLOBALS.API_URL}auth/login`,
-                    withCredentials: true,
-                    withoutXSRF: true,
-                    handleErrors: false
-                }, {}, {
-                    'X-CSRF-TOKEN': this.state._token,
-                    'Authorization': `Basic ${window.btoa(createRes.response.data.username + '@changemyworldnow.com:demo123')}`
-                });
-                req.then(res => {
-                    if (res.status < 300 && res.status >= 200) {
-                        Authorization.reloadUser();
-                        Log.info('User login successful');
-                        History.replaceState(null, '/profile');
-                    } else {
-                        Toast.error(ERRORS.BAD_PASS);
-                        Log.log(req, 'Invalid login');
-                    }
-                }).catch(e => {
-                    Toast.error(ERRORS.BAD_PASS);
-                    Log.log(e, 'Invalid login');
-                });
-            } else {
-                Toast.error(ERRORS.BAD_PASS);
-                Log.log(req, 'Invalid login');
-            }
-        }).catch(e => {
-            Toast.error(ERRORS.BAD_PASS);
-            Log.log(e, 'Invalid login');
-        });
+    login: function () {
+        History.push('/login');
     },
     renderCaptcha: function () {
         var captchas = document.getElementsByClassName('grecaptcha');
@@ -300,7 +248,7 @@ var Header = React.createClass({
         this.setState({contactOpen: false, showContact: false});
     },
     loginAlert: function () {
-        History.replaceState(null, '/login');
+        History.replace('/login');
     },
     launchDemo: function () {
         this.setState({demoOpen: true});
@@ -352,6 +300,9 @@ var Header = React.createClass({
                     <a href="#" onClick={this.displayContactModal}>
                         {COPY.BUTTONS.CONTACT}
                     </a>
+                    <a href="/terms" target="_blank">
+                        {COPY.BUTTONS.TERMS}
+                    </a>
                 </div>
                 <div className="actions">
                     <Button id="signup" className="green" onClick={this.displaySignupModal}>
@@ -360,7 +311,7 @@ var Header = React.createClass({
                     <Button id="login" className="hidden" onClick={this.loginAlert}>
                         {COPY.BUTTONS.LOGIN}
                     </Button>
-                    <Button id="demo" className="purple" onClick={this.launchDemo}>
+                    <Button id="demo" className="purple" onClick={this.login}>
                         {COPY.BUTTONS.LOGIN}
                     </Button>
                 </div>
@@ -397,6 +348,9 @@ var Layout = React.createClass({
                         </a>
                         <a href="#" onClick={this.displayContactModal}>
                             {COPY.BUTTONS.CONTACT}
+                        </a>
+                        <a href="/terms" target="_blank">
+                            {COPY.BUTTONS.TERMS}
                         </a>
                     </footer>
                 </div>

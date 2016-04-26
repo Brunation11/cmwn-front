@@ -1,29 +1,38 @@
 import React from 'react';
 import {Link} from 'react-router';
 import _ from 'lodash';
+import Immutable from 'seamless-immutable';
+import { connect } from 'react-redux';
 
-import HttpManager from 'components/http_manager';
-import GLOBALS from 'components/globals';
-import Log from 'components/log';
+const nonMenuLinks = [
+    'me',
+    'self',
+    'profile',
+    'games',
+    'forgot',
+    'user_image'
+];
 
+var addHardcodedEntries = function (menuItems) {
+    menuItems.unshift({url: '/profile', text: 'Action Items'});
+    menuItems.push({url: '/profile/edit', text: 'Edit My Profile'});
+    return menuItems;
+};
 
-var SiteNav = React.createClass({
-    componentDidMount: function () {
-        this.menuItems = [];
-        this.getMenuItems();
-    },
-    getMenuItems: function () {
-        var urlData = HttpManager.GET({url: GLOBALS.API_URL + 'sidebar'});
-        urlData.then(res => {
-            this.menuItems = _.map(_.pairs(res.response.data[0]), (value) => ({text: value[0], url: value[1]}));
-            this.forceUpdate();
-        }).catch(err => {
-            Log.warn(err, 'could not load menu'); //eslint-disable-line no-console
-        });
-
-    },
+var Component = React.createClass({
     renderNavItems: function () {
-        return _.map(this.menuItems, item => (<li key={`(${item.text})-${item.url}`}><Link to={item.url}>{item.text}</Link></li>));
+        var menuItems = _.reduce(this.props.data, (a, i, k) => {
+            if (!~nonMenuLinks.indexOf(k)) {
+                var link = ~k.indexOf('_') ? k.split('_')[1] : k;
+                a.push({
+                    url: i.view_url || '/' + link,
+                    text: i.label == null ? _.startCase(link) : i.label
+                });
+            }
+            return a;
+        }, []);
+        menuItems = addHardcodedEntries(menuItems);
+        return _.map(menuItems, item => (<li key={`(${item.text})-${item.url}`}><Link to={item.url}>{item.text}</Link></li>));
     },
     render: function () {
         return (
@@ -35,6 +44,17 @@ var SiteNav = React.createClass({
         );
     }
 });
+
+const mapStateToProps = state => {
+    var data = [];
+    state.currentUser;
+    if (state.currentUser && state.currentUser._links) {
+        data = state.currentUser._links.asMutable();
+    }
+    return { currentUser: state.currentUser, data: Immutable(data) };
+};
+
+var SiteNav = connect(mapStateToProps)(Component);
 
 export default SiteNav;
 
