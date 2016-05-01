@@ -10,7 +10,10 @@ const nonMenuLinks = [
     'profile',
     'games',
     'forgot',
-    'user_image'
+    'user_image',
+    'user_name',
+    'flip',
+    'password'
 ];
 
 var addHardcodedEntries = function (menuItems) {
