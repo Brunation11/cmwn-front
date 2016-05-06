@@ -30,7 +30,7 @@ import 'routes/users/profile.scss';
 const PAGE_UNIQUE_IDENTIFIER = 'profile';
 
 const GameWrapper = GenerateDataSource('games', PAGE_UNIQUE_IDENTIFIER);
-const FlipSource = GenerateDataSource('flips', PAGE_UNIQUE_IDENTIFIER);
+const FlipSource = GenerateDataSource('flip', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     ACTION: 'Profile',
@@ -103,7 +103,7 @@ var Profile = React.createClass({
         }
         return (
             <div>
-                <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl} onExit={() => this.setState({gameOn: false})}/>
+                <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl} flipUrl={this.state._links.flip.href} onExit={() => this.setState({gameOn: false})}/>
                     <a onClick={this.hideModal} className="modal-close">(close)</a>
             </div>
         );

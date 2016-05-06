@@ -147,7 +147,7 @@ import 'media/logo.png';
 
 //htaccess should take care of it but if somehow it does not, this should overkill the issue
 if (window.location.protocol !== 'https:') {
-    window.location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+    //window.location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
 }
 
 document.domain = 'changemyworldnow.com';

@@ -21,36 +21,37 @@ var Trophycase = React.createClass({
         };
     },
     componentDidMount: function () {
-        if (this.props.data && this.props.data._embedded && this.props.data._embedded.flips) {
-            this.setState({flips: this.props.data._embedded.flips});
+        if (this.props.data && this.props.data) {
+            this.setState({flips: this.props.data});
         }
     },
     componentWillReceiveProps: function (nextProps) {
-        if (nextProps.data && nextProps.data._embedded && nextProps.data._embedded.flips) {
-            this.setState({flips: nextProps.data._embedded.flips});
+        if (nextProps.data && nextProps.data) {
+            this.setState({flips: nextProps.data});
         }
     },
     renderPartial: function (items) {
         return (
            <div className="flip-list">
-               {_.map(items, (item) => (<Link to="" key={Shortid.generate()}><img src={`/flips/${item.uuid}.png`} ></img><div className="partial" style={{height: `${item.progress}%`}} ><img src={`/flips/${item.uuid}_grey.png`} ></img></div></Link>))}
+               {_.map(items, (item) => (<Link to="" key={Shortid.generate()}><img src={`/flips/${item.flip_id}.png`} ></img><div className="partial" style={{height: `${item.progress}%`}} ><img src={`/flips/${item.flip_id}_grey.png`} ></img></div></Link>))}
            </div>
         );
     },
     renderComplete: function (items) {
         return (
            <div className="flip-list">
-               {_.map(items, (item) => (<Link to="" key={Shortid.generate()}><img src={`/flips/${item.uuid}.png`} ></img></Link>))}
+               {_.map(items, (item) => (<Link to="" key={Shortid.generate()}><img src={`/flips/${item.flip_id}.png`} ></img></Link>))}
            </div>
         );
     },
     renderCase: function () {
-        var complete, inProgress;
+        var complete = [], inProgress = [];
         if (this.state && !this.state.flips.length) {
             return null;
         }
-        complete = _.filter(this.state.flips, item => item.progress === 100);
-        inProgress = _.difference(this.state.flips, complete);
+        complete = this.state.flips;
+        //complete = _.filter(this.state.flips, item => item.progress === 100);
+        //inProgress = _.difference(this.state.flips, complete);
         return (
             <Panel className="standard" header={HEADINGS.FLIPBOARD}>
                 <div className="earned">
