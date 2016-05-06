@@ -11,6 +11,10 @@
     footer {
         padding: 30px;
         border-top: solid 5px $cmwn-blue;
+
+        .links {
+            font-size: 13px;
+        }
     }
 
     button:active {
@@ -25,7 +29,7 @@
         a,
         a:active,
         a:visited {
-            font-size: 13px;
+            font-size: 11px;
             color: #000;
         }
 
@@ -51,11 +55,35 @@
     }
 
     .global-header {
+        margin-bottom: 20px;
+
         .logo  {
             overflow: hidden;
 
             img {
                 margin-bottom: 40px;
+
+                @media (max-width: 1200px) {
+                    min-width: 95px;
+                    width: 15vw;
+                }
+            }
+        }
+
+        .headerLogo {
+            width: calc(100% - #{$logout_size} - #{$logo-size } - 200px);
+            float: none;
+            padding: 0;
+            position: absolute;
+            right: 300px;
+            top: 15px;
+
+            @media (max-width: $device-max-break) {
+                    width: calc(100% - 70px - 165px - 88px);
+                    top: 0;
+                    right: 0;
+                    min-width: 299px;
+                    margin: 0;
             }
         }
         
