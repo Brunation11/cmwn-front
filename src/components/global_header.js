@@ -6,7 +6,8 @@ import Authorization from 'components/authorization';
 import EventManager from 'components/event_manager';
 
 //import LOGO_URL from 'media/logo.png';
-import LOGO_URL from 'media/logoalpha.png';
+import LOGO_URL from 'media/header-logo.png';
+import LOGO_HEADER from 'media/header-header.png';
 import LOGOUT_URL from 'media/pt_logout_on.png';
 
 const LOGOUT = 'logout';
@@ -46,12 +47,14 @@ var GlobalHeader = React.createClass({
     render: function () {
         return (
             <div className="global-header">
-                <div className="logo" ><Link to="/" ><img alt="Change My World Now" src={LOGO_URL} />Change My World Now</Link></div>
+                <div className="logo" ><Link to="/" ><img alt="Change My World Now" src={LOGO_URL} /></Link></div>
+                <div className="headerLogo"><Link to="/" ><img alt="Change My World Now" src={LOGO_HEADER} /><span className="read">Change My World Now</span></Link></div>
                 <Button className="menu" onClick={this.toggleMenu}>
                    <Glyphicon glyph="glyphicon glyphicon-menu-hamburger" />
                    <span className="fallback">{MENU}</span>
                 </Button>
                 {this.renderLogout()}
+                <div className="blocker"></div>
             </div>
         );
     }
