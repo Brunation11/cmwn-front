@@ -25,8 +25,8 @@ var Component = React.createClass({
     componentDidMount: function () {
         var state = Store.getState();
         if (this.props.user_id === state.currentUser.user_id) {
-            if (this.props.currentUser.profileImage) {
-                this.setState({profileImage: this.props.currentUser.profileImage});
+            if (this.props.currentUser._embedded.image) {
+                this.setState({profileImage: this.props.currentUser._embedded.image.url});
             }
         } else {
             this.setState({profileImage: GLOBALS.DEFAULT_PROFILE});
