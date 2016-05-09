@@ -9,7 +9,8 @@ import Log from 'components/log';
 import History from 'components/history';
 
 import 'routes/home.scss';
-import LOGO_URL from 'media/logo.png';
+import LOGO_URL from 'media/header-logo.png';
+import LOGO_HEADER from 'media/header-header.png';
 import SLIDE_A_BG_URL from 'media/home/green_background.png';
 import SLIDE_B_BG_URL from 'media/home/purple_background.png';
 import SLIDE_C_BG_URL from 'media/home/blue_background.png';
@@ -157,6 +158,7 @@ var Home = React.createClass({
                 </Modal>
                 <div className="global-header">
                     <div className="logo" ><Link to="/" ><img alt="Change My World Now" src={LOGO_URL} />Change My World Now</Link></div>
+                    <div className="headerLogo"><Link to="/" ><img alt="Change My World Now" src={LOGO_HEADER} /><span className="read">Change My World Now</span></Link></div>
                     <Header workOpen={this.state.workOpen} contactOpen={this.state.contactOpen} closeWork={this.closeWork} closeContact={this.closeContact} />
                 </div>
                 <Carousel>
