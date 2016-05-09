@@ -133,15 +133,15 @@ h1, h2, h3 {
     }
 
     .blocker {
-        position: relative;
-        padding-top: 30px;
-        margin-top: -15px;
-        margin-bottom: -15px;
+        position: absolute;
+        padding-top: $standard;
+        margin-top: 5px;
         margin-left: auto;
         margin-right: auto;
         background: white;
+        width: 100%;
+        left: 0;
         z-index: $z-nav + 3;
-        max-width: $monitor-max-break;
     }
 
     .layout {
@@ -219,6 +219,7 @@ h1, h2, h3 {
         position: relative;
         z-index: $z-nav + 1;
         max-width: $monitor-max-break; 
+        height: 115px;
     }
     
     .global-footer {
@@ -253,17 +254,38 @@ h1, h2, h3 {
         width: 100%;
     }
 
-    .logo {
-        width: calc(100% - #{$standard});
+    .logo, .headerLogo {
+        //width: calc(100% - #{$standard});
+        z-index: $z-nav + 4;
+        display: inline-block;
         color: transparent;
         max-width: $logo-max-width;
 
         a {
             color: transparent;
         }
+        
+        .read {
+            width: 0px;
+        }
+
+    }
+    
+    .logo {
 
         img {
-            width: calc(100% - #{$logout_size});
+            width: $logo-size;
+        }
+    }
+
+    .headerLogo {
+        float: right;
+        padding-right: 10px;
+        width: calc(100% - #{$logout_size} - #{$logo-size });
+        padding: $standard 80px 0 35px;
+
+        img {
+            width: 100%;
         }
     }
 
@@ -379,6 +401,11 @@ h1, h2, h3 {
 
         .logout {
             display: none;
+        }
+
+        .headerLogo {
+            padding: 0;
+            margin: 25px 70px 0 0;
         }
 
         .content {
