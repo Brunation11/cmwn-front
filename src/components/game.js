@@ -55,7 +55,9 @@ var Game = React.createClass({
         this.clearEvent();
     },
     submitFlip: function (flip) {
-        debugger;
+        if (!this.props.flipUrl) {
+            return;
+        }
         HttpManager.POST({url: this.props.flipUrl}, {'flip_id': flip}).catch(err => {
             Toast.error(BAD_FLIP + (err.message ? ' Message: ' + err.message : ''));
             Log.log('Server refused flip update', err, flip);

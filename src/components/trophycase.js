@@ -53,7 +53,7 @@ var Trophycase = React.createClass({
         //complete = _.filter(this.state.flips, item => item.progress === 100);
         //inProgress = _.difference(this.state.flips, complete);
         return (
-            <Panel className="standard" header={HEADINGS.FLIPBOARD}>
+            <Panel className="trophycase standard" header={HEADINGS.FLIPBOARD}>
                 <div className="earned">
                     {EARNED}<strong>{complete.length}</strong>
                     <img className="spacer" src={DISABLED_FLIP} />

@@ -30,7 +30,7 @@ import 'routes/users/profile.scss';
 const PAGE_UNIQUE_IDENTIFIER = 'profile';
 
 const GameWrapper = GenerateDataSource('games', PAGE_UNIQUE_IDENTIFIER);
-const FlipSource = GenerateDataSource('flip', PAGE_UNIQUE_IDENTIFIER);
+const FlipSource = GenerateDataSource('user_flip', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     ACTION: 'Profile',
@@ -93,6 +93,7 @@ var Profile = React.createClass({
         this.refs.gameRef.dispatchPlatformEvent('quit');
     },
     renderGame: function () {
+        var flipUrl = this.state._links.user_flip ? this.state._links.user_flip.href : null;
         if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe9() || Detector.isIe10() || Detector.isIe11() || Detector.isFirefox() || Detector.isEdge())) {
             return (
                 <div>
@@ -103,7 +104,7 @@ var Profile = React.createClass({
         }
         return (
             <div>
-                <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl} flipUrl={this.state._links.flip.href} onExit={() => this.setState({gameOn: false})}/>
+                <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl} flipUrl={flipUrl} onExit={() => this.setState({gameOn: false})}/>
                     <a onClick={this.hideModal} className="modal-close">(close)</a>
             </div>
         );
