@@ -327,7 +327,10 @@ var Component = React.createClass({
                         <Button onClick={this.submitData}> Save </Button>
                     </Form></div>
                 </Panel>
-                <UpdateUsername className={ClassNames({hidden: this.state.type !== 'CHILD'})} username={this.state.username} />
+                <UpdateUsername className={ClassNames({
+                    hidden: this.state.type !== 'CHILD' ||
+                        this.state.user_id !== this.props.currentUser.user_id
+                })} username={this.state.username} />
                 <ChangePassword user_id={this.state.user_id} />
                 <CodeChange data={this.props.data} user_id={this.state.user_id} />
             </Layout>
@@ -456,13 +459,16 @@ var ChangePassword = React.createClass({
 
 const mapStateToProps = state => {
     var data = {};
+    var currentUser = {};
     var loading = true;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
+        currentUser = state.currentUser;
     }
     return {
         data,
+        currentUser,
         loading
     };
 };

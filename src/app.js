@@ -207,7 +207,6 @@ var AppComponent = React.createClass({
             <div>
                 {Errors.renderErrors()}
                 <GlobalHeader currentUser={this.props.currentUser} />
-                <div className="blocker"></div>
                 <div className="sweater">
                     {this.props.children}
                 </div>
