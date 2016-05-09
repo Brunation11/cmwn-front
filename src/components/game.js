@@ -59,7 +59,7 @@ var Game = React.createClass({
             return;
         }
         HttpManager.POST({url: this.props.flipUrl}, {'flip_id': flip}).catch(err => {
-            Toast.error(BAD_FLIP + (err.message ? ' Message: ' + err.message : ''));
+            Toast.error(BAD_FLIP);
             Log.log('Server refused flip update', err, flip);
         });
     },
