@@ -118,7 +118,7 @@ II?+I,,,,,,,,,,,,,,,,:,,,::::++=~~::,,,......................,,.,,.,,,,,,,,,,,,,
 import 'polyfills';//minor polyfills here. Major polyfilles (e.g. es5 shim) loaded in index from cdn
 
 import React from 'react';
-import { Provider } from 'react-redux';
+import { Provider, connect } from 'react-redux';
 import _ from 'lodash';
 import ReactDOM from 'react-dom';
 import { Router } from 'react-router';
@@ -185,7 +185,7 @@ document.onmousedown = function (e) {
 //█  1. Top Level React Components
 //█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
 
-var App = React.createClass({
+var AppComponent = React.createClass({
     componentWillMount: function () {
         Errors.onError(this.globalUpdate);
         EventManager.listen('userChanged', this.globalUpdate);
@@ -206,7 +206,7 @@ var App = React.createClass({
         return (
             <div>
                 {Errors.renderErrors()}
-                <GlobalHeader />
+                <GlobalHeader currentUser={this.props.currentUser} />
                 <div className="blocker"></div>
                 <div className="sweater">
                     {this.props.children}
@@ -216,6 +216,18 @@ var App = React.createClass({
         );
     }
 });
+
+const mapStateToProps = state => {
+    var currentUser = {};
+    if (state.currentUser != null) {
+        currentUser = state.page.data;
+    }
+    return {
+        currentUser
+    };
+};
+
+var App = connect(mapStateToProps)(AppComponent);
 
 /** Default route. Currently does nothing except display a 404, as this loading indicates no route found**/
 var Landing = React.createClass({
