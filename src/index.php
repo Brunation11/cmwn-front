@@ -1,3 +1,14 @@
+<?php
+$https = isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on');
+$proxy = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) ? $_SERVER['HTTP_X_FORWARDED_PROTO'] : null;
+
+if (!$https && $proxy !== 'https') {
+    $newUrl = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    header("HTTP/1.1 301 Moved Permanently");
+    header('Location: ' . $newUrl);
+    die();
+}
+?>
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="ie ie6"> <![endif]-->
 <!--[if IE 7]>         <html class="ie ie7"> <![endif]-->
