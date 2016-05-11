@@ -292,7 +292,7 @@ var Component = React.createClass({
                 <h3>School Information</h3>
                 {this.renderSchoolInformation()}
                 */}
-                <Button className={ClassNames({hidden: this.state.isStudent, available: !this.state.isStudent})} disabled={this.state.isStudent} onClick={this.submitData}> Save </Button>
+                <Button className="user-metadata-btn" disabled={this.state.isStudent} onClick={this.submitData}> Save </Button>
             </Form>
         )
     },
