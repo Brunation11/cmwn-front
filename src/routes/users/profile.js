@@ -10,7 +10,6 @@ import Detector from 'components/browser_detector';
 import ProfileImage from 'components/profile_image';
 import FlipBoard from 'components/flipboard';
 import Game from 'components/game';
-import Authorization from 'components/authorization';
 import EventManager from 'components/event_manager';
 import EditLink from 'components/edit_link';
 import Trophycase from 'components/trophycase';
@@ -197,7 +196,7 @@ var Profile = React.createClass({
                    <Trophycase className={ClassNames({hidden: !this.state.isStudent})} />
                </FlipSource>
                <Panel header={
-                   ((this.state.user_id === Authorization.currentUser.uuid) ? 'My ' : this.state.username + '\'s ') + HEADINGS.ACTION
+                   ((this.state.user_id === state.currentUser.user_id) ? 'My ' : this.state.username + '\'s ') + HEADINGS.ACTION
                } className={ClassNames('standard', {hidden: !this.state.isStudent && this.state.user_id === state.currentUser.user_id})}>
                <div className="infopanel">
                      <div className="right">

@@ -6,9 +6,7 @@ import Util from 'components/util';
 import Toast from 'components/toast';
 import Log from 'components/log';
 import History from 'components/history';
-import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
-import Authorization from 'components/authorization';
 import Store from 'components/store';
 
 import Layout from 'layouts/one_col';
@@ -48,8 +46,7 @@ var Component = React.createClass({
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
             Util.logout();
             req = HttpManager.POST({
-                //url: this.props.data._links.login.href,
-                url: GLOBALS.API_URL + 'login'
+                url: this.props.data._links.login.href,
             }, {
                 'username': this.refs.login.getValue(),
                 'password': this.refs.password.getValue()
@@ -60,10 +57,8 @@ var Component = React.createClass({
                     return;
                 }
                 if (res.status < 300 && res.status >= 200) {
-                    Authorization.reloadUser(res.response).then(() => {
-                        Log.info(e, 'User login success');
-                        History.push('/profile');
-                    });
+                    Log.info(e, 'User login success');
+                    History.push('/profile');
                 } else {
                     Toast.error(ERRORS.LOGIN + (res.response && res.response.data && res.response.data.message ? ' Message: ' + res.response.data.message : ''));
                     Log.log(res, 'Invalid login.', req);

@@ -48,6 +48,9 @@ var authReducer = (currentUser = Immutable(storedUserProperties), action) => {
         [ACTION_CONSTANTS.LOGOUT]: function () {
             return Immutable({});
         },
+        [ACTION_CONSTANTS.DESTROY_CURRENT_USER]: function () {
+            return Immutable({});
+        },
         [ACTION_CONSTANTS.NO_USER_AUTHORIZED]: function (currentUser_, data) {
             currentUser_ = currentUser_.set('token', data.token);
             currentUser_ = currentUser_.merge(data);
