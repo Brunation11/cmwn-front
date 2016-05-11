@@ -219,6 +219,9 @@ var Component = React.createClass({
         ) {
             return null;
         }
+
+        var userType = this.state.isStudent ? this.childRender : this.adultRender;
+
         return (
            <Layout className="edit-student">
                 <Panel header={HEADINGS.EDIT_TITLE + this.state.first_name + ' ' + this.state.last_name} className="standard edit-profile">
@@ -226,106 +229,9 @@ var Component = React.createClass({
                         <ProfileImage user_id={this.props.data.user_id} link-below={true}/>
                         <p><a onClick={this.suspendAccount}>{SUSPEND}</a></p>
                     </div>
-                    <div className="right"><Form ref="formRef">
-                        <Input
-                            type="text"
-                            value={this.state.username}
-                            placeholder="Username"
-                            label="Username"
-                            ref="usernameInput"
-                            validate={[
-                                Validate.max.bind(null, 25),
-                                Validate.regex.bind(null, /^[a-zA-Z0-9_-]+$/),
-                            ]}
-                            name="usernameInput"
-                            validationEvent="onBlur"
-                            disabled={this.state.isStudent}
-                            hasFeedback
-                            onChange={e => this.setState({username: e.target.value})} //eslint-disable-line camelcase
-                        />
-                        {this.renderEmail()}
-                        <Input
-                            type="text"
-                            value={this.state.first_name}
-                            placeholder="first name"
-                            label="First Name"
-                            validate="required"
-                            ref="firstnameInput"
-                            name="firstnameInput"
-                            validationEvent="onBlur"
-                            hasFeedback
-                            onChange={e => this.setState({first_name: e.target.value})} //eslint-disable-line camelcase
-                            disabled={this.state.isStudent}
-                        />
-                        <Input
-                            type="text"
-                            value={this.state.last_name}
-                            placeholder="last name"
-                            label="Last Name"
-                            validate="required"
-                            ref="lastnameInput"
-                            name="lastnameInput"
-                            onChange={e => this.setState({last_name: e.target.value})} //eslint-disable-line camelcase
-                            disabled={this.state.isStudent}
-                        />
-                        <DatePicker
-                            type="text"
-                            value={this.state.dob}
-                            placeholder="date of birth"
-                            label="Date of Birth"
-                            ref="birthdateInput"
-                            name="birthdateInput"
-                            clearButtonElement="x"
-                            onChange={value => {
-                                if (self.state.isStudent) {
-                                    self.setState({dob: this.state.dob});
-                                    return;
-                                }
-                                if (value == null) {
-                                    self.refs.dropdownDatepicker.reset();
-                                }
-                                self.setState({dob: value, birthdate: Date.parse(value)});
-                            }}
-                            disabled={this.state.isStudent}
-                            calendarPlacement="top"
-                        />
-                        <DropdownDatepicker ref="dropdownDatepicker" disabled={this.state.isStudent} value={this.state.dob} onChange={date => {
-                            this.setState({dob: date, birthdate: Date.parse(date)});
-                        }} />
-                        {''/*
-                        <Input
-                            type="select"
-                            value={this.state.gender}
-                            placeholder="Gender"
-                            label="Gender"
-                            validate="required"
-                            ref="genderInput"
-                            name="genderInput"
-                            onChange={e => this.setState({gender: e.target.value})}
-                        >
-                                <option value="" >Select gender</option>
-                                <option value="female">Female</option>
-                                <option value="male">Male</option>
-                                <option value="other">Other</option>
-                        </Input>
-                        <Input
-                            type="email"
-                            value={this.state.email}
-                            placeholder="email"
-                            label="email"
-                            validate="required,email"
-                            ref="emailInput"
-                            name="emailInput"
-                            onChange={e => this.setState({email: e.target.value})}
-                        />
-                        <h3>Parent or Guardian</h3>
-                        {this.renderParentFields()}
-                        <p><a onClick={this.addParent}>+ Add parent or guardian</a></p>
-                        <h3>School Information</h3>
-                        {this.renderSchoolInformation()}
-                        */}
-                        <Button onClick={this.submitData}> Save </Button>
-                    </Form></div>
+                    <div className="right">
+                        {userType()}
+                    </div>
                 </Panel>
                 <UpdateUsername className={ClassNames({hidden: this.state.type !== 'CHILD'})} username={this.state.username} />
                 <ChangePassword user_id={this.state.user_id} />
