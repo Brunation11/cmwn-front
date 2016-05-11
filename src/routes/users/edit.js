@@ -296,6 +296,24 @@ var Component = React.createClass({
             </Form>
         )
     },
+    childRender: function() {
+        var day = Moment(this.state.birthdate).date(),
+            month = Moment(this.state.birthdate).month() + 1,
+            year = Moment(this.state.birthdate).year();
+
+        return (
+            <div className="user-metadata">
+                <p>Username:</p>
+                <p className="field">{this.state.username}</p>
+                <p>First Name:</p>
+                <p className="field">{this.state.first_name}</p>
+                <p>Last Name:</p>
+                <p className="field">{this.state.last_name}</p>
+                <p>Birthday:</p>
+                <p className="field">{Moment(`${month} ${day}, ${year}`).format('MM-DD-YYYY')}</p>
+            </div>
+        )
+    },
     render: function () {
         var self = this;
         if (this.props.data == null || this.props.data.user_id == null || !Util.decodePermissions(this.props.data.scope).update
