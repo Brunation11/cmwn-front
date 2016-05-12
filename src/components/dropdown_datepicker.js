@@ -13,45 +13,45 @@ var Page = React.createClass({
         };
     },
     getInitialState: function () {
-        var day = 0, month = 0, year = 0;
+        var month = 0, day = 0, year = 0;
         if (this.props.value != null) {
-            day = Moment(this.props.value).date() + 1;
             month = Moment(this.props.value).month() + 1;
+            day = Moment(this.props.value).date();
             year = Moment(this.props.value).year();
         }
         return {
-            year: year,
             month: month,
-            day: day
+            day: day,
+            year: year
         };
     },
     componentWillReceiveProps: function (nextProps) {
-        var day = 0, month = 0, year = 0;
+        var month = 0, day = 0, year = 0;
         if (nextProps.value != null) {
-            day = Moment(nextProps.value).date();
             month = Moment(nextProps.value).month() + 1;
+            day = Moment(nextProps.value).date();
             year = Moment(nextProps.value).year();
             this.setState({
-                year: year,
                 month: month,
-                day: day
+                day: day,
+                year: year
             });
         }
     },
     getDate: function (nextState) {
-        var day = nextState.day || this.state.day,
-            month = nextState.month || this.state.month,
+        var month = nextState.month || this.state.month,
+            day = nextState.day || this.state.day,
             year = nextState.year || this.state.year;
-        if (!year || !month || !day) {
+        if (!month || !day || !year) {
             return null;
         }
-        return Moment(`${year}-${month}-${day}`).format('YYYY-MM-DD');
+        return Moment(`${month}-${day}-${year}`).format('MM-DD-YYYY');
     },
     reset: function () {
         this.setState({
-            year: 0,
             month: 0,
-            day: 0
+            day: 0,
+            year: 0
         });
     },
     renderMonthOptions: function () {
