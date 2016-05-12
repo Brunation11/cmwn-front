@@ -66,11 +66,13 @@ var Profile = React.createClass({
         }
     },
     componentWillReceiveProps: function (nextProps) {
+        this.resolveRole();
         this.setState(nextProps.data);
     },
     resolveRole: function () {
         var newState = {};
         var state = Store.getState();
+        //remember we actually want current user here, not the user whose profile we are looking at
         if (state.currentUser && state.currentUser.type !== 'CHILD') {
             newState.isStudent = false;
         } else {
