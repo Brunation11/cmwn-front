@@ -39,6 +39,9 @@ var Page = React.createClass({
         HttpManager.GET({url: 'https://api-dev.changemyworldnow.com/user-name'}).then(server => {
             this.setState({last: this.state.option, option: server.response.user_name});
         }).catch(err => {});
+        this.setStyleOnClick();
+    },
+    setStyleOnClick: function() {
         document.getElementById('note').style.visibility = "visible";
         document.getElementById('reminder').style = "transition: 1s";
         document.getElementById('reminder').style = "left: 0";
@@ -74,13 +77,13 @@ var Page = React.createClass({
                         disabled
                         label="Current Username:"
                     />
-                    <Button className="purple username-btn" onClick={this.reloadChildUsername}><Glyphicon glyph="repeat" /> {BUTTONS.GET}</Button>
+                    <Button className="purple username-btn generate" onClick={this.reloadChildUsername}><Glyphicon glyph="repeat" /> {BUTTONS.GET}</Button>
                     <br />
-                    <Button className="green username-btn" onClick={this.setChildUsername}>{Util.formatString(BUTTONS.CONFIRM)}</Button>
+                    <Button className="green username-btn submit" onClick={this.setChildUsername}>{Util.formatString(BUTTONS.CONFIRM)}</Button>
                     <br />
-                    <Button className="alternate-usernames username-btn" onClick={this.resetLast}>Select Last Option: {this.state.last}</Button>
+                    <Button className="blue alternate-usernames-btn username-btn" onClick={this.resetLast}>Select Last Option: {this.state.last}</Button>
                     <br />
-                    <Button className="alternate-usernames username-btn" onClick={this.resetOriginal}>Select Original: {this.state.original}</Button>
+                    <Button className="blue alternate-usernames-btn username-btn" onClick={this.resetOriginal}>Select Original: {this.state.original}</Button>
                 </div>
                 <div className="right">
                     <div className="note" id="note">
