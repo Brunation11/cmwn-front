@@ -43,10 +43,12 @@ var Component = React.createClass({
     },
     login: function (e) {
         var req;
+        var dataUrl;
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
+            dataUrl = this.props.data._links.login.href;
             Util.logout();
             req = HttpManager.POST({
-                url: this.props.data._links.login.href,
+                url: dataUrl,
             }, {
                 'username': this.refs.login.getValue(),
                 'password': this.refs.password.getValue()
@@ -127,9 +129,9 @@ var Component = React.createClass({
 const mapStateToProps = state => {
     var data = {};
     var loading = true;
-    if (state.page && state.page.data != null) {
+    if (state.currentUser) {
         loading = state.page.loading;
-        data = state.page.data;
+        data = state.currentUser;
     }
     return {
         data,
