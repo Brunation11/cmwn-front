@@ -39,6 +39,12 @@ var Page = React.createClass({
         HttpManager.GET({url: 'https://api-dev.changemyworldnow.com/user-name'}).then(server => {
             this.setState({last: this.state.option, option: server.response.user_name});
         }).catch(err => {});
+        this.setStyleOnClick();
+    },
+    setStyleOnClick: function() {
+        document.getElementById('note').style.visibility = "visible";
+        document.getElementById('reminder').style = "transition: 1s";
+        document.getElementById('reminder').style = "left: 0";
     },
     setChildUsername: function () {
         Alertify
@@ -63,24 +69,31 @@ var Page = React.createClass({
     renderAdult: function () {},
     renderChild: function () {
         return (
-           <div>
-                <h3>{this.props.copy}</h3>
-                <p>Current Username: {this.state.username}</p>
-                <p>Original Username: {this.state.original}</p>
-                <b>Current Option: (love this option? Be sure to remember to hit "set" to make it yours forever!)</b>
-                <Input
-                    type="text"
-                    value={this.state.option}
-                    disabled
-                />
-                <Button className="standard purple" onClick={this.reloadChildUsername}><Glyphicon glyph="repeat" /> {BUTTONS.GET}</Button>
-                <Button className="standard green" onClick={this.setChildUsername}>{Util.formatString(BUTTONS.SET, this.state.option)}</Button>
-                <p>
+           <div className="update-username-container">
+                <div className="left">
+                    <Input
+                        type="text"
+                        value={this.state.option}
+                        disabled
+                        label="Current Username:"
+                    />
+                    <Button className="purple username-btn generate" onClick={this.reloadChildUsername}><Glyphicon glyph="repeat" /> {BUTTONS.GET}</Button>
                     <br />
-                    <a onClick={this.resetLast}>Select Last Option: {this.state.last}</a>
+                    <Button className="green username-btn submit" onClick={this.setChildUsername}>{Util.formatString(BUTTONS.CONFIRM)}</Button>
                     <br />
-                    <a onClick={this.resetOriginal}>Select Original: {this.state.original}</a>
-                </p>
+                    <Button className="blue alternate-usernames-btn username-btn" onClick={this.resetLast}>Select Last Option: {this.state.last}</Button>
+                    <br />
+                    <Button className="blue alternate-usernames-btn username-btn" onClick={this.resetOriginal}>Select Original: {this.state.original}</Button>
+                </div>
+                <div className="right">
+                    <div className="note" id="note">
+                        <p>love your new username? Be sure to click "YES, CHANGE IT!" to make it yours forever!</p>
+                        <p className="disclaimer">Note: Once you choose to set the new username, you won't be able to change it again.</p>
+                    </div>
+                    <div className="reminder-container">
+                        <p className="reminder" id="reminder">Changed your mind? You can choose from the last choice or keep your same username!</p>
+                    </div>
+                </div>
            </div>
         );
     },
