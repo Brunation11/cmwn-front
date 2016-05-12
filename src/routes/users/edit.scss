@@ -70,21 +70,21 @@
     .user-metadata {
         font-size: 1rem;
         padding: 1rem;
-        color: #2CC4F4;
+        color: $cmwn-blue;
     }
 
     .user-metadata  .field {
-        background: url(/f427849b8caaa9e4cba74e927cba4b6e.jpg);
+        background: url(../../media/blue-header-bg.jpg);
         border-radius: 5px;
         color: #fff;
-        padding: 0 .5rem;
+        padding: $standard / 3;
         font-size: 1.25rem;
         box-shadow: 0px 0px 6px rgba(46, 163, 242, 0.9)
     }
 
     .user-metadata-btn, .user-metadata-btn:hover {
         margin-top: 1rem;
-        background: #47B72C;
+        background: $cmwn-green;
         color: #fff;
         font-weight: 700;
         border: none;
