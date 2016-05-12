@@ -213,14 +213,14 @@ var Component = React.createClass({
             />
         );
     },
-    adultRender: function() {
+    renderAdult: function() {
         return (
             <Form ref="formRef">
                 <Input
                     type="text"
                     value={this.state.username}
                     placeholder="Username"
-                    label="Username"
+                    label="Username:"
                     ref="usernameInput"
                     validate={[
                         Validate.max.bind(null, 25),
@@ -237,7 +237,7 @@ var Component = React.createClass({
                     type="text"
                     value={this.state.first_name}
                     placeholder="first name"
-                    label="First Name"
+                    label="First Name:"
                     validate="required"
                     ref="firstnameInput"
                     name="firstnameInput"
@@ -250,7 +250,7 @@ var Component = React.createClass({
                     type="text"
                     value={this.state.last_name}
                     placeholder="last name"
-                    label="Last Name"
+                    label="Last Name:"
                     validate="required"
                     ref="lastnameInput"
                     name="lastnameInput"
@@ -296,7 +296,7 @@ var Component = React.createClass({
             </Form>
         )
     },
-    childRender: function() {
+    renderChild: function() {
         var day = Moment(this.state.birthdate).date(),
             month = Moment(this.state.birthdate).month() + 1,
             year = Moment(this.state.birthdate).year();
@@ -304,24 +304,24 @@ var Component = React.createClass({
         return (
             <div className="user-metadata">
                 <p>Username:</p>
-                <p className="field">{this.state.username}</p>
+                <p className="standard field">{this.state.username}</p>
                 <p>First Name:</p>
-                <p className="field">{this.state.first_name}</p>
+                <p className="standard field">{this.state.first_name}</p>
                 <p>Last Name:</p>
-                <p className="field">{this.state.last_name}</p>
+                <p className="standard field">{this.state.last_name}</p>
                 <p>Birthday:</p>
-                <p className="field">{Moment(`${month} ${day}, ${year}`).format('MM-DD-YYYY')}</p>
+                <p className="standard field">{Moment(`${month} ${day}, ${year}`).format('MM-DD-YYYY')}</p>
             </div>
         )
     },
     render: function () {
         var self = this;
+        var userType = this.state.isStudent ? this.renderChild : this.renderAdult;
+
         if (this.props.data == null || this.props.data.user_id == null || !Util.decodePermissions(this.props.data.scope).update
         ) {
             return null;
         }
-
-        var userType = this.state.isStudent ? this.childRender : this.adultRender;
 
         return (
            <Layout className="edit-student">
