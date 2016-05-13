@@ -4,6 +4,7 @@ import Shortid from 'shortid';
 import {Input} from 'react-bootstrap';
 import Moment from 'moment';
 
+import 'components/dropdown_datepicker.scss';
 
 var Page = React.createClass({
     getDefaultProps: function () {
@@ -12,45 +13,45 @@ var Page = React.createClass({
         };
     },
     getInitialState: function () {
-        var day = 0, month = 0, year = 0;
+        var month = 0, day = 0, year = 0;
         if (this.props.value != null) {
-            day = Moment(this.props.value).date();
             month = Moment(this.props.value).month() + 1;
+            day = Moment(this.props.value).date();
             year = Moment(this.props.value).year();
         }
         return {
-            year: year,
             month: month,
-            day: day
+            day: day,
+            year: year
         };
     },
     componentWillReceiveProps: function (nextProps) {
-        var day = 0, month = 0, year = 0;
+        var month = 0, day = 0, year = 0;
         if (nextProps.value != null) {
-            day = Moment(nextProps.value).date();
             month = Moment(nextProps.value).month() + 1;
+            day = Moment(nextProps.value).date();
             year = Moment(nextProps.value).year();
             this.setState({
-                year: year,
                 month: month,
-                day: day
+                day: day,
+                year: year
             });
         }
     },
     getDate: function (nextState) {
-        var day = nextState.day || this.state.day,
-            month = nextState.month || this.state.month,
+        var month = nextState.month || this.state.month,
+            day = nextState.day || this.state.day,
             year = nextState.year || this.state.year;
-        if (!year || !month || !day) {
+        if (!month || !day || !year) {
             return null;
         }
-        return Moment(`${year}-${month}-${day}`).format('YYYY-MM-DD');
+        return Moment(`${month}-${day}-${year}`).format('MM-DD-YYYY');
     },
     reset: function () {
         this.setState({
-            year: 0,
             month: 0,
-            day: 0
+            day: 0,
+            year: 0
         });
     },
     renderMonthOptions: function () {
@@ -95,21 +96,11 @@ var Page = React.createClass({
     },
     render: function () {
         return (
-            <span className="form-inline dropdown_datepicker" >
+            <span className="form-inline dropdown-datepicker" >
+                <label>Birthday:</label>
+                <br />
                 <Input
-                    type="select"
-                    value={this.state.year}
-                    placeholder="Year"
-                    validate="required"
-                    ref="yearInput"
-                    name="yearInput"
-                    onChange={e => {
-                        this.setState({year: e.target.value});
-                        this.props.onChange(this.getDate({year: e.target.value}));
-                    }}
-                    disabled={this.props.disabled}
-                >{this.renderYearOptions()}</Input>
-                <Input
+                    className="birthday-input"
                     type="select"
                     value={this.state.month}
                     placeholder="Month"
@@ -123,6 +114,7 @@ var Page = React.createClass({
                     disabled={this.props.disabled}
                 >{this.renderMonthOptions()}</Input>
                 <Input
+                    className="birthday-input"
                     type="select"
                     value={this.state.day}
                     placeholder="Day"
@@ -135,6 +127,20 @@ var Page = React.createClass({
                     }}
                     disabled={this.props.disabled}
                 >{this.renderDayOptions()}</Input>
+                <Input
+                    className="birthday-input"
+                    type="select"
+                    value={this.state.year}
+                    placeholder="Year"
+                    validate="required"
+                    ref="yearInput"
+                    name="yearInput"
+                    onChange={e => {
+                        this.setState({year: e.target.value});
+                        this.props.onChange(this.getDate({year: e.target.value}));
+                    }}
+                    disabled={this.props.disabled}
+                >{this.renderYearOptions()}</Input>
                 <br />
             </span>
         );

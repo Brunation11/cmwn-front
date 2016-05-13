@@ -4,18 +4,6 @@ import _ from 'lodash';
 import Immutable from 'seamless-immutable';
 import { connect } from 'react-redux';
 
-const nonMenuLinks = [
-    'me',
-    'self',
-    'profile',
-    'games',
-    'forgot',
-    'user_image',
-    'user_name',
-    'flip',
-    'password'
-];
-
 var addHardcodedEntries = function (menuItems) {
     menuItems.unshift({url: '/profile', text: 'Action Items'});
     menuItems.push({url: '/profile/edit', text: 'Edit My Profile'});
@@ -25,7 +13,7 @@ var addHardcodedEntries = function (menuItems) {
 var Component = React.createClass({
     renderNavItems: function () {
         var menuItems = _.reduce(this.props.data, (a, i, k) => {
-            if (!~nonMenuLinks.indexOf(k)) {
+            if (i.label != null) {
                 var link = ~k.indexOf('_') ? k.split('_')[1] : k;
                 a.push({
                     url: i.view_url || '/' + link,

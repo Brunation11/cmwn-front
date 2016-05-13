@@ -213,12 +213,116 @@ var Component = React.createClass({
             />
         );
     },
+    renderAdult: function() {
+        return (
+            <Form ref="formRef">
+                <Input
+                    type="text"
+                    value={this.state.username}
+                    placeholder="Username"
+                    label="Username:"
+                    ref="usernameInput"
+                    validate={[
+                        Validate.max.bind(null, 25),
+                        Validate.regex.bind(null, /^[a-zA-Z0-9_-]+$/),
+                    ]}
+                    name="usernameInput"
+                    validationEvent="onBlur"
+                    disabled={this.state.isStudent}
+                    hasFeedback
+                    onChange={e => this.setState({username: e.target.value})} //eslint-disable-line camelcase
+                />
+                {this.renderEmail()}
+                <Input
+                    type="text"
+                    value={this.state.first_name}
+                    placeholder="first name"
+                    label="First Name:"
+                    validate="required"
+                    ref="firstnameInput"
+                    name="firstnameInput"
+                    validationEvent="onBlur"
+                    hasFeedback
+                    onChange={e => this.setState({first_name: e.target.value})} //eslint-disable-line camelcase
+                    disabled={this.state.isStudent}
+                />
+                <Input
+                    type="text"
+                    value={this.state.last_name}
+                    placeholder="last name"
+                    label="Last Name:"
+                    validate="required"
+                    ref="lastnameInput"
+                    name="lastnameInput"
+                    onChange={e => this.setState({last_name: e.target.value})} //eslint-disable-line camelcase
+                    disabled={this.state.isStudent}
+                />
+                <DropdownDatepicker ref="dropdownDatepicker" disabled={this.state.isStudent} value={this.state.dob} onChange={date => {
+                    this.setState({dob: date, birthdate: Date.parse(date)});
+                }} />
+                {''/*
+                <Input
+                    type="select"
+                    value={this.state.gender}
+                    placeholder="Gender"
+                    label="Gender"
+                    validate="required"
+                    ref="genderInput"
+                    name="genderInput"
+                    onChange={e => this.setState({gender: e.target.value})}
+                >
+                        <option value="" >Select gender</option>
+                        <option value="female">Female</option>
+                        <option value="male">Male</option>
+                        <option value="other">Other</option>
+                </Input>
+                <Input
+                    type="email"
+                    value={this.state.email}
+                    placeholder="email"
+                    label="email"
+                    validate="required,email"
+                    ref="emailInput"
+                    name="emailInput"
+                    onChange={e => this.setState({email: e.target.value})}
+                />
+                <h3>Parent or Guardian</h3>
+                {this.renderParentFields()}
+                <p><a onClick={this.addParent}>+ Add parent or guardian</a></p>
+                <h3>School Information</h3>
+                {this.renderSchoolInformation()}
+                */}
+                <Button className="user-metadata-btn" disabled={this.state.isStudent} onClick={this.submitData}> Save </Button>
+            </Form>
+        )
+    },
+    renderChild: function() {
+        var day = Moment(this.state.birthdate).date(),
+            month = Moment(this.state.birthdate).month() + 1,
+            year = Moment(this.state.birthdate).year();
+
+        return (
+            <div className="user-metadata">
+                <p>Username:</p>
+                <p className="standard field">{this.state.username}</p>
+                <p>First Name:</p>
+                <p className="standard field">{this.state.first_name}</p>
+                <p>Last Name:</p>
+                <p className="standard field">{this.state.last_name}</p>
+                <p>Birthday:</p>
+                <p className="standard field">{Moment(`${month} ${day}, ${year}`).format('MM-DD-YYYY')}</p>
+            </div>
+        )
+    },
     render: function () {
         var self = this;
+        var userType = this.state.isStudent ? this.renderChild : this.renderAdult;
+
         if (this.props.data == null || this.props.data.user_id == null || !Util.decodePermissions(this.props.data.scope).update
         ) {
             return null;
         }
+
         return (
            <Layout className="edit-student">
                 <Panel header={HEADINGS.EDIT_TITLE + this.state.first_name + ' ' + this.state.last_name} className="standard edit-profile">
@@ -226,110 +330,16 @@ var Component = React.createClass({
                         <ProfileImage user_id={this.props.data.user_id} link-below={true}/>
                         <p><a onClick={this.suspendAccount}>{SUSPEND}</a></p>
                     </div>
-                    <div className="right"><Form ref="formRef">
-                        <Input
-                            type="text"
-                            value={this.state.username}
-                            placeholder="Username"
-                            label="Username"
-                            ref="usernameInput"
-                            validate={[
-                                Validate.max.bind(null, 25),
-                                Validate.regex.bind(null, /^[a-zA-Z0-9_-]+$/),
-                            ]}
-                            name="usernameInput"
-                            validationEvent="onBlur"
-                            disabled={this.state.isStudent}
-                            hasFeedback
-                            onChange={e => this.setState({username: e.target.value})} //eslint-disable-line camelcase
-                        />
-                        {this.renderEmail()}
-                        <Input
-                            type="text"
-                            value={this.state.first_name}
-                            placeholder="first name"
-                            label="First Name"
-                            validate="required"
-                            ref="firstnameInput"
-                            name="firstnameInput"
-                            validationEvent="onBlur"
-                            hasFeedback
-                            onChange={e => this.setState({first_name: e.target.value})} //eslint-disable-line camelcase
-                            disabled={this.state.isStudent}
-                        />
-                        <Input
-                            type="text"
-                            value={this.state.last_name}
-                            placeholder="last name"
-                            label="Last Name"
-                            validate="required"
-                            ref="lastnameInput"
-                            name="lastnameInput"
-                            onChange={e => this.setState({last_name: e.target.value})} //eslint-disable-line camelcase
-                            disabled={this.state.isStudent}
-                        />
-                        <DatePicker
-                            type="text"
-                            value={this.state.dob}
-                            placeholder="date of birth"
-                            label="Date of Birth"
-                            ref="birthdateInput"
-                            name="birthdateInput"
-                            clearButtonElement="x"
-                            onChange={value => {
-                                if (self.state.isStudent) {
-                                    self.setState({dob: this.state.dob});
-                                    return;
-                                }
-                                if (value == null) {
-                                    self.refs.dropdownDatepicker.reset();
-                                }
-                                self.setState({dob: value, birthdate: Date.parse(value)});
-                            }}
-                            disabled={this.state.isStudent}
-                            calendarPlacement="top"
-                        />
-                        <DropdownDatepicker ref="dropdownDatepicker" disabled={this.state.isStudent} value={this.state.dob} onChange={date => {
-                            this.setState({dob: date, birthdate: Date.parse(date)});
-                        }} />
-                        {''/*
-                        <Input
-                            type="select"
-                            value={this.state.gender}
-                            placeholder="Gender"
-                            label="Gender"
-                            validate="required"
-                            ref="genderInput"
-                            name="genderInput"
-                            onChange={e => this.setState({gender: e.target.value})}
-                        >
-                                <option value="" >Select gender</option>
-                                <option value="female">Female</option>
-                                <option value="male">Male</option>
-                                <option value="other">Other</option>
-                        </Input>
-                        <Input
-                            type="email"
-                            value={this.state.email}
-                            placeholder="email"
-                            label="email"
-                            validate="required,email"
-                            ref="emailInput"
-                            name="emailInput"
-                            onChange={e => this.setState({email: e.target.value})}
-                        />
-                        <h3>Parent or Guardian</h3>
-                        {this.renderParentFields()}
-                        <p><a onClick={this.addParent}>+ Add parent or guardian</a></p>
-                        <h3>School Information</h3>
-                        {this.renderSchoolInformation()}
-                        */}
-                        <Button onClick={this.submitData}> Save </Button>
-                    </Form></div>
+                    <div className="right">
+                        {userType()}
+                    </div>
                 </Panel>
-                <UpdateUsername className={ClassNames({hidden: this.state.type !== 'CHILD'})} username={this.state.username} />
+                <UpdateUsername className={ClassNames({
+                    hidden: this.state.type !== 'CHILD' ||
+                        this.state.user_id !== this.props.currentUser.user_id
+                })} username={this.state.username} />
                 <ChangePassword user_id={this.state.user_id} />
-                <CodeChange user_id={this.state.user_id} />
+                <CodeChange data={this.props.data} user_id={this.state.user_id} />
             </Layout>
         );
     }
@@ -344,9 +354,7 @@ var CodeChange = React.createClass({
         return {code: ''};
     },
     submit: function () {
-        var update = HttpManager.POST({url: `${GLOBALS.API_URL}user/${this.props.user_id}/code`}, {
-            'code': this.state.code
-        });
+        var update = HttpManager.POST({url: this.props.data._links.forgot.href }, {email: this.props.data.email, code: this.state.code});
         update.then(() => {
             Toast.success('Code Reset for user. They will need to update their password on next login.');
         }).catch(err => {
@@ -458,13 +466,16 @@ var ChangePassword = React.createClass({
 
 const mapStateToProps = state => {
     var data = {};
+    var currentUser = {};
     var loading = true;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
+        currentUser = state.currentUser;
     }
     return {
         data,
+        currentUser,
         loading
     };
 };
