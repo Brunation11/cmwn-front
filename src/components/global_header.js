@@ -46,18 +46,10 @@ var GlobalHeader = React.createClass({
         );
     },
     render: function () {
-        var logoLink;
-        // if (window.localStorage["com.cmwn.platform.userId"] === null || window.localStorage["com.cmwn.platform.userId"] === 'null') {
-        //     logoLink = "/";
-        // } else {
-        //     logoLink = "profile";
-        // }
-
-
         return (
             <div className="global-header">
-                <div className="logo" ><Link to={logoLink} ><img alt="Change My World Now" src={LOGO_URL} /></Link></div>
-                <div className="headerLogo"><Link to={logoLink} ><img alt="Change My World Now" src={LOGO_HEADER} /><span className="read">Change My World Now</span></Link></div>
+                <div className="logo" ><Link to={this.props.logoLink} ><img alt="Change My World Now" src={LOGO_URL} /></Link></div>
+                <div className="headerLogo"><Link to={this.props.logoLink} ><img alt="Change My World Now" src={LOGO_HEADER} /><span className="read">Change My World Now</span></Link></div>
                 <Button className="menu" onClick={this.toggleMenu}>
                    <Glyphicon glyph="glyphicon glyphicon-menu-hamburger" />
                    <span className="fallback">{MENU}</span>
