@@ -7,7 +7,7 @@
     font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
     background-color: $cmwn-blue;
     box-shadow: 0px 0px 6px rgba(46, 163, 242, 0.9);
-    border-radius: 5px;
+    border-radius: %standard / 3;
     height: 3rem;
     color: #fff;
     text-align: center;
@@ -30,35 +30,34 @@
     width: 50%;
   }
 
-  #note {
-    visibility: hidden;
-  }
-
   .note {
+    visibility: hidden;
     float: right;
     position: relative;
     width: 90%;
     height: 11.5rem;
-    padding: 1.25rem;
+    padding: $standard;
     font-size: 1.10rem;
     font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
     background-color: $cmwn-purple;
     color: #fff;
-    -webkit-border-radius: 30px;
-    -moz-border-radius: 30px;
-    border-radius: 30px;
-    -webkit-box-shadow: 2px 2px 4px #888;
-    -moz-box-shadow: 2px 2px 4px #888;
-    box-shadow: 4px 4px 8px #888;
+    border-radius: $standard * 2;
+    box-shadow: -4px 6px 8px #888;
+
+    &:after {
+      border-bottom: 35px solid transparent;
+      border-left: 35px solid $cmwn-purple;
+      box-shadow: -6px -1px 10px -4px #888;
+      transform: rotate(-45deg);
+      left: -$standard;
+      content: '';
+      position: absolute;
+      top: 40px;
+    }
   }
 
-  .note:after {
-    border-bottom: 40px solid transparent;
-    border-right: 40px solid $cmwn-purple;
-    left: -25px;
-    content: '';
-    position: absolute;
-    top: 55px;
+  .open {
+    visibility: visible;
   }
 
   .reminder-container {
@@ -66,6 +65,7 @@
     overflow: hidden;
     width: 100%;
     height: 150px;
+    left: -2.75rem;
   }
 
   .reminder {
@@ -73,108 +73,82 @@
     left: -100%;
     width: 50%;
     height: 100px;
-    margin-top: 2.5rem;
+    margin-top: 2rem;
     padding: $standard;
     background: $cmwn-blue;
     transition: 1s;
     font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
     color: #fff;
+    box-shadow: -4px 6px 8px #888;
+
+    &:after {
+      border-bottom: 35px solid transparent;
+      border-left: 35px solid $cmwn-blue;
+      box-shadow: -6px -3px 10px -4px #888;
+      transform: rotate(-45deg);
+      left: -$standard;
+      content: '';
+      position: absolute;
+      top: 40px;
+    }
+  }
+
+  .animate {
+    transition: 1s;
+    left: 30px;
   }
 
   .disclaimer {
     font-size: 1rem;
   }
 
-  @-webkit-keyframes username-btn {
-    16.65% {
-      -webkit-transform: translateX(8px);
-      transform: translateX(8px);
-    }
-
-    33.3% {
-      -webkit-transform: translateX(-6px);
-      transform: translateX(-6px);
-    }
-
-    49.95% {
-      -webkit-transform: translateX(4px);
-      transform: translateX(4px);
-    }
-
-    66.6% {
-      -webkit-transform: translateX(-2px);
-      transform: translateX(-2px);
-    }
-
-    83.25% {
-      -webkit-transform: translateX(1px);
-      transform: translateX(1px);
-    }
-
-    100% {
-      -webkit-transform: translateX(0);
-      transform: translateX(0);
-    }
-  }
-
   @keyframes username-btn {
     16.65% {
-      -webkit-transform: translateX(8px);
       transform: translateX(8px);
     }
 
     33.3% {
-      -webkit-transform: translateX(-6px);
       transform: translateX(-6px);
     }
 
     49.95% {
-      -webkit-transform: translateX(4px);
       transform: translateX(4px);
     }
 
     66.6% {
-      -webkit-transform: translateX(-2px);
       transform: translateX(-2px);
     }
 
     83.25% {
-      -webkit-transform: translateX(1px);
       transform: translateX(1px);
     }
 
     100% {
-      -webkit-transform: translateX(0);
       transform: translateX(0);
     }
   }
 
   .username-btn {
     display: inline-block;
-    vertical-align: middle;
-    -webkit-transform: translateZ(0);
+    vertical-align: top;
     transform: translateZ(0);
-    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
-    -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
-    -moz-osx-font-smoothing: grayscale;
     color: #fff;
     font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
     margin: .25rem 0;
     width: 75%;
     font-size: 1.5rem;
+    border: none;
+    outline: none;
   }
 
   .username-btn:hover, .username-btn:focus, .username-btn:active {
-    -webkit-animation-name: username-btn;
     animation-name: username-btn;
-    -webkit-animation-duration: 1s;
     animation-duration: 1s;
-    -webkit-animation-timing-function: ease-in-out;
     animation-timing-function: ease-in-out;
-    -webkit-animation-iteration-count: 1;
     animation-iteration-count: 1;
     border: none;
+    outline: none;
   }
 
   .generate:hover {

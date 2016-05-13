@@ -4,6 +4,8 @@ import Alertify from 'alertify.js';
 
 import HttpManager from 'components/http_manager';
 import Util from 'components/util';
+import Toast from 'components/toast';
+import ClassNames from 'classnames';
 
 import 'components/update_username.scss';
 
@@ -42,9 +44,7 @@ var Page = React.createClass({
         this.setStyleOnClick();
     },
     setStyleOnClick: function() {
-        document.getElementById('note').style.visibility = "visible";
-        document.getElementById('reminder').style = "transition: 1s";
-        document.getElementById('reminder').style = "left: 0";
+        this.setState({tooltipsOpen: true});
     },
     setChildUsername: function () {
         Alertify
@@ -53,7 +53,10 @@ var Page = React.createClass({
             .confirm(Util.formatString(CONFIRM_SET, this.state.original), () => {
                 HttpManager.POST({url: 'https://api-dev.changemyworldnow.com/user-name'}, {user_name: this.state.option}).then(server => {
                     this.setState({username: this.state.option});
-                }).catch(err => {});
+                    Toast.spawn({addnCls: 'humane-flatty-success', waitForMove: false, timeout: 10000})("Username Updated to " + server.response.username + "!");
+                }).catch(err => {
+                    Toast.error(BAD_UPDATE + (err.message ? " Message: " + err.message : ""));
+                });
             }
         );
     },
@@ -86,12 +89,12 @@ var Page = React.createClass({
                     <Button className="blue alternate-usernames-btn username-btn" onClick={this.resetOriginal}>Select Original: {this.state.original}</Button>
                 </div>
                 <div className="right">
-                    <div className="note" id="note">
+                    <div className={ClassNames("note", {open: this.state.tooltipsOpen})}>
                         <p>love your new username? Be sure to click "YES, CHANGE IT!" to make it yours forever!</p>
                         <p className="disclaimer">Note: Once you choose to set the new username, you won't be able to change it again.</p>
                     </div>
                     <div className="reminder-container">
-                        <p className="reminder" id="reminder">Changed your mind? You can choose from the last choice or keep your same username!</p>
+                        <p className={ClassNames("reminder", {animate: this.state.tooltipsOpen})}>Changed your mind? You can choose from the last choice or keep your same username!</p>
                     </div>
                 </div>
            </div>
