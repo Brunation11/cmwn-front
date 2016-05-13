@@ -150,14 +150,7 @@ var Home = React.createClass({
         this.setState({ contactOpen: false });
     },
     render: function () {
-
-        var logoLink;
-        if (window.localStorage["com.cmwn.platform.userId"] === null || window.localStorage["com.cmwn.platform.userId"] === 'null') {
-            logoLink = "/";
-        } else {
-            logoLink = "profile";
-        }
-        console.log(Store.getState().currentUser);
+        var logoLink = Store.getState().currentUser.user_id ? "/profile" : "/";
 
         return (
             <div id="home" className="home">
