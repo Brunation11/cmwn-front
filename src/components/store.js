@@ -45,9 +45,20 @@ populate(storedUserProperties, '_links', 'com.cmwn.platform._links');
 
 var authReducer = (currentUser = Immutable(storedUserProperties), action) => {
     var reducers = {
-        [ACTION_CONSTANTS.LOGOUT]: function () {
-            return Immutable({});
-        },
+        [ACTION_CONSTANTS.LOGOUT]: function (currentUser_) {
+            var nextUser = Immutable({
+                _links: currentUser_._links,
+                token: currentUser_.token
+            });
+            return Immutable(nextUser);
+        }.bind(null, currentUser),
+        [ACTION_CONSTANTS.DESTROY_CURRENT_USER]: function (currentUser_) {
+            var nextUser = Immutable({
+                _links: currentUser_._links,
+                token: currentUser_.token
+            });
+            return Immutable(nextUser);
+        }.bind(null, currentUser),
         [ACTION_CONSTANTS.NO_USER_AUTHORIZED]: function (currentUser_, data) {
             currentUser_ = currentUser_.set('token', data.token);
             currentUser_ = currentUser_.merge(data);

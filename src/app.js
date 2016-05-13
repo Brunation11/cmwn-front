@@ -134,7 +134,6 @@ import Store from 'components/store';
 import Util from 'components/util';
 import DevTools from 'components/devtools';
 import Actions from 'components/actions';
-import Authorization from 'components/authorization';
 
 import Errors from 'components/errors';
 import Home from 'routes/home';
@@ -147,7 +146,7 @@ import 'media/logo.png';
 
 //htaccess should take care of it but if somehow it does not, this should overkill the issue
 if (window.location.protocol !== 'https:') {
-    //window.location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+    window.location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
 }
 
 document.domain = 'changemyworldnow.com';
@@ -283,7 +282,6 @@ var progressivePageLoad = function () {
         });
         break;
     case GLOBALS.PAGE_LOAD_STATE.PAGE: //We are authorized. Store the current user and proceed to page load
-        Authorization.storeUser();
         if (state.location.endpoint && state.location.endpoint.indexOf('$') === 0) {
             //Looking for the string $$ at the beginning of a route to indicate
             //that it should be pulled directly from the users context

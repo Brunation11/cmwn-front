@@ -36,6 +36,7 @@ const ACTIONS = [
     'START_RELOAD_PAGE',
     'END_RELOAD_PAGE',
     'NO_USER_AUTHORIZED',
+    'DESTROY_CURRENT_USER',
 ];
 
 export default _.reduce(ACTIONS, (a, i) => _.defaults(a, {[i]: i}), {});

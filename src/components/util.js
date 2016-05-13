@@ -5,6 +5,7 @@ import Store from 'components/store';
 import Log from 'components/log';
 import GLOBALS from 'components/globals';
 import EventManager from 'components/event_manager';
+import HttpManager from 'components/http_manager';
 
 var Util = {
     /**
@@ -159,6 +160,33 @@ var Util = {
             templateString = templateString.replace('{' + k + '}', arg);
         });
         return templateString;
+    },
+    reloadUser(newUser) {
+        var getUser;
+        if (newUser != null) {
+            return this.storeUser(newUser);
+        } else {
+            getUser = HttpManager.GET({url: Store.getState().currentUser._links.me.href});
+            return getUser.then(res => {
+                /* @TODO MPR, 3/7/16: This should move to errors.js */
+                if (res && res.status === 401 && res.response && res.response.error && res.response.error.detail === 'RESET_PASSWORD') {
+                    if (~window.location.href.indexOf('change-password')) {
+                        return Promise.resolve();
+                    }
+                    window.location.href = '/change-password';
+                    return Promise.resolve();
+                }
+                return this.storeUser(res.response);
+            }).catch(e => {
+                Log.log(e, 'Error encountered during authorization check. Logging out.');
+                //user is not logged in.
+                this.logout();
+                if (window.location.pathname !== '/login' && window.location.pathname !== '/login/') {
+                    History.push('/login');
+                    this._resolve();
+                }
+            });
+        }
     }
 };
 
