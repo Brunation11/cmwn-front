@@ -7,6 +7,7 @@ import Shortid from 'shortid';
 import Toast from 'components/toast';
 import Log from 'components/log';
 import History from 'components/history';
+import Store from 'components/store';
 
 import 'routes/home.scss';
 import LOGO_URL from 'media/header-logo.png';
@@ -149,6 +150,8 @@ var Home = React.createClass({
         this.setState({ contactOpen: false });
     },
     render: function () {
+        var logoLink = Store.getState().currentUser.user_id ? "/profile" : "/";
+
         return (
             <div id="home" className="home">
                 <Modal show={this.state.viewOpen} onHide={() => this.setState({viewOpen: false})}>
@@ -157,8 +160,8 @@ var Home = React.createClass({
                     </Modal.Body>
                 </Modal>
                 <div className="global-header">
-                    <div className="logo" ><Link to="/" ><img alt="Change My World Now" src={LOGO_URL} />Change My World Now</Link></div>
-                    <div className="headerLogo"><Link to="/" ><img alt="Change My World Now" src={LOGO_HEADER} /><span className="read">Change My World Now</span></Link></div>
+                    <div className="logo" ><Link to={logoLink} ><img alt="Change My World Now" src={LOGO_URL} />Change My World Now</Link></div>
+                    <div className="headerLogo"><Link to={logoLink} ><img alt="Change My World Now" src={LOGO_HEADER} /><span className="read">Change My World Now</span></Link></div>
                     <Header workOpen={this.state.workOpen} contactOpen={this.state.contactOpen} closeWork={this.closeWork} closeContact={this.closeContact} />
                 </div>
                 <Carousel>

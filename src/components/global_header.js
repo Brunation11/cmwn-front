@@ -2,6 +2,7 @@ import React from 'react';
 import {Link} from 'react-router';
 import {Button, Glyphicon} from 'react-bootstrap';
 
+import Store from 'components/store';
 import Authorization from 'components/authorization';
 import EventManager from 'components/event_manager';
 
@@ -47,8 +48,8 @@ var GlobalHeader = React.createClass({
     render: function () {
         return (
             <div className="global-header">
-                <div className="logo" ><Link to="/" ><img alt="Change My World Now" src={LOGO_URL} /></Link></div>
-                <div className="headerLogo"><Link to="/" ><img alt="Change My World Now" src={LOGO_HEADER} /><span className="read">Change My World Now</span></Link></div>
+                <div className="logo" ><Link to={this.props.logoLink} ><img alt="Change My World Now" src={LOGO_URL} /></Link></div>
+                <div className="headerLogo"><Link to={this.props.logoLink} ><img alt="Change My World Now" src={LOGO_HEADER} /><span className="read">Change My World Now</span></Link></div>
                 <Button className="menu" onClick={this.toggleMenu}>
                    <Glyphicon glyph="glyphicon glyphicon-menu-hamburger" />
                    <span className="fallback">{MENU}</span>

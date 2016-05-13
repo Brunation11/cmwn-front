@@ -200,13 +200,15 @@ var App = React.createClass({
         this.forceUpdate();
     },
     render: function () {
+        var logoLink = Store.getState().currentUser.user_id ? "/profile" : "/";
+
         if (this.isHome()) {
             return <Home />;
         }
         return (
             <div>
                 {Errors.renderErrors()}
-                <GlobalHeader />
+                <GlobalHeader logoLink={logoLink} />
                 <div className="sweater">
                     {this.props.children}
                 </div>
