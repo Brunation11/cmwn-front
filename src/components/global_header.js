@@ -11,7 +11,7 @@ import LOGO_URL from 'media/header-logo.png';
 import LOGO_HEADER from 'media/header-header.png';
 import LOGOUT_URL from 'media/pt_logout_on.png';
 
-const LOGOUT = 'logout';
+const LOGOUT = 'logout';fg
 const CURRENT_USER_IS = 'You are logged in as ';
 const MENU = 'Menu';
 
