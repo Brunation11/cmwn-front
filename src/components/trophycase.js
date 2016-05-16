@@ -1,8 +1,9 @@
 import React from 'react';
 import _ from 'lodash';
-import {Panel} from 'react-bootstrap';
+import {ButtonToolbar, OverlayTrigger, Panel, Popover, Button} from 'react-bootstrap';
 import {Link} from 'react-router';
 import Shortid from 'shortid';
+import Moment from 'moment';
 
 import 'components/trophycase.scss';
 
@@ -33,15 +34,22 @@ var Trophycase = React.createClass({
     renderPartial: function (items) {
         return (
            <div className="flip-list">
-               {_.map(items, (item) => (<Link to="" key={Shortid.generate()}><img src={`/flips/${item.flip_id}.png`} ></img><div className="partial" style={{height: `${item.progress}%`}} ><img src={`/flips/${item.flip_id}_grey.png`} ></img></div></Link>))}
+               {_.map(items, (item) => (<Link to="" key={Shortid.generate()} className="pulse"><img src={`/flips/${item.flip_id}.png`} ></img><div className="partial" style={{height: `${item.progress}%`}} ><img src={`/flips/${item.flip_id}_grey.png`} ></img></div></Link>))}
            </div>
         );
     },
     renderComplete: function (items) {
+        console.log(this.state);
         return (
-           <div className="flip-list">
-               {_.map(items, (item) => (<Link to="" key={Shortid.generate()}><img src={`/flips/${item.flip_id}.png`} ></img></Link>))}
-           </div>
+            <div className="flip-list">
+                {_.map(items, (item) => (
+                    <ButtonToolbar className="float pulse buzz">
+                        <OverlayTrigger trigger="hover" rootClose placement="top" overlay={<Popover title={item.title + "  |  earned: " + Moment(item.earned).format('MMM Do YYYY')}>{item.description}</Popover>}>
+                            <Link to="" key={Shortid.generate()}><img src={`/flips/${item.flip_id}.png`} ></img></Link>
+                        </OverlayTrigger>
+                    </ButtonToolbar>
+                ))}
+            </div>
         );
     },
     renderCase: function () {
@@ -56,10 +64,10 @@ var Trophycase = React.createClass({
             <Panel className="trophycase standard" header={HEADINGS.FLIPBOARD}>
                 <div className="earned">
                     {EARNED}<strong>{complete.length}</strong>
-                    <img className="spacer" src={DISABLED_FLIP} />
+
                     {this.renderComplete(complete)}
                 </div>
-                <div className="in-progress  hidden">
+                <div className="in-progress hidden">
                     {IN_PROGRESS}<strong>{inProgress.length}</strong>
                     <img className="spacer" src={DISABLED_FLIP} />
                     {this.renderPartial(inProgress)}
