@@ -118,7 +118,7 @@ II?+I,,,,,,,,,,,,,,,,:,,,::::++=~~::,,,......................,,.,,.,,,,,,,,,,,,,
 import 'polyfills';//minor polyfills here. Major polyfilles (e.g. es5 shim) loaded in index from cdn
 
 import React from 'react';
-import { Provider } from 'react-redux';
+import { Provider, connect } from 'react-redux';
 import _ from 'lodash';
 import ReactDOM from 'react-dom';
 import { Router } from 'react-router';
@@ -134,7 +134,6 @@ import Store from 'components/store';
 import Util from 'components/util';
 import DevTools from 'components/devtools';
 import Actions from 'components/actions';
-import Authorization from 'components/authorization';
 
 import Errors from 'components/errors';
 import Home from 'routes/home';
@@ -147,7 +146,7 @@ import 'media/logo.png';
 
 //htaccess should take care of it but if somehow it does not, this should overkill the issue
 if (window.location.protocol !== 'https:') {
-    //window.location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+    window.location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
 }
 
 document.domain = 'changemyworldnow.com';
@@ -185,30 +184,43 @@ document.onmousedown = function (e) {
 //█  1. Top Level React Components
 //█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
 
-var App = React.createClass({
+var AppComponent = React.createClass({
+    getInitialState: function() {
+        return {
+            logoLink: "/"
+        };
+    },
     componentWillMount: function () {
         Errors.onError(this.globalUpdate);
         EventManager.listen('userChanged', this.globalUpdate);
         EventManager.listen('errorChanged', this.globalUpdate);
     },
+    componentDidMount: function() {
+        if (this.props.currentUser != null) {
+            this.setState({logoLink: this.props.currentUser.user_id ? "/profile" : "/"});
+        }
+    },
+    componentWillReceiveProps: function(nextProps) {
+        if (nextProps.currentUser != null) {
+            this.setState({logoLink: nextProps.currentUser.user_id ? "/profile" : "/"});
+        }
+    },
     isHome: function () {
         return window.location.href.toLowerCase().indexOf('home') !== -1 ||
-            window.location.pathname === '/' ||
-            window.location.pathname === '';
+               window.location.pathname === '/' ||
+               window.location.pathname === '';
     },
     globalUpdate: function () {
         this.forceUpdate();
     },
     render: function () {
-        var logoLink = Store.getState().currentUser.user_id ? "/profile" : "/";
-
         if (this.isHome()) {
             return <Home />;
         }
         return (
             <div>
                 {Errors.renderErrors()}
-                <GlobalHeader logoLink={logoLink} />
+                <GlobalHeader logoLink={this.state.logoLink} currentUser={this.props.currentUser} />
                 <div className="sweater">
                     {this.props.children}
                 </div>
@@ -217,6 +229,18 @@ var App = React.createClass({
         );
     }
 });
+
+const mapStateToProps = state => {
+    var currentUser = {};
+    if (state.currentUser != null) {
+        currentUser = state.page.data;
+    }
+    return {
+        currentUser
+    };
+};
+
+var App = connect(mapStateToProps)(AppComponent);
 
 /** Default route. Currently does nothing except display a 404, as this loading indicates no route found**/
 var Landing = React.createClass({
@@ -273,7 +297,6 @@ var progressivePageLoad = function () {
         });
         break;
     case GLOBALS.PAGE_LOAD_STATE.PAGE: //We are authorized. Store the current user and proceed to page load
-        Authorization.storeUser();
         if (state.location.endpoint && state.location.endpoint.indexOf('$') === 0) {
             //Looking for the string $$ at the beginning of a route to indicate
             //that it should be pulled directly from the users context

@@ -334,9 +334,12 @@ var Component = React.createClass({
                         {userType()}
                     </div>
                 </Panel>
-                <UpdateUsername className={ClassNames({hidden: this.state.type !== 'CHILD'})} username={this.state.username} />
+                <UpdateUsername className={ClassNames({
+                    hidden: this.state.type !== 'CHILD' ||
+                        this.state.user_id !== this.props.currentUser.user_id
+                })} username={this.state.username} />
                 <ChangePassword user_id={this.state.user_id} />
-                <CodeChange user_id={this.state.user_id} />
+                <CodeChange data={this.props.data} user_id={this.state.user_id} />
             </Layout>
         );
     }
@@ -351,9 +354,7 @@ var CodeChange = React.createClass({
         return {code: ''};
     },
     submit: function () {
-        var update = HttpManager.POST({url: `${GLOBALS.API_URL}user/${this.props.user_id}/code`}, {
-            'code': this.state.code
-        });
+        var update = HttpManager.POST({url: this.props.data._links.forgot.href }, {email: this.props.data.email, code: this.state.code});
         update.then(() => {
             Toast.success('Code Reset for user. They will need to update their password on next login.');
         }).catch(err => {
@@ -465,13 +466,16 @@ var ChangePassword = React.createClass({
 
 const mapStateToProps = state => {
     var data = {};
+    var currentUser = {};
     var loading = true;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
+        currentUser = state.currentUser;
     }
     return {
         data,
+        currentUser,
         loading
     };
 };
