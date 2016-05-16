@@ -52,7 +52,7 @@ var buildMenuRoutes = function (links) {
             return a;
         }, false);
         if (matchedRoute) {
-            link = link.set('url', Util.replacePathPlaceholdersFromParamObject(matchedRoute.path, matchedRoute.params));
+            link = link.set('url', Util.replacePathPlaceholdersFromParamObject(matchedRoute.path, matchedRoute.params).split('(')[0]);
             a.push(link);
         }
         return a;
