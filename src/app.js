@@ -196,22 +196,19 @@ var AppComponent = React.createClass({
         EventManager.listen('errorChanged', this.globalUpdate);
     },
     componentDidMount: function() {
-        debugger;
         if (this.props.currentUser != null) {
             this.setState({logoLink: this.props.currentUser.user_id ? "/profile" : "/"});
         }
     },
     componentWillReceiveProps: function(nextProps) {
-        debugger;
-
         if (nextProps.currentUser != null) {
             this.setState({logoLink: nextProps.currentUser.user_id ? "/profile" : "/"});
         }
     },
     isHome: function () {
         return window.location.href.toLowerCase().indexOf('home') !== -1 ||
-            window.location.pathname === '/' ||
-            window.location.pathname === '';
+               window.location.pathname === '/' ||
+               window.location.pathname === '';
     },
     globalUpdate: function () {
         this.forceUpdate();
