@@ -330,8 +330,13 @@ var Component = React.createClass({
                 <UpdateUsername className={ClassNames({
                     hidden: this.state.type !== 'CHILD' ||
                         this.state.user_id !== this.props.currentUser.user_id
-                })} username={this.state.username} />
-                <ChangePassword user_id={this.state.user_id} />
+                    })}
+                    username={this.state.username}
+                />
+                <ChangePassword
+                    user_id={this.state.user_id}
+                    url={this.state._links.password.href}
+                />
                 <CodeChange data={this.props.data} user_id={this.state.user_id} />
             </Layout>
         );
@@ -339,7 +344,7 @@ var Component = React.createClass({
 });
 
 var isPassValid = function (password) {
-    return password.length > 8 && ~password.search(/[0-9]+/);
+    return password.length >= 8 && ~password.search(/[0-9]+/);
 };
 
 var CodeChange = React.createClass({
@@ -392,7 +397,7 @@ var ChangePassword = React.createClass({
             this.setState({extraProps: {bsStyle: 'error'}});
             Toast.error(ERRORS.TOO_SHORT);
         } else if (this.state.confirm === this.state.new) {
-            var update = HttpManager.POST({url: `${GLOBALS.API_URL}password/${this.props.user_id}`}, {
+            var update = HttpManager.POST({url: this.props.url}, {
                 'current_password': this.state.current,
                 'password': this.state.new,
                 'password_confirmation': this.state.confirm,
