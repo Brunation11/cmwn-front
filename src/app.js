@@ -185,10 +185,28 @@ document.onmousedown = function (e) {
 //█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
 
 var AppComponent = React.createClass({
+    getInitialState: function() {
+        return {
+            logoLink: "/"
+        };
+    },
     componentWillMount: function () {
         Errors.onError(this.globalUpdate);
         EventManager.listen('userChanged', this.globalUpdate);
         EventManager.listen('errorChanged', this.globalUpdate);
+    },
+    componentDidMount: function() {
+        debugger;
+        if (this.props.currentUser != null) {
+            this.setState({logoLink: this.props.currentUser.user_id ? "/profile" : "/"});
+        }
+    },
+    componentWillReceiveProps: function(nextProps) {
+        debugger;
+
+        if (nextProps.currentUser != null) {
+            this.setState({logoLink: nextProps.currentUser.user_id ? "/profile" : "/"});
+        }
     },
     isHome: function () {
         return window.location.href.toLowerCase().indexOf('home') !== -1 ||
@@ -199,19 +217,13 @@ var AppComponent = React.createClass({
         this.forceUpdate();
     },
     render: function () {
-        var logoLink = Store.getState().currentUser.user_id ? "/profile" : "/";
-
         if (this.isHome()) {
             return <Home />;
         }
         return (
             <div>
                 {Errors.renderErrors()}
-<<<<<<< HEAD
-                <GlobalHeader logoLink={logoLink} />
-=======
-                <GlobalHeader currentUser={this.props.currentUser} />
->>>>>>> 64c7437659588f6cda14e5a282210bf3a47773a6
+                <GlobalHeader logoLink={this.state.logoLink} currentUser={this.props.currentUser} />
                 <div className="sweater">
                     {this.props.children}
                 </div>

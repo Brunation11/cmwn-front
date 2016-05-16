@@ -3,11 +3,7 @@ import {Link} from 'react-router';
 import ClassNames from 'classnames';
 import {Button, Glyphicon} from 'react-bootstrap';
 
-<<<<<<< HEAD
 import Store from 'components/store';
-import Authorization from 'components/authorization';
-=======
->>>>>>> 64c7437659588f6cda14e5a282210bf3a47773a6
 import EventManager from 'components/event_manager';
 
 //import LOGO_URL from 'media/logo.png';
@@ -18,7 +14,19 @@ import LOGOUT_URL from 'media/pt_logout_on.png';
 const LOGOUT = 'logout';
 const CURRENT_USER_IS = 'You are logged in as ';
 const MENU = 'Menu';
+
 var GlobalHeader = React.createClass({
+
+    getDefaultProps: function() {
+        return {
+            logoLink: "/"
+        };
+    },
+    componentDidMount: function () {
+        EventManager.listen('userChanged', () => {
+            this.forceUpdate();
+        });
+    },
     toggleMenu: function () {
         var isOpen = EventManager.get('menuIsOpen');
         EventManager.update('menuIsOpen', !isOpen);
