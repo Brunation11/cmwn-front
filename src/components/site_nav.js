@@ -9,8 +9,8 @@ import PrivateRoutes from 'private_routes';
 import Util from 'components/util';
 
 var addHardcodedEntries = function (menuItems) {
-    menuItems.unshift({url: '/profile', text: 'Action Items'});
-    menuItems.push({url: '/profile/edit', text: 'Edit My Profile'});
+    menuItems.unshift({url: '/profile', label: 'Action Items'});
+    menuItems.push({url: '/profile/edit', label: 'Edit My Profile'});
     return menuItems;
 };
 
@@ -25,7 +25,7 @@ var buildMenuRoutes = function (links) {
         //try to match our endpoint to a route, and extract its parameters
         var matchedRoute = _.reduce(allRoutes, (a, route) => { //eslint-disable-line no-shadow
             var params;
-            if (!a && route.endpoint) {
+            if (!a && route.endpoint && link.label != null) {
                 // there are three scenarios here - the endpoint is non dynamic, it is dynamic by parameter,
                 // or it is dynamic based on the current user.
 
@@ -36,7 +36,7 @@ var buildMenuRoutes = function (links) {
                     //This _probably_ wont be a problem...
                     a = route;
                     a.params = {};
-                } else if (!~route.endpoint.indexOf(':') && ~link.href.indexOf(route.endpoint)) {
+                } else if (route.endpoint !== '/' && !~route.endpoint.indexOf(':') && ~link.href.indexOf(route.endpoint)) {
                     //nondynamic is also fairly easy, as urls cannot contain colonks
                     a = route;
                     a.params = {};
@@ -73,7 +73,7 @@ var Component = React.createClass({
 //            return a;
 //        }, []);
         menuItems = addHardcodedEntries(menuItems);
-        return _.map(menuItems, item => (<li key={`(${item.text})-${item.url}`}><Link to={item.url}>{item.text}</Link></li>));
+        return _.map(menuItems, item => (<li key={`(${item.label})-${item.url}`}><Link to={item.url}>{item.label}</Link></li>));
     },
     render: function () {
         return (
