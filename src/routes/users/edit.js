@@ -2,7 +2,6 @@ import React from 'react';
 import _ from 'lodash';
 import {Button, Input, Panel} from 'react-bootstrap';
 import { connect } from 'react-redux';
-import DatePicker from 'react-bootstrap-date-picker';
 import ClassNames from 'classnames';
 import Moment from 'moment';
 
@@ -78,6 +77,9 @@ var Component = React.createClass({
         }
     },
     resetPassword: function () {
+        if (this.props.data._links.forgot == null) {
+            return;
+        }
         //note: This should only appear for adults, who have email addressed
         HttpManager.GET(this.props.data._links.forgot.href, {email: this.props.data.email}).then(() => {
             Toast.success('Password Reset. This user will recieve an email with further instructions.');
@@ -213,7 +215,7 @@ var Component = React.createClass({
             />
         );
     },
-    renderAdult: function() {
+    renderAdult: function () {
         return (
             <Form ref="formRef">
                 <Input
@@ -294,9 +296,9 @@ var Component = React.createClass({
                 */}
                 <Button className="user-metadata-btn" disabled={this.state.isStudent} onClick={this.submitData}> Save </Button>
             </Form>
-        )
+        );
     },
-    renderChild: function() {
+    renderChild: function () {
         var day = Moment(this.state.birthdate).date(),
             month = Moment(this.state.birthdate).month() + 1,
             year = Moment(this.state.birthdate).year();
@@ -312,10 +314,9 @@ var Component = React.createClass({
                 <p>Birthday:</p>
                 <p className="standard field">{Moment(`${month} ${day}, ${year}`).format('MM-DD-YYYY')}</p>
             </div>
-        )
+        );
     },
     render: function () {
-        var self = this;
         var userType = this.state.isStudent ? this.renderChild : this.renderAdult;
 
         if (this.props.data == null || this.props.data.user_id == null || !Util.decodePermissions(this.props.data.scope).update
@@ -334,15 +335,17 @@ var Component = React.createClass({
                         {userType()}
                     </div>
                 </Panel>
-                <UpdateUsername className={ClassNames({
-                    hidden: this.state.type !== 'CHILD' ||
-                        this.state.user_id !== this.props.currentUser.user_id
+                <UpdateUsername
+                    className={ClassNames({
+                        hidden:
+                            this.state.type !== 'CHILD' ||
+                            this.state.user_id !== this.props.currentUser.user_id
                     })}
                     username={this.state.username}
                 />
                 <ChangePassword
                     user_id={this.state.user_id}
-                    url={this.state._links.password.href}
+                    url={this.state._links.password}
                 />
                 <CodeChange data={this.props.data} user_id={this.state.user_id} />
             </Layout>
@@ -359,7 +362,10 @@ var CodeChange = React.createClass({
         return {code: ''};
     },
     submit: function () {
-        var update = HttpManager.POST({url: this.props.data._links.forgot.href }, {email: this.props.data.email, code: this.state.code});
+        if (this.props.data._links.reset == null) {
+            return;
+        }
+        var update = HttpManager.POST({url: this.props.data._links.reset.href }, {email: this.props.data.email, code: this.state.code});
         update.then(() => {
             Toast.success('Code Reset for user. They will need to update their password on next login.');
         }).catch(err => {
@@ -369,7 +375,7 @@ var CodeChange = React.createClass({
     },
     render: function () {
         var state = Store.getState();
-        if (state.currentUser.user_id === this.props.user_id) {
+        if (state.currentUser.user_id === this.props.user_id || this.props.data._links.reset == null) {
             return null;
         }
         return (
@@ -404,7 +410,7 @@ var ChangePassword = React.createClass({
             this.setState({extraProps: {bsStyle: 'error'}});
             Toast.error(ERRORS.TOO_SHORT);
         } else if (this.state.confirm === this.state.new) {
-            var update = HttpManager.POST({url: this.props.url}, {
+            var update = HttpManager.POST({url: this.props.url.href}, {
                 'current_password': this.state.current,
                 'password': this.state.new,
                 'password_confirmation': this.state.confirm,
@@ -424,7 +430,7 @@ var ChangePassword = React.createClass({
     },
     render: function () {
         var state = Store.getState();
-        if (state.currentUser.user_id !== this.props.user_id) {
+        if (state.currentUser.user_id !== this.props.user_id || this.props.url == null || this.props.url.href == null) {
             return null;
         }
         return (
