@@ -1,11 +1,12 @@
 @import 'variables';
 
 .trophycase {
-    
-    .flip-list {
-        position: absolute;
-        top: 25px;
 
+    .flip-list {
+        padding: $standard;
+        padding-bottom: (2 * $standard);
+        overflow: scroll;
+        width: 100%;
         img {
             padding: $standard / 3;
             max-width: 75px; //totally arbitrary
@@ -26,19 +27,16 @@
     }
 
     .earned, .in-progress {
-        position: relative;
-        overflow-x: auto;
-        overflow-y: hidden;
-        margin-bottom: 10px;
+        overflow: scroll;
         white-space: nowrap;
+        padding: $standard;
+        padding-bottom: 0;
+        width: 100%;
+        display: inline-block;
 
         strong {
             color: $cmwn-purple;
         }
-    }
-
-    .in-progress {
-        margin-bottom: -12px;
     }
 
     .spacer {
@@ -46,4 +44,103 @@
         padding: 10px;
         visibility: hidden;
     }
+
+    /* Pulse */
+    @keyframes pulse {
+      to {
+        transform: scale(1.1);
+      }
+    }
+
+    .pulse {
+      display: inline-block;
+      vertical-align: middle;
+      transform: translateZ(0);
+      box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+      backface-visibility: hidden;
+      animation-name: pulse;;
+      animation-duration: .5s;
+      animation-delay: .3s;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
+      margin: 0 .5rem;
+    }
+
+    /*.pulse:hover, .pulse:focus, .pulse:active {
+      animation-name: pulse;;
+      animation-duration: .5s;
+      animation-delay: .3s;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      animation-direction: alternate;
+    }*/
+
+    /* Buzz */
+    @keyframes buzz {
+      50% {
+        transform: translateX(3px) rotate(2deg);
+      }
+
+      100% {
+        transform: translateX(-3px) rotate(-2deg);
+      }
+    }
+
+    .buzz {
+      display: inline-block;
+      vertical-align: middle;
+      transform: translateZ(0);
+      box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+      backface-visibility: hidden;
+    }
+
+    .buzz:hover, .buzz:focus, .buzz:active {
+      animation-name: buzz;
+      animation-duration: 0.15s;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    /* Float Shadow */
+    .float {
+      display: inline-block;
+      vertical-align: middle;
+      transform: translateZ(0);
+      box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+      backface-visibility: hidden;
+      position: relative;
+      transition-duration: 0.3s;
+      transition-property: transform;
+      transform: translateY(-5px);
+    }
+
+    .float:before {
+      pointer-events: none;
+      position: absolute;
+      z-index: -1;
+      content: '';
+      top: 100%;
+      left: 5%;
+      height: 10px;
+      width: 90%;
+      opacity: 0;
+      background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0) 80%);
+      transition-duration: 0.5s;
+      transition-property: transform, opacity;
+      opacity: 1;
+      transform: translateY(5px);
+    }
+
+    /*.float:hover, .float:focus, .float:active {
+      transform: translateY(-5px);
+    }*/
+
+    /*.float:hover:before, .float:focus:before, .float:active:before {
+      opacity: 1;
+      transform: translateY(5px);
+    }*/
 }
+
+
+/*stop you made it back*/
