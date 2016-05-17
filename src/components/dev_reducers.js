@@ -1,8 +1,7 @@
 
 
-var reducer = function (state, action) {
+var reducer = function (state) {
     return state;
 };
 
 export default reducer;
-

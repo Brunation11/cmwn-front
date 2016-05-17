@@ -13,7 +13,8 @@ const IDENTIFIER = 'change-username';
 
 const CHANGE = 'Update your Username';
 const CONFIRM_SET = 'Are you sure? Once you leave this page, you will not be able to change back to {0}.';
-const CONFIRM_RESET = 'Are you sure? If you change back to {0} you may not be able to return to {1}.';
+const BAD_UPDATE = 'Could not update your user name.';
+// const CONFIRM_RESET = 'Are you sure? If you change back to {0} you may not be able to return to {1}.';
 
 const BUTTONS = {
     CONFIRM: 'Yes, change it!',
@@ -40,10 +41,10 @@ var Page = React.createClass({
     reloadChildUsername: function () {
         HttpManager.GET({url: 'https://api-dev.changemyworldnow.com/user-name'}).then(server => {
             this.setState({last: this.state.option, option: server.response.user_name});
-        }).catch(err => {});
+        }).catch(err => {}); // eslint-disable-line
         this.setStyleOnClick();
     },
-    setStyleOnClick: function() {
+    setStyleOnClick: function () {
         this.setState({tooltipsOpen: true});
     },
     setChildUsername: function () {
@@ -51,11 +52,11 @@ var Page = React.createClass({
             .okBtn(BUTTONS.CONFIRM)
             .cancelBtn(BUTTONS.CANCEL)
             .confirm(Util.formatString(CONFIRM_SET, this.state.original), () => {
-                HttpManager.POST({url: 'https://api-dev.changemyworldnow.com/user-name'}, {user_name: this.state.option}).then(server => {
+                HttpManager.POST({url: 'https://api-dev.changemyworldnow.com/user-name'}, {user_name: this.state.option}).then(server => { // eslint-disable-line
                     this.setState({username: this.state.option});
-                    Toast.spawn({addnCls: 'humane-flatty-success', waitForMove: false, timeout: 10000})("Username Updated to " + server.response.username + "!");
+                    Toast.spawn({addnCls: 'humane-flatty-success', waitForMove: false, timeout: 10000})('Username Updated to ' + server.response.username + '!');
                 }).catch(err => {
-                    Toast.error(BAD_UPDATE + (err.message ? " Message: " + err.message : ""));
+                    Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
                 });
             }
         );
@@ -67,7 +68,7 @@ var Page = React.createClass({
         this.setState({option: this.state.original, last: this.state.option});
     },
     updateAdultUsername: function () {
-        HttpManager.GET().then(server => {}).catch(err => {});
+        HttpManager.GET().then(server => {}).catch(err => {}); // eslint-disable-line
     },
     renderAdult: function () {},
     renderChild: function () {
@@ -89,12 +90,12 @@ var Page = React.createClass({
                     <Button className="blue alternate-usernames-btn username-btn" onClick={this.resetOriginal}>Select Original: {this.state.original}</Button>
                 </div>
                 <div className="right">
-                    <div className={ClassNames("note", {open: this.state.tooltipsOpen})}>
+                    <div className={ClassNames('note', {open: this.state.tooltipsOpen})}>
                         <p>love your new username? Be sure to click "YES, CHANGE IT!" to make it yours forever!</p>
                         <p className="disclaimer">Note: Once you choose to set the new username, you won't be able to change it again.</p>
                     </div>
                     <div className="reminder-container">
-                        <p className={ClassNames("reminder", {animate: this.state.tooltipsOpen})}>Changed your mind? You can choose from the last choice or keep your same username!</p>
+                        <p className={ClassNames('reminder', {animate: this.state.tooltipsOpen})}>Changed your mind? You can choose from the last choice or keep your same username!</p>
                     </div>
                 </div>
            </div>
@@ -103,12 +104,12 @@ var Page = React.createClass({
     render: function () {
         var displayUpdate;
 //        if (this.props.userType === 'CHILD') {
-            displayUpdate = this.renderChild;
+        displayUpdate = this.renderChild;
 //        } else {
 //            displayUpdate = this.renderAdult;
 //        }
         return (
-           <Panel  header={CHANGE} className={this.props.className + " standard " + IDENTIFIER}>
+           <Panel header={CHANGE} className={this.props.className + ' standard ' + IDENTIFIER}>
                {displayUpdate()}
            </Panel>
         );

@@ -150,8 +150,6 @@ var Home = React.createClass({
         this.setState({ contactOpen: false });
     },
     render: function () {
-
-
         return (
             <div id="home" className="home">
                 <Modal show={this.state.viewOpen} onHide={() => this.setState({viewOpen: false})}>

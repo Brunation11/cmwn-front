@@ -67,7 +67,7 @@ Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
 
                     if (server.response.user_id == null) {
                         Errors.handle401();
-                        dispatch(Actions[ACTION_CONSTANTS.NO_USER_AUTHORIZED]({data:server.response}));
+                        dispatch(Actions[ACTION_CONSTANTS.NO_USER_AUTHORIZED]({data: server.response}));
                     } else {
                         dispatch({
                             type: 'combo',
