@@ -311,7 +311,7 @@ gulp.task('webpack:build-development', ['build-warning'], buildDevelopment);
 /** This task converts our JS output to utf-8, as this is what the browser expects when generating SRI hashes
  * This task also ultimately produces our final build artifact. */
 gulp.task('explicit-utf-8', ['webpack:build'], function (done) {
-    exec('iconv -f utf-8 ./build/build.js > ./build/cmwn-' + appPackage.version + '.js', done);
+    exec('iconv -f LATIN1 -t UTF-8 ./build/build.js > ./build/cmwn-' + appPackage.version + '.js', done);
 });
 /** Convienience Build Aliases */
 // eAP here just lets us restart gulp with appropriate flags
