@@ -3,7 +3,7 @@
 .trophycase {
 
     .flip-list {
-        padding: $standard;
+        padding: $standard 0;
         padding-bottom: (2 * $standard);
         overflow: scroll;
         width: 100%;
@@ -39,6 +39,15 @@
         }
     }
 
+    .earned-header {
+      font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
+      font-size: 1.25rem;
+    }
+
+    .earned-value {
+      font-size: 2rem;
+    }
+
     .spacer {
         display: block;
         padding: 10px;
@@ -66,15 +75,6 @@
       animation-direction: alternate;
       margin: 0 .5rem;
     }
-
-    /*.pulse:hover, .pulse:focus, .pulse:active {
-      animation-name: pulse;;
-      animation-duration: .5s;
-      animation-delay: .3s;
-      animation-timing-function: linear;
-      animation-iteration-count: infinite;
-      animation-direction: alternate;
-    }*/
 
     /* Buzz */
     @keyframes buzz {
@@ -132,15 +132,14 @@
       transform: translateY(5px);
     }
 
-    /*.float:hover, .float:focus, .float:active {
-      transform: translateY(-5px);
-    }*/
+  .flip {
+    border: none;
+    transform: perspective(500px) rotateY(90deg) scale(0.9);
+  }
 
-    /*.float:hover:before, .float:focus:before, .float:active:before {
-      opacity: 1;
-      transform: translateY(5px);
-    }*/
+  .flip:hover {
+    transform: perspective(500px) rotateY(0) scale(1);
+  }
 }
 
 
-/*stop you made it back*/
