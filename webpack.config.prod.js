@@ -71,6 +71,7 @@ module.exports = {
         includePaths: [path.resolve(__dirname, './src')]
     },
     postcss: function () {
+        console.log(path.resolve(__dirname, './src'));
         return [autoprefixer];
     }
 };

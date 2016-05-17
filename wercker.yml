@@ -1,16 +1,19 @@
 box:
-  id: node:5.7
+  id: node:6-wheezy
 build:
   steps:
     - script:
       name: Install packages
       code: npm install
-    - scropt:
+    - script:
       name: Install Global packages
-      code: npm install -g eslint eslint-plugin-react babel-eslint gulp
+      code: npm install -g eslint eslint-plugin-react eslint-plugin-babel babel-eslint gulp
     - script:
       name: Linter
       code: eslint src
+    - script:
+      name: +1 dump step of dumbness with keen
+      code: npm rebuild node-sass
     - script:
       name: Build packages
       code: gulp build --production

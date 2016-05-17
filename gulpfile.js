@@ -100,6 +100,7 @@ var buildDevelopment = function () {
     wpStream.on('error', err => {
         fs.writeFile('build_errors.log', err);
         wpStream.end();
+        throw err;
     });
     return gulp.src('./src/app.js')
         .pipe(wpStream)
@@ -124,6 +125,7 @@ var buildProduction = function () {
     wpStream.on('error', err => {
         fs.writeFile('build_errors.log', err);
         wpStream.end();
+        throw err;
     });
 
     fs.writeFile('build_errors.log', '');
@@ -319,8 +321,8 @@ gulp.task('explicit-utf-8', ['webpack:build'], function (done) {
 // as such, this is how we need to alias build commands.
 gulp.task('build-dev', executeAsProcess('gulp build', ['build', '--development']));
 gulp.task('build-development', executeAsProcess('gulp build', ['build', '--development']));
-gulp.task('build-prod', executeAsProcess('gulp build', ['build', '--development']));
-gulp.task('build-production', executeAsProcess('gulp build', ['build', '--development']));
+gulp.task('build-prod', executeAsProcess('gulp build', ['build', '--production']));
+gulp.task('build-production', executeAsProcess('gulp build', ['build', '--production']));
 
 /*·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´Resource and Static Asset Tasks`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·*/
 gulp.task('index', ['primary-style', 'webpack:build', 'explicit-utf-8', 'sri'], buildIndexPage);
