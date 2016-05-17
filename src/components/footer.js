@@ -1,5 +1,6 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
+import ClassNames from 'classnames';
 
 import Log from 'components/log';
 
@@ -29,11 +30,8 @@ var Footer = React.createClass({
             viewOpen: false,
             workOpen: false,
             contactOpen: false,
-            showContact: true
+            showContact: false
         };
-    },
-    componentDidMount: function () {
-        this.renderCaptcha();
     },
     componentDidUpdate: function () {
         try {
@@ -49,6 +47,10 @@ var Footer = React.createClass({
         this.setState({ workOpen: true });
     },
     displayContact: function () {
+        if (this.props.loggedIn) {
+            this.setState({contactOpen: true, showContact: true});
+            return;
+        }
         this.setState({ contactOpen: true });
     },
     closeWork: function () {
@@ -76,6 +78,7 @@ var Footer = React.createClass({
                 <Modal show={this.state.contactOpen} onHide={this.closeContact}>
                     <Modal.Body>
                         {COPY.MODALS.PRECAPTCHA}
+                        <div className={ClassNames('grecaptcha', {hidden: this.props.loggedIn})}></div>
                         {this.state.showContact ? COPY.MODALS.CONTACT : ''}
                     </Modal.Body>
                 </Modal>

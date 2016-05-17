@@ -45,6 +45,14 @@ var Component = React.createClass({
         var req;
         var dataUrl;
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
+            if (this.props.data._links && this.props.data._links.login == null) {
+                if (this.refs.login.getValue() === this.props.data.username || this.refs.login.getValue() === this.props.data.email) {
+                    History.push('/profile');
+                } else {
+                    //but why
+                    History.push('/logout');
+                }
+            }
             dataUrl = this.props.data._links.login.href;
             Util.logout();
             req = HttpManager.POST({
