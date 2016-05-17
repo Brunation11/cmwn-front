@@ -369,7 +369,7 @@ var Layout = React.createClass({
                             {COPY.BUTTONS.CONTACT}
                         </a>
                         <a href="/terms" target="_blank">
-                            {COPY.BUTTON.TERMS}
+                            {COPY.BUTTONS.TERMS}
                         </a>
                     </footer>
                 </div>
