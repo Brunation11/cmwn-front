@@ -217,7 +217,7 @@ var AppComponent = React.createClass({
         if (this.isHome()) {
             return (
                 <div>
-                    <Home />
+                    <Home logoLink={this.state.logoLink} currentUser={this.props.currentUser} />
                     {renderDevTool()}
                 </div>
             );
