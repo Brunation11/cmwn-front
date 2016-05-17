@@ -100,6 +100,7 @@ var buildDevelopment = function () {
     wpStream.on('error', err => {
         fs.writeFile('build_errors.log', err);
         wpStream.end();
+        throw err;
     });
     return gulp.src('./src/app.js')
         .pipe(wpStream)
@@ -124,6 +125,7 @@ var buildProduction = function () {
     wpStream.on('error', err => {
         fs.writeFile('build_errors.log', err);
         wpStream.end();
+        throw err;
     });
 
     fs.writeFile('build_errors.log', '');
@@ -309,7 +311,7 @@ gulp.task('webpack:build-development', ['build-warning'], buildDevelopment);
 /** This task converts our JS output to utf-8, as this is what the browser expects when generating SRI hashes
  * This task also ultimately produces our final build artifact. */
 gulp.task('explicit-utf-8', ['webpack:build'], function (done) {
-    exec('iconv -f utf-8 ./build/build.js > ./build/cmwn-' + appPackage.version + '.js', done);
+    exec('iconv -f LATIN1 -t UTF-8 ./build/build.js > ./build/cmwn-' + appPackage.version + '.js', done);
 });
 /** Convienience Build Aliases */
 // eAP here just lets us restart gulp with appropriate flags
@@ -319,8 +321,8 @@ gulp.task('explicit-utf-8', ['webpack:build'], function (done) {
 // as such, this is how we need to alias build commands.
 gulp.task('build-dev', executeAsProcess('gulp build', ['build', '--development']));
 gulp.task('build-development', executeAsProcess('gulp build', ['build', '--development']));
-gulp.task('build-prod', executeAsProcess('gulp build', ['build', '--development']));
-gulp.task('build-production', executeAsProcess('gulp build', ['build', '--development']));
+gulp.task('build-prod', executeAsProcess('gulp build', ['build', '--production']));
+gulp.task('build-production', executeAsProcess('gulp build', ['build', '--production']));
 
 /*·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´Resource and Static Asset Tasks`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·*/
 gulp.task('index', ['primary-style', 'webpack:build', 'explicit-utf-8', 'sri'], buildIndexPage);
