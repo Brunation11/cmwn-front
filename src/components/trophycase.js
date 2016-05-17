@@ -43,7 +43,7 @@ var Trophycase = React.createClass({
         return (
             <div className="flip-list">
                 {_.map(items, (item) => (
-                    <ButtonToolbar className="float pulse buzz">
+                    <ButtonToolbar className="flip float pulse buzz">
                         <OverlayTrigger trigger="hover" rootClose placement="top" overlay={<Popover title={item.title + "  |  earned: " + Moment(item.earned).format('MMM Do YYYY')}>{item.description}</Popover>}>
                             <Link to="" key={Shortid.generate()}><img src={`/flips/${item.flip_id}.png`} ></img></Link>
                         </OverlayTrigger>
@@ -58,12 +58,12 @@ var Trophycase = React.createClass({
             return null;
         }
         complete = this.state.flips;
-        //complete = _.filter(this.state.flips, item => item.progress === 100);
+        // complete = _.filter(this.state.flips, item => item.progress === 100);
         //inProgress = _.difference(this.state.flips, complete);
         return (
             <Panel className="trophycase standard" header={HEADINGS.FLIPBOARD}>
                 <div className="earned">
-                    {EARNED}<strong>{complete.length}</strong>
+                    <span className="earned-header">{EARNED}<strong className="earned-value"> {complete.length}</strong></span>
 
                     {this.renderComplete(complete)}
                 </div>
