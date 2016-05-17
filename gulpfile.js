@@ -333,7 +333,7 @@ gulp.task('sri', ['webpack:build', 'explicit-utf-8'], function () {
 });
 
 /*·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´Lint and Testing Tasks`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·*/
-gulp.task('lint', ['lint-js', 'lint-config', 'lint-test']);
+gulp.task('lint', ['lint-js', 'lint-config']);
 gulp.task('lint-js', function () {
     return gulp.src(['src/**/*.js', '!src/**/*.test.js'])
         // eslint() attaches the lint output to the eslint property

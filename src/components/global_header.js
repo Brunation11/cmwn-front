@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 import ClassNames from 'classnames';
 import {Button, Glyphicon} from 'react-bootstrap';
 
-import Store from 'components/store';
+// import Store from 'components/store';
 import EventManager from 'components/event_manager';
 
 //import LOGO_URL from 'media/logo.png';
@@ -11,15 +11,15 @@ import LOGO_URL from 'media/header-logo.png';
 import LOGO_HEADER from 'media/header-header.png';
 import LOGOUT_URL from 'media/pt_logout_on.png';
 
-const LOGOUT = 'logout';fg
+const LOGOUT = 'logout';
 const CURRENT_USER_IS = 'You are logged in as ';
 const MENU = 'Menu';
 
 var GlobalHeader = React.createClass({
 
-    getDefaultProps: function() {
+    getDefaultProps: function () {
         return {
-            logoLink: "/"
+            logoLink: '/'
         };
     },
     componentDidMount: function () {

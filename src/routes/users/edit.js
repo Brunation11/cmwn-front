@@ -2,7 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import {Button, Input, Panel} from 'react-bootstrap';
 import { connect } from 'react-redux';
-import DatePicker from 'react-bootstrap-date-picker';
+// import DatePicker from 'react-bootstrap-date-picker';
 import ClassNames from 'classnames';
 import Moment from 'moment';
 
@@ -213,7 +213,7 @@ var Component = React.createClass({
             />
         );
     },
-    renderAdult: function() {
+    renderAdult: function () {
         return (
             <Form ref="formRef">
                 <Input
@@ -294,9 +294,9 @@ var Component = React.createClass({
                 */}
                 <Button className="user-metadata-btn" disabled={this.state.isStudent} onClick={this.submitData}> Save </Button>
             </Form>
-        )
+        );
     },
-    renderChild: function() {
+    renderChild: function () {
         var day = Moment(this.state.birthdate).date(),
             month = Moment(this.state.birthdate).month() + 1,
             year = Moment(this.state.birthdate).year();
@@ -312,10 +312,9 @@ var Component = React.createClass({
                 <p>Birthday:</p>
                 <p className="standard field">{Moment(`${month} ${day}, ${year}`).format('MM-DD-YYYY')}</p>
             </div>
-        )
+        );
     },
     render: function () {
-        var self = this;
         var userType = this.state.isStudent ? this.renderChild : this.renderAdult;
 
         if (this.props.data == null || this.props.data.user_id == null || !Util.decodePermissions(this.props.data.scope).update

@@ -150,7 +150,7 @@ var Home = React.createClass({
         this.setState({ contactOpen: false });
     },
     render: function () {
-        var logoLink = Store.getState().currentUser.user_id ? "/profile" : "/";
+        var logoLink = Store.getState().currentUser.user_id ? '/profile' : '/';
 
         return (
             <div id="home" className="home">
