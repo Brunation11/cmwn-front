@@ -114,6 +114,8 @@ var Game = React.createClass({
         ReactDOM.findDOMNode(this.refs.gameRef).contentWindow.dispatchEvent(event);
     },
     makeFullScreen: function () {
+        console.log('ok here we go');
+        console.log(this);
         var self = this;
         if (Screenfull.enabled) {
             Screenfull.request(ReactDOM.findDOMNode(self.refs.gameRef));
@@ -122,6 +124,8 @@ var Game = React.createClass({
         }
     },
     render: function () {
+        console.log('entering render property');
+        console.log(this);
         if (this.props.url == null) {
             return null;
         }
