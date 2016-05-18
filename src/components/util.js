@@ -53,7 +53,7 @@ var Util = {
         titleElem.appendChild(title);
     },
     /* logic pulled from the react-router source with the non-basic route types removed*/
-    matchPathAndExtractParams(route, path) {
+    matchPathAndExtractParams(route = '', path = '') {
         var routeArray;
         var pathArray;
         var params = {};
