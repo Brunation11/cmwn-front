@@ -82,7 +82,7 @@ var routes = [
     { path: 'class/:id/profile(/)', title: 'Classes', endpoint: '/group/:id', component: ClassProfile},
     { path: 'classes/:id/profile(/)', onEnter: redirect('/class/:id/profile')},
     { path: 'friends(/)', title: 'Friends', endpoint: '/friend', component: Friends},
-    { path: 'friends/suggested(/)', title: 'Suggested Friends', endpoint: '/friend', component: SuggestedFriends},
+    { path: 'friends/suggested(/)', title: 'Suggested Friends', endpoint: '$$suggested_friends', component: SuggestedFriends},
     { path: 'suggestedfriends(/)', onEnter: redirect('/friends/suggested')}
 ];
 
