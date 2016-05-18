@@ -114,14 +114,17 @@ var Game = React.createClass({
         ReactDOM.findDOMNode(this.refs.gameRef).contentWindow.dispatchEvent(event);
     },
     makeFullScreen: function () {
-        console.log('ok here we go');
-        console.log(this);
         var self = this;
         if (Screenfull.enabled) {
+            console.log('if');
+            console.log(Screenfull.enabled);
             Screenfull.request(ReactDOM.findDOMNode(self.refs.gameRef));
-        } else {
             self.setState({fullscreenFallback: true});
+        } else {
+            console.log('else');
         }
+        console.log('ok here we go');
+        console.log(this);
     },
     render: function () {
         console.log('entering render property');
