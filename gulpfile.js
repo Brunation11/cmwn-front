@@ -26,6 +26,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var mergeStream = require('merge-stream');
 var sri = require('gulp-sri');
 var mocha = require('gulp-mocha');
+var zip = require('gulp-zip');
 
 /** @const */
 var APP_PREFIX = 'APP_';
@@ -191,6 +192,12 @@ var buildIndexPage = function () {
         .pipe(gulp.dest('./build'));
 };
 
+var zipTheBuild = function () {
+    return gulp.src(['build/**/*.*', 'build/.htaccess'])
+      .pipe(zip('build.zip'))
+      .pipe(gulp.dest('./'));
+};
+
 var buildAndCopyStaticResources = function () {
     var config = {
         resolve: {
@@ -297,7 +304,7 @@ gulp.task('dev-server', ['development-server']);
 gulp.task('development-server', executeAsProcess('npm', ['start']));
 
 /*·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´JS Build Tasks`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·*/
-gulp.task('build', ['primary-style', 'webpack:build', 'index']);
+gulp.task('build', ['primary-style', 'webpack:build', 'index'], zipTheBuild);
 /** Selects whether to rerun as dev or prod build task*/
 gulp.task('webpack:build', selectBuildMode);
 /** Convienience methods to run only the webpack portion of a build*/

@@ -4,7 +4,12 @@ build:
   steps:
     - script:
       name: Install packages
-      code: npm install
+      code: |
+       if [ -f $WERCKER_CACHE_DIR/nm_cache.tar] ; then
+          echo "Extracting tar"
+          tar xf $WERCKER_CACHE_DIR/nm_cache.tar
+       fi
+       npm prune && npm install && tar cf $WERCKER_CACHE_DIR/nm_cache.tar node_modules
     - script:
       name: Install Global packages
       code: npm install -g eslint eslint-plugin-react eslint-plugin-babel babel-eslint gulp
