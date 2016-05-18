@@ -11,7 +11,7 @@
         min-height: 75vh;
         display: block;
         margin: auto;
-        margin-bottom: $standard;
+        /*margin-bottom: $standard;*/
 
     }
 
@@ -34,7 +34,7 @@
         bottom: 0;
         right: 0;
         margin-left: -35px;
-        margin-top: -55px;
+        /*margin-top: -55px;*/
 
         iframe {
             z-index: $z-override;
