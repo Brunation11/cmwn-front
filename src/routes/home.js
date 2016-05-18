@@ -39,11 +39,11 @@ const COPY = {
     BUTTONS: {
         WORK: 'Work with Us',
         CONTACT: 'Contact Us',
-        LOGIN: 'Login',
         DEMO: 'Demo',
         SIGNUP: 'School Signup',
         WATCH: 'Watch the video',
-        TERMS: 'Terms & Conditions'
+        TERMS: 'Terms & Conditions',
+        LOGIN: 'Login'
     },
     SLIDES: [
         {
@@ -150,8 +150,6 @@ var Home = React.createClass({
         this.setState({ contactOpen: false });
     },
     render: function () {
-        var logoLink = Store.getState().currentUser.user_id ? '/profile' : '/';
-
         return (
             <div id="home" className="home">
                 <Modal show={this.state.viewOpen} onHide={() => this.setState({viewOpen: false})}>
@@ -160,8 +158,8 @@ var Home = React.createClass({
                     </Modal.Body>
                 </Modal>
                 <div className="global-header">
-                    <div className="logo" ><Link to={logoLink} ><img alt="Change My World Now" src={LOGO_URL} />Change My World Now</Link></div>
-                    <div className="headerLogo"><Link to={logoLink} ><img alt="Change My World Now" src={LOGO_HEADER} /><span className="read">Change My World Now</span></Link></div>
+                    <div className="logo" ><Link to={this.props.logoLink} ><img alt="Change My World Now" src={LOGO_URL} />Change My World Now</Link></div>
+                    <div className="headerLogo"><Link to={this.props.logoLink} ><img alt="Change My World Now" src={LOGO_HEADER} /><span className="read">Change My World Now</span></Link></div>
                     <Header workOpen={this.state.workOpen} contactOpen={this.state.contactOpen} closeWork={this.closeWork} closeContact={this.closeContact} />
                 </div>
                 <Carousel>
@@ -225,7 +223,16 @@ var Header = React.createClass({
         }
     },
     login: function () {
-        History.push('/login');
+        if (Store.getState().currentUser.user_id) {
+            History.push('/profile');
+        } else {
+            History.push('/login');
+        }
+    },
+    setLoginButtonCopy: function () {
+        if (Store.getState().currentUser.user_id) {
+            COPY.BUTTONS.LOGIN = 'Profile';
+        }
     },
     renderCaptcha: function () {
         var captchas = document.getElementsByClassName('grecaptcha');
@@ -253,7 +260,11 @@ var Header = React.createClass({
         this.setState({contactOpen: false, showContact: false});
     },
     loginAlert: function () {
-        History.replace('/login');
+        if (Store.getState().currentUser.user_id) {
+            History.replace('/profile');
+        } else {
+            History.replace('/login');
+        }
     },
     launchDemo: function () {
         this.setState({demoOpen: true});
@@ -266,6 +277,7 @@ var Header = React.createClass({
         Toast.success(COPY.ALERTS.SIGNUP.TEXT);
     },
     render: function () {
+        this.setLoginButtonCopy();
         return (
             <div>
                 <Modal show={this.state.demoOpen} onHide={this.confirmDemo}>

@@ -26,6 +26,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var mergeStream = require('merge-stream');
 var sri = require('gulp-sri');
 var mocha = require('gulp-mocha');
+var zip = require('gulp-zip');
 
 /** @const */
 var APP_PREFIX = 'APP_';
@@ -100,6 +101,7 @@ var buildDevelopment = function () {
     wpStream.on('error', err => {
         fs.writeFile('build_errors.log', err);
         wpStream.end();
+        throw err;
     });
     return gulp.src('./src/app.js')
         .pipe(wpStream)
@@ -124,6 +126,7 @@ var buildProduction = function () {
     wpStream.on('error', err => {
         fs.writeFile('build_errors.log', err);
         wpStream.end();
+        throw err;
     });
 
     fs.writeFile('build_errors.log', '');
@@ -187,6 +190,12 @@ var buildIndexPage = function () {
             }
         }))
         .pipe(gulp.dest('./build'));
+};
+
+var zipTheBuild = function () {
+    return gulp.src(['build/**/*.*', 'build/.htaccess'])
+      .pipe(zip('build.zip'))
+      .pipe(gulp.dest('./'));
 };
 
 var buildAndCopyStaticResources = function () {
@@ -295,7 +304,7 @@ gulp.task('dev-server', ['development-server']);
 gulp.task('development-server', executeAsProcess('npm', ['start']));
 
 /*·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´JS Build Tasks`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·*/
-gulp.task('build', ['primary-style', 'webpack:build', 'index']);
+gulp.task('build', ['primary-style', 'webpack:build', 'index'], zipTheBuild);
 /** Selects whether to rerun as dev or prod build task*/
 gulp.task('webpack:build', selectBuildMode);
 /** Convienience methods to run only the webpack portion of a build*/
@@ -309,7 +318,7 @@ gulp.task('webpack:build-development', ['build-warning'], buildDevelopment);
 /** This task converts our JS output to utf-8, as this is what the browser expects when generating SRI hashes
  * This task also ultimately produces our final build artifact. */
 gulp.task('explicit-utf-8', ['webpack:build'], function (done) {
-    exec('iconv -f utf-8 ./build/build.js > ./build/cmwn-' + appPackage.version + '.js', done);
+    exec('iconv -f LATIN1 -t UTF-8 ./build/build.js > ./build/cmwn-' + appPackage.version + '.js', done);
 });
 /** Convienience Build Aliases */
 // eAP here just lets us restart gulp with appropriate flags
@@ -319,8 +328,8 @@ gulp.task('explicit-utf-8', ['webpack:build'], function (done) {
 // as such, this is how we need to alias build commands.
 gulp.task('build-dev', executeAsProcess('gulp build', ['build', '--development']));
 gulp.task('build-development', executeAsProcess('gulp build', ['build', '--development']));
-gulp.task('build-prod', executeAsProcess('gulp build', ['build', '--development']));
-gulp.task('build-production', executeAsProcess('gulp build', ['build', '--development']));
+gulp.task('build-prod', executeAsProcess('gulp build', ['build', '--production']));
+gulp.task('build-production', executeAsProcess('gulp build', ['build', '--production']));
 
 /*·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´Resource and Static Asset Tasks`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·*/
 gulp.task('index', ['primary-style', 'webpack:build', 'explicit-utf-8', 'sri'], buildIndexPage);

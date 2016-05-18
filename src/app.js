@@ -215,7 +215,12 @@ var AppComponent = React.createClass({
     },
     render: function () {
         if (this.isHome()) {
-            return <Home />;
+            return (
+                <div>
+                    <Home logoLink={this.state.logoLink} currentUser={this.props.currentUser} />
+                    {renderDevTool()}
+                </div>
+            );
         }
         return (
             <div>
