@@ -91,7 +91,12 @@ var Component = React.createClass({
                     <br />
                     <Text label={`${HEADINGS.CREATED}: `} text={this.props.data.created_at}><p></p></Text>
                 </Panel>
-                <Panel header="Users" className="standard">
+                <Panel header="Students" className="standard">
+                    <div className="clear">
+                        <span className="buttons-right">
+                            {this.renderImport()}
+                        </span>
+                    </div>
                     <UserSource transform={users => {
                         return _.map(users, user => {
                             user = user.set('role', user.type === 'CHILD' ? 'Student' : 'Faculty');
