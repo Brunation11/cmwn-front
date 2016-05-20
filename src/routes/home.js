@@ -43,7 +43,8 @@ const COPY = {
         SIGNUP: 'School Signup',
         WATCH: 'Watch the video',
         TERMS: 'Terms & Conditions',
-        LOGIN: 'Login'
+        LOGIN: 'Login',
+        PROFILE: 'Profile'
     },
     SLIDES: [
         {
@@ -229,11 +230,6 @@ var Header = React.createClass({
             History.push('/login');
         }
     },
-    setLoginButtonCopy: function () {
-        if (Store.getState().currentUser.user_id) {
-            COPY.BUTTONS.LOGIN = 'Profile';
-        }
-    },
     renderCaptcha: function () {
         var captchas = document.getElementsByClassName('grecaptcha');
         if (captchas.length) {
@@ -277,7 +273,7 @@ var Header = React.createClass({
         Toast.success(COPY.ALERTS.SIGNUP.TEXT);
     },
     render: function () {
-        this.setLoginButtonCopy();
+        var loginButtonCopy = Store.getState().currentUser.user_id ? COPY.BUTTONS.PROFILE : COPY.BUTTONS.LOGIN;
         return (
             <div>
                 <Modal show={this.state.demoOpen} onHide={this.confirmDemo}>
@@ -326,10 +322,10 @@ var Header = React.createClass({
                         {COPY.BUTTONS.SIGNUP}
                     </Button>
                     <Button id="login" className="hidden" onClick={this.loginAlert}>
-                        {COPY.BUTTONS.LOGIN}
+                        {loginButtonCopy}
                     </Button>
                     <Button id="demo" className="purple" onClick={this.login}>
-                        {COPY.BUTTONS.LOGIN}
+                        {loginButtonCopy}
                     </Button>
                 </div>
             </div>

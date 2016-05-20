@@ -127,7 +127,7 @@ var Game = React.createClass({
         }
         return (
                 <div ref="wrapRef" className={ClassNames('game', {fullscreen: this.state.fullscreenFallback})}>
-                <iframe ref="gameRef" src={this.props.url} />
+                <iframe ref="gameRef" src={this.props.url} allowtransparency="true" />
                 <Button className="purple standard" onClick={this.makeFullScreen}><Glyphicon glyph="fullscreen" /> {FULLSCREEN}</Button>
                 <Button className={ClassNames('green standard', {hidden: !this.props.isTeacher})} onClick={() => this.dispatchPlatformEvent('toggle-demo-mode')}>{DEMO_MODE}</Button>
                 </div>
