@@ -11,6 +11,7 @@ import Util from 'components/util';
 var addHardcodedEntries = function (menuItems) {
     menuItems.unshift({url: '/profile', label: 'Action Items'});
     menuItems.push({url: '/profile/edit', label: 'Edit My Profile'});
+    menuItems.push({url: '/logout', label: 'Logout'})
     return menuItems;
 };
 
@@ -61,6 +62,7 @@ var buildMenuRoutes = function (links) {
 
 var Component = React.createClass({
     renderNavItems: function () {
+        console.log('last look at data');
         var menuItems = buildMenuRoutes(this.props.data);
 //        var menuItems = _.reduce(this.props.data, (a, i, k) => {
 //            if (i.label != null) {
