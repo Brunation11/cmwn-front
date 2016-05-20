@@ -15,7 +15,7 @@
         }
 
         button {
-            z-index: 2;
+            z-index: 1000;
             bottom: 15px;
             display: inline-block;
             float: left;
@@ -63,8 +63,7 @@
 
     @media (orientation: landscape) {
         iframe {
-            width: calc(50vmax * 1.77);
-            max-width: 100%;
+            width: calc(42vmax * 1.77);
             height: 50vmax;
             display: block;
             margin: auto;
@@ -73,7 +72,7 @@
         }
 
         button {
-            z-index: 2;
+            z-index: 1000;
             bottom: 15px;
             display: inline-block;
             float: left;
