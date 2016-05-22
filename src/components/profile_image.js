@@ -1,4 +1,5 @@
 import React from 'react';
+import {Button, ButtonToolbar, OverlayTrigger, Popover} from 'react-bootstrap'
 import Classnames from 'classnames';
 import { connect } from 'react-redux';
 
@@ -14,6 +15,7 @@ import 'components/profile_image.scss';
 const PIC_ALT = 'Profile Picture';
 const UPLOAD_ERROR = 'There was a problem uploading your image. Please refresh the page and try again.';
 const MODERATION = 'Your image has been submitted for moderation and should appear shortly.';
+const PENDING = 'Woah there World Changer! We\'re reviewing your image and it should appear shortly.';
 // const NO_IMAGE = 'There was a problem displaying your profile image. Please refresh the page to try again';
 
 var Component = React.createClass({
@@ -44,41 +46,45 @@ var Component = React.createClass({
         }
     },
     startUpload: function (e) {
-        var self = this;
-        e.stopPropagation();
-        Cloudinary.load((e_, err) => {
-            if (err != null) {
-                Toast.error(UPLOAD_ERROR);
-            }
-            /* eslint-disable camelcase*/
-            Cloudinary.instance.openUploadWidget({
-                cloud_name: 'changemyworldnow',
-                upload_preset: 'public-profile-image',
-                multiple: false,
-                resource_type: 'image',
-                cropping: 'server',
-                gravity: 'custom',
-                cropping_aspect_ratio: 1,
-                theme: 'minimal',
-            }, (error, result) => {
-                if (error !== null) {
-                    if (error.message === 'User closed widget') {
-                        return;
-                    }
-                }
-                self.setState({profileImage: result[0].secure_url});
-                HttpManager.POST({url: this.props.data.user_image.href}, {
-                    url: result[0].secure_url,
-                    image_id: result[0].public_id
-                }).then(() => {
-                    Toast.error(MODERATION);
-                }).catch(() => {
+        if (Store.getState().currentUser._embedded.image.is_moderated) {
+            var self = this;
+            e.stopPropagation();
+            Cloudinary.load((e_, err) => {
+                if (err != null) {
                     Toast.error(UPLOAD_ERROR);
-                    Log.error(e, 'Failed image upload');
+                }
+                /* eslint-disable camelcase*/
+                Cloudinary.instance.openUploadWidget({
+                    cloud_name: 'changemyworldnow',
+                    upload_preset: 'public-profile-image',
+                    multiple: false,
+                    resource_type: 'image',
+                    cropping: 'server',
+                    gravity: 'custom',
+                    cropping_aspect_ratio: 1,
+                    theme: 'minimal',
+                }, (error, result) => {
+                    if (error !== null) {
+                        if (error.message === 'User closed widget') {
+                            return;
+                        }
+                    }
+                    self.setState({profileImage: result[0].secure_url});
+                    HttpManager.POST({url: this.props.data.user_image.href}, {
+                        url: result[0].secure_url,
+                        image_id: result[0].public_id
+                    }).then(() => {
+                        Toast.error(MODERATION);
+                    }).catch(() => {
+                        Toast.error(UPLOAD_ERROR);
+                        Log.error(e, 'Failed image upload');
+                    });
                 });
+                /* eslint-enable camelcase */
             });
-            /* eslint-enable camelcase */
-        });
+        } else {
+            return;
+        }
     },
     renderImage: function (url) {
         var style = {'backgroundImage': `url(${url})`};
@@ -92,6 +98,21 @@ var Component = React.createClass({
             </div>
         );
     },
+    renderUploadButton: function () {
+        if (Store.getState().currentUser._embedded.image.isModerated) {
+            return (
+                <button className="upload" onClick={this.startUpload}>Upload Image</button>
+            )
+        } else {
+            return (
+                <ButtonToolbar>
+                    <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover>{PENDING}</Popover>}>
+                        <button className="upload" onClick={this.startUpload}>Upload Image</button>
+                    </OverlayTrigger>
+                </ButtonToolbar>
+            )
+        }
+    },
     render: function () {
         if (this.props.user_id == null) {
             return null;
@@ -99,8 +120,7 @@ var Component = React.createClass({
         return (
             <div className={Classnames('profile-image', {'link-below': this.props['link-below']})} >
                 {this.renderImage(this.state.profileImage)}
-                <div className="upload" onClick={this.startUpload}>Upload Image</div>
-                <div className="below"><span onClick={this.startUpload}>Upload New Image</span></div>
+                {this.renderUploadButton()}
             </div>
         );
     }
