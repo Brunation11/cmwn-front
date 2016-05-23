@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+echo "[post-merge] Checking for new modules"
+
+if [ "package.json" -nt "node_modules/" ]; then
+    echo "[post-merge] New package.json installing new packages"
+    npm install
+fi

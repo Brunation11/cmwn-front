@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
-eslint src
+echo "[pre-commit] Running linter"
+eslint `pwd`/src

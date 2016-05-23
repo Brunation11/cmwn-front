@@ -3,8 +3,9 @@ HOOK_NAMES="applypatch-msg pre-applypatch post-applypatch pre-commit prepare-com
 # assuming the script is in a bin directory, one level into the repo
 HOOK_DIR=$(git rev-parse --show-toplevel)/.git/hooks
 
+echo "Installing commit hooks"
+
 for hook in $HOOK_NAMES; do
-    echo "checking hook " $hook
     # If the hook already exists, is executable, and is not a symlink
     if [ ! -h $HOOK_DIR/$hook -a -x $HOOK_DIR/$hook ]; then
         mv $HOOK_DIR/$hook $HOOK_DIR/$hook.local
@@ -13,6 +14,5 @@ for hook in $HOOK_NAMES; do
     # create the symlink, overwriting the file if it exists
     # probably the only way this would happen is if you're using an old version of git
     # -- back when the sample hooks were not executable, instead of being named ____.sample
-        echo "Installing hook"
-        ln -s -f ../../bin/git-hooks/$hook $HOOK_DIR/$hook
+    ln -s -f ../../bin/git-hooks/$hook $HOOK_DIR/$hook
 done
