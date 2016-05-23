@@ -4,7 +4,7 @@ import assert from 'assert';
 import TestUtils from 'react-addons-test-utils';
 import { Provider } from 'react-redux';
 import {expect} from 'chai';
-/*
+
 import Users from 'routes/users';
 import Districts from 'routes/districts';
 import DistrictView from 'routes/districts/view';
@@ -25,7 +25,7 @@ import StudentEdit from 'routes/users/edit';
 import Game from 'routes/game';
 import ChangePassword from 'routes/change_password';
 import Store from 'components/store';
-*/
+
 //import App from 'app';
 /*
 var testComponentWithStore = function (component) {

@@ -14,6 +14,16 @@ global.window = win
 global.window.MODE = 'test';
 global.window.__cmwn = {};
 global.window.__cmwn.MODE = 'test';
+global.window.cmwn_token = '';
+global.window.localStorage = {
+    cmwn_token: '',
+    setItem: function (key, val) {
+        this[key] = val;
+    },
+    getItem: function () {
+        return '';
+    }
+};
 
 // take all properties of the window object and also attach it to the 
 // mocha global object

@@ -3,6 +3,11 @@ import { syncHistoryWithStore } from 'react-router-redux';
 
 import Store from 'components/store';
 
-const history = syncHistoryWithStore(browserHistory, Store);
+var history;
+try {
+    history = syncHistoryWithStore(browserHistory, Store);
+} catch(err) {
+    console.log(err);
+}
 
 export default history;
