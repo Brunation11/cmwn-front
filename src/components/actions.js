@@ -130,7 +130,7 @@ Actions = Actions.set(ACTION_CONSTANTS.START_RELOAD_PAGE, function (state) {
     return {
         type: ACTION_CONSTANTS.END_RELOAD_PAGE,
         payload: {
-            promise: HttpManager.GET({url: state.page.data._links.self})
+            promise: HttpManager.GET({url: state.page.data._links.self.href})
         }
     };
 });
