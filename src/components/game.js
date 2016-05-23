@@ -105,6 +105,7 @@ var Game = React.createClass({
         var self = this;
         if (e.keyCode === 27 || e.charCode === 27) {
             self.setState({fullscreenFallback: false});
+            Screenfull.exit();
         }
     },
     dispatchPlatformEvent(name, data) {
