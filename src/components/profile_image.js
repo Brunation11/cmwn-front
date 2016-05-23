@@ -1,4 +1,5 @@
 import React from 'react';
+import {Button, ButtonToolbar, OverlayTrigger, Popover} from 'react-bootstrap'
 import Classnames from 'classnames';
 import { connect } from 'react-redux';
 
@@ -14,6 +15,7 @@ import 'components/profile_image.scss';
 const PIC_ALT = 'Profile Picture';
 const UPLOAD_ERROR = 'There was a problem uploading your image. Please refresh the page and try again.';
 const MODERATION = 'Your image has been submitted for moderation and should appear shortly.';
+const PENDING = 'Woah there World Changer! We\'re reviewing your image and it should appear shortly. To continue uploading a new image click ';
 // const NO_IMAGE = 'There was a problem displaying your profile image. Please refresh the page to try again';
 
 var Component = React.createClass({
@@ -92,6 +94,21 @@ var Component = React.createClass({
             </div>
         );
     },
+    renderUploadButton: function () {
+        if (Store.getState().currentUser._embedded.image.isModerated) {
+            return (
+                <button className="upload" onClick={this.startUpload}>Upload Image</button>
+            )
+        } else {
+            return (
+                <ButtonToolbar>
+                    <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover>{PENDING}<strong onClick={this.startUpload}>here.</strong></Popover>}>
+                        <button className="upload">Upload Image</button>
+                    </OverlayTrigger>
+                </ButtonToolbar>
+            )
+        }
+    },
     render: function () {
         if (this.props.user_id == null) {
             return null;
@@ -99,8 +116,7 @@ var Component = React.createClass({
         return (
             <div className={Classnames('profile-image', {'link-below': this.props['link-below']})} >
                 {this.renderImage(this.state.profileImage)}
-                <div className="upload" onClick={this.startUpload}>Upload Image</div>
-                <div className="below"><span onClick={this.startUpload}>Upload New Image</span></div>
+                {this.renderUploadButton()}
             </div>
         );
     }
