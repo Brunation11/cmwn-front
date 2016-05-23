@@ -141,7 +141,6 @@ const mapStateToProps = state => {
         loading = state.page.loading;
         data = state.currentUser;
     }
-    debugger;
     return {
         data,
         loading
