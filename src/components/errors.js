@@ -59,13 +59,14 @@ var show404 = function () {
 
 var show500 = function (url) {
     var currentUser = {};
+    var link = '/';
+    var state;
     if (Store != null && Store.getState != null) {
+        state = Store.getState();
         currentUser = Store.getState().currentUser.without(['first_name', 'middle_name', 'last_name']);
-    }
-    var state = Store.getState();
-    var link = '/login';
-    if (state.currentUser.user_id != null) {
-        link = '/profile';
+        if (state.currentUser.user_id != null) {
+            link = '/profile';
+        }
     }
     _errors.push(
         <div id="triggerederror" className="error500"><a href={link} className="gohome"> </a><a onClick={() => window.location.reload()}> </a></div>
@@ -77,13 +78,14 @@ var show500 = function (url) {
 
 var showApplication = function (err) {
     var currentUser = {};
+    var link = '/';
+    var state;
     if (Store != null && Store.getState != null) {
+        state = Store.getState();
         currentUser = Store.getState().currentUser.without(['first_name', 'middle_name', 'last_name']);
-    }
-    var state = Store.getState();
-    var link = '/login';
-    if (state.currentUser.user_id != null) {
-        link = '/profile';
+        if (state.currentUser.user_id != null) {
+            link = '/profile';
+        }
     }
     _errors.push(
         <div id="triggerederror" className="applicationerror"><a href={link}> </a></div>

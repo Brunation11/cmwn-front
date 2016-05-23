@@ -2,10 +2,10 @@ import React from 'react';
 import _ from 'lodash';
 import ClassNames from 'classnames';
 import {Link} from 'react-router';
+import { connect } from 'react-redux';
 import {Button} from 'react-bootstrap';
 import Shortid from 'shortid';
 
-import Fetcher from 'components/fetcher';
 import Log from 'components/log';
 import HttpManager from 'components/http_manager';
 import FlipBoard from 'components/flipboard';
@@ -27,7 +27,9 @@ const PROFILE = 'View Profile';
 const REQUESTED = 'Accept Request';
 const PENDING = 'Request Pending';
 
-var Page = React.createClass({
+const PAGE_UNIQUE_IDENTIFIER = 'friends-page';
+
+var Component = React.createClass({
     getInitialState: function () {
         HttpManager.GET({url: GLOBALS.API_URL + 'users?include=roles,flips,images', handleErrors: false}).then(res => {
             this.friends = res.response.data;
@@ -72,6 +74,9 @@ var Page = React.createClass({
         item.relationship = type;
         item.image = _.has(item, 'images.data[0].url') ? item.images.data[0].url : DefaultProfile;
         item.flips = item.flips == null ? 0 : item.flips.data.length;
+        //_.map(data.friendrequests, this.transformFriend.bind(this, 'requested')),
+        //_.map(data.acceptedfriends, this.transformFriend.bind(this, 'accepted')),
+        //_.map(data.pendingfriends, this.transformFriend.bind(this, 'pending'))
         return item;
     },
     renderFlipsEarned: function (item) {
@@ -104,23 +109,32 @@ var Page = React.createClass({
     },
     render: function () {
         return (
-           <Layout className="friends-page">
+           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <form>
-                    <Fetcher ref="fetcher" url={ GLOBALS.API_URL + 'friends?include=roles,images,flips'} transform={data => {
-                        data = [].concat(
-                            _.map(data.friendrequests, this.transformFriend.bind(this, 'requested')),
-                            _.map(data.acceptedfriends, this.transformFriend.bind(this, 'accepted')),
-                            _.map(data.pendingfriends, this.transformFriend.bind(this, 'pending'))
-                        );
+                   <FlipBoard data={this.props.data} renderFlip={this.renderFlip} header={HEADINGS.FRIENDS} transform={data => {
                         return data;
-                    }}>
-                       <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.FRIENDS} />
-                    </Fetcher>
+                   }}/>
                 </form>
            </Layout>
         );
     }
 });
 
+const mapStateToProps = state => {
+    var data = [];
+    var loading = true;
+    if (state.page && state.page.data != null && state.page.data._embedded && state.page.data._embedded.friend) {
+        loading = state.page.loading;
+        data = state.page.data._embedded.friend;
+    }
+    return {
+        data,
+        loading
+    };
+};
+
+var Page = connect(mapStateToProps)(Component);
+Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
+
 
