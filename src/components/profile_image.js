@@ -21,7 +21,8 @@ const PENDING = 'Woah there World Changer! We\'re reviewing your image and it sh
 var Component = React.createClass({
     getInitialState: function () {
         return {
-            profileImage: GLOBALS.DEFAULT_PROFILE
+            profileImage: GLOBALS.DEFAULT_PROFILE,
+            isModerated: false
         };
     },
     componentDidMount: function () {
@@ -29,6 +30,7 @@ var Component = React.createClass({
         if (this.props.user_id === state.currentUser.user_id) {
             if (this.props.currentUser._embedded.image) {
                 this.setState({profileImage: this.props.currentUser._embedded.image.url});
+                this.setState({isModerated: this.props.currentUser._embedded.image.isModerated});
             }
         } else {
             this.setState({profileImage: GLOBALS.DEFAULT_PROFILE});
@@ -69,6 +71,7 @@ var Component = React.createClass({
                     }
                 }
                 self.setState({profileImage: result[0].secure_url});
+                self.setState({isModerated: false});
                 HttpManager.POST({url: this.props.data.user_image.href}, {
                     url: result[0].secure_url,
                     image_id: result[0].public_id
@@ -95,7 +98,7 @@ var Component = React.createClass({
         );
     },
     renderUploadButton: function () {
-        if (Store.getState().currentUser._embedded.image.isModerated) {
+        if (!this.props.currentUser._embedded.image || this.state.isModerated) {
             return (
                 <button className="upload" onClick={this.startUpload}>Upload Image</button>
             )
