@@ -2,23 +2,27 @@
 
 cat $PWD/bin/splash.txt
 
+docker-machine active
+if [ $? != 0 ]
+then
+    echo "[installer] no default docker-machine running"
+    echo "[installer] you should check for updates in composer.json yourself"
+    exit 1
+fi
 
-echo "[ui-installer] Installing hooks"
+echo "[installer] Installing hooks"
 bash $PWD/bin/install-git-hooks.sh
-
-echo "[ui-installer] Installing global packages"
-npm install -g eslint eslint-plugin-react eslint-plugin-babel babel-eslint gulp
-
-echo "[ui-installer] Installing node modules"
-npm install
-
-echo "[ui-installer] building production"
-gulp build --production
 
 echo "[api-installer] Building docker containers"
 eval $(docker-machine env)
 
 docker-compose build
+
+echo "[installer] Installing node modules"
+docker-compose run node npm install
+
+echo "[installer] building production"
+docker-compose run node gulp build --production
 
 DOCKER_IP=$(docker-machine ip)
 

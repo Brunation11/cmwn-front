@@ -1,14 +1,18 @@
-phpserver:
+php:
   build: ./docker/php
+  volumes:
+    - ./:/var/www/
+
+node:
+  build: ./docker/node
   volumes:
     - ./:/var/www/
 
 nginx:
   build: ./docker/nginx
   ports:
-    - "80:80"
     - "443:443"
   volumes:
     - ./:/var/www/
   links:
-    - phpserver
+    - php

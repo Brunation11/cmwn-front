@@ -1,7 +1,15 @@
 #!/usr/bin/env bash
+docker-machine active
+if [ $? != 0 ]
+then
+    echo "[post-merge] no default docker-machine running"
+    echo "[post-merge] you should check for updates in composer.json yourself"
+    exit 1
+fi
+
 echo "[post-merge] Checking for new modules"
 
 if [ "package.json" -nt "node_modules/" ]; then
     echo "[post-merge] New package.json installing new packages"
-    npm install
+    docker-compose run node npm install
 fi
