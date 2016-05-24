@@ -1,10 +1,11 @@
 import React from 'react';
 import _ from 'lodash';
-import {ButtonToolbar, OverlayTrigger, Panel, Popover, Button} from 'react-bootstrap';
+import {Panel} from 'react-bootstrap';
 import {Link} from 'react-router';
 import Shortid from 'shortid';
 import Moment from 'moment';
 
+import PopOver from 'components/popover';
 import 'components/trophycase.scss';
 
 import DISABLED_FLIP from 'media/flip-disabled.png';
@@ -39,15 +40,12 @@ var Trophycase = React.createClass({
         );
     },
     renderComplete: function (items) {
-        console.log(this.state);
         return (
             <div className="flip-list">
                 {_.map(items, (item) => (
-                    <ButtonToolbar className="flip float pulse buzz">
-                        <OverlayTrigger trigger="hover" rootClose placement="top" overlay={<Popover title={item.title + "  |  earned: " + Moment(item.earned).format('MMM Do YYYY')}>{item.description}</Popover>}>
-                            <Link to="" key={Shortid.generate()}><img src={`/flips/${item.flip_id}.png`} ></img></Link>
-                        </OverlayTrigger>
-                    </ButtonToolbar>
+                    <div className="flip float pulse buzz">
+                        <PopOver element={item} trigger="hover" placement="top"/>
+                    </div>
                 ))}
             </div>
         );
@@ -64,7 +62,6 @@ var Trophycase = React.createClass({
             <Panel className="trophycase standard" header={HEADINGS.FLIPBOARD}>
                 <div className="earned">
                     <span className="earned-header">{EARNED}<strong className="earned-value"> {complete.length}</strong></span>
-
                     {this.renderComplete(complete)}
                 </div>
                 <div className="in-progress hidden">
