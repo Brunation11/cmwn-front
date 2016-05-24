@@ -30,7 +30,7 @@ var Component = React.createClass({
         if (this.props.user_id === state.currentUser.user_id) {
             if (this.props.currentUser._embedded.image) {
                 this.setState({profileImage: this.props.currentUser._embedded.image.url});
-                this.setState({isModerated: this.props.currentUser._embedded.image.isModerated});
+                this.setState({isModerated: this.props.currentUser._embedded.image.is_moderated});
             }
         } else {
             this.setState({profileImage: GLOBALS.DEFAULT_PROFILE});
