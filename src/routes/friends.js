@@ -112,7 +112,7 @@ var Component = React.createClass({
            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <form>
                    <FlipBoard data={this.props.data} renderFlip={this.renderFlip} header={HEADINGS.FRIENDS} transform={data => {
-                        return data;
+                       return data;
                    }}/>
                 </form>
            </Layout>
