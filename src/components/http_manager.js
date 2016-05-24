@@ -6,9 +6,9 @@
 import _ from 'lodash';
 //import Cookie from 'cookie';
 
-import PublicRoutes from 'public_routes';
-import History from 'components/history';
-import Errors from 'components/errors';
+// import PublicRoutes from 'public_routes';
+// import History from 'components/history';
+// import Errors from 'components/errors';
 import Log from 'components/log';
 
 const APP_COOKIE_NAME = 'cmwn_token';
@@ -95,7 +95,7 @@ var _makeRequest = function (verb, requests){
                 xhr.open(verb, url, true);
 
                 xhr.withCredentials = true;
-                
+
                 xhr.setRequestHeader('Accept', 'application/json');
 
                 _.each(req.headers, (header, key) => {

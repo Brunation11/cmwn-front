@@ -1,0 +1,50 @@
+@import 'variables';
+
+.feed {
+
+    a {
+        color: $cmwn-purple;
+    }
+    .source-image {
+        height: 40px;
+        display: inline-block;
+        background-size: contain;
+        padding-right: 50px;
+        background-repeat: no-repeat;
+        float: left;
+    }
+    .source-user {
+        font-size: 14px;
+        font-weight: bold;
+    }
+    .source-date {
+        display: block;
+    }
+    .standard {
+
+        & > .image {
+            float: left;
+        }
+        .message {
+            padding: $standard;
+            display: inline-block;
+
+            p {
+                margin: 0;
+            }
+            h3 {
+                margin: 0;
+            }
+            .btn {
+                margin: 15px 0px 0px 7.5px;
+            }
+        }
+    }
+    li.feed-item {
+        margin-bottom: $standard;
+        border: #ddd solid 1px;
+        padding: $standard;
+        border-radius: $standard;
+        overflow: auto;
+    }
+}

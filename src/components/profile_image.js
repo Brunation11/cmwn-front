@@ -14,7 +14,7 @@ import 'components/profile_image.scss';
 const PIC_ALT = 'Profile Picture';
 const UPLOAD_ERROR = 'There was a problem uploading your image. Please refresh the page and try again.';
 const MODERATION = 'Your image has been submitted for moderation and should appear shortly.';
-const NO_IMAGE = 'There was a problem displaying your profile image. Please refresh the page to try again';
+// const NO_IMAGE = 'There was a problem displaying your profile image. Please refresh the page to try again';
 
 var Component = React.createClass({
     getInitialState: function () {
