@@ -4,53 +4,97 @@
     padding-bottom: 35px;
     text-align: center;
 
-    iframe {
-        width: calc(75vh * 1.77);
-        max-width: 100%;
-        height: 1px;
-        min-height: 75vh;
-        display: block;
-        margin: auto;
-        margin-bottom: $standard;
-
-    }
-
-    button {
-        z-index: 2;
-        bottom: 15px;
-        display: inline-block;
-        float: left;
-        margin-right: $standard;
-    }
-
-    &.fullscreen {
-        z-index: $z-override;
-        position: fixed;
-        width: 105vw;
-        height: 105vh;
-        background: black;
-        /*top: 0;*/
-        /*left: 0;*/
-        /*bottom: 0;*/
-        /*right: 0;*/
-        /*margin-left: -35px;*/
-        /*margin-top: -55px;*/
-
+    @media (orientation: portrait) {
         iframe {
-            z-index: $z-override;
-            position: fixed;
-            max-width: 100vw;
-            width: 100vw;
-            height: calc(100vw * 0.5625);
-            /*top: 50vh;*/
-            /*left: 0;*/
-            /*margin: auto;*/
-            /*transform: translateY(-55%);*/
-            /*z-index: 1000;*/
+            width: calc(50vmin * 1.77);
+            height: 50vmin;
+            display: block;
+            margin: auto;
+            margin-top: $standard;
+            margin-bottom: $standard;
         }
 
         button {
-            display: none;
+            z-index: 1000;
+            bottom: 15px;
+            display: inline-block;
+            float: left;
+            margin-right: $standard;
+        }
+
+        &.fullscreen {
+            z-index: $z-override;
+            position: fixed;
+            width: 105vw;
+            height: 105vh;
+            background: black;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+
+            iframe {
+                z-index: $z-override;
+                position: fixed;
+                width: 100vmin;
+                height: calc(100vmin * 0.5625);
+                transform: translateY(55%);
+            }
+
+            button {
+                display: none;
+            }
+        }
+    }
+
+    @media (orientation: landscape) {
+        iframe {
+            width: calc(42vmax * 1.77);
+            height: 50vmax;
+            display: block;
+            margin: auto;
+            margin-top: $standard;
+            margin-bottom: $standard;
+        }
+
+        button {
+            z-index: 1000;
+            bottom: 15px;
+            display: inline-block;
+            float: left;
+            margin-right: $standard;
+        }
+
+        &.fullscreen {
+            z-index: $z-override;
+            position: fixed;
+            width: 105vw;
+            height: 105vh;
+            background: black;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+
+            iframe {
+                z-index: $z-override;
+                position: fixed;
+                width: 100vmax;
+                height: calc(100vmax * 0.5625);
+                top: -0.5vmin;
+                margin: auto;
+            }
+
+            button {
+                display: none;
+            }
+        }
+
+        @media (max-device-width : 568px) {
+            iframe {
+                height: calc(75vmax * 0.5625);
+                top: -0.5vmin;
+            }
         }
     }
 }

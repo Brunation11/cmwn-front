@@ -1,4 +1,5 @@
 import React from 'react';
+import {ButtonToolbar, OverlayTrigger, Popover} from 'react-bootstrap';
 import Classnames from 'classnames';
 import { connect } from 'react-redux';
 
@@ -14,12 +15,14 @@ import 'components/profile_image.scss';
 const PIC_ALT = 'Profile Picture';
 const UPLOAD_ERROR = 'There was a problem uploading your image. Please refresh the page and try again.';
 const MODERATION = 'Your image has been submitted for moderation and should appear shortly.';
+const PENDING = 'Woah there World Changer! We\'re reviewing your image and it should appear shortly. To continue uploading a new image click ';
 // const NO_IMAGE = 'There was a problem displaying your profile image. Please refresh the page to try again';
 
 var Component = React.createClass({
     getInitialState: function () {
         return {
-            profileImage: GLOBALS.DEFAULT_PROFILE
+            profileImage: GLOBALS.DEFAULT_PROFILE,
+            isModerated: false
         };
     },
     componentDidMount: function () {
@@ -27,6 +30,7 @@ var Component = React.createClass({
         if (this.props.user_id === state.currentUser.user_id) {
             if (this.props.currentUser._embedded.image) {
                 this.setState({profileImage: this.props.currentUser._embedded.image.url});
+                this.setState({isModerated: this.props.currentUser._embedded.image.isModerated});
             }
         } else {
             this.setState({profileImage: GLOBALS.DEFAULT_PROFILE});
@@ -67,6 +71,7 @@ var Component = React.createClass({
                     }
                 }
                 self.setState({profileImage: result[0].secure_url});
+                self.setState({isModerated: false});
                 HttpManager.POST({url: this.props.data.user_image.href}, {
                     url: result[0].secure_url,
                     image_id: result[0].public_id
@@ -92,6 +97,21 @@ var Component = React.createClass({
             </div>
         );
     },
+    renderUploadButton: function () {
+        if (!this.props.currentUser._embedded.image || this.state.isModerated) {
+            return (
+                <button className="upload" onClick={this.startUpload}>Upload Image</button>
+            );
+        } else {
+            return (
+                <ButtonToolbar>
+                    <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover>{PENDING}<strong onClick={this.startUpload}>here.</strong></Popover>}>
+                        <button className="upload">Upload Image</button>
+                    </OverlayTrigger>
+                </ButtonToolbar>
+            );
+        }
+    },
     render: function () {
         if (this.props.user_id == null) {
             return null;
@@ -99,8 +119,7 @@ var Component = React.createClass({
         return (
             <div className={Classnames('profile-image', {'link-below': this.props['link-below']})} >
                 {this.renderImage(this.state.profileImage)}
-                <div className="upload" onClick={this.startUpload}>Upload Image</div>
-                <div className="below"><span onClick={this.startUpload}>Upload New Image</span></div>
+                {this.renderUploadButton()}
             </div>
         );
     }
