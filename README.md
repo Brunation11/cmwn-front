@@ -51,3 +51,7 @@ FAQ:
 __Q:__ I get the following error: "ERROR: Couldn't connect to Docker daemon - you might need to run 'docker-machine start default'."
 
 __A:__ This happens when you restart your computer or when you open a new terminal window.  Run: ``eval $(docker-machine env)``
+
+__Q:__ How can I run commands in the docker container
+
+__A:__ There is a default node container that you can use to run node type stuff.  In order to execute just run: `` docker-compose run node <command>``
