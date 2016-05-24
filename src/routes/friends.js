@@ -5,7 +5,6 @@ import {Link} from 'react-router';
 import {Button} from 'react-bootstrap';
 import Shortid from 'shortid';
 
-import Fetcher from 'components/fetcher';
 import Log from 'components/log';
 import HttpManager from 'components/http_manager';
 import FlipBoard from 'components/flipboard';
@@ -106,16 +105,9 @@ var Page = React.createClass({
         return (
            <Layout className="friends-page">
                 <form>
-                    <Fetcher ref="fetcher" url={ GLOBALS.API_URL + 'friends?include=roles,images,flips'} transform={data => {
-                        data = [].concat(
-                            _.map(data.friendrequests, this.transformFriend.bind(this, 'requested')),
-                            _.map(data.acceptedfriends, this.transformFriend.bind(this, 'accepted')),
-                            _.map(data.pendingfriends, this.transformFriend.bind(this, 'pending'))
-                        );
-                        return data;
-                    }}>
-                       <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.FRIENDS} />
-                    </Fetcher>
+                   <FlipBoard data={this.props.data} renderFlip={this.renderFlip} header={HEADINGS.FRIENDS} transform={data => {
+                       return data;
+                   }}/>
                 </form>
            </Layout>
         );
