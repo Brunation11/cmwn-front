@@ -30,7 +30,7 @@ var Component = React.createClass({
         if (this.props.user_id === state.currentUser.user_id) {
             if (this.props.currentUser._embedded.image) {
                 this.setState({profileImage: this.props.currentUser._embedded.image.url});
-                this.setState({isModerated: this.props.currentUser._embedded.image.isModerated});
+                this.setState({isModerated: this.props.currentUser._embedded.image.is_moderated});
             }
         } else {
             this.setState({profileImage: GLOBALS.DEFAULT_PROFILE});
@@ -105,7 +105,7 @@ var Component = React.createClass({
         } else {
             return (
                 <ButtonToolbar>
-                    <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover>{PENDING}<strong onClick={this.startUpload}>here.</strong></Popover>}>
+                    <OverlayTrigger trigger='click' rootClose placement='bottom' overlay={<Popover style={{color: 'gray'}}>{PENDING}<strong style={{color: '#7829bb'}} onClick={this.startUpload}>here.</strong></Popover>}>
                         <button className="upload">Upload Image</button>
                     </OverlayTrigger>
                 </ButtonToolbar>
