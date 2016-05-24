@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, ButtonToolbar, OverlayTrigger, Popover} from 'react-bootstrap'
+import {ButtonToolbar, OverlayTrigger, Popover} from 'react-bootstrap';
 import Classnames from 'classnames';
 import { connect } from 'react-redux';
 
@@ -101,7 +101,7 @@ var Component = React.createClass({
         if (!this.props.currentUser._embedded.image || this.state.isModerated) {
             return (
                 <button className="upload" onClick={this.startUpload}>Upload Image</button>
-            )
+            );
         } else {
             return (
                 <ButtonToolbar>
@@ -109,7 +109,7 @@ var Component = React.createClass({
                         <button className="upload">Upload Image</button>
                     </OverlayTrigger>
                 </ButtonToolbar>
-            )
+            );
         }
     },
     render: function () {
