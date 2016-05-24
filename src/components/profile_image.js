@@ -105,7 +105,7 @@ var Component = React.createClass({
         } else {
             return (
                 <ButtonToolbar>
-                    <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover>{PENDING}<strong style={{color: "7829bb"}} onClick={this.startUpload}>here.</strong></Popover>}>
+                    <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={<Popover style={{color: "gray"}}>{PENDING}<strong style={{color: "#7829bb"}} onClick={this.startUpload}>here.</strong></Popover>}>
                         <button className="upload">Upload Image</button>
                     </OverlayTrigger>
                 </ButtonToolbar>
