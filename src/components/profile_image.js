@@ -15,7 +15,8 @@ import 'components/profile_image.scss';
 const PIC_ALT = 'Profile Picture';
 const UPLOAD_ERROR = 'There was a problem uploading your image. Please refresh the page and try again.';
 const MODERATION = 'Your image has been submitted for moderation and should appear shortly.';
-const PENDING = 'Woah there World Changer! We\'re reviewing your image and it should appear shortly. To continue uploading a new image click ';
+const PENDINGHEADER = 'Woah there World Changer!';
+const PENDING = ' We\'re reviewing your image and it should appear shortly. Other users will continue to see your last approved image until we\'ve reviewed this one. To continue uploading a new image click ';
 // const NO_IMAGE = 'There was a problem displaying your profile image. Please refresh the page to try again';
 
 var Component = React.createClass({
@@ -105,7 +106,17 @@ var Component = React.createClass({
         } else {
             return (
                 <ButtonToolbar>
-                    <OverlayTrigger trigger='click' rootClose placement='bottom' overlay={<Popover style={{color: 'gray'}}>{PENDING}<strong style={{color: '#7829bb'}} onClick={this.startUpload}>here.</strong></Popover>}>
+                    <OverlayTrigger trigger='click' rootClose placement='bottom' overlay={
+                        <Popover style={{color: 'gray'}}>
+                            <strong className="test" style={{color: '#7829bb'}}>
+                                {PENDINGHEADER}
+                                <br />
+                            </strong>
+                            {PENDING}
+                            <strong style={{color: '#7829bb'}} onClick={this.startUpload}>
+                                here.
+                            </strong>
+                        </Popover>}>
                         <button className="upload">Upload Image</button>
                     </OverlayTrigger>
                 </ButtonToolbar>
