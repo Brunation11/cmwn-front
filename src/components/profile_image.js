@@ -106,7 +106,7 @@ var Component = React.createClass({
         } else {
             return (
                 <ButtonToolbar>
-                    <OverlayTrigger trigger='click' rootClose placement='bottom' overlay={
+                    <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={
                         <Popover style={{color: 'gray'}}>
                             <strong className="test" style={{color: '#7829bb'}}>
                                 {PENDINGHEADER}
