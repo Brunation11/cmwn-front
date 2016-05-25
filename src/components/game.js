@@ -118,7 +118,6 @@ var Game = React.createClass({
         if (Screenfull.enabled) {
             Screenfull.request(ReactDOM.findDOMNode(self.refs.gameRef));
             self.setState({fullscreenFallback: true});
-        } else {
         }
     },
     render: function () {
