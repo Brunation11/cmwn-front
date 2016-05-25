@@ -29,18 +29,17 @@ var Component = React.createClass({
                 this.setState({profileImage: this.props.currentUser._embedded.image.url});
             }
         } else {
-            this.setState({profileImage: GLOBALS.DEFAULT_PROFILE});
-            /** @TODO MPR, 3/9/16: get image from server when not available */
-            /*HttpManager.GET({url: `${GLOBALS.API_URL}users/${this.props.user_id}/image`, handleErrors: false})
-                .then(res => {
-                    if (res && res.response && res.response.data && res.response.data.length && _.isString(_.last(res.response.data).url)) {
-                        this.setState({profileImage: _.last(res.response.data).url});
-                    }
-                }).catch(e => {
-                    Toast.error(NO_IMAGE);
-                    Log.debug(e, 'Image could not be extracted from user');
-                });
-            */
+            HttpManager.GET({
+                url: (GLOBALS.API_URL + 'user/' + this.props.user_id + '/image'),
+                handleErrors: false
+            })
+            .then(res => {
+                this.setState({profileImage: res.response.url});
+            }).catch(e => {
+                Toast.error(NO_IMAGE);
+                Log.debug(e, 'Image could not be extracted from user');
+            });
+
         }
     },
     startUpload: function (e) {
