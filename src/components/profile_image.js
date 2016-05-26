@@ -17,7 +17,7 @@ const UPLOAD_ERROR = 'There was a problem uploading your image. Please refresh t
 const MODERATION = 'Your image has been submitted for moderation and should appear shortly.';
 const PENDINGHEADER = 'Woah there World Changer!';
 const PENDING = ' We\'re reviewing your image and it should appear shortly. Other users will continue to see your last approved image until we\'ve reviewed this one. To continue uploading a new image click ';
-// const NO_IMAGE = 'There was a problem displaying your profile image. Please refresh the page to try again';
+const NO_IMAGE = 'Looks like there was a problem displaying this users profile. Please refresh the page to try again.';
 
 var Component = React.createClass({
     getInitialState: function () {
@@ -34,18 +34,17 @@ var Component = React.createClass({
                 this.setState({isModerated: this.props.currentUser._embedded.image.is_moderated});
             }
         } else {
-            this.setState({profileImage: GLOBALS.DEFAULT_PROFILE});
-            /** @TODO MPR, 3/9/16: get image from server when not available */
-            /*HttpManager.GET({url: `${GLOBALS.API_URL}users/${this.props.user_id}/image`, handleErrors: false})
-                .then(res => {
-                    if (res && res.response && res.response.data && res.response.data.length && _.isString(_.last(res.response.data).url)) {
-                        this.setState({profileImage: _.last(res.response.data).url});
-                    }
-                }).catch(e => {
-                    Toast.error(NO_IMAGE);
-                    Log.debug(e, 'Image could not be extracted from user');
-                });
-            */
+            HttpManager.GET({
+                url: (GLOBALS.API_URL + 'user/' + this.props.user_id + '/image'),
+                handleErrors: false
+            })
+            .then(res => {
+                this.setState({profileImage: res.response.url});
+            }).catch(e => {
+                Toast.error(NO_IMAGE);
+                Log.error(e, 'Image could not be extracted from user');
+            });
+
         }
     },
     startUpload: function (e) {
