@@ -42,7 +42,7 @@ var Component = React.createClass({
     render: function () {
         var code = this.props.data.meta == null ? null : this.props.data.meta.code;
         var systemId = this.props.data.meta == null ? null : this.props.data.meta.system_id;
-        if (this.props.data.org_id == null || !Util.decodePermissions(this.props.data.scope).update) {
+        if (this.props.data.org_id == null) {
             return null;
         }
         return (
