@@ -350,6 +350,7 @@ var Component = React.createClass({
                     user_id={this.state.user_id}
                     url={this.state._links.password}
                 />
+                <ForgotPass data={this.props.data} user_id={this.state.user_id} />
                 <CodeChange data={this.props.data} user_id={this.state.user_id} />
             </Layout>
         );
@@ -394,6 +395,36 @@ var CodeChange = React.createClass({
                         onChange={e => this.setState({code: e.target.value})}
                     />
                     <Button onClick={this.submit}>Reset Code</Button>
+            </form></Panel>
+        );
+    }
+});
+
+//This forgot pass is for admins to manually code reset another adult
+var ForgotPass = React.createClass({
+    getInitialState: function () {
+        return {code: ''};
+    },
+    submit: function () {
+        if (this.props.data._links.forgot == null) {
+            return;
+        }
+        var update = HttpManager.POST({url: this.props.data._links.forgot.href }, {email: this.props.data.email});
+        update.then(() => {
+            Toast.success('Password reset code sent to user email.');
+        }).catch(err => {
+            Log.warn('Could not reset password at this time.' + (err.message ? ' Message: ' + err.message : ''), err);
+            Toast.error(ERRORS.BAD_PASS);
+        });
+    },
+    render: function () {
+        var state = Store.getState();
+        if (state.currentUser.user_id === this.props.user_id || this.props.data._links.forgot == null) {
+            return null;
+        }
+        return (
+            <Panel header={HEADINGS.UPDATE_CODE} className="standard"><form>
+                    <Button onClick={this.submit}>Reset Password</Button>
             </form></Panel>
         );
     }
