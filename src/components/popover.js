@@ -4,8 +4,6 @@ import {Link} from 'react-router';
 import Shortid from 'shortid';
 import Moment from 'moment';
 
-// import 'components/popover.scss';
-
 var PopOver = React.createClass({
   getInitialState: function () {
     return {
