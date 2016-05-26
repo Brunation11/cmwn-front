@@ -1,6 +1,8 @@
+build.zip
 .vagrant
 node_modules
 build
+build.zip
 **/*.swp
 **/*.swo
 .DS_Store
