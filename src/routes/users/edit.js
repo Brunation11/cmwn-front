@@ -329,7 +329,7 @@ var Component = React.createClass({
                 <Panel header={HEADINGS.EDIT_TITLE + this.state.first_name + ' ' + this.state.last_name} className="standard edit-profile">
                     <div className="left">
                         <ProfileImage user_id={this.props.data.user_id} link-below={true}/>
-                        <p><a onClick={this.suspendAccount}>{SUSPEND}</a></p>
+                        <p className={ClassNames({hidden: !Util.decodePermissions(this.props.data.scope).delete})}><a onClick={this.suspendAccount}>{SUSPEND}</a></p>
                     </div>
                     <div className="right">
                         {userType()}
