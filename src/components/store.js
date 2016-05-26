@@ -85,10 +85,10 @@ var authReducer = (currentUser = Immutable(storedUserProperties), action) => {
     if (action.type in reducers) {
         return reducers[action.type]();
     }
-    return currentUser;
+return currentUser;
 };
 
-var pageReducer = (page = Immutable({title: 'Change My World Now'}), action) => {
+var pageReducer = (page = Immutable({title: 'Change My World Now', item_count: 10, page_num: 1}), action) => {
     var reducers = {
         [ACTION_CONSTANTS.PAGE_TITLE]: function (page_, title) {
             return page_.set('title', title);
@@ -96,6 +96,8 @@ var pageReducer = (page = Immutable({title: 'Change My World Now'}), action) => 
         [ACTION_CONSTANTS.PAGE_LOADING]: function (page_) {
             page_ = page_.set('initialized', false);
             page_ = page_.without('data');
+            /* @TODO MPR, 5/25/16: Update from Laravel pagination names */
+            page_ = page_.merge({item_count: 10, page_num: 1});
             return page_.set('loading', true);
         }.bind(null, page),
         [ACTION_CONSTANTS.PAGE_LOADED]: function (page_) {
@@ -146,6 +148,7 @@ var locationReducer = (previousLoc = {}, action) => {
 };
 
 var componentReducer = (allComponents = Immutable({_componentsToLoad: 0, _componentsLoaded: 0}), action) => {
+    /* @TODO MPR, 5/25/16: Update from Laravel pagination names */
     var setComponentData = function (component) {
         var extractedEmbedded = _.reduce(action.data._embedded, (a, i) => i);
         component = component.set('loading', false);
