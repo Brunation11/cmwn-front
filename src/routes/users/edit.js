@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import ClassNames from 'classnames';
 import Moment from 'moment';
 
+import Actions from 'components/actions';
 import HttpManager from 'components/http_manager';
 import Log from 'components/log';
 import Toast from 'components/toast';
@@ -17,6 +18,7 @@ import ProfileImage from 'components/profile_image';
 import Form from 'components/form';
 import DropdownDatepicker from 'components/dropdown_datepicker';
 import Store from 'components/store';
+import ACTION_CONSTANTS from 'components/action_constants';
 
 import 'routes/users/edit.scss';
 
@@ -131,6 +133,7 @@ var Component = React.createClass({
         if (this.refs.formRef.isValid()) {
             HttpManager.PUT(`${GLOBALS.API_URL}user/${this.state.user_id}`, postData).then(() => {
                 Toast.success('Profile Updated');
+                Actions.dispatch[ACTION_CONSTANTS.UPDATE_USERNAME]({'username': this.state.username});
             }).catch(err => {
                 Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
                 Log.log('Server refused profile update', err, postData);

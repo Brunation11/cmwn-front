@@ -59,6 +59,10 @@ var authReducer = (currentUser = Immutable(storedUserProperties), action) => {
             });
             return Immutable(nextUser);
         }.bind(null, currentUser),
+        [ACTION_CONSTANTS.UPDATE_USERNAME]: function (currentUser_, username) {
+            var nextUser = currentUser.set('username', username);
+            return nextUser;
+        }.bind(null, currentUser, action.username),
         [ACTION_CONSTANTS.NO_USER_AUTHORIZED]: function (currentUser_, data) {
             currentUser_ = currentUser_.set('token', data.token);
             currentUser_ = currentUser_.merge(data);
