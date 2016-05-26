@@ -42,7 +42,7 @@ var Component = React.createClass({
                 this.setState({profileImage: res.response.url});
             }).catch(e => {
                 Toast.error(NO_IMAGE);
-                Log.debug(e, 'Image could not be extracted from user');
+                Log.error(e, 'Image could not be extracted from user');
             });
 
         }
