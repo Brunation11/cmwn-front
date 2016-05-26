@@ -24,7 +24,7 @@ const UserSource = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
 const HEADINGS = {
     MY_CLASSMATES: 'My Classmates',
     MY_STUDENTS: 'My Students',
-    CLASS: 'Class – '
+    CLASS: 'Class - '
 };
 
 const ADMIN_TEXT = 'Class Administrative Dashboard';
