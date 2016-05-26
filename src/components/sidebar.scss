@@ -2,11 +2,12 @@
 
 .sidebar {
     
-    .username {
+    .username, .username a {
         font-family: $cmwn-jade-font;
         font-size: 1.7rem;
         color: $cmwn-blue;
         cursor: pointer;
+        text-decoration: none;
     }
 
    .welcome {
