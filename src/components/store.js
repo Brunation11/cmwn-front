@@ -115,7 +115,19 @@ var pageReducer = (page = Immutable({title: 'Change My World Now'}), action) => 
             page_ = page_.set('data', action_.data);
             return page_;
         }.bind(null, page, action),
-        [ACTION_CONSTANTS.END_RELOAD_PAGE]: function (page_, action_) {
+        [ACTION_CONSTANTS.END_GET_NEXT_PAGE_PAGE]: function (page_, action_) {
+            page_ = page_.set('data', action_.data);
+            return page_;
+        }.bind(null, page, action),
+        [ACTION_CONSTANTS.END_CHANGE_PAGE_ROW_COUNT]: function (page_, action_) {
+            page_ = page_.set('data', action_.data);
+            return page_;
+        }.bind(null, page, action),
+        [ACTION_CONSTANTS.PAGE_DATA_REJECTED]: function (page_) {
+            //do something?
+            return page_;
+        }.bind(null, page, action),
+        [ACTION_CONSTANTS.END_RELOAD_PAGE_FULFILLED]: function (page_, action_) {
             page_ = page_.set('data', action_.data);
             return page_;
         }.bind(null, page, action)
@@ -146,6 +158,7 @@ var locationReducer = (previousLoc = {}, action) => {
 };
 
 var componentReducer = (allComponents = Immutable({_componentsToLoad: 0, _componentsLoaded: 0}), action) => {
+    /* @TODO MPR, 5/25/16: Update from Laravel pagination names */
     var setComponentData = function (component) {
         var extractedEmbedded = _.reduce(action.data._embedded, (a, i) => i);
         component = component.set('loading', false);
