@@ -50,3 +50,9 @@ We additionally define the following rules:
  
 
 ### Acceptable shorthand
+
+There are a few useful shortcuts for common tasks that are unorthodox but easy to identify and use if you are aware of them:
+ 
+  - Use the unary + to cast to a number (`+'3' === 3`) (Be aware of the [NaN results of this operation](http://jibbering.com/faq/notes/type-conversion/#tcNumber), however, and consider the other choices available in `Number()`, `ParseInteger()`, and `ParseNumber()`)
+  - Use the bitwise NOT (`~`) operator to quickly check the results of an .indexOf operation (e.g. `~'asdf'.indexOf('q') === 0`) (for your own edification, this works because the only number that becomes falsy after a bitwise NOT in the twos-compliment binary representation is -1)
+  - Use double NOT (`!!`, "bangbang") to cast to a boolean
