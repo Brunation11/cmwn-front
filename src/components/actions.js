@@ -136,6 +136,30 @@ Actions = Actions.set(ACTION_CONSTANTS.START_RELOAD_PAGE, function (state) {
     };
 });
 
+Actions = Actions.set(ACTION_CONSTANTS.GET_NEXT_PAGE_PAGE, function (state, pageNum) {
+    return {
+        type: ACTION_CONSTANTS.END_GET_NEXT_PAGE_PAGE,
+        payload: {
+            promise: HttpManager.GET({url: Util.modifyTemplatedQueryParams(
+                state.page.data._links.find.href,
+                {page: pageNum, per_page: state.currentUser._links[state.location.endpoint.slice(2)].page_size} //eslint-disable-line camelcase
+            )})
+        }
+    };
+});
+
+Actions = Actions.set(ACTION_CONSTANTS.CHANGE_PAGE_ROW_COUNT, function (state, itemCount) {
+    return {
+        type: ACTION_CONSTANTS.END_CHANGE_PAGE_ROW_COUNT,
+        payload: {
+            promise: HttpManager.GET({url: Util.modifyTemplatedQueryParams(
+                state.page.data._links.find.href,
+                {per_page: itemCount, page: state.currentUser._links[state.location.endpoint.slice(2)].page} //eslint-disable-line camelcase
+            ) })
+        }
+    };
+});
+
 Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentifier, componentName) {
     var endpoint;
     var state = Store.getState();
@@ -178,38 +202,38 @@ Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentif
     };
 });
 
-Actions = Actions.set(ACTION_CONSTANTS.GET_NEXT_PAGE_PAGE, function (state, endpointIdentifier, componentName, pageNum) {
+Actions = Actions.set(ACTION_CONSTANTS.GET_NEXT_COMPONENT_PAGE, function (state, endpointIdentifier, componentName, pageNum) {
     var endpoint = Util.modifyTemplatedQueryParams(
-        state.components[endpointIdentifier + '-' + componentName]._links.find, {
+        state.components[endpointIdentifier + '-' + componentName]._links.find.href, {
             page: pageNum,
             'per_page': state.components[endpointIdentifier + '-' + componentName].page_size
         }
     );
     return {
-        type: 'ACTION_CONSTANTS.GET_NEXT_PAGE_PAGE',
+        type: 'ACTION_CONSTANTS.GET_NEXT_COMPONENT_PAGE',
         payload: {
             promise: HttpManager.GET({url: endpoint}).then(server => {
                 return Promise.resolve((action, dispatch) => {
-                    dispatch(Actions.END_GET_NEXT_PAGE_PAGE({data: server.response, endpointIdentifier, componentName}));
+                    dispatch(Actions.END_GET_NEXT_COMPONENT_PAGE({data: server.response, endpointIdentifier, componentName}));
                 });
             })
         }
     };
 });
 
-Actions = Actions.set(ACTION_CONSTANTS.CHANGE_PAGE_ROW_COUNT, function (state, endpointIdentifier, componentName, rowCount) {
+Actions = Actions.set(ACTION_CONSTANTS.CHANGE_COMPONENT_ROW_COUNT, function (state, endpointIdentifier, componentName, rowCount) {
     var endpoint = Util.modifyTemplatedQueryParams(
-        state.components[endpointIdentifier + '-' + componentName]._links.find, {
+        state.components[endpointIdentifier + '-' + componentName]._links.find.href, {
             page: state.components[endpointIdentifier + '-' + componentName].page,
             'per_page': rowCount
         }
     );
     return {
-        type: 'ACTION_CONSTANTS.CHANGE_PAGE_ROW_COUNT',
+        type: 'ACTION_CONSTANTS.CHANGE_COMPONENT_ROW_COUNT',
         payload: {
             promise: HttpManager.GET({url: endpoint}).then(server => {
                 return Promise.resolve((action, dispatch) => {
-                    dispatch(Actions.END_CHANGE_PAGE_ROW_COUNT({data: server.response, endpointIdentifier, componentName}));
+                    dispatch(Actions.END_CHANGE_COMPONENT_ROW_COUNT({data: server.response, endpointIdentifier, componentName}));
                 });
             })
         }
