@@ -85,10 +85,10 @@ var authReducer = (currentUser = Immutable(storedUserProperties), action) => {
     if (action.type in reducers) {
         return reducers[action.type]();
     }
-return currentUser;
+    return currentUser;
 };
 
-var pageReducer = (page = Immutable({title: 'Change My World Now', item_count: 10, page_num: 1}), action) => {
+var pageReducer = (page = Immutable({title: 'Change My World Now', itemCount: 10, pageNum: 1}), action) => {
     var reducers = {
         [ACTION_CONSTANTS.PAGE_TITLE]: function (page_, title) {
             return page_.set('title', title);
@@ -97,7 +97,7 @@ var pageReducer = (page = Immutable({title: 'Change My World Now', item_count: 1
             page_ = page_.set('initialized', false);
             page_ = page_.without('data');
             /* @TODO MPR, 5/25/16: Update from Laravel pagination names */
-            page_ = page_.merge({item_count: 10, page_num: 1});
+            page_ = page_.merge({itemCount: 10, pageNum: 1});
             return page_.set('loading', true);
         }.bind(null, page),
         [ACTION_CONSTANTS.PAGE_LOADED]: function (page_) {
@@ -112,6 +112,12 @@ var pageReducer = (page = Immutable({title: 'Change My World Now', item_count: 1
             page_ = page_.set('title', action_.title);
             page_ = page_.set('data', action_.data);
             return page_;
+        }.bind(null, page, action),
+        [ACTION_CONSTANTS.END_GET_NEXT_COMPONENT_PAGE]: function (page_, action_) {
+            return page_.set('itemCount', action_.itemCount).set('pageNum', action_.pageNum);
+        }.bind(null, page, action),
+        [ACTION_CONSTANTS.END_CHANGE_COMPONENT_ROW_COUNT]: function (page_, action_) {
+            return page_.set('itemCount', action_.itemCount).set('pageNum', action_.pageNum);
         }.bind(null, page, action),
         [ACTION_CONSTANTS.PAGE_DATA_REJECTED]: function (page_) {
             //do something?
