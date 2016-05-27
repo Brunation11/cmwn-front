@@ -45,8 +45,6 @@ var Component = React.createClass({
                     Toast.error(NO_IMAGE);
                     Log.error(e, 'Image could not be extracted from user');
                 });
-            } else {
-                this.setState({profileImage: GLOBALS.DEFAULT_PROFILE});
             }
         }
     },
