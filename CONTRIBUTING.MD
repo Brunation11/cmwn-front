@@ -1,7 +1,7 @@
 # CMWN Javascript Style Guide
 
 ## Overview
-As a general rule, all Javascript code being contributed to CMWN should follow the rules outlined in this document. For any rules not specified here, style rules should conform to the Standard Javascript Style. For arbitrary style choices (e.g. tabs vs spaces) we defer to PHP PSR1 for maximum overall consistency across all repositories whenever possible. CMWN JS is also following the ECMAScript 2015 standard (formerly ES6), and any syntax supported by this standard is allowed.
+As a general rule, all Javascript code being contributed to CMWN should follow the rules outlined in this document. For any rules not specified here, style rules should conform to the [Standard Javascript Style](http://standardjs.com/rules.htmlhttp://standardjs.com/rules.html). For arbitrary style choices (e.g. tabs vs spaces) we defer to [PHP PSR1](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md) for maximum overall consistency across all repositories whenever possible. CMWN JS is also following the [ECMAScript 2015 standard](https://babeljs.io/docs/learn-es2015/) (formerly ES6), and any syntax supported by this standard is allowed.
    
 A breif summary of the Standard JS style rules followed by this repository:
  - Always use single quotes
