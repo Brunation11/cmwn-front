@@ -3,7 +3,9 @@
 ## The Golden Rule
 
 Borrowed from the excellent commuinty style guide [idiomatic.js](https://github.com/rwaldron/idiomatic.js/#dont-do-stupid-shit-and-everything-will-be-ok):   
- > "**Don't do stupid shit and everything will be ok**"
+ > "**Don't do stupid shit and everything will be ok**"   
+ 
+ Common sense should be the rule of the land. We are attempting to make a large codebase appear as if it were crafted by a single hand, and there will be issues not covered by this guide. If you are unsure about a decision you are making, just ask someone. We are all in this together.
 
 ## Overview
 As a general rule, all Javascript code being contributed to CMWN should follow the rules outlined in this document. For any rules not specified here, style rules should conform to the [Standard Javascript Style](http://standardjs.com/rules.htmlhttp://standardjs.com/rules.html). For arbitrary style choices (e.g. tabs vs spaces) we defer to [PHP PSR1](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md) for maximum overall consistency across all repositories whenever possible. CMWN JS is also following the [ECMAScript 2015 standard](https://babeljs.io/docs/learn-es2015/) (formerly ES6), and any syntax supported by this standard is allowed.
@@ -54,10 +56,17 @@ We additionally define the following rules:
  - Do not access `this` before calling `super()` in a class function
  
 
-### Acceptable shorthand
+## Acceptable shorthand
 
 There are a few useful shortcuts for common tasks that are unorthodox but easy to identify and use if you are aware of them:
  
   - Use the unary + to cast to a number (`+'3' === 3`) (Be aware of the [NaN results of this operation](http://jibbering.com/faq/notes/type-conversion/#tcNumber), however, and consider the other choices available in `Number()`, `ParseInteger()`, and `ParseNumber()`)
   - Use the bitwise NOT (`~`) operator to quickly check the results of an .indexOf operation (e.g. `~'asdf'.indexOf('q') === 0`) (for your own edification, this works because the only number that becomes falsy after a bitwise NOT in the twos-compliment binary representation is -1)
   - Use double NOT (`!!`, "bangbang") to cast to a boolean
+
+## Further Reading
+
+Most of our style rules have been taken from one of the two following sources. If you come across something not in StandardJS or PSR1, these two guides are good sources for well thought out, in depth discussions of the merits and reasons for a variety of JavaScript style choices:
+
+- [Idiomatic.JS](https://github.com/rwaldron/idiomatic.js/) - Open source, community JS language and usage standards
+- [AirBnB Style Guide](https://github.com/airbnb/javascript/tree/master/es5) - AirBnB's open source style guide. Goes deep into all aspects of using the JS language.
