@@ -34,17 +34,20 @@ var Component = React.createClass({
                 this.setState({isModerated: this.props.currentUser._embedded.image.is_moderated});
             }
         } else {
-            HttpManager.GET({
-                url: (GLOBALS.API_URL + 'user/' + this.props.user_id + '/image'),
-                handleErrors: false
-            })
-            .then(res => {
-                this.setState({profileImage: res.response.url});
-            }).catch(e => {
-                Toast.error(NO_IMAGE);
-                Log.error(e, 'Image could not be extracted from user');
-            });
-
+            if (this.props.currentUser._embedded.image) {
+                HttpManager.GET({
+                    url: (GLOBALS.API_URL + 'user/' + this.props.user_id + '/image'),
+                    handleErrors: false
+                })
+                .then(res => {
+                    this.setState({profileImage: res.response.url});
+                }).catch(e => {
+                    Toast.error(NO_IMAGE);
+                    Log.error(e, 'Image could not be extracted from user');
+                });
+            } else {
+                this.setState({profileImage: GLOBALS.DEFAULT_PROFILE});
+            }
         }
     },
     startUpload: function (e) {
