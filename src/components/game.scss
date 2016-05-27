@@ -35,7 +35,8 @@
                 position: fixed;
                 width: $game-fullscreen-width-portrait;
                 height: $game-fullscreen-height-portrait;
-                transform: translateY(55%);
+                top:50%;
+                transform: translateY(-50%);
             }
 
             button {
@@ -78,7 +79,8 @@
                 position: fixed;
                 width: $game-fullscreen-width-landscape;
                 height: $game-fullscreen-height-landscape;
-                top: -0.5vmin;
+                top:50%;
+                transform: translateY(-50%);
                 margin: auto;
             }
 
