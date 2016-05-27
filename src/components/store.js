@@ -88,7 +88,7 @@ var authReducer = (currentUser = Immutable(storedUserProperties), action) => {
     return currentUser;
 };
 
-var pageReducer = (page = Immutable({title: 'Change My World Now', itemCount: 10, pageNum: 1}), action) => {
+var pageReducer = (page = Immutable({title: 'Change My World Now'}), action) => {
     var reducers = {
         [ACTION_CONSTANTS.PAGE_TITLE]: function (page_, title) {
             return page_.set('title', title);
@@ -96,8 +96,6 @@ var pageReducer = (page = Immutable({title: 'Change My World Now', itemCount: 10
         [ACTION_CONSTANTS.PAGE_LOADING]: function (page_) {
             page_ = page_.set('initialized', false);
             page_ = page_.without('data');
-            /* @TODO MPR, 5/25/16: Update from Laravel pagination names */
-            page_ = page_.merge({itemCount: 10, pageNum: 1});
             return page_.set('loading', true);
         }.bind(null, page),
         [ACTION_CONSTANTS.PAGE_LOADED]: function (page_) {
@@ -113,11 +111,13 @@ var pageReducer = (page = Immutable({title: 'Change My World Now', itemCount: 10
             page_ = page_.set('data', action_.data);
             return page_;
         }.bind(null, page, action),
-        [ACTION_CONSTANTS.END_GET_NEXT_COMPONENT_PAGE]: function (page_, action_) {
-            return page_.set('itemCount', action_.itemCount).set('pageNum', action_.pageNum);
+        [ACTION_CONSTANTS.END_GET_NEXT_PAGE_PAGE]: function (page_, action_) {
+            page_ = page_.set('data', action_.data);
+            return page_;
         }.bind(null, page, action),
-        [ACTION_CONSTANTS.END_CHANGE_COMPONENT_ROW_COUNT]: function (page_, action_) {
-            return page_.set('itemCount', action_.itemCount).set('pageNum', action_.pageNum);
+        [ACTION_CONSTANTS.END_CHANGE_PAGE_ROW_COUNT]: function (page_, action_) {
+            page_ = page_.set('data', action_.data);
+            return page_;
         }.bind(null, page, action),
         [ACTION_CONSTANTS.PAGE_DATA_REJECTED]: function (page_) {
             //do something?
