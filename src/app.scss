@@ -217,7 +217,10 @@ h1, h2, h3 {
 
     .global-header {
         position: relative;
+<<<<<<< HEAD
         z-index: $z-nav + 1;
+=======
+>>>>>>> release/bulbasaur
         max-width: $monitor-max-break;
         height: 115px;
     }
@@ -310,6 +313,7 @@ h1, h2, h3 {
     }
 
     .menu {
+        z-index: $z-nav + 1;
         display: none;
         padding: $standard / 2;
         width: $logout-size - ($standard / 2);
