@@ -72,7 +72,7 @@ var Component = React.createClass({
                     }
                 }
                 self.setState({profileImage: result[0].secure_url});
-                this.setState({isModerated: false});
+                self.setState({isModerated: false});
                 HttpManager.POST({url: this.props.data.user_image.href}, {
                     url: result[0].secure_url,
                     image_id: result[0].public_id
