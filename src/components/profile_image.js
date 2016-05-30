@@ -72,12 +72,12 @@ var Component = React.createClass({
                     }
                 }
                 self.setState({profileImage: result[0].secure_url});
-                self.setState({isModerated: false});
                 HttpManager.POST({url: this.props.data.user_image.href}, {
                     url: result[0].secure_url,
                     image_id: result[0].public_id
                 }).then(() => {
                     Toast.error(MODERATION);
+                    this.setState({isModerated: false});
                 }).catch(() => {
                     Toast.error(UPLOAD_ERROR);
                     Log.error(e, 'Failed image upload');
@@ -107,13 +107,13 @@ var Component = React.createClass({
             return (
                 <ButtonToolbar>
                     <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={
-                        <Popover style={{color: 'gray'}}>
+                        <Popover id="upload" style={{color: 'gray'}}>
                             <strong className="test" style={{color: '#7829bb'}}>
                                 {PENDINGHEADER}
                                 <br />
                             </strong>
                             {PENDING}
-                            <strong style={{color: '#7829bb'}} onClick={this.startUpload}>
+                            <strong style={{color: '#7829bb', cursor: 'pointer'}} onClick={this.startUpload}>
                                 here.
                             </strong>
                         </Popover>}>
