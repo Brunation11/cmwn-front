@@ -72,12 +72,12 @@ var Component = React.createClass({
                     }
                 }
                 self.setState({profileImage: result[0].secure_url});
+                this.setState({isModerated: false});
                 HttpManager.POST({url: this.props.data.user_image.href}, {
                     url: result[0].secure_url,
                     image_id: result[0].public_id
                 }).then(() => {
                     Toast.error(MODERATION);
-                    this.setState({isModerated: false});
                 }).catch(() => {
                     Toast.error(UPLOAD_ERROR);
                     Log.error(e, 'Failed image upload');
@@ -99,7 +99,7 @@ var Component = React.createClass({
         );
     },
     renderUploadButton: function () {
-        if (!this.props.currentUser._embedded.image || this.state.isModerated) {
+        if ((this.state.profileImage === GLOBALS.DEFAULT_PROFILE) || this.state.isModerated) {
             return (
                 <button className="upload" onClick={this.startUpload}>Upload Image</button>
             );
