@@ -12,7 +12,6 @@ import ProfileImage from 'components/profile_image';
 import FlipBoard from 'components/flipboard';
 import Game from 'components/game';
 import EventManager from 'components/event_manager';
-import EditLink from 'components/edit_link';
 import Trophycase from 'components/trophycase';
 import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
@@ -189,7 +188,7 @@ var Profile = React.createClass({
             year = Moment(this.state.birthdate).year();
         return (
             <div>
-                <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className='standard'>
+                <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
                     <div className="left">
                         <div className="frame">
                             <ProfileImage user_id={this.state.user_id} link-below={true}/>
@@ -231,8 +230,6 @@ var Profile = React.createClass({
         if (this.state.username == null) {
             return null;
         }
-        console.log(this.state.user_id);
-        console.log(state.currentUser.user_id);
         var profile = (this.state.user_id === state.currentUser.user_id) ? this.renderCurrentUserProfile : this.renderUserProfile;
         return (
            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
