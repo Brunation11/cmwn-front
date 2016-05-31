@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+docker-machine active
+if [ $? != 0 ]
+then
+    echo "[pre-commit] no default docker-machine running"
+    exit 1
+fi
+
+echo "[pre-commit] Running lint"
+docker-compose run node eslint `pwd`/src
