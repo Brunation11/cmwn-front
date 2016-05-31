@@ -96,7 +96,7 @@ var Profile = React.createClass({
     },
     renderGame: function () {
         var flipUrl = this.state._links.user_flip ? this.state._links.user_flip.href : null;
-        if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe9() || Detector.isIe10() || Detector.isIe11() || Detector.isFirefox() || Detector.isEdge())) {
+        if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe10())) {
             return (
                 <div>
                     {BROWSER_NOT_SUPPORTED}

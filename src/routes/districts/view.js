@@ -1,9 +1,11 @@
 import React from 'react';
 import _ from 'lodash';
+import ClassNames from 'classnames';
 import {Panel} from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import Layout from 'layouts/two_col';
+
 import EditLink from 'components/edit_link';
 import Toast from 'components/toast';
 import QueryString from 'query-string';
@@ -11,11 +13,12 @@ import Util from 'components/util';
 import History from 'components/history';
 import GenerateDataSource from 'components/datasource';
 import Text from 'components/nullable_text';
+import Store from 'components/store';
 import {Table, Column} from 'components/table';
 
 const DISTRICT_CREATED = 'Disctrict created successfully';
 const HEADINGS = {
-    TITLE: 'District Administrative Dashboard: ',
+    TITLE: 'District Dashboard: ',
     ID: 'ID',
     NAME: 'District Name',
     CODE: 'District Code',
@@ -40,9 +43,11 @@ var Component = React.createClass({
         }
     },
     render: function () {
+        var state = Store.getState();
         var code = this.props.data.meta == null ? null : this.props.data.meta.code;
         var systemId = this.props.data.meta == null ? null : this.props.data.meta.system_id;
-        if (this.props.data.org_id == null || !Util.decodePermissions(this.props.data.scope).update) {
+        var showHelpers = state.currentUser.type === 'ADULT';
+        if (this.props.data.org_id == null) {
             return null;
         }
         return (
@@ -61,7 +66,7 @@ var Component = React.createClass({
                     <br />
                     <Text label={`${HEADINGS.DESCRIPTION}: `} text={this.props.data.description}><p></p></Text>
                 </Panel>
-                <Panel header={HEADINGS.SCHOOLS} className="standard">
+                <Panel header={HEADINGS.SCHOOLS} className={ClassNames('standard', {hidden: !showHelpers})}>
                     <a onClick={() => History.push('/schools')}>View All Your Schools</a>
                     <SchoolSource>
                         <Table className="admin">
@@ -84,7 +89,7 @@ var Component = React.createClass({
                         </Table>
                     </SchoolSource>
                 </Panel>
-                <Panel header={HEADINGS.CLASSES} className="standard">
+                <Panel header={HEADINGS.CLASSES} className={ClassNames('standard', {hidden: !showHelpers})}>
                     <a onClick={() => History.push('/classes')}>View All Your Classes</a>
                     <ClassSource>
                         <Table className="admin">
@@ -107,7 +112,7 @@ var Component = React.createClass({
                         </Table>
                     </ClassSource>
                 </Panel>
-                <Panel header={HEADINGS.USERS} className="standard">
+                <Panel header={HEADINGS.USERS} className={ClassNames('standard', {hidden: !showHelpers})}>
                     <a onClick={() => History.push('/users')}>View All Your Users</a>
                     <UserSource>
                         <Table className="admin">
