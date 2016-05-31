@@ -421,6 +421,7 @@ h1, h2, h3 {
 
         .sidebar {
             padding: $standard;
+            border-bottom: ($standard * 4) solid #fff;
             background: #fff;
             position: fixed;
             top: 0;
@@ -429,8 +430,8 @@ h1, h2, h3 {
             width: 100%;
             overflow-y: scroll;
             transition: right  1s ease-in-out;
-            min-height: 100vh;
-            z-index: $z-nav;
+            height: 100vmax;
+            z-index:  $z-nav;
 
             &.open {
                 right: 0;

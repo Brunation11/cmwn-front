@@ -35,7 +35,8 @@ var Paginator = React.createClass({
     getDefaultProps: function () {
         return {
             onPageChange: _.identity,
-            onRowCountChange: _.identity
+            onRowCountChange: _.identity,
+            pagePaginator: false
         };
     },
     getInitialState: function () {
@@ -45,13 +46,21 @@ var Paginator = React.createClass({
             pageCount: this.props.pageCount || 1
         };
     },
-    selectPage: function (pageNum) {
+    selectPage: function (pageNum, isPagePaginator = this.props.pagePaginator) {
         this.props.onPageChange(pageNum);
-        Actions.GET_NEXT_COMPONENT_PAGE(Store.getState(), this.props.endpointIdentifier, this.props.componentName, pageNum);
+        if (isPagePaginator) {
+            Actions.GET_NEXT_PAGE_PAGE(Store.getState(), pageNum);
+        } else {
+            Actions.GET_NEXT_COMPONENT_PAGE(Store.getState(), this.props.endpointIdentifier, this.props.componentName, pageNum);
+        }
     },
-    selectRowCount: function (e, count) {
+    selectRowCount: function (e, count, isPagePaginator = this.props.pagePaginator) {
         this.props.onRowCountChange(count);
-        Actions.CHANGE_COMPONENT_ROW_COUNT(Store.getState(), this.props.endpointIdentifier, this.props.componentName, count);
+        if (isPagePaginator) {
+            Actions.CHANGE_PAGE_ROW_COUNT(Store.getState(), count);
+        } else {
+            Actions.CHANGE_COMPONENT_ROW_COUNT(Store.getState(), this.props.endpointIdentifier, this.props.componentName, count);
+        }
     },
     renderPageSelectors: function () {
         return _.map(_getButtonPattern(this.state.currentPage, this.state.pageCount), value => {
