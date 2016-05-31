@@ -41,8 +41,13 @@ var Component = React.createClass({
             .then(res => {
                 this.setState({profileImage: res.response.url});
             }).catch(e => {
-                Toast.error(NO_IMAGE);
-                Log.error(e, 'Image could not be extracted from user');
+                if (e.status === 404) {
+                    //if a user has never uploaded an image, we expect a 404
+                    this.setState({profileImage: GLOBALS.DEFAULT_PROFILE});
+                } else {
+                    Toast.error(NO_IMAGE);
+                    Log.error(e, 'Image could not be extracted from user');
+                }
             });
 
         }
