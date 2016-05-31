@@ -2,7 +2,6 @@ import React from 'react';
 
 import HttpManager from 'components/http_manager';
 import Log from 'components/log';
-import UpdateUsername from 'components/update_username';
 import History from 'components/history';
 import Toast from 'components/toast';
 import Store from 'components/store';
@@ -22,7 +21,6 @@ const ERRORS = {
 };
 const CHANGE_COPY = 'You are required to change your password before using ChangeMyWorldNow.com. Please update your password using the form below to proceed.';
 
-const USERNAME_COPY = 'You may also optionally set a different username from the one automatically assigned to you.';
 
 var isPassValid = function (password) {
     return password.length >= 8 && ~password.search(/[0-9]+/);
@@ -74,6 +72,10 @@ var ChangePassword = React.createClass({
             update.then(() => {
                 History.replace('/profile?message=updated');
             }).catch(err => {
+                if (err.status === 0) {
+                    //non-error response from update password indicates password already changed successfully
+                    History.replace('/profile?message=updated');
+                }
                 Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
                 Toast.error(ERRORS.BAD_PASS);
             });
@@ -124,7 +126,6 @@ var ChangePassword = React.createClass({
                     <Button onClick={this.submit}>Update</Button>
                     </form>
                 </Panel>
-                <UpdateUsername username="neat_max" copy={USERNAME_COPY}/>
             </div>
         );
     }

@@ -59,6 +59,10 @@ var authReducer = (currentUser = Immutable(storedUserProperties), action) => {
             });
             return Immutable(nextUser);
         }.bind(null, currentUser),
+        [ACTION_CONSTANTS.UPDATE_USERNAME]: function (currentUser_, username) {
+            var nextUser = currentUser.set('username', username);
+            return nextUser;
+        }.bind(null, currentUser, action.username),
         [ACTION_CONSTANTS.NO_USER_AUTHORIZED]: function (currentUser_, data) {
             currentUser_ = currentUser_.set('token', data.token);
             currentUser_ = currentUser_.merge(data);
@@ -73,12 +77,12 @@ var authReducer = (currentUser = Immutable(storedUserProperties), action) => {
             //eventually this will need to be broken out into a fourth section
             //with its own url template binding rules, but for the time being
             //there is no difference between /users and /org/my-org/users
-            if (_.has(action, 'data._embedded.organizations[0]._links.org_users')) {
-                currentUser_ = currentUser_.setIn(['_links', 'user'], _.defaults(
-                    {label: 'Friends and Network', view_url: '/users'}, // eslint-disable-line camelcase
-                    action.data._embedded.organizations[0]._links.org_users
-                ));
-            }
+            //if (_.has(action, 'data._embedded.organizations[0]._links.org_users')) {
+            //    currentUser_ = currentUser_.setIn(['_links', 'user'], _.defaults(
+            //        {label: 'Friends and Network', view_url: '/users'}, // eslint-disable-line camelcase
+            //        action.data._embedded.organizations[0]._links.org_users
+            //    ));
+            //}
             return currentUser_;
         }.bind(null, currentUser, action.data)
     };

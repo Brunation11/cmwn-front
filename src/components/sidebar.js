@@ -18,7 +18,7 @@ var Component = React.createClass({
         return (
             <div>
                 <p className="welcome">{WELCOME}</p>
-                <p className="username">{this.props.currentUser.username}<a onClick={this.attemptNavigate} > </a></p>
+                <p className="username"><a onClick={this.attemptNavigate} >{this.props.currentUser.username}</a></p>
             </div>
         );
     },

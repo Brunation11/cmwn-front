@@ -44,6 +44,7 @@ const ACTIONS = [
     'END_RELOAD_PAGE_FULFILLED',
     'NO_USER_AUTHORIZED',
     'DESTROY_CURRENT_USER',
+    'UPDATE_USERNAME',
 ];
 
 export default _.reduce(ACTIONS, (a, i) => _.defaults(a, {[i]: i}), {});

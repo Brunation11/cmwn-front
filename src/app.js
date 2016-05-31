@@ -238,7 +238,7 @@ var AppComponent = React.createClass({
 const mapStateToProps = state => {
     var currentUser = {};
     if (state.currentUser != null) {
-        currentUser = state.page.data;
+        currentUser = state.currentUser;
     }
     return {
         currentUser
