@@ -7,7 +7,9 @@
     @media (orientation: portrait) {
         iframe {
             width: $game-responsive-width-portrait;
+            max-width: $game-responsive-width-portrait;
             height: $game-responsive-height-portrait;
+            max-height: $game-responsive-height-portrait;
             display: block;
             margin: $standard auto;
         }
@@ -34,8 +36,11 @@
                 z-index: $z-override;
                 position: fixed;
                 width: $game-fullscreen-width-portrait;
+                max-width: $game-fullscreen-width-portrait;
                 height: $game-fullscreen-height-portrait;
-                transform: translateY(55%);
+                max-height: $game-fullscreen-height-portrait;
+                top: 50%;
+                transform: translateY(-55%);
             }
 
             button {
@@ -47,11 +52,11 @@
     @media (orientation: landscape) {
         iframe {
             width: $game-responsive-width-landscape;
+            max-width: $game-responsive-width-landscape;
             height: $game-responsive-height-landscape;
+            max-height: $game-responsive-height-landscape;
             display: block;
-            margin: auto;
-            margin-top: $standard;
-            margin-bottom: $standard;
+            margin: $standard auto;
         }
 
         button {
@@ -77,9 +82,12 @@
                 z-index: $z-override;
                 position: fixed;
                 width: $game-fullscreen-width-landscape;
+                max-width: $game-fullscreen-width-landscape;
                 height: $game-fullscreen-height-landscape;
-                top: -0.5vmin;
+                max-height: $game-fullscreen-height-landscape;
                 margin: auto;
+                top: 50%;
+                transform: translateY(-50%);
             }
 
             button {
@@ -87,10 +95,39 @@
             }
         }
 
-        @media (max-device-width : $iphone5-width) {
-            iframe {
-                height: $game-fullscreen-height-landscape-mobile;
-                top: -0.5vmin;
+        @media only screen and (min-device-width: $iphone2g-4s-min-width) and (max-device-width: $iphone2g-4s-max-width) {
+            &.fullscreen {
+                iframe {
+                    height: $game-fullscreen-height-landscape-iphone2g-4s;
+                    max-height: $game-fullscreen-height-landscape-iphone2g-4s;
+                }
+            }
+        }
+
+        @media only screen and (min-device-width: $iphone5-min-width) and (max-device-width: $iphone5-max-width) {
+            &.fullscreen {
+                iframe {
+                    height: $game-fullscreen-height-landscape-iphone5;
+                    max-height: $game-fullscreen-height-landscape-iphone5;
+                }
+            }
+        }
+
+        @media only screen and (min-device-width: $iphone6-min-width) and (max-device-width: $iphone6-max-width) {
+            &.fullscreen {
+                iframe {
+                    height: $game-fullscreen-height-landscape-iphone6;
+                    max-height: $game-fullscreen-height-landscape-iphone6;
+                }
+            }
+        }
+
+        @media only screen and (min-device-width: $iphone6plus-min-width) and (max-device-width: $iphone6plus-max-width) {
+            &.fullscreen {
+                iframe {
+                    height: $game-fullscreen-height-landscape-iphone6plus;
+                    max-height: $game-fullscreen-height-landscape-iphone6plus;
+                }
             }
         }
     }

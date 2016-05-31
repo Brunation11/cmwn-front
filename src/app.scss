@@ -135,7 +135,6 @@ h1, h2, h3 {
     .blocker {
         position: absolute;
         padding-top: $standard;
-        margin-top: 5px;
         margin-left: auto;
         margin-right: auto;
         background: white;
@@ -218,7 +217,7 @@ h1, h2, h3 {
     .global-header {
         position: relative;
         max-width: $monitor-max-break;
-        height: 115px;
+        height: 120px;
     }
 
     .global-footer {
@@ -422,6 +421,7 @@ h1, h2, h3 {
 
         .sidebar {
             padding: $standard;
+            border-bottom: ($standard * 4) solid #fff;
             background: #fff;
             position: fixed;
             top: 0;
@@ -430,8 +430,8 @@ h1, h2, h3 {
             width: 100%;
             overflow-y: scroll;
             transition: right  1s ease-in-out;
-            min-height: 100vh;
-            z-index: $z-nav;
+            height: 100vmax;
+            z-index:  $z-nav;
 
             &.open {
                 right: 0;
