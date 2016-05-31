@@ -24,6 +24,7 @@ var buildMenuRoutes = function (links) {
     //reduce the set of links
     return _.reduce(links, (a, link, k) => {
         //try to match our endpoint to a route, and extract its parameters
+        var url;
         var matchedRoute = _.reduce(allRoutes, (a, route) => { //eslint-disable-line no-shadow
             var params;
             if (!a && route.endpoint && link.label != null) {
@@ -53,7 +54,8 @@ var buildMenuRoutes = function (links) {
             return a;
         }, false);
         if (matchedRoute) {
-            link = link.set('url', Util.replacePathPlaceholdersFromParamObject(matchedRoute.path, matchedRoute.params).split('(')[0]);
+            url = Util.replacePathPlaceholdersFromParamObject(matchedRoute.path, matchedRoute.params).split('(')[0];
+            link = link.set('url', url.indexOf('/') === 0 ? url : '/' + url);
             a.push(link);
         }
         return a;

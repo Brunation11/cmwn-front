@@ -5,6 +5,7 @@ import Shortid from 'shortid';
 import {Panel, Modal} from 'react-bootstrap';
 import QueryString from 'query-string';
 import { connect } from 'react-redux';
+import Moment from 'moment';
 
 import Detector from 'components/browser_detector';
 import ProfileImage from 'components/profile_image';
@@ -95,7 +96,7 @@ var Profile = React.createClass({
     },
     renderGame: function () {
         var flipUrl = this.state._links.user_flip ? this.state._links.user_flip.href : null;
-        if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe9() || Detector.isIe10() || Detector.isIe11() || Detector.isFirefox() || Detector.isEdge())) {
+        if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe10())) {
             return (
                 <div>
                     {BROWSER_NOT_SUPPORTED}
@@ -182,35 +183,60 @@ var Profile = React.createClass({
             </p>
         );
     },
-    render: function () {
-        var state = Store.getState();
-        if (this.state.username == null) {
-            return null;
-        }
+    renderUserProfile: function () {
+        var day = Moment(this.state.birthdate).date(),
+            month = Moment(this.state.birthdate).month() + 1,
+            year = Moment(this.state.birthdate).year();
         return (
-           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+            <div>
+                <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className='standard'>
+                    <div className="left">
+                        <div className="frame">
+                            <ProfileImage user_id={this.state.user_id} link-below={true}/>
+                        </div>
+                    </div>
+                    <div className="right">
+                        <div className="user-metadata">
+                            <p>Username:</p>
+                            <p className="standard field">{this.state.username}</p>
+                            <p>First Name:</p>
+                            <p className="standard field">{this.state.first_name}</p>
+                            <p>Last Name:</p>
+                            <p className="standard field">{this.state.last_name}</p>
+                            <p>Birthday:</p>
+                            <p className="standard field">{Moment(`${month} ${day}, ${year}`).format('MM-DD-YYYY')}</p>
+                        </div>
+                    </div>
+                </Panel>
+            </div>
+        );
+    },
+    renderCurrentUserProfile: function () {
+        return (
+            <div>
                 <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal} keyboard={false} backdrop="static">
                     <Modal.Body>
                         {this.renderGame()}
                     </Modal.Body>
                 </Modal>
-               <FlipSource>
+                <FlipSource>
                    <Trophycase className={ClassNames({hidden: !this.state.isStudent})} />
-               </FlipSource>
-               <Panel header={
-                   ((this.state.user_id === state.currentUser.user_id) ? 'My ' : this.state.username + '\'s ') + HEADINGS.ACTION
-               } className={ClassNames('standard', {hidden: !this.state.isStudent && this.state.user_id === state.currentUser.user_id})}>
-               <div className="infopanel">
-                     <div className="right">
-                         <EditLink className="purple" base="/profile" id={this.state.user_id} scope={this.state.scope} />
-                     </div>
-                     <ProfileImage className={ClassNames({hidden: this.state.user_id === state.currentUser.user_id})} user_id={this.state.user_id} link-below={true}/>
-                     <div className="info">
-                        {this.renderClassList()}
-                     </div>
-                 </div>
-               </Panel>
-               {this.renderGameList()}
+                </FlipSource>
+                {this.renderGameList()}
+            </div>
+        );
+    },
+    render: function () {
+        var state = Store.getState();
+        if (this.state.username == null) {
+            return null;
+        }
+        console.log(this.state.user_id);
+        console.log(state.currentUser.user_id);
+        var profile = (this.state.user_id === state.currentUser.user_id) ? this.renderCurrentUserProfile : this.renderUserProfile;
+        return (
+           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+               {profile()}
            </Layout>
         );
     }
