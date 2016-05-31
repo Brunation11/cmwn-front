@@ -1,8 +1,8 @@
 php:
   build: ./docker/php
   environment:
-    APP_API_URL: "https://api-local.changemyworldnow.com/"
-    APP_GAME_URL: "https://games-local.changemyworldnow.com/"
+    APP_API_URL: "https://api-dev.changemyworldnow.com/"
+    APP_GAME_URL: "https://games-dev.changemyworldnow.com/"
     APP_MODE: "local"
   volumes:
     - ./:/var/www/

@@ -49,7 +49,6 @@ var Component = React.createClass({
                     Log.error(e, 'Image could not be extracted from user');
                 }
             });
-
         }
     },
     startUpload: function (e) {
@@ -103,7 +102,7 @@ var Component = React.createClass({
         );
     },
     renderUploadButton: function () {
-        if (!this.props.currentUser._embedded.image || this.state.isModerated) {
+        if ((this.state.profileImage === GLOBALS.DEFAULT_PROFILE) || this.state.isModerated) {
             return (
                 <button className="upload" onClick={this.startUpload}>Upload Image</button>
             );
@@ -111,13 +110,13 @@ var Component = React.createClass({
             return (
                 <ButtonToolbar>
                     <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={
-                        <Popover style={{color: 'gray'}}>
+                        <Popover id="upload" style={{color: 'gray'}}>
                             <strong className="test" style={{color: '#7829bb'}}>
                                 {PENDINGHEADER}
                                 <br />
                             </strong>
                             {PENDING}
-                            <strong style={{color: '#7829bb'}} onClick={this.startUpload}>
+                            <strong style={{color: '#7829bb', cursor: 'pointer'}} onClick={this.startUpload}>
                                 here.
                             </strong>
                         </Popover>}>
