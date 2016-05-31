@@ -135,7 +135,6 @@ h1, h2, h3 {
     .blocker {
         position: absolute;
         padding-top: $standard;
-        margin-top: 5px;
         margin-left: auto;
         margin-right: auto;
         background: white;
@@ -218,7 +217,7 @@ h1, h2, h3 {
     .global-header {
         position: relative;
         max-width: $monitor-max-break;
-        height: 115px;
+        height: 120px;
     }
 
     .global-footer {
