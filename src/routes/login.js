@@ -6,9 +6,7 @@ import Util from 'components/util';
 import Toast from 'components/toast';
 import Log from 'components/log';
 import History from 'components/history';
-import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
-import Authorization from 'components/authorization';
 import Store from 'components/store';
 
 import Layout from 'layouts/one_col';
@@ -45,11 +43,20 @@ var Component = React.createClass({
     },
     login: function (e) {
         var req;
+        var dataUrl;
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
+            if (this.props.data._links && this.props.data._links.login == null) {
+                if (this.refs.login.getValue() === this.props.data.username || this.refs.login.getValue() === this.props.data.email) {
+                    History.push('/profile');
+                } else {
+                    //but why
+                    History.push('/logout');
+                }
+            }
+            dataUrl = this.props.data._links.login.href;
             Util.logout();
             req = HttpManager.POST({
-                //url: this.props.data._links.login.href,
-                url: GLOBALS.API_URL + 'login'
+                url: dataUrl,
             }, {
                 'username': this.refs.login.getValue(),
                 'password': this.refs.password.getValue()
@@ -60,10 +67,8 @@ var Component = React.createClass({
                     return;
                 }
                 if (res.status < 300 && res.status >= 200) {
-                    Authorization.reloadUser(res.response).then(() => {
-                        Log.info(e, 'User login success');
-                        History.push('/profile');
-                    });
+                    Log.info(e, 'User login success');
+                    History.push('/profile');
                 } else {
                     Toast.error(ERRORS.LOGIN + (res.response && res.response.data && res.response.data.message ? ' Message: ' + res.response.data.message : ''));
                     Log.log(res, 'Invalid login.', req);
@@ -132,9 +137,9 @@ var Component = React.createClass({
 const mapStateToProps = state => {
     var data = {};
     var loading = true;
-    if (state.page && state.page.data != null) {
+    if (state.currentUser) {
         loading = state.page.loading;
-        data = state.page.data;
+        data = state.currentUser;
     }
     return {
         data,

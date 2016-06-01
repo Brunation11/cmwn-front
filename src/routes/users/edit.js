@@ -2,10 +2,10 @@ import React from 'react';
 import _ from 'lodash';
 import {Button, Input, Panel} from 'react-bootstrap';
 import { connect } from 'react-redux';
-import DatePicker from 'react-bootstrap-date-picker';
 import ClassNames from 'classnames';
 import Moment from 'moment';
 
+import Actions from 'components/actions';
 import HttpManager from 'components/http_manager';
 import Log from 'components/log';
 import Toast from 'components/toast';
@@ -18,6 +18,7 @@ import ProfileImage from 'components/profile_image';
 import Form from 'components/form';
 import DropdownDatepicker from 'components/dropdown_datepicker';
 import Store from 'components/store';
+import ACTION_CONSTANTS from 'components/action_constants';
 
 import 'routes/users/edit.scss';
 
@@ -78,6 +79,9 @@ var Component = React.createClass({
         }
     },
     resetPassword: function () {
+        if (this.props.data._links.forgot == null) {
+            return;
+        }
         //note: This should only appear for adults, who have email addressed
         HttpManager.GET(this.props.data._links.forgot.href, {email: this.props.data.email}).then(() => {
             Toast.success('Password Reset. This user will recieve an email with further instructions.');
@@ -129,6 +133,7 @@ var Component = React.createClass({
         if (this.refs.formRef.isValid()) {
             HttpManager.PUT(`${GLOBALS.API_URL}user/${this.state.user_id}`, postData).then(() => {
                 Toast.success('Profile Updated');
+                Actions.dispatch[ACTION_CONSTANTS.UPDATE_USERNAME]({'username': this.state.username});
             }).catch(err => {
                 Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
                 Log.log('Server refused profile update', err, postData);
@@ -213,7 +218,7 @@ var Component = React.createClass({
             />
         );
     },
-    renderAdult: function() {
+    renderAdult: function () {
         return (
             <Form ref="formRef">
                 <Input
@@ -294,9 +299,9 @@ var Component = React.createClass({
                 */}
                 <Button className="user-metadata-btn" disabled={this.state.isStudent} onClick={this.submitData}> Save </Button>
             </Form>
-        )
+        );
     },
-    renderChild: function() {
+    renderChild: function () {
         var day = Moment(this.state.dob).date(),
             month = Moment(this.state.dob).month() + 1,
             year = Moment(this.state.dob).year();
@@ -312,10 +317,9 @@ var Component = React.createClass({
                 <p>Birthday:</p>
                 <p className="standard field">{Moment((day + month + year)).format('MMMM Do, YYYY')}</p>
             </div>
-        )
+        );
     },
     render: function () {
-        var self = this;
         var userType = this.state.isStudent ? this.renderChild : this.renderAdult;
 
         if (this.props.data == null || this.props.data.user_id == null || !Util.decodePermissions(this.props.data.scope).update
@@ -328,22 +332,33 @@ var Component = React.createClass({
                 <Panel header={HEADINGS.EDIT_TITLE + this.state.first_name + ' ' + this.state.last_name} className="standard edit-profile">
                     <div className="left">
                         <ProfileImage user_id={this.props.data.user_id} link-below={true}/>
-                        <p><a onClick={this.suspendAccount}>{SUSPEND}</a></p>
+                        <p className={ClassNames({hidden: !Util.decodePermissions(this.props.data.scope).delete})}><a onClick={this.suspendAccount}>{SUSPEND}</a></p>
                     </div>
                     <div className="right">
                         {userType()}
                     </div>
                 </Panel>
-                <UpdateUsername className={ClassNames({hidden: this.state.type !== 'CHILD'})} username={this.state.username} />
-                <ChangePassword user_id={this.state.user_id} />
-                <CodeChange user_id={this.state.user_id} />
+                <UpdateUsername
+                    className={ClassNames({
+                        hidden:
+                            this.state.type !== 'CHILD' ||
+                            this.state.user_id !== this.props.currentUser.user_id
+                    })}
+                    username={this.state.username}
+                />
+                <ChangePassword
+                    user_id={this.state.user_id}
+                    url={this.state._links.password}
+                />
+                <ForgotPass data={this.props.data} user_id={this.state.user_id} />
+                <CodeChange data={this.props.data} user_id={this.state.user_id} />
             </Layout>
         );
     }
 });
 
 var isPassValid = function (password) {
-    return password.length > 8 && ~password.search(/[0-9]+/);
+    return password.length >= 8 && ~password.search(/[0-9]+/);
 };
 
 var CodeChange = React.createClass({
@@ -351,9 +366,10 @@ var CodeChange = React.createClass({
         return {code: ''};
     },
     submit: function () {
-        var update = HttpManager.POST({url: `${GLOBALS.API_URL}user/${this.props.user_id}/code`}, {
-            'code': this.state.code
-        });
+        if (this.props.data._links.reset == null) {
+            return;
+        }
+        var update = HttpManager.POST({url: this.props.data._links.reset.href }, {email: this.props.data.email, code: this.state.code});
         update.then(() => {
             Toast.success('Code Reset for user. They will need to update their password on next login.');
         }).catch(err => {
@@ -363,7 +379,7 @@ var CodeChange = React.createClass({
     },
     render: function () {
         var state = Store.getState();
-        if (state.currentUser.user_id === this.props.user_id) {
+        if (state.currentUser.user_id === this.props.user_id || this.props.data._links.reset == null) {
             return null;
         }
         return (
@@ -384,6 +400,36 @@ var CodeChange = React.createClass({
     }
 });
 
+//This forgot pass is for admins to manually code reset another adult
+var ForgotPass = React.createClass({
+    getInitialState: function () {
+        return {code: ''};
+    },
+    submit: function () {
+        if (this.props.data._links.forgot == null) {
+            return;
+        }
+        var update = HttpManager.POST({url: this.props.data._links.forgot.href }, {email: this.props.data.email});
+        update.then(() => {
+            Toast.success('Password reset code sent to user email.');
+        }).catch(err => {
+            Log.warn('Could not reset password at this time.' + (err.message ? ' Message: ' + err.message : ''), err);
+            Toast.error(ERRORS.BAD_PASS);
+        });
+    },
+    render: function () {
+        var state = Store.getState();
+        if (state.currentUser.user_id === this.props.user_id || this.props.data._links.forgot == null) {
+            return null;
+        }
+        return (
+            <Panel header={HEADINGS.UPDATE_CODE} className="standard"><form>
+                    <Button onClick={this.submit}>Reset Password</Button>
+            </form></Panel>
+        );
+    }
+});
+
 var ChangePassword = React.createClass({
     getInitialState: function () {
         return {
@@ -398,7 +444,7 @@ var ChangePassword = React.createClass({
             this.setState({extraProps: {bsStyle: 'error'}});
             Toast.error(ERRORS.TOO_SHORT);
         } else if (this.state.confirm === this.state.new) {
-            var update = HttpManager.POST({url: `${GLOBALS.API_URL}password/${this.props.user_id}`}, {
+            var update = HttpManager.POST({url: this.props.url.href}, {
                 'current_password': this.state.current,
                 'password': this.state.new,
                 'password_confirmation': this.state.confirm,
@@ -418,7 +464,7 @@ var ChangePassword = React.createClass({
     },
     render: function () {
         var state = Store.getState();
-        if (state.currentUser.user_id !== this.props.user_id) {
+        if (state.currentUser.user_id !== this.props.user_id || this.props.url == null || this.props.url.href == null) {
             return null;
         }
         return (
@@ -465,13 +511,16 @@ var ChangePassword = React.createClass({
 
 const mapStateToProps = state => {
     var data = {};
+    var currentUser = {};
     var loading = true;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
+        currentUser = state.currentUser;
     }
     return {
         data,
+        currentUser,
         loading
     };
 };

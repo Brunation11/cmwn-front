@@ -1,0 +1,9 @@
+* text=auto
+*.css linguist-vendored
+*.less linguist-vendored
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary
+*.ico binary
+*.woff binary

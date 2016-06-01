@@ -6,7 +6,6 @@ import PublicRoutes from 'public_routes';
 import EventManager from 'components/event_manager';
 import Log from 'components/log';
 import Store from 'components/log';
-import Authorization from 'components/authorization';
 import Util from 'components/util';
 import PrivateRoutes from 'private_routes';
 
@@ -26,6 +25,10 @@ var renderErrors = function () {
 };
 
 var show403 = function (url) {
+    var currentUser = {};
+    if (Store != null && Store.getState != null) {
+        currentUser = Store.getState().currentUser.without(['first_name', 'middle_name', 'last_name']);
+    }
     //var redirect = window.setTimeout(function () {
         //History.replace('/profile');
         //window.location.reload();
@@ -37,44 +40,58 @@ var show403 = function (url) {
         <div id="triggerederror" className="error403"><a href="/profile"> </a></div>
     );
     _.each(_handlers, handler => handler());
-    Log.error('displayed 403: ' + url, ...arguments, window.location, Authorization.currentUser);
+    Log.error('displayed 403: ' + url, ...arguments, window.location, currentUser);
     EventManager.update('errorChange', _errors);
 };
 
 var show404 = function () {
+    var currentUser = {};
+    if (Store != null && Store.getState != null) {
+        currentUser = Store.getState().currentUser.without(['first_name', 'middle_name', 'last_name']);
+    }
     _errors.push(
         <div id="triggerederror" className="error404"><a href="/profile"> </a></div>
     );
     _.each(_handlers, handler => handler());
-    Log.error('Displayed 404: ' + window.location.pathname, ...arguments, window.location, Authorization.currentUser);
+    Log.error('Displayed 404: ' + window.location.pathname, ...arguments, window.location, currentUser);
     EventManager.update('errorChange', _errors);
 };
 
 var show500 = function (url) {
-    var state = Store.getState();
-    var link = '/login';
-    if (state.currentUser.user_id != null) {
-        link = '/profile';
+    var currentUser = {};
+    var link = '/';
+    var state;
+    if (Store != null && Store.getState != null) {
+        state = Store.getState();
+        currentUser = Store.getState().currentUser.without(['first_name', 'middle_name', 'last_name']);
+        if (state.currentUser.user_id != null) {
+            link = '/profile';
+        }
     }
     _errors.push(
         <div id="triggerederror" className="error500"><a href={link} className="gohome"> </a><a onClick={() => window.location.reload()}> </a></div>
     );
     _.each(_handlers, handler => handler());
-    Log.error('Displayed 500: ' + url, ...arguments, window.location, Authorization.currentUser);
+    Log.error('Displayed 500: ' + url, ...arguments, window.location, currentUser);
     EventManager.update('errorChange', _errors);
 };
 
 var showApplication = function (err) {
-    var state = Store.getState();
-    var link = '/login';
-    if (state.currentUser.user_id != null) {
-        link = '/profile';
+    var currentUser = {};
+    var link = '/';
+    var state;
+    if (Store != null && Store.getState != null) {
+        state = Store.getState();
+        currentUser = Store.getState().currentUser.without(['first_name', 'middle_name', 'last_name']);
+        if (state.currentUser.user_id != null) {
+            link = '/profile';
+        }
     }
     _errors.push(
         <div id="triggerederror" className="applicationerror"><a href={link}> </a></div>
     );
     _.each(_handlers, handler => handler());
-    Log.error('Displayed Application Error: ' + (err && err.message != null ? err.message : err), ...arguments, window.location, Authorization.currentUser);
+    Log.error('Displayed Application Error: ' + (err && err.message != null ? err.message : err), ...arguments, window.location, currentUser);
     EventManager.update('errorChange', _errors);
 };
 

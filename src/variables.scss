@@ -36,3 +36,29 @@ $max-base-font-size: 18px;
 //z-index scopes (note that bootstrap styles start at 1000)
 $z-nav: 500;
 $z-override: 1100;
+
+$game-responsive-width-portrait: calc(50vmin * 1.77);
+$game-responsive-height-portrait: 50vmin;
+$game-fullscreen-width-portrait: 100vmin;
+$game-fullscreen-height-portrait: calc(100vmin * 0.5625);
+
+$game-responsive-width-landscape: calc(50vmax * 1.77);
+$game-responsive-height-landscape: 50vmax;
+$game-fullscreen-width-landscape: 100vmax;
+$game-fullscreen-height-landscape: calc(100vmax * 0.5625);
+
+$iphone2g-4s-min-width: 320px;
+$iphone2g-4s-max-width: 480px;
+$game-fullscreen-height-landscape-iphone2g-4s: calc(85vmax * 0.5625);
+
+$iphone5-min-width: 320px;
+$iphone5-max-width: 568px;
+$game-fullscreen-height-landscape-iphone5: calc(72vmax * 0.5625);
+
+$iphone6-min-width: 375px;
+$iphone6-max-width: 667px;
+$game-fullscreen-height-landscape-iphone6: calc(100vmax * 0.5625);
+
+$iphone6plus-min-width: 414px;
+$iphone6plus-max-width: 736px;
+$game-fullscreen-height-landscape-iphone6plus: calc(100vmax * 0.5625);

@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import 'components/table.scss';
 
-const BREADCRUMBS = 'Return to class list';
+// const BREADCRUMBS = 'Return to class list';
 
 //we include the second param here purely to indicate to
 //the reader that it may be passed to a custom renderCell

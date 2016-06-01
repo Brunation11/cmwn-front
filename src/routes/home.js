@@ -7,6 +7,7 @@ import Shortid from 'shortid';
 import Toast from 'components/toast';
 import Log from 'components/log';
 import History from 'components/history';
+import Store from 'components/store';
 
 import 'routes/home.scss';
 import LOGO_URL from 'media/header-logo.png';
@@ -38,11 +39,12 @@ const COPY = {
     BUTTONS: {
         WORK: 'Work with Us',
         CONTACT: 'Contact Us',
-        LOGIN: 'Login',
         DEMO: 'Demo',
         SIGNUP: 'School Signup',
         WATCH: 'Watch the video',
-        TERMS: 'Terms & Conditions'
+        TERMS: 'Terms & Conditions',
+        LOGIN: 'Login',
+        PROFILE: 'Profile'
     },
     SLIDES: [
         {
@@ -86,7 +88,7 @@ const COPY = {
         PRECAPTCHA: 'Thanks for your interest! Please check the box below to display contact information.',
         CONTACT: <span>
             <p>Postage can be sent to:</p>
-            <p>21 W 46th Street, Suite 605<br />600 Third Ave<br /></p>
+            <p>21 W 46th Street, Suite 605<br />New York, New York 10036<br /></p>
             <p>Or give us a call at &#40;&#54;&#52;&#54;&#41;&#32;&#56;&#54;&#49;&#45;&#48;&#53;&#55;&#49;</p>
             <p>Click <a href="mailto:&#105;&#110;&#102;&#111;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#106;&#111;&#110;&#105;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;">here</a> to contact us.</p>
         </span>,
@@ -157,8 +159,8 @@ var Home = React.createClass({
                     </Modal.Body>
                 </Modal>
                 <div className="global-header">
-                    <div className="logo" ><Link to="/" ><img alt="Change My World Now" src={LOGO_URL} />Change My World Now</Link></div>
-                    <div className="headerLogo"><Link to="/" ><img alt="Change My World Now" src={LOGO_HEADER} /><span className="read">Change My World Now</span></Link></div>
+                    <div className="logo" ><Link to={this.props.logoLink} ><img alt="Change My World Now" src={LOGO_URL} />Change My World Now</Link></div>
+                    <div className="headerLogo"><Link to={this.props.logoLink} ><img alt="Change My World Now" src={LOGO_HEADER} /><span className="read">Change My World Now</span></Link></div>
                     <Header workOpen={this.state.workOpen} contactOpen={this.state.contactOpen} closeWork={this.closeWork} closeContact={this.closeContact} />
                 </div>
                 <Carousel>
@@ -222,7 +224,11 @@ var Header = React.createClass({
         }
     },
     login: function () {
-        History.push('/login');
+        if (Store.getState().currentUser.user_id) {
+            History.push('/profile');
+        } else {
+            History.push('/login');
+        }
     },
     renderCaptcha: function () {
         var captchas = document.getElementsByClassName('grecaptcha');
@@ -250,7 +256,11 @@ var Header = React.createClass({
         this.setState({contactOpen: false, showContact: false});
     },
     loginAlert: function () {
-        History.replace('/login');
+        if (Store.getState().currentUser.user_id) {
+            History.replace('/profile');
+        } else {
+            History.replace('/login');
+        }
     },
     launchDemo: function () {
         this.setState({demoOpen: true});
@@ -263,6 +273,7 @@ var Header = React.createClass({
         Toast.success(COPY.ALERTS.SIGNUP.TEXT);
     },
     render: function () {
+        var loginButtonCopy = Store.getState().currentUser.user_id ? COPY.BUTTONS.PROFILE : COPY.BUTTONS.LOGIN;
         return (
             <div>
                 <Modal show={this.state.demoOpen} onHide={this.confirmDemo}>
@@ -311,10 +322,10 @@ var Header = React.createClass({
                         {COPY.BUTTONS.SIGNUP}
                     </Button>
                     <Button id="login" className="hidden" onClick={this.loginAlert}>
-                        {COPY.BUTTONS.LOGIN}
+                        {loginButtonCopy}
                     </Button>
                     <Button id="demo" className="purple" onClick={this.login}>
-                        {COPY.BUTTONS.LOGIN}
+                        {loginButtonCopy}
                     </Button>
                 </div>
             </div>
