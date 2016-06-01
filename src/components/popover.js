@@ -13,9 +13,11 @@ var PopOver = React.createClass({
         };
     },
     componentDidMount: function () {
-        this.setState({element: this.props.element});
-        this.setState({trigger: this.props.trigger});
-        this.setState({placement: this.props.placement});
+        this.setState({
+            element: this.props.element,
+            trigger: this.props.trigger,
+            placement: this.props.placement
+        });
     },
     render: function () {
         var state = this.state;
