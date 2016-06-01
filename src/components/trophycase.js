@@ -3,7 +3,6 @@ import _ from 'lodash';
 import {Panel} from 'react-bootstrap';
 import {Link} from 'react-router';
 import Shortid from 'shortid';
-import Moment from 'moment';
 
 import PopOver from 'components/popover';
 import 'components/trophycase.scss';
@@ -35,7 +34,7 @@ var Trophycase = React.createClass({
     renderPartial: function (items) {
         return (
            <div className="flip-list">
-               {_.map(items, (item) => (<Link to="" key={Shortid.generate()} className="pulse"><img src={`/flips/${item.flip_id}.png`} ></img><div className="partial" style={{height: `${item.progress}%`}} ><img src={`/flips/${item.flip_id}_grey.png`} ></img></div></Link>))}
+               {_.map(items, (item) => (<Link to="" key={Shortid.generate()}><img src={`/flips/${item.flip_id}.png`} ></img><div className="partial" style={{height: `${item.progress}%`}} ><img src={`/flips/${item.flip_id}_grey.png`} ></img></div></Link>))}
            </div>
         );
     },
