@@ -303,9 +303,9 @@ var Component = React.createClass({
         );
     },
     renderChild: function () {
-        var day = Moment(this.state.birthdate).date(),
-            month = Moment(this.state.birthdate).month() + 1,
-            year = Moment(this.state.birthdate).year();
+        var day = Moment(this.state.dob).date(),
+            month = Moment(this.state.dob).month() + 1,
+            year = Moment(this.state.dob).year();
 
         return (
             <div className="user-metadata">
@@ -316,7 +316,7 @@ var Component = React.createClass({
                 <p>Last Name:</p>
                 <p className="standard field">{this.state.last_name}</p>
                 <p>Birthday:</p>
-                <p className="standard field">{Moment(`${month} ${day}, ${year}`).format('MM-DD-YYYY')}</p>
+                <p className="standard field">{Moment((day + month + year)).format('MMMM Do, YYYY')}</p>
             </div>
         );
     },
