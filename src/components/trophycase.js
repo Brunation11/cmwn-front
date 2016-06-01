@@ -3,7 +3,6 @@ import _ from 'lodash';
 import {Panel} from 'react-bootstrap';
 import {Link} from 'react-router';
 import Shortid from 'shortid';
-import Moment from 'moment';
 
 import PopOver from 'components/popover';
 import 'components/trophycase.scss';
