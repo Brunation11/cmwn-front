@@ -39,6 +39,7 @@ const INVALID_SUBMISSION = 'Invalid submission. Please update fields highlighted
 const BAD_UPDATE = 'There was a problem updating your profile. Please try again later.';
 const USER_REMOVED = 'User deleted. You will now be redirected.';
 const CONFIRM_DELETE = 'Are you sure you want to delete this user? This action cannot be undone.';
+const PASS_UPDATED = '<p>You have successfully updated your password.<br />Be sure to remember for next time!</p>';
 
 var Component = React.createClass({
     getInitialState: function () {
@@ -451,7 +452,7 @@ var ChangePassword = React.createClass({
                 'user_id': this.props.user_id,
             });
             update.then(() => {
-                Toast.success('Password Updated');
+                Toast.success(PASS_UPDATED);
             }).catch(err => {
                 Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
                 Toast.error(ERRORS.BAD_PASS);
