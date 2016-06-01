@@ -187,6 +187,18 @@ var Util = {
                 }
             });
         }
+    },
+    modifyTemplatedQueryParams(template, params){
+        //this approach assumes all template params are in the query string
+        //this will break under any other circumstance
+        var templates = template.replace('?', '').split('{')[1].split('}')[0].split(',');
+        var url = template.split('{')[0] + '?';
+        _.each(templates, key => {
+            if (params[key] != null){
+                url += key + '=' + params[key] + '&';
+            }
+        });
+        return url;
     }
 };
 
