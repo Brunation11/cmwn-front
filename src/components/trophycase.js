@@ -3,7 +3,9 @@ import _ from 'lodash';
 import {Panel} from 'react-bootstrap';
 import {Link} from 'react-router';
 import Shortid from 'shortid';
+import Moment from 'moment';
 
+import PopOver from 'components/popover';
 import 'components/trophycase.scss';
 
 import DISABLED_FLIP from 'media/flip-disabled.png';
@@ -33,15 +35,19 @@ var Trophycase = React.createClass({
     renderPartial: function (items) {
         return (
            <div className="flip-list">
-               {_.map(items, (item) => (<Link to="" key={Shortid.generate()}><img src={`/flips/${item.flip_id}.png`} ></img><div className="partial" style={{height: `${item.progress}%`}} ><img src={`/flips/${item.flip_id}_grey.png`} ></img></div></Link>))}
+               {_.map(items, (item) => (<Link to="" key={Shortid.generate()} className="pulse"><img src={`/flips/${item.flip_id}.png`} ></img><div className="partial" style={{height: `${item.progress}%`}} ><img src={`/flips/${item.flip_id}_grey.png`} ></img></div></Link>))}
            </div>
         );
     },
     renderComplete: function (items) {
         return (
-           <div className="flip-list">
-               {_.map(items, (item) => (<Link to="" key={Shortid.generate()}><img src={`/flips/${item.flip_id}.png`} ></img></Link>))}
-           </div>
+            <div className="flip-list">
+                {_.map(items, (item) => (
+                    <div className="flip float pulse buzz">
+                        <PopOver element={item} trigger="hover" placement="top"/>
+                    </div>
+                ))}
+            </div>
         );
     },
     renderCase: function () {
@@ -50,16 +56,15 @@ var Trophycase = React.createClass({
             return null;
         }
         complete = this.state.flips;
-        //complete = _.filter(this.state.flips, item => item.progress === 100);
+        // complete = _.filter(this.state.flips, item => item.progress === 100);
         //inProgress = _.difference(this.state.flips, complete);
         return (
             <Panel className="trophycase standard" header={HEADINGS.FLIPBOARD}>
                 <div className="earned">
-                    {EARNED}<strong>{complete.length}</strong>
-                    <img className="spacer" src={DISABLED_FLIP} />
+                    <span className="earned-header">{EARNED}<strong className="earned-value"> {complete.length}</strong></span>
                     {this.renderComplete(complete)}
                 </div>
-                <div className="in-progress  hidden">
+                <div className="in-progress hidden">
                     {IN_PROGRESS}<strong>{inProgress.length}</strong>
                     <img className="spacer" src={DISABLED_FLIP} />
                     {this.renderPartial(inProgress)}
