@@ -116,9 +116,9 @@ var Component = React.createClass({
                                 <br />
                             </strong>
                             {PENDING}
-                            <strong style={{color: '#7829bb', cursor: 'pointer'}} onClick={this.startUpload}>
+                            <a style={{color: '#7829bb', cursor: 'pointer'}} onClick={this.startUpload}>
                                 here.
-                            </strong>
+                            </a>
                         </Popover>}>
                         <button className="upload">Upload Image</button>
                     </OverlayTrigger>
