@@ -54,7 +54,7 @@ var GlobalHeader = React.createClass({
             <div className="global-header">
                 <div className="logo" ><Link to={this.props.logoLink} ><img alt="Change My World Now" src={LOGO_URL} /></Link></div>
                 <div className="headerLogo"><Link to={this.props.logoLink} ><img alt="Change My World Now" src={LOGO_HEADER} /><span className="read">Change My World Now</span></Link></div>
-                <Button className={ClassNames('menu', {hidden: this.props.currentUser == null})} onClick={this.toggleMenu}>
+                <Button className={ClassNames('menu', {hidden: !Store.getState().currentUser.user_id})} onClick={this.toggleMenu}>
                    <Glyphicon glyph="glyphicon glyphicon-menu-hamburger" />
                    <span className="fallback">{MENU}</span>
                 </Button>
