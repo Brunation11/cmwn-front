@@ -38,7 +38,7 @@ var routes = [
     { path: 'change-password(/)', title: 'Password Change', component: ChangePassword },
     { path: 'profile(/)', title: 'Profile', endpoint: '$$self', component: Profile},
     { path: 'games(/)', title: 'Games', component: Games},
-    { path: 'game/:game(/)', title: 'Games', component: Game},
+    { path: 'game/:game(/)', title: 'Games', endpoint: '$$self', component: Game},
     { path: 'profile/edit(/)', title: 'Edit Profile', endpoint: '$$self', component: StudentEdit },
     { path: 'profile/:id/edit(/)', title: 'Edit Profile', endpoint: '/user/:id', component: StudentEdit },
     { path: 'users(/)', title: 'Users', endpoint: '$$user', component: Users },
