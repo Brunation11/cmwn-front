@@ -39,6 +39,7 @@ const INVALID_SUBMISSION = 'Invalid submission. Please update fields highlighted
 const BAD_UPDATE = 'There was a problem updating your profile. Please try again later.';
 const USER_REMOVED = 'User deleted. You will now be redirected.';
 const CONFIRM_DELETE = 'Are you sure you want to delete this user? This action cannot be undone.';
+const PASS_UPDATED = '<p>You have successfully updated your password.<br />Be sure to remember for next time!</p>';
 
 var Component = React.createClass({
     getInitialState: function () {
@@ -302,9 +303,9 @@ var Component = React.createClass({
         );
     },
     renderChild: function () {
-        var day = Moment(this.state.birthdate).date(),
-            month = Moment(this.state.birthdate).month() + 1,
-            year = Moment(this.state.birthdate).year();
+        var day = Moment(this.state.dob).date(),
+            month = Moment(this.state.dob).month() + 1,
+            year = Moment(this.state.dob).year();
 
         return (
             <div className="user-metadata">
@@ -315,7 +316,7 @@ var Component = React.createClass({
                 <p>Last Name:</p>
                 <p className="standard field">{this.state.last_name}</p>
                 <p>Birthday:</p>
-                <p className="standard field">{Moment(`${month} ${day}, ${year}`).format('MM-DD-YYYY')}</p>
+                <p className="standard field">{Moment((day + month + year)).format('MMMM Do, YYYY')}</p>
             </div>
         );
     },
@@ -451,7 +452,7 @@ var ChangePassword = React.createClass({
                 'user_id': this.props.user_id,
             });
             update.then(() => {
-                Toast.success('Password Updated');
+                Toast.success(PASS_UPDATED);
             }).catch(err => {
                 Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
                 Toast.error(ERRORS.BAD_PASS);
