@@ -56,10 +56,7 @@ var Component = React.createClass({
         HttpManager.POST({url: state.currentUser._links.friend.href}, {
             'friend_id': id
         }).then(() => {
-            this.refs.fetcher.getData().then(() => {
-                Toast.success(FRIEND_ADDED + item.username);
-                this.forceUpdate();
-            });
+            Toast.success(FRIEND_ADDED + item.username);
             Actions.dispatch.START_RELOAD_PAGE(Store.getState());
         }).catch(this.friendErr);
     },
