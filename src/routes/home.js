@@ -7,12 +7,11 @@ import Shortid from 'shortid';
 import Toast from 'components/toast';
 import Log from 'components/log';
 import History from 'components/history';
-import GLOBALS from 'components/globals';
-import HttpManager from 'components/http_manager';
-import Authorization from 'components/authorization';
+import Store from 'components/store';
 
 import 'routes/home.scss';
-import LOGO_URL from 'media/logo.png';
+import LOGO_URL from 'media/header-logo.png';
+import LOGO_HEADER from 'media/header-header.png';
 import SLIDE_A_BG_URL from 'media/home/green_background.png';
 import SLIDE_B_BG_URL from 'media/home/purple_background.png';
 import SLIDE_C_BG_URL from 'media/home/blue_background.png';
@@ -40,11 +39,12 @@ const COPY = {
     BUTTONS: {
         WORK: 'Work with Us',
         CONTACT: 'Contact Us',
-        LOGIN: 'Login',
         DEMO: 'Demo',
         SIGNUP: 'School Signup',
         WATCH: 'Watch the video',
-        TERMS: 'Terms & Conditions'
+        TERMS: 'Terms & Conditions',
+        LOGIN: 'Login',
+        PROFILE: 'Profile'
     },
     SLIDES: [
         {
@@ -88,17 +88,13 @@ const COPY = {
         PRECAPTCHA: 'Thanks for your interest! Please check the box below to display contact information.',
         CONTACT: <span>
             <p>Postage can be sent to:</p>
-            <p>600 Third Ave<br />2nd Floor<br />New York, NY 10016<br /></p>
+            <p>21 W 46th Street, Suite 605<br />New York, New York 10036<br /></p>
             <p>Or give us a call at &#40;&#54;&#52;&#54;&#41;&#32;&#56;&#54;&#49;&#45;&#48;&#53;&#55;&#49;</p>
             <p>Click <a href="mailto:&#105;&#110;&#102;&#111;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#106;&#111;&#110;&#105;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;">here</a> to contact us.</p>
         </span>,
 
         SIGNUP: <span><p>We are so excited about your interest to work with us!</p><p>Click <a href="mailto:&#106;&#111;&#110;&#105;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#099;&#097;&#116;&#104;&#121;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;?subject=Sign up with CMWN&body=Thank you for your interest in Change My World Now!%0D%0A%0D%0AIf you would like to launch Change My World Now in your school please provide the following information and someone from our team will contact you.%0D%0A%0D%0AYour Name:%0D%0AYour School:%0D%0AYour Email:%0D%0ASchool Grades:%0D%0APrincipal Name:%0D%0ASchool Phone:%0D%0ACity/State:">here</a> to contact us.</p></span>
     }
-};
-
-const ERRORS = {
-    BAD_PASS: 'Sorry, that wasn\'t quite right. Please try again.'
 };
 
 const SOURCES = {
@@ -155,6 +151,7 @@ var Home = React.createClass({
         this.setState({ contactOpen: false });
     },
     render: function () {
+        var logoLink = Store.getState().currentUser.user_id ? '/profile' : '/';
         return (
             <div id="home" className="home">
                 <Modal show={this.state.viewOpen} onHide={() => this.setState({viewOpen: false})}>
@@ -163,7 +160,8 @@ var Home = React.createClass({
                     </Modal.Body>
                 </Modal>
                 <div className="global-header">
-                    <div className="logo" ><Link to="/" ><img alt="Change My World Now" src={LOGO_URL} />Change My World Now</Link></div>
+                    <div className="logo" ><Link to={logoLink} ><img alt="Change My World Now" src={LOGO_URL} />Change My World Now</Link></div>
+                    <div className="headerLogo"><Link to={logoLink} ><img alt="Change My World Now" src={LOGO_HEADER} /><span className="read">Change My World Now</span></Link></div>
                     <Header workOpen={this.state.workOpen} contactOpen={this.state.contactOpen} closeWork={this.closeWork} closeContact={this.closeContact} />
                 </div>
                 <Carousel>
@@ -214,7 +212,6 @@ var Header = React.createClass({
         };
     },
     componentDidMount: function () {
-        this.getToken();
         this.renderCaptcha();
     },
     componentDidUpdate: function () {
@@ -227,54 +224,12 @@ var Header = React.createClass({
             return err;
         }
     },
-    getToken: function () {
-        var req = HttpManager.GET({url: `${GLOBALS.API_URL}csrf_token`, withCredentials: true, withoutToken: true, withoutXSRF: true});
-        req.then(res => {
-            this.setState({_token: res.response.token});
-            HttpManager.setToken(res.response.token);
-        });
-    },
-    login: function (code) {
-        var req, req2;
-        req2 = HttpManager.POST({
-            url: `${GLOBALS.API_URL}create_demo_student`,
-            withCredentials: true,
-            withoutXSRF: true,
-            handleErrors: false
-        }, {code});
-        req2.then(createRes => {
-            if (createRes.status < 300 && createRes.status >= 200) {
-                req = HttpManager.POST({
-                    url: `${GLOBALS.API_URL}auth/login`,
-                    withCredentials: true,
-                    withoutXSRF: true,
-                    handleErrors: false
-                }, {}, {
-                    'X-CSRF-TOKEN': this.state._token,
-                    'Authorization': `Basic ${window.btoa(createRes.response.data.username + '@changemyworldnow.com:demo123')}`
-                });
-                req.then(res => {
-                    if (res.status < 300 && res.status >= 200) {
-                        Authorization.reloadUser().then(() => {
-                            Log.info('User login successful');
-                            History.replace('/profile');
-                        });
-                    } else {
-                        Toast.error(ERRORS.BAD_PASS);
-                        Log.log(req, 'Invalid login');
-                    }
-                }).catch(e => {
-                    Toast.error(ERRORS.BAD_PASS);
-                    Log.log(e, 'Invalid login');
-                });
-            } else {
-                Toast.error(ERRORS.BAD_PASS);
-                Log.log(req, 'Invalid login');
-            }
-        }).catch(e => {
-            Toast.error(ERRORS.BAD_PASS);
-            Log.log(e, 'Invalid login');
-        });
+    login: function () {
+        if (Store.getState().currentUser.user_id) {
+            History.push('/profile');
+        } else {
+            History.push('/login');
+        }
     },
     renderCaptcha: function () {
         var captchas = document.getElementsByClassName('grecaptcha');
@@ -302,7 +257,11 @@ var Header = React.createClass({
         this.setState({contactOpen: false, showContact: false});
     },
     loginAlert: function () {
-        History.replace('/login');
+        if (Store.getState().currentUser.user_id) {
+            History.replace('/profile');
+        } else {
+            History.replace('/login');
+        }
     },
     launchDemo: function () {
         this.setState({demoOpen: true});
@@ -315,6 +274,7 @@ var Header = React.createClass({
         Toast.success(COPY.ALERTS.SIGNUP.TEXT);
     },
     render: function () {
+        var loginButtonCopy = Store.getState().currentUser.user_id ? COPY.BUTTONS.PROFILE : COPY.BUTTONS.LOGIN;
         return (
             <div>
                 <Modal show={this.state.demoOpen} onHide={this.confirmDemo}>
@@ -363,10 +323,10 @@ var Header = React.createClass({
                         {COPY.BUTTONS.SIGNUP}
                     </Button>
                     <Button id="login" className="hidden" onClick={this.loginAlert}>
-                        {COPY.BUTTONS.LOGIN}
+                        {loginButtonCopy}
                     </Button>
-                    <Button id="demo" className="purple" onClick={this.launchDemo}>
-                        {COPY.BUTTONS.LOGIN}
+                    <Button id="demo" className="purple" onClick={this.login}>
+                        {loginButtonCopy}
                     </Button>
                 </div>
             </div>

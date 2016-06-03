@@ -1,7 +1,23 @@
+@import 'variables';
+
+.profile-image-popover {
+    color: gray;
+
+    strong {
+        color: #7829bb;
+    }
+
+    a {
+        color: #7829bb;
+        cursor: pointer;
+    }
+}
+
 .profile-image {
     position: relative;
     z-index: 2;
     text-align: center;
+    padding-bottom: $standard;
 
     .profile-pic {
         transform: translate3d(0px, 0px, 0px); //fix for image jitter in chrome: http://stackoverflow.com/questions/12980153/image-moves-on-hover-chrome-opacity-issue
@@ -14,29 +30,37 @@
     .below {
         display: none;
     }
-    
+
     &.link-below .upload {
         display: none;
     }
 
     .upload {
+        width: 100%;
         z-index: 1;
         text-align: center;
-        background: rgba(200,200,200,0.8);
+        background: $cmwn-purple;
         color: white;
-        padding: 15px;
+        padding: ($standard / 2);
         position: absolute;
         left: 0;
         right: 0;
         bottom: 0;
-        opacity: 0;
-        transition: opacity 0.8s, z-index 0s
+        opacity: 1;
+        border: none;
+        display: inline-block;
+        vertical-align: middle;
+        transform: translateZ(0);
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+        backface-visibility: hidden;
+        transition-duration: 0.3s;
+        transition-property: box-shadow, transform;
     }
 
-    &:hover .upload {
-        opacity: 1;
-        z-index: 3;
-        cursor: pointer;
+    .upload:hover, .upload:focus, .upload:active {
+        outline: none;
+        box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
+        transform: scale(1.1);
     }
 }
 

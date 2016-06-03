@@ -1,0 +1,27 @@
+version: '2'
+services:
+  php:
+    container_name: cmwn_front_php
+    build: ./docker/php
+    environment:
+      APP_API_URL: "https://api-local.changemyworldnow.com/"
+      APP_GAME_URL: "https://games-local.changemyworldnow.com/"
+      APP_MODE: "local"
+    volumes:
+      - ./:/var/www/
+
+  node:
+    container_name: cmwn_front_node
+    build: ./docker/node
+    volumes:
+      - ./:/var/www/
+
+  nginx:
+    container_name: cmwn_front_ngnix
+    build: ./docker/nginx
+    ports:
+      - "443:443"
+    volumes:
+      - ./:/var/www/
+    links:
+      - php

@@ -315,13 +315,11 @@ const TERMS = (
 
     <p className="p5 ft3">Change My World Now</p>
 
-    <p className="p50 ft3">Gina&#8217;s Ink, Incorporated</p>
+    <p className="p50 ft3">Gina's Ink, Incorporated</p>
 
-    <p className="p50 ft3">600 Third Ave</p>
+    <p className="p50 ft3">21 W 46th Street, Suite 605 </p>
 
-    <p className="p50 ft3">2<span className="ft25">nd</span> Floor</p>
-
-    <p className="p50 ft3">New York City, NY 10016</p>
+    <p className="p50 ft3">New York, New York 10036</p>
   </div>
 </div>
 );

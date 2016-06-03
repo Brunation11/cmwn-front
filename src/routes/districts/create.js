@@ -1,12 +1,12 @@
 import React from 'react';
 import {Button, Input} from 'react-bootstrap';
+import { connect } from 'react-redux';
 
 import HttpManager from 'components/http_manager';
 import Log from 'components/log';
 import Toast from 'components/toast';
 import History from 'components/history';
 import Layout from 'layouts/two_col';
-import GLOBALS from 'components/globals';
 import Form from 'components/form';
 
 const ERRORS = {
@@ -14,7 +14,7 @@ const ERRORS = {
     INVALID_SUBMISSION: 'Invalid submission. Please update fields highlighted in red and submit again'
 };
 
-var Page = React.createClass({
+var Component = React.createClass({
     getInitialState: function () {
         return {
             title: '',
@@ -25,13 +25,17 @@ var Page = React.createClass({
     submitData: function () {
         var postData = {
             title: this.state.title,
-            system_id: this.state.districtId, //eslint-disable-line camelcase
-            code: this.state.code
+            meta: {
+                system_id: this.state.districtId, //eslint-disable-line camelcase
+                code: this.state.code,
+            },
+            description: this.state.title,
+            type: 'district'
         };
         if (this.refs.formRef.isValid()) {
-            HttpManager.POST({url: `${GLOBALS.API_URL}districts`, handleErrors: false}, postData).then(res => {
-                if (res.response && res.response.data && res.response.data.uuid) {
-                    History.replace(`/districts/${res.response.data.uuid}?message=created`);
+            HttpManager.POST({url: this.props.data._links.self.href, asJSON: true}, postData).then(res => {
+                if (res.response && res.response.org_id) {
+                    History.replace('/district/' + res.response.org_id + '?message=created');
                 }
             }).catch(err => {
                 Toast.error(ERRORS.BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
@@ -83,6 +87,19 @@ var Page = React.createClass({
     }
 });
 
-export default Page;
+const mapStateToProps = state => {
+    var data = {};
+    var loading = true;
+    if (state.page && state.page.data != null) {
+        loading = state.page.loading;
+        data = state.page.data;
+    }
+    return {
+        data,
+        loading,
+    };
+};
 
+var Page = connect(mapStateToProps)(Component);
+export default Page;
 
