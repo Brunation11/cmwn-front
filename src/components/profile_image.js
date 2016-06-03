@@ -49,7 +49,6 @@ var Component = React.createClass({
                     Log.error(e, 'Image could not be extracted from user');
                 }
             });
-
         }
     },
     startUpload: function (e) {
