@@ -1,5 +1,51 @@
 @import 'variables';
 
+.cmwn-confirm {
+  font-family: $cmwn-jade-font;
+}
+
+.cmwn-cancel {
+  font-family: $cmwn-jade-font;
+}
+
+.float-shadow {
+  display: inline-block;
+  vertical-align: middle;
+  transform: translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  backface-visibility: hidden;
+  position: relative;
+  transition-duration: 0.3s;
+  transition-property: transform;
+}
+
+.float-shadow:before {
+  pointer-events: none;
+  position: absolute;
+  z-index: -1;
+  content: '';
+  top: 100%;
+  left: 5%;
+  height: 10px;
+  width: 90%;
+  opacity: 0;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0) 80%);
+  /* W3C */
+  transition-duration: 0.3s;
+  transition-property: transform, opacity;
+}
+
+.float-shadow:hover, .float-shadow:focus, .float-shadow:active {
+  transform: translateY(-5px);
+  /* move the element up by 5px */
+}
+
+.float-shadow:hover:before, .float-shadow:focus:before, .float-shadow:active:before {
+  opacity: 1;
+  transform: translateY(5px);
+  /* move the element down by 5px (it will stay in place because it's attached to the element that also moves up 5px) */
+}
+
 .change-username {
 
   input:disabled {
