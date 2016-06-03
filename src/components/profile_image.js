@@ -111,13 +111,13 @@ var Component = React.createClass({
             return (
                 <ButtonToolbar>
                     <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={
-                        <Popover id="upload" style={{color: 'gray'}}>
-                            <strong style={{color: '#7829bb'}}>
+                        <Popover className="profile-image-popover" id="upload">
+                            <strong>
                                 {PENDINGHEADER}
                                 <br />
                             </strong>
                             {PENDING}
-                            <a style={{color: '#7829bb', cursor: 'pointer'}} onClick={this.startUpload}>
+                            <a onClick={this.startUpload}>
                                 here.
                             </a>
                         </Popover>}>
