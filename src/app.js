@@ -214,7 +214,7 @@ var AppComponent = React.createClass({
         this.forceUpdate();
     },
     globalAlert: function () {
-        // GlobalAlert({text: 'global alert!', type: 'notice', animate: 'scroll-left'});
+        GlobalAlert({text: 'global alert!', type: 'notice', animate: 'scroll-left'});
     },
     render: function () {
         if (this.isHome()) {

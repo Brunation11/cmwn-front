@@ -1,0 +1,61 @@
+@import 'variables';
+
+.swal2-container {
+    div.swal2-overlay[style] {
+        display: none !important;
+    }
+
+    .global-alert {
+        top: 0;
+        left: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        position: relative;
+        border-radius: 0;
+        box-shadow: inset 0 -20px 20px -20px #232323;
+
+        .swal2-content, a {
+            font-family: $cmwn-jade-font;
+            font-size: 1rem;
+            text-transform: uppercase;
+        }
+
+        a {
+            text-decoration: underline;
+        }
+    }
+
+    .warning, .notice, .success {
+        .swal2-content, a {
+            color: #fff;
+        }
+    }
+
+    .warning {
+        background: $cmwn-red !important;
+    }
+
+    .notice {
+        background: $cmwn-blue !important;
+    }
+
+    .success {
+        background: $cmwn-green !important;
+    }
+
+    .scroll-left {
+        .swal2-content {
+            transform:translateX(100%);
+            animation: scroll-left 20s linear infinite;
+        }
+
+        @keyframes scroll-left {
+            0%   {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+    }
+}
