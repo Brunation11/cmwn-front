@@ -33,7 +33,7 @@ const ERRORS = {
     INVALID_SUBMISSION: 'Invalid submission. Please update fields highlighted in red and submit again'
 };
 
-const TERMS_COPY = <span>By checking the box below, you agree that you have read, understand, and accept <a href="/terms" target="_blank">ChangeMyWorldNow.com's terms and conditions</a>.</span>;
+const TERMS_COPY = <span>By checking the box below, you agree that you have read, understand and accept the <a href="/terms" target="_blank">Change My World Now Terms and Conditions</a>.</span>;
 
 var checkPerms = function (data) {
     if (data && data.scope && !Util.decodePermissions(data.scope).update) {

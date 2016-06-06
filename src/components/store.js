@@ -59,6 +59,10 @@ var authReducer = (currentUser = Immutable(storedUserProperties), action) => {
             });
             return Immutable(nextUser);
         }.bind(null, currentUser),
+        [ACTION_CONSTANTS.UPDATE_USERNAME]: function (currentUser_, username) {
+            var nextUser = currentUser.set('username', username);
+            return nextUser;
+        }.bind(null, currentUser, action.username),
         [ACTION_CONSTANTS.NO_USER_AUTHORIZED]: function (currentUser_, data) {
             currentUser_ = currentUser_.set('token', data.token);
             currentUser_ = currentUser_.merge(data);
@@ -73,12 +77,12 @@ var authReducer = (currentUser = Immutable(storedUserProperties), action) => {
             //eventually this will need to be broken out into a fourth section
             //with its own url template binding rules, but for the time being
             //there is no difference between /users and /org/my-org/users
-            if (_.has(action, 'data._embedded.organizations[0]._links.org_users')) {
-                currentUser_ = currentUser_.setIn(['_links', 'user'], _.defaults(
-                    {label: 'Friends and Network', view_url: '/users'}, // eslint-disable-line camelcase
-                    action.data._embedded.organizations[0]._links.org_users
-                ));
-            }
+            //if (_.has(action, 'data._embedded.organizations[0]._links.org_users')) {
+            //    currentUser_ = currentUser_.setIn(['_links', 'user'], _.defaults(
+            //        {label: 'Friends and Network', view_url: '/users'}, // eslint-disable-line camelcase
+            //        action.data._embedded.organizations[0]._links.org_users
+            //    ));
+            //}
             return currentUser_;
         }.bind(null, currentUser, action.data)
     };
@@ -111,8 +115,20 @@ var pageReducer = (page = Immutable({title: 'Change My World Now'}), action) => 
             page_ = page_.set('data', action_.data);
             return page_;
         }.bind(null, page, action),
-        [ACTION_CONSTANTS.END_RELOAD_PAGE]: function (page_, action_) {
+        [ACTION_CONSTANTS.END_GET_NEXT_PAGE_PAGE]: function (page_, action_) {
             page_ = page_.set('data', action_.data);
+            return page_;
+        }.bind(null, page, action),
+        [ACTION_CONSTANTS.END_CHANGE_PAGE_ROW_COUNT]: function (page_, action_) {
+            page_ = page_.set('data', action_.data);
+            return page_;
+        }.bind(null, page, action),
+        [ACTION_CONSTANTS.PAGE_DATA_REJECTED]: function (page_) {
+            //do something?
+            return page_;
+        }.bind(null, page, action),
+        [ACTION_CONSTANTS.END_RELOAD_PAGE_FULFILLED]: function (page_, action_) {
+            page_ = page_.set('data', action_.payload.response);
             return page_;
         }.bind(null, page, action)
     };
@@ -142,6 +158,7 @@ var locationReducer = (previousLoc = {}, action) => {
 };
 
 var componentReducer = (allComponents = Immutable({_componentsToLoad: 0, _componentsLoaded: 0}), action) => {
+    /* @TODO MPR, 5/25/16: Update from Laravel pagination names */
     var setComponentData = function (component) {
         var extractedEmbedded = _.reduce(action.data._embedded, (a, i) => i);
         component = component.set('loading', false);

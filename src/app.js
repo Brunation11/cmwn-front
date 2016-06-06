@@ -217,7 +217,7 @@ var AppComponent = React.createClass({
         if (this.isHome()) {
             return (
                 <div>
-                    <Home logoLink={this.state.logoLink} currentUser={this.props.currentUser} />
+                    <Home />
                     {renderDevTool()}
                 </div>
             );
@@ -238,7 +238,7 @@ var AppComponent = React.createClass({
 const mapStateToProps = state => {
     var currentUser = {};
     if (state.currentUser != null) {
-        currentUser = state.page.data;
+        currentUser = state.currentUser;
     }
     return {
         currentUser
@@ -305,8 +305,15 @@ var progressivePageLoad = function () {
         if (state.location.endpoint && state.location.endpoint.indexOf('$') === 0) {
             //Looking for the string $$ at the beginning of a route to indicate
             //that it should be pulled directly from the users context
-            if (Store.getState().currentUser._links[state.location.endpoint.slice(2)] != null) {
-                pageRoute = Store.getState().currentUser._links[state.location.endpoint.slice(2)].href;
+            if (state.currentUser._links[state.location.endpoint.slice(2)] != null) {
+                if (state.currentUser._links[state.location.endpoint.slice(2)].templated) {
+                    pageRoute = Util.modifyTemplatedQueryParams(
+                        Store.getState().currentUser._links[state.location.endpoint.slice(2)].href,
+                        {page: state.page.pageNum, per_page: state.page.itemCount} //eslint-disable-line camelcase
+                    );
+                } else {
+                    pageRoute = Store.getState().currentUser._links[state.location.endpoint.slice(2)].href;
+                }
             } else {
                 Log.error('Route could not be loaded, route endpoint not provided for the current user');
             }

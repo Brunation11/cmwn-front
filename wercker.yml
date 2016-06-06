@@ -22,3 +22,6 @@ build:
     - script:
       name: Build packages
       code: gulp build --production
+  after-steps:
+    - slack-notifier:
+      url: $SLACK_URL

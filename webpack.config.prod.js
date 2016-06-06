@@ -34,12 +34,12 @@ module.exports = {
                 warnings: false
             },
             output: {
-                comments: function(node, comment) {
+                comments: function (node, comment) {
                     var text = comment.value;
                     var type = comment.type;
-                    if (type == "comment2") {
+                    if (type === 'comment2') {
                         // multiline comment
-                        return /@copyright/i.test(text);
+                        return (/@copyright/i).test(text);
                     }
                 }
             }
