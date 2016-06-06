@@ -134,7 +134,7 @@ import Store from 'components/store';
 import Util from 'components/util';
 import DevTools from 'components/devtools';
 import Actions from 'components/actions';
-
+import GlobalAlert from 'components/global_alert';
 import Errors from 'components/errors';
 import Home from 'routes/home';
 
@@ -213,10 +213,14 @@ var AppComponent = React.createClass({
     globalUpdate: function () {
         this.forceUpdate();
     },
+    globalAlert: function () {
+        GlobalAlert({text: 'global alert!', type: 'notice', animate: 'scroll-left'});
+    },
     render: function () {
         if (this.isHome()) {
             return (
                 <div>
+                    {this.globalAlert()}
                     <Home />
                     {renderDevTool()}
                 </div>
@@ -224,6 +228,7 @@ var AppComponent = React.createClass({
         }
         return (
             <div>
+                {this.globalAlert()}
                 {Errors.renderErrors()}
                 <GlobalHeader logoLink={this.state.logoLink} currentUser={this.props.currentUser} />
                 <div className="sweater">

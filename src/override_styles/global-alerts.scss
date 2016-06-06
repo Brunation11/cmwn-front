@@ -1,0 +1,53 @@
+@import 'variables';
+
+.swal2-container {
+    div.swal2-overlay[style] {
+        display: none !important;
+    }
+
+    .global-alert {
+        top: 0 !important;
+        left: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        position: relative !important;
+        border-radius: 0 !important;
+        box-shadow: inset 0 -20px 20px -20px #232323;
+        font-family: $cmwn-jade-font;
+    }
+
+    .warning, .notice, .success {
+        .swal2-content {
+            color: #fff;
+            text-transform: uppercase;
+        }
+    }
+
+    .warning {
+        background: $cmwn-red !important;
+    }
+
+    .notice {
+        background: $cmwn-blue !important;
+    }
+
+    .success {
+        background: $cmwn-green !important;
+    }
+
+    .scroll-left {
+        .swal2-content {
+            transform:translateX(100%);
+            animation: scroll-left 15s linear infinite;
+        }
+
+        @keyframes scroll-left {
+            0%   {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+    }
+}
