@@ -60,6 +60,6 @@ var GlobalAlert = function (args) {
         allowEscapeKey: false,
         customClass: 'global-alert' + ' ' + args.type + ' ' + args.animate,
     });
-}
+};
 
 export default GlobalAlert;
