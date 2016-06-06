@@ -1,7 +1,8 @@
 import SweetAlert from 'sweetalert2';
 
 // Argument                    Default value       Description
-// title                       null                The title of the modal. It can either be added to the object under the key   //                                                 "title" or passed as the first parameter of the function.
+// title                       null                The title of the modal. It can either be added to the object under the key
+//                                                 "title" or passed as the first parameter of the function.
 // text                        null                A description for the modal. It can either be added to the object under the key
 //                                                 "text" or passed as the second parameter of the function.
 // html                        null                A HTML description for the modal. If "text" and "html" parameters are provided
@@ -54,11 +55,15 @@ import SweetAlert from 'sweetalert2';
 
 var GlobalAlert = function (args) {
     SweetAlert({
-        text: args.text,
+        animation: false,
+        html: args.text,
         showConfirmButton: false,
         allowOutsideClick: false,
         allowEscapeKey: false,
-        customClass: 'global-alert' + ' ' + args.type + ' ' + args.animate,
+        customClass: ('global-alert'
+                      + (args.type ? (' ' + args.type) : '')
+                      + (args.animate ? (' ' + args.animate) : '')
+                      )
     });
 };
 
