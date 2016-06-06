@@ -376,6 +376,8 @@ gulp.task('lint-config', function () {
 });
 
 gulp.task('test', function () {
+		process.env.NODE_ENV = 'production';
+		process.env.BABEL_ENV = 'production';
     var tests = gulp.src(['src/**/*.test.js'], {read: false})
          .pipe(mocha({require: ['./src/testdom.js'], reporter: 'min'}));
     tests.on('error', function (err) {
