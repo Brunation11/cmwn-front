@@ -56,10 +56,7 @@ var Component = React.createClass({
         HttpManager.POST({url: state.currentUser._links.friend.href}, {
             'friend_id': id
         }).then(() => {
-            this.refs.fetcher.getData().then(() => {
-                Toast.success(FRIEND_ADDED + item.username);
-                this.forceUpdate();
-            });
+            Toast.success(FRIEND_ADDED + item.username);
             Actions.dispatch.START_RELOAD_PAGE(Store.getState());
         }).catch(this.friendErr);
     },
@@ -78,8 +75,8 @@ var Component = React.createClass({
                     <div className="item">
                         <span className="overlay">
                             <div className="relwrap"><div className="abswrap">
-                                <Button onClick={this.doNothing} className={ClassNames('blue standard', {faded: item.friend_status !== 'requested'})}>{PENDING}</Button>
-                                <Button onClick={this.acceptRequest.bind(this, item)} className={ClassNames('blue standard', {faded: item.friend_status !== 'PENDING'})}>{REQUESTED}</Button>
+                                <Button onClick={this.doNothing} className={ClassNames('blue standard', {faded: item.friend_status !== 'PENDING'})}>{PENDING}</Button>
+                                <Button onClick={this.acceptRequest.bind(this, item)} className={ClassNames('blue standard', {faded: item.friend_status !== 'NEEDS_YOUR_ACCEPTANCE'})}>{REQUESTED}</Button>
                                 <Button className="purple standard">{PROFILE}</Button>
                             </div></div>
                         </span>

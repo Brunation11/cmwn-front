@@ -1,6 +1,5 @@
 import React from 'react';
 import _ from 'lodash';
-import {Link} from 'react-router';
 import { connect } from 'react-redux';
 import {Panel, Button} from 'react-bootstrap';
 
@@ -69,23 +68,21 @@ var Component = React.createClass({
     renderFlip: function (item){
         return (
             <div className="flip">
-                <Link to={`/student/${item.uuid}`}>
-                    <div className="item">
-                        <span className="overlay">
-                            <div className="relwrap"><div className="abswrap">
-                                <Button onClick={this.addFriend.bind(this, item)} className={ClassNames('green standard', {hidden: item.relationship === 'Pending' || item.relationship === 'requested'})}>{ADD_FRIEND}</Button>
-                                <Button
-                                    onClick={this.addFriend.bind(this, item)}
-                                    className={ClassNames('blue standard', {hidden: item.relationship !== 'Pending'})}
-                                >{ACCEPT}</Button>
-                                <Button className={ClassNames('blue standard', {hidden: item.relationship !== 'requested'})}>{REQUESTED}</Button>
-                                <Button className="purple standard" onClick={History.push.bind(null, '/profile/' + item.user_id)}>{PROFILE}</Button>
-                            </div></div>
-                        </span>
-                        <img src={item.image}></img>
-                    </div>
-                    <p className="linkText" >{item.username}</p>
-                </Link>
+                <div className="item">
+                    <span className="overlay">
+                        <div className="relwrap"><div className="abswrap">
+                            <Button onClick={this.addFriend.bind(this, item)} className={ClassNames('green standard', {hidden: item.relationship === 'Pending' || item.relationship === 'requested'})}>{ADD_FRIEND}</Button>
+                            <Button
+                                onClick={this.addFriend.bind(this, item)}
+                                className={ClassNames('blue standard', {hidden: item.relationship !== 'Pending'})}
+                            >{ACCEPT}</Button>
+                            <Button className={ClassNames('blue standard', {hidden: item.relationship !== 'requested'})}>{REQUESTED}</Button>
+                            <Button className="purple standard" onClick={History.push.bind(null, '/profile/' + item.suggest_id)}>{PROFILE}</Button>
+                        </div></div>
+                    </span>
+                    <img src={item.image}></img>
+                </div>
+                <p className="linkText" >{item.username}</p>
                 {''/*this.renderFlipsEarned(item)*/}
             </div>
         );
