@@ -128,7 +128,7 @@ var pageReducer = (page = Immutable({title: 'Change My World Now'}), action) => 
             return page_;
         }.bind(null, page, action),
         [ACTION_CONSTANTS.END_RELOAD_PAGE_FULFILLED]: function (page_, action_) {
-            page_ = page_.set('data', action_.data);
+            page_ = page_.set('data', action_.payload.response);
             return page_;
         }.bind(null, page, action)
     };
