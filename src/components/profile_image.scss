@@ -1,5 +1,18 @@
 @import 'variables';
 
+.profile-image-popover {
+    color: gray;
+
+    strong {
+        color: #7829bb;
+    }
+
+    a {
+        color: #7829bb;
+        cursor: pointer;
+    }
+}
+
 .profile-image {
     position: relative;
     z-index: 2;
