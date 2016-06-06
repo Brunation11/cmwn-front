@@ -73,7 +73,6 @@ describe('Application', function () {
             expect(TestUtils.isDOMComponent(this.appWrapper)).to.be.ok;
         });
     });
-    /*
     describe('Routes', function () {
         it('Should load User Profile', function () {
             Store.dispatch({
@@ -192,5 +191,5 @@ describe('Application', function () {
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
         */
-    //});
+    });
 });
