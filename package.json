@@ -38,7 +38,8 @@
     "reselect": "^2.0.3",
     "screenfull": "^3.0.0",
     "seamless-immutable": "^5.1.0",
-    "shortid": "^2.2.4"
+    "shortid": "^2.2.4",
+    "sweetalert2": "^3.2.3"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.3",
