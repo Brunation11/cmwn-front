@@ -35,12 +35,12 @@
   transition-property: transform, opacity;
 }
 
-.float-shadow:hover, .float-shadow:focus, .float-shadow:active {
+.float-shadow:hover {
   transform: translateY(-5px);
   /* move the element up by 5px */
 }
 
-.float-shadow:hover:before, .float-shadow:focus:before, .float-shadow:active:before {
+.float-shadow:hover:before {
   opacity: 1;
   transform: translateY(5px);
   /* move the element down by 5px (it will stay in place because it's attached to the element that also moves up 5px) */
