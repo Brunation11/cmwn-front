@@ -12,7 +12,7 @@ import Store from 'components/store';
 import Layout from 'layouts/one_col';
 
 const LABELS = {
-    LOGIN: 'Email',
+    LOGIN: 'Email | Username',
     PASSWORD: 'Password',
     SUBMIT: 'SUBMIT',
     RESET: 'Reset Password'
