@@ -1,5 +1,6 @@
 /* eslint-disable */
 var jsdom = require('jsdom')
+var _ = require('lodash')
 
 // setup the simplest document possible
 var doc = jsdom.jsdom('<!doctype html><html><body></body></html>')
@@ -23,6 +24,12 @@ global.window.localStorage = {
     getItem: function () {
         return '';
     }
+};
+global.window.console = global.console;
+global.console.error = global.console.error || _.noop;
+global.window.Rollbar = global.window.Rollbar || {
+	error: _.noop,
+	configure: _.noop
 };
 
 // take all properties of the window object and also attach it to the 
