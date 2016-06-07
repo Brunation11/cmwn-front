@@ -1,10 +1,9 @@
 import React from 'react';
 import {Input, Panel, Button, Glyphicon} from 'react-bootstrap';
-import Alertify from 'alertify.js';
+import SweetAlert from 'sweetalert2';
 
 import HttpManager from 'components/http_manager';
 import Util from 'components/util';
-import Toast from 'components/toast';
 import ClassNames from 'classnames';
 
 import 'components/update_username.scss';
@@ -12,7 +11,7 @@ import 'components/update_username.scss';
 const IDENTIFIER = 'change-username';
 
 const CHANGE = 'Update your Username';
-const CONFIRM_SET = 'Are you sure? Once you leave this page, you will not be able to change back to {0}.';
+const CONFIRM_SET = 'Once you leave this page, you will not be able to change back to {0}.';
 const BAD_UPDATE = 'Could not update your user name.';
 // const CONFIRM_RESET = 'Are you sure? If you change back to {0} you may not be able to return to {1}.';
 
@@ -48,18 +47,48 @@ var Page = React.createClass({
         this.setState({tooltipsOpen: true});
     },
     setChildUsername: function () {
-        Alertify
-            .okBtn(BUTTONS.CONFIRM)
-            .cancelBtn(BUTTONS.CANCEL)
-            .confirm(Util.formatString(CONFIRM_SET, this.state.original), () => {
-                HttpManager.POST({url: 'https://api-dev.changemyworldnow.com/user-name'}, {user_name: this.state.option}).then(server => { // eslint-disable-line
-                    this.setState({username: this.state.option});
-                    Toast.spawn({addnCls: 'humane-flatty-success', waitForMove: false, timeout: 10000})('Username Updated to ' + server.response.username + '!');
+        SweetAlert({
+            title: 'Are you sure?',
+            text: Util.formatString(CONFIRM_SET, this.state.original),
+            type: 'warning',
+            showConfirmButton: true,
+            confirmButtonText: BUTTONS.CONFIRM,
+            confirmButtonColor: '#47B72C',
+            confirmButtonClass: 'cmwn-confirm float-shadow',
+            showCancelButton: true,
+            cancelButtonText: BUTTONS.CANCEL,
+            cancelButtonColor: '#7829BB',
+            cancelButtonClass: 'cmwn-cancel float-shadow',
+            closeOnConfirm: false,
+            buttonStyling: false
+        }).then(isConfirm => {
+            if (isConfirm) {
+                HttpManager.POST({
+                    url: 'https://api-dev.changemyworldnow.com/user-name'
+                }, {
+                    user_name: this.state.option // eslint-disable-line
+                }).then(server => {
+                    this.setState({
+                        username: this.state.option
+                    });
+                    SweetAlert({
+                        title: 'SAVED!',
+                        text: ('Username Updated to ' + server.response.username + '!'),
+                        type: 'success',
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
                 }).catch(err => {
-                    Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
+                    SweetAlert({
+                        title: 'OH NO!',
+                        text: (BAD_UPDATE + (err.message ? ' Message: ' + err.message : '')),
+                        type: 'error',
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
                 });
             }
-        );
+        });
     },
     resetLast: function () {
         this.setState({option: this.state.last, last: this.state.option});
