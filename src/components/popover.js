@@ -23,7 +23,7 @@ var PopOver = React.createClass({
         var state = this.state;
         return (
             <ButtonToolbar>
-                <OverlayTrigger trigger={state.trigger} rootClose placement={state.placement} overlay={<Popover title={state.element.title + '  |  earned: ' + Moment(state.element.earned).format('MMM Do YYYY')}>{state.element.description}</Popover>}>
+                <OverlayTrigger trigger={state.trigger} rootClose placement={state.placement} overlay={<Popover id='popover' title={state.element.title + '  |  earned: ' + Moment(new Date(state.element.earned)).format('MMM Do YYYY')}>{state.element.description}</Popover>}>
                     <Link to="" key={Shortid.generate()}><img src={`/flips/${state.element.flip_id}.png`} ></img></Link>
                 </OverlayTrigger>
             </ButtonToolbar>
