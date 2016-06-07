@@ -135,7 +135,7 @@ import Util from 'components/util';
 import DevTools from 'components/devtools';
 import Actions from 'components/actions';
 import Detector from 'components/browser_detector';
-import Global_Alert from 'components/global_alerts';
+import GlobalAlert from 'components/global_alerts';
 import Errors from 'components/errors';
 import Home from 'routes/home';
 
@@ -145,8 +145,7 @@ import 'overrides.scss';
 
 import 'media/logo.png';
 
-+const BROWSER_NOT_SUPPORTED = 'For the best viewing experience we recommend the desktop version in Chrome.<br />If you don\'t have chrome, <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">download it for free here</a>.';
-
+const BROWSER_NOT_SUPPORTED = 'For the best viewing experience we recommend the desktop version in Chrome.<br />If you don\'t have chrome, <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">download it for free here</a>.';
 
 //htaccess should take care of it but if somehow it does not, this should overkill the issue
 if (window.location.protocol !== 'https:') {
