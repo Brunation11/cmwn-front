@@ -1,6 +1,6 @@
 import React from 'react';
 import {Panel, Button, Glyphicon} from 'react-bootstrap';
-import Alertify from 'alertify.js';
+import SweetAlert from 'sweetalert2';
 
 import HttpManager from 'components/http_manager';
 import Util from 'components/util';
