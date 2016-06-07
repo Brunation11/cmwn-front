@@ -65,6 +65,9 @@ var GlobalAlert = function (args) {
                       + (args.animate ? (' ' + args.animate) : '')
                      )
     });
+
+    document.body.insertBefore(document.body.lastChild, document.body.firstChild);
+    document.body.removeChild(document.body.lastChild);
 };
 
 export default GlobalAlert;
