@@ -1,6 +1,6 @@
 import React from 'react';
-import {Input, Panel, Button, Glyphicon} from 'react-bootstrap';
-import SweetAlert from 'sweetalert2';
+import {Panel, Button, Glyphicon} from 'react-bootstrap';
+import Alertify from 'alertify.js';
 
 import HttpManager from 'components/http_manager';
 import Util from 'components/util';
@@ -9,18 +9,24 @@ import ClassNames from 'classnames';
 import 'components/update_username.scss';
 
 const IDENTIFIER = 'change-username';
-
-const CHANGE = 'Update your Username';
-const CONFIRM_SET = 'Once you leave this page, you will not be able to change back to {0}.';
+const CHANGE = 'create a new username';
+const CONFIRM_SET = 'Are you sure? Once you leave this page, you will not be able to change back to {0}.';
 const BAD_UPDATE = 'Could not update your user name.';
 // const CONFIRM_RESET = 'Are you sure? If you change back to {0} you may not be able to return to {1}.';
 
 const BUTTONS = {
-    CONFIRM: 'Yes, change it!',
+    CONFIRM: 'How about this one?',
+    PREVIOUS: 'This name is still available!',
+    ORIGINAL: 'You can also keep your original.',
     CANCEL: 'No, go back.',
     GET: 'Generate New Name',
     SET: 'Set {0} as my Username',
     LAST: 'Reset to {0}'
+};
+
+const COPY = {
+    NOTE: 'Click to select the name you want.',
+    DISCLAIMER: 'Note: Once you change your username, you won\'t be able to go back to your original.'
 };
 
 var Page = React.createClass({
@@ -104,27 +110,38 @@ var Page = React.createClass({
         return (
            <div className="update-username-container">
                 <div className="left">
-                    <Input
-                        type="text"
-                        value={this.state.option}
-                        disabled
-                        label="Current Username:"
-                    />
-                    <Button className="purple username-btn generate" onClick={this.reloadChildUsername}><Glyphicon glyph="repeat" /> {BUTTONS.GET}</Button>
+                    <Button className="purple username-btn username-picker generate" onClick={this.reloadChildUsername}>
+                        <Glyphicon glyph="repeat" /> {BUTTONS.GET}
+                    </Button>
                     <br />
-                    <Button className="green username-btn submit" onClick={this.setChildUsername}>{Util.formatString(BUTTONS.CONFIRM)}</Button>
+                    <Button className="green username-btn username-picker" onClick={this.setChildUsername}>
+                        {BUTTONS.CONFIRM}
+                        <br />
+                        <span className="username username-picker">
+                            {this.state.option}
+                        </span>
+                    </Button>
                     <br />
-                    <Button className="blue alternate-usernames-btn username-btn" onClick={this.resetLast}>Select Last Option: {this.state.last}</Button>
+                    <Button className="green username-btn username-picker" onClick={this.resetLast}>
+                        {BUTTONS.PREVIOUS}
+                        <br />
+                        <span className="username username-picker">
+                            {this.state.last}
+                        </span>
+                    </Button>
                     <br />
-                    <Button className="blue alternate-usernames-btn username-btn" onClick={this.resetOriginal}>Select Original: {this.state.original}</Button>
+                    <Button className="green username-btn username-picker" onClick={this.resetOriginal}>
+                        {BUTTONS.ORIGINAL}
+                        <br />
+                        <span className="username username-picker">
+                            {this.state.original}
+                        </span>
+                    </Button>
                 </div>
                 <div className="right">
                     <div className={ClassNames('note', {open: this.state.tooltipsOpen})}>
-                        <p>love your new username? Be sure to click "YES, CHANGE IT!" to make it yours forever!</p>
-                        <p className="disclaimer">Note: Once you choose to set the new username, you won't be able to change it again.</p>
-                    </div>
-                    <div className="reminder-container">
-                        <p className={ClassNames('reminder', {animate: this.state.tooltipsOpen})}>Changed your mind? You can choose from the last choice or keep your same username!</p>
+                        <p>{COPY.NOTE}</p>
+                        <p className="disclaimer">{COPY.DISCLAIMER}</p>
                     </div>
                 </div>
            </div>
