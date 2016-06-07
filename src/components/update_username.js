@@ -1,5 +1,5 @@
 import React from 'react';
-import {Input, Panel, Button, Glyphicon} from 'react-bootstrap';
+import {Panel, Button, Glyphicon} from 'react-bootstrap';
 import Alertify from 'alertify.js';
 
 import HttpManager from 'components/http_manager';
