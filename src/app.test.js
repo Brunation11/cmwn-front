@@ -27,17 +27,19 @@ import Game from 'routes/game';
 import ChangePassword from 'routes/change_password';
 */
 import Store from 'components/store';
-import ACTION_CONSTANTS from 'components/action_constants';
+console.log("loaded stuff??");
+//import ACTION_CONSTANTS from 'components/action_constants';
 
-import App from 'app';
+//import App from 'app';
 
+/*
 var testComponentWithStore = function (component) {
     return TestUtils.renderIntoDocument(
         <Provider store={Store} >
             {component}
         </Provider>
     );
-};
+};*/
 
 window.__cmwn.MODE = 'test';
 
@@ -57,7 +59,7 @@ describe('Test Utilities', function () {
     });
 });
 
-
+/*
 describe('Application', function () {
     before('render and locate element', function () {
         //var renderedComponent = TestUtils.renderIntoDocument(
@@ -191,5 +193,5 @@ describe('Application', function () {
             expect(TestUtils.isDOMComponent(inputComponent)).to.be.ok;
         });
         */
-    });
-});
+   /* });
+});*/

@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import Moment from 'moment';
 
 import Detector from 'components/browser_detector';
-import ProfileImage from 'components/profile_image';
+//import ProfileImage from 'components/profile_image';
 import FlipBoard from 'components/flipboard';
 import Game from 'components/game';
 import EventManager from 'components/event_manager';
@@ -18,7 +18,7 @@ import Toast from 'components/toast';
 //import Util from 'components/util';
 import History from 'components/history';
 import Store from 'components/store';
-import GenerateDataSource from 'components/datasource';
+//import GenerateDataSource from 'components/datasource';
 
 import Layout from 'layouts/two_col';
 
@@ -28,8 +28,8 @@ import 'routes/users/profile.scss';
 
 const PAGE_UNIQUE_IDENTIFIER = 'profile';
 
-const GameWrapper = GenerateDataSource('games', PAGE_UNIQUE_IDENTIFIER);
-const FlipSource = GenerateDataSource('user_flip', PAGE_UNIQUE_IDENTIFIER);
+//const GameWrapper = GenerateDataSource('games', PAGE_UNIQUE_IDENTIFIER);
+//const FlipSource = GenerateDataSource('user_flip', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     ACTION: 'Profile',
@@ -143,7 +143,8 @@ var Profile = React.createClass({
             return null;
         }
         return (
-           <GameWrapper transform={data => {
+        		<div>
+           {''/*<GameWrapper transform={data => {
                var array = data;
                var currentIndex, temporaryValue, randomIndex;
                if (array == null) {
@@ -168,7 +169,8 @@ var Profile = React.createClass({
                    renderFlip={this.renderFlip}
                    header={HEADINGS.ARCADE}
                />
-           </GameWrapper>
+           </GameWrapper>*/}
+           </div>
         );
     },
     renderClassList: function () {
@@ -218,9 +220,9 @@ var Profile = React.createClass({
                         {this.renderGame()}
                     </Modal.Body>
                 </Modal>
-                <FlipSource>
+                {''/*<FlipSource>
                    <Trophycase className={ClassNames({hidden: !this.state.isStudent})} />
-                </FlipSource>
+                </FlipSource>*/}
                 {this.renderGameList()}
             </div>
         );
