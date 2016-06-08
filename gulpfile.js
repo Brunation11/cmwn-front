@@ -27,6 +27,12 @@ var mergeStream = require('merge-stream');
 var sri = require('gulp-sri');
 var mocha = require('gulp-mocha');
 var zip = require('gulp-zip');
+var webdriverio = require('webdriverio')
+var selenium = require('selenium-standalone');
+var webdriver = require('gulp-webdriver');
+var http = require('http');
+var connect = require('connect');
+var serveStatic = require('serve-static');
 
 /** @const */
 var APP_PREFIX = 'APP_';
@@ -371,8 +377,42 @@ gulp.task('test', function () {
          .pipe(mocha({reporter: 'min'}));
 });
 
+
+var httpServer, seleniumServer;
+
+gulp.task('http', (done) => {
+    "use strict";
+    let app = connect().use(serveStatic('test/fixtures'));
+    httpServer = http.createServer(app).listen(9990, done);
+});
+
+gulp.task('selenium', (done) => {
+    selenium.install({logger: console.log}, () => {
+        selenium.start((err, child) => {
+            if (err) { return done(err); }
+            seleniumServer = child;
+            done();
+        });
+    });
+});
+
+
+gulp.task('e2e', ['http', 'selenium'], () => {
+    return gulp.src('wdio.conf.js')
+        .pipe(webdriver()).on('error', () => {
+            seleniumServer.kill();
+            process.exit(1);
+        });
+});
+
+gulp.task('test', ['e2e'], () => {
+    httpServer.close();
+    seleniumServer.kill();
+});
+
 //this task is only required when some post-build task intentionally clears the console, as our tests do
 gulp.task('showBuildErrors', function () {
     console.log(fs.readFileSync('build_errors.log'));
 });
+
 
