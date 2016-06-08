@@ -27,11 +27,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var mergeStream = require('merge-stream');
 var sri = require('gulp-sri');
 var mocha = require('gulp-mocha');
-var babel = require('gulp-babel');
-var istanbul = require('gulp-babel-istanbul');
-var injectModules = require('gulp-inject-modules');
 var zip = require('gulp-zip');
-var isparta = require('isparta');
 
 /** @const */
 var APP_PREFIX = 'APP_';
@@ -382,47 +378,13 @@ gulp.task('lint-config', function () {
 gulp.task('test', function () {
 		process.env.NODE_ENV = 'production';
 		process.env.BABEL_ENV = 'production';
-		// TODO: why read = false?
-    //var tests = gulp.src(['src/**/*.test.js'], {read: false})
-		console.log("assigning tests");
-		var tests = gulp.src(['src/rect.test.js'], {read: false})
+    var tests = gulp.src(['src/**/*.test.js'], {read: false})
          .pipe(mocha({require: ['./src/testdom.js'], reporter: 'min'}));
     tests.on('error', function (err) {
         console.log('SOMETHING HAPPENED:' + err);
     });
     return tests;
 });
-
-function swallowError (error) {
-
-	  // If you want details of the error in the console
-	  console.log(error.toString())
-
-	  this.emit('end')
-	}
-
-gulp.task('coverage', function(cb) {
-	// TODO: exclude test files?
-	gulp.src(['src/**/*.js', "!src/**/*.test.js"])
-	//gulp.src(['src/rectangle.js'])
-		.pipe(istanbul({
-			instrumenter: isparta.Instrumenter,
-			//includeUntested: true
-		}))
-		.pipe(istanbul.hookRequire({verbose: true}))
-		.on('finish', function() {
-			console.log("DONE PIPING");
-			gulp.src('src/rect.test.js')
-			//gulp.src('src/**/*.test.js')
-				.pipe(babel())
-				.pipe(injectModules())
-				.pipe(mocha({require: ['./src/testdom.js', 'ignore-styles'], reporter: 'min'}))
-				.pipe(istanbul.writeReports())
-				.on('error', swallowError)
-				.on('end', cb);
-		});
-}); 
-
 
 //this task is only required when some post-build task intentionally clears the console, as our tests do
 gulp.task('showBuildErrors', function () {

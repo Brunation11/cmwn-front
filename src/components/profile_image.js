@@ -151,5 +151,4 @@ const mapStateToProps = state => {
 var Image = connect(mapStateToProps)(Component);
 
 export default Image;
-console.log("done image");
 

@@ -254,4 +254,3 @@ const Store = createStore( function (state = {}, action) {
     return state;
 }, Immutable({routing: INITIAL_STATE}), compose(...composeMiddleware));
 export default Store;
-console.log("done store");

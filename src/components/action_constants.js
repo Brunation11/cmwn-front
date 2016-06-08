@@ -1,4 +1,3 @@
-console.log("starting action");
 import _ from 'lodash';
 /** This file exists to resolve a circular dependency between the store and action components*/
 const ACTIONS = [
@@ -51,4 +50,4 @@ const ACTIONS = [
 ];
 
 export default _.reduce(ACTIONS, (a, i) => _.defaults(a, {[i]: i}), {});
-console.log("done actions");
+

@@ -1,5 +1,5 @@
-import { connect } from 'react-redux';
 import React from 'react';
+import { connect } from 'react-redux';
 
 import SiteNav from 'components/site_nav';
 //import FriendList from 'components/friend_list';

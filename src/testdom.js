@@ -1,7 +1,7 @@
 /* eslint-disable */
 var jsdom = require('jsdom')
 var _ = require('lodash')
-console.log("test");
+
 // setup the simplest document possible
 var doc = jsdom.jsdom('<!doctype html><html><body></body></html>')
 

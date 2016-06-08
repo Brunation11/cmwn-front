@@ -1,4 +1,3 @@
-console.log("loading!!");
 import React from 'react';
 import _ from 'lodash';
 import Shortid from 'shortid';
