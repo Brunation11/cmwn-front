@@ -20,7 +20,7 @@ To setup the site, just run
 $ bin/install.sh
 ```
 
-Installing (Windows Powershell)
+Installing (Windows PowerShell)
 ---------------------------------------------
 
 Change symlink permissions:
