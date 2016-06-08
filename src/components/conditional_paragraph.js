@@ -1,13 +1,13 @@
 import React from 'react';
 import _ from 'lodash';
 
-var Component = React.createClass({
-    render: function () {
+class Component extends React.Component {
+    render() {
         if (this.props.children == null) {
             return null;
         }
-        return (
-            <div>
+        return
+            (<div>
                 {React.Children.map(this.props.children, child => {
                     var childProps = {};
                     if (child.props.children != null && child.props.children !== '') {
@@ -25,10 +25,9 @@ var Component = React.createClass({
                     }
                     return null;
                 })}
-            </div>
-        );
+            </div>);
     }
-});
+};
 
 export default Component;
 

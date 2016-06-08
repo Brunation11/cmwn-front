@@ -9,24 +9,18 @@ import Util from 'components/util';
 
 /** Higher Order Component */
 var GenerateDataSource = function (endpointIdentifier, componentName) {
-    var Component = React.createClass({
-        getInitialState: function () {
-            return {};
-        },
-        getDefaultProps: function () {
-            return {
-                renderNoData: () => null,
-                transform: _.identity,
-                onError: _.noop
-            };
-        },
-        componentWillMount: function () {
+	class Component extends React.Component {
+		constructor() {
+			super();
+			this.state = {};
+		}
+        componentWillMount() {
             Actions.dispatch.REGISTER_COMPONENT({endpointIdentifier: this.props.endpointIdentifier, componentName: this.props.componentName});
-        },
-        componentDidMount: function () {
-            this.attemptLoadComponentData();
-        },
-        componentWillReceiveProps: function (newProps) {
+        }
+        componentDidMount() {
+        	this.attemptLoadComponentData();
+        }
+        componentWillReceiveProps(newProps) {
             var mutableData;
             this.attemptLoadComponentData();
 
@@ -34,17 +28,19 @@ var GenerateDataSource = function (endpointIdentifier, componentName) {
                 mutableData = newProps.data.asMutable == null ? newProps.data : newProps.data.asMutable();
                 this.setState({data: Immutable(this.props.transform(mutableData))});
             }
-        },
-        attemptLoadComponentData: function () {
+        }
+        attemptLoadComponentData() {
             var state = Store.getState();
             Util.attemptComponentLoad(state, this.props.endpointIdentifier, componentName, this.props.onError);
-        },
-        reloadComponentData: function () {
+        }
+        
+        reloadComponentData() {
             /** @TODO MPR, 3/24/16: Implement this action **/
             Actions.dispatch.RELOAD_COMPONENT({endpointIdentifier: this.props.endpointIdentifier, componentName: this.props.componentName});
-        },
-        render: function () {
-            var propsForChild;
+        }
+        
+        render() {
+        	var propsForChild;
             var props = _.reduce(this.props, (a, i, k) => {
                 //we have to do this dumb copy because creating an immutable
                 //out of dom nodes overflows the call stack and
@@ -71,7 +67,13 @@ var GenerateDataSource = function (endpointIdentifier, componentName) {
                 </div>
             );
         }
-    });
+	}
+	Component.defaultProps = {
+			renderNoData: () => null,
+			transform: _.identity,
+			onError: _.noop
+	};
+	
     const mapStateToProps = state => {
         var component;
         var data = {};
