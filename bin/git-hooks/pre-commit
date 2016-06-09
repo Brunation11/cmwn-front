@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
-docker-machine active
+target_docker_name="front"
+
+bash $PWD/bin/setup-docker.sh $target_docker_name
 if [ $? != 0 ]
 then
-    echo "[pre-commit] no default docker-machine running"
+    >&2 echo "[post-merge] no $target_docker_name docker-machine running"
     exit 1
 fi
 
+echo "[post-merge] connecting to containers"
+eval $(docker-machine env $target_docker_name)
+
 echo "[pre-commit] Running lint"
-docker-compose run node eslint `pwd`/src
+docker-compose run --rm node gulp lint
