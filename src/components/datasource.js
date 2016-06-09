@@ -14,12 +14,15 @@ var GenerateDataSource = function (endpointIdentifier, componentName) {
 			super();
 			this.state = {};
 		}
+		
         componentWillMount() {
             Actions.dispatch.REGISTER_COMPONENT({endpointIdentifier: this.props.endpointIdentifier, componentName: this.props.componentName});
         }
+        
         componentDidMount() {
         	this.attemptLoadComponentData();
         }
+        
         componentWillReceiveProps(newProps) {
             var mutableData;
             this.attemptLoadComponentData();
@@ -29,12 +32,13 @@ var GenerateDataSource = function (endpointIdentifier, componentName) {
                 this.setState({data: Immutable(this.props.transform(mutableData))});
             }
         }
-        attemptLoadComponentData() {
+        
+        attemptLoadComponentData = () => {
             var state = Store.getState();
             Util.attemptComponentLoad(state, this.props.endpointIdentifier, componentName, this.props.onError);
         }
         
-        reloadComponentData() {
+        reloadComponentData = () => {
             /** @TODO MPR, 3/24/16: Implement this action **/
             Actions.dispatch.RELOAD_COMPONENT({endpointIdentifier: this.props.endpointIdentifier, componentName: this.props.componentName});
         }
@@ -68,6 +72,7 @@ var GenerateDataSource = function (endpointIdentifier, componentName) {
             );
         }
 	}
+	
 	Component.defaultProps = {
 			renderNoData: () => null,
 			transform: _.identity,
