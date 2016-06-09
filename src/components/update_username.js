@@ -16,6 +16,7 @@ const GOOD_UPDATED = 'Username updated to ';
 const BAD_UPDATE = 'Could not update your user name.';
 
 const BUTTONS = {
+    GENERATE: 'Generate New Name',
     NEW: 'How about this one?',
     PREVIOUS: 'This name is still available!',
     ORIGINAL: 'You can also keep your original.',
@@ -114,7 +115,7 @@ var Page = React.createClass({
            <div className="update-username-container">
                 <div className="left">
                     <Button className="purple username-btn username-picker generate" onClick={this.reloadChildUsername}>
-                        <Glyphicon glyph="repeat" /> {BUTTONS.GET}
+                        <Glyphicon glyph="repeat" /> {BUTTONS.GENERATE}
                     </Button>
                     <br />
                     <Button className="green username-btn username-picker" onClick={this.setChildUsername}>
