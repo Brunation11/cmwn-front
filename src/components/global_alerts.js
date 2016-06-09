@@ -61,10 +61,7 @@ var GlobalAlert = function (args) {
         showConfirmButton: false,
         allowOutsideClick: false,
         allowEscapeKey: false,
-        customClass: Classnames('global-alert', {
-                                [args.type]: args.type,
-                                [args.animate]: args.animate
-                              })
+        customClass: Classnames('global-alert', {[args.type]: args.type, [args.animate]: args.animate})
     });
 
     document.body.insertBefore(document.body.lastChild, document.body.firstChild);
