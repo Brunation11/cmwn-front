@@ -5,23 +5,27 @@ import SweetAlert from 'sweetalert2';
 import HttpManager from 'components/http_manager';
 import Util from 'components/util';
 import ClassNames from 'classnames';
+import Store from 'components/store';
 
 import 'components/update_username.scss';
 
 const IDENTIFIER = 'change-username';
 const CHANGE = 'create a new username';
-const CONFIRM_SET = 'Are you sure? Once you leave this page, you will not be able to change back to {0}.';
+const CONFIRM_SET = 'Are you sure you want to change your username? You will not be able to change it back to {0}.';
+const GOOD_UPDATED = 'Username updated to ';
 const BAD_UPDATE = 'Could not update your user name.';
-// const CONFIRM_RESET = 'Are you sure? If you change back to {0} you may not be able to return to {1}.';
 
 const BUTTONS = {
-    CONFIRM: 'How about this one?',
+    NEW: 'How about this one?',
     PREVIOUS: 'This name is still available!',
     ORIGINAL: 'You can also keep your original.',
-    CANCEL: 'No, go back.',
-    GET: 'Generate New Name',
-    SET: 'Set {0} as my Username',
-    LAST: 'Reset to {0}'
+    CONFIRM: 'Yes, change it!',
+    CANCEL: 'No',
+};
+
+const TITLES = {
+    SAVED: 'SAVED!',
+    ERROR: 'OH NO!'
 };
 
 const COPY = {
@@ -54,23 +58,22 @@ var Page = React.createClass({
     },
     setChildUsername: function () {
         SweetAlert({
-            title: 'Are you sure?',
             text: Util.formatString(CONFIRM_SET, this.state.original),
             type: 'warning',
             showConfirmButton: true,
             confirmButtonText: BUTTONS.CONFIRM,
             confirmButtonColor: '#47B72C',
-            confirmButtonClass: 'cmwn-confirm float-shadow',
+            confirmButtonClass: 'cmwn-font float-shadow',
             showCancelButton: true,
             cancelButtonText: BUTTONS.CANCEL,
             cancelButtonColor: '#7829BB',
-            cancelButtonClass: 'cmwn-cancel float-shadow',
+            cancelButtonClass: 'cmwn-font float-shadow',
             closeOnConfirm: false,
             buttonStyling: false
         }).then(isConfirm => {
             if (isConfirm) {
                 HttpManager.POST({
-                    url: 'https://api-dev.changemyworldnow.com/user-name'
+                    url: Store.getState().page.data._links.user_name.href
                 }, {
                     user_name: this.state.option // eslint-disable-line
                 }).then(server => {
@@ -78,15 +81,15 @@ var Page = React.createClass({
                         username: this.state.option
                     });
                     SweetAlert({
-                        title: 'SAVED!',
-                        text: ('Username Updated to ' + server.response.username + '!'),
+                        title: TITLES.SAVED,
+                        text: (GOOD_UPDATED + server.response.username + '!'),
                         type: 'success',
                         timer: 3000,
                         showConfirmButton: false
                     });
                 }).catch(err => {
                     SweetAlert({
-                        title: 'OH NO!',
+                        title: TITLES.ERROR,
                         text: (BAD_UPDATE + (err.message ? ' Message: ' + err.message : '')),
                         type: 'error',
                         timer: 3000,
@@ -115,7 +118,7 @@ var Page = React.createClass({
                     </Button>
                     <br />
                     <Button className="green username-btn username-picker" onClick={this.setChildUsername}>
-                        {BUTTONS.CONFIRM}
+                        {BUTTONS.NEW}
                         <br />
                         <span className="username username-picker">
                             {this.state.option}
