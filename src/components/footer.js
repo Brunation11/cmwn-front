@@ -24,16 +24,17 @@ const COPY = {
         SIGNUP: <span><p>We are so excited about your interest to work with us!</p><p>Click <a href="mailto:&#106;&#111;&#110;&#105;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#099;&#097;&#116;&#104;&#121;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;?subject=Sign up with CMWN&body=Thank you for your interest in Change My World Now!%0D%0A%0D%0AIf you would like to launch Change My World Now in your school please provide the following information and someone from our team will contact you.%0D%0A%0D%0AYour Name:%0D%0AYour School:%0D%0AYour Email:%0D%0ASchool Grades:%0D%0APrincipal Name:%0D%0ASchool Phone:%0D%0ACity/State:">here</a> to contact us.</p></span>
     }
 };
-var Footer = React.createClass({
-    getInitialState: function () {
-        return {
-            viewOpen: false,
-            workOpen: false,
-            contactOpen: false,
-            showContact: false
-        };
-    },
-    componentDidUpdate: function () {
+class Footer extends React.Component {
+	constructor() {
+		this.state = {
+	            viewOpen: false,
+	            workOpen: false,
+	            contactOpen: false,
+	            showContact: false
+		};
+	}
+
+    componentDidUpdate() {
         try {
             this.renderCaptcha();
         } catch(err) {
@@ -42,31 +43,37 @@ var Footer = React.createClass({
             Log.warn(err, 'Captcha not fully destroyed');
             return err;
         }
-    },
-    displayWork: function () {
+    }
+    
+    displayWork = () => {
         this.setState({ workOpen: true });
-    },
-    displayContact: function () {
+    }
+    
+    displayContact = () => {
         if (this.props.loggedIn) {
             this.setState({contactOpen: true, showContact: true});
             return;
         }
         this.setState({ contactOpen: true });
-    },
-    closeWork: function () {
+    }
+    
+    closeWork = () => {
         this.setState({ workOpen: false });
-    },
-    closeContact: function () {
+    }
+    
+    closeContact = () => {
         this.setState({ contactOpen: false });
-    },
-    renderCaptcha: function () {
+    }
+    
+    renderCaptcha() {
         var captchas = document.getElementsByClassName('grecaptcha');
         if (captchas.length) {
             grecaptcha.render(captchas[0], {'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l', callback: () => { //eslint-disable-line no-undef
                 this.setState({showContact: true});
             }});
         }
-    },
+    }
+    
     render: function () {
         return (
             <div className="global-footer">
@@ -96,7 +103,7 @@ var Footer = React.createClass({
             </div>
         );
     }
-});
+};
 
 export default Footer;
 

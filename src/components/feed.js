@@ -6,14 +6,9 @@ import Shortid from 'shortid';
 
 import 'components/feed.scss';
 
-var Page = React.createClass({
-    getDefaultProps: function () {
-        return {
-            data: null,
-            transform: _.identity
-        };
-    },
-    renderItems: function () {
+class Page extends React.Component {
+
+    renderItems() {
         if (this.props.data == null) {
             return null;
         }
@@ -36,8 +31,9 @@ var Page = React.createClass({
                 </li>
            );
         });
-    },
-    render: function () {
+    }
+    
+    render() {
         return (
            <div className={Classnames('feed', this.props.className)}>
                <ol>
@@ -46,8 +42,12 @@ var Page = React.createClass({
            </div>
         );
     }
-});
+}
+
+Page.defaultProps = {
+		data: null,
+        transform: _.identity
+};
 
 export default Page;
-
 

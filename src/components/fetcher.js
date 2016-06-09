@@ -7,21 +7,18 @@ import HttpManager from 'components/http_manager';
 import Log from 'components/log';
 
 /** Marked for deprecation */
-var Fetcher = React.createClass({
-    getInitialState: function () {
-        this.data = this.props.transform(this.props.data);
-        return {};
-    },
-    getDefaultProps: function () {
-        return {
-            transform: _.identity,
-            renderNoData: (() => null)
-        };
-    },
-    componentDidMount: function () {
+class Fetcher extends React.Component {
+	constructor() {
+		super(props);
+		this.data = this.props.transform(this.props.data);
+		this.state = {};
+	}
+	
+    componentDidMount() {
         this.getData();
-    },
-    getData: function () {
+    }
+	
+    getData() {
         var urlData = HttpManager.GET({url: this.props.url});
         return urlData.then(res => {
             if (res.response.data == null && res.response._embedded == null) {
@@ -47,8 +44,9 @@ var Fetcher = React.createClass({
             this.forceUpdate();
             return Promise.resolve(this.data);
         });
-    },
-    render: function () {
+    }
+    
+    render() {
         var propsForChild;
         var props = this.props || {};
 
@@ -69,7 +67,11 @@ var Fetcher = React.createClass({
             </div>
         );
     }
-});
+};
+
+Fetcher.defaultProps = {
+    transform: _.identity,
+    renderNoData: (() => null)
+}
 
 export default Fetcher;
-
