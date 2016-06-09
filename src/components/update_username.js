@@ -13,7 +13,7 @@ const IDENTIFIER = 'change-username';
 
 const CHANGE = 'Update your Username';
 const CONFIRM_SET = 'Are you sure you want to change your username? You will not be able to change it back to {0}.';
-const GOOD_UPDATED = 'Username updated to '
+const GOOD_UPDATED = 'Username updated to ';
 const BAD_UPDATE = 'Could not update your username.';
 
 
