@@ -5,7 +5,6 @@
     .flip-list {
         padding: $standard 0;
         padding-bottom: (2 * $standard);
-        overflow: scroll;
         width: 100%;
         img {
             padding: $standard / 3;
@@ -27,7 +26,6 @@
     }
 
     .earned, .in-progress {
-        overflow: scroll;
         white-space: nowrap;
         padding: $standard;
         padding-bottom: 0;
