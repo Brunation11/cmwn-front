@@ -6,9 +6,9 @@ import {Panel} from 'react-bootstrap';
 
 import 'components/flipboard.scss';
 
-class FlipBoard {
-	constructor() {
-		super();
+class FlipBoard extends React.Component {
+	constructor(props) {
+		super(props);
 		this.state = {
             data: _.map(this.props.data == null ? [] : this.props.data, this.props.transform)
         };

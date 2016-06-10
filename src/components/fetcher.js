@@ -8,7 +8,7 @@ import Log from 'components/log';
 
 /** Marked for deprecation */
 class Fetcher extends React.Component {
-	constructor() {
+	constructor(props) {
 		super(props);
 		this.data = this.props.transform(this.props.data);
 		this.state = {};

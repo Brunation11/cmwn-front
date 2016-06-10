@@ -32,7 +32,7 @@ class Page extends React.Component {
         state.canDelete = props.canDelete != null ? props.canDelete : Util.decodePermissions(props.scope).delete;
         this.setState(state);
     }
-    suspendAccount = () => {
+    suspendAccount() {
         if (window.confirm(CONFIRM_DELETE)) { //eslint-disable-line no-alert
             HttpManager.DELETE({url: GLOBALS.API_URL.slice(0, -1) + this.state.base + '/' + this.state.uuid})
                 .then(() => {
@@ -50,7 +50,7 @@ class Page extends React.Component {
             return null;
         }
         return (
-            <Button className={this.props.className + ' standard'} onClick={this.suspendAccount} >{this.props.text ? this.props.text : DELETE}</Button>
+            <Button className={this.props.className + ' standard'} onClick={this.suspendAccount.bind(this)} >{this.props.text ? this.props.text : DELETE}</Button>
         );
     }
 }

@@ -26,6 +26,7 @@ const COPY = {
 };
 class Footer extends React.Component {
 	constructor() {
+		super();
 		this.state = {
 	            viewOpen: false,
 	            workOpen: false,
@@ -45,11 +46,11 @@ class Footer extends React.Component {
         }
     }
     
-    displayWork = () => {
+    displayWork() {
         this.setState({ workOpen: true });
     }
     
-    displayContact = () => {
+    displayContact() {
         if (this.props.loggedIn) {
             this.setState({contactOpen: true, showContact: true});
             return;
@@ -57,11 +58,11 @@ class Footer extends React.Component {
         this.setState({ contactOpen: true });
     }
     
-    closeWork = () => {
+    closeWork() {
         this.setState({ workOpen: false });
     }
     
-    closeContact = () => {
+    closeContact() {
         this.setState({ contactOpen: false });
     }
     
@@ -74,15 +75,15 @@ class Footer extends React.Component {
         }
     }
     
-    render: function () {
+    render() {
         return (
             <div className="global-footer">
-                <Modal show={this.state.workOpen} onHide={this.closeWork}>
+                <Modal show={this.state.workOpen} onHide={this.closeWork.bind(this)}>
                     <Modal.Body>
                         {COPY.MODALS.WORK}
                     </Modal.Body>
                 </Modal>
-                <Modal show={this.state.contactOpen} onHide={this.closeContact}>
+                <Modal show={this.state.contactOpen} onHide={this.closeContact.bind(this)}>
                     <Modal.Body>
                         {COPY.MODALS.PRECAPTCHA}
                         <div className={ClassNames('grecaptcha', {hidden: this.props.loggedIn})}></div>
@@ -90,10 +91,10 @@ class Footer extends React.Component {
                     </Modal.Body>
                 </Modal>
                 <footer className="links">
-                    <a onClick={this.displayWork}>
+                    <a onClick={this.displayWork.bind(this)}>
                         {COPY.BUTTONS.WORK}
                     </a>
-                    <a onClick={this.displayContact}>
+                    <a onClick={this.displayContact.bind(this)}>
                         {COPY.BUTTONS.CONTACT}
                     </a>
                     <a href="/terms" target="_blank">

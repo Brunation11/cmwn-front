@@ -7,7 +7,7 @@ import Moment from 'moment';
 import 'components/dropdown_datepicker.scss';
 
 class Page extends React.Component {
-	constructor() {
+	constructor(props) {
 		super(props);
 		var month = 0, day = 0, year = 0;
         if (this.props.value != null) {
@@ -20,6 +20,7 @@ class Page extends React.Component {
                 day: day,
                 year: year
         }
+        this.setState = this.setState.bind(this);
 	}
 	
     componentWillReceiveProps(nextProps) {
@@ -36,7 +37,7 @@ class Page extends React.Component {
         }
     }
     
-    getDate = (nextState) => {
+    getDate(nextState) {
         var month = nextState.month || this.state.month,
             day = nextState.day || this.state.day,
             year = nextState.year || this.state.year;
@@ -46,7 +47,7 @@ class Page extends React.Component {
         return Moment(`${month}-${day}-${year}`).format('MM-DD-YYYY');
     }
     
-    reset = () => {
+    reset() {
         this.setState({
             month: 0,
             day: 0,
@@ -54,7 +55,7 @@ class Page extends React.Component {
         });
     }
     
-    renderMonthOptions = () => {
+    renderMonthOptions() {
         var items = [
             <option value={0} >Select Month</option>
         ];
@@ -68,7 +69,7 @@ class Page extends React.Component {
         return items;
     }
     
-    renderDayOptions = () => {
+    renderDayOptions() {
         var items = [
             <option value={0} >Select Day</option>
         ];
@@ -82,7 +83,7 @@ class Page extends React.Component {
         return items;
     }
     
-    renderYearOptions = () => {
+    renderYearOptions() {
         var items = [
             <option value={0} >Select Month</option>
         ];
@@ -112,7 +113,7 @@ class Page extends React.Component {
                     name="monthInput"
                     onChange={e => {
                         this.setState({month: e.target.value});
-                        this.props.onChange(this.getDate({month: e.target.value}));
+                        this.props.onChange(this.getDate({month: e.target.value})).bind(this);
                     }}
                     disabled={this.props.disabled}
                 >{this.renderMonthOptions()}</Input>
@@ -126,7 +127,7 @@ class Page extends React.Component {
                     name="dayInput"
                     onChange={e => {
                         this.setState({day: e.target.value});
-                        this.props.onChange(this.getDate({day: e.target.value}));
+                        this.props.onChange(this.getDate({day: e.target.value})).bind(this);
                     }}
                     disabled={this.props.disabled}
                 >{this.renderDayOptions()}</Input>
@@ -140,7 +141,7 @@ class Page extends React.Component {
                     name="yearInput"
                     onChange={e => {
                         this.setState({year: e.target.value});
-                        this.props.onChange(this.getDate({year: e.target.value}));
+                        this.props.onChange(this.getDate({year: e.target.value})).bind(this);
                     }}
                     disabled={this.props.disabled}
                 >{this.renderYearOptions()}</Input>

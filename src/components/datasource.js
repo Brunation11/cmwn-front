@@ -33,12 +33,12 @@ var GenerateDataSource = function (endpointIdentifier, componentName) {
             }
         }
         
-        attemptLoadComponentData = () => {
+        attemptLoadComponentData() {
             var state = Store.getState();
             Util.attemptComponentLoad(state, this.props.endpointIdentifier, componentName, this.props.onError);
         }
         
-        reloadComponentData = () => {
+        reloadComponentData() {
             /** @TODO MPR, 3/24/16: Implement this action **/
             Actions.dispatch.RELOAD_COMPONENT({endpointIdentifier: this.props.endpointIdentifier, componentName: this.props.componentName});
         }
