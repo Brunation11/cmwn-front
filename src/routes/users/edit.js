@@ -251,9 +251,9 @@ var Component = React.createClass({
                     hasFeedback
                     onChange={
                         e => this.setState({
-                            first_name: e.target.value
+                            first_name: e.target.value //eslint-disable-line camelcase
                         })
-                    } //eslint-disable-line camelcase
+                    }
                     // disabled={this.state.isStudent}
                 />
                 <Input
@@ -267,9 +267,9 @@ var Component = React.createClass({
                     hasFeedback
                     onChange={
                         e => this.setState({
-                            last_name: e.target.value
+                            last_name: e.target.value //eslint-disable-line camelcase
                         })
-                    } //eslint-disable-line camelcase
+                    }
                     // disabled={this.state.isStudent}
                 />
                 <DropdownDatepicker
