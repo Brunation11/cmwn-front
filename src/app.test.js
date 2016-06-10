@@ -27,7 +27,6 @@ import Game from 'routes/game';
 import ChangePassword from 'routes/change_password';
 */
 import Store from 'components/store';
-console.log("loaded stuff??");
 //import ACTION_CONSTANTS from 'components/action_constants';
 
 //import App from 'app';

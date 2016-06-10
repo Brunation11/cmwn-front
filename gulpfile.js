@@ -29,6 +29,7 @@ var sri = require('gulp-sri');
 var mocha = require('gulp-mocha');
 var zip = require('gulp-zip');
 
+
 /** @const */
 var APP_PREFIX = 'APP_';
 
@@ -384,6 +385,12 @@ gulp.task('test', function () {
         console.log('SOMETHING HAPPENED:' + err);
     });
     return tests;
+});
+
+gulp.task('coverage', function() {
+	exec('./test.sh', function(error, stdout, stderr) {
+		console.log(stdout);
+	});
 });
 
 //this task is only required when some post-build task intentionally clears the console, as our tests do
