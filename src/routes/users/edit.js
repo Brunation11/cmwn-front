@@ -199,26 +199,6 @@ var Component = React.createClass({
         );
     },
     renderTeacherInputs: function () {},
-    renderEmail: function () {
-        if (this.state.isStudent || this.state.email == null) {
-            return null;
-        }
-        return (
-            <Input
-                type="text"
-                value={this.state.email}
-                placeholder="Email"
-                label="Email"
-                ref="emailInput"
-                validate="required"
-                name="emailInput"
-                validationEvent="onBlur"
-                disabled
-                hasFeedback
-                onChange={e => this.setState({email: e.target.value})} //eslint-disable-line camelcase
-            />
-        );
-    },
     renderAdult: function () {
         return (
             <Form ref="formRef">
@@ -234,11 +214,31 @@ var Component = React.createClass({
                     ]}
                     name="usernameInput"
                     validationEvent="onBlur"
-                    disabled={this.state.isStudent}
+                    disabled={Store.getState().currentUser.user_id !== this.state.user_id}
                     hasFeedback
-                    onChange={e => this.setState({username: e.target.value})} //eslint-disable-line camelcase
+                    onChange={
+                        e => this.setState({
+                            username: e.target.value
+                        })
+                    } //eslint-disable-line camelcase
                 />
-                {this.renderEmail()}
+                <Input
+                    type="textarea"
+                    value={this.state.email}
+                    placeholder="Email"
+                    label="Email"
+                    ref="emailInput"
+                    validate="required"
+                    name="emailInput"
+                    validationEvent="onBlur"
+                    disabled
+                    hasFeedback
+                    onChange={
+                        e => this.setState({
+                            email: e.target.value
+                        })
+                    } //eslint-disable-line camelcase
+                />
                 <Input
                     type="text"
                     value={this.state.first_name}
@@ -249,8 +249,12 @@ var Component = React.createClass({
                     name="firstnameInput"
                     validationEvent="onBlur"
                     hasFeedback
-                    onChange={e => this.setState({first_name: e.target.value})} //eslint-disable-line camelcase
-                    disabled={this.state.isStudent}
+                    onChange={
+                        e => this.setState({
+                            first_name: e.target.value
+                        })
+                    } //eslint-disable-line camelcase
+                    // disabled={this.state.isStudent}
                 />
                 <Input
                     type="text"
@@ -260,13 +264,29 @@ var Component = React.createClass({
                     validate="required"
                     ref="lastnameInput"
                     name="lastnameInput"
-                    onChange={e => this.setState({last_name: e.target.value})} //eslint-disable-line camelcase
-                    disabled={this.state.isStudent}
+                    hasFeedback
+                    onChange={
+                        e => this.setState({
+                            last_name: e.target.value
+                        })
+                    } //eslint-disable-line camelcase
+                    // disabled={this.state.isStudent}
                 />
-                <DropdownDatepicker ref="dropdownDatepicker" disabled={this.state.isStudent} value={this.state.dob} onChange={date => {
-                    this.setState({dob: date, birthdate: Date.parse(date)});
-                }} />
-                {''/*
+                <DropdownDatepicker
+                    ref="dropdownDatepicker"
+                    disabled={this.state.isStudent}
+                    value={this.state.dob}
+                    hasFeedback
+                    onChange={
+                        date => {
+                            this.setState({
+                                dob: date,
+                                birthdate: Date.parse(date)
+                            });
+                        }
+                    }
+                />
+                {/*
                 <Input
                     type="select"
                     value={this.state.gender}
