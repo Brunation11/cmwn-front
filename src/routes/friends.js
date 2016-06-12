@@ -96,7 +96,7 @@ var Component = React.createClass({
                            data = data.set('image', _.has(data, '_embedded.image[0].url') ? data.images.data[0].url : DefaultProfile);
                            return data;
                        }}/>
-                   </Paginator >
+                   </Paginator>
                 </form>
            </Layout>
         );
