@@ -30,7 +30,8 @@ var Footer = React.createClass({
             viewOpen: false,
             workOpen: false,
             contactOpen: false,
-            showContact: false
+            showContact: false,
+            verified: false
         };
     },
     componentDidUpdate: function () {
@@ -47,7 +48,7 @@ var Footer = React.createClass({
         this.setState({ workOpen: true });
     },
     displayContact: function () {
-        if (this.props.loggedIn) {
+        if (this.props.loggedIn || this.state.verified) {
             this.setState({contactOpen: true, showContact: true});
             return;
         }
@@ -63,7 +64,11 @@ var Footer = React.createClass({
         var captchas = document.getElementsByClassName('grecaptcha');
         if (captchas.length) {
             grecaptcha.render(captchas[0], {'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l', callback: () => { //eslint-disable-line no-undef
-                this.setState({showContact: true});
+                this.setState({
+                    showContact: true,
+                    verified: true
+                });
+
             }});
         }
     },
@@ -78,7 +83,7 @@ var Footer = React.createClass({
                 <Modal show={this.state.contactOpen} onHide={this.closeContact}>
                     <Modal.Body>
                         {COPY.MODALS.PRECAPTCHA}
-                        <div className={ClassNames('grecaptcha', {hidden: this.props.loggedIn})}></div>
+                        <div className={ClassNames('grecaptcha', {hidden: (this.props.loggedIn || this.state.verified)})}></div>
                         {this.state.showContact ? COPY.MODALS.CONTACT : ''}
                     </Modal.Body>
                 </Modal>
