@@ -74,8 +74,8 @@ var Component = React.createClass({
                 <Link to={`/profile/${item.user_id == null ? item.friend_id : item.user_id}`}>
                     <div className="item">
                         <span className="overlay">
-                            <div className="relwrap"><div className="abswrap">
-                                <Button onClick={this.doNothing} className={ClassNames('blue standard', {faded: item.friend_status !== 'PENDING'})}>{PENDING}</Button>
+                            <div className="relwrap"><div className="abswrap prompts">
+                                <span className={ClassNames('pending-prompt', {faded: item.friend_status !== 'PENDING'})}>{PENDING}</span>
                                 <Button onClick={this.acceptRequest.bind(this, item)} className={ClassNames('blue standard', {faded: item.friend_status !== 'NEEDS_YOUR_ACCEPTANCE'})}>{REQUESTED}</Button>
                                 <Button className="purple standard">{PROFILE}</Button>
                             </div></div>
