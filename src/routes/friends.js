@@ -76,13 +76,10 @@ var Component = React.createClass({
                     className="friend-link">
                     <div className="item">
                         <span className="overlay">
-                            <div className="relwrap friend"><div className="abswrap">
-                                <Button disabled onClick={this.doNothing} className={ClassNames(
-                                    'blue standard nohover',
-                                    {faded: item.friend_status !== 'PENDING'}
-                                )}>
+                            <div className="relwrap friend"><div className="abswrap prompts">
+                                <span className={ClassNames('pending-prompt', {faded: item.friend_status !== 'PENDING'})}>
                                     {PENDING}
-                                </Button>
+                                </span>
                                 <Button onClick={this.acceptRequest.bind(this, item)} className={ClassNames(
                                     'blue standard',
                                     {faded: item.friend_status !== 'NEEDS_YOUR_ACCEPTANCE'}
