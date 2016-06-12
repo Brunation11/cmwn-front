@@ -235,7 +235,7 @@ var Header = React.createClass({
     },
     renderCaptcha: function () {
         if (this.state.verified) {
-            return
+            return;
         } else {
             var captchas = document.getElementsByClassName('grecaptcha');
             if (captchas.length) {
