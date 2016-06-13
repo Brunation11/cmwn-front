@@ -1,3 +1,4 @@
+
 import React from 'react';
 import _ from 'lodash';
 import Immutable from 'seamless-immutable';
@@ -8,7 +9,7 @@ import Store from 'components/store';
 import Util from 'components/util';
 
 /** Higher Order Component */
-var GenerateDataSource = function (endpointIdentifier, componentName) {
+export default function (endpointIdentifier, componentName) {
 	class Component extends React.Component {
 		constructor() {
 			super();
@@ -74,10 +75,10 @@ var GenerateDataSource = function (endpointIdentifier, componentName) {
 	}
 	
 	Component.defaultProps = {
-			renderNoData: () => null,
-			transform: _.identity,
-			onError: _.noop
-	};
+            renderNoData: () => null,
+            transform: _.identity,
+            onError: _.noop
+    };
 	
     const mapStateToProps = state => {
         var component;
@@ -99,7 +100,4 @@ var GenerateDataSource = function (endpointIdentifier, componentName) {
     };
 
     return connect(mapStateToProps)(Component);
-};
-
-export default GenerateDataSource;
-
+}
