@@ -1,11 +1,8 @@
-/*global describe, before, it */
+/*global describe, it */
 import React from 'react'; //eslint-disable-line no-unused-vars
 import assert from 'assert';
-import TestUtils from 'react-addons-test-utils';
-import { Provider } from 'react-redux';
 import {expect} from 'chai';
 
-import Profile from 'routes/users/profile';
 /*
 import Users from 'routes/users';
 import Districts from 'routes/districts';
@@ -26,7 +23,6 @@ import StudentEdit from 'routes/users/edit';
 import Game from 'routes/game';
 import ChangePassword from 'routes/change_password';
 */
-import Store from 'components/store';
 //import ACTION_CONSTANTS from 'components/action_constants';
 
 //import App from 'app';
