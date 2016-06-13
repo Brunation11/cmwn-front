@@ -372,19 +372,13 @@ gulp.task('lint-config', function () {
         .pipe(eslint.format());
 });
 
-gulp.task('test', function () {
+gulp.task('unit', function () {
     return gulp.src(['src/**/*.test.js'], {read: false})
          .pipe(mocha({reporter: 'min'}));
 });
 
 
-var httpServer, seleniumServer;
-
-gulp.task('http', (done) => {
-    "use strict";
-    let app = connect().use(serveStatic('test/fixtures'));
-    httpServer = http.createServer(app).listen(9990, done);
-});
+var seleniumServer;
 
 gulp.task('selenium', (done) => {
     selenium.install({logger: console.log}, () => {
@@ -397,7 +391,7 @@ gulp.task('selenium', (done) => {
 });
 
 
-gulp.task('e2e', ['http', 'selenium'], () => {
+gulp.task('e2e', ['selenium'], () => {
     return gulp.src('wdio.conf.js')
         .pipe(webdriver()).on('error', () => {
             seleniumServer.kill();
@@ -405,8 +399,7 @@ gulp.task('e2e', ['http', 'selenium'], () => {
         });
 });
 
-gulp.task('test', ['e2e'], () => {
-    httpServer.close();
+gulp.task('test', ['e2e', 'unit'], () => {
     seleniumServer.kill();
 });
 
