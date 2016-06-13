@@ -9,6 +9,12 @@ exports.config = {
     // NPM script (see https://docs.npmjs.com/cli/run-script) then the current working
     // directory is where your package.json resides, so `wdio` will be called from there.
     //
+    user: '***',
+    key: '***',
+    browserstack: {
+        debug: true,
+        local: true
+   },
     specs: [
         './test/specs/**/*.js'
     ],
@@ -42,10 +48,16 @@ exports.config = {
         // maxInstances can get overwritten per capability. So if you have an in-house Selenium
         // grid with only 5 firefox instance available you can make sure that not more than
         // 5 instance gets started at a time.
-        maxInstances: 5,
+        //maxInstances: 5,
         //
-        browserName: 'chrome'//'phantomjs',
+        //browserName: 'chrome'//'phantomjs',
         //"phantomjs.cli.args" : ["--ignore-ssl-errors=yes"]
+        os: 'OS X',
+        os_version: 'El Capitan',
+        browser: 'firefox',
+        browser_version: '44',
+        name: 'Example via runner',
+        build: 'Sample WebDriverIO tests'
     }],
     //
     // ===================
@@ -59,7 +71,7 @@ exports.config = {
     sync: true,
     //
     // Level of logging verbosity: silent | verbose | command | data | result | error
-    logLevel: 'silent',
+    logLevel: 'verbose',
     //
     // Enables colors for log output.
     coloredLogs: true,
