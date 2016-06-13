@@ -28,6 +28,8 @@ var mergeStream = require('merge-stream');
 var sri = require('gulp-sri');
 var mocha = require('gulp-mocha');
 var zip = require('gulp-zip');
+var selenium = require('selenium-standalone');
+var webdriver = require('gulp-webdriver');
 
 
 /** @const */
@@ -376,7 +378,7 @@ gulp.task('lint-config', function () {
         .pipe(eslint.format());
 });
 
-gulp.task('test', function () {
+gulp.task('unit', function () {
     process.env.NODE_ENV = 'production';
     process.env.BABEL_ENV = 'production';
     var tests = gulp.src(['src/**/*.test.js'], {read: false})
@@ -393,8 +395,37 @@ gulp.task('coverage', function () {
     });
 });
 
+
+var seleniumServer;
+
+gulp.task('selenium', (done) => {
+    selenium.install({logger: console.log}, () => {
+        selenium.start((err, child) => {
+            if (err) {
+                return done(err);
+            }
+            seleniumServer = child;
+            done();
+        });
+    });
+});
+
+
+gulp.task('e2e', ['selenium'], () => {
+    return gulp.src('wdio.conf.js')
+        .pipe(webdriver()).on('error', () => {
+            seleniumServer.kill();
+            process.exit(1);
+        });
+});
+
+gulp.task('test', ['e2e', 'unit'], () => {
+    seleniumServer.kill();
+});
+
 //this task is only required when some post-build task intentionally clears the console, as our tests do
 gulp.task('showBuildErrors', function () {
     console.log(fs.readFileSync('build_errors.log'));
 });
+
 

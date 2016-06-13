@@ -113,11 +113,11 @@ var Component = React.createClass({
                 <Tabs activeKey={this.state.key} onSelect={this.handleSelect} >
                     <Tab eventKey={1} title={'Login'}>
                         <br />
-                        <form method="POST" >
+                        <form method="POST" id="login-form" >
                             <input type="hidden" name="_token" value={this.state._token} />
-                            <Input ref="login" type="text" name="email" label={LABELS.LOGIN} />
-                            <Input ref="password" type="password" name="password" label={LABELS.PASSWORD} />
-                            <Button onKeyPress={this.login} onClick={this.login} >{LABELS.SUBMIT}</Button>
+                            <Input ref="login" type="text" id="email" name="email" label={LABELS.LOGIN} />
+                            <Input ref="password" type="password" id="password" name="password" label={LABELS.PASSWORD} />
+                            <Button id="login-button" onKeyPress={this.login} onClick={this.login} >{LABELS.SUBMIT}</Button>
                         </form>
                     </Tab>
                     <Tab eventKey={2} title={'Forgot Password'} >
