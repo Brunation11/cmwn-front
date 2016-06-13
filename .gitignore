@@ -18,4 +18,6 @@ _steps
 _projects
 .wercker
 wercker.env
-
+docker-compose.yml
+coverage
+coverage/**/**

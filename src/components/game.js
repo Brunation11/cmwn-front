@@ -9,6 +9,8 @@ import HttpManager from 'components/http_manager';
 import Toast from 'components/toast';
 import Log from 'components/log';
 
+import SkribbleMocks from 'routes/users/mock_skribble_data';
+
 import 'components/game.scss';
 
 const EVENT_PREFIX = '_e_';
@@ -91,6 +93,10 @@ var Game = React.createClass({
                 this.props['on' + _.capitalize(e.name)](...arguments);
             }
         }
+        if (e && e.respond != null) {
+            SkribbleMocks(e);
+        }
+
     },
     setEvent: function () {
         window.addEventListener('game-event', this.gameEventHandler);
