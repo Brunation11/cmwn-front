@@ -1,0 +1,17 @@
+scss_files: 'src/**/*.scss'
+
+linters:
+    ColorVariable:
+        enabled: false # maybe true, but so many literals right now
+    DuplicateProperty:
+        ignore_consecutive: true
+    IdSelector:
+        enabled: false # currently use IDs
+    Indentation:
+        width: 4
+    NestingDepth:
+        max_depth: 4
+    ProperSortOrder:
+        order: concentric
+        # -> /node_modules/scss-lint/data/proper-sort-orders/concentric.txt
+

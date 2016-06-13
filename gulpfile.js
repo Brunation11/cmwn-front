@@ -15,6 +15,8 @@ var appPackage = require('./package.json');
 var exec = require('child_process').exec;
 var spawn = require('child_process').spawn;
 var eslint = require('gulp-eslint');
+var scsslint = require('gulp-scss-lint');
+var scssLintStylish = require('gulp-scss-lint-stylish');
 var fs = require('fs');
 var eslintConfigJs = JSON.parse(fs.readFileSync('./.eslintrc'));
 var eslintConfigTest = JSON.parse(fs.readFileSync('./.eslintrc_test'));
@@ -342,7 +344,7 @@ gulp.task('sri', ['webpack:build', 'explicit-utf-8'], function () {
 });
 
 /*·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´Lint and Testing Tasks`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·*/
-gulp.task('lint', ['lint-js', 'lint-config']);
+gulp.task('lint', ['lint-js', 'lint-config', 'lint-scss']);
 gulp.task('lint-js', function () {
     return gulp.src(['src/**/*.js', '!src/**/*.test.js'])
         // eslint() attaches the lint output to the eslint property
@@ -364,6 +366,13 @@ gulp.task('lint-config', function () {
     return gulp.src(['gulpfile.js', 'webpack.config.dev.js', 'webpack.config.prod.js'])
         .pipe(eslint(_.defaultsDeep(eslintConfigConfig, eslintConfigJs)))
         .pipe(eslint.format());
+});
+gulp.task('lint-scss', function() {
+    return gulp.src(['src/**/*.scss'])
+        .pipe(scsslint({
+            'reporterOutput': 'scssReport.json', // file output
+            customReport: scssLintStylish
+        }));
 });
 
 gulp.task('test', function () {
