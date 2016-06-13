@@ -8,16 +8,16 @@ import Log from 'components/log';
 
 /** Marked for deprecation */
 class Fetcher extends React.Component {
-	constructor(props) {
-		super(props);
-		this.data = this.props.transform(this.props.data);
-		this.state = {};
-	}
-	
+    constructor(props) {
+        super(props);
+        this.data = this.props.transform(this.props.data);
+        this.state = {};
+    }
+
     componentDidMount() {
         this.getData();
     }
-	
+
     getData() {
         var urlData = HttpManager.GET({url: this.props.url});
         return urlData.then(res => {
@@ -45,33 +45,33 @@ class Fetcher extends React.Component {
             return Promise.resolve(this.data);
         });
     }
-    
+
     render() {
         var propsForChild;
         var props = this.props || {};
 
         if (this.data == null || (_.isArray(this.data) && this.data.length === 0)) {
             return (
-                <div className={this.props.className}>{this.props.renderNoData()}</div>
+                    <div className={this.props.className}>{this.props.renderNoData()}</div>
             );
         }
 
         propsForChild = Immutable.Map(props)
-            .remove('url')
-            .remove('children')
-            .remove('transform')
-            .set('data', this.data);
+        .remove('url')
+        .remove('children')
+        .remove('transform')
+        .set('data', this.data);
         return (
             <div className={this.props.className}>
                 {React.Children.map(this.props.children, child => React.cloneElement(child, propsForChild.toObject()))}
             </div>
         );
     }
-};
+}
 
 Fetcher.defaultProps = {
     transform: _.identity,
     renderNoData: (() => null)
-}
+};
 
 export default Fetcher;

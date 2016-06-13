@@ -15,11 +15,11 @@ const ERRORS = {
 };
 
 class Page extends React.Component {
-	constructor() {
-		super();
-		this.state = {};
-	}
-	componentDidMount() {
+    constructor() {
+        super();
+        this.state = {};
+    }
+    componentDidMount() {
         this.setupState(this.props);
     }
     componentWillReceiveProps(nextProps) {
@@ -35,22 +35,22 @@ class Page extends React.Component {
     suspendAccount() {
         if (window.confirm(CONFIRM_DELETE)) { //eslint-disable-line no-alert
             HttpManager.DELETE({url: GLOBALS.API_URL.slice(0, -1) + this.state.base + '/' + this.state.uuid})
-                .then(() => {
-                    Toast.success(USER_REMOVED);
-                })
-                .catch(err => {
-                    Toast.error(ERRORS.BAD_DELETE);
-                    Log.error('User not deleted: ' + err.message, err);
-                });
+            .then(() => {
+                Toast.success(USER_REMOVED);
+            })
+            .catch(err => {
+                Toast.error(ERRORS.BAD_DELETE);
+                Log.error('User not deleted: ' + err.message, err);
+            });
         }
     }
-    
+
     render() {
         if ((!this.state.canDelete && !this.state.scope) || (this.state.uuid == null && this.state.id == null)) {
             return null;
         }
         return (
-            <Button className={this.props.className + ' standard'} onClick={this.suspendAccount.bind(this)} >{this.props.text ? this.props.text : DELETE}</Button>
+                <Button className={this.props.className + ' standard'} onClick={this.suspendAccount.bind(this)} >{this.props.text ? this.props.text : DELETE}</Button>
         );
     }
 }

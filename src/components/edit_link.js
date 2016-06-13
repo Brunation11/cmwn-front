@@ -7,19 +7,19 @@ import History from 'components/history';
 const EDIT = 'Edit';
 
 class Page extends React.Component {
-	constructor() {
-		super();
-		this.state = {};
-	}
-	
-	componentDidMount() {
+    constructor() {
+        super();
+        this.state = {};
+    }
+
+    componentDidMount() {
         this.setupState(this.props);
     }
-	
-	componentWillReceiveProps(nextProps) {
+
+    componentWillReceiveProps(nextProps) {
         this.setupState(nextProps);
     }
-    
+
     setupState(props) {
         var state = {};
         state.base = props.base;
@@ -27,16 +27,16 @@ class Page extends React.Component {
         state.canUpdate = props.canUpdate != null ? props.canUpdate : Util.decodePermissions(props.scope).update;
         this.setState(state);
     }
-	
-	render() {
-		if ((!this.state.canUpdate && !this.state.scope) || (this.state.uuid == null && this.state.id == null)) {
+
+    render() {
+        if ((!this.state.canUpdate && !this.state.scope) || (this.state.uuid == null && this.state.id == null)) {
             return null;
         }
         return (
-            <Button className={this.props.className + ' standard'} 
-            onClick={() => History.push(`${this.state.base}/${this.state.uuid}/edit`)} >{this.props.text ? this.props.text : EDIT}</Button>
+                <Button className={this.props.className + ' standard'}
+                onClick={() => History.push(`${this.state.base}/${this.state.uuid}/edit`)} >{this.props.text ? this.props.text : EDIT}</Button>
         );
-	}
+    }
 }
 
 Page.defaultProps = {base: ''};

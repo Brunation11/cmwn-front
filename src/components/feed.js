@@ -32,7 +32,7 @@ class Page extends React.Component {
            );
         });
     }
-    
+
     render() {
         return (
            <div className={Classnames('feed', this.props.className)}>
@@ -45,8 +45,8 @@ class Page extends React.Component {
 }
 
 Page.defaultProps = {
-		data: null,
-        transform: _.identity
+    data: null,
+    transform: _.identity
 };
 
 export default Page;

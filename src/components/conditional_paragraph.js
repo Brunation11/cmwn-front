@@ -6,8 +6,8 @@ class Component extends React.Component {
         if (this.props.children == null) {
             return null;
         }
-        return
-            (<div>
+        return (
+            <div>
                 {React.Children.map(this.props.children, child => {
                     var childProps = {};
                     if (child.props.children != null && child.props.children !== '') {
@@ -27,7 +27,7 @@ class Component extends React.Component {
                 })}
             </div>);
     }
-};
+}
 
 export default Component;
 

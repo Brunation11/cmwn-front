@@ -7,22 +7,22 @@ import Moment from 'moment';
 import 'components/dropdown_datepicker.scss';
 
 class Page extends React.Component {
-	constructor(props) {
-		super(props);
-		var month = 0, day = 0, year = 0;
+    constructor(props) {
+        super(props);
+        var month = 0, day = 0, year = 0;
         if (this.props.value != null) {
             month = Moment(this.props.value).month() + 1;
             day = Moment(this.props.value).date();
             year = Moment(this.props.value).year();
         }
         this.state = {
-        		month: month,
-                day: day,
-                year: year
-        }
+            month: month,
+            day: day,
+            year: year
+        };
         this.setState = this.setState.bind(this);
-	}
-	
+    }
+
     componentWillReceiveProps(nextProps) {
         var month = 0, day = 0, year = 0;
         if (nextProps.value != null) {
@@ -36,7 +36,7 @@ class Page extends React.Component {
             });
         }
     }
-    
+
     getDate(nextState) {
         var month = nextState.month || this.state.month,
             day = nextState.day || this.state.day,
@@ -46,7 +46,7 @@ class Page extends React.Component {
         }
         return Moment(`${month}-${day}-${year}`).format('MM-DD-YYYY');
     }
-    
+
     reset() {
         this.setState({
             month: 0,
@@ -54,7 +54,7 @@ class Page extends React.Component {
             year: 0
         });
     }
-    
+
     renderMonthOptions() {
         var items = [
             <option value={0} >Select Month</option>
@@ -62,13 +62,13 @@ class Page extends React.Component {
 
         _.each(Moment.monthsShort(), (month, i) => {
             items.push(
-                <option value={i + 1} key={Shortid.generate()}>{month}</option>
+                    <option value={i + 1} key={Shortid.generate()}>{month}</option>
             );
         });
 
         return items;
     }
-    
+
     renderDayOptions() {
         var items = [
             <option value={0} >Select Day</option>
@@ -76,13 +76,13 @@ class Page extends React.Component {
 
         _.each(Array((new Date(0, this.state.month, 0).getDate())), (day, i) => {
             items.push(
-                <option value={i + 1} key={Shortid.generate()}>{i + 1}</option>
+                    <option value={i + 1} key={Shortid.generate()}>{i + 1}</option>
             );
         });
 
         return items;
     }
-    
+
     renderYearOptions() {
         var items = [
             <option value={0} >Select Month</option>
@@ -91,13 +91,13 @@ class Page extends React.Component {
 
         _.each(Array(150), (year, i) => {
             items.push(
-                <option value={currentYear - i} key={Shortid.generate()}>{currentYear - i}</option>
+                    <option value={currentYear - i} key={Shortid.generate()}>{currentYear - i}</option>
             );
         });
 
         return items;
     }
-    
+
     render() {
         return (
             <span className="form-inline dropdown-datepicker" >
@@ -149,7 +149,7 @@ class Page extends React.Component {
             </span>
         );
     }
-	
+
 }
 
 Page.defaultProps = {onChange: _.identity};
