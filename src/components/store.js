@@ -221,7 +221,7 @@ if (isAvailable && DevTools && DevTools.instrument != null) {
 }
 
 const Store = createStore( function (state = {}, action) {
-    if (action.error) {
+    if (action == null || action.error) {
         Log.error(action.payload);
     }
     state = combineReducers({

@@ -1,4 +1,5 @@
 require('babel-core/register');//for mocha to use es6
+require('app-module-path').addPath(__dirname + '/src');
 /*global require process*/
 /*eslint-env node */
 /*eslint no-console:0 */
@@ -34,6 +35,7 @@ var http = require('http');
 var connect = require('connect');
 var serveStatic = require('serve-static');
 
+
 /** @const */
 var APP_PREFIX = 'APP_';
 
@@ -52,6 +54,14 @@ if (args.development || args.prod) {
 } else if (process.env.NODE_ENV) {
     mode = process.env.NODE_ENV;
 }
+
+
+require.extensions['.css'] = _.noop;
+require.extensions['.scss'] = _.noop;
+require.extensions['.png'] = _.noop;
+require.extensions['.jpg'] = _.noop;
+require.extensions['.jpeg'] = _.noop;
+require.extensions['.gif'] = _.noop;
 
 /*
 ___  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______  ___
@@ -373,8 +383,20 @@ gulp.task('lint-config', function () {
 });
 
 gulp.task('unit', function () {
-    return gulp.src(['src/**/*.test.js'], {read: false})
-         .pipe(mocha({reporter: 'min'}));
+    process.env.NODE_ENV = 'production';
+    process.env.BABEL_ENV = 'production';
+    var tests = gulp.src(['src/**/*.test.js'], {read: false})
+         .pipe(mocha({require: ['./src/testdom.js'], reporter: 'min'}));
+    tests.on('error', function (err) {
+        console.log('SOMETHING HAPPENED:' + err);
+    });
+    return tests;
+});
+
+gulp.task('coverage', function () {
+    exec('./test.sh', function (error, stdout) {
+        console.log(stdout);
+    });
 });
 
 
@@ -383,7 +405,9 @@ var seleniumServer;
 gulp.task('selenium', (done) => {
     selenium.install({logger: console.log}, () => {
         selenium.start((err, child) => {
-            if (err) { return done(err); }
+            if (err) {
+                return done(err);
+            }
             seleniumServer = child;
             done();
         });
