@@ -28,10 +28,10 @@ echo "[installer] Building docker containers"
 docker-compose build
 
 echo "[installer] Installing node modules"
-docker-compose run node npm install
+docker-compose run --rm node npm install
 
 echo "[installer] building production"
-docker-compose run node gulp build --production
+docker-compose run --rm node gulp build --production
 
 cat <<EOF
 [installer] Completed!
