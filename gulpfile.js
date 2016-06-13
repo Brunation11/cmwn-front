@@ -377,8 +377,8 @@ gulp.task('lint-config', function () {
 });
 
 gulp.task('test', function () {
-		process.env.NODE_ENV = 'production';
-		process.env.BABEL_ENV = 'production';
+    process.env.NODE_ENV = 'production';
+    process.env.BABEL_ENV = 'production';
     var tests = gulp.src(['src/**/*.test.js'], {read: false})
          .pipe(mocha({require: ['./src/testdom.js'], reporter: 'min'}));
     tests.on('error', function (err) {
@@ -387,10 +387,10 @@ gulp.task('test', function () {
     return tests;
 });
 
-gulp.task('coverage', function() {
-	exec('./test.sh', function(error, stdout, stderr) {
-		console.log(stdout);
-	});
+gulp.task('coverage', function () {
+    exec('./test.sh', function (error, stdout) {
+        console.log(stdout);
+    });
 });
 
 //this task is only required when some post-build task intentionally clears the console, as our tests do

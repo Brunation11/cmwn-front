@@ -93,5 +93,4 @@ export default function (endpointIdentifier, componentName) {
     };
 
     return connect(mapStateToProps)(Component);
-};
-
+}
