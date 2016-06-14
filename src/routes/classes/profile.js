@@ -76,7 +76,7 @@ var Component = React.createClass({
             return null;
         }
         return (
-            <p><a href={`/class/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
+            <p><a id="class-dashboard-link" href={`/class/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
         );
     },
     renderFlip: function (item){
