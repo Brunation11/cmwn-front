@@ -1,0 +1,22 @@
+@import 'variables';
+
+.user-flip {
+  border: 1px solid $cmwn-blue;
+  max-height: 200px;
+  overflow: scroll;
+  scrollbar-face-color: $cmwn-blue;
+
+  &:after {
+    border: 1px solid $cmwn-blue;
+  }
+
+  .popover-title, .flip-name {
+    color: $cmwn-blue;
+    font-family: $cmwn-jade-font;
+  }
+
+  .popover-title {
+    background: none;
+    border: none;
+  }
+}
