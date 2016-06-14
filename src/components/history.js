@@ -1,6 +1,8 @@
-import { useRouterHistory } from 'react-router';
-import { createHistory } from 'history';
-// useRouterHistory creates a composable higher-order function
-const appHistory = useRouterHistory(createHistory)({ queryKey: false });
+import { browserHistory} from 'react-router';
+import { syncHistoryWithStore } from 'react-router-redux';
 
-export default appHistory;
+import Store from 'components/store';
+
+const history = syncHistoryWithStore(browserHistory, Store);
+
+export default history;

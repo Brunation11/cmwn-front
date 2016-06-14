@@ -1,3 +1,14 @@
+<?php
+$https = isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on');
+$proxy = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) ? $_SERVER['HTTP_X_FORWARDED_PROTO'] : null;
+
+if (!$https && $proxy !== 'https') {
+    $newUrl = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    header("HTTP/1.1 301 Moved Permanently");
+    header('Location: ' . $newUrl);
+    die();
+}
+?>
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="ie ie6"> <![endif]-->
 <!--[if IE 7]>         <html class="ie ie7"> <![endif]-->
@@ -7,7 +18,8 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" >
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="referrer" content="origin">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
         <noscript><meta http-equiv="X-Frame-Options" content="DENY" /></noscript>
@@ -89,14 +101,21 @@
                 document.head.appendChild(fileref);
             }
             //polyfill localstorage
-            try {
-                storage.setItem(testKey, '1');
-                storage.removeItem(testKey);
-            } catch (error) {
+            if (window.localStorage == null) {
                 fileref=document.createElement('script');
                 fileref.setAttribute("type","text/javascript");
                 fileref.setAttribute("src", "//cdnjs.cloudflare.com/ajax/libs/localStorage/2.0.1/localStorage.min.js");
                 document.head.appendChild(fileref);
+            }
+            try {
+                //will fail in private safari
+                window.localStorage.setItem('testKey', '1');
+                window.localStorage.removeItem('testKey');
+            } catch (error) {
+                //we dont rely on localstorage as a source of truth
+                //so we can safely ignore these errors
+                Storage.prototype._setItem = Storage.prototype.setItem;
+                Storage.prototype.setItem = function() {};
             }
         </script>
         <script>
@@ -142,6 +161,8 @@
           })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
           ga('create', 'UA-26000499-1', 'auto');
+          ga('require', 'linkid');
+          ga('require', 'displayfeatures');
           ga('send', 'pageview');
 
         </script>

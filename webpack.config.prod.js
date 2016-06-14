@@ -5,7 +5,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var autoprefixer = require('autoprefixer');
-
+// \\t\\x0b\\f\\xa0\\ufeff\\n\\r\\u2028\\u2029\\u1680\\u180e\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200a\\u202f\\u205f\\u3000
 module.exports = {
     devtool: 'source-map',
     resolve: {
@@ -32,11 +32,25 @@ module.exports = {
             mangle: {},
             compressor: {
                 warnings: false
+            },
+            output: {
+                comments: function (node, comment) {
+                    var text = comment.value;
+                    var type = comment.type;
+                    if (type === 'comment2') {
+                        // multiline comment
+                        return (/@copyright/i).test(text);
+                    }
+                }
             }
         })
     ],
     module: {
         loaders: [{
+            test: /dev_reducers|devtool/,
+            loader: 'null'
+        },
+        {
             test: /\.js$/,
             loader: 'babel',
             include: path.join(__dirname, 'src'),

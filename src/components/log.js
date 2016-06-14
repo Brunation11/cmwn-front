@@ -3,7 +3,6 @@ import GLOBALS from 'components/globals';
 
 class Logger {
     constructor() {
-        console.log('logger init');
         this.info = this.write('info', 'User Action', '#d0e2ec');
         this.log = this.write('log', 'System', '#bfe2ca');
         this.warn = this.write('warn', 'Warning', '#fed88f');
@@ -18,11 +17,12 @@ class Logger {
     }
     write(verb, label, color) {
         return function () {
-            console.log('logger called', ...arguments);
             if (GLOBALS.MODE.toLowerCase() === 'local' || GLOBALS.MODE.toLowerCase() === 'dev' || GLOBALS.MODE.toLowerCase() === 'development') {
                 console[verb](`%c ${label}: `, `color: ${color};`, ...arguments);
             }
-            Rollbar[verb](...arguments); //eslint-disable-line no-undef
+            if (window.Rollbar[verb] != null) {
+                window.Rollbar[verb](...arguments); //eslint-disable-line no-undef
+            }
         };
     }
 }

@@ -1,62 +1,65 @@
 import React from 'react';
+import { Link } from 'react-router';
 import _ from 'lodash';
+import {Panel} from 'react-bootstrap';
+import { connect } from 'react-redux';
 
-//import HttpManager from 'components/http_manager';
-import GLOBALS from 'components/globals';
-import Layout from 'layouts/two_col';
 import {Table, Column} from 'components/table';
-import Paginator from 'components/paginator';
-import Fetcher from 'components/fetcher';
+import Store from 'components/store';
 
-const TITLE = 'Districts';
+import Layout from 'layouts/two_col';
+
+const TITLE = 'My Districts';
 const CREATE_TEXT = 'Create District';
 
-var Districs = React.createClass({
+var Component = React.createClass({
     renderCreateDistrict: function () {
-        if (!this.isSuperAdmin) {
-            return null;
+        var state = Store.getState();
+        if (state.currentUser.scope === -1) {
+            return (
+                <p><a href={'/districts/create'}>{CREATE_TEXT}</a></p>
+            );
         }
-        return (
-            <p><a href={'/districts/create'}>{CREATE_TEXT}</a></p>
-        );
+        return null;
     },
     render: function () {
         return (
-            <Layout>
-                <header>
-                    <h2>{TITLE}</h2>
+            <Layout className="district-list">
+                <Panel header={TITLE} className="standard" >
                     <div >
                         {this.renderCreateDistrict()}
                     </div>
-                </header>
-                <Fetcher url={GLOBALS.API_URL + 'districts'} transform={data => {
-                    //sure exploiting this side effect in a render method is filthy but its also easy
-                    var wasSuper = this.isSuperAdmin;
-                    this.isSuperAdmin = _.reduce(data, (a, i) => a && i.can_update, true);
-                    if (wasSuper !== this.isSuperAdmin) {
-                        window.setTimeout(() => this.forceUpdate(), 0);
-                    }
-                    return data;
-                }}>
-                    <Paginator pageCount={1}>
-                        <Table>
-                            <Column dataKey="title"
-                                renderCell={(data, row) => (
-                                    <a href={`/district/${row.uuid}`}>{_.startCase(data)}</a>
-                                )}
-                            />
-                            <Column dataKey="description" />
-                            <Column dataKey="created_at" renderHeader="Created" />
-                            <Column dataKey="updated_at" renderHeader="Last Updated"
-                                renderCell={data => (data == null ? 'never' : data)}
-                            />
-                        </Table>
-                    </Paginator>
-               </Fetcher>
+                    <Table data={this.props.data} className="admin">
+                        <Column dataKey="title"
+                            renderCell={(data, row) => (
+                                <Link to={'/districts/' + row.org_id}>{_.startCase(data)}</Link>
+                            )}
+                        />
+                        <Column dataKey="description" />
+                        <Column dataKey="created_at" renderHeader="Created" />
+                        <Column dataKey="updated_at" renderHeader="Last Updated"
+                            renderCell={data => (data == null ? 'never' : data)}
+                        />
+                    </Table>
+                </Panel>
             </Layout>
         );
     }
 });
 
-export default Districs;
+const mapStateToProps = state => {
+    var data = [];
+    var loading = true;
+    if (state.page && state.page.data && state.page.data._embedded && state.page.data._embedded.org) {
+        loading = state.page.loading;
+        data = state.page.data._embedded.org;
+    }
+    return {
+        data,
+        loading
+    };
+};
+
+var Page = connect(mapStateToProps)(Component);
+export default Page;
 

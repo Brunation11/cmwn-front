@@ -29,6 +29,19 @@ class BrowserDetector {
     isIe11() {
         return !!~document.getElementsByTagName('html')[0].className.indexOf('ie11');
     }
+    isFirefox() {
+        //absolute laziest way to do this. Will not reliably get all versions of firefox
+        //but should cover anyone under reasonably normal network and system situations
+        //from http://stackoverflow.com/questions/7000190/detect-all-firefox-versions-in-js
+        return (/firefox/i).test(navigator.userAgent);
+    }
+    isEdge() {
+        //Even less reliable than the firefox one, though at least nobody is forking edge.
+        //This could stop working at any time if MS decides to use the full chrome UA string
+        //as they have said they will
+        //from http://stackoverflow.com/questions/31511870/detecting-microsofts-edge-or-spartan-with-javascript
+        return (/Edge\/\d+/i).test(navigator.userAgent);
+    }
 }
 
 var Detector = new BrowserDetector();

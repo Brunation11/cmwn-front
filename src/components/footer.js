@@ -1,6 +1,8 @@
 import React from 'react';
 import {Modal} from 'react-bootstrap';
+import ClassNames from 'classnames';
 
+import Log from 'components/log';
 
 const COPY = {
     BUTTONS: {
@@ -11,10 +13,10 @@ const COPY = {
     MODALS: {
         WORK: <span><p>We are so excited about your interest to work with us!</p><p>Click <a href="mailto:&#106;&#111;&#110;&#105;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#097;&#114;&#114;&#111;&#110;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;?subject=Work With Us!">here</a> to contact us.</p></span>,
 
-        PRECAPTCHA: 'Thanks for your interest! Please check the box below to display contact information.',
+        PRECAPTCHA: 'Thanks for your interest!',
         CONTACT: <span>
             <p>Postage can be sent to:</p>
-            <p>600 Third Ave<br />2nd Floor<br />New York, NY 10016<br /></p>
+            <p>21 W 46th Street, Suite 605<br />New York, New York 10036<br /></p>
             <p>Or give us a call at &#40;&#54;&#52;&#54;&#41;&#32;&#56;&#54;&#49;&#45;&#48;&#53;&#55;&#49;</p>
             <p>Click <a href="mailto:&#105;&#110;&#102;&#111;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#106;&#111;&#110;&#105;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;">here</a> to contact us.</p>
         </span>,
@@ -27,13 +29,28 @@ var Footer = React.createClass({
         return {
             viewOpen: false,
             workOpen: false,
-            contactOpen: false
+            contactOpen: false,
+            showContact: false
         };
+    },
+    componentDidUpdate: function () {
+        try {
+            this.renderCaptcha();
+        } catch(err) {
+            //captcha doesnt always clean itself up nicely, throws its own
+            //unhelpful, unbreaking 'container not empty' error. Ignoring.
+            Log.warn(err, 'Captcha not fully destroyed');
+            return err;
+        }
     },
     displayWork: function () {
         this.setState({ workOpen: true });
     },
     displayContact: function () {
+        if (this.props.loggedIn) {
+            this.setState({contactOpen: true, showContact: true});
+            return;
+        }
         this.setState({ contactOpen: true });
     },
     closeWork: function () {
@@ -61,7 +78,7 @@ var Footer = React.createClass({
                 <Modal show={this.state.contactOpen} onHide={this.closeContact}>
                     <Modal.Body>
                         {COPY.MODALS.PRECAPTCHA}
-                        <div className="grecaptcha"></div>
+                        <div className={ClassNames('grecaptcha', {hidden: this.props.loggedIn})}></div>
                         {this.state.showContact ? COPY.MODALS.CONTACT : ''}
                     </Modal.Body>
                 </Modal>
