@@ -111,7 +111,8 @@ var Profile = React.createClass({
         );
     },
     renderFlip: function (item){
-        var onClick, playText;
+        var onClick;
+        var playText;
         if (item.coming_soon) {
             onClick = _.noop;
             playText = COMING_SOON;
@@ -145,7 +146,9 @@ var Profile = React.createClass({
         return (
            <GameWrapper transform={data => {
                var array = data;
-               var currentIndex, temporaryValue, randomIndex;
+               var currentIndex;
+               var temporaryValue;
+               var randomIndex;
                if (array == null) {
                    array = [];
                } else if (!_.isArray(array)) {
@@ -183,9 +186,9 @@ var Profile = React.createClass({
         );
     },
     renderUserProfile: function () {
-        var day = Moment(this.state.birthdate).date(),
-            month = Moment(this.state.birthdate).month() + 1,
-            year = Moment(this.state.birthdate).year();
+        var day = Moment(this.state.birthdate).date();
+        var month = Moment(this.state.birthdate).month() + 1;
+        var year = Moment(this.state.birthdate).year();
         return (
             <div>
                 <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
@@ -226,11 +229,11 @@ var Profile = React.createClass({
         );
     },
     render: function () {
+        var profile = (this.state.user_id === state.currentUser.user_id) ? this.renderCurrentUserProfile : this.renderUserProfile;
         var state = Store.getState();
         if (this.state.username == null) {
             return null;
         }
-        var profile = (this.state.user_id === state.currentUser.user_id) ? this.renderCurrentUserProfile : this.renderUserProfile;
         return (
            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                {profile()}

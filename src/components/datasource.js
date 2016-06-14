@@ -7,7 +7,7 @@ import Actions from 'components/actions';
 import Store from 'components/store';
 import Util from 'components/util';
 
-/** Higher Order Component */
+/* Higher Order Component */
 var GenerateDataSource = function (endpointIdentifier, componentName) {
     var Component = React.createClass({
         getInitialState: function () {

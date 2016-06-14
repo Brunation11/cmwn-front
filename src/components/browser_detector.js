@@ -1,4 +1,4 @@
-
+var Detector;
 
 class BrowserDetector {
     constructor(){}
@@ -44,7 +44,7 @@ class BrowserDetector {
     }
 }
 
-var Detector = new BrowserDetector();
+Detector = new BrowserDetector();
 
 export default Detector;
 

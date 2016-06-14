@@ -39,8 +39,8 @@ We additionally define the following rules:
  - Declare all variables at the top of their scope ☺
  - Use dot notation to access object properties whenever possible ☺
  - End all files with a blank newline ☺
- - No line should exceed 110 characters (width of the GitHub code viewer)
- - No file should exceed 500 lines
+ - No line should exceed 110 characters (width of the GitHub code viewer) ☺
+ - No file should exceed 500 lines ☺
  - When including JSDoc comments, they must be valid ☺
  - Always wrap immediately invoked functional expressions in parentheses ☺
  - Do not declare functions inside of loops ☺

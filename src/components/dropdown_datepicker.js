@@ -13,7 +13,9 @@ var Page = React.createClass({
         };
     },
     getInitialState: function () {
-        var month = 0, day = 0, year = 0;
+        var month = 0;
+        var day = 0;
+        var year = 0;
         if (this.props.value != null) {
             month = Moment(this.props.value).month() + 1;
             day = Moment(this.props.value).date();
@@ -26,7 +28,9 @@ var Page = React.createClass({
         };
     },
     componentWillReceiveProps: function (nextProps) {
-        var month = 0, day = 0, year = 0;
+        var month = 0;
+        var day = 0;
+        var year = 0;
         if (nextProps.value != null) {
             month = Moment(nextProps.value).month() + 1;
             day = Moment(nextProps.value).date();
@@ -39,9 +43,9 @@ var Page = React.createClass({
         }
     },
     getDate: function (nextState) {
-        var month = nextState.month || this.state.month,
-            day = nextState.day || this.state.day,
-            year = nextState.year || this.state.year;
+        var month = nextState.month || this.state.month;
+        var day = nextState.day || this.state.day;
+        var year = nextState.year || this.state.year;
         if (!month || !day || !year) {
             return null;
         }
