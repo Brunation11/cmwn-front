@@ -42,7 +42,7 @@ const CLASSES = 'Classes';
 const BROWSER_NOT_SUPPORTED = <span><p>For the best viewing experience we recommend the desktop version in Chrome</p><p>If you don't have chrome, <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">download it for free here</a>.</p></span>;
 const PASS_UPDATED = '<p>You have successfully updated your password.<br />Be sure to remember for next time!</p>';
 
-var Profile = React.createClass({
+export var Profile = React.createClass({
     getInitialState: function () {
         var state = _.defaults({
             gameOn: false,
@@ -71,9 +71,9 @@ var Profile = React.createClass({
     },
     resolveRole: function () {
         var newState = {};
-        var state = Store.getState();
+        //var state = Store.getState();
         //remember we actually want current user here, not the user whose profile we are looking at
-        if (state.currentUser && state.currentUser.type !== 'CHILD') {
+        if (this.props.currentUser && this.props.currentUser.type !== 'CHILD') {
             newState.isStudent = false;
         } else {
             newState.isStudent = true;
@@ -94,7 +94,8 @@ var Profile = React.createClass({
         this.refs.gameRef.dispatchPlatformEvent('quit');
     },
     renderGame: function () {
-        var flipUrl = this.state._links.user_flip ? this.state._links.user_flip.href : null;
+        var flipUrl = this.state._links && this.state._links.user_flip ? this.state._links.user_flip.href : null;
+        console.log("flipUrl: " + flipUrl);
         if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe10())) {
             return (
                 <div>
@@ -138,8 +139,8 @@ var Profile = React.createClass({
         );
     },
     renderGameList: function () {
-        var state = Store.getState();
-        if (this.state._links == null || state.currentUser.user_id !== this.state.user_id) {
+        //var state = Store.getState();
+        if (this.state._links == null || this.props.currentUser.user_id !== this.state.user_id) {
             return null;
         }
         return (
@@ -226,11 +227,13 @@ var Profile = React.createClass({
         );
     },
     render: function () {
-        var state = Store.getState();
+        //var state = Store.getState();
+        console.log(this.state);
+        console.log(this.props);
         if (this.state.username == null) {
             return null;
         }
-        var profile = (this.state.user_id === state.currentUser.user_id) ? this.renderCurrentUserProfile : this.renderUserProfile;
+        var profile = (this.state.user_id === this.props.currentUser.user_id) ? this.renderCurrentUserProfile : this.renderUserProfile;
         return (
            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                {profile()}
@@ -242,13 +245,16 @@ var Profile = React.createClass({
 const mapStateToProps = state => {
     var data = {};
     var loading = true;
+    var currentUser = {};
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
+        currentUser = state.currentUser;
     }
     return {
         data,
-        loading
+        loading,
+        currentUser
     };
 };
 
