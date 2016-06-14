@@ -1,3 +1,4 @@
+
 import React from 'react';
 import _ from 'lodash';
 import Immutable from 'seamless-immutable';
@@ -8,7 +9,7 @@ import Store from 'components/store';
 import Util from 'components/util';
 
 /* Higher Order Component */
-var GenerateDataSource = function (endpointIdentifier, componentName) {
+export default function (endpointIdentifier, componentName) {
     var Component = React.createClass({
         getInitialState: function () {
             return {};
@@ -92,7 +93,4 @@ var GenerateDataSource = function (endpointIdentifier, componentName) {
     };
 
     return connect(mapStateToProps)(Component);
-};
-
-export default GenerateDataSource;
-
+}
