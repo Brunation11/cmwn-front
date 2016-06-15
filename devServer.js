@@ -6,8 +6,8 @@ var config = require('./webpack.config.dev');
 var fs = require('fs');
 var http = require('http');
 var https = require('https');
-var privateKey  = fs.readFileSync('/Users/maxrafferty/certs/server.key', 'utf8');
-var certificate = fs.readFileSync('/Users/maxrafferty/certs/server.crt', 'utf8');
+var privateKey  = fs.readFileSync('./server.key', 'utf8');
+var certificate = fs.readFileSync('./server.crt', 'utf8');
 
 var credentials = {key: privateKey, cert: certificate};
 var app = express();
@@ -59,16 +59,16 @@ app.get('/*', function(req, res) {
     console.log('Listening at http://localhost:' + PORT);
 });*/
 
-var api = express ();
+//var api = express ();
 //api.get('/*', function(req, res) {
 //    res.redirect(200, 'http://lapi.changemyworldnow.com'+req.path);
 //})
-var proxy = require('express-http-proxy');
-api.use('/*', proxy('http://proxy.changemyworldnow.com', {
-  forwardPath: function(req, res) {
-    return require('url').parse(req.originalUrl).path;
-  }
-}));
+//var proxy = require('express-http-proxy');
+//api.use('/*', proxy('http://proxy.changemyworldnow.com', {
+//  forwardPath: function(req, res) {
+//    return require('url').parse(req.originalUrl).path;
+//  }
+//}));
 /*api.listen(3001, 'localhost', function(err) {
 
     if (err) {
@@ -83,8 +83,8 @@ var httpsServer = https.createServer(credentials, app);
 
 httpServer.listen(PORT);
 httpsServer.listen(SSHPORT);
-var apiHttpServer = http.createServer(api);
+/*var apiHttpServer = http.createServer(api);
 var apiHttpsServer = https.createServer(credentials, api);
 
 apiHttpServer.listen(APIPORT);
-apiHttpsServer.listen(SSHAPIPORT);
+apiHttpsServer.listen(SSHAPIPORT);*/

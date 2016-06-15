@@ -232,7 +232,7 @@ var Profile = React.createClass({
         }
         var profile = (this.state.user_id === state.currentUser.user_id) ? this.renderCurrentUserProfile : this.renderUserProfile;
         return (
-           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+           <Layout className={PAGE_UNIQUE_IDENTIFIER} navMenuId="navMenu">
                {profile()}
            </Layout>
         );
