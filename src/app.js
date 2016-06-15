@@ -129,7 +129,6 @@ import History from 'components/history';
 import GLOBALS from 'components/globals';
 import PublicRoutes from 'public_routes';
 import PrivateRoutes from 'private_routes';
-import EventManager from 'components/event_manager';
 import Store from 'components/store';
 import Util from 'components/util';
 import DevTools from 'components/devtools';
@@ -192,8 +191,6 @@ var AppComponent = React.createClass({
     },
     componentWillMount: function () {
         Errors.onError(this.globalUpdate);
-        EventManager.listen('userChanged', this.globalUpdate);
-        EventManager.listen('errorChanged', this.globalUpdate);
     },
     componentDidMount: function () {
         if (this.props.currentUser != null) {

@@ -27,7 +27,7 @@ var Component = React.createClass({
             return null;
         }
         return (
-            <div className={'sidebar ' + (this.props.menuIsOpen ? 'open' : '')}>
+            <div id={this.props.navMenuId} className={'sidebar ' + (this.props.menuIsOpen ? 'open' : '')}>
                 {this.renderWelcome()}
                 <a onClick={this.attemptNavigate} >
                     <ProfileImage user_id={this.props.currentUser.user_id}/>
