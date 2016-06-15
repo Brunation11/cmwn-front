@@ -28,12 +28,8 @@ var mergeStream = require('merge-stream');
 var sri = require('gulp-sri');
 var mocha = require('gulp-mocha');
 var zip = require('gulp-zip');
-var webdriverio = require('webdriverio')
 var selenium = require('selenium-standalone');
 var webdriver = require('gulp-webdriver');
-var http = require('http');
-var connect = require('connect');
-var serveStatic = require('serve-static');
 
 
 /** @const */

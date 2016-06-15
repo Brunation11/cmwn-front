@@ -42,6 +42,7 @@
     "shortid": "^2.2.4"
   },
   "devDependencies": {
+    "app-module-path": "^1.1.0",
     "autoprefixer": "^6.3.3",
     "autoprefixer-loader": "^3.2.0",
     "babel-core": "^6.9.1",
