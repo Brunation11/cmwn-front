@@ -17,7 +17,6 @@ import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
 //import Util from 'components/util';
 import History from 'components/history';
-import Store from 'components/store';
 import GenerateDataSource from 'components/datasource';
 
 import Layout from 'layouts/two_col';
@@ -42,16 +41,17 @@ const CLASSES = 'Classes';
 const BROWSER_NOT_SUPPORTED = <span><p>For the best viewing experience we recommend the desktop version in Chrome</p><p>If you don't have chrome, <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">download it for free here</a>.</p></span>;
 const PASS_UPDATED = '<p>You have successfully updated your password.<br />Be sure to remember for next time!</p>';
 
-export var Profile = React.createClass({
-    getInitialState: function () {
-        var state = _.defaults({
+export class Profile extends React.Component {
+    constructor() {
+        super(props);
+        this.state = _.defaults({
             gameOn: false,
             gameId: -1
         }, _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {},
         {classes: {data: []}});
-        return state;
-    },
-    componentDidMount: function () {
+    }
+
+    componentDidMount() {
         EventManager.listen('userChanged', () => {
             this.resolveRole();
             this.forceUpdate();
@@ -64,14 +64,15 @@ export var Profile = React.createClass({
         if (this.props.data) {
             this.setState(this.props.data);
         }
-    },
-    componentWillReceiveProps: function (nextProps) {
+    }
+    
+    componentWillReceiveProps(nextProps) {
         this.resolveRole();
         this.setState(nextProps.data);
-    },
-    resolveRole: function () {
+    }
+    
+    resolveRole() {
         var newState = {};
-        //var state = Store.getState();
         //remember we actually want current user here, not the user whose profile we are looking at
         if (this.props.currentUser && this.props.currentUser.type !== 'CHILD') {
             newState.isStudent = false;
@@ -79,8 +80,9 @@ export var Profile = React.createClass({
             newState.isStudent = true;
         }
         this.setState(newState);
-    },
-    showModal: function (gameUrl) {
+    }
+    
+    showModal(gameUrl) {
         var urlParts;
         if (Detector.isMobileOrTablet() || Detector.isPortrait()) {
             urlParts = gameUrl.split('/');
@@ -88,14 +90,15 @@ export var Profile = React.createClass({
             History.push(`/game/${_.last(urlParts)}`);
         }
         this.setState({gameOn: true, gameUrl});
-    },
-    hideModal: function () {
+    }
+    
+    hideModal() {
         this.setState({gameOn: false});
         this.refs.gameRef.dispatchPlatformEvent('quit');
-    },
-    renderGame: function () {
+    }
+    
+    renderGame() {
         var flipUrl = this.state._links && this.state._links.user_flip ? this.state._links.user_flip.href : null;
-        console.log("flipUrl: " + flipUrl);
         if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe10())) {
             return (
                 <div>
@@ -107,11 +110,12 @@ export var Profile = React.createClass({
         return (
             <div>
                 <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl} flipUrl={flipUrl} onExit={() => this.setState({gameOn: false})}/>
-                    <a onClick={this.hideModal} className="modal-close">(close)</a>
+                    <a onClick={this.hideModal.bind(this)} className="modal-close">(close)</a>
             </div>
         );
-    },
-    renderFlip: function (item){
+    }
+    
+    renderFlip(item) {
         var onClick, playText;
         if (item.coming_soon) {
             onClick = _.noop;
@@ -122,7 +126,7 @@ export var Profile = React.createClass({
         }
         return (
             <div className="flip fill" key={Shortid.generate()}>
-                <a onClick={onClick} >
+                <a onClick={onClick.bind(this)} >
                     <div className="item">
                         <span className="overlay">
                             <span className="heading">{item.title}</span>
@@ -137,9 +141,9 @@ export var Profile = React.createClass({
                 </a>
             </div>
         );
-    },
-    renderGameList: function () {
-        //var state = Store.getState();
+    }
+    
+    renderGameList() {
         if (this.state._links == null || this.props.currentUser.user_id !== this.state.user_id) {
             return null;
         }
@@ -166,13 +170,14 @@ export var Profile = React.createClass({
                return _.filter(array, v => !v.coming_soon).concat(_.filter(array, v => v.coming_soon));
            }}>
                <FlipBoard
-                   renderFlip={this.renderFlip}
+                   renderFlip={this.renderFlip.bind(this)}
                    header={HEADINGS.ARCADE}
                />
            </GameWrapper>
         );
-    },
-    renderClassList: function () {
+    }
+    
+    renderClassList() {
         if (!this.state || !this.state._embedded || !this.state._embedded.group_class) {
             return null;
         }
@@ -182,8 +187,9 @@ export var Profile = React.createClass({
                 {_.map(this.state._embedded.group_class, item => item.title).join(', ')}
             </p>
         );
-    },
-    renderUserProfile: function () {
+    }
+    
+    renderUserProfile() {
         var ISODate = (new Date(this.state.birthdate)).toISOString();
 
         return (
@@ -209,11 +215,12 @@ export var Profile = React.createClass({
                 </Panel>
             </div>
         );
-    },
-    renderCurrentUserProfile: function () {
+    }
+    
+    renderCurrentUserProfile() {
         return (
             <div>
-                <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal} keyboard={false} backdrop="static">
+                <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal.bind(this)} keyboard={false} backdrop="static">
                     <Modal.Body>
                         {this.renderGame()}
                     </Modal.Body>
@@ -224,11 +231,9 @@ export var Profile = React.createClass({
                 {this.renderGameList()}
             </div>
         );
-    },
-    render: function () {
-        //var state = Store.getState();
-        console.log(this.state);
-        console.log(this.props);
+    }
+    
+    render() {
         if (this.state.username == null) {
             return null;
         }
@@ -239,7 +244,7 @@ export var Profile = React.createClass({
            </Layout>
         );
     }
-});
+};
 
 const mapStateToProps = state => {
     var data = {};
