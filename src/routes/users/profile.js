@@ -229,11 +229,12 @@ var Profile = React.createClass({
         );
     },
     render: function () {
-        var profile = (this.state.user_id === state.currentUser.user_id) ? this.renderCurrentUserProfile : this.renderUserProfile;
+        var profile;
         var state = Store.getState();
         if (this.state.username == null) {
             return null;
         }
+        profile = (this.state.user_id === state.currentUser.user_id) ? this.renderCurrentUserProfile : this.renderUserProfile;
         return (
            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                {profile()}

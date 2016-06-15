@@ -367,10 +367,11 @@ var CodeChange = React.createClass({
         return {code: ''};
     },
     submit: function () {
-        var update = HttpManager.POST({url: this.props.data._links.reset.href }, {email: this.props.data.email, code: this.state.code});
+        var update;
         if (this.props.data._links.reset == null) {
             return;
         }
+        update = HttpManager.POST({url: this.props.data._links.reset.href }, {email: this.props.data.email, code: this.state.code});
         update.then(() => {
             Toast.success('Code Reset for user. They will need to update their password on next login.');
         }).catch(err => {
@@ -407,10 +408,11 @@ var ForgotPass = React.createClass({
         return {code: ''};
     },
     submit: function () {
-        var update = HttpManager.POST({url: this.props.data._links.forgot.href }, {email: this.props.data.email});
+        var update;
         if (this.props.data._links.forgot == null) {
             return;
         }
+        update = HttpManager.POST({url: this.props.data._links.forgot.href }, {email: this.props.data.email});
         update.then(() => {
             Toast.success('Password reset code sent to user email.');
         }).catch(err => {
