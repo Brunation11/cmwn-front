@@ -57,7 +57,7 @@ class Page extends React.Component {
 
     renderMonthOptions() {
         var items = [
-            <option value={0} key={Shortid.generate()}>Select Month</option>
+            <option value={0} key={Shortid.generate()} disabled>Select Month</option>
         ];
 
         _.each(Moment.monthsShort(), (month, i) => {
@@ -71,7 +71,7 @@ class Page extends React.Component {
 
     renderDayOptions() {
         var items = [
-            <option value={0} key={Shortid.generate()}>Select Day</option>
+            <option value={0} key={Shortid.generate()} disabled>Select Day</option>
         ];
 
         _.each(Array((new Date(0, this.state.month, 0).getDate())), (day, i) => {
@@ -85,7 +85,7 @@ class Page extends React.Component {
 
     renderYearOptions() {
         var items = [
-            <option value={0} key={Shortid.generate()}>Select Year</option>
+            <option value={0} key={Shortid.generate()} disabled>Select Year</option>
         ];
         var currentYear = new Date().getFullYear();
 
