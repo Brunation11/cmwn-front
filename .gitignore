@@ -18,6 +18,9 @@ _steps
 _projects
 .wercker
 wercker.env
+front.sh
+stop_front.sh
+errorShots
 docker-compose.yml
 coverage
 coverage/**/**

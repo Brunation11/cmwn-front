@@ -184,9 +184,8 @@ export var Profile = React.createClass({
         );
     },
     renderUserProfile: function () {
-        var day = Moment(this.state.birthdate).date(),
-            month = Moment(this.state.birthdate).month() + 1,
-            year = Moment(this.state.birthdate).year();
+        var ISODate = (new Date(this.state.birthdate)).toISOString();
+
         return (
             <div>
                 <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
@@ -204,7 +203,7 @@ export var Profile = React.createClass({
                             <p>Last Name:</p>
                             <p className="standard field">{this.state.last_name}</p>
                             <p>Birthday:</p>
-                            <p className="standard field">{Moment(`${month} ${day}, ${year}`).format('MM-DD-YYYY')}</p>
+                            <p className="standard field">{Moment(ISODate).format('MM-DD-YYYY')}</p>
                         </div>
                     </div>
                 </Panel>
@@ -235,7 +234,7 @@ export var Profile = React.createClass({
         }
         var profile = (this.state.user_id === this.props.currentUser.user_id) ? this.renderCurrentUserProfile : this.renderUserProfile;
         return (
-           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+           <Layout className={PAGE_UNIQUE_IDENTIFIER} navMenuId="navMenu">
                {profile()}
            </Layout>
         );
