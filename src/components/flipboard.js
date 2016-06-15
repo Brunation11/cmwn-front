@@ -27,7 +27,7 @@ class FlipBoard extends React.Component {
         return (
             <div className="flipboard">
                 <Panel header={this.props.header} className="standard">
-                {_.map(this.state.data, (item, i) => this.props.renderFlip(item, i))}
+                    {_.map(this.state.data, (item, i) => this.props.renderFlip(item, i))}
                 </Panel>
             </div>
         );

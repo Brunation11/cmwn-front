@@ -66,12 +66,12 @@ export default function (endpointIdentifier, componentName) {
             // transformation will only be
             // applied on new data
             propsForChild = Immutable(props)
-            .set('componentName', this.props.componentName)
-            .set('endpointIdentifier', this.props.endpointIdentifier);
+                .set('componentName', this.props.componentName)
+                .set('endpointIdentifier', this.props.endpointIdentifier);
             return (
-                    <div className={this.props.className}>
-                        {React.Children.map(this.props.children, child => React.cloneElement(child, propsForChild))}
-                    </div>
+                <div className={this.props.className}>
+                    {React.Children.map(this.props.children, child => React.cloneElement(child, propsForChild))}
+                </div>
             );
         }
     }

@@ -62,7 +62,7 @@ class Page extends React.Component {
 
         _.each(Moment.monthsShort(), (month, i) => {
             items.push(
-                    <option value={i + 1} key={Shortid.generate()}>{month}</option>
+                <option value={i + 1} key={Shortid.generate()}>{month}</option>
             );
         });
 
@@ -76,7 +76,7 @@ class Page extends React.Component {
 
         _.each(Array((new Date(0, this.state.month, 0).getDate())), (day, i) => {
             items.push(
-                    <option value={i + 1} key={Shortid.generate()}>{i + 1}</option>
+                <option value={i + 1} key={Shortid.generate()}>{i + 1}</option>
             );
         });
 
@@ -91,7 +91,7 @@ class Page extends React.Component {
 
         _.each(Array(150), (year, i) => {
             items.push(
-                    <option value={currentYear - i} key={Shortid.generate()}>{currentYear - i}</option>
+                <option value={currentYear - i} key={Shortid.generate()}>{currentYear - i}</option>
             );
         });
 

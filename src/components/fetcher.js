@@ -52,15 +52,15 @@ class Fetcher extends React.Component {
 
         if (this.data == null || (_.isArray(this.data) && this.data.length === 0)) {
             return (
-                    <div className={this.props.className}>{this.props.renderNoData()}</div>
+                <div className={this.props.className}>{this.props.renderNoData()}</div>
             );
         }
 
         propsForChild = Immutable.Map(props)
-        .remove('url')
-        .remove('children')
-        .remove('transform')
-        .set('data', this.data);
+            .remove('url')
+            .remove('children')
+            .remove('transform')
+            .set('data', this.data);
         return (
             <div className={this.props.className}>
                 {React.Children.map(this.props.children, child => React.cloneElement(child, propsForChild.toObject()))}
