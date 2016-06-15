@@ -33,22 +33,27 @@ describe('tests the view page for a class', function () {
         expect(classUrl).to.equal(browser.getUrl());
         browser.back();
         var studentUrl;
+        browser.waitForExist('.student');
         var student = browser.getAttribute('.student', 'href');
         if(student[0].length === 1){
             //only one student
             browser.click('.student');
             browser.waitForExist('.panel-heading');
             studentUrl = student;
-            expect(studentUrl).to.equal(browser.getUrl());
+            var studentUrlList = studentUrl.split('/');
+            var len = studentUrlList.length;
+            expect(browser.getUrl()).to.contain(studentUrlList[len-1]);
         }
         else if(student.length != 0){
             //multiple students on page
             studentUrl = student[0];
+            var studentUrlList = studentUrl.split('/');
+            var len = studentUrlList.length;
             browser.click('.student');
             browser.waitForExist('.panel-heading');
-            expect(studentUrl).to.equal(browser.getUrl());
+            expect(browser.getUrl()).to.contain(studentUrlList[len-1]);
         }
-        rowser.back();
+        browser.back();
         // compose the url for editing the class
         var editUrl = '';
         var urlList = classUrl.split('/');
