@@ -391,6 +391,9 @@ gulp.task('unit', function () {
 
 gulp.task('coverage', function () {
     exec('./test.sh', function (error, stdout) {
+        if (error) {
+            console.log(error);
+        }
         console.log(stdout);
     });
 });

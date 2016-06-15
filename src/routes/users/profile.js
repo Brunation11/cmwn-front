@@ -42,7 +42,7 @@ const BROWSER_NOT_SUPPORTED = <span><p>For the best viewing experience we recomm
 const PASS_UPDATED = '<p>You have successfully updated your password.<br />Be sure to remember for next time!</p>';
 
 export class Profile extends React.Component {
-    constructor() {
+    constructor(props) {
         super(props);
         this.state = _.defaults({
             gameOn: false,
@@ -240,7 +240,7 @@ export class Profile extends React.Component {
         var profile = (this.state.user_id === this.props.currentUser.user_id) ? this.renderCurrentUserProfile : this.renderUserProfile;
         return (
            <Layout className={PAGE_UNIQUE_IDENTIFIER} navMenuId="navMenu">
-               {profile()}
+               {profile.apply(this)}
            </Layout>
         );
     }
