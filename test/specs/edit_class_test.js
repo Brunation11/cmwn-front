@@ -1,9 +1,12 @@
 var login_test = require("./login_test");
 
+var USER = "teacher";
+var PASSWD = "business2";
+
 //selects the first class in the table
 describe('tests editing class as teacher', function () {
     it('should assert editing class was successful', function () {
-    	login_test.login("teacher", "business");
+    	login_test.login(USER, PASSWD);
     	browser.waitForExist('#navMenu', 3000);
     	browser.url('/classes');
     	browser.waitForExist('.datatable', 5000);
@@ -31,7 +34,7 @@ describe('tests editing class as teacher', function () {
 
     // leaving class name and description blank
     it('should display an error', function () {
-    	login_test.login("teacher", "business");
+    	login_test.login(USER, PASSWD);
     	browser.waitForExist('#navMenu', 3000);
     	browser.url('/classes');
     	browser.waitForExist('.datatable', 5000);
@@ -58,7 +61,7 @@ describe('tests editing class as teacher', function () {
 
 	// leaving description blank
 	it('should assert editing class was successful', function () {
-    	login_test.login("teacher", "business");
+    	login_test.login(USER, PASSWD);
     	browser.waitForExist('#navMenu', 3000);
     	browser.url('/classes');
     	browser.waitForExist('.datatable');
