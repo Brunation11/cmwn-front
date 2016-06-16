@@ -19,6 +19,7 @@ _projects
 .wercker
 wercker.env
 scssReport.json
+docker-compose.yml
 front.sh
 stop_front.sh
 errorShots
