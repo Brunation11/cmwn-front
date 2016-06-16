@@ -6,25 +6,21 @@ import {Panel} from 'react-bootstrap';
 
 import 'components/flipboard.scss';
 
-var FlipBoard = React.createClass({
-    getInitialState: function () {
-        return {
+class FlipBoard extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
             data: _.map(this.props.data == null ? [] : this.props.data, this.props.transform)
         };
-    },
-    getDefaultProps: function () {
-        return {
-            header: 'Flipboard',
-            transform: _.identity,
-            renderFlip: () => <div className="flip" key={Shortid.generate()}></div>
-        };
-    },
-    componentWillReceiveProps: function (nextProps) {
+    }
+
+    componentWillReceiveProps(nextProps) {
         this.setState({
             data: _.map(nextProps.data == null ? [] : nextProps.data, this.props.transform)
         });
-    },
-    render: function () {
+    }
+
+    render() {
         if (!this.state.data.length) {
             return null;
         }
@@ -36,6 +32,12 @@ var FlipBoard = React.createClass({
             </div>
         );
     }
-});
+}
+
+FlipBoard.defaultProps = {
+    header: 'Flipboard',
+    transform: _.identity,
+    renderFlip: () => <div className="flip" key={Shortid.generate()}></div>
+};
 
 export default FlipBoard;
