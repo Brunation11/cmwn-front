@@ -390,7 +390,7 @@ gulp.task('unit', function () {
 });
 
 gulp.task('coverage', function () {
-    exec('./test.sh', function (error, stdout) {
+    exec('./test.sh', function (error, stdout, stderr) {
         if (error) {
             console.log(error);
         }
