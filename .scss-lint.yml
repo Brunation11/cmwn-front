@@ -83,8 +83,6 @@ linters:
         severity: error
     QualifyingElement:
         severity: error
-    SelectorDepth:
-        severity: error
     Shorthand:
         severity: error
     SingleLinePerProperty:
