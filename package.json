@@ -37,6 +37,7 @@
     "redux-promise-middleware": "^2.3.3",
     "redux-thunk": "^1.0.3",
     "reselect": "^2.0.3",
+    "ruby": "^0.6.1",
     "screenfull": "^3.0.0",
     "seamless-immutable": "^5.1.0",
     "shortid": "^2.2.4"
@@ -77,6 +78,8 @@
     "gulp-if": "^2.0.0",
     "gulp-inject": "^3.0.0",
     "gulp-mocha": "git+https://github.com/sindresorhus/gulp-mocha.git",
+    "gulp-scss-lint": "^0.4.0",
+    "gulp-scss-lint-stylish": "^1.0.1",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-sri": "^0.3.0",
     "gulp-util": "^3.0.7",
