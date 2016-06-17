@@ -40,7 +40,7 @@ exports.config = {
     // https://docs.saucelabs.com/reference/platforms-configurator
     //
     capabilities: [{
-        browserName: 'chrome',
+        browserName: 'chrome'
     }],
     // BrowerStack capabilities
     //capabilities: [{
@@ -70,7 +70,7 @@ exports.config = {
     sync: true,
     //
     // Level of logging verbosity: silent | verbose | command | data | result | error
-    logLevel: 'verbose',
+    logLevel: 'silent',
     //
     // Enables colors for log output.
     coloredLogs: true,
@@ -93,7 +93,7 @@ exports.config = {
     connectionRetryCount: 3,
     //
     // Host of the WebDriver server
-    // host: '192.168.99.100',
+    host: '192.168.99.100',
     //
     // Port the WebDriver server is on
     // port: 4444,
