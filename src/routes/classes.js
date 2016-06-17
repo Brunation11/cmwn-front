@@ -32,7 +32,7 @@ var Component = React.createClass({
         var cols = [
             <Column dataKey="title" renderHeader="Class Name" renderCell={(title, row) => {
                 return (
-                    <Link to={'/class/' + row.group_id + '/view'}>{title}</Link>
+                    <Link to={'/class/' + row.group_id + '/view'} className="class-url">{title}</Link>
                 );
             }}></Column>,
             <Column dataKey="external_id" renderHeader="Class Id"></Column>,
