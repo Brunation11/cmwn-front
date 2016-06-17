@@ -25,3 +25,27 @@ services:
       - ./:/var/www/
     links:
       - php
+
+  selenium_hub:
+    container_name: selenium_hub
+    image: selenium/hub
+    ports:
+      - "4444:4444"
+
+  selenium_chrome:
+    image: selenium/node-chrome
+    environment:
+      HUB_PORT_4444_TCP_ADDR: "hub"
+    ports:
+      - 5900
+    links:
+      - selenium_hub:hub
+
+  selenium_firefox:
+    image: selenium/node-firefox
+    environment:
+      HUB_PORT_4444_TCP_ADDR: "hub"
+    ports:
+      - 5900
+    links:
+      - selenium_hub:hub

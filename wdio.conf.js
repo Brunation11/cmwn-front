@@ -14,6 +14,7 @@ exports.config = {
     ],
     // Patterns to exclude.
     exclude: [
+        './test/specs/donottest/*.js'
         // 'path/to/excluded/files'
     ],
     //
@@ -39,14 +40,24 @@ exports.config = {
     // https://docs.saucelabs.com/reference/platforms-configurator
     //
     capabilities: [{
-        // maxInstances can get overwritten per capability. So if you have an in-house Selenium
-        // grid with only 5 firefox instance available you can make sure that not more than
-        // 5 instance gets started at a time.
-        maxInstances: 5,
-        //
-        browserName: 'chrome'//'phantomjs',
-        //"phantomjs.cli.args" : ["--ignore-ssl-errors=yes"]
+        browserName: 'chrome',
     }],
+    // BrowerStack capabilities
+    //capabilities: [{
+    //   // maxInstances can get overwritten per capability. So if you have an in-house Selenium
+    //   // grid with only 5 firefox instance available you can make sure that not more than
+    //   // 5 instance gets started at a time.
+    //   //maxInstances: 5,
+    //   //
+    //   //browserName: 'chrome'//'phantomjs',
+    //   //"phantomjs.cli.args" : ["--ignore-ssl-errors=yes"]
+    //   os: 'OS X',
+    //   os_version: 'El Capitan',
+    //   browser: 'firefox',
+    //   browser_version: '44',
+    //   name: 'Example via runner',
+    //   build: 'Sample WebDriverIO tests'
+    //}],
     //
     // ===================
     // Test Configurations
@@ -59,7 +70,7 @@ exports.config = {
     sync: true,
     //
     // Level of logging verbosity: silent | verbose | command | data | result | error
-    logLevel: 'silent',
+    logLevel: 'verbose',
     //
     // Enables colors for log output.
     coloredLogs: true,
@@ -81,12 +92,18 @@ exports.config = {
     // Default request retries count
     connectionRetryCount: 3,
     //
+    // Host of the WebDriver server
+    // host: '192.168.99.100',
+    //
+    // Port the WebDriver server is on
+    // port: 4444,
+    //
     // Initialize the browser instance with a WebdriverIO plugin. The object should have the
     // plugin name as key and the desired plugin options as properties. Make sure you have
     // the plugin installed before running any tests. The following plugins are currently
     // available:
     // WebdriverCSS: https://github.com/webdriverio/webdrivercss
-    // WebdriverRTC: https://github.com/webdriverio/webdriverrtc
+    // WebdriverR8C: https://github.com/webdriverio/webdriverrtc
     // Browserevent: https://github.com/webdriverio/browserevent
     // plugins: {
     //     webdrivercss: {
