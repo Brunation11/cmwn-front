@@ -3,6 +3,7 @@ import {Link} from 'react-router';
 import _ from 'lodash';
 import {Input, Carousel, CarouselItem, Button, Modal} from 'react-bootstrap';
 import Shortid from 'shortid';
+import ClassNames from 'classnames';
 
 import Toast from 'components/toast';
 import Log from 'components/log';
@@ -202,7 +203,8 @@ var Header = React.createClass({
         return {
             loginOpen: false,
             signupOpen: false,
-            showContact: false
+            showContact: false,
+            verified: false
         };
     },
     getDefaultProps: function () {
@@ -232,11 +234,18 @@ var Header = React.createClass({
         }
     },
     renderCaptcha: function () {
-        var captchas = document.getElementsByClassName('grecaptcha');
-        if (captchas.length) {
-            grecaptcha.render(captchas[0], {'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l', callback: () => { //eslint-disable-line no-undef
-                this.setState({showContact: true});
-            }});
+        if (this.state.verified) {
+            return;
+        } else {
+            var captchas = document.getElementsByClassName('grecaptcha');
+            if (captchas.length) {
+                grecaptcha.render(captchas[0], {'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l', callback: () => { //eslint-disable-line no-undef
+                    this.setState({
+                        showContact: true,
+                        verified: true
+                    });
+                }});
+            }
         }
     },
     displayWorkModal: function () {
@@ -296,9 +305,9 @@ var Header = React.createClass({
                 </Modal>
                 <Modal show={this.props.contactOpen || this.state.contactOpen} onHide={this.hideContactModal}>
                     <Modal.Body>
-                        {COPY.MODALS.PRECAPTCHA}
-                        <div className="grecaptcha"></div>
-                        {this.state.showContact ? COPY.MODALS.CONTACT : ''}
+                        {this.state.verified ? '' : COPY.MODALS.PRECAPTCHA}
+                        <div className={ClassNames('grecaptcha', {hidden: (this.props.loggedIn || this.state.verified)})}></div>
+                        {this.state.verified ? COPY.MODALS.CONTACT : ''}
                     </Modal.Body>
                 </Modal>
                 <Modal show={this.state.signupOpen} onHide={() => this.setState({signupOpen: false})}>
