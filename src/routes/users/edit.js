@@ -39,7 +39,7 @@ const INVALID_SUBMISSION = 'Invalid submission. Please update fields highlighted
 const BAD_UPDATE = 'There was a problem updating your profile. Please try again later.';
 const USER_REMOVED = 'User deleted. You will now be redirected.';
 const CONFIRM_DELETE = 'Are you sure you want to delete this user? This action cannot be undone.';
-const PASS_UPDATED = '<p>You have successfully updated your password.<br />Be sure to remember for next time!</p>';
+const PASS_UPDATED = '<p id="showMsg">You have successfully updated your password.<br />Be sure to remember for next time!</p>';
 
 var Component = React.createClass({
     getInitialState: function () {
@@ -83,7 +83,7 @@ var Component = React.createClass({
         if (this.props.data._links.forgot == null) {
             return;
         }
-        //note: This should only appear for adults, who have email addressed
+        //note: This should only appear for adults, who have email addresses
         HttpManager.GET(this.props.data._links.forgot.href, {email: this.props.data.email}).then(() => {
             Toast.success('Password Reset. This user will recieve an email with further instructions.');
         }).catch(err => {
@@ -472,6 +472,7 @@ var ChangePassword = React.createClass({
             <Panel header={HEADINGS.PASSWORD} className="standard">
                 <form>
                 <Input
+                    id="oldPass"
                     type="password"
                     value={this.state.current}
                     placeholder="********"
@@ -482,6 +483,7 @@ var ChangePassword = React.createClass({
                     onChange={e => this.setState({current: e.target.value})}
                 />
                 <Input
+                    id="newPass"
                     type="password"
                     value={this.state.new}
                     placeholder="********"
@@ -493,6 +495,7 @@ var ChangePassword = React.createClass({
                     {...this.state.extraProps}
                 />
                 <Input
+                    id="confirmPass"
                     type="password"
                     value={this.state.confirm}
                     placeholder="********"
@@ -503,7 +506,7 @@ var ChangePassword = React.createClass({
                     onChange={e => this.setState({confirm: e.target.value})}
                     {...this.state.extraProps}
                 />
-                <Button onClick={this.submit}>Update</Button>
+                <Button onClick={this.submit} id="updateBtn">Update</Button>
                 </form>
             </Panel>
         );
