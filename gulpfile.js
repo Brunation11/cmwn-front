@@ -390,11 +390,18 @@ gulp.task('unit', function () {
 });
 
 gulp.task('coverage', function () {
-    exec('./test.sh', function (error, stdout, stderr) {
-        if (error) {
-            console.log(error);
-        }
-        console.log(stdout);
+    var proc = spawn('./test.sh');
+
+    proc.on('exit', function (exitCode) {
+        console.log('process exited with code ' + exitCode);
+    });
+
+    proc.stdout.on('data', function (chunk) {
+        console.log('' + chunk);
+    });
+
+    proc.stdout.on('end', function () {
+        console.log('finished collecting data chunks from stdout');
     });
 });
 

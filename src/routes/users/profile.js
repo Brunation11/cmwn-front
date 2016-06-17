@@ -15,7 +15,7 @@ import EventManager from 'components/event_manager';
 import Trophycase from 'components/trophycase';
 import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
-//import Util from 'components/util';
+// import Util from 'components/util';
 import History from 'components/history';
 import GenerateDataSource from 'components/datasource';
 
@@ -65,15 +65,16 @@ export class Profile extends React.Component {
             this.setState(this.props.data);
         }
     }
-    
+
     componentWillReceiveProps(nextProps) {
         this.resolveRole();
         this.setState(nextProps.data);
     }
-    
+
     resolveRole() {
         var newState = {};
-        //remember we actually want current user here, not the user whose profile we are looking at
+        // remember we actually want current user here, not the user whose
+        // profile we are looking at
         if (this.props.currentUser && this.props.currentUser.type !== 'CHILD') {
             newState.isStudent = false;
         } else {
@@ -81,22 +82,22 @@ export class Profile extends React.Component {
         }
         this.setState(newState);
     }
-    
+
     showModal(gameUrl) {
         var urlParts;
         if (Detector.isMobileOrTablet() || Detector.isPortrait()) {
             urlParts = gameUrl.split('/');
-            urlParts.pop(); //discard index.html
+            urlParts.pop(); // discard index.html
             History.push(`/game/${_.last(urlParts)}`);
         }
         this.setState({gameOn: true, gameUrl});
     }
-    
+
     hideModal() {
         this.setState({gameOn: false});
         this.refs.gameRef.dispatchPlatformEvent('quit');
     }
-    
+
     renderGame() {
         var flipUrl = this.state._links && this.state._links.user_flip ? this.state._links.user_flip.href : null;
         if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe10())) {
@@ -114,7 +115,7 @@ export class Profile extends React.Component {
             </div>
         );
     }
-    
+
     renderFlip(item) {
         var onClick, playText;
         if (item.coming_soon) {
@@ -142,7 +143,7 @@ export class Profile extends React.Component {
             </div>
         );
     }
-    
+
     renderGameList() {
         if (this.state._links == null || this.props.currentUser.user_id !== this.state.user_id) {
             return null;
@@ -176,7 +177,7 @@ export class Profile extends React.Component {
            </GameWrapper>
         );
     }
-    
+
     renderClassList() {
         if (!this.state || !this.state._embedded || !this.state._embedded.group_class) {
             return null;
@@ -188,7 +189,7 @@ export class Profile extends React.Component {
             </p>
         );
     }
-    
+
     renderUserProfile() {
         var ISODate = (new Date(this.state.birthdate)).toISOString();
 
@@ -216,7 +217,7 @@ export class Profile extends React.Component {
             </div>
         );
     }
-    
+
     renderCurrentUserProfile() {
         return (
             <div>
@@ -232,7 +233,7 @@ export class Profile extends React.Component {
             </div>
         );
     }
-    
+
     render() {
         if (this.state.username == null) {
             return null;
@@ -244,7 +245,7 @@ export class Profile extends React.Component {
            </Layout>
         );
     }
-};
+}
 
 const mapStateToProps = state => {
     var data = {};
@@ -265,4 +266,3 @@ const mapStateToProps = state => {
 var Page = connect(mapStateToProps)(Profile);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
-
