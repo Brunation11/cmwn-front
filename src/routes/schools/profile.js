@@ -50,10 +50,11 @@ var Component = React.createClass({
         this.setState(nextProps.data);
     },
     renderDistricts: function () {
+        var links;
         if (!this.props.data || !this.props.data._embedded || !this.props.data._embedded.organization || this.props.data._embedded.organization.district) {
             return null;
         }
-        var links = _.map(this.props.data._embedded.organization.district, district => {
+        links = _.map(this.props.data._embedded.organization.district, district => {
             return (
                 <Link to={`/districts/${district.org_id}`}>
                     {district.title}

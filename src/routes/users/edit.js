@@ -146,7 +146,7 @@ var Component = React.createClass({
     renderParentFields: function () {
         if (this.state.parents && this.state.parents.length) {
             return _.map(this.state.parents, (parent, i) => {
-                /** @TODO MPR, 11/14/15: Implement Autocomplete, store parent ID*/
+                /* TODO MPR, 11/14/15: Implement Autocomplete, store parent ID*/
                 return (
                         <span>
                             <Input
@@ -303,9 +303,9 @@ var Component = React.createClass({
         );
     },
     renderChild: function () {
-        var day = Moment(this.state.dob).date(),
-            month = Moment(this.state.dob).month() + 1,
-            year = Moment(this.state.dob).year();
+        var day = Moment(this.state.dob).date();
+        var month = Moment(this.state.dob).month() + 1;
+        var year = Moment(this.state.dob).year();
 
         return (
             <div className="user-metadata">
@@ -367,10 +367,11 @@ var CodeChange = React.createClass({
         return {code: ''};
     },
     submit: function () {
+        var update;
         if (this.props.data._links.reset == null) {
             return;
         }
-        var update = HttpManager.POST({url: this.props.data._links.reset.href }, {email: this.props.data.email, code: this.state.code});
+        update = HttpManager.POST({url: this.props.data._links.reset.href }, {email: this.props.data.email, code: this.state.code});
         update.then(() => {
             Toast.success('Code Reset for user. They will need to update their password on next login.');
         }).catch(err => {
@@ -407,10 +408,11 @@ var ForgotPass = React.createClass({
         return {code: ''};
     },
     submit: function () {
+        var update;
         if (this.props.data._links.forgot == null) {
             return;
         }
-        var update = HttpManager.POST({url: this.props.data._links.forgot.href }, {email: this.props.data.email});
+        update = HttpManager.POST({url: this.props.data._links.forgot.href }, {email: this.props.data.email});
         update.then(() => {
             Toast.success('Password reset code sent to user email.');
         }).catch(err => {
@@ -441,11 +443,12 @@ var ChangePassword = React.createClass({
         };
     },
     submit: function () {
+        var update;
         if (!isPassValid(this.state.new)) {
             this.setState({extraProps: {bsStyle: 'error'}});
             Toast.error(ERRORS.TOO_SHORT);
         } else if (this.state.confirm === this.state.new) {
-            var update = HttpManager.POST({url: this.props.url.href}, {
+            update = HttpManager.POST({url: this.props.url.href}, {
                 'current_password': this.state.current,
                 'password': this.state.new,
                 'password_confirmation': this.state.confirm,

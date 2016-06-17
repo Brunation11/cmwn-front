@@ -21,10 +21,11 @@ class Page extends React.Component {
             year: year
         };
         this.setState = this.setState.bind(this);
-    }
-
+    } 
     componentWillReceiveProps(nextProps) {
-        var month = 0, day = 0, year = 0;
+        var month = 0;
+        var day = 0;
+        var year = 0;
         if (nextProps.value != null) {
             month = Moment(nextProps.value).month() + 1;
             day = Moment(nextProps.value).date();

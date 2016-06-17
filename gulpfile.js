@@ -71,7 +71,7 @@ ___  ______  ______  ______  ______  ______  ______  ______  ______  ______  ___
 (______)(______)(______)(______)(______)(______)(______)(______)(______)(______)(______)(______)(______)
 */
 
-/**
+/*
  * Higher order function. Starts an arbitrary shell command
  * note that this is not a gulp best practice, and should be
  * used sparingly and only with justification.
