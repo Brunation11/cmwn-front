@@ -5,7 +5,7 @@ export default function (e) {
     // console.log(e.name, e.gameData); // eslint-disable-line no-console
 
     data = e.gameData;
-    console.log(data.name);
+    // console.log(data);
     // console.log(data); // eslint-disable-line no-console
 
     if (!data) {
@@ -14,7 +14,7 @@ export default function (e) {
 
     if (data.game === 'skribble') {
 
-        if (data.name === 'init') {
+        if (data.name === 'ready') {
             e.respond({
                 name: 'update-data',
                 data: {
