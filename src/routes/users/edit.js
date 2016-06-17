@@ -516,7 +516,7 @@ var ChangePassword = React.createClass({
     }
 });
 
-const mapStateToProps = state => {
+var mapStateToProps = state => {
     var data = {};
     var currentUser = {};
     var loading = true;

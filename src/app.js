@@ -233,7 +233,7 @@ var AppComponent = React.createClass({
     }
 });
 
-const mapStateToProps = state => {
+var mapStateToProps = state => {
     var currentUser = {};
     if (state.currentUser != null) {
         currentUser = state.currentUser;
@@ -242,6 +242,7 @@ const mapStateToProps = state => {
         currentUser
     };
 };
+
 
 var App = connect(mapStateToProps)(AppComponent);
 

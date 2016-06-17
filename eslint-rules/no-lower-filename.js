@@ -1,4 +1,4 @@
-// This rule checks if the file name is lowercase
+// This rule checks if the file name is lowercase and snake case
 
 module.exports = function(context) {
     return {
@@ -6,12 +6,15 @@ module.exports = function(context) {
             // Returns the filename associated with the source
             var fileName = context.getFilename();
             
-            var i = 0;
-            var character = '';
-            while (i <= fileName.length) {                
-                // Tests if each character in the filename is not a number & is uppercase
-                character = fileName.charAt(i);
-                if (isNaN(character * 1) && character == character.toUpperCase()) {
+            // Extracts just the fileName.js
+            while (fileName.indexOf("/") !== -1) {
+                fileName = fileName.substring(fileName.indexOf("/") + 1);
+            }
+            
+            for (var i = 0; i < fileName.length; i++) {
+                var charVal = fileName.charCodeAt(i);
+                // 65 = `A` and 90 = `Z` and 32 = ` ` for ASCII Code
+                if (charVal >= 65 && charVal <= 90 || charVal == 32) {
                     context.report(
                         node,
                         {
@@ -20,7 +23,7 @@ module.exports = function(context) {
                         },
                         "The filename is not lowercase"
                     );
-                    i++;
+                    break;
                 }
             }
         }
