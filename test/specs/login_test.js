@@ -1,17 +1,9 @@
-describe('my awesome website', function() {
-    it('should assert that login was successful', function() {
-        browser.url('/login');
-        browser.setValue('#email', 'teacher');
-        browser.setValue('#password', 'business');
-        var a = browser.getValue('#email');
-        expect(a).to.equal('teacher');
-        var b = browser.getValue('#password');
-        expect(b).to.equal('business');
-        browser.pause(4000);
-        browser.click('#login-button');
-        browser.pause(10000);
-        browser.getUrl().should.equal('https://local.changemyworldnow.com/profile');
-        console.log(browser.getUrl());
-        
-    });
-});
+var exports = module.exports = {};
+exports.login = function (name, psswd) {
+    browser.url("/login");
+    browser.setValue('#email', name);
+    browser.setValue('#password', psswd);
+    browser.pause(2000); // doesn't work without the pause
+    browser.click('#login-button');
+    browser.waitForExist('.upload', 5000); // if login occurs "upload" button will be on page
+}

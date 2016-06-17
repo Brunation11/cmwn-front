@@ -77,7 +77,7 @@ var Component = React.createClass({
         return (
             <Layout>
                 <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard">
-                    <p className="right" >
+                    <p className="right" id="editButton">
                         <EditLink className="purple" base="/class" id={this.state.group_id} scope={this.state.scope} text="Edit this class"/>
                         {this.renderImport()}
                         <DeleteLink className="purple" base="/class" id={this.state.group_id} scope={this.state.scope} text="Delete this class" />
