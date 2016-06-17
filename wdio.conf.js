@@ -42,22 +42,6 @@ exports.config = {
     capabilities: [{
         browserName: 'chrome'
     }],
-    // BrowerStack capabilities
-    //capabilities: [{
-    //   // maxInstances can get overwritten per capability. So if you have an in-house Selenium
-    //   // grid with only 5 firefox instance available you can make sure that not more than
-    //   // 5 instance gets started at a time.
-    //   //maxInstances: 5,
-    //   //
-    //   //browserName: 'chrome'//'phantomjs',
-    //   //"phantomjs.cli.args" : ["--ignore-ssl-errors=yes"]
-    //   os: 'OS X',
-    //   os_version: 'El Capitan',
-    //   browser: 'firefox',
-    //   browser_version: '44',
-    //   name: 'Example via runner',
-    //   build: 'Sample WebDriverIO tests'
-    //}],
     //
     // ===================
     // Test Configurations
@@ -103,7 +87,7 @@ exports.config = {
     // the plugin installed before running any tests. The following plugins are currently
     // available:
     // WebdriverCSS: https://github.com/webdriverio/webdrivercss
-    // WebdriverR8C: https://github.com/webdriverio/webdriverrtc
+    // WebdriverRTC: https://github.com/webdriverio/webdriverrtc
     // Browserevent: https://github.com/webdriverio/browserevent
     // plugins: {
     //     webdrivercss: {
