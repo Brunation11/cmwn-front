@@ -74,9 +74,10 @@
         "no-unused-vars": ["error", {"vars": "all", "args": "after-used"}],
         "no-multiple-empty-lines": "off",
         "one-var": ["error", "never"],
-        "no-empty": "error",
-        "no-exceed-chars": "error",
-        "no-exceed-lines": "error"
+        "max-len": ["error", 110],
+        "no-exceed-lines": "error",
+        "upper-snakecase-const": "error",
+        "no-lower-filename": "error"
     },
     "env": {
         "es6": true,
