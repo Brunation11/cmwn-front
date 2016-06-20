@@ -1,13 +1,18 @@
 import React from 'react';
+
 import { Profile } from 'routes/users/profile';
 
-export default class MockFlipWrapper extends React.Component {
+class MockFlipWrapper extends React.Component {
     
     showModal(gameUrl) {
-        return gameUrl;
+        this.props.clicked = gameUrl;
     }
     
     render() {
-        return Profile.prototype.renderFlip(this.props.item);
+        return Profile.prototype.renderFlip.call(this, this.props.item);
     }
 }
+
+MockFlipWrapper.defaultProps = {clicked: null};
+
+export default MockFlipWrapper;

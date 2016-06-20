@@ -41,6 +41,28 @@ const CLASSES = 'Classes';
 const BROWSER_NOT_SUPPORTED = <span><p>For the best viewing experience we recommend the desktop version in Chrome</p><p>If you don't have chrome, <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">download it for free here</a>.</p></span>;
 const PASS_UPDATED = '<p>You have successfully updated your password.<br />Be sure to remember for next time!</p>';
 
+export var dataTransform = function(data) {
+    var array = data;
+    var currentIndex, temporaryValue, randomIndex;
+    if (array == null) {
+        array = [];
+    } else if (!_.isArray(array)) {
+        return [];
+    }
+    currentIndex = array.length;
+     // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+    return _.filter(array, v => !v.coming_soon).concat(_.filter(array, v => v.coming_soon));
+}
+
 export class Profile extends React.Component {
     constructor(props) {
         super(props);
@@ -104,13 +126,13 @@ export class Profile extends React.Component {
             return (
                 <div>
                     {BROWSER_NOT_SUPPORTED}
-                    <p><a onClick={() => this.setState({gameOn: false})} >(close)</a></p>
+                    <p><a onClick={this.setState.bind(this, {gameOn: false})} >(close)</a></p>
                 </div>
             );
         }
         return (
             <div>
-                <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl} flipUrl={flipUrl} onExit={() => this.setState({gameOn: false})}/>
+                <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl} flipUrl={flipUrl} onExit={this.setState.bind(this, {gameOn: false})}/>
                     <a onClick={this.hideModal.bind(this)} className="modal-close">(close)</a>
             </div>
         );
@@ -149,27 +171,7 @@ export class Profile extends React.Component {
             return null;
         }
         return (
-           <GameWrapper transform={data => {
-               var array = data;
-               var currentIndex, temporaryValue, randomIndex;
-               if (array == null) {
-                   array = [];
-               } else if (!_.isArray(array)) {
-                   return [];
-               }
-               currentIndex = array.length;
-                // While there remain elements to shuffle...
-               while (0 !== currentIndex) {
-                   // Pick a remaining element...
-                   randomIndex = Math.floor(Math.random() * currentIndex);
-                   currentIndex -= 1;
-                   // And swap it with the current element.
-                   temporaryValue = array[currentIndex];
-                   array[currentIndex] = array[randomIndex];
-                   array[randomIndex] = temporaryValue;
-               }
-               return _.filter(array, v => !v.coming_soon).concat(_.filter(array, v => v.coming_soon));
-           }}>
+           <GameWrapper transform={dataTransform}>
                <FlipBoard
                    renderFlip={this.renderFlip.bind(this)}
                    header={HEADINGS.ARCADE}

@@ -10,4 +10,3 @@ import { Profile } from 'routes/users/profile';
 import teacherData from 'mocks/users/teacherData';
 import studentDataA from 'mocks/users/studentDataA';
 import studentDataB from 'mocks/users/studentDataB';
-
