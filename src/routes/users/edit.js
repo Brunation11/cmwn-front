@@ -39,7 +39,7 @@ const INVALID_SUBMISSION = 'Invalid submission. Please update fields highlighted
 const BAD_UPDATE = 'There was a problem updating your profile. Please try again later.';
 const USER_REMOVED = 'User deleted. You will now be redirected.';
 const CONFIRM_DELETE = 'Are you sure you want to delete this user? This action cannot be undone.';
-const PASS_UPDATED = '<p>You have successfully updated your password.<br />Be sure to remember for next time!</p>';
+const PASS_UPDATED = '<p id="showMsg">You have successfully updated your password.<br />Be sure to remember for next time!</p>';
 
 var Component = React.createClass({
     getInitialState: function () {
@@ -83,7 +83,7 @@ var Component = React.createClass({
         if (this.props.data._links.forgot == null) {
             return;
         }
-        //note: This should only appear for adults, who have email addressed
+        //note: This should only appear for adults, who have email addresses
         HttpManager.GET(this.props.data._links.forgot.href, {email: this.props.data.email}).then(() => {
             Toast.success('Password Reset. This user will recieve an email with further instructions.');
         }).catch(err => {
@@ -146,7 +146,7 @@ var Component = React.createClass({
     renderParentFields: function () {
         if (this.state.parents && this.state.parents.length) {
             return _.map(this.state.parents, (parent, i) => {
-                /** @TODO MPR, 11/14/15: Implement Autocomplete, store parent ID*/
+                /* TODO MPR, 11/14/15: Implement Autocomplete, store parent ID*/
                 return (
                         <span>
                             <Input
@@ -303,9 +303,9 @@ var Component = React.createClass({
         );
     },
     renderChild: function () {
-        var day = Moment(this.state.dob).date(),
-            month = Moment(this.state.dob).month() + 1,
-            year = Moment(this.state.dob).year();
+        var day = Moment(this.state.dob).date();
+        var month = Moment(this.state.dob).month() + 1;
+        var year = Moment(this.state.dob).year();
 
         return (
             <div className="user-metadata">
@@ -367,10 +367,11 @@ var CodeChange = React.createClass({
         return {code: ''};
     },
     submit: function () {
+        var update;
         if (this.props.data._links.reset == null) {
             return;
         }
-        var update = HttpManager.POST({url: this.props.data._links.reset.href }, {email: this.props.data.email, code: this.state.code});
+        update = HttpManager.POST({url: this.props.data._links.reset.href }, {email: this.props.data.email, code: this.state.code});
         update.then(() => {
             Toast.success('Code Reset for user. They will need to update their password on next login.');
         }).catch(err => {
@@ -407,10 +408,11 @@ var ForgotPass = React.createClass({
         return {code: ''};
     },
     submit: function () {
+        var update;
         if (this.props.data._links.forgot == null) {
             return;
         }
-        var update = HttpManager.POST({url: this.props.data._links.forgot.href }, {email: this.props.data.email});
+        update = HttpManager.POST({url: this.props.data._links.forgot.href }, {email: this.props.data.email});
         update.then(() => {
             Toast.success('Password reset code sent to user email.');
         }).catch(err => {
@@ -441,11 +443,12 @@ var ChangePassword = React.createClass({
         };
     },
     submit: function () {
+        var update;
         if (!isPassValid(this.state.new)) {
             this.setState({extraProps: {bsStyle: 'error'}});
             Toast.error(ERRORS.TOO_SHORT);
         } else if (this.state.confirm === this.state.new) {
-            var update = HttpManager.POST({url: this.props.url.href}, {
+            update = HttpManager.POST({url: this.props.url.href}, {
                 'current_password': this.state.current,
                 'password': this.state.new,
                 'password_confirmation': this.state.confirm,
@@ -472,6 +475,7 @@ var ChangePassword = React.createClass({
             <Panel header={HEADINGS.PASSWORD} className="standard">
                 <form>
                 <Input
+                    id="oldPass"
                     type="password"
                     value={this.state.current}
                     placeholder="********"
@@ -482,6 +486,7 @@ var ChangePassword = React.createClass({
                     onChange={e => this.setState({current: e.target.value})}
                 />
                 <Input
+                    id="newPass"
                     type="password"
                     value={this.state.new}
                     placeholder="********"
@@ -493,6 +498,7 @@ var ChangePassword = React.createClass({
                     {...this.state.extraProps}
                 />
                 <Input
+                    id="confirmPass"
                     type="password"
                     value={this.state.confirm}
                     placeholder="********"
@@ -503,7 +509,7 @@ var ChangePassword = React.createClass({
                     onChange={e => this.setState({confirm: e.target.value})}
                     {...this.state.extraProps}
                 />
-                <Button onClick={this.submit}>Update</Button>
+                <Button onClick={this.submit} id="updateBtn">Update</Button>
                 </form>
             </Panel>
         );

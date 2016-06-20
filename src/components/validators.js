@@ -45,7 +45,8 @@ var regex = function (test, str) {
 
 /**
  * Validate can be called itself to join several rules. Rules are specified as strings passed as additional arguments
- * @param {string} str
+ * @param {string} str, a string
+ * @returns {string} 'error' or 'success'
  */
 var Validate = function (str) {
     var rules = Array.prototype.slice.call(arguments, 1);

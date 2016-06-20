@@ -75,10 +75,10 @@ var Component = React.createClass({
     },
     renderAdminView: function () {
         var children = _.filter(this.props.data, {type: 'CHILD'});
-        children = children || [];
         var adults = _.filter(this.props.data, {type: 'ADULT'});
         var tabIndex = 1;
         var tabs = [];
+        children = children || [];
         if (children && children.length) {
             tabs.push(
                 <Tab eventKey={tabIndex} title={'Students'}>

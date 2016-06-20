@@ -1,8 +1,8 @@
 import React from 'react';
 import _ from 'lodash';
 
-var Component = React.createClass({
-    render: function () {
+class Component extends React.Component {
+    render() {
         if (this.props.children == null) {
             return null;
         }
@@ -25,10 +25,9 @@ var Component = React.createClass({
                     }
                     return null;
                 })}
-            </div>
-        );
+            </div>);
     }
-});
+}
 
 export default Component;
 

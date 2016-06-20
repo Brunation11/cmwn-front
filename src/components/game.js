@@ -63,7 +63,7 @@ var Game = React.createClass({
             Log.log('Server refused flip update', err, flip);
         });
     },
-    /**
+    /*
      * default events. These will always fire regardless of whether or not
      * there is an event defined in addition to the submission behavior
      */
@@ -81,7 +81,7 @@ var Game = React.createClass({
     [EVENT_PREFIX + 'Init']: function (e) {
         e.respond(this.props.gameState);
     },
-    /** end of default events */
+    /* end of default events */
     gameEventHandler: function (e) {
         if (e.name != null) {
             if (_.isFunction(this[EVENT_PREFIX + _.capitalize(e.name)])) {
