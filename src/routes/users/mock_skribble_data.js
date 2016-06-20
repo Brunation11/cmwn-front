@@ -5,7 +5,7 @@ export default function (e) {
     // console.log(e.name, e.gameData); // eslint-disable-line no-console
 
     data = e.gameData;
-    console.log(data.name);
+    console.log(data.name); // eslint-disable-line
     // console.log(data); // eslint-disable-line no-console
 
     if (!data) {
