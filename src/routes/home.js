@@ -1,5 +1,4 @@
 import React from 'react';
-import {Link} from 'react-router';
 import _ from 'lodash';
 import {Input, Carousel, CarouselItem, Button, Modal} from 'react-bootstrap';
 import Shortid from 'shortid';
