@@ -38,7 +38,8 @@ var buildMenuRoutes = function (links) {
                     //This _probably_ wont be a problem...
                     a = route;
                     a.params = {};
-                } else if (route.endpoint !== '/' && !~route.endpoint.indexOf(':') && ~link.href.indexOf(route.endpoint)) {
+                } else if (route.endpoint !== '/' && !~route.endpoint.indexOf(':') &&
+                           ~link.href.indexOf(route.endpoint)) {
                     //nondynamic is also fairly easy, as urls cannot contain colonks
                     a = route;
                     a.params = {};
@@ -47,14 +48,16 @@ var buildMenuRoutes = function (links) {
                     params = Util.matchPathAndExtractParams(route.endpoint, link.href);
                     if (Object.keys(params).length) {
                         route.params = params;
-                        a = route; //MPR: ok i admit the typechange is strange here but i like it better than starting at null
+                        a = route; //MPR: ok i admit the typechange is strange here
+                                    //but i like it better than starting at null
                     }
                 }
             }
             return a;
         }, false);
         if (matchedRoute) {
-            url = Util.replacePathPlaceholdersFromParamObject(matchedRoute.path, matchedRoute.params).split('(')[0];
+            url = Util.replacePathPlaceholdersFromParamObject(matchedRoute.path,
+                    matchedRoute.params).split('(')[0];
             link = link.set('url', url.indexOf('/') === 0 ? url : '/' + url);
             a.push(link);
         }
@@ -76,7 +79,8 @@ var Component = React.createClass({
 //            return a;
 //        }, []);
         menuItems = addHardcodedEntries(menuItems);
-        return _.map(menuItems, item => (<li key={`(${item.label})-${item.url}`}><Link to={item.url}>{item.label}</Link></li>));
+        return _.map(menuItems, item =>
+            (<li key={`(${item.label})-${item.url}`}><Link to={item.url}>{item.label}</Link></li>));
     },
     render: function () {
         return (

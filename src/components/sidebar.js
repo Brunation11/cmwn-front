@@ -18,12 +18,17 @@ var Component = React.createClass({
         return (
             <div>
                 <p className="welcome">{WELCOME}</p>
-                <p className="username"><a onClick={this.attemptNavigate} >{this.props.currentUser.username}</a></p>
+                <p className="username">
+                    <a onClick={this.attemptNavigate} >
+                        {this.props.currentUser.username}
+                    </a>
+                </p>
             </div>
         );
     },
     render: function () {
-        if (this.props.currentUser.username == null || this.props.currentUser.username.toLowerCase() === 'null') {
+        if (this.props.currentUser.username == null ||
+            this.props.currentUser.username.toLowerCase() === 'null') {
             return null;
         }
         return (

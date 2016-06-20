@@ -9,7 +9,7 @@ var Page = React.createClass({
     },
     render: function () {
         return (
-           <div ref="loaderRef" className="loadingIcon anyOtherClasses">
+           <div ref="loaderRef" className="loading-icon anyOtherClasses">
            </div>
         );
     }

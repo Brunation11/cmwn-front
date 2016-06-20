@@ -51,7 +51,8 @@ var Paginator = React.createClass({
         if (isPagePaginator) {
             Actions.GET_NEXT_PAGE_PAGE(Store.getState(), pageNum);
         } else {
-            Actions.GET_NEXT_COMPONENT_PAGE(Store.getState(), this.props.endpointIdentifier, this.props.componentName, pageNum);
+            Actions.GET_NEXT_COMPONENT_PAGE(Store.getState(),
+            this.props.endpointIdentifier, this.props.componentName, pageNum);
         }
     },
     selectRowCount: function (e, count, isPagePaginator = this.props.pagePaginator) {
@@ -59,15 +60,18 @@ var Paginator = React.createClass({
         if (isPagePaginator) {
             Actions.CHANGE_PAGE_ROW_COUNT(Store.getState(), count);
         } else {
-            Actions.CHANGE_COMPONENT_ROW_COUNT(Store.getState(), this.props.endpointIdentifier, this.props.componentName, count);
+            Actions.CHANGE_COMPONENT_ROW_COUNT(Store.getState(),
+            this.props.endpointIdentifier, this.props.componentName, count);
         }
     },
     renderPageSelectors: function () {
         return _.map(_getButtonPattern(this.state.currentPage, this.state.pageCount), value => {
             if (value === '<') {
-                return (<Button key={value} onClick={this.selectPage.bind(this, Math.floor(1, this.state.currentPage - 1))}>{value}</Button>);
+                return (<Button key={value} onClick={this.selectPage.bind(this,
+                    Math.floor(1, this.state.currentPage - 1))}>{value}</Button>);
             } else if (value === '>') {
-                return (<Button key={value} onClick={this.selectPage.bind(this, Math.ceil(this.state.pageCount, this.state.currentPage + 1))}>{value}</Button>);
+                return (<Button key={value} onClick={this.selectPage.bind(this,
+                    Math.ceil(this.state.pageCount, this.state.currentPage + 1))}>{value}</Button>);
             } else if (value === '...') {
                 return (<Button key={value} disabled={true}>{value}</Button>);
             } else {
@@ -76,7 +80,8 @@ var Paginator = React.createClass({
         });
     },
     renderRowCountChoices: function () {
-        return _.map(GLOBALS.PAGINATOR_COUNTS, value => <MenuItem value={value} eventKey={value} key={value}>{value}</MenuItem>);
+        return _.map(GLOBALS.PAGINATOR_COUNTS, value =>
+            <MenuItem value={value} eventKey={value} key={value}>{value}</MenuItem>);
     },
     render: function () {
         var self = this;
@@ -86,7 +91,8 @@ var Paginator = React.createClass({
         return (
             <Panel className="paginator">
                 <div>
-                    {React.Children.map(self.props.children, child => React.cloneElement(child, {data: self.props.data}))}
+                    {React.Children.map(self.props.children, child =>
+                        React.cloneElement(child, {data: self.props.data}))}
                 </div>
                 <footer>
                     <ButtonGroup>

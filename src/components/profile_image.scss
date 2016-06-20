@@ -1,26 +1,26 @@
 @import 'variables';
 
 .profile-image-popover {
-    color: gray;
+    color: $cmwn-gray;
 
     strong {
-        color: #7829bb;
+        color: $cmwn-purple;
     }
 
     a {
-        color: #7829bb;
         cursor: pointer;
+        color: $cmwn-purple;
     }
 }
 
 .profile-image {
     position: relative;
     z-index: 2;
-    text-align: center;
     padding-bottom: $standard;
+    text-align: center;
 
     .profile-pic {
-        transform: translate3d(0px, 0px, 0px); //fix for image jitter in chrome: http://stackoverflow.com/questions/12980153/image-moves-on-hover-chrome-opacity-issue
+        transform: translate3d(0, 0, 0); //fix for image jitter in chrome: http://stackoverflow.com/questions/12980153/image-moves-on-hover-chrome-opacity-issue
     }
 
     &.link-below .below {
@@ -36,42 +36,44 @@
     }
 
     .upload {
-        width: 100%;
-        z-index: 1;
-        text-align: center;
-        background: $cmwn-purple;
-        color: white;
-        padding: ($standard / 2);
+        display: inline-block;
         position: absolute;
-        left: 0;
         right: 0;
         bottom: 0;
-        opacity: 1;
-        border: none;
-        display: inline-block;
-        vertical-align: middle;
+        left: 0;
         transform: translateZ(0);
-        box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+        opacity: 1;
+        z-index: 1;
+        border: 0;
+        box-shadow: 0 0 1px $cmwn-trans;
+        background: $cmwn-purple;
+        padding: ($standard / 2);
+        width: 100%;
+        vertical-align: middle;
+        text-align: center;
+        color: $cmwn-white;
         backface-visibility: hidden;
-        transition-duration: 0.3s;
+        transition-duration: .3s;
         transition-property: box-shadow, transform;
     }
 
-    .upload:hover, .upload:focus, .upload:active {
-        outline: none;
-        box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
+    .upload:hover,
+    .upload:focus,
+    .upload:active {
         transform: scale(1.1);
+        outline: none;
+        box-shadow: 0 10px 10px -10px $cmwn-trans-gray;
     }
 }
 
-#cloudinary-overlay {
+#cloudinary-overlay { // scss-lint:disable IdSelector
 
     .widget {
+        transition: max-width .8s;
         max-width: 0;
-        transition: max-width 0.8s;
     }
 
-    &.with_theme .widget {
+    &.with_theme .widget { // scss-lint:disable SelectorFormat
         max-width: 101vw;
     }
 }
