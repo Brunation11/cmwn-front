@@ -7,3 +7,10 @@ exports.login = function (name, psswd) {
     browser.click('#login-button');
     browser.waitForExist('.upload', 5000); // if login occurs "upload" button will be on page
 }
+
+describe('tests logging in', function () {
+    it('should check login is successful', function () {
+    	exports.login('teacher', 'business2');
+    	expect(browser.getUrl()).to.equal('https://local.changemyworldnow.com/profile');
+   	})
+});
