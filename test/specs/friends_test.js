@@ -14,7 +14,7 @@ describe('tests the friends page', function () {
     	if(href[0].length > 1)
     		friendLink = href[0];
     	browser.click('.linkText');
-    	browser.waitForExist('.user-metadata');
+    	browser.waitForExist('.user-metadata', 999999);
     	expect(browser.getUrl()).to.equal(friendLink);
    	})
 });
