@@ -34,21 +34,26 @@ var Component = React.createClass({
                 this.setState({isModerated: this.props.currentUser._embedded.image.is_moderated});
             }
         } else {
-            HttpManager.GET({
-                url: (GLOBALS.API_URL + 'user/' + this.props.user_id + '/image'),
-                handleErrors: false
-            })
-            .then(res => {
-                this.setState({profileImage: res.response.url});
-            }).catch(e => {
-                if (e.status === 404) {
-                    //if a user has never uploaded an image, we expect a 404
-                    this.setState({profileImage: GLOBALS.DEFAULT_PROFILE});
-                } else {
-                    Toast.error(NO_IMAGE);
-                    Log.error(e, 'Image could not be extracted from user');
-                }
-            });
+            if (this.props.user._embedded.image) {
+                this.setState({profileImage: this.props.currentUser._embedded.image.url});
+                this.setState({isModerated: this.props.currentUser._embedded.image.is_moderated});
+            } else {
+                HttpManager.GET({
+                    url: (this.props.user._links.user_image.href),
+                    handleErrors: false
+                })
+                .then(res => {
+                    this.setState({profileImage: res.response.url});
+                }).catch(e => {
+                    if (e.status === 404) {
+                        //if a user has never uploaded an image, we expect a 404
+                        this.setState({profileImage: GLOBALS.DEFAULT_PROFILE});
+                    } else {
+                        Toast.error(NO_IMAGE);
+                        Log.error(e, 'Image could not be extracted from user');
+                    }
+                });
+            }
         }
     },
     startUpload: function (e) {
