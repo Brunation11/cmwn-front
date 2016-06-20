@@ -187,7 +187,7 @@ document.onmousedown = function (e) {
 var AppComponent = React.createClass({
     getInitialState: function () {
         return {
-            logoLink: '/'
+            logoLink: '/home'
         };
     },
     componentWillMount: function () {
@@ -197,12 +197,12 @@ var AppComponent = React.createClass({
     },
     componentDidMount: function () {
         if (this.props.currentUser != null) {
-            this.setState({logoLink: this.props.currentUser.user_id ? '/profile' : '/'});
+            this.setState({logoLink: this.props.currentUser.user_id ? '/profile' : '/home'});
         }
     },
     componentWillReceiveProps: function (nextProps) {
         if (nextProps.currentUser != null) {
-            this.setState({logoLink: nextProps.currentUser.user_id ? '/profile' : '/'});
+            this.setState({logoLink: nextProps.currentUser.user_id ? '/profile' : '/home'});
         }
     },
     isHome: function () {
