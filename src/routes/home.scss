@@ -3,6 +3,10 @@
 #home.home {
     text-align: center;
 
+    .logo-button, .logo-button:hover, .logo-button:active, a.logo-button:focus {
+        cursor: pointer;
+    }
+
     h2 {
         font-size: 36px;
         text-transform: uppercase;
@@ -86,7 +90,7 @@
                     margin: 0;
             }
         }
-        
+
         .links {
             position: absolute;
             top: 10px; right: 20px;
@@ -109,7 +113,7 @@
 
     footer.links {
         position: relative;
-        top: auto; right: auto; 
+        top: auto; right: auto;
     }
 
     .global-header .actions {
@@ -208,7 +212,7 @@
                     vertical-align: middle;
                 }
             }
-            
+
             .centered::after {
                 display: inline-block;
                 content: "";
@@ -221,7 +225,7 @@
                 margin: 0;
                 margin-bottom: 20px;
                 color: #fff;
-                    
+
                 @media (max-width: $device-max-break) {
                     width: auto;
                     font-size: 30px;
@@ -277,7 +281,7 @@
             margin-left: 20px;
             margin-right: 40px;
         }
-        
+
         h2 {
             margin-top: 65px;
 
@@ -353,7 +357,7 @@
             background-size: 70%;
         }
     }
-    
+
     &::after {
         position: absolute;
         left: 0px; right: 0px;
