@@ -191,7 +191,7 @@ var Profile = React.createClass({
                 <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
                     <div className="left">
                         <div className="frame">
-                            <ProfileImage user_id={this.state.user_id} link-below={true}/>
+                            <ProfileImage user={this.state} link-below={true}/>
                         </div>
                     </div>
                     <div className="right">
