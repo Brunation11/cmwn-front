@@ -14,6 +14,7 @@ var webpackDevConfig = require('./webpack.config.dev.js');
 var webpackProdConfig = require('./webpack.config.prod.js');
 var appPackage = require('./package.json');
 var exec = require('child_process').exec;
+var execSync = require('child_process').execSync;
 var spawn = require('child_process').spawn;
 var eslint = require('gulp-eslint');
 var scsslint = require('gulp-scss-lint');
@@ -406,7 +407,10 @@ gulp.task('coverage', function () {
 });
 
 gulp.task('e2e', () => {
-    return gulp.src('wdio.conf.js').pipe(webdriver());
+    var hostIP = execSync('echo $DOCKER_HOST_IP').toString().split('\n')[0];
+    return gulp.src('wdio.conf.js').pipe(webdriver({
+        host: hostIP
+    }));
 });
 
 gulp.task('test', ['e2e', 'unit'], () => {

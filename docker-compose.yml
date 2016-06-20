@@ -13,6 +13,8 @@ services:
   node:
     container_name: cmwn_front_node
     build: ./docker/node
+    environment:
+      DOCKER_HOST_IP: "192.168.99.100"
     volumes:
       - ./:/var/www/
 
