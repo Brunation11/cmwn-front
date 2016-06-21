@@ -311,8 +311,8 @@ var progressivePageLoad = function () {
                 if (state.currentUser._links[state.location.endpoint.slice(2)].templated) {
                     pageRoute = Util.modifyTemplatedQueryParams(
                         Store.getState().currentUser._links[state.location.endpoint.slice(2)].href,
-                        //eslint-disable-line camelcase
-                        {page: state.page.pageNum, per_page: state.page.itemCount}
+                        {page: state.page.pageNum,
+                        per_page: state.page.itemCount} //eslint-disable-line camelcase
                     );
                 } else {
                     pageRoute = Store.getState().currentUser._links[state.location.endpoint.slice(2)].href;

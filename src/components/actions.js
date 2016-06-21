@@ -68,8 +68,8 @@ Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
                 return Promise.resolve((action, dispatch) => {
                     HttpManager.setToken(server.response.token);
                     //configure trackers to logged in user
-                    Rollbar.configure({payload: {person: {id: server.response.user_id,
-                        username: server.response.username}}}); //eslint-disable-line no-undef
+                    Rollbar.configure({payload: {person: {id: server.response.user_id, //eslint-disable-line no-undef, max-len
+                        username: server.response.username}}});
 
                     if (server.response.user_id == null) {
                         Errors.handle401();
@@ -148,9 +148,8 @@ Actions = Actions.set(ACTION_CONSTANTS.GET_NEXT_PAGE_PAGE, function (state, page
         payload: {
             promise: HttpManager.GET({url: Util.modifyTemplatedQueryParams(
                 state.page.data._links.find.href,
-                {page: pageNum, per_page:
+                {page: pageNum, per_page: //eslint-disable-line camelcase
                 state.currentUser._links[state.location.endpoint.slice(2)].page_size}
-                //eslint-disable-line camelcase
             )})
         }
     };
@@ -162,9 +161,8 @@ Actions = Actions.set(ACTION_CONSTANTS.CHANGE_PAGE_ROW_COUNT, function (state, i
         payload: {
             promise: HttpManager.GET({url: Util.modifyTemplatedQueryParams(
                 state.page.data._links.find.href,
-                {per_page: itemCount, page:
+                {per_page: itemCount, page: //eslint-disable-line camelcase
                 state.currentUser._links[state.location.endpoint.slice(2)].page}
-                //eslint-disable-line camelcase
             ) })
         }
     };
