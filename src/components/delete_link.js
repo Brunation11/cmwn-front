@@ -29,7 +29,8 @@ class Page extends React.Component {
         var state = {};
         state.base = props.base;
         state.uuid = props.uuid || props.id;
-        state.canDelete = props.canDelete != null ? props.canDelete : Util.decodePermissions(props.scope).delete;
+        state.canDelete = props.canDelete !=
+            null ? props.canDelete : Util.decodePermissions(props.scope).delete;
         this.setState(state);
     }
     suspendAccount() {
@@ -46,11 +47,14 @@ class Page extends React.Component {
     }
 
     render() {
-        if ((!this.state.canDelete && !this.state.scope) || (this.state.uuid == null && this.state.id == null)) {
+        if ((!this.state.canDelete && !this.state.scope) ||
+            (this.state.uuid == null && this.state.id == null)) {
             return null;
         }
         return (
-            <Button className={this.props.className + ' standard'} onClick={this.suspendAccount.bind(this)} >{this.props.text ? this.props.text : DELETE}</Button>
+            <Button className={this.props.className + ' standard'}
+                onClick={this.suspendAccount.bind(this)} >
+                {this.props.text ? this.props.text : DELETE}</Button>
         );
     }
 }
