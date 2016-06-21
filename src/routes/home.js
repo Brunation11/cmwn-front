@@ -1,8 +1,8 @@
 import React from 'react';
-import {Link} from 'react-router';
 import _ from 'lodash';
 import {Input, Carousel, CarouselItem, Button, Modal} from 'react-bootstrap';
 import Shortid from 'shortid';
+import ClassNames from 'classnames';
 
 import Toast from 'components/toast';
 import Log from 'components/log';
@@ -134,6 +134,16 @@ var Home = React.createClass({
             contactOpen: false
         };
     },
+    componentDidMount: function () {
+        History.replace('/home');
+    },
+    logoLink: function () {
+        if (Store.getState().currentUser.user_id) {
+            History.replace('/profile');
+        } else {
+            History.replace('/home');
+        }
+    },
     openViewModal: function () {
         this.setState({viewOpen: true});
     },
@@ -151,7 +161,6 @@ var Home = React.createClass({
         this.setState({ contactOpen: false });
     },
     render: function () {
-        var logoLink = Store.getState().currentUser.user_id ? '/profile' : '/';
         return (
             <div id="home" className="home">
                 <Modal show={this.state.viewOpen} onHide={() => this.setState({viewOpen: false})}>
@@ -160,8 +169,16 @@ var Home = React.createClass({
                     </Modal.Body>
                 </Modal>
                 <div className="global-header">
-                    <div className="logo" ><Link to={logoLink} ><img alt="Change My World Now" src={LOGO_URL} />Change My World Now</Link></div>
-                    <div className="headerLogo"><Link to={logoLink} ><img alt="Change My World Now" src={LOGO_HEADER} /><span className="read">Change My World Now</span></Link></div>
+                    <div className="logo" >
+                        <span className="logo-button" onClick={this.logoLink}>
+                            <img alt="Change My World Now" src={LOGO_URL} />
+                        </span>
+                    </div>
+                    <div className="headerLogo">
+                        <span className="logo-button" onClick={this.logoLink}>
+                            <img alt="Change My World Now" src={LOGO_HEADER} />
+                        </span>
+                    </div>
                     <Header workOpen={this.state.workOpen} contactOpen={this.state.contactOpen} closeWork={this.closeWork} closeContact={this.closeContact} />
                 </div>
                 <Carousel>
@@ -202,7 +219,8 @@ var Header = React.createClass({
         return {
             loginOpen: false,
             signupOpen: false,
-            showContact: false
+            showContact: false,
+            verified: false
         };
     },
     getDefaultProps: function () {
@@ -232,11 +250,18 @@ var Header = React.createClass({
         }
     },
     renderCaptcha: function () {
-        var captchas = document.getElementsByClassName('grecaptcha');
-        if (captchas.length) {
-            grecaptcha.render(captchas[0], {'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l', callback: () => { //eslint-disable-line no-undef
-                this.setState({showContact: true});
-            }});
+        if (this.state.verified) {
+            return;
+        } else {
+            var captchas = document.getElementsByClassName('grecaptcha');
+            if (captchas.length) {
+                grecaptcha.render(captchas[0], {'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l', callback: () => { //eslint-disable-line no-undef
+                    this.setState({
+                        showContact: true,
+                        verified: true
+                    });
+                }});
+            }
         }
     },
     displayWorkModal: function () {
@@ -296,9 +321,9 @@ var Header = React.createClass({
                 </Modal>
                 <Modal show={this.props.contactOpen || this.state.contactOpen} onHide={this.hideContactModal}>
                     <Modal.Body>
-                        {COPY.MODALS.PRECAPTCHA}
-                        <div className="grecaptcha"></div>
-                        {this.state.showContact ? COPY.MODALS.CONTACT : ''}
+                        {this.state.verified ? '' : COPY.MODALS.PRECAPTCHA}
+                        <div className={ClassNames('grecaptcha', {hidden: (this.props.loggedIn || this.state.verified)})}></div>
+                        {this.state.verified ? COPY.MODALS.CONTACT : ''}
                     </Modal.Body>
                 </Modal>
                 <Modal show={this.state.signupOpen} onHide={() => this.setState({signupOpen: false})}>

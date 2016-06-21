@@ -133,7 +133,8 @@ import Store from 'components/store';
 import Util from 'components/util';
 import DevTools from 'components/devtools';
 import Actions from 'components/actions';
-
+import GlobalAlert from 'components/global_alert';
+import Detector from 'components/browser_detector';
 import Errors from 'components/errors';
 import Home from 'routes/home';
 
@@ -142,6 +143,8 @@ import 'overrides.scss';
 //import 'app.scss';
 
 import 'media/logo.png';
+
+const BROWSER_NOT_SUPPORTED = 'For the best viewing experience we recommend the desktop version in Chrome.<br />If you don\'t have chrome, <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">download it for free here</a>.';
 
 //htaccess should take care of it but if somehow it does not, this should overkill the issue
 if (window.location.protocol !== 'https:') {
@@ -186,7 +189,7 @@ document.onmousedown = function (e) {
 var AppComponent = React.createClass({
     getInitialState: function () {
         return {
-            logoLink: '/'
+            logoLink: '/home'
         };
     },
     componentWillMount: function () {
@@ -194,12 +197,12 @@ var AppComponent = React.createClass({
     },
     componentDidMount: function () {
         if (this.props.currentUser != null) {
-            this.setState({logoLink: this.props.currentUser.user_id ? '/profile' : '/'});
+            this.setState({logoLink: this.props.currentUser.user_id ? '/profile' : '/home'});
         }
     },
     componentWillReceiveProps: function (nextProps) {
         if (nextProps.currentUser != null) {
-            this.setState({logoLink: nextProps.currentUser.user_id ? '/profile' : '/'});
+            this.setState({logoLink: nextProps.currentUser.user_id ? '/profile' : '/home'});
         }
     },
     isHome: function () {
@@ -210,10 +213,16 @@ var AppComponent = React.createClass({
     globalUpdate: function () {
         this.forceUpdate();
     },
+    globalAlert: function () {
+        if (!window.navigator.standalone && (Detector.isIe9() || Detector.isIe10())) {
+            GlobalAlert({text: BROWSER_NOT_SUPPORTED, type: 'warning', animate: 'scroll-left'});
+        }
+    },
     render: function () {
         if (this.isHome()) {
             return (
                 <div>
+                    {this.globalAlert()}
                     <Home />
                     {renderDevTool()}
                 </div>
@@ -221,6 +230,7 @@ var AppComponent = React.createClass({
         }
         return (
             <div>
+                {this.globalAlert()}
                 {Errors.renderErrors()}
                 <GlobalHeader logoLink={this.state.logoLink} currentUser={this.props.currentUser} />
                 <div className="sweater">
