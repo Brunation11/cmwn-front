@@ -703,6 +703,32 @@ export default function (e) {
                         ]
                     }
                 ],
+                friends: [
+                    {
+                        'user_id': 1,
+                        name: 'epic_otter',
+                        'flips_earned': 15,
+                        'profile_image': 'media/Libraries/Images/Animals/Dogs_and_Cats/img_dogs_10-01.png'
+                    },
+                    {
+                        'user_id': 2,
+                        name: 'genuine_mongoose',
+                        'flips_earned': 10,
+                        'profile_image': 'media/Libraries/Images/Animals/Dogs_and_Cats/img_dogs_10-01.png'
+                    },
+                    {
+                        'user_id': 3,
+                        name: 'playful_beetle',
+                        'flips_earned': 12,
+                        'profile_image': 'media/Libraries/Images/Animals/Dogs_and_Cats/img_dogs_10-01.png'
+                    },
+                    {
+                        'user_id': 4,
+                        name: 'hip_crocodile',
+                        'flips_earned': 2,
+                        'profile_image': 'media/Libraries/Images/Animals/Dogs_and_Cats/img_dogs_10-01.png'
+                    }
+                ]
             };
 
             if (~data.categories.indexOf('messages') && ~data.categories.indexOf('statements')) {
@@ -766,6 +792,12 @@ export default function (e) {
                     inbox: gameData.inbox,
                     outbox: gameData.outbox,
                     saved: gameData.saved,
+                };
+            }
+
+            if (~data.categories.indexOf('friends')) {
+                deliveryData = {
+                    friends: gameData.friends,
                 };
             }
 
