@@ -1,4 +1,3 @@
-
 import React from 'react';
 import _ from 'lodash';
 import Immutable from 'seamless-immutable';
@@ -7,6 +6,8 @@ import { connect } from 'react-redux';
 import Actions from 'components/actions';
 import Store from 'components/store';
 import Util from 'components/util';
+
+var mapStateToProps;
 
 /* Higher Order Component */
 export default function (endpointIdentifier, componentName) {
@@ -87,7 +88,7 @@ export default function (endpointIdentifier, componentName) {
         onError: _.noop
     };
 
-    var mapStateToProps = state => {
+    mapStateToProps = state => {
         var component;
         var data = {};
         var loading = true;
