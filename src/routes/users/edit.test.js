@@ -15,7 +15,7 @@ describe('Edit Profile', function() {
        const wrapper = shallow(edit);
        
        it('renders the edit profile component', function() {
-           //expect(wrapper.instance()).to.be.instanceOf(EditProfile);
+           expect(wrapper.instance()).to.be.instanceOf(EditProfile);
        });
    })
     

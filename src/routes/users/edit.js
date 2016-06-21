@@ -18,18 +18,17 @@ import ProfileImage from 'components/profile_image';
 import Form from 'components/form';
 import DropdownDatepicker from 'components/dropdown_datepicker';
 import ACTION_CONSTANTS from 'components/action_constants';
+import CodeChange from 'components/code_change';
+import ForgotPass from 'components/forgot_pass';
+import ChangePassword from 'components/change_password';
+
 
 import 'routes/users/edit.scss';
 
 const HEADINGS = {
-    EDIT_TITLE: 'Edit User: ',
-    UPDATE_CODE: 'Reset code for user',
-    PASSWORD: 'Update Password'
+    EDIT_TITLE: 'Edit User: '
 };
 const ERRORS = {
-    BAD_PASS: 'Sorry, there was a problem updating your password.',
-    NO_MATCH: 'Those passwords do not appear to match. Please try again.',
-    TOO_SHORT: 'Passwords must contain at least 8 characters, including one number',
     BAD_DELETE: 'Sorry, there was a problem deleting the user. Please refresh and try again.',
     BAD_RESET: 'This users password could not be reset at this time. Please try again later.'
 };
@@ -38,7 +37,6 @@ const INVALID_SUBMISSION = 'Invalid submission. Please update fields highlighted
 const BAD_UPDATE = 'There was a problem updating your profile. Please try again later.';
 const USER_REMOVED = 'User deleted. You will now be redirected.';
 const CONFIRM_DELETE = 'Are you sure you want to delete this user? This action cannot be undone.';
-const PASS_UPDATED = '<p>You have successfully updated your password.<br />Be sure to remember for next time!</p>';
 
 export class EditProfile extends React.Component {
     constructor(props) {
@@ -374,161 +372,6 @@ export class EditProfile extends React.Component {
 
 var isPassValid = function (password) {
     return password.length >= 8 && ~password.search(/[0-9]+/);
-};
-
-class CodeChange extends React.Component {
-    constructor() {
-        super();
-        this.state = {code: ''};
-    }
-
-    submit() {
-        if (this.props.data._links.reset == null) {
-            return;
-        }
-        var update = HttpManager.POST({url: this.props.data._links.reset.href }, {email: this.props.data.email, code: this.state.code});
-        update.then(
-            Toast.success.bind(this, 'Code Reset for user. They will need to update their password on next login.')
-        ).catch(err => {
-            Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
-            Toast.error(ERRORS.BAD_PASS);
-        });
-    }
-
-    render() {
-        if (this.props.currentUser && this.props.currentUser.user_id === this.props.user_id || 
-            this.props.data._links.reset == null) {
-            return null;
-        }
-        return (
-            <Panel header={HEADINGS.UPDATE_CODE} className="standard"><form>
-                    <Input
-                        type="text"
-                        value={this.state.code}
-                        placeholder="code"
-                        label="Reset Code"
-                        validate="required"
-                        ref="currentInput"
-                        name="currentInput"
-                        onChange={e => this.setState({code: e.target.value})}
-                    />
-                    <Button onClick={this.submit.bind(this)}>Reset Code</Button>
-            </form></Panel>
-        );
-    }
-};
-
-//This forgot pass is for admins to manually code reset another adult
-class ForgotPass extends React.Component {
-    constructor() {
-        super();
-        this.state = {code: ''};
-    }
-
-    submit() {
-        if (this.props.data._links.forgot == null) {
-            return;
-        }
-        var update = HttpManager.POST({url: this.props.data._links.forgot.href }, {email: this.props.data.email});
-        update.then(
-            Toast.success.bind(this, 'Password reset code sent to user email.')
-        ).catch(err => {
-            Log.warn('Could not reset password at this time.' + (err.message ? ' Message: ' + err.message : ''), err);
-            Toast.error(ERRORS.BAD_PASS);
-        });
-    }
-
-    render() {
-        if (this.props.currentUser.user_id === this.props.user_id || this.props.data._links.forgot == null) {
-            return null;
-        }
-        return (
-            <Panel header={HEADINGS.UPDATE_CODE} className="standard"><form>
-                    <Button onClick={this.submit.bind(this)}>Reset Password</Button>
-            </form></Panel>
-        );
-    }
-};
-
-class ChangePassword extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            current: '',
-            new: '',
-            confirm: '',
-            extraProps: {}
-        };
-    }
-
-    submit() {
-        if (!isPassValid(this.state.new)) {
-            this.setState({extraProps: {bsStyle: 'error'}});
-            Toast.error(ERRORS.TOO_SHORT);
-        } else if (this.state.confirm === this.state.new) {
-            var update = HttpManager.POST({url: this.props.url.href}, {
-                'current_password': this.state.current,
-                'password': this.state.new,
-                'password_confirmation': this.state.confirm,
-                'user_id': this.props.user_id,
-            });
-            update.then(
-                Toast.success.bind(this, PASS_UPDATED)
-            ).catch(err => {
-                Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
-                Toast.error(ERRORS.BAD_PASS);
-            });
-        } else {
-            this.setState({extraProps: {bsStyle: 'error'}});
-            Toast.error(ERRORS.NO_MATCH);
-            /** @TODO MPR, 11/19/15: check on change, not submit*/
-        }
-    }
-
-    render() {
-        if (this.props.currentUser.user_id !== this.props.user_id || this.props.url == null || this.props.url.href == null) {
-            return null;
-        }
-        return (
-            <Panel header={HEADINGS.PASSWORD} className="standard">
-                <form>
-                <Input
-                    type="password"
-                    value={this.state.current}
-                    placeholder="********"
-                    label="Current Password"
-                    validate="required"
-                    ref="currentInput"
-                    name="currentInput"
-                    onChange={e => this.setState({current: e.target.value})}
-                />
-                <Input
-                    type="password"
-                    value={this.state.new}
-                    placeholder="********"
-                    label="New Password"
-                    validate="required"
-                    ref="newInput"
-                    name="newInput"
-                    onChange={e => this.setState({new: e.target.value})}
-                    {...this.state.extraProps}
-                />
-                <Input
-                    type="password"
-                    value={this.state.confirm}
-                    placeholder="********"
-                    label="Confirm Password"
-                    validate="required"
-                    ref="confirmInput"
-                    name="confirmInput"
-                    onChange={e => this.setState({confirm: e.target.value})}
-                    {...this.state.extraProps}
-                />
-                <Button onClick={this.submit.bind(this)}>Update</Button>
-                </form>
-            </Panel>
-        );
-    }
 };
 
 const mapStateToProps = state => {
