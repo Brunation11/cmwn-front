@@ -41,7 +41,7 @@ const CLASSES = 'Classes';
 const BROWSER_NOT_SUPPORTED = <span><p>For the best viewing experience we recommend the desktop version in Chrome</p><p>If you don't have chrome, <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">download it for free here</a>.</p></span>;
 const PASS_UPDATED = '<p>You have successfully updated your password.<br />Be sure to remember for next time!</p>';
 
-export var dataTransform = function(data) {
+export var dataTransform = function (data) {
     var array = data;
     var currentIndex, temporaryValue, randomIndex;
     if (array == null) {
@@ -61,7 +61,7 @@ export var dataTransform = function(data) {
         array[randomIndex] = temporaryValue;
     }
     return _.filter(array, v => !v.coming_soon).concat(_.filter(array, v => v.coming_soon));
-}
+};
 
 export class Profile extends React.Component {
     constructor(props) {

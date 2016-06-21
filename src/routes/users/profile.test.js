@@ -1,7 +1,4 @@
 import React from 'react';
-import assert from 'assert';
-import TestUtils from 'react-addons-test-utils';
-import { Provider } from 'react-redux';
 import { expect } from 'chai';
 import { mount, shallow } from 'enzyme';
 
@@ -46,6 +43,8 @@ var checkAnotherProfileContent = function(data, currentUser) {
 }
 
 describe('Profile', function() {
+    //TODO: lifecycle methods when mounting set up with unconnected compoents
+
     describe('Teacher viewing own Profile', function() {
     
     	it('renders own teacher Profile', function() {
@@ -203,7 +202,6 @@ describe('Profile', function() {
            
            
            var result = dataTransform(data);
-           console.log(result);
            expect(result).to.be.an.instanceof(Array)
            expect(result).to.have.lengthOf(5);
            expect(result[4].id).to.equal(2); 

@@ -17,7 +17,6 @@ import UpdateUsername from 'components/update_username';
 import ProfileImage from 'components/profile_image';
 import Form from 'components/form';
 import DropdownDatepicker from 'components/dropdown_datepicker';
-import Store from 'components/store';
 import ACTION_CONSTANTS from 'components/action_constants';
 
 import 'routes/users/edit.scss';
@@ -41,13 +40,14 @@ const USER_REMOVED = 'User deleted. You will now be redirected.';
 const CONFIRM_DELETE = 'Are you sure you want to delete this user? This action cannot be undone.';
 const PASS_UPDATED = '<p>You have successfully updated your password.<br />Be sure to remember for next time!</p>';
 
-var Component = React.createClass({
-    getInitialState: function () {
+export class EditProfile extends React.Component {
+    constructor(props) {
+        super(props);
         var state = _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {};
-        state = _.defaults({}, state, {isStudent: true, dob: new Date().toISOString()});
-        return state;
-    },
-    componentDidMount: function () {
+        this.state = _.defaults({}, state, {isStudent: true, dob: new Date().toISOString()});
+    }
+
+    componentDidMount() {
         var state;
         if (this.props.data && this.props.data.birthdate) {
             state = _.defaults({}, this.props.data, {dob: new Date(this.props.data.birthdate).toISOString()});
@@ -56,8 +56,9 @@ var Component = React.createClass({
         }
         this.setState(state);
         this.resolveRole();
-    },
-    componentWillReceiveProps: function (nextProps) {
+    }
+
+    componentWillReceiveProps(nextProps) {
         var state;
         if (nextProps.data && nextProps.data.birthdate) {
             state = _.defaults({}, nextProps.data, {dob: new Date(nextProps.data.birthdate).toISOString()});
@@ -66,54 +67,57 @@ var Component = React.createClass({
         }
         this.setState(state);
         this.resolveRole();
-    },
-    suspendAccount: function () {
+    }
+
+    suspendAccount() {
         if (window.confirm(CONFIRM_DELETE)) { //eslint-disable-line no-alert
             HttpManager.DELETE({url: GLOBALS.API_URL + 'user/' + this.state.user_id, handleErrors: false})
-                .then(() => {
-                    Toast.success(USER_REMOVED);
-                })
+                .then(Toast.success.bind(this, USER_REMOVED))
                 .catch(err => {
                     Toast.error(ERRORS.BAD_DELETE);
                     Log.error('User not deleted: ' + err.message, err);
                 });
         }
-    },
-    resetPassword: function () {
+    }
+
+    resetPassword() {
         if (this.props.data._links.forgot == null) {
             return;
         }
         //note: This should only appear for adults, who have email addressed
-        HttpManager.GET(this.props.data._links.forgot.href, {email: this.props.data.email}).then(() => {
-            Toast.success('Password Reset. This user will recieve an email with further instructions.');
-        }).catch(err => {
+        HttpManager.GET(this.props.data._links.forgot.href, {email: this.props.data.email}).then(
+            Toast.success.bind(this, 'Password Reset. This user will recieve an email with further instructions.')
+        ).catch(err => {
             Toast.error(ERRORS.BAD_RESET + (err.message ? ' Message: ' + err.message : ''));
             Log.log('Server refused profile update', err);
         });
-    },
-    removeParent: function (i) {
+    }
+
+    removeParent(i) {
         var self = this;
         return function () {
             self.state.parents.splice(i, 1);
             self.setState({parents: self.state.parents});
         };
-    },
-    addParent: function () {
+    }
+
+    addParent() {
         var parents = this.state.parents || [];
         parents.push({name: 'Jane Adams'});
         this.setState({parents});
-    },
-    resolveRole: function () {
+    }
+
+    resolveRole() {
         var newState = {};
-        var state = Store.getState();
-        if (state.currentUser && state.currentUser.type !== 'CHILD') {
+        if (this.props.currentUser && this.props.currentUser.type !== 'CHILD') {
             newState.isStudent = false;
         } else {
             newState.isStudent = true;
         }
         this.setState(newState);
-    },
-    submitData: function () {
+    }
+
+    submitData() {
         var birthdate = Moment(this.state.birthdate);
         /** @TODO MPR, 3/18/16: Remove unneeded fields*/
         var postData = {
@@ -142,37 +146,41 @@ var Component = React.createClass({
         } else {
             Toast.error(INVALID_SUBMISSION);
         }
-    },
-    renderParentFields: function () {
+    }
+    
+    renderParent(parent, i) {
+        /** @TODO MPR, 11/14/15: Implement Autocomplete, store parent ID*/
+        return (
+            <span>
+                <Input
+                    type="text"
+                    groupClassName="has-addon"
+                    value={parent.name}
+                    placeholder="Parent or Guardian"
+                    label="Parent or Guardian"
+                    bsStyle={Validate.required(parent.name)}
+                    hasFeedback
+                    ref={`parentRef${i}`}
+                    key={`parentRef${i}`}
+                    addonAfter={<Button onClick={this.removeParent.call(this, i)} >X</Button>}
+                    onChange={() => {
+                        var parents = this.state.parents;
+                        parents[i] = {name: this.refs[`parentRef${i}`].getValue()};
+                        this.setState({parents});
+                    }}
+                />
+            </span>
+        );
+    }
+
+    renderParentFields() {
         if (this.state.parents && this.state.parents.length) {
-            return _.map(this.state.parents, (parent, i) => {
-                /** @TODO MPR, 11/14/15: Implement Autocomplete, store parent ID*/
-                return (
-                        <span>
-                            <Input
-                                type="text"
-                                groupClassName="has-addon"
-                                value={parent.name}
-                                placeholder="Parent or Guardian"
-                                label="Parent or Guardian"
-                                bsStyle={Validate.required(parent.name)}
-                                hasFeedback
-                                ref={`parentRef${i}`}
-                                key={`parentRef${i}`}
-                                addonAfter={<Button onClick={this.removeParent(i)} >X</Button>}
-                                onChange={() => {
-                                    var parents = this.state.parents;
-                                    parents[i] = {name: this.refs[`parentRef${i}`].getValue()};
-                                    this.setState({parents});
-                                }}
-                            />
-                        </span>
-                );
-            });
+            return _.map(this.state.parents, renderParent);
         }
         return null;
-    },
-    renderSchoolInformation: function () {
+    }
+
+    renderSchoolInformation() {
         var teachers = _.map(this.state.teachers, this.renderTeacherInputs);
         if (!teachers.length) {
             teachers = null;
@@ -185,21 +193,24 @@ var Component = React.createClass({
                     placeholder="Grade"
                     label="Grade"
                     ref="gradeInput"
-                    onChange={() => this.setState({grade: this.refs.gradeInput.getValue()})}
+                    onChange={this.setState.bind(this, {grade: this.refs.gradeInput.getValue()})}
                 >{this.renderk8()}</Input>
                 {teachers}
            </div>
         );
-    },
-    renderk8: function () {
+    }
+
+    renderk8() {
         return (
             _.map(Array(9), (v, i) => {
                 return (<option value={i}>{i === 0 ? 'k' : i}</option>);
             })
         );
-    },
-    renderTeacherInputs: function () {},
-    renderEmail: function () {
+    }
+
+    renderTeacherInputs () {}
+    
+    renderEmail() {
         if (this.state.isStudent || this.state.email == null) {
             return null;
         }
@@ -218,8 +229,9 @@ var Component = React.createClass({
                 onChange={e => this.setState({email: e.target.value})} //eslint-disable-line camelcase
             />
         );
-    },
-    renderAdult: function () {
+    }
+
+    renderAdult() {
         return (
             <Form ref="formRef">
                 <Input
@@ -298,11 +310,12 @@ var Component = React.createClass({
                 <h3>School Information</h3>
                 {this.renderSchoolInformation()}
                 */}
-                <Button className="user-metadata-btn" disabled={this.state.isStudent} onClick={this.submitData}> Save </Button>
+                <Button className="user-metadata-btn" disabled={this.state.isStudent} onClick={this.submitData.bind(this)}> Save </Button>
             </Form>
         );
-    },
-    renderChild: function () {
+    }
+
+    renderChild() {
         var day = Moment(this.state.dob).date(),
             month = Moment(this.state.dob).month() + 1,
             year = Moment(this.state.dob).year();
@@ -319,12 +332,12 @@ var Component = React.createClass({
                 <p className="standard field">{Moment((day + month + year)).format('MMMM Do, YYYY')}</p>
             </div>
         );
-    },
-    render: function () {
+    }
+
+    render() {
         var userType = this.state.isStudent ? this.renderChild : this.renderAdult;
 
-        if (this.props.data == null || this.props.data.user_id == null || !Util.decodePermissions(this.props.data.scope).update
-        ) {
+        if (this.props.data == null || this.props.data.user_id == null || !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
 
@@ -333,10 +346,10 @@ var Component = React.createClass({
                 <Panel header={HEADINGS.EDIT_TITLE + this.state.first_name + ' ' + this.state.last_name} className="standard edit-profile">
                     <div className="left">
                         <ProfileImage user_id={this.props.data.user_id} link-below={true}/>
-                        <p className={ClassNames({hidden: !Util.decodePermissions(this.props.data.scope).delete})}><a onClick={this.suspendAccount}>{SUSPEND}</a></p>
+                        <p className={ClassNames({hidden: !Util.decodePermissions(this.props.data.scope).delete})}><a onClick={this.suspendAccount.bind(this)}>{SUSPEND}</a></p>
                     </div>
                     <div className="right">
-                        {userType()}
+                        {userType.call(this)}
                     </div>
                 </Panel>
                 <UpdateUsername
@@ -350,37 +363,41 @@ var Component = React.createClass({
                 <ChangePassword
                     user_id={this.state.user_id}
                     url={this.state._links.password}
+                    currentUser={this.props.currentUser}
                 />
-                <ForgotPass data={this.props.data} user_id={this.state.user_id} />
-                <CodeChange data={this.props.data} user_id={this.state.user_id} />
+                <ForgotPass data={this.props.data} user_id={this.state.user_id} currentUser={this.props.currentUser}/>
+                <CodeChange data={this.props.data} user_id={this.state.user_id} currentUser={this.props.currentUser}/>
             </Layout>
         );
     }
-});
+};
 
 var isPassValid = function (password) {
     return password.length >= 8 && ~password.search(/[0-9]+/);
 };
 
-var CodeChange = React.createClass({
-    getInitialState: function () {
-        return {code: ''};
-    },
-    submit: function () {
+class CodeChange extends React.Component {
+    constructor() {
+        super();
+        this.state = {code: ''};
+    }
+
+    submit() {
         if (this.props.data._links.reset == null) {
             return;
         }
         var update = HttpManager.POST({url: this.props.data._links.reset.href }, {email: this.props.data.email, code: this.state.code});
-        update.then(() => {
-            Toast.success('Code Reset for user. They will need to update their password on next login.');
-        }).catch(err => {
+        update.then(
+            Toast.success.bind(this, 'Code Reset for user. They will need to update their password on next login.')
+        ).catch(err => {
             Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
             Toast.error(ERRORS.BAD_PASS);
         });
-    },
-    render: function () {
-        var state = Store.getState();
-        if (state.currentUser.user_id === this.props.user_id || this.props.data._links.reset == null) {
+    }
+
+    render() {
+        if (this.props.currentUser && this.props.currentUser.user_id === this.props.user_id || 
+            this.props.data._links.reset == null) {
             return null;
         }
         return (
@@ -395,52 +412,56 @@ var CodeChange = React.createClass({
                         name="currentInput"
                         onChange={e => this.setState({code: e.target.value})}
                     />
-                    <Button onClick={this.submit}>Reset Code</Button>
+                    <Button onClick={this.submit.bind(this)}>Reset Code</Button>
             </form></Panel>
         );
     }
-});
+};
 
 //This forgot pass is for admins to manually code reset another adult
-var ForgotPass = React.createClass({
-    getInitialState: function () {
-        return {code: ''};
-    },
-    submit: function () {
+class ForgotPass extends React.Component {
+    constructor() {
+        super();
+        this.state = {code: ''};
+    }
+
+    submit() {
         if (this.props.data._links.forgot == null) {
             return;
         }
         var update = HttpManager.POST({url: this.props.data._links.forgot.href }, {email: this.props.data.email});
-        update.then(() => {
-            Toast.success('Password reset code sent to user email.');
-        }).catch(err => {
+        update.then(
+            Toast.success.bind(this, 'Password reset code sent to user email.')
+        ).catch(err => {
             Log.warn('Could not reset password at this time.' + (err.message ? ' Message: ' + err.message : ''), err);
             Toast.error(ERRORS.BAD_PASS);
         });
-    },
-    render: function () {
-        var state = Store.getState();
-        if (state.currentUser.user_id === this.props.user_id || this.props.data._links.forgot == null) {
+    }
+
+    render() {
+        if (this.props.currentUser.user_id === this.props.user_id || this.props.data._links.forgot == null) {
             return null;
         }
         return (
             <Panel header={HEADINGS.UPDATE_CODE} className="standard"><form>
-                    <Button onClick={this.submit}>Reset Password</Button>
+                    <Button onClick={this.submit.bind(this)}>Reset Password</Button>
             </form></Panel>
         );
     }
-});
+};
 
-var ChangePassword = React.createClass({
-    getInitialState: function () {
-        return {
+class ChangePassword extends React.Component {
+    constructor() {
+        super();
+        this.state = {
             current: '',
             new: '',
             confirm: '',
             extraProps: {}
         };
-    },
-    submit: function () {
+    }
+
+    submit() {
         if (!isPassValid(this.state.new)) {
             this.setState({extraProps: {bsStyle: 'error'}});
             Toast.error(ERRORS.TOO_SHORT);
@@ -451,9 +472,9 @@ var ChangePassword = React.createClass({
                 'password_confirmation': this.state.confirm,
                 'user_id': this.props.user_id,
             });
-            update.then(() => {
-                Toast.success(PASS_UPDATED);
-            }).catch(err => {
+            update.then(
+                Toast.success.bind(this, PASS_UPDATED)
+            ).catch(err => {
                 Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
                 Toast.error(ERRORS.BAD_PASS);
             });
@@ -462,10 +483,10 @@ var ChangePassword = React.createClass({
             Toast.error(ERRORS.NO_MATCH);
             /** @TODO MPR, 11/19/15: check on change, not submit*/
         }
-    },
-    render: function () {
-        var state = Store.getState();
-        if (state.currentUser.user_id !== this.props.user_id || this.props.url == null || this.props.url.href == null) {
+    }
+
+    render() {
+        if (this.props.currentUser.user_id !== this.props.user_id || this.props.url == null || this.props.url.href == null) {
             return null;
         }
         return (
@@ -503,12 +524,12 @@ var ChangePassword = React.createClass({
                     onChange={e => this.setState({confirm: e.target.value})}
                     {...this.state.extraProps}
                 />
-                <Button onClick={this.submit}>Update</Button>
+                <Button onClick={this.submit.bind(this)}>Update</Button>
                 </form>
             </Panel>
         );
     }
-});
+};
 
 const mapStateToProps = state => {
     var data = {};
@@ -526,6 +547,6 @@ const mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(Component);
+var Page = connect(mapStateToProps)(EditProfile);
 export default Page;
 

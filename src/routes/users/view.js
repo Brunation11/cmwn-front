@@ -39,12 +39,12 @@ export class ProfileView extends React.Component {
         this.setState(this.props.data);
         this.resolveRole();
     }
-    
+
     componentWillReceiveProps(nextProps) {
         this.setState(nextProps.data);
         this.resolveRole();
     }
-    
+
     suspendAccount() {
         if (window.confirm(CONFIRM_DELETE)) { //eslint-disable-line no-alert
             HttpManager.DELETE({url: GLOBALS.API_URL + 'users/' + this.state.user_id, handleErrors: false})
@@ -57,7 +57,7 @@ export class ProfileView extends React.Component {
                 });
         }
     }
-    
+
     resolveRole() {
         var newState = {};
         if (this.state.roles == null) {
@@ -70,7 +70,7 @@ export class ProfileView extends React.Component {
         }
         this.setState(newState);
     }
-    
+
     render() {
         if (this.props.data.username == null || !Util.decodePermissions(this.props.data.scope).update) {
             return null;
@@ -80,7 +80,7 @@ export class ProfileView extends React.Component {
                 <Panel header={HEADINGS.EDIT_TITLE + this.state.first_name + ' ' + this.state.last_name} className="standard edit-profile">
                     <div className="left">
                         <ProfileImage user_id={this.state.user_id} link-below={true}/>
-                        <p><a onClick={this.suspendAccount}>{SUSPEND}</a></p>
+                        <p><a onClick={this.suspendAccount.bind(this)}>{SUSPEND}</a></p>
                         <EditLink base="/user" uuid={this.state.user_id} canUpdate={Util.decodePermissions(this.state.scope).update} />
                     </div>
                     <div className="right">
@@ -90,7 +90,7 @@ export class ProfileView extends React.Component {
             </Layout>
         );
     }
-};
+}
 
 const mapStateToProps = state => {
     var data = {};
