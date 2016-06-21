@@ -22,12 +22,14 @@ import Util from 'components/util';
  * Generates a dictionary of bound action creator functions.
  * See http://redux.js.org/docs/basics/Actions.html
  * The generated functions take 2 parameters:
- * Data - An object that will be merged with the type to create the action object. Must not include a 'type' property.
+ * Data - An object that will be merged with the type to create the action object.
+ * Must not include a 'type' property.
  * Transform - If for whatever reason merging into an object is not the desired behavior, a transform
  * function can be provided. This will be invoked by the bound action, and itself has two parameter, the type
  * name, and the passed in data, and should return an action with a type property
  * @param {map} actionNameList a list
- * @returns {array} Immutable(_.defaults({type: name}, data)), (transform(name, data)), a, or Immutable(actions)
+ * @returns {array} Immutable(_.defaults({type: name}, data)),
+ * (transform(name, data)), a, or Immutable(actions)
  */
 var generateBasicBoundActions = function (actionNameList) {
     var defaultTransform = function (name, data = {}) {
@@ -66,7 +68,8 @@ Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
                 return Promise.resolve((action, dispatch) => {
                     HttpManager.setToken(server.response.token);
                     //configure trackers to logged in user
-                    Rollbar.configure({payload: {person: {id: server.response.user_id, username: server.response.username}}}); //eslint-disable-line no-undef
+                    Rollbar.configure({payload: {person: {id: server.response.user_id,
+                        username: server.response.username}}}); //eslint-disable-line no-undef
 
                     if (server.response.user_id == null) {
                         Errors.handle401();
@@ -110,7 +113,8 @@ Actions = Actions.set(ACTION_CONSTANTS.PAGE_DATA, function (url, title) {
                 return Promise.resolve((action, dispatch) => {
                     dispatch({
                         type: 'combo',
-                        types: ['DELOADER_START', 'DELOADER_SUCCESS', 'DELOADER_ERROR'], /** @TODO MPR, 3/24/16: Change these dumb names **/
+                        types: ['DELOADER_START', 'DELOADER_SUCCESS', 'DELOADER_ERROR'],
+                        /** @TODO MPR, 3/24/16: Change these dumb names **/
                         sequence: true,
                         payload: [
                             Actions.END_PAGE_DATA.bind(null, {data: server.response, title}),
@@ -144,7 +148,9 @@ Actions = Actions.set(ACTION_CONSTANTS.GET_NEXT_PAGE_PAGE, function (state, page
         payload: {
             promise: HttpManager.GET({url: Util.modifyTemplatedQueryParams(
                 state.page.data._links.find.href,
-                {page: pageNum, per_page: state.currentUser._links[state.location.endpoint.slice(2)].page_size} //eslint-disable-line camelcase
+                {page: pageNum, per_page:
+                state.currentUser._links[state.location.endpoint.slice(2)].page_size}
+                //eslint-disable-line camelcase
             )})
         }
     };
@@ -156,7 +162,9 @@ Actions = Actions.set(ACTION_CONSTANTS.CHANGE_PAGE_ROW_COUNT, function (state, i
         payload: {
             promise: HttpManager.GET({url: Util.modifyTemplatedQueryParams(
                 state.page.data._links.find.href,
-                {per_page: itemCount, page: state.currentUser._links[state.location.endpoint.slice(2)].page} //eslint-disable-line camelcase
+                {per_page: itemCount, page:
+                state.currentUser._links[state.location.endpoint.slice(2)].page}
+                //eslint-disable-line camelcase
             ) })
         }
     };
@@ -168,11 +176,15 @@ Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentif
     if (state.page && state.page.data && state.page.data._links[endpointIdentifier] != null) {
         endpoint = state.page.data._links[endpointIdentifier].href;
     } else if (state.currentUser && state.currentUser._links[endpointIdentifier] != null) {
-        /* @TODO MPR, 3/22/16: This conditional should not exist, and only is here as a stopgap while the me endpoint does not
+        /* @TODO MPR, 3/22/16: This conditional should not exist, and only is here as a stopgap
+         * while the me endpoint does not
          * exactly match the authenticated / endpoint. */
         endpoint = state.currentUser._links[endpointIdentifier].href;
     } else {
-        Log.info('HAL Link for component endpoint ' + endpointIdentifier + ' could not be resolved in component ' + componentName + '. Component will not be displayed. This is not necessarily an error, and the server inteded to hide this component for this user.');
+        Log.info('HAL Link for component endpoint ' + endpointIdentifier +
+            ' could not be resolved in component ' + componentName +
+            '. Component will not be displayed. This is not necessarily an error, and the server'
+            + 'inteded to hide this component for this user.');
         return {type: 'noop', action: {endpointIdentifier, componentName, reason: 'Endpoint not found'}};
     }
     return {
@@ -190,12 +202,14 @@ Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentif
                         types: ['DELOADER_START', 'DELOADER_SUCCESS', 'DELOADER_ERROR'],
                         sequence: true,
                         payload: [
-                            Actions.END_COMPONENT_DATA.bind(null, {data: server.response, endpointIdentifier, componentName}),
+                            Actions.END_COMPONENT_DATA.bind(null,
+                                {data: server.response, endpointIdentifier, componentName}),
                             Actions.COMPONENT_LOADER_COMPLETE
                         ]
                     });
                     if (state.components._componentsToLoad - 1 === state.components._componentsLoaded) {
-                        Actions.dispatch.LOADER_START();//unlike other stages, we advance this one at the very end, rather than the beginning
+                        Actions.dispatch.LOADER_START();//unlike other stages, we advance this one at the
+                        //very end, rather than the beginning
                         Actions.dispatch.ADVANCE_LOAD_STAGE();
                     }
                 });
@@ -204,7 +218,8 @@ Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentif
     };
 });
 
-Actions = Actions.set(ACTION_CONSTANTS.GET_NEXT_COMPONENT_PAGE, function (state, endpointIdentifier, componentName, pageNum) {
+Actions = Actions.set(ACTION_CONSTANTS.GET_NEXT_COMPONENT_PAGE, function
+    (state, endpointIdentifier, componentName, pageNum) {
     var endpoint = Util.modifyTemplatedQueryParams(
         state.components[endpointIdentifier + '-' + componentName]._links.find.href, {
             page: pageNum,
@@ -216,14 +231,16 @@ Actions = Actions.set(ACTION_CONSTANTS.GET_NEXT_COMPONENT_PAGE, function (state,
         payload: {
             promise: HttpManager.GET({url: endpoint}).then(server => {
                 return Promise.resolve((action, dispatch) => {
-                    dispatch(Actions.END_GET_NEXT_COMPONENT_PAGE({data: server.response, endpointIdentifier, componentName}));
+                    dispatch(Actions.END_GET_NEXT_COMPONENT_PAGE(
+                        {data: server.response, endpointIdentifier, componentName}));
                 });
             })
         }
     };
 });
 
-Actions = Actions.set(ACTION_CONSTANTS.CHANGE_COMPONENT_ROW_COUNT, function (state, endpointIdentifier, componentName, rowCount) {
+Actions = Actions.set(ACTION_CONSTANTS.CHANGE_COMPONENT_ROW_COUNT, function
+    (state, endpointIdentifier, componentName, rowCount) {
     var endpoint = Util.modifyTemplatedQueryParams(
         state.components[endpointIdentifier + '-' + componentName]._links.find.href, {
             page: state.components[endpointIdentifier + '-' + componentName].page,
@@ -235,14 +252,16 @@ Actions = Actions.set(ACTION_CONSTANTS.CHANGE_COMPONENT_ROW_COUNT, function (sta
         payload: {
             promise: HttpManager.GET({url: endpoint}).then(server => {
                 return Promise.resolve((action, dispatch) => {
-                    dispatch(Actions.END_CHANGE_COMPONENT_ROW_COUNT({data: server.response, endpointIdentifier, componentName}));
+                    dispatch(Actions.END_CHANGE_COMPONENT_ROW_COUNT(
+                        {data: server.response, endpointIdentifier, componentName}));
                 });
             })
         }
     };
 });
 
-Actions = Actions.set(ACTION_CONSTANTS.GET_NEXT_COMPONENT_PAGE, function (state, endpointIdentifier, componentName, pageNum) {
+Actions = Actions.set(ACTION_CONSTANTS.GET_NEXT_COMPONENT_PAGE, function
+    (state, endpointIdentifier, componentName, pageNum) {
     var endpoint = Util.modifyTemplatedQueryParams(
         state.components[endpointIdentifier + '-' + componentName]._links.find, {
             page: pageNum,
@@ -254,14 +273,16 @@ Actions = Actions.set(ACTION_CONSTANTS.GET_NEXT_COMPONENT_PAGE, function (state,
         payload: {
             promise: HttpManager.GET({url: endpoint}).then(server => {
                 return Promise.resolve((action, dispatch) => {
-                    dispatch(Actions.END_GET_NEXT_COMPONENT_PAGE({data: server.response, endpointIdentifier, componentName}));
+                    dispatch(Actions.END_GET_NEXT_COMPONENT_PAGE(
+                        {data: server.response, endpointIdentifier, componentName}));
                 });
             })
         }
     };
 });
 
-Actions = Actions.set(ACTION_CONSTANTS.CHANGE_COMPONENT_ROW_COUNT, function (state, endpointIdentifier, componentName, rowCount) {
+Actions = Actions.set(ACTION_CONSTANTS.CHANGE_COMPONENT_ROW_COUNT, function
+    (state, endpointIdentifier, componentName, rowCount) {
     var endpoint = Util.modifyTemplatedQueryParams(
         state.components[endpointIdentifier + '-' + componentName]._links.find, {
             page: state.components[endpointIdentifier + '-' + componentName].page,
@@ -273,7 +294,8 @@ Actions = Actions.set(ACTION_CONSTANTS.CHANGE_COMPONENT_ROW_COUNT, function (sta
         payload: {
             promise: HttpManager.GET({url: endpoint}).then(server => {
                 return Promise.resolve((action, dispatch) => {
-                    dispatch(Actions.END_CHANGE_COMPONENT_ROW_COUNT({data: server.response, endpointIdentifier, componentName}));
+                    dispatch(Actions.END_CHANGE_COMPONENT_ROW_COUNT(
+                        {data: server.response, endpointIdentifier, componentName}));
                 });
             })
         }
