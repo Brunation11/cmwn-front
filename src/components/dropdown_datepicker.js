@@ -9,7 +9,9 @@ import 'components/dropdown_datepicker.scss';
 class Page extends React.Component {
     constructor(props) {
         super(props);
-        var month = 0, day = 0, year = 0;
+        var month = 0; //eslint-disable-line vars-on-top
+        var day = 0; //eslint-disable-line vars-on-top
+        var year = 0; //eslint-disable-line vars-on-top
         if (this.props.value != null) {
             month = Moment(this.props.value).month() + 1;
             day = Moment(this.props.value).date();
@@ -21,7 +23,7 @@ class Page extends React.Component {
             year: year
         };
         this.setState = this.setState.bind(this);
-    } 
+    }
     componentWillReceiveProps(nextProps) {
         var month = 0;
         var day = 0;
@@ -39,9 +41,9 @@ class Page extends React.Component {
     }
 
     getDate(nextState) {
-        var month = nextState.month || this.state.month,
-            day = nextState.day || this.state.day,
-            year = nextState.year || this.state.year;
+        var month = nextState.month || this.state.month;
+        var day = nextState.day || this.state.day;
+        var year = nextState.year || this.state.year;
         if (!month || !day || !year) {
             return null;
         }
