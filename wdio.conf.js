@@ -1,3 +1,4 @@
+var e2eReport = require('./e2e_report.js');
 exports.config = {
     
     //
@@ -117,7 +118,7 @@ exports.config = {
     // The only one supported by default is 'dot'
     // see also: http://webdriver.io/guide/testrunner/reporters.html
     // reporters: ['dot'],
-    reporter: 'dot',
+    reporters: [e2eReport],
     //
     // Options to be passed to Mocha.
     // See the full list at http://mochajs.org/
