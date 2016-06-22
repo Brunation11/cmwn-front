@@ -6,9 +6,9 @@ var PASSWD = "business2";
 describe('tests the view page for a class', function () {
     it('should check the elements on class view page', function () {
     	login_test.login(USER, PASSWD);
-    	browser.waitForExist('#navMenu', 999999);
+    	browser.waitForExist('#navMenu', 60000);
     	browser.url('/classes');
-    	browser.waitForExist('.datatable', 5000);
+    	browser.waitForExist('.datatable', 60000);
     	// get the url of the first class in the table
     	var classUrl = browser.getAttribute('.class-url', 'href');
     	if(classUrl[0].length === 1){
@@ -20,7 +20,7 @@ describe('tests the view page for a class', function () {
     		browser.url(classUrl[0]);
     	}
         classUrl = browser.getUrl(); //class view url
-        browser.waitForExist('#return-to-school', 999999);
+        browser.waitForExist('#return-to-school', 60000);
         var schoolUrl = browser.getAttribute('#return-to-school', 'href');
         browser.click('#return-to-school');
         browser.waitForExist('.panel-heading');
