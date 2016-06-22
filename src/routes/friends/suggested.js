@@ -62,7 +62,7 @@ var Component = React.createClass({
             return null;
         }
         return (
-            <p className="userFlips">{item.flips.data.length} Flips Earned</p>
+            <p className="user-flips">{item.flips.data.length} Flips Earned</p>
         );
     },
     renderFlip: function (item){

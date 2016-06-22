@@ -68,7 +68,7 @@ var Component = React.createClass({
             return null;
         }
         return (
-            <p className="userFlips" key={Shortid.generate()}>0 Flips Earned</p>
+            <p className="user-flips" key={Shortid.generate()}>0 Flips Earned</p>
         );
     },
     renderAdminLink: function () {
