@@ -39,7 +39,7 @@ services:
       - "nginx:local.chagemyworldnow.com"
 
   selenium_chrome:
-    image: selenium/node-chrome-debug
+    image: selenium/node-chrome
     environment:
       HUB_PORT_4444_TCP_ADDR: "hub"
     ports:
