@@ -1,5 +1,7 @@
 @import 'variables';
 
+$overlay-color: #fff;
+
 .flipboard {
 
     img {
@@ -86,26 +88,26 @@
         }
 
         .overlay {
-            max-width: $flip-standard-size;
-            margin: auto;
-            color: #ffffff;
-            opacity: 0;
-            background: rgba($cmwn-blue, 0.6);
+            display: table-caption;
             position: absolute;
-            overflow: hidden;
             top: 0;
+            right: 0;
             bottom: 0;
             left: 0;
-            right: 0;
-            display: table-caption;
+            transition: opacity .5s;
+            opacity: 0;
+            margin: auto;
+            background: rgba($cmwn-blue, .6);
             padding: $standard;
+            max-width: $flip-standard-size;
+            overflow: hidden;
             text-align: left;
-            transition: opacity 0.5s;
+            color: $overlay-color;
 
             &:hover {
                 opacity: 1;
             }
-            
+
             .relwrap {
                 position: relative;
                 height: 100%;
@@ -119,8 +121,8 @@
         }
 
         p {
+            margin: 5px auto 10px;
             max-width: 200px;
-            margin: 5px auto 10px auto;
         }
     }
 }
