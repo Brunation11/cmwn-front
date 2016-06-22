@@ -1,3 +1,4 @@
+/* eslint-disable vars-on-top */
 import _ from 'lodash';
 import { combineReducers, createStore, compose, applyMiddleware } from 'redux';
 import { routerReducer } from 'react-router-redux';
@@ -19,11 +20,10 @@ const INITIAL_STATE = Immutable({
 var isAvailable = window.__cmwn.MODE === 'dev' || window.__cmwn.MODE === 'development' || window.__cmwn.MODE === 'local';
 
 var populate = function (host, key, storageKey) {
+    var prop = window.localStorage[storageKey];
     if (window.localStorage == null) {
         return null;
     }
-    var prop = window.localStorage[storageKey];
-
     if (prop != null && prop !== 'null' && prop !== 'undefined') {
         try {
             host[key] = JSON.parse(prop);

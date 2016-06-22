@@ -25,6 +25,8 @@ import ChangePassword from 'components/change_password';
 
 import 'routes/users/edit.scss';
 
+var Page;
+
 const HEADINGS = {
     EDIT_TITLE: 'Edit User: '
 };
@@ -41,8 +43,10 @@ const CONFIRM_DELETE = 'Are you sure you want to delete this user? This action c
 export class EditProfile extends React.Component {
     constructor(props) {
         super(props);
-        var state = _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {};
-        var isStudent = props.isStudent !== null && props.isStudent !== undefined ? props.isStudent : true;
+        var state;
+        var isStudent;
+        state = _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {};
+        isStudent = props.isStudent !== null && props.isStudent !== undefined ? props.isStudent : true;
         this.state = _.defaults({}, state, {isStudent: isStudent, dob: new Date().toISOString()});
     }
 
@@ -94,7 +98,7 @@ export class EditProfile extends React.Component {
         if (this.props.data._links.forgot == null) {
             return;
         }
-        //note: This should only appear for adults, who have email addressed
+        //note: This should only appear for adults, who have email addresses
         HttpManager.GET(this.props.data._links.forgot.href, {email: this.props.data.email}).then(
             Toast.success.bind(this, 'Password Reset. This user will recieve an email with further instructions.')
         ).catch(err => {
@@ -149,7 +153,7 @@ export class EditProfile extends React.Component {
     }
 
     renderParent(parent, i) {
-        /** @TODO MPR, 11/14/15: Implement Autocomplete, store parent ID*/
+        /** TODO MPR, 11/14/15: Implement Autocomplete, store parent ID*/
         return (
             <span>
                 <Input
@@ -162,7 +166,7 @@ export class EditProfile extends React.Component {
                     hasFeedback
                     ref={`parentRef${i}`}
                     key={`parentRef${i}`}
-                    addonAfter={<Button onClick={this.removeParent.call(this, i)} >X</Button>}
+                    addonAfter={<Button onClick={this.removeParent(i)} >X</Button>}
                     onChange={() => {
                         var parents = this.state.parents;
                         parents[i] = {name: this.refs[`parentRef${i}`].getValue()};
@@ -316,9 +320,9 @@ export class EditProfile extends React.Component {
     }
 
     renderChild() {
-        var day = Moment(this.state.dob).date(),
-            month = Moment(this.state.dob).month() + 1,
-            year = Moment(this.state.dob).year();
+        var day = Moment(this.state.dob).date();
+        var month = Moment(this.state.dob).month() + 1;
+        var year = Moment(this.state.dob).year();
 
         return (
             <div className="user-metadata">
@@ -388,6 +392,6 @@ const mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(EditProfile);
+Page = connect(mapStateToProps)(EditProfile);
 export default Page;
 

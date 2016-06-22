@@ -15,7 +15,7 @@ const ERRORS = {
     TOO_SHORT: 'Passwords must contain at least 8 characters, including one number',
 };
 
-const PASS_UPDATED = '<p>You have successfully updated your password.<br />Be sure to remember for next time!</p>';
+const PASS_UPDATED = '<p id="showMsg">You have successfully updated your password.<br />Be sure to remember for next time!</p>';
 
 class ChangePassword extends React.Component {
     constructor() {
@@ -58,42 +58,45 @@ class ChangePassword extends React.Component {
         }
         return (
             <Panel header={HEADINGS.PASSWORD} className="standard">
-                <form>
-                <Input
-                    type="password"
-                    value={this.state.current}
-                    placeholder="********"
-                    label="Current Password"
-                    validate="required"
-                    ref="currentInput"
-                    name="currentInput"
-                    onChange={e => this.setState({current: e.target.value})}
-                />
-                <Input
-                    type="password"
-                    value={this.state.new}
-                    placeholder="********"
-                    label="New Password"
-                    validate="required"
-                    ref="newInput"
-                    name="newInput"
-                    onChange={e => this.setState({new: e.target.value})}
-                    {...this.state.extraProps}
-                />
-                <Input
-                    type="password"
-                    value={this.state.confirm}
-                    placeholder="********"
-                    label="Confirm Password"
-                    validate="required"
-                    ref="confirmInput"
-                    name="confirmInput"
-                    onChange={e => this.setState({confirm: e.target.value})}
-                    {...this.state.extraProps}
-                />
-                <Button onClick={this.submit.bind(this)}>Update</Button>
-                </form>
-            </Panel>
+            <form>
+            <Input
+                id="oldPass"
+                type="password"
+                value={this.state.current}
+                placeholder="********"
+                label="Current Password"
+                validate="required"
+                ref="currentInput"
+                name="currentInput"
+                onChange={e => this.setState({current: e.target.value})}
+            />
+            <Input
+                id="newPass"
+                type="password"
+                value={this.state.new}
+                placeholder="********"
+                label="New Password"
+                validate="required"
+                ref="newInput"
+                name="newInput"
+                onChange={e => this.setState({new: e.target.value})}
+                {...this.state.extraProps}
+            />
+            <Input
+                id="confirmPass"
+                type="password"
+                value={this.state.confirm}
+                placeholder="********"
+                label="Confirm Password"
+                validate="required"
+                ref="confirmInput"
+                name="confirmInput"
+                onChange={e => this.setState({confirm: e.target.value})}
+                {...this.state.extraProps}
+            />
+            <Button onClick={this.submit.bind(this)} id="updateBtn">Update</Button>
+            </form>
+        </Panel>
         );
     }
 }

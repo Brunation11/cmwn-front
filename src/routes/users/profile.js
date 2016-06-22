@@ -25,6 +25,8 @@ import FlipBgDefault from 'media/flip-placeholder-white.png';
 
 import 'routes/users/profile.scss';
 
+var Page;
+
 const PAGE_UNIQUE_IDENTIFIER = 'profile';
 
 const GameWrapper = GenerateDataSource('games', PAGE_UNIQUE_IDENTIFIER);
@@ -43,7 +45,9 @@ const PASS_UPDATED = '<p>You have successfully updated your password.<br />Be su
 
 export var dataTransform = function (data) {
     var array = data;
-    var currentIndex, temporaryValue, randomIndex;
+    var currentIndex;
+    var temporaryValue;
+    var randomIndex;
     if (array == null) {
         array = [];
     } else if (!_.isArray(array)) {
@@ -140,7 +144,9 @@ export class Profile extends React.Component {
     }
 
     renderFlip(item) {
-        var onClick, playText;
+        var onClick;
+        var playText;
+
         if (item.coming_soon) {
             onClick = _.noop;
             playText = COMING_SOON;
@@ -195,7 +201,6 @@ export class Profile extends React.Component {
 
     renderUserProfile() {
         var ISODate = (new Date(this.state.birthdate)).toISOString();
-
         return (
             <div>
                 <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
@@ -238,10 +243,12 @@ export class Profile extends React.Component {
     }
 
     render() {
+        var profile;
         if (this.state.username == null) {
             return null;
         }
-        var profile = (this.state.user_id === this.props.currentUser.user_id) ? this.renderCurrentUserProfile : this.renderUserProfile;
+        profile = (this.state.user_id === this.props.currentUser.user_id) ? this.renderCurrentUserProfile : this.renderUserProfile;
+
         return (
            <Layout className={PAGE_UNIQUE_IDENTIFIER} navMenuId="navMenu">
                {profile.apply(this)}
@@ -266,6 +273,6 @@ const mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(Profile);
+Page = connect(mapStateToProps)(Profile);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;

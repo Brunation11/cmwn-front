@@ -50,7 +50,8 @@ var Trophycase = React.createClass({
         );
     },
     renderCase: function () {
-        var complete = [], inProgress = [];
+        var complete = [];
+        var inProgress = [];
         if (this.state && !this.state.flips.length) {
             return null;
         }

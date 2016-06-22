@@ -44,7 +44,7 @@ class ValidatedInput extends Input {
  * This module is a strong candidate for open sourcing as an alternative
  * to the somewhat more ambitious https://www.npmjs.com/package/react-bootstrap-validation
  */
-var Form = React.createClass({
+var Form = React.createClass({ // eslint-disable-line vars-on-top
     isValid: function () {
         return _.reduce(
             this.refs,
@@ -58,7 +58,10 @@ var Form = React.createClass({
         return (
             <form {...self.props}>
                 {React.Children.map(self.props.children, child => {
-                    var validationFn, propsForChild, props, validators;
+                    var validationFn;
+                    var propsForChild;
+                    var props;
+                    var validators;
 
                     if (child == null) {
                         return child;

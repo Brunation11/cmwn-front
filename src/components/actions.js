@@ -26,6 +26,8 @@ import Util from 'components/util';
  * Transform - If for whatever reason merging into an object is not the desired behavior, a transform
  * function can be provided. This will be invoked by the bound action, and itself has two parameter, the type
  * name, and the passed in data, and should return an action with a type property
+ * @param {map} actionNameList a list
+ * @returns {array} Immutable(_.defaults({type: name}, data)), (transform(name, data)), a, or Immutable(actions)
  */
 var generateBasicBoundActions = function (actionNameList) {
     var defaultTransform = function (name, data = {}) {

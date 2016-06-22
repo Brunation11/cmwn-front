@@ -14,6 +14,8 @@ import Util from 'components/util';
 
 import 'routes/users/edit.scss';
 
+var Page;
+
 const HEADINGS = {
     EDIT_TITLE: 'User Administration: ',
     PASSWORD: 'Update Password'
@@ -105,6 +107,6 @@ const mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(ProfileView);
+Page = connect(mapStateToProps)(ProfileView);
 export default Page;
 

@@ -32,11 +32,13 @@ var Util = {
         item[key] = value;
         return value;
     },
-    /** from http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript */
+    /** from http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+    * @returns {string} v.toString(16)
+    */
     uuid: function () {
         Log.info('uuid deprecated. Use ShortId');
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);//eslint-disable-line eqeqeq
+            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8); //eslint-disable-line eqeqeq, one-var
             return v.toString(16);
         });
     },
@@ -57,7 +59,8 @@ var Util = {
         var routeArray;
         var pathArray;
         var params = {};
-        var routePart, pathPart;
+        var routePart;
+        var pathPart;
         route = route.toLowerCase().replace('(', '').replace(')', '');
         path = path.toLowerCase();
         if (route.slice(-1) === '/') {

@@ -19,10 +19,11 @@ class CodeChange extends React.Component {
     }
 
     submit() {
+        var update;
         if (this.props.data._links.reset == null) {
             return;
         }
-        var update = HttpManager.POST({url: this.props.data._links.reset.href }, {email: this.props.data.email, code: this.state.code});
+        update = HttpManager.POST({url: this.props.data._links.reset.href }, {email: this.props.data.email, code: this.state.code});
         update.then(
             Toast.success.bind(this, 'Code Reset for user. They will need to update their password on next login.')
         ).catch(err => {

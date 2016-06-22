@@ -21,10 +21,11 @@ class ForgotPass extends React.Component {
     }
 
     submit() {
+        var update;
         if (this.props.data._links.forgot == null) {
             return;
         }
-        var update = HttpManager.POST({url: this.props.data._links.forgot.href }, {email: this.props.data.email});
+        update = HttpManager.POST({url: this.props.data._links.forgot.href }, {email: this.props.data.email});
         update.then(
             Toast.success.bind(this, 'Password reset code sent to user email.')
         ).catch(err => {

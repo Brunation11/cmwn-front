@@ -6,7 +6,7 @@ describe('tests editing class as teacher', function () {
     	login_test.login("teacher", "business");
     	browser.waitForExist('#navMenu', 3000);
     	browser.url('/classes');
-    	browser.waitForExist('.datatable');
+    	browser.waitForExist('.datatable', 5000);
     	// get the url of the first class in the table
     	var classUrl = browser.getAttribute('.class-url', 'href');
     	if(classUrl[0].length < 2){
@@ -34,7 +34,7 @@ describe('tests editing class as teacher', function () {
     	login_test.login("teacher", "business");
     	browser.waitForExist('#navMenu', 3000);
     	browser.url('/classes');
-    	browser.waitForExist('.datatable');
+    	browser.waitForExist('.datatable', 5000);
     	// get the url of the first class in the list
     	var classUrl = browser.getAttribute('.class-url', 'href');
     	if(classUrl[0].length < 2){
