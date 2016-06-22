@@ -19,7 +19,9 @@ services:
       - ./:/var/www/
 
   nginx:
-    container_name: cmwn_front_ngnix
+    container_name: local.changemyworldnow.com
+    hostname: "local"
+    domainname: "changemyworldnow.com"
     build: ./docker/nginx
     ports:
       - "443:443"
@@ -33,14 +35,17 @@ services:
     image: selenium/hub
     ports:
       - "4444:4444"
+    links:
+      - "nginx:local.chagemyworldnow.com"
 
   selenium_chrome:
-    image: selenium/node-chrome
+    image: selenium/node-chrome-debug
     environment:
       HUB_PORT_4444_TCP_ADDR: "hub"
     ports:
       - 5900
     links:
+      - "nginx:local.chagemyworldnow.com"
       - selenium_hub:hub
 
   selenium_firefox:
@@ -50,4 +55,6 @@ services:
     ports:
       - 5900
     links:
+      - "nginx:local.chagemyworldnow.com"
+      - nginx
       - selenium_hub:hub
