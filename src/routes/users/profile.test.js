@@ -26,8 +26,6 @@ var checkOwnProfileContent = function(data, currentUser) {
     expect(wrapper.children()).to.have.length(1);
     expect(wrapper.children('div')).to.have.length(1);
     expect(wrapper.find('Modal')).to.have.length(1);
-    // TODO: how to test generate datasource
-    // TODO: figure out testing among interconnected game wrapper, datasource, modal
     expect(wrapper.find('Trophycase')).to.have.length(1);
     expect(wrapper.find('FlipBoard')).to.have.length(1);
 }
@@ -39,11 +37,13 @@ var checkAnotherProfileContent = function(data, currentUser) {
     expect(wrapper.find('Panel')).to.have.length(1);
     expect(wrapper.find('.frame')).to.have.length(1);
     expect(wrapper.find('.user-metadata').children()).to.have.length(8);
-    //TODO: test profile image when separated from mapStateToProps
 }
 
 describe('Profile', function() {
-    //TODO: lifecycle methods when mounting set up with unconnected compoents
+    // TODO: lifecycle methods when mounting set up with unconnected components.  LB 06/21/16.
+    // TODO: also use mount to test interactions with other components like generate data source & profile image. LB 06/22/16
+    // TODO: test show modal when set up mock Detector and History set up. LB 06/22/16
+
 
     describe('Teacher viewing own Profile', function() {
     

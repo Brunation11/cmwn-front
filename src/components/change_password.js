@@ -1,12 +1,13 @@
 import React from 'react';
+import {Button, Input, Panel} from 'react-bootstrap';
 
 import HttpManager from 'components/http_manager';
 import Toast from 'components/toast';
 import Log from 'components/log';
 
-const  HEADINGS = {
+const HEADINGS = {
     PASSWORD: 'Update Password'
-}
+};
 
 const ERRORS = {
     BAD_PASS: 'Sorry, there was a problem updating your password.',
@@ -95,6 +96,10 @@ class ChangePassword extends React.Component {
             </Panel>
         );
     }
+}
+
+var isPassValid = function (password) {
+    return password.length >= 8 && ~password.search(/[0-9]+/);
 };
 
 export default ChangePassword;

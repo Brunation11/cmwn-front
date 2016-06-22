@@ -42,7 +42,8 @@ export class EditProfile extends React.Component {
     constructor(props) {
         super(props);
         var state = _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {};
-        this.state = _.defaults({}, state, {isStudent: true, dob: new Date().toISOString()});
+        var isStudent = props.isStudent !== null && props.isStudent !== undefined ? props.isStudent : true;
+        this.state = _.defaults({}, state, {isStudent: isStudent, dob: new Date().toISOString()});
     }
 
     componentDidMount() {
@@ -53,7 +54,7 @@ export class EditProfile extends React.Component {
             state = this.props.data;
         }
         this.setState(state);
-        this.resolveRole();
+        this.resolveRole(this.props);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -64,7 +65,18 @@ export class EditProfile extends React.Component {
             state = nextProps.data;
         }
         this.setState(state);
-        this.resolveRole();
+        this.resolveRole(nextProps);
+    }
+
+    resolveRole(props) {
+        var newState = {};
+        if (props.currentUser && props.currentUser.type &&
+            props.currentUser.type !== 'CHILD') {
+            newState.isStudent = false;
+        } else {
+            newState.isStudent = true;
+        }
+        this.setState(newState);
     }
 
     suspendAccount() {
@@ -89,30 +101,6 @@ export class EditProfile extends React.Component {
             Toast.error(ERRORS.BAD_RESET + (err.message ? ' Message: ' + err.message : ''));
             Log.log('Server refused profile update', err);
         });
-    }
-
-    removeParent(i) {
-        var self = this;
-        return function () {
-            self.state.parents.splice(i, 1);
-            self.setState({parents: self.state.parents});
-        };
-    }
-
-    addParent() {
-        var parents = this.state.parents || [];
-        parents.push({name: 'Jane Adams'});
-        this.setState({parents});
-    }
-
-    resolveRole() {
-        var newState = {};
-        if (this.props.currentUser && this.props.currentUser.type !== 'CHILD') {
-            newState.isStudent = false;
-        } else {
-            newState.isStudent = true;
-        }
-        this.setState(newState);
     }
 
     submitData() {
@@ -145,7 +133,21 @@ export class EditProfile extends React.Component {
             Toast.error(INVALID_SUBMISSION);
         }
     }
-    
+
+    removeParent(i) {
+        var self = this;
+        return function () {
+            self.state.parents.splice(i, 1);
+            self.setState({parents: self.state.parents});
+        };
+    }
+
+    addParent() {
+        var parents = this.state.parents || [];
+        parents.push({name: 'Jane Adams'});
+        this.setState({parents});
+    }
+
     renderParent(parent, i) {
         /** @TODO MPR, 11/14/15: Implement Autocomplete, store parent ID*/
         return (
@@ -173,7 +175,7 @@ export class EditProfile extends React.Component {
 
     renderParentFields() {
         if (this.state.parents && this.state.parents.length) {
-            return _.map(this.state.parents, renderParent);
+            return _.map(this.state.parents, this.renderParent);
         }
         return null;
     }
@@ -206,8 +208,8 @@ export class EditProfile extends React.Component {
         );
     }
 
-    renderTeacherInputs () {}
-    
+    renderTeacherInputs() {}
+
     renderEmail() {
         if (this.state.isStudent || this.state.email == null) {
             return null;
@@ -368,11 +370,7 @@ export class EditProfile extends React.Component {
             </Layout>
         );
     }
-};
-
-var isPassValid = function (password) {
-    return password.length >= 8 && ~password.search(/[0-9]+/);
-};
+}
 
 const mapStateToProps = state => {
     var data = {};

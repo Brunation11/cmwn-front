@@ -1,10 +1,11 @@
 import React from 'react';
+import {Button, Input, Panel} from 'react-bootstrap';
 
 import HttpManager from 'components/http_manager';
 import Toast from 'components/toast';
 import Log from 'components/log';
 
-const  HEADINGS = {
+const HEADINGS = {
     UPDATE_CODE: 'Reset code for user',
 };
 const ERRORS = {
@@ -31,7 +32,7 @@ class CodeChange extends React.Component {
     }
 
     render() {
-        if (this.props.currentUser && this.props.currentUser.user_id === this.props.user_id || 
+        if (this.props.currentUser && this.props.currentUser.user_id === this.props.user_id ||
             this.props.data._links.reset == null) {
             return null;
         }
@@ -51,6 +52,6 @@ class CodeChange extends React.Component {
             </form></Panel>
         );
     }
-};
+}
 
 export default CodeChange;

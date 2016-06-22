@@ -1,12 +1,13 @@
 import React from 'react';
+import {Button, Panel} from 'react-bootstrap';
 
 import HttpManager from 'components/http_manager';
 import Toast from 'components/toast';
 import Log from 'components/log';
 
-const  HEADINGS = {
+const HEADINGS = {
     UPDATE_CODE: 'Reset code for user',
-}
+};
 
 const ERRORS = {
     BAD_PASS: 'Sorry, there was a problem updating your password.',
@@ -42,6 +43,6 @@ class ForgotPass extends React.Component {
             </form></Panel>
         );
     }
-};
+}
 
-export default ForgotPass
+export default ForgotPass;

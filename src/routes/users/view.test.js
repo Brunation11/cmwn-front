@@ -26,9 +26,8 @@ describe('Profile View', function() {
 
         });
         
-        //TODO: testing for suspend account when test mode for http set up
-        //TODO: lifecycle methods when mounting set up with unconnected components
-        //TODO: edit link and History?
+        //TODO: testing for suspend account when test mode for HttpManager set up. LB 06/22/16
+        //TODO: lifecycle methods when mounting set up with unconnected components. LB 06/22/16
     });
     
    
@@ -47,7 +46,6 @@ describe('Profile View', function() {
 
             const wrapper = shallow(view);
             expect(wrapper.type()).to.equal(null);
-             //TODO: should this page be giving a permission denied error?
         });
     });
 });

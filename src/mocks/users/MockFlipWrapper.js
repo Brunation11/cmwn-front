@@ -3,7 +3,7 @@ import React from 'react';
 import { Profile } from 'routes/users/profile';
 
 class MockFlipWrapper extends React.Component {
-    
+
     showModal(gameUrl) {
         this.props.clicked = gameUrl;
     }

@@ -75,10 +75,10 @@ export class Profile extends React.Component {
 
     componentDidMount() {
         EventManager.listen('userChanged', () => {
-            this.resolveRole();
+            this.resolveRole(this.props);
             this.forceUpdate();
         });
-        this.resolveRole();
+        this.resolveRole(this.props);
         if (QueryString.parse(window.location.search).message === 'updated') {
             Toast.success(PASS_UPDATED);
         }
@@ -89,15 +89,16 @@ export class Profile extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.resolveRole();
+        this.resolveRole(nextProps);
         this.setState(nextProps.data);
     }
 
-    resolveRole() {
+    resolveRole(props) {
         var newState = {};
         // remember we actually want current user here, not the user whose
         // profile we are looking at
-        if (this.props.currentUser && this.props.currentUser.type !== 'CHILD') {
+        if (props.currentUser && props.currentUser.type &&
+            props.currentUser.type !== 'CHILD') {
             newState.isStudent = false;
         } else {
             newState.isStudent = true;
