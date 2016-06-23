@@ -68,7 +68,7 @@ var Component = React.createClass({
             return null;
         }
         return (
-            <p className="userFlips" key={Shortid.generate()}>0 Flips Earned</p>
+            <p className="user-flips" key={Shortid.generate()}>0 Flips Earned</p>
         );
     },
     renderAdminLink: function () {
@@ -84,7 +84,7 @@ var Component = React.createClass({
             <div className="flip" key={Shortid.generate()}>
                 <Link to={`/student/${item.user_id.toString()}`} id={item.username}>
                     <img src={item.images && item.images.data && item.images.data.length ? item.images.data[0].url : DefaultProfile}></img>
-                    <p className="linkText" >{item.username}</p>
+                    <p className="link-text" >{item.username}</p>
                 </Link>
                 {this.renderFlipsEarned(item)}
             </div>

@@ -73,7 +73,10 @@ class _EventManager {
      * Pushes a change onto the change stack
      * @param {string} key - the key of the object to update. Can be a nested path, as with _.get
      * @param {*} val the value to update
-     * @param {string|number} [scopeHandle = 'global'] - unique identifier for individual component scopes. If a number is passed as this parameter, it will be treated as the depth parameter and the final param will be ignored. 'global' should be passed for multi-scope components.
+     * @param {string|number} [scopeHandle = 'global'] - unique identifier for individual
+     * component scopes. If a number is passed as this parameter, it will be treated as the depth
+     * parameter and the final param will be ignored. 'global' should be passed
+     * for multi-scope components.
      * @param {number} [depth = 0] - how closely to compare objects.
      * 0 = shallow. Default, and always used for value types. (top level by Reference)
      * 1 = by collection. Checks inside arrays and object properties by reference
@@ -94,7 +97,10 @@ class _EventManager {
         if (oldVal == null) {
             bypass = true;
         } else {
-            bypass = _.reduce(_pendingChanges, (acc, change) => (acc || change.key === `${scopeHandle}.${key}`)); //checking equality on all pending changes is impractical. Push the update if the current key exists in changes already
+            //checking equality on all pending changes is impractical.
+            //Push the update if the current key exists in changes already
+            bypass = _.reduce(_pendingChanges, (acc, change) => (acc ||
+                change.key === `${scopeHandle}.${key}`));
         }
         if (_.isNumber(val) || _.isString(val) || _.isBoolean(val)) {
             depth = 0;
