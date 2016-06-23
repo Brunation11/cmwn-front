@@ -47,7 +47,7 @@ var Component = React.createClass({
     }
 });
 
-const mapStateToProps = state => {
+var mapStateToProps = state => {
     var data = [];
     var loading = true;
     if (state.page && state.page.data && state.page.data._embedded && state.page.data._embedded.org) {
