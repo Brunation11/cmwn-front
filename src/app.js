@@ -1,3 +1,4 @@
+/* eslint-disable vars-on-top */
 /**
  * App.js
  * # Production Application Entrypoint
@@ -232,7 +233,7 @@ var AppComponent = React.createClass({
     }
 });
 
-const mapStateToProps = state => {
+var mapStateToProps = state => {
     var currentUser = {};
     if (state.currentUser != null) {
         currentUser = state.currentUser;
@@ -241,6 +242,7 @@ const mapStateToProps = state => {
         currentUser
     };
 };
+
 
 var App = connect(mapStateToProps)(AppComponent);
 
@@ -418,7 +420,7 @@ if (window.Rollbar != null) { //eslint-disable-line no-undef
     }});
 }
 
-/** Function enabling an interactive debugging mode via the console **/
+/* Function enabling an interactive debugging mode via the console */
 window.__cmwn.interactiveDebug = function () {
     window.debugging = true;
     Rollbar.configure({reportLevel: 'info'}); //eslint-disable-line
@@ -429,13 +431,13 @@ window.__cmwn.interactiveDebug = function () {
 //█  6. Application Bootstrap
 //█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
 
-/**
+/*
  * Attaches the App component to the routes, which are then attached to the Router, which is then attached
  * to the redux store via the Provider. This Provider is then rendered in the React shadow dom, and then is
  * appended to the the actual dom node with ID cmwn-app as soon as it is available.
  * Also outputs the console warning if this is successful, and will attempt to re-bootstrap up to 5 times
  * if any of these steps fail. A generic application error is shown if this fails.
- **/
+ */
 function run() {
     window._bootstrap_attempts = window._bootstrap_attempts || 0; //eslint-disable-line camelcase
     try {
@@ -475,4 +477,3 @@ if (loadedStates.indexOf(document.readyState) !== -1 && document.getElementById(
 
 // We only need to export this for testing purposes. It is never imported in production.
 export default App;
-

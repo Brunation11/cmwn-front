@@ -1,6 +1,8 @@
 /* eslint-disable no-console, no-debugger*/
 import GLOBALS from 'components/globals';
 
+var Log;
+
 class Logger {
     constructor() {
         this.info = this.write('info', 'User Action', '#d0e2ec');
@@ -27,6 +29,6 @@ class Logger {
     }
 }
 
-var Log = new Logger();
+Log = new Logger();
 
 export default Log;

@@ -47,10 +47,11 @@ var Component = React.createClass({
         this.setState(newProps.data);
     },
     renderDistricts: function () {
+        var links;
         if (!this.state || this.state._embedded == null) {
             return null;
         }
-        var links = _.map(this.state._embedded.organizations, district => {
+        links = _.map(this.state._embedded.organizations, district => {
             if (district.type !== 'district') {
                 return null;
             }
@@ -149,7 +150,7 @@ var Component = React.createClass({
     }
 });
 
-const mapStateToProps = state => {
+var mapStateToProps = state => {
     var data = {};
     var loading = true;
     if (state.page && state.page.data != null) {

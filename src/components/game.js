@@ -9,6 +9,8 @@ import HttpManager from 'components/http_manager';
 import Toast from 'components/toast';
 import Log from 'components/log';
 
+import SkribbleMocks from 'routes/users/mock_skribble_data';
+
 import 'components/game.scss';
 
 const EVENT_PREFIX = '_e_';
@@ -63,7 +65,7 @@ var Game = React.createClass({
             Log.log('Server refused flip update', err, flip);
         });
     },
-    /**
+    /*
      * default events. These will always fire regardless of whether or not
      * there is an event defined in addition to the submission behavior
      */
@@ -81,7 +83,7 @@ var Game = React.createClass({
     [EVENT_PREFIX + 'Init']: function (e) {
         e.respond(this.props.gameState);
     },
-    /** end of default events */
+    /* end of default events */
     gameEventHandler: function (e) {
         if (e.name != null) {
             if (_.isFunction(this[EVENT_PREFIX + _.capitalize(e.name)])) {
@@ -91,6 +93,10 @@ var Game = React.createClass({
                 this.props['on' + _.capitalize(e.name)](...arguments);
             }
         }
+        if (e && e.respond != null) {
+            SkribbleMocks(e);
+        }
+
     },
     setEvent: function () {
         window.addEventListener('game-event', this.gameEventHandler);

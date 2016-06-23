@@ -1,3 +1,4 @@
+var e2eReport = require('./e2e_report.js');
 exports.config = {
     
     //
@@ -10,10 +11,11 @@ exports.config = {
     // directory is where your package.json resides, so `wdio` will be called from there.
     //
     specs: [
-        './test/specs/**/*.js'
+        './test/specs/*.js'
     ],
     // Patterns to exclude.
     exclude: [
+        './test/specs/donottest/*.js'
         // 'path/to/excluded/files'
     ],
     //
@@ -39,13 +41,7 @@ exports.config = {
     // https://docs.saucelabs.com/reference/platforms-configurator
     //
     capabilities: [{
-        // maxInstances can get overwritten per capability. So if you have an in-house Selenium
-        // grid with only 5 firefox instance available you can make sure that not more than
-        // 5 instance gets started at a time.
-        maxInstances: 5,
-        //
-        browserName: 'chrome'//'phantomjs',
-        //"phantomjs.cli.args" : ["--ignore-ssl-errors=yes"]
+        browserName: 'chrome'
     }],
     //
     // ===================
@@ -80,6 +76,12 @@ exports.config = {
     //
     // Default request retries count
     connectionRetryCount: 3,
+    //
+    // Host of the WebDriver server
+    // host: hostIP,
+    //
+    // Port the WebDriver server is on
+    // port: 4444,
     //
     // Initialize the browser instance with a WebdriverIO plugin. The object should have the
     // plugin name as key and the desired plugin options as properties. Make sure you have
@@ -116,7 +118,7 @@ exports.config = {
     // The only one supported by default is 'dot'
     // see also: http://webdriver.io/guide/testrunner/reporters.html
     // reporters: ['dot'],
-    reporter: 'dot',
+    reporters: [e2eReport],
     //
     // Options to be passed to Mocha.
     // See the full list at http://mochajs.org/

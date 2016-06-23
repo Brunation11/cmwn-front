@@ -6,8 +6,13 @@ var PASSWD = "business2";
 //selects the first class in the table
 describe('tests editing class as teacher', function () {
     it('should assert editing class was successful', function () {
+<<<<<<< HEAD
     	login_test.login(USER, PASSWD);
     	browser.waitForExist('#navMenu', 60000);
+=======
+    	login_test.login("teacher", "business2");
+    	browser.waitForExist('#navMenu', 3000);
+>>>>>>> 5f26c625f0134caf369d7ce7dabed782b7e4348a
     	browser.url('/classes');
     	browser.waitForExist('.datatable', 60000);
     	// get the url of the first class in the table
@@ -34,8 +39,13 @@ describe('tests editing class as teacher', function () {
 
     // leaving class name and description blank
     it('should display an error', function () {
+<<<<<<< HEAD
     	login_test.login(USER, PASSWD);
     	browser.waitForExist('#navMenu', 60000);
+=======
+    	login_test.login("teacher", "business2");
+    	browser.waitForExist('#navMenu', 3000);
+>>>>>>> 5f26c625f0134caf369d7ce7dabed782b7e4348a
     	browser.url('/classes');
     	browser.waitForExist('.datatable', 60000);
     	// get the url of the first class in the list

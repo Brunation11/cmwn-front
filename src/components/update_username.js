@@ -24,7 +24,7 @@ const BUTTONS = {
     LAST: 'Reset to {0}'
 };
 
-var Page = React.createClass({
+var UpdateUsername = React.createClass({
     getInitialState: function () {
         return {
             username: this.props.username.slice(0, -3),
@@ -116,5 +116,5 @@ var Page = React.createClass({
     }
 });
 
-export default Page;
+export default UpdateUsername;
 

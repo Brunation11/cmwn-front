@@ -278,7 +278,7 @@ var BulkUpload = React.createClass({
     }
 });
 
-const mapStateToProps = state => {
+var mapStateToProps = state => {
     var data = {title: ''};
     var loading = true;
     if (state.page && state.page.data != null) {
