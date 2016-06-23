@@ -110,7 +110,7 @@ var Component = React.createClass({
     }
 });
 
-const mapStateToProps = state => {
+var mapStateToProps = state => {
     var data = [];
     var loading = true;
     var rowCount = 1;
