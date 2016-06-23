@@ -1,6 +1,6 @@
-var login_test = require("./login");
-var USER = "teacher";
-var PASSWD = "business2";
+var login_test = require('./login_test.js');
+var USER = 'teacher';
+var PASSWD = 'business2';
 
 describe('tests opening game on games page', function() {
     // Checks if the game opens when you press on "PLAY NOW!"

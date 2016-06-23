@@ -1,6 +1,6 @@
-var login_test = require("./login");
-var USER = "teacher";
-var PASSWD = "business2";
+var login_test = require('./login_test.js');
+var USER = 'teacher';
+var PASSWD = 'business2';
 
 describe('tests buttons for game', function() {
     // Checks if the game takes up full screen if you press the "FULL SCREEN" button
