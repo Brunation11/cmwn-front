@@ -22,7 +22,7 @@ const PENDING = ' We\'re reviewing your image and it should appear shortly. ' +
 const NO_IMAGE = 'Looks like there was a problem displaying this users profile. ' +
                 'Please refresh the page to try again.';
 
-var Component = React.createClass({
+var ProfileImage = React.createClass({
     getInitialState: function () {
         return {
             profileImage: GLOBALS.DEFAULT_PROFILE,
@@ -151,7 +151,7 @@ var mapStateToProps = state => {
     return { currentUser: state.currentUser, data };
 };
 
-var Image = connect(mapStateToProps)(Component);
+var Image = connect(mapStateToProps)(ProfileImage);
 
 export default Image;
 

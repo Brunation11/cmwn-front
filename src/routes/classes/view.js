@@ -68,7 +68,7 @@ var Component = React.createClass({
         if (!this.state || this.state.parent_id == null) {
             return null;
         }
-        return <Link to={'/school/' + this.state.parent_id} >{BREADCRUMBS}</Link>;
+        return <Link to={'/school/' + this.state.parent_id} id="return-to-school">{BREADCRUMBS}</Link>;
     },
     render: function () {
         if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
@@ -84,7 +84,7 @@ var Component = React.createClass({
                     </p>
                     {this.renderBreadcrumb()}
                     <p>
-                        <Link to={`/class/${this.props.data.group_id}/profile`}>Return to class profile</Link>
+                        <Link to={`/class/${this.props.data.group_id}/profile`} id="return-to-class">Return to class profile</Link>
                     </p>
                     <br />
                     <Text label={`${HEADINGS.DESCRIPTION}: `} text={this.props.data.description}><p></p></Text>
@@ -108,7 +108,7 @@ var Component = React.createClass({
                                 <Column dataKey="title"
                                     renderHeader="Name"
                                     renderCell={(data, row) => (
-                                        <Link to={`/users/${row.user_id}`}>{`${row.first_name} ${row.last_name}`}</Link>
+                                        <Link to={`/users/${row.user_id}`} className="student">{`${row.first_name} ${row.last_name}`}</Link>
                                     )}
                                 />
                                 <Column dataKey="username" />
@@ -121,7 +121,7 @@ var Component = React.createClass({
                                 <Column dataKey="updated_at" renderHeader="Update Users"
                                     renderCell={(data, row) => {
                                         return (
-                                            <Link to={`/users/${row.user_id}/edit`}>Edit</Link>
+                                            <Link to={`/users/${row.user_id}/edit`} className="edit-student">Edit</Link>
                                         );
                                     }}
                                 />

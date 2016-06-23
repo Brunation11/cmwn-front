@@ -6,7 +6,7 @@ import History from 'components/history';
 
 const EDIT = 'Edit';
 
-class Page extends React.Component {
+class EditLink extends React.Component {
     constructor() {
         super();
         this.state = {};
@@ -24,22 +24,25 @@ class Page extends React.Component {
         var state = {};
         state.base = props.base;
         state.uuid = props.uuid || props.id;
-        state.canUpdate = props.canUpdate != null ? props.canUpdate : Util.decodePermissions(props.scope).update;
+        state.canUpdate = props.canUpdate !=
+            null ? props.canUpdate : Util.decodePermissions(props.scope).update;
         this.setState(state);
     }
 
     render() {
-        if ((!this.state.canUpdate && !this.state.scope) || (this.state.uuid == null && this.state.id == null)) {
+        if ((!this.state.canUpdate && !this.state.scope) ||
+            (this.state.uuid == null && this.state.id == null)) {
             return null;
         }
         return (
             <Button className={this.props.className + ' standard'}
-            onClick={() => History.push(`${this.state.base}/${this.state.uuid}/edit`)} >{this.props.text ? this.props.text : EDIT}</Button>
+                onClick={() => History.push(`${this.state.base}/${this.state.uuid}/edit`)} >
+                {this.props.text ? this.props.text : EDIT}</Button>
         );
     }
 }
 
-Page.defaultProps = {base: ''};
+EditLink.defaultProps = {base: ''};
 
-export default Page;
+export default EditLink;
 

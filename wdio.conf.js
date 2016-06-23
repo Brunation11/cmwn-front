@@ -1,3 +1,4 @@
+var e2eReport = require('./e2e_report.js');
 exports.config = {
     
     //
@@ -10,7 +11,7 @@ exports.config = {
     // directory is where your package.json resides, so `wdio` will be called from there.
     //
     specs: [
-        './test/specs/run_tests/changepass_test.js'
+        './test/specs/*.js'
     ],
     // Patterns to exclude.
     exclude: [
@@ -77,7 +78,7 @@ exports.config = {
     connectionRetryCount: 3,
     //
     // Host of the WebDriver server
-    host: '192.168.99.100',
+    // host: hostIP,
     //
     // Port the WebDriver server is on
     // port: 4444,
@@ -117,7 +118,7 @@ exports.config = {
     // The only one supported by default is 'dot'
     // see also: http://webdriver.io/guide/testrunner/reporters.html
     // reporters: ['dot'],
-    reporter: 'dot',
+    reporters: [e2eReport],
     //
     // Options to be passed to Mocha.
     // See the full list at http://mochajs.org/
