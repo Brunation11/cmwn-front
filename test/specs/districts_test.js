@@ -1,10 +1,10 @@
-var login_test = require("./login_test");
+var login = require("./login");
 
 
 describe('tests the friends page', function () {
     it('should check that friends profile link takes to right profile', function () {
     	var friendLink;
-    	login_test.login('teacher', 'business2');
+    	login.login('teacher', 'business2');
     	browser.waitForExist('#navMenu', 60000);
     	browser.url('/districts');
         browser.waitForExist('.district-link', 60000);
