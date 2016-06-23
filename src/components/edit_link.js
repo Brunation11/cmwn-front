@@ -6,7 +6,7 @@ import History from 'components/history';
 
 const EDIT = 'Edit';
 
-class Page extends React.Component {
+class EditLink extends React.Component {
     constructor() {
         super();
         this.state = {};
@@ -39,7 +39,7 @@ class Page extends React.Component {
     }
 }
 
-Page.defaultProps = {base: ''};
+EditLink.defaultProps = {base: ''};
 
-export default Page;
+export default EditLink;
 

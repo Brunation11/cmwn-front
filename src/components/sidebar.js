@@ -39,7 +39,7 @@ var Component = React.createClass({
     }
 });
 
-const mapStateToProps = state => {
+var mapStateToProps = state => {
     var data = [];
     state.currentUser;
     if (state.currentUser && state.currentUser._links) {

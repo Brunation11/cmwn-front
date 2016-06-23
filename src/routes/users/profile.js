@@ -15,9 +15,8 @@ import EventManager from 'components/event_manager';
 import Trophycase from 'components/trophycase';
 import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
-//import Util from 'components/util';
+// import Util from 'components/util';
 import History from 'components/history';
-import Store from 'components/store';
 import GenerateDataSource from 'components/datasource';
 
 import Layout from 'layouts/two_col';
@@ -25,6 +24,8 @@ import Layout from 'layouts/two_col';
 import FlipBgDefault from 'media/flip-placeholder-white.png';
 
 import 'routes/users/profile.scss';
+
+var Page;
 
 const PAGE_UNIQUE_IDENTIFIER = 'profile';
 
@@ -42,21 +43,46 @@ const CLASSES = 'Classes';
 const BROWSER_NOT_SUPPORTED = <span><p>For the best viewing experience we recommend the desktop version in Chrome</p><p>If you don't have chrome, <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">download it for free here</a>.</p></span>;
 const PASS_UPDATED = '<p>You have successfully updated your password.<br />Be sure to remember for next time!</p>';
 
-var Profile = React.createClass({
-    getInitialState: function () {
-        var state = _.defaults({
+export var dataTransform = function (data) {
+    var array = data;
+    var currentIndex;
+    var temporaryValue;
+    var randomIndex;
+    if (array == null) {
+        array = [];
+    } else if (!_.isArray(array)) {
+        return [];
+    }
+    currentIndex = array.length;
+     // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+    return _.filter(array, v => !v.coming_soon).concat(_.filter(array, v => v.coming_soon));
+};
+
+export class Profile extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = _.defaults({
             gameOn: false,
             gameId: -1
         }, _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {},
         {classes: {data: []}});
-        return state;
-    },
-    componentDidMount: function () {
+    }
+
+    componentDidMount() {
         EventManager.listen('userChanged', () => {
-            this.resolveRole();
+            this.resolveRole(this.props);
             this.forceUpdate();
         });
-        this.resolveRole();
+        this.resolveRole(this.props);
         if (QueryString.parse(window.location.search).message === 'updated') {
             Toast.success(PASS_UPDATED);
         }
@@ -64,55 +90,63 @@ var Profile = React.createClass({
         if (this.props.data) {
             this.setState(this.props.data);
         }
-    },
-    componentWillReceiveProps: function (nextProps) {
-        this.resolveRole();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.resolveRole(nextProps);
         this.setState(nextProps.data);
-    },
-    resolveRole: function () {
+    }
+
+    resolveRole(props) {
         var newState = {};
-        var state = Store.getState();
-        //remember we actually want current user here, not the user whose profile we are looking at
-        if (state.currentUser && state.currentUser.type !== 'CHILD') {
+        // remember we actually want current user here, not the user whose
+        // profile we are looking at
+        if (props.currentUser && props.currentUser.type &&
+            props.currentUser.type !== 'CHILD') {
             newState.isStudent = false;
         } else {
             newState.isStudent = true;
         }
         this.setState(newState);
-    },
-    showModal: function (gameUrl) {
+    }
+
+    showModal(gameUrl) {
         var urlParts;
         if (Detector.isMobileOrTablet() || Detector.isPortrait()) {
             urlParts = gameUrl.split('/');
-            urlParts.pop(); //discard index.html
+            urlParts.pop(); // discard index.html
             History.push(`/game/${_.last(urlParts)}`);
         }
         this.setState({gameOn: true, gameUrl});
-    },
-    hideModal: function () {
+    }
+
+    hideModal() {
         this.setState({gameOn: false});
         this.refs.gameRef.dispatchPlatformEvent('quit');
-    },
-    renderGame: function () {
-        var flipUrl = this.state._links.user_flip ? this.state._links.user_flip.href : null;
+    }
+
+    renderGame() {
+        var flipUrl = this.state._links && this.state._links.user_flip ? this.state._links.user_flip.href : null;
         if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe10())) {
             return (
                 <div>
                     {BROWSER_NOT_SUPPORTED}
-                    <p><a onClick={() => this.setState({gameOn: false})} >(close)</a></p>
+                    <p><a onClick={this.setState.bind(this, {gameOn: false})} >(close)</a></p>
                 </div>
             );
         }
         return (
             <div>
-                <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl} flipUrl={flipUrl} onExit={() => this.setState({gameOn: false})}/>
-                    <a onClick={this.hideModal} className="modal-close">(close)</a>
+                <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl} flipUrl={flipUrl} onExit={this.setState.bind(this, {gameOn: false})}/>
+                    <a onClick={this.hideModal.bind(this)} className="modal-close">(close)</a>
             </div>
         );
-    },
-    renderFlip: function (item){
+    }
+
+    renderFlip(item) {
         var onClick;
         var playText;
+
         if (item.coming_soon) {
             onClick = _.noop;
             playText = COMING_SOON;
@@ -122,7 +156,7 @@ var Profile = React.createClass({
         }
         return (
             <div className="flip fill" key={Shortid.generate()}>
-                <a onClick={onClick} >
+                <a onClick={onClick.bind(this)} >
                     <div className="item">
                         <span className="overlay">
                             <span className="heading">{item.title}</span>
@@ -137,44 +171,23 @@ var Profile = React.createClass({
                 </a>
             </div>
         );
-    },
-    renderGameList: function () {
-        var state = Store.getState();
-        if (this.state._links == null || state.currentUser.user_id !== this.state.user_id) {
+    }
+
+    renderGameList() {
+        if (this.state._links == null || this.props.currentUser.user_id !== this.state.user_id) {
             return null;
         }
         return (
-           <GameWrapper transform={data => {
-               var array = data;
-               var currentIndex;
-               var temporaryValue;
-               var randomIndex;
-               if (array == null) {
-                   array = [];
-               } else if (!_.isArray(array)) {
-                   return [];
-               }
-               currentIndex = array.length;
-                // While there remain elements to shuffle...
-               while (0 !== currentIndex) {
-                   // Pick a remaining element...
-                   randomIndex = Math.floor(Math.random() * currentIndex);
-                   currentIndex -= 1;
-                   // And swap it with the current element.
-                   temporaryValue = array[currentIndex];
-                   array[currentIndex] = array[randomIndex];
-                   array[randomIndex] = temporaryValue;
-               }
-               return _.filter(array, v => !v.coming_soon).concat(_.filter(array, v => v.coming_soon));
-           }}>
+           <GameWrapper transform={dataTransform}>
                <FlipBoard
-                   renderFlip={this.renderFlip}
+                   renderFlip={this.renderFlip.bind(this)}
                    header={HEADINGS.ARCADE}
                />
            </GameWrapper>
         );
-    },
-    renderClassList: function () {
+    }
+
+    renderClassList() {
         if (!this.state || !this.state._embedded || !this.state._embedded.group_class) {
             return null;
         }
@@ -184,8 +197,9 @@ var Profile = React.createClass({
                 {_.map(this.state._embedded.group_class, item => item.title).join(', ')}
             </p>
         );
-    },
-    renderUserProfile: function () {
+    }
+
+    renderUserProfile() {
         var ISODate = (new Date(this.state.birthdate)).toISOString();
         return (
             <div>
@@ -210,11 +224,12 @@ var Profile = React.createClass({
                 </Panel>
             </div>
         );
-    },
-    renderCurrentUserProfile: function () {
+    }
+
+    renderCurrentUserProfile() {
         return (
             <div>
-                <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal} keyboard={false} backdrop="static">
+                <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal.bind(this)} keyboard={false} backdrop="static">
                     <Modal.Body>
                         {this.renderGame()}
                     </Modal.Body>
@@ -225,36 +240,39 @@ var Profile = React.createClass({
                 {this.renderGameList()}
             </div>
         );
-    },
-    render: function () {
+    }
+
+    render() {
         var profile;
-        var state = Store.getState();
         if (this.state.username == null) {
             return null;
         }
-        profile = (this.state.user_id === state.currentUser.user_id) ? this.renderCurrentUserProfile : this.renderUserProfile;
+        profile = (this.state.user_id === this.props.currentUser.user_id) ? this.renderCurrentUserProfile : this.renderUserProfile;
+
         return (
            <Layout className={PAGE_UNIQUE_IDENTIFIER} navMenuId="navMenu">
-               {profile()}
+               {profile.apply(this)}
            </Layout>
         );
     }
-});
+}
 
-const mapStateToProps = state => {
+var mapStateToProps = state => {
     var data = {};
     var loading = true;
+    var currentUser = {};
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
+        currentUser = state.currentUser;
     }
     return {
         data,
-        loading
+        loading,
+        currentUser
     };
 };
 
-var Page = connect(mapStateToProps)(Profile);
+Page = connect(mapStateToProps)(Profile);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
-
