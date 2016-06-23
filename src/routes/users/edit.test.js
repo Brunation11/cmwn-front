@@ -5,9 +5,9 @@ import { mount, shallow } from 'enzyme';
 import { EditProfile } from 'routes/users/edit';
 
 
-import teacherData from 'mocks/users/teacherData';
-import studentDataA from 'mocks/users/studentDataA';
-import studentDataB from 'mocks/users/studentDataB';
+import teacherData from 'mocks/users/teacher_data';
+import studentDataA from 'mocks/users/student_data_a';
+import studentDataB from 'mocks/users/student_data_b';
 
 var checkEditEls = function(wrapper) {
     expect(wrapper.find('Layout')).to.have.length(1);

@@ -31,8 +31,8 @@ const TERMS = (
       detail below, <span className="ft2">CMWN does not sell, rent or trade personal
       information from kids.</span></p>
 
-      <p className="p4 ft5">By using and accessing CMWN, located at <a href="www.changemyworldnow.com" className=
-      "ft4">www.changemyworldnow.com</a>, you are accepting and agree to comply with
+      <p className="p4 ft5">By using and accessing CMWN, located at <a href="www.changemyworldnow.com"
+      className="ft4">www.changemyworldnow.com</a>, you are accepting and agree to comply with
       this Privacy Policy &amp; Conditions of Use.</p>
 
       <p className="p5 ft6">What are the rules for accessing CMWN?</p>
@@ -65,8 +65,8 @@ const TERMS = (
       "ft9">You represent and acknowledge that you are solely responsible for complying
       with the Children&#8217;s Online Privacy Protection Act (&#8220;COPPA&#8221;),
       where applicable. For more information on COPPA and kid&#8217;s privacy, please
-      see </span> <a href="http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online" className=
-      "ft10">http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online</a>
+      see </span> <a href="http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online"
+      className="ft10">http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online</a>
       .</p>
 
       <p className="p12 ft7"><span className="ft8">&#8226;</span><span className=
@@ -99,7 +99,8 @@ const TERMS = (
     <p className="p18 ft7"><span className="ft8">&#8226;</span><span className="ft9">You
     understand that the school is responsible for complying with COPPA, where applicable,
     which requires Consent for online collection of personal information from children
-    under 13. For more information on COPPA, please see </span><a href="http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online">
+    under 13. For more information on COPPA, please see </span><a
+    href="http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online">
     http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online.</a></p>
 
     <p className="p7 ft3">If you are using CMWN as a Parent or Guardian, the following
@@ -182,7 +183,9 @@ const TERMS = (
 
     <p className="p31 ft5">CMWN uses Google Analytics to monitor our website activity. To
     learn how Google Analytics collects and processes data, please visit:
-    <a href="www.google.com/policies/privacy/partners" className="ft17"> www.google.com/policies/privacy/partners</a></p>
+    <a href="www.google.com/policies/privacy/partners" className="ft17">
+        www.google.com/policies/privacy/partners
+    </a></p>
 
     <p className="p32 ft7"><span className="ft18">Do Not Track Disclosure</span>. Do Not
     Track (DNT) is a privacy preference that users can set in some web browsers, allowing
@@ -310,8 +313,8 @@ const TERMS = (
 
     <p className="p49 ft5">If you have questions or need further assistance, you are
     welcome to contact us directly by sending an email with your questions or comments to
-    <a href="mailto:info@changemyworldnow.com" className="ft4"> info@changemyworldnow.com</a>. You can also write to us
-    at:</p>
+    <a href="mailto:info@changemyworldnow.com" className="ft4"> info@changemyworldnow.com</a>
+    . You can also write to us at:</p>
 
     <p className="p5 ft3">Change My World Now</p>
 

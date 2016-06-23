@@ -1,6 +1,7 @@
-
 export default function (e) {
-    var data, gameData, deliveryData;
+    var data;
+    var gameData;
+    var deliveryData;
 
     // console.log(e.name, e.gameData); // eslint-disable-line no-console
 
@@ -11,6 +12,9 @@ export default function (e) {
     if (!data) {
         return;
     }
+
+    /* eslint-disable max-len */
+    /* eslint-disable no-exceed-lines */
 
     if (data.game === 'skribble') {
 
@@ -819,5 +823,6 @@ export default function (e) {
       //   name: 'toggle-demo-mode',
       // });
     }
+    /* eslint-enable */
 
 }

@@ -17,7 +17,7 @@ import FlipBgDefault from 'media/flip-placeholder-white.png';
 
 import 'routes/users/profile.scss';
 
-const GameWrapper = GenerateDataSource('games', 'games-list');
+const GAME_WRAPPER = GenerateDataSource('games', 'games-list');
 
 const HEADINGS = {
     ACTION: 'Profile',
@@ -104,7 +104,7 @@ var Profile = React.createClass({
     },
     renderGameList: function () {
         return (
-           <GameWrapper transform={data => {
+           <GAME_WRAPPER transform={data => {
                var array = data;
                var currentIndex;
                var temporaryValue;
@@ -131,7 +131,7 @@ var Profile = React.createClass({
                    renderFlip={this.renderFlip}
                    header={HEADINGS.ARCADE}
                />
-           </GameWrapper>
+           </GAME_WRAPPER>
         );
     },
     render: function () {

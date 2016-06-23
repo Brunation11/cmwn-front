@@ -12,7 +12,12 @@ const TITLE = 'MY SCHOOLS';
 var Component = React.createClass({
     renderFlip: function (item){
         return (
-            <div className="flip" key={Shortid.generate()}><a href={`/school/${item.group_id}`}><img src={DefaultProfile}></img><p>{`${item.title}`}</p></a></div>
+            <div className="flip" key={Shortid.generate()}>
+                <a href={`/school/${item.group_id}`}>
+                <img src={DefaultProfile}></img>
+                <p>{`${item.title}`}</p>
+                </a>
+            </div>
         );
     },
     render: function () {
