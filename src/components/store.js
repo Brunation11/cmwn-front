@@ -197,7 +197,7 @@ var componentReducer = (allComponents = Immutable({_componentsToLoad: 0, _compon
     //component-wide reducers
     if (action.type in reducers) {
         return allComponents.set(action.endpointIdentifier + '-' +
-                                 action.componentName, reducers[action.type]());
+            action.componentName, reducers[action.type]());
     } else if (action.type === ACTION_CONSTANTS.COMPONENT_LOADER_COMPLETE) {
         allComponents = allComponents.set('_componentsLoaded', allComponents._componentsLoaded + 1);
     } else if (action.type === ACTION_CONSTANTS.REGISTER_COMPONENT) {
@@ -245,16 +245,16 @@ var Store = createStore( function (state = {}, action) {
             }
             if (action_.type === ACTION_CONSTANTS.LOADER_START) {
                 return {currentStage: loaderState.currentStage + 1,
-                        lastCompletedStage: loaderState.lastCompletedStage};
+                    lastCompletedStage: loaderState.lastCompletedStage};
             }
             if (action_.type === ACTION_CONSTANTS.ADVANCE_LOAD_STAGE) {
                 return {currentStage: loaderState.currentStage,
-                        lastCompletedStage: loaderState.lastCompletedStage + 1};
+                    lastCompletedStage: loaderState.lastCompletedStage + 1};
             }
             if (action_.type === ACTION_CONSTANTS.LOADER_ERROR) {
                 if (loaderState.currentStage === GLOBALS.PAGE_LOAD_STATE.COMPONENT) {
                     Log.error('HAL link required for component load not provided. ' +
-                              'Will not load because: ' + action.payload);
+                        'Will not load because: ' + action.payload);
                 } else if (action_.error) {
                     Log.error('Loader error at stage ' + loaderState.currentStage + ' : ' + action_.payload);
                 } else {

@@ -39,7 +39,7 @@ var buildMenuRoutes = function (links) {
                     a = route;
                     a.params = {};
                 } else if (route.endpoint !== '/' && !~route.endpoint.indexOf(':') &&
-                           ~link.href.indexOf(route.endpoint)) {
+                        ~link.href.indexOf(route.endpoint)) {
                     //nondynamic is also fairly easy, as urls cannot contain colonks
                     a = route;
                     a.params = {};
@@ -57,7 +57,7 @@ var buildMenuRoutes = function (links) {
         }, false);
         if (matchedRoute) {
             url = Util.replacePathPlaceholdersFromParamObject(matchedRoute.path,
-                    matchedRoute.params).split('(')[0];
+                matchedRoute.params).split('(')[0];
             link = link.set('url', url.indexOf('/') === 0 ? url : '/' + url);
             a.push(link);
         }

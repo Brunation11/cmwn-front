@@ -52,7 +52,7 @@ var Paginator = React.createClass({
             Actions.GET_NEXT_PAGE_PAGE(Store.getState(), pageNum);
         } else {
             Actions.GET_NEXT_COMPONENT_PAGE(Store.getState(),
-            this.props.endpointIdentifier, this.props.componentName, pageNum);
+                this.props.endpointIdentifier, this.props.componentName, pageNum);
         }
     },
     selectRowCount: function (e, count, isPagePaginator = this.props.pagePaginator) {
@@ -61,7 +61,7 @@ var Paginator = React.createClass({
             Actions.CHANGE_PAGE_ROW_COUNT(Store.getState(), count);
         } else {
             Actions.CHANGE_COMPONENT_ROW_COUNT(Store.getState(),
-            this.props.endpointIdentifier, this.props.componentName, count);
+                this.props.endpointIdentifier, this.props.componentName, count);
         }
     },
     renderPageSelectors: function () {

@@ -44,7 +44,8 @@ var GlobalHeader = React.createClass({
     renderLogout: function () {
         if (!this.props.currentUser || (this.props.currentUser &&
             (this.props.currentUser.username == null ||
-            this.props.currentUser.username.toLowerCase() === 'null'))) {
+            this.props.currentUser.username.toLowerCase() === 'null'))
+        ) {
             return null;
         }
         return (
