@@ -23,36 +23,32 @@ describe('tests the view page for a class', function () {
         browser.waitForExist('#return-to-school', 60000);
         var schoolUrl = browser.getAttribute('#return-to-school', 'href');
         browser.click('#return-to-school');
-        browser.waitForExist('.panel-heading');
+        browser.waitForExist('.panel-heading', 60000);
         expect(schoolUrl).to.equal(browser.getUrl());
         browser.back();
-        browser.waitForExist('#return-to-class');
+        browser.waitForExist('#return-to-class', 60000);
         var classUrl = browser.getAttribute('#return-to-class', 'href');
         browser.click('#return-to-class');
-        browser.waitForExist('#class-dashboard-link');
+        browser.waitForExist('#class-dashboard-link', 60000);
         expect(classUrl).to.equal(browser.getUrl());
         browser.back();
-        var studentUrl;
         browser.waitForExist('.student');
+        var studentUrl;
+        var len;
         var student = browser.getAttribute('.student', 'href');
+        browser.click('.student');
+        browser.waitForExist('.panel-heading', 60000);
         if(student[0].length === 1){
             //only one student
-            browser.click('.student');
-            browser.waitForExist('.panel-heading');
             studentUrl = student;
-            var studentUrlList = studentUrl.split('/');
-            var len = studentUrlList.length;
-            expect(browser.getUrl()).to.contain(studentUrlList[len-1]);
         }
         else if(student.length != 0){
             //multiple students on page
             studentUrl = student[0];
-            var studentUrlList = studentUrl.split('/');
-            var len = studentUrlList.length;
-            browser.click('.student');
-            browser.waitForExist('.panel-heading');
-            expect(browser.getUrl()).to.contain(studentUrlList[len-1]);
         }
+        var studentUrlList = studentUrl.split('/');
+        len = studentUrlList.length;
+        expect(browser.getUrl()).to.contain(studentUrlList[len-1]);
         browser.back();
         // compose the url for editing the class
         var editUrl = '';
@@ -61,10 +57,10 @@ describe('tests the view page for a class', function () {
             editUrl += urlList[i] + '/';
         }
         editUrl += 'edit';
-        browser.waitForExist('.purple');
+        browser.waitForExist('.purple', 60000);
         // click the edit button
         browser.click('.purple');
-        browser.waitForExist('#class-name');
+        browser.waitForExist('#class-name', 60000);
         expect(browser.getUrl()).to.equal(editUrl);
     });
 });
