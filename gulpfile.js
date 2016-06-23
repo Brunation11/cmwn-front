@@ -417,7 +417,10 @@ gulp.task('coverage', function () {
 
 gulp.task('e2e', () => {
     var overrideHostIP = process.env.DOCKER_HOST_IP;
-    var hostIP = overrideHostIP || execSync('docker-compose ip front').toString().split('\n')[0];
+    var hostIP = overrideHostIP || execSync('docker-machine ip front').toString().split('\n')[0];
+    if (hostIP === '' || hostIP == null) {
+        console.error('No docker IP available for selenium host. Integration tests will fail.');
+    }
     return gulp.src('wdio.conf.js').pipe(webdriver({
         host: hostIP
     }));
