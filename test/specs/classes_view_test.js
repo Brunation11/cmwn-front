@@ -1,7 +1,7 @@
-var login_test = require("./login_test");
-
-var USER = "teacher";
-var PASSWD = "business2";
+var login_test = require('./login_test');
+var data = require('../test_data.js');
+var USER = data.USER;
+var PASSWD = data.PASS;
 
 describe('tests the view page for a class', function () {
     it('should check the elements on class view page', function () {
