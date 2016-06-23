@@ -39,7 +39,8 @@ var buildMenuRoutes = function (links) {
                     a = route;
                     a.params = {};
                 } else if (route.endpoint !== '/' && !~route.endpoint.indexOf(':') &&
-                        ~link.href.indexOf(route.endpoint)) {
+                        ~link.href.indexOf(route.endpoint)
+                    ) {
                     //nondynamic is also fairly easy, as urls cannot contain colonks
                     a = route;
                     a.params = {};
