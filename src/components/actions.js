@@ -149,7 +149,7 @@ Actions = Actions.set(ACTION_CONSTANTS.GET_NEXT_PAGE_PAGE, function (state, page
             promise: HttpManager.GET({url: Util.modifyTemplatedQueryParams(
                 state.page.data._links.find.href,
                 {page: pageNum, per_page: //eslint-disable-line camelcase
-                state.currentUser._links[state.location.endpoint.slice(2)].page_size}
+                    state.currentUser._links[state.location.endpoint.slice(2)].page_size}
             )})
         }
     };
@@ -162,7 +162,7 @@ Actions = Actions.set(ACTION_CONSTANTS.CHANGE_PAGE_ROW_COUNT, function (state, i
             promise: HttpManager.GET({url: Util.modifyTemplatedQueryParams(
                 state.page.data._links.find.href,
                 {per_page: itemCount, page: //eslint-disable-line camelcase
-                state.currentUser._links[state.location.endpoint.slice(2)].page}
+                    state.currentUser._links[state.location.endpoint.slice(2)].page}
             ) })
         }
     };
@@ -181,8 +181,8 @@ Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentif
     } else {
         Log.info('HAL Link for component endpoint ' + endpointIdentifier +
             ' could not be resolved in component ' + componentName +
-            '. Component will not be displayed. This is not necessarily an error, and the server'
-            + 'inteded to hide this component for this user.');
+            '. Component will not be displayed. This is not necessarily an error, and the server' +
+            'inteded to hide this component for this user.');
         return {type: 'noop', action: {endpointIdentifier, componentName, reason: 'Endpoint not found'}};
     }
     return {

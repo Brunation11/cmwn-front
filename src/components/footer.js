@@ -80,9 +80,9 @@ class Footer extends React.Component {
         var captchas = document.getElementsByClassName('grecaptcha');
         if (captchas.length) {
             grecaptcha.render(captchas[0], //eslint-disable-line no-undef
-            {'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l', callback: () => {
-                this.setState({showContact: true});
-            }});
+                {'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l', callback: () => {
+                    this.setState({showContact: true});
+                }});
         }
     }
 

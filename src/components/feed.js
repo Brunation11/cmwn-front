@@ -31,7 +31,7 @@ class Page extends React.Component {
                             message => <message.type {...message.attributes}>{message.text}</message.type>))}
                     </div>
                     <a className="image" href={item.image.href || ''}>
-                    <img src={item.image.url || item.image} /></a>
+                        <img src={item.image.url || item.image} /></a>
                 </li>
            );
         });

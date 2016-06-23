@@ -36,7 +36,7 @@ class Page extends React.Component {
         }
         return (
             <Button className={this.props.className + ' standard'}
-            onClick={() => History.push(`${this.state.base}/${this.state.uuid}/edit`)} >
+                onClick={() => History.push(`${this.state.base}/${this.state.uuid}/edit`)} >
                 {this.props.text ? this.props.text : EDIT}</Button>
         );
     }

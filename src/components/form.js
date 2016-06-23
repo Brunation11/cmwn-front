@@ -76,8 +76,8 @@ var Form = React.createClass({ // eslint-disable-line vars-on-top
                         validationFn = _.reduce(validators, (a, v) => {
                             if (_.isFunction(v)) {
                                 return a(() => {
-                                    if (self && self.refs && child.ref && self.refs[child.ref]
-                                        && _.isFunction(self.refs[child.ref].getValue)) {
+                                    if (self && self.refs && child.ref && self.refs[child.ref] &&
+                                        _.isFunction(self.refs[child.ref].getValue)) {
                                         return v(self.refs[child.ref].getValue());
                                     }
                                     return 'success';

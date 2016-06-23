@@ -99,8 +99,8 @@ class _EventManager {
         } else {
             //checking equality on all pending changes is impractical.
             //Push the update if the current key exists in changes already
-            bypass = _.reduce(_pendingChanges, (acc, change) => (acc || change.key ===
-                `${scopeHandle}.${key}`));
+            bypass = _.reduce(_pendingChanges, (acc, change) => (acc ||
+                change.key === `${scopeHandle}.${key}`));
         }
         if (_.isNumber(val) || _.isString(val) || _.isBoolean(val)) {
             depth = 0;

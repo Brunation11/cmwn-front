@@ -47,8 +47,10 @@ class Page extends React.Component {
     }
 
     render() {
-        if ((!this.state.canDelete && !this.state.scope) ||
-            (this.state.uuid == null && this.state.id == null)) {
+        if (
+            (!this.state.canDelete && !this.state.scope) ||
+            (this.state.uuid == null && this.state.id == null)
+        ) {
             return null;
         }
         return (

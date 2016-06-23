@@ -20,7 +20,7 @@ export default function (endpointIdentifier, componentName) {
         componentWillMount() {
             Actions.dispatch.REGISTER_COMPONENT(
                 {endpointIdentifier: this.props.endpointIdentifier,
-                    componentName: this.props.componentName});
+                componentName: this.props.componentName});
         }
 
         componentDidMount() {
