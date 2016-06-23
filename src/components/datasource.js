@@ -82,7 +82,7 @@ export default function (endpointIdentifier, componentName) {
         onError: _.noop
     };
 
-    const mapStateToProps = state => {
+    var mapStateToProps = state => {
         var component;
         var data = {};
         var loading = true;

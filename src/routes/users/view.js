@@ -14,6 +14,8 @@ import Util from 'components/util';
 
 import 'routes/users/edit.scss';
 
+var Page;
+
 const HEADINGS = {
     EDIT_TITLE: 'User Administration: ',
     PASSWORD: 'Update Password'
@@ -28,21 +30,24 @@ const SUSPEND = 'Delete Account';
 const USER_REMOVED = 'User deleted. You will now be redirected.';
 const CONFIRM_DELETE = 'Are you sure you want to delete this user? This action cannot be undone.';
 
-var Component = React.createClass({
-    getInitialState: function () {
-        var state = _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {};
-        state.isStudent = true;
-        return state;
-    },
-    componentDidMount: function () {
+export class ProfileView extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {};
+        this.state.isStudent = true;
+    }
+
+    componentDidMount() {
         this.setState(this.props.data);
         this.resolveRole();
-    },
-    componentWillReceiveProps: function (nextProps) {
+    }
+
+    componentWillReceiveProps(nextProps) {
         this.setState(nextProps.data);
         this.resolveRole();
-    },
-    suspendAccount: function () {
+    }
+
+    suspendAccount() {
         if (window.confirm(CONFIRM_DELETE)) { //eslint-disable-line no-alert
             HttpManager.DELETE({url: GLOBALS.API_URL + 'users/' + this.state.user_id, handleErrors: false})
                 .then(() => {
@@ -53,8 +58,9 @@ var Component = React.createClass({
                     Log.error('User not deleted: ' + err.message, err);
                 });
         }
-    },
-    resolveRole: function () {
+    }
+
+    resolveRole() {
         var newState = {};
         if (this.state.roles == null) {
             return;
@@ -65,8 +71,9 @@ var Component = React.createClass({
             newState.isStudent = false;
         }
         this.setState(newState);
-    },
-    render: function () {
+    }
+
+    render() {
         if (this.props.data.username == null || !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
@@ -75,7 +82,7 @@ var Component = React.createClass({
                 <Panel header={HEADINGS.EDIT_TITLE + this.state.first_name + ' ' + this.state.last_name} className="standard edit-profile">
                     <div className="left">
                         <ProfileImage user_id={this.state.user_id} link-below={true}/>
-                        <p><a onClick={this.suspendAccount}>{SUSPEND}</a></p>
+                        <p><a onClick={this.suspendAccount.bind(this)}>{SUSPEND}</a></p>
                         <EditLink base="/user" uuid={this.state.user_id} canUpdate={Util.decodePermissions(this.state.scope).update} />
                     </div>
                     <div className="right">
@@ -85,9 +92,9 @@ var Component = React.createClass({
             </Layout>
         );
     }
-});
+}
 
-const mapStateToProps = state => {
+var mapStateToProps = state => {
     var data = {};
     var loading = true;
     if (state.page && state.page.data != null) {
@@ -100,6 +107,6 @@ const mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(Component);
+Page = connect(mapStateToProps)(ProfileView);
 export default Page;
 
