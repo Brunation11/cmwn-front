@@ -1,11 +1,11 @@
 var login = require("./login");
-
-var USER = "teacher";
-var PASSWD = "business2";
+var data = require('../test_data.js');
+var USER = data.USER;
+var PASSWD = data.PASS;
 
 describe('checks that hamburger menu works', function () {
 	it('should assert that hamburger menu works', function () {
-        login.login(USER, PASSWD);
+        login_test.login(USER, PASSWD);
         browser.windowHandleSize({width: 400, height: 800});
         browser.waitForExist('.glyphicon', 60000);
         browser.click('.glyphicon');

@@ -82,7 +82,7 @@ var Component = React.createClass({
                         </span>
                         <img src={item.image}></img>
                     </div>
-                    <p className="linkText" >{item.username}</p>
+                    <p className="link-text" >{item.username}</p>
                 </Link>
             </div>
         );

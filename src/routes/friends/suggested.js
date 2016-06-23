@@ -62,7 +62,7 @@ var Component = React.createClass({
             return null;
         }
         return (
-            <p className="userFlips">{item.flips.data.length} Flips Earned</p>
+            <p className="user-flips">{item.flips.data.length} Flips Earned</p>
         );
     },
     renderFlip: function (item){
@@ -82,7 +82,7 @@ var Component = React.createClass({
                     </span>
                     <img src={item.image}></img>
                 </div>
-                <p className="linkText" >{item.username}</p>
+                <p className="link-text" >{item.username}</p>
                 {''/*this.renderFlipsEarned(item)*/}
             </div>
         );

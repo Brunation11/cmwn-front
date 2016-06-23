@@ -1,7 +1,7 @@
 var login = require("./login");
-
-var USER = "teacher";
-var PASSWD = "business2";
+var data = require('../test_data.js');
+var USER = data.USER;
+var PASSWD = data.PASS;
 
 //selects the first class in the table
 describe('tests editing class as teacher', function () {

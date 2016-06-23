@@ -1,11 +1,11 @@
 var login = require("./login");
-
-var USER = "teacher";
-var PASSWD = "business2";
+var data = require('../test_data.js');
+var USER = data.USER;
+var PASSWD = data.PASS;
 
 describe('tests editing class as teacher', function () {
     it('should check the elements on class profile page', function () {
-    	login.login(USER, PASSWD);
+    	login_test.login(USER, PASSWD);
     	browser.waitForExist('#navMenu', 60000);
     	// check that Class Administrative Dashboard contains the right link
         browser.url('/classes');
