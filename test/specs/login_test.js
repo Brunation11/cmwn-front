@@ -1,9 +1,11 @@
-var exports = module.exports = {};
-exports.login = function (name, psswd) {
-    browser.url("/login");
-    browser.setValue('#email', name);
-    browser.setValue('#password', psswd);
-    browser.pause(2000); // doesn't work without the pause
-    browser.click('#login-button');
-    browser.waitForExist('.upload', 60000); // if login occurs "upload" button will be on page
-}
+var login = require("./login");
+var data = require('../test_data.js');
+var USER = data.USER;
+var PASSWD = data.PASS;
+
+describe('tests logging in', function () {
+    it('should check login is successful', function () {
+    	login.login(USER, PASSWD);
+    	expect(browser.getUrl()).to.equal('https://local.changemyworldnow.com/profile');
+   	})
+});

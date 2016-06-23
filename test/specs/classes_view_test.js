@@ -1,11 +1,12 @@
-var login_test = require('./login_test');
+var login = require("./login");
+
 var data = require('../test_data.js');
 var USER = data.USER;
 var PASSWD = data.PASS;
 
 describe('tests the view page for a class', function () {
     it('should check the elements on class view page', function () {
-    	login_test.login(USER, PASSWD);
+    	login.login(USER, PASSWD);
     	browser.waitForExist('#navMenu', 60000);
     	browser.url('/classes');
     	browser.waitForExist('.datatable', 60000);

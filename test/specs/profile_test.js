@@ -1,4 +1,4 @@
-var login_test = require('./login_test');
+var login = require("./login");
 var data = require('../test_data.js');
 var USER = data.USER;
 var PASSWD = data.PASS;

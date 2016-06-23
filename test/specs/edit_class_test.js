@@ -1,4 +1,4 @@
-var login_test = require('./login_test');
+var login = require("./login");
 var data = require('../test_data.js');
 var USER = data.USER;
 var PASSWD = data.PASS;
@@ -6,13 +6,8 @@ var PASSWD = data.PASS;
 //selects the first class in the table
 describe('tests editing class as teacher', function () {
     it('should assert editing class was successful', function () {
-<<<<<<< HEAD
-    	login_test.login(USER, PASSWD);
+    	login.login(USER, PASSWD);
     	browser.waitForExist('#navMenu', 60000);
-=======
-    	login_test.login("teacher", "business2");
-    	browser.waitForExist('#navMenu', 3000);
->>>>>>> 5f26c625f0134caf369d7ce7dabed782b7e4348a
     	browser.url('/classes');
     	browser.waitForExist('.datatable', 60000);
     	// get the url of the first class in the table
@@ -39,13 +34,8 @@ describe('tests editing class as teacher', function () {
 
     // leaving class name and description blank
     it('should display an error', function () {
-<<<<<<< HEAD
-    	login_test.login(USER, PASSWD);
+    	login.login(USER, PASSWD);
     	browser.waitForExist('#navMenu', 60000);
-=======
-    	login_test.login("teacher", "business2");
-    	browser.waitForExist('#navMenu', 3000);
->>>>>>> 5f26c625f0134caf369d7ce7dabed782b7e4348a
     	browser.url('/classes');
     	browser.waitForExist('.datatable', 60000);
     	// get the url of the first class in the list
@@ -71,7 +61,7 @@ describe('tests editing class as teacher', function () {
 
 	// leaving description blank
 	it('should assert editing class was successful', function () {
-    	login_test.login(USER, PASSWD);
+    	login.login(USER, PASSWD);
     	browser.waitForExist('#navMenu', 60000);
     	browser.url('/classes');
     	browser.waitForExist('.datatable');
