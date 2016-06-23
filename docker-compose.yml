@@ -33,6 +33,10 @@ services:
   selenium_hub:
     container_name: selenium_hub
     image: selenium/hub
+    environment:
+      GRID_TIMEOUT: 180000
+      GRID_BROWSER_TIMEOUT: 180000
+      GRID_CLEAN_UP_CYCLE: 180000
     ports:
       - "4444:4444"
     links:
