@@ -19,7 +19,7 @@ const PENDINGHEADER = 'Woah there World Changer!';
 const PENDING = ' We\'re reviewing your image and it should appear shortly. Other users will continue to see your last approved image until we\'ve reviewed this one. To continue uploading a new image click ';
 const NO_IMAGE = 'Looks like there was a problem displaying this users profile. Please refresh the page to try again.';
 
-var Component = React.createClass({
+var ProfileImage = React.createClass({
     getInitialState: function () {
         return {
             profileImage: GLOBALS.DEFAULT_PROFILE,
@@ -148,7 +148,7 @@ var mapStateToProps = state => {
     return { currentUser: state.currentUser, data };
 };
 
-var Image = connect(mapStateToProps)(Component);
+var Image = connect(mapStateToProps)(ProfileImage);
 
 export default Image;
 
