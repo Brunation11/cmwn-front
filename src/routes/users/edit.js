@@ -318,7 +318,7 @@ export class EditProfile extends React.Component {
                 {this.renderSchoolInformation()}
                 */}
                 <Button className="user-metadata-btn" disabled={this.state.isStudent}
-                onClick={this.submitData.bind(this)}> Save </Button>
+                    onClick={this.submitData.bind(this)}> Save </Button>
             </Form>
         );
     }
@@ -353,11 +353,13 @@ export class EditProfile extends React.Component {
         return (
            <Layout className="edit-student">
                 <Panel header={HEADINGS.EDIT_TITLE + this.state.first_name + ' ' + this.state.last_name}
-                className="standard edit-profile">
+                    className="standard edit-profile">
                     <div className="left">
                         <ProfileImage user_id={this.props.data.user_id} link-below={true}/>
-                        <p className={ClassNames({hidden: !Util.decodePermissions(this.props.data.scope)
-                            .delete})}><a onClick={this.suspendAccount.bind(this)}>{SUSPEND}</a></p>
+                        <p className={ClassNames({hidden:
+                            !Util.decodePermissions(this.props.data.scope).delete})}>
+                            <a onClick={this.suspendAccount.bind(this)}>{SUSPEND}</a>
+                        </p>
                     </div>
                     <div className="right">
                         {userType.call(this)}

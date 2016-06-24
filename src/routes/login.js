@@ -64,7 +64,8 @@ var Component = React.createClass({
             });
             req.then(res => {
                 if (res.response && res.response.status && res.response.detail &&
-                    res.response.status === 401 && res.response.detail.toLowerCase() === 'reset_password') {
+                    res.response.status === 401 && res.response.detail.toLowerCase() === 'reset_password'
+                ) {
                     History.push('/change-password');
                     return;
                 }

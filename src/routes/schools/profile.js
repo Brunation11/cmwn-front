@@ -93,7 +93,7 @@ var Component = React.createClass({
         }
         return (
             <EditLink className="green" base="/school" id={this.state.group_id} scope={this.state.scope}
-            text="Import Spreadsheets"/>
+                text="Import Spreadsheets"/>
         );
     },
     render: function () {
@@ -105,7 +105,7 @@ var Component = React.createClass({
                <Panel header={this.props.data.title} className="standard">
                    <p className="right" >
                        <EditLink className="purple" text="Edit School" uuid={this.state.group_id}
-                       base="/school" canUpdate={Util.decodePermissions(this.state.scope).update} />
+                           base="/school" canUpdate={Util.decodePermissions(this.state.scope).update} />
                        {this.renderImport()}
                    </p>
                    {this.renderAdminLink()}

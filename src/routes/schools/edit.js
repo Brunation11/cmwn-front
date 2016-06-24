@@ -214,7 +214,8 @@ var BulkUpload = React.createClass({
                             Toast.error('Teacher and Student access codes must be different');
                             return false;
                         } else if (!isPassValid(this.state.teacherCode) ||
-                            !isPassValid(this.state.studentCode)) {
+                            !isPassValid(this.state.studentCode)
+                        ) {
                             e.preventDefault();
                             Toast.error('Passwords must be a minimum of 8 characters and contain a number.');
                             return false;
@@ -247,7 +248,7 @@ var BulkUpload = React.createClass({
                 <input type="hidden" name="organization" value={this.props.organization_id} />
                 <input type="hidden" name="organization_id" value={this.props.organization_id} />
                 <Input ref="fileInput" accept=".xlsx" type="file" name="file" chars="40"
-                label="Upload Spreadsheet"/>
+                    label="Upload Spreadsheet"/>
                 <Input
                     type="text"
                     value={this.state.teacherCode}

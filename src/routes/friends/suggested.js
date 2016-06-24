@@ -74,18 +74,31 @@ var Component = React.createClass({
                 <div className="item">
                     <span className="overlay">
                         <div className="relwrap"><div className="abswrap">
-                            <Button onClick={this.addFriend.bind(this, item)}
-                            className={ClassNames('green standard',
-                                {hidden: item.relationship === 'Pending' ||
-                                item.relationship === 'requested'})}>{ADD_FRIEND}</Button>
+                            <Button onClick={this.addFriend.bind(this, item)} className={ClassNames(
+                                    'green standard',
+                                    {hidden: item.relationship === 'Pending' ||
+                                    item.relationship === 'requested'}
+                            )}>
+                                {ADD_FRIEND}
+                            </Button>
                             <Button
                                 onClick={this.addFriend.bind(this, item)}
-                                className={ClassNames('blue standard',
-                                    {hidden: item.relationship !== 'Pending'})}>{ACCEPT}</Button>
-                            <Button className={ClassNames('blue standard',
-                                {hidden: item.relationship !== 'requested'})}>{REQUESTED}</Button>
+                                className={ClassNames(
+                                    'blue standard',
+                                    {hidden: item.relationship !== 'Pending'}
+                            )}>
+                                {ACCEPT}
+                            </Button>
+                            <Button className={ClassNames(
+                                'blue standard',
+                                {hidden: item.relationship !== 'requested'}
+                            )}>
+                                {REQUESTED}
+                            </Button>
                             <Button className="purple standard" onClick={History.push.bind(null,
-                                '/profile/' + item.suggest_id)}>{PROFILE}</Button>
+                                '/profile/' + item.suggest_id)}>
+                                {PROFILE}
+                            </Button>
                         </div></div>
                     </span>
                     <img src={item.image}></img>
@@ -103,14 +116,15 @@ var Component = React.createClass({
            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <form>
                     <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.SUGGESTED} data={this.props.data}
-                    transform={data => {
-                        //data = _.map(data, item => {
-                        data = data.set('image', _.has(data, '_embedded.image[0].url') ?
-                            data.images.data[0].url : DefaultProfile);
-                        //    return item;
-                        //});
-                        return data;
-                    }} />
+                        transform={data => {
+                            //data = _.map(data, item => {
+                            data = data.set('image', _.has(data, '_embedded.image[0].url') ?
+                                data.images.data[0].url : DefaultProfile);
+                            //    return item;
+                            //});
+                            return data;
+                        }}
+                    />
                 </form>
            </Layout>
         );

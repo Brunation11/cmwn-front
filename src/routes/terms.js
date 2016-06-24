@@ -31,9 +31,9 @@ const TERMS = (
       detail below, <span className="ft2">CMWN does not sell, rent or trade personal
       information from kids.</span></p>
 
-      <p className="p4 ft5">By using and accessing CMWN, located at <a href="www.changemyworldnow.com"
-      className="ft4">www.changemyworldnow.com</a>, you are accepting and agree to comply with
-      this Privacy Policy &amp; Conditions of Use.</p>
+      <p className="p4 ft5"> By using and accessing CMWN, located at <a href="www.changemyworldnow.com"
+          className="ft4">www.changemyworldnow.com
+      </a>, you are accepting and agree to comply with this Privacy Policy &amp; Conditions of Use.</p>
 
       <p className="p5 ft6">What are the rules for accessing CMWN?</p>
 
@@ -66,8 +66,8 @@ const TERMS = (
       with the Children&#8217;s Online Privacy Protection Act (&#8220;COPPA&#8221;),
       where applicable. For more information on COPPA and kid&#8217;s privacy, please
       see </span> <a href="http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online"
-      className="ft10">http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online</a>
-      .</p>
+          className="ft10">http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online
+      </a>.</p>
 
       <p className="p12 ft7"><span className="ft8">&#8226;</span><span className=
       "ft9">Where applicable, you must obtain Consent from all parents or guardians whose
@@ -100,8 +100,9 @@ const TERMS = (
     understand that the school is responsible for complying with COPPA, where applicable,
     which requires Consent for online collection of personal information from children
     under 13. For more information on COPPA, please see </span><a
-    href="http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online">
-    http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online.</a></p>
+        href="http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online">
+        http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online.
+    </a></p>
 
     <p className="p7 ft3">If you are using CMWN as a Parent or Guardian, the following
     rules also apply:</p>

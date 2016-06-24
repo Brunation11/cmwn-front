@@ -45,9 +45,9 @@ const BROWSER_NOT_SUPPORTED = (
     <span>
         <p>For the best viewing experience we recommend the desktop version in Chrome</p>
         <p>If you don't have chrome,{' '}
-        <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">
-            download it for free here
-        </a>.
+            <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">
+                download it for free here
+            </a>.
         </p>
     </span>);
 
@@ -150,7 +150,7 @@ export class Profile extends React.Component {
         return (
             <div>
                 <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl}
-                flipUrl={flipUrl} onExit={this.setState.bind(this, {gameOn: false})}/>
+                    flipUrl={flipUrl} onExit={this.setState.bind(this, {gameOn: false})}/>
                     <a onClick={this.hideModal.bind(this)} className="modal-close">(close)</a>
             </div>
         );
@@ -243,7 +243,7 @@ export class Profile extends React.Component {
         return (
             <div>
                 <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal.bind(this)}
-                keyboard={false} backdrop="static">
+                    keyboard={false} backdrop="static">
                     <Modal.Body>
                         {this.renderGame()}
                     </Modal.Body>
