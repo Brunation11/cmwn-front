@@ -1,4 +1,4 @@
-var login_test = require('./login_test.js');
+var login_test = require('../login_test.js');
 var USER = 'teacher';
 var PASSWD = 'business2';
 
@@ -6,9 +6,9 @@ describe('tests buttons for game', function() {
     // Checks if the game takes up full screen if you press the "FULL SCREEN" button
     it('should assert opening the game when pressed', function() {
         login_test.login(USER, PASSWD);
-        browser.waitForExist('.sidebar', 4000);
+        browser.waitForExist('.sidebar');
         browser.url('/game/happy-fish-face');
-        browser.waitForExist('#happy-fish-face', 4000);
+        browser.waitForExist('#happy-fish-face');
         // check the size of the game
         // Checks if pressing the full screen button increases the size of the game
         var beforeSize = browser.getAttribute('.purple standard btn btn-default', 'zoom');
@@ -20,13 +20,13 @@ describe('tests buttons for game', function() {
     // Checks the "DEMO MODE" button
     it('should assert the demo mode when pressed', function() {
         login_test.login(USER, PASSWD);
-        browser.waitForExist('.sidebar', 4000);
+        browser.waitForExist('.sidebar');
         browser.url('/game/happy-fish-face');
-        browser.waitForExist('#happy-fish-face', 4000);
+        browser.waitForExist('#happy-fish-face');
         // check the size of the game
         // Checks if the demo mode works
         browser.click('.green standard btn btn-default');
-        browser.waitForExist('.pl-scope pl-game READY DEMO', 99999);
+        browser.waitForExist('.pl-scope pl-game READY DEMO');
         var location1 = browser.getLocation('.next-screen', 'y');
         browser.click('.next-screen'); // Press play
         browser.pressKeycode(22); // press the right key

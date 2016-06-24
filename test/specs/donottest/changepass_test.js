@@ -1,4 +1,4 @@
-var login_test = require("./login_test");
+var login_test = require('../login_test.js');
 
 describe('tests changing password', function() {
     // Checks if changing the password works

@@ -1,4 +1,4 @@
-var login_test = require('./login_test.js');
+var login_test = require('../login_test.js');
 var USER = 'teacher';
 var PASSWD = 'business2';
 
@@ -6,11 +6,11 @@ describe('tests opening game on games page', function() {
     // Checks if the game opens when you press on "PLAY NOW!"
     it('should assert opening the game when pressed', function() {
         login_test.login(USER, PASSWD);
-        browser.waitForExist('.sidebar', 4000);
+        browser.waitForExist('.sidebar');
         browser.url('/games');
-        browser.waitForExist('.panel-body', 4000);
+        browser.waitForExist('.panel-body');
         browser.click('.play');
-        browser.waitForExist('.pl-scope pl-game READY', 99999);
+        browser.waitForExist('.pl-scope pl-game READY');
         // Checks if the game popped up since its width is 960
         var width = browser.getElementSize('.pl-scope pl-game READY', 'width');
         expect(width).to.equal(960);
@@ -25,11 +25,11 @@ describe('tests opening game on games page', function() {
     // Checks if pressing "(close)" closes the game
     it('should assert closing the game when pressed', function() {
         login_test.login(USER, PASSWD);
-        browser.waitForExist('.sidebar', 4000);
+        browser.waitForExist('.sidebar');
         browser.url('/games');
-        browser.waitForExist('.panel-heading', 4000);
+        browser.waitForExist('.panel-heading');
         browser.click('.play');
-        browser.waitForExist('.modal-close', 4000);
+        browser.waitForExist('.modal-close');
         browser.click('.modal-close');
         browser.pause(3000);
         // Checks if the "(close)" link is still shown

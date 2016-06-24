@@ -1,4 +1,4 @@
-var login_test = require("./login_test");
+var login_test = require('../login_test.js');
 
 describe('checks that hamburger menu works', function () {
 	it('should assert that hamburger menu works', function () {

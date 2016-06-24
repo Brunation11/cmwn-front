@@ -1,4 +1,6 @@
 var e2eReport = require('./e2e_report.js');
+var hostIP;
+
 exports.config = {
     
     //
@@ -13,6 +15,19 @@ exports.config = {
     specs: [
         './test/specs/**/*.js'
     ],
+    // You can add a suite to define sets of tests to be called togehter as a group
+    // These suites can be called individually by running "wdio --suite someFeature"
+    suites: {
+        games: [
+            './test/specs/games/*.js'
+        ],
+        classes: [
+            './test/specs/classes/*.js'
+        ],
+        mobile: [
+            './test/specs/mobile/*.js'
+        ]
+    }
     // Patterns to exclude.
     exclude: [
         './test/specs/donottest/*.js'
@@ -41,6 +56,9 @@ exports.config = {
     //
     capabilities: [{
         browserName: 'chrome'
+//    },
+//    {
+//        browserName: 'firefox'
     }],
     //
     // ===================
@@ -77,7 +95,7 @@ exports.config = {
     connectionRetryCount: 3,
     //
     // Host of the WebDriver server
-    // host: hostIP,
+    host: '192.168.99.100',
     //
     // Port the WebDriver server is on
     // port: 4444,
@@ -123,7 +141,7 @@ exports.config = {
     // See the full list at http://mochajs.org/
     mochaOpts: {
         compilers: ['js:babel-core/register'],
-        timeout: 99999999
+        timeout: 180000
     },
     //
     // =====
@@ -135,13 +153,21 @@ exports.config = {
     // resolved to continue.
     //
     // Gets executed once before all workers get launched.
-    // onPrepare: function (config, capabilities) {
-    // },
+    onPrepare: function (config, capabilities) {
+        var overrideHostIP = process.env.DOCKER_HOST_IP;
+        var hostIP = overrideHostIP || execSync('docker-machine ip front').toString().split('\n')[0];
+        if (hostIP === '' || hostIP == null) {
+            console.error('No docker IP available for selenium host. Integration tests will fail.');
+        }
+    },
     //
     // Gets executed before test execution begins. At this point you can access all global
     // variables, such as `browser`. It is the perfect place to define custom commands.
-    // before: function (capabilities, specs) {
-    // },
+     before: function (capabilities, specs) {
+        var chai = require('chai');
+        global.expect = chai.expect;
+        chai.Should();
+    },
     //
     // Hook that gets executed before the suite starts
     // beforeSuite: function (suite) {
@@ -151,11 +177,6 @@ exports.config = {
     // beforeEach in Mocha)
     // beforeHook: function () {
     // },
-    before: function() {
-        var chai = require('chai');
-        global.expect = chai.expect;
-        chai.Should();
-    }
     //
     // Hook that gets executed _after_ a hook within the suite starts (e.g. runs after calling
     // afterEach in Mocha)
