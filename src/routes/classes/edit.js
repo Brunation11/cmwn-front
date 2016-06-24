@@ -25,21 +25,22 @@ const ERRORS = {
     INVALID_SUBMISSION: 'Invalid submission. Please update fields highlighted in red and submit again'
 };
 
-var Component = React.createClass({
-    getInitialState: function () {
-        return {
+export class EditClass extends React.Component {
+    constructor (props) {
+        super(props);
+        this.state =  {
             code: '',
             title: '',
             description: ''
         };
-    },
-    componentWillMount: function () {
+    }
+    componentWillMount () {
         this.setState(this.props.data);
-    },
-    componentWillReceiveProps: function (newProps) {
+    }
+    componentWillReceiveProps (newProps) {
         this.setState(newProps.data);
-    },
-    submitData: function () {
+    }
+    submitData () {
         var postData = {
             title: this.state.title,
             organization_id: this.props.data.organization_id, //eslint-disable-line camelcase
@@ -51,8 +52,8 @@ var Component = React.createClass({
             Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
             Log.log('Server refused district update', err, postData);
         });
-    },
-    render: function () {
+    }
+    render () {
         if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
@@ -83,17 +84,18 @@ var Component = React.createClass({
                     name="codeInput"
                     onChange={e => this.setState({description: e.target.value})} //eslint-disable-line camelcase
                 />
-                 <Button id="save-button" onClick={this.submitData} > Save </Button>
+                 <Button id="save-button" onClick={this.submitData.bind(this)} > Save </Button>
               </Panel>
               <CreateStudent data={this.props.data}/>
            </Layout>
          );
     }
-});
+};
 
-var CreateStudent = React.createClass({
-    getInitialState: function () {
-        return {
+export class CreateStudent extends React.Component {
+    constructor (props) {
+        super(props);
+        this.state {
             title: ''
         };
     },
