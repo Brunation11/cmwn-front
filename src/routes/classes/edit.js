@@ -81,7 +81,7 @@ var Component = React.createClass({
                     validate="required"
                     ref="codeInput"
                     name="codeInput"
-                    onChange={e => this.setState({description: e.target.value})} //eslint-disable-line camelcase
+                    onChange={e => this.setState({description: e.target.value})}
                 />
                  <Button id="save-button" onClick={this.submitData} > Save </Button>
               </Panel>
