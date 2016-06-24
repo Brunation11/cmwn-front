@@ -70,8 +70,8 @@
             }
         }
 
-        .headerLogo {
-            width: calc(100% - #{$logout_size} - #{$logo-size } - 200px);
+        .header-logo {
+            width: calc(100% - #{$logout-size} - #{$logo-size } - 200px);
             float: none;
             padding: 0;
             position: absolute;
