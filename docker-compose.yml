@@ -32,7 +32,7 @@ services:
 
   selenium_hub:
     container_name: selenium_hub
-    image: selenium/hub
+    image: selenium/hub:2.53.0
     environment:
       GRID_TIMEOUT: 180000
       GRID_BROWSER_TIMEOUT: 180000
@@ -43,21 +43,25 @@ services:
       - "nginx:local.chagemyworldnow.com"
 
   selenium_chrome:
-    image: selenium/node-chrome
+    image: selenium/node-chrome-debug:2.53.0
     environment:
       HUB_PORT_4444_TCP_ADDR: "hub"
+      DBUS_SESSION_BUS_ADDRESS: "/dev/null"
     ports:
-      - 5900
+      - "5900:5900"
+#    volumes:
+#      - /x:/dev/shm
     links:
       - "nginx:local.chagemyworldnow.com"
       - selenium_hub:hub
+    privileged: true
 
   selenium_firefox:
-    image: selenium/node-firefox
+    image: selenium/node-firefox-debug:2.53.0
     environment:
       HUB_PORT_4444_TCP_ADDR: "hub"
     ports:
-      - 5900
+      - "5901:5900"
     links:
       - "nginx:local.chagemyworldnow.com"
       - nginx

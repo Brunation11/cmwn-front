@@ -27,7 +27,7 @@ exports.config = {
         mobile: [
             './test/specs/mobile/*.js'
         ]
-    }
+    },
     // Patterns to exclude.
     exclude: [
         './test/specs/donottest/*.js'
@@ -141,7 +141,7 @@ exports.config = {
     // See the full list at http://mochajs.org/
     mochaOpts: {
         compilers: ['js:babel-core/register'],
-        timeout: 180000
+        timeout: 120000
     },
     //
     // =====
