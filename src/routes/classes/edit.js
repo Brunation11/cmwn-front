@@ -21,7 +21,7 @@ const HEADINGS = {
 const BAD_UPDATE = 'There was a problem updating your profile. Please try again later.';
 
 const ERRORS = {
-    BAD_UPDATE: 'Could not create school. Please try again later.',
+    BAD_UPDATE: 'Could not create user. Please try again later.',
     INVALID_SUBMISSION: 'Invalid submission. Please update fields highlighted in red and submit again'
 };
 
@@ -95,11 +95,11 @@ export class EditClass extends React.Component {
 export class CreateStudent extends React.Component {
     constructor (props) {
         super(props);
-        this.state {
+        this.state = {
             title: ''
         };
-    },
-    submitData: function () {
+    }
+    submitData () {
         var postData = {
             first_name: this.state.first, //eslint-disable-line camelcase
             group_id: this.props.data.group_id, //eslint-disable-line camelcase
@@ -123,8 +123,8 @@ export class CreateStudent extends React.Component {
         } else {
             Toast.error(ERRORS.INVALID_SUBMISSION);
         }
-    },
-    render: function () {
+    }
+    render () {
         return (
         <Panel header={HEADINGS.CREATE_USER} className="standard">
             <Form ref="formRef">
@@ -148,12 +148,12 @@ export class CreateStudent extends React.Component {
                     ref="lastInput"
                     onChange={e => this.setState({last: e.target.value})}
                  />
-                <Button onClick={this.submitData}> Create </Button>
+                <Button onClick={this.submitData.bind(this)}> Create </Button>
             </Form>
         </Panel>
         );
     }
-});
+};
 
 var mapStateToProps = state => {
     var data = {title: ''};
@@ -168,6 +168,6 @@ var mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(Component);
+var Page = connect(mapStateToProps)(EditClass);
 export default Page;
 
