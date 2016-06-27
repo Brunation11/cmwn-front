@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import {Modal} from 'react-bootstrap';
 
 import Game from 'components/game';
@@ -8,6 +9,8 @@ import Store from 'components/store';
 import Detector from 'components/browser_detector';
 
 import Layout from 'layouts/one_col';
+
+const BROWSER_NOT_SUPPORTED = <span><p>For the best viewing experience we recommend the desktop version in Chrome</p><p>If you don't have chrome, <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">download it for free here</a>.</p></span>;
 
 var Page = React.createClass({
     getInitialState: function () {
