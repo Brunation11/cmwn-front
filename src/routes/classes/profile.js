@@ -19,7 +19,7 @@ import 'routes/classes/profile.scss';
 
 const PAGE_UNIQUE_IDENTIFIER = 'classProfile';
 
-const UserSource = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
+const USER_SOURCE = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     MY_CLASSMATES: 'My Classmates',
@@ -83,7 +83,8 @@ var Component = React.createClass({
         return (
             <div className="flip" key={Shortid.generate()}>
                 <Link to={`/student/${item.user_id.toString()}`}>
-                    <img src={item.images && item.images.data && item.images.data.length ? item.images.data[0].url : DefaultProfile}></img>
+                    <img src={item.images && item.images.data &&
+                        item.images.data.length ? item.images.data[0].url : DefaultProfile}></img>
                     <p className="linkText" >{item.username}</p>
                 </Link>
                 {this.renderFlipsEarned(item)}
@@ -95,12 +96,13 @@ var Component = React.createClass({
             return null;
         }
         return (
-           <Panel header={this.state.title} className="standard">
-               <p className="right" >
-                   <EditLink className="purple" text="Edit Class" base="/class" uuid={this.state.group_id} canUpdate={Util.decodePermissions(this.state.scope).update} />
-               </p>
-               {this.renderAdminLink()}
-           </Panel>
+            <Panel header={this.state.title} className="standard">
+                <p className="right" >
+                    <EditLink className="purple" text="Edit Class" base="/class" uuid={this.state.group_id}
+                        canUpdate={Util.decodePermissions(this.state.scope).update} />
+                </p>
+                {this.renderAdminLink()}
+            </Panel>
         );
     },
     render: function () {
@@ -110,11 +112,11 @@ var Component = React.createClass({
         return (
            <Layout className="classProfile">
                {this.renderClassInfo()}
-               <UserSource>
+               <USER_SOURCE>
                    <FlipBoard renderFlip={this.renderFlip} header={
                      HEADINGS.CLASS + this.props.data.title
                    } />
-               </UserSource>
+               </USER_SOURCE>
            </Layout>
         );
     }
