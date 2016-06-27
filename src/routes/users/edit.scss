@@ -27,7 +27,10 @@
             a { //fixes a horrible chrome/osx font aliasing issue http://stackoverflow.com/questions/8024061/webkit-blurry-text-with-css-scale-translate3d
                 transform: translate3d(0, 0, 0);
                 filter: blur(0);
+
+                // scss-lint:disable VendorPrefix
                 -webkit-filter: blur(0);
+                // scss-lint:enable VendorPrefix
             }
 
             .input-group-addon {

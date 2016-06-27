@@ -1,6 +1,10 @@
 @import 'variables';
 
-.home {
+// scss-lint:disable IdSelector
+#home.home {
+
+// scss-lint:enable IdSelector
+
     text-align: center;
 
     h2 {
