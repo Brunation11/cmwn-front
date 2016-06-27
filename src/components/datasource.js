@@ -1,4 +1,3 @@
-
 import React from 'react';
 import _ from 'lodash';
 import Immutable from 'seamless-immutable';
@@ -7,6 +6,8 @@ import { connect } from 'react-redux';
 import Actions from 'components/actions';
 import Store from 'components/store';
 import Util from 'components/util';
+
+var mapStateToProps;
 
 /* Higher Order Component */
 export default function (endpointIdentifier, componentName) {
@@ -17,7 +18,9 @@ export default function (endpointIdentifier, componentName) {
         }
 
         componentWillMount() {
-            Actions.dispatch.REGISTER_COMPONENT({endpointIdentifier: this.props.endpointIdentifier, componentName: this.props.componentName});
+            Actions.dispatch.REGISTER_COMPONENT(
+                {endpointIdentifier: this.props.endpointIdentifier,
+                componentName: this.props.componentName});
         }
 
         componentDidMount() {
@@ -36,12 +39,14 @@ export default function (endpointIdentifier, componentName) {
 
         attemptLoadComponentData() {
             var state = Store.getState();
-            Util.attemptComponentLoad(state, this.props.endpointIdentifier, componentName, this.props.onError);
+            Util.attemptComponentLoad(state, this.props.endpointIdentifier,
+                componentName, this.props.onError);
         }
 
         reloadComponentData() {
             /** @TODO MPR, 3/24/16: Implement this action * */
-            Actions.dispatch.RELOAD_COMPONENT({endpointIdentifier: this.props.endpointIdentifier, componentName: this.props.componentName});
+            Actions.dispatch.RELOAD_COMPONENT({endpointIdentifier: this.props.endpointIdentifier,
+                componentName: this.props.componentName});
         }
 
         render() {
@@ -70,7 +75,8 @@ export default function (endpointIdentifier, componentName) {
                 .set('endpointIdentifier', this.props.endpointIdentifier);
             return (
                 <div className={this.props.className}>
-                    {React.Children.map(this.props.children, child => React.cloneElement(child, propsForChild))}
+                    {React.Children.map(this.props.children,
+                        child => React.cloneElement(child, propsForChild))}
                 </div>
             );
         }
@@ -82,7 +88,7 @@ export default function (endpointIdentifier, componentName) {
         onError: _.noop
     };
 
-    var mapStateToProps = state => {
+    mapStateToProps = state => {
         var component;
         var data = {};
         var loading = true;

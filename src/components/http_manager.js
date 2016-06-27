@@ -17,7 +17,8 @@ var HttpManager;
 
 /**
  * Bundles requests into an array of request objects
- * @param {array|string|object} requests - arrays will have makeRequestObj on each of their items, strings will be set to the url of a new request object.
+ * @param {array|string|object} requests - arrays will have makeRequestObj
+ * on each of their items, strings will be set to the url of a new request object.
  * @param {string|object} [body] - request info. Should be a properly formatted JSON
  * or query string
  * @param {object} [headers] - the headers to be sent with requests. If you need

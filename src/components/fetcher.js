@@ -23,7 +23,7 @@ class Fetcher extends React.Component {
         return urlData.then(res => {
             if (res.response.data == null && res.response._embedded == null) {
                 this.data = res.response;
-                Log.warn('An endpoint has returned an unexpected result (No Data Property). Attempting to proceed.'); //eslint-disable-line no-console
+                Log.warn('An endpoint has returned an unexpected result (No Data Property). Attempting to proceed.'); //eslint-disable-line no-console, max-len
             } else if (this.response.data != null) {
                 this.data = res.response.data;
             } else if (this.response._embedded != null) {
@@ -63,7 +63,8 @@ class Fetcher extends React.Component {
             .set('data', this.data);
         return (
             <div className={this.props.className}>
-                {React.Children.map(this.props.children, child => React.cloneElement(child, propsForChild.toObject()))}
+                {React.Children.map(this.props.children, child => React.cloneElement(child,
+                    propsForChild.toObject()))}
             </div>
         );
     }

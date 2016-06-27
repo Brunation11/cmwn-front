@@ -72,10 +72,10 @@ var Component = React.createClass({
     renderFlip: function (item){
         return (
             <div className="flip" key={Shortid.generate()}>
-                <Link to={`/profile/${item.user_id == null ? item.friend_id : item.user_id}`}>
+                <Link to={`/profile/${item.user_id == null ? item.friend_id : item.user_id}`} className="friend-link">
                     <div className="item">
                         <span className="overlay">
-                            <div className="relwrap"><div className="abswrap">
+                            <div className="relwrap friend"><div className="abswrap">
                                 <Button onClick={this.doNothing} className={ClassNames(
                                     'blue standard',
                                     {faded: item.friend_status !== 'PENDING'}
@@ -93,7 +93,7 @@ var Component = React.createClass({
                         </span>
                         <img src={item.image}></img>
                     </div>
-                    <p className="linkText" >{item.username}</p>
+                    <p className="link-text" >{item.username}</p>
                 </Link>
             </div>
         );

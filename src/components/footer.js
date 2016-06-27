@@ -3,7 +3,7 @@ import {Modal} from 'react-bootstrap';
 import ClassNames from 'classnames';
 
 import Log from 'components/log';
-
+/* eslint-disable max-len */
 const COPY = {
     BUTTONS: {
         WORK: 'Work with Us',
@@ -11,15 +11,15 @@ const COPY = {
         TERMS: 'Terms & Conditions'
     },
     MODALS: {
-        WORK: <span><p>We are so excited about your interest to work with us!</p><p>Click <a href="mailto:&#106;&#111;&#110;&#105;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#097;&#114;&#114;&#111;&#110;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;?subject=Work With Us!">here</a> to contact us.</p></span>,
+        WORK: <span><p>We are so excited about your interest to work with us!</p><p>Click <a href="mailto:&#106;&#111;&#110;&#105;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#097;&#114;&#114;&#111;&#110;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;?subject=Work With Us!">here</a> to contact us.</p></span>, //eslint-disable-line max-len
 
         PRECAPTCHA: 'Thanks for your interest!',
         CONTACT: (
             <span>
                 <p>Postage can be sent to:</p>
                 <p>21 W 46th Street, Suite 605<br />New York, New York 10036<br /></p>
-                <p>Or give us a call at &#40;&#54;&#52;&#54;&#41;&#32;&#56;&#54;&#49;&#45;&#48;&#53;&#55;&#49;</p>
-                <p>Click <a href="mailto:&#105;&#110;&#102;&#111;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#106;&#111;&#110;&#105;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;">here</a> to contact us.</p>
+                <p>Or give us a call at &#40;&#54;&#52;&#54;&#41;&#32;&#56;&#54;&#49;&#45;&#48;&#53;&#55;&#49;</p> //eslint-disable-line max-len
+                <p>Click <a href="mailto:&#105;&#110;&#102;&#111;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#106;&#111;&#110;&#105;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;">here</a> to contact us.</p> //eslint-disable-line max-len
             </span>
         ),
         SIGNUP: (
@@ -33,6 +33,7 @@ const COPY = {
         )
     }
 };
+/* eslint-enable max-len */
 class Footer extends React.Component {
     constructor() {
         super();
@@ -78,9 +79,10 @@ class Footer extends React.Component {
     renderCaptcha() {
         var captchas = document.getElementsByClassName('grecaptcha');
         if (captchas.length) {
-            grecaptcha.render(captchas[0], {'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l', callback: () => { //eslint-disable-line no-undef
-                this.setState({showContact: true});
-            }});
+            grecaptcha.render(captchas[0], //eslint-disable-line no-undef
+                {'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l', callback: () => {
+                    this.setState({showContact: true});
+                }});
         }
     }
 
