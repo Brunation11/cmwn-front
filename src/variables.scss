@@ -2,15 +2,18 @@
 //* variables.scss
 //* contains all globally used colors, measuerments, etc
 //**//
+// scss-lint:disable all
 
 $cmwn-jade-font: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
 $helvetica: "Helvetica Neue", Helvetica, Arial, sans-serif;
 //*************************colors************************
+
 $cmwn-blue: #2cc4f4;
 $cmwn-blue-light: lighten($cmwn-blue, 10%);
 $cmwn-blue-dark: darken($cmwn-blue, 10%);
 $cmwn-green: #47b72c;
 $cmwn-purple: #7829bb;
+$rule-medium-gray: #f5f5f5;
 $rule-light-gray: #e6e6e6; // 10% Gray
 $copy-medium-gray: #666; // 60% Gray
 $cmwn-black: #000;
@@ -75,4 +78,8 @@ $game-fullscreen-height-landscape-iphone6: calc(100vmax * .5625);
 
 $iphone6plus-min-width: 414px;
 $iphone6plus-max-width: 736px;
+<<<<<<< HEAD
 $game-fullscreen-height-landscape-iphone6plus: calc(100vmax * .5625);
+=======
+$game-fullscreen-height-landscape-iphone6plus: calc(100vmax * 0.5625);
+>>>>>>> origin/max/lint
