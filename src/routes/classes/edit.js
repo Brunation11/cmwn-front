@@ -62,6 +62,7 @@ var Component = React.createClass({
                 <Link to={'/class/' + this.props.data.group_id + '/view'}>Return to Class Dashboard</Link>
                 <br />
                 <Input
+                    id="class-name"
                     type="text"
                     value={this.state.title}
                     placeholder="Class Name"
@@ -72,6 +73,7 @@ var Component = React.createClass({
                     onChange={e => this.setState({title: e.target.value})} //eslint-disable-line camelcase
                 />
                 <Input
+                    id="descript"
                     type="text"
                     value={this.state.description}
                     placeholder="Description"
@@ -81,7 +83,7 @@ var Component = React.createClass({
                     name="codeInput"
                     onChange={e => this.setState({description: e.target.value})} //eslint-disable-line camelcase
                 />
-                 <Button onClick={this.submitData} > Save </Button>
+                 <Button id="save-button" onClick={this.submitData} > Save </Button>
               </Panel>
               <CreateStudent data={this.props.data}/>
            </Layout>
@@ -137,7 +139,7 @@ var CreateStudent = React.createClass({
                  <Input
                     type="text"
                     value={this.state.last}
-                    placeholder="title"
+                    placeholder="Last Name"
                     label="Last Name"
                     validate="required"
                     hasFeedback
@@ -151,7 +153,7 @@ var CreateStudent = React.createClass({
     }
 });
 
-const mapStateToProps = state => {
+var mapStateToProps = state => {
     var data = {title: ''};
     var loading = true;
     if (state.page && state.page.data != null) {

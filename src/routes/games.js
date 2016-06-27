@@ -66,7 +66,8 @@ var Profile = React.createClass({
         );
     },
     renderFlip: function (item){
-        var onClick, playText;
+        var onClick;
+        var playText;
         if (item.coming_soon) {
             onClick = _.noop;
             playText = COMING_SOON;
@@ -96,7 +97,9 @@ var Profile = React.createClass({
         return (
            <GameWrapper transform={data => {
                var array = data;
-               var currentIndex, temporaryValue, randomIndex;
+               var currentIndex;
+               var temporaryValue;
+               var randomIndex;
                if (array == null) {
                    array = [];
                } else if (!_.isArray(array)) {
@@ -131,7 +134,7 @@ var Profile = React.createClass({
     }
 });
 
-const mapStateToProps = state => {
+var mapStateToProps = state => {
     var data = {};
     var loading = true;
     if (state.page && state.page.data != null) {

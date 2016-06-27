@@ -17,10 +17,15 @@ var _state = {};
 var _pendingChangeTracker = {};
 var _changeHandlers = {};
 
+var EventManager;
+
 const UPDATE_THROTTLE = 17; //60 FPS should be sufficent
 
 /**
  * Predicate. Checks if two collections share references to all items/properties
+ * @param {array} a, the first array to compare
+ * @param {array} b, the second array to compare
+ * @returns {boolean} true or false
  */
 var eqByCollection = function (a, b) {
     if (a.length !== b.length){
@@ -37,6 +42,8 @@ var eqByCollection = function (a, b) {
 /**
  * Private method of _EventManager. Must always be called with .call(this, ...) or .apply(this, ...)
  * Consumes the current list of pending changes
+ * @param {string} id, a string
+ * @returns {object} null
  */
 var _commitChanges = function (id) {
     if (this.pendingCount === 0 || _pendingChangeTracker[id] == null) {
@@ -62,11 +69,14 @@ class _EventManager {
     constructor() {
         this.lastUpdate = Date.now();
     }
-    /**
+    /*
      * Pushes a change onto the change stack
      * @param {string} key - the key of the object to update. Can be a nested path, as with _.get
      * @param {*} val the value to update
-     * @param {string|number} [scopeHandle = 'global'] - unique identifier for individual component scopes. If a number is passed as this parameter, it will be treated as the depth parameter and the final param will be ignored. 'global' should be passed for multi-scope components.
+     * @param {string|number} [scopeHandle = 'global'] - unique identifier for individual
+     * component scopes. If a number is passed as this parameter, it will be treated as the depth
+     * parameter and the final param will be ignored. 'global' should be passed
+     * for multi-scope components.
      * @param {number} [depth = 0] - how closely to compare objects.
      * 0 = shallow. Default, and always used for value types. (top level by Reference)
      * 1 = by collection. Checks inside arrays and object properties by reference
@@ -74,7 +84,10 @@ class _EventManager {
      */
     update(key, val, scopeHandle = 'global', depth = 0) {
         var now = Date.now();
-        var bypass, oldVal, promise, resolver;
+        var bypass;
+        var oldVal;
+        var promise;
+        var resolver;
 
         if (_.isNumber(scopeHandle)) {
             depth = scopeHandle;
@@ -84,7 +97,10 @@ class _EventManager {
         if (oldVal == null) {
             bypass = true;
         } else {
-            bypass = _.reduce(_pendingChanges, (acc, change) => (acc || change.key === `${scopeHandle}.${key}`)); //checking equality on all pending changes is impractical. Push the update if the current key exists in changes already
+            //checking equality on all pending changes is impractical.
+            //Push the update if the current key exists in changes already
+            bypass = _.reduce(_pendingChanges, (acc, change) => (acc ||
+                change.key === `${scopeHandle}.${key}`));
         }
         if (_.isNumber(val) || _.isString(val) || _.isBoolean(val)) {
             depth = 0;
@@ -128,11 +144,11 @@ class _EventManager {
         /** @TODO: MPR, 11/3/15: Implement Dispose */
     }
     get pendingCount() {
-        return _pendingChanges.lenght;
+        return _pendingChanges.length;
     }
 }
 
-var EventManager = new _EventManager();
+EventManager = new _EventManager();
 
 export default EventManager;
 

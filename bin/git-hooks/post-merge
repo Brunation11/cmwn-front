@@ -1,15 +1,20 @@
 #!/usr/bin/env bash
-docker-machine active
+
+target_docker_name="front"
+
+bash $PWD/bin/setup-docker.sh $target_docker_name
 if [ $? != 0 ]
 then
-    echo "[post-merge] no default docker-machine running"
-    echo "[post-merge] you should check for updates in composer.json yourself"
+    >&2 echo "[post-merge] no $target_docker_name docker-machine running"
     exit 1
 fi
+
+echo "[post-merge] connecting to containers"
+eval $(docker-machine env $target_docker_name)
 
 echo "[post-merge] Checking for new modules"
 
 if [ "package.json" -nt "node_modules/" ]; then
     echo "[post-merge] New package.json installing new packages"
-    docker-compose run node npm install
+    docker-compose run --rm node npm install
 fi

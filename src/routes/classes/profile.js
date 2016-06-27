@@ -68,7 +68,7 @@ var Component = React.createClass({
             return null;
         }
         return (
-            <p className="userFlips" key={Shortid.generate()}>0 Flips Earned</p>
+            <p className="user-flips" key={Shortid.generate()}>0 Flips Earned</p>
         );
     },
     renderAdminLink: function () {
@@ -76,15 +76,15 @@ var Component = React.createClass({
             return null;
         }
         return (
-            <p><a href={`/class/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
+            <p><a id="class-dashboard-link" href={`/class/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
         );
     },
     renderFlip: function (item){
         return (
             <div className="flip" key={Shortid.generate()}>
-                <Link to={`/student/${item.user_id.toString()}`}>
+                <Link to={`/student/${item.user_id.toString()}`} id={item.username}>
                     <img src={item.images && item.images.data && item.images.data.length ? item.images.data[0].url : DefaultProfile}></img>
-                    <p className="linkText" >{item.username}</p>
+                    <p className="link-text" >{item.username}</p>
                 </Link>
                 {this.renderFlipsEarned(item)}
             </div>
@@ -97,7 +97,7 @@ var Component = React.createClass({
         return (
            <Panel header={this.state.title} className="standard">
                <p className="right" >
-                   <EditLink className="purple" text="Edit Class" base="/class" uuid={this.state.group_id} canUpdate={Util.decodePermissions(this.state.scope).update} />
+                   <EditLink id="edit-button" className="purple" text="Edit Class" base="/class" uuid={this.state.group_id} canUpdate={Util.decodePermissions(this.state.scope).update} />
                </p>
                {this.renderAdminLink()}
            </Panel>
@@ -120,7 +120,7 @@ var Component = React.createClass({
     }
 });
 
-const mapStateToProps = state => {
+var mapStateToProps = state => {
     var data = {};
     var loading = true;
     if (state.page && state.page.data != null) {

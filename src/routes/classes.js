@@ -32,7 +32,7 @@ var Component = React.createClass({
         var cols = [
             <Column dataKey="title" renderHeader="Class Name" renderCell={(title, row) => {
                 return (
-                    <Link to={'/class/' + row.group_id + '/view'}>{title}</Link>
+                    <Link to={'/class/' + row.group_id + '/view'} className="class-url">{title}</Link>
                 );
             }}></Column>,
             <Column dataKey="external_id" renderHeader="Class Id"></Column>,
@@ -96,7 +96,7 @@ var Component = React.createClass({
     }
 });
 
-const mapStateToProps = state => {
+var mapStateToProps = state => {
     var data = [];
     var loading = true;
     if (state.page && state.page.data && state.page.data._embedded && state.page.data._embedded.group) {

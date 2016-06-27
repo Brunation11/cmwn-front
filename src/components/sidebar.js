@@ -18,16 +18,21 @@ var Component = React.createClass({
         return (
             <div>
                 <p className="welcome">{WELCOME}</p>
-                <p className="username"><a onClick={this.attemptNavigate} >{this.props.currentUser.username}</a></p>
+                <p className="username">
+                    <a onClick={this.attemptNavigate} >
+                        {this.props.currentUser.username}
+                    </a>
+                </p>
             </div>
         );
     },
     render: function () {
-        if (this.props.currentUser.username == null || this.props.currentUser.username.toLowerCase() === 'null') {
+        if (this.props.currentUser.username == null ||
+            this.props.currentUser.username.toLowerCase() === 'null') {
             return null;
         }
         return (
-            <div className={'sidebar ' + (this.props.menuIsOpen ? 'open' : '')}>
+            <div id={this.props.navMenuId} className={'sidebar ' + (this.props.menuIsOpen ? 'open' : '')}>
                 {this.renderWelcome()}
                 <a onClick={this.attemptNavigate} >
                     <ProfileImage user_id={this.props.currentUser.user_id}/>
@@ -39,7 +44,7 @@ var Component = React.createClass({
     }
 });
 
-const mapStateToProps = state => {
+var mapStateToProps = state => {
     var data = [];
     state.currentUser;
     if (state.currentUser && state.currentUser._links) {
