@@ -205,7 +205,7 @@ var Home = React.createClass({
                     <div className="logo" ><Link to={logoLink} ><img alt="Change My World Now"
                         src={LOGO_URL} />Change My World Now</Link>
                     </div>
-                    <div className="headerLogo"><Link to={logoLink} ><img alt="Change My World Now"
+                    <div className="header-logo"><Link to={logoLink} ><img alt="Change My World Now"
                         src={LOGO_HEADER} /><span className="read">Change My World Now</span></Link>
                     </div>
                     <Header workOpen={this.state.workOpen} contactOpen={this.state.contactOpen}

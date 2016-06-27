@@ -72,7 +72,8 @@ var Component = React.createClass({
     renderFlip: function (item){
         return (
             <div className="flip" key={Shortid.generate()}>
-                <Link to={`/profile/${item.user_id == null ? item.friend_id : item.user_id}`} className="friend-link">
+                <Link to={`/profile/${item.user_id == null ? item.friend_id : item.user_id}`}
+                    className="friend-link">
                     <div className="item">
                         <span className="overlay">
                             <div className="relwrap friend"><div className="abswrap">
