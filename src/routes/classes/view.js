@@ -16,7 +16,7 @@ import GenerateDataSource from 'components/datasource';
 
 const PAGE_UNIQUE_IDENTIFIER = 'classProfile';
 
-const UserSource = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
+const USER_SOURCE = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     TITLE: 'Class Administrative Dashboard: ',
@@ -89,7 +89,9 @@ var Component = React.createClass({
                     </p>
                     {this.renderBreadcrumb()}
                     <p>
-                        <Link to={`/class/${this.props.data.group_id}/profile`} id="return-to-class">Return to class profile</Link>
+                        <Link to={`/class/${this.props.data.group_id}/profile`} id="return-to-class">
+                            Return to class profile
+                        </Link>
                     </p>
                     <br />
                     <Text label={`${HEADINGS.DESCRIPTION}: `} text={this.props.data.description}>
@@ -106,7 +108,7 @@ var Component = React.createClass({
                             {this.renderImport()}
                         </span>
                     </div>
-                    <UserSource transform={users => {
+                    <USER_SOURCE transform={users => {
                         return _.map(users, user => {
                             user = user.set('role', user.type === 'CHILD' ? 'Student' : 'Faculty');
                             return user;
@@ -132,13 +134,15 @@ var Component = React.createClass({
                                 <Column dataKey="updated_at" renderHeader="Update Users"
                                     renderCell={(data, row) => {
                                         return (
-                                            <Link to={`/users/${row.user_id}/edit`} className="edit-student">Edit</Link>
+                                            <Link to={`/users/${row.user_id}/edit`} className="edit-student">
+                                                Edit
+                                            </Link>
                                         );
                                     }}
                                 />
                             </Table>
                         </Paginator>
-                    </UserSource>
+                    </USER_SOURCE>
                 </Panel>
            </Layout>
 

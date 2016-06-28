@@ -6,10 +6,10 @@
     background: url('../media/blue-header-bg.jpg');
     background-color: $cmwn-blue;
     background-size: 100% auto;
+    width: 100%;
     border-collapse: collapse;
     border-spacing: 0;
-    width: 100%;
-    //border-right: 1px solid #fff;
+    //border-right: 1px solid $cmwn-white;
     //border-top: 1px solid #ddd;
 
     td {
@@ -20,17 +20,17 @@
     thead {
 
         tr {
-            color: #fff;
-            filter: blur(0);
+            text-transform: uppercase;
+            color: $cmwn-white;
             font-family: $cmwn-jade-font;
             font-size: 1.2rem;
             -webkit-font-smoothing: antialiased;
-            text-transform: uppercase;
+            filter: blur(0);
         }
 
         td {
             white-space: pre;
-            //border-left: #fff solid 1px;
+            //border-left: $cmwn-white solid 1px;
         }
     }
 
@@ -38,20 +38,20 @@
 
         tr {
             //border-bottom: 1px solid #ddd;
-            background: #fff;
+            background: $cmwn-white;
         }
 
         td {
-            border-left: 2px solid #fff;
-            border-right: 2px solid #fff;
+            border-right: 2px solid $cmwn-white;
+            border-left: 2px solid $cmwn-white;
         }
 
         &:nth-child(even) {
-            background: #eee;
+            background: $cmwn-off-white;
 
             td {
-                border-left: 2px solid #eee;
-                border-right: 2px solid #eee;
+                border-right: 2px solid $cmwn-off-white;
+                border-left: 2px solid $cmwn-off-white;
             }
         }
     }
@@ -62,14 +62,14 @@
 
     &.admin {
         background: none;
-        color: #000;
+        color: $cmwn-black;
 
         tr {
-            color: #000;
+            color: $cmwn-black;
         }
 
         thead {
-            border-bottom: 1px solid #000;
+            border-bottom: 1px solid $cmwn-black;
         }
 
         tbody {

@@ -3,14 +3,14 @@
 .trophycase {
 
     .flip-list {
-        overflow: scroll;
         padding: $standard 0;
         padding-bottom: (2 * $standard);
         width: 100%;
+        overflow: scroll;
 
         img {
-            max-width: 75px; //totally arbitrary
             padding: $standard / 3;
+            max-width: 75px; //totally arbitrary
         }
 
         a {
@@ -19,22 +19,22 @@
         }
 
         .partial {
-            background: #fff;
             display: inline-block;
-            left: 0;
-            overflow: hidden;
             position: absolute;
+            left: 0;
+            background: $cmwn-white;
+            overflow: hidden;
         }
     }
 
     .earned,
     .in-progress {
         display: inline-block;
-        overflow: scroll;
         padding: $standard;
         padding-bottom: 0;
-        white-space: nowrap;
         width: 100%;
+        overflow: scroll;
+        white-space: nowrap;
 
         strong {
             color: $cmwn-purple;
@@ -52,8 +52,8 @@
 
     .spacer {
         display: block;
-        padding: 10px;
         visibility: hidden;
+        padding: 10px;
     }
 
     // Pulse
@@ -64,18 +64,18 @@
     }
 
     .pulse {
-        animation-delay: .3s;
-        animation-direction: alternate;
-        animation-duration: .5s;
-        animation-iteration-count: infinite;
-        animation-name: pulse;
-        animation-timing-function: linear;
-        backface-visibility: hidden;
-        box-shadow: 0 0 1px rgba(0, 0, 0, 0);
         display: inline-block;
-        margin: 0 .5rem;
         transform: translateZ(0);
+        animation-name: pulse;
+        animation-duration: .5s;
+        animation-timing-function: linear;
+        animation-delay: .3s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+        margin: 0 .5rem;
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0);
         vertical-align: middle;
+        backface-visibility: hidden;
     }
 
     // Buzz
@@ -90,55 +90,54 @@
     }
 
     .buzz {
-        backface-visibility: hidden;
-        box-shadow: 0 0 1px rgba(0, 0, 0, 0);
         display: inline-block;
         transform: translateZ(0);
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0);
         vertical-align: middle;
+        backface-visibility: hidden;
     }
 
     .buzz:hover,
     .buzz:focus,
     .buzz:active {
-        animation-duration: .15s;
-        animation-iteration-count: infinite;
         animation-name: buzz;
+        animation-duration: .15s;
         animation-timing-function: linear;
+        animation-iteration-count: infinite;
     }
 
     // Float Shadow
     .float {
-        backface-visibility: hidden;
-        box-shadow: 0 0 1px rgba(0, 0, 0, 0);
         display: inline-block;
         position: relative;
-        transform: translateZ(0);
-        transform: translateY(-5px);
+        transform: translateY(-5px) translateZ(0);
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+        vertical-align: middle;
+        backface-visibility: hidden;
         transition-duration: .3s;
         transition-property: transform;
-        vertical-align: middle;
     }
 
     .float::before {
-        background: radial-gradient(ellipse at center, rgba(0, 0, 0, .35) 0%, rgba(0, 0, 0, 0) 80%);
-        content: '';
-        height: 10px;
-        left: 5%;
-        opacity: 0; // which one do we want?!?
-        opacity: 1;
-        pointer-events: none;
         position: absolute;
         top: 100%;
+        left: 5%;
         transform: translateY(5px);
-        transition-duration: .5s;
-        transition-property: transform, opacity;
-        width: 90%;
         z-index: -1;
+        background: radial-gradient(ellipse at center, rgba(0, 0, 0, .35) 0%, rgba(0, 0, 0, 0) 80%);
+        width: 90%;
+        height: 10px;
+        content: '';
+        //opacity: 0; // which one do we want?!? MPR: huh... lets remove both and really find out, eh?
+        //opacity: 1;
+        transition-property: transform, opacity;
+        pointer-events: none;
+        transition-duration: .5s;
     }
 
     .flip {
-        border: 0;
         transform: perspective(500px) rotateY(90deg) scale(.9);
+        border: 0;
     }
 
     .flip:hover {
