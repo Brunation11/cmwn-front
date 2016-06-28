@@ -116,8 +116,10 @@ h3 {
 
     .sweater,
     .global-header {
+        // scss-lint:disable ColorVariable
         box-shadow: 0 0 20px rgba(0, 0, 0, .2);
         background: $cmwn-white;
+        // scss-lint:enable ColorVariable
     }
 
     .sweater,
@@ -201,11 +203,11 @@ h3 {
             }
 
             li:first-child {
-                border-top: 1px solid rgb(84, 194, 242);
+                border-top: 1px solid $cmwn-blue;
             }
 
             li {
-                border-bottom: 1px solid rgb(84, 194, 242);
+                border-bottom: 1px solid $cmwn-blue;
                 padding: $standard / 2;
             }
 
