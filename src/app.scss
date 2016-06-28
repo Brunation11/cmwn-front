@@ -1,11 +1,11 @@
-/**
- * app.scss
- * Contains all of the core styles for the platform. Any style added
- * to this file will be inlined into the primary index.html in order
- * to prevent a possible jarring flash of unstyled content.
- * because we are importing them here, functions.scss and
- * variables.scss share this property
- */
+///**
+// * app.scss
+// * Contains all of the core styles for the platform. Any style added
+// * to this file will be inlined into the primary index.html in order
+// * to prevent a possible jarring flash of unstyled content.
+// * because we are importing them here, functions.scss and
+// * variables.scss share this property
+// */
 
 @import 'variables';
 @import 'functions';
@@ -16,8 +16,8 @@ html {
 }
 
 @font-face {
-    font-family: "CMWNJadeRegular";
-    src: url("/fonts/cmwn.woff") format("woff");
+    font-family: 'CMWNJadeRegular';
+    src: url('/fonts/cmwn.woff') format('woff');
 }
 
 body {
@@ -33,115 +33,124 @@ body {
     }
 }
 
-h1, h2, h3 {
-    font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
+h1,
+h2,
+h3 {
+    font-family: 'CMWNJadeRegular', Impact, Helvetica, Arial, sans-serif;
 }
 
-#pageerror, #triggerederror {
-    position: fixed;
+// scss-lint:disable IdSelector
+#pageerror,
+#triggerederror {
     display: block;
-    top: 0px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: #fff;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     z-index: 2000;
+    border: 15px solid $cmwn-white;
+    background-color: $cmwn-white;
+    background-repeat: no-repeat;
+    background-position: center;
     background-size: contain;
-    border: 15px solid #fff;
 
     a {
-        cursor: pointer;
         position: fixed;
-        top: 0px;
-        bottom: 0px;
-        left: 0px;
-        right: 0px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        cursor: pointer;
     }
+
     &.error403 {
-        background-image: url("media/403_error.png");
+        background-image: url('media/403_error.png');
     }
+
     &.error404 {
-        background-image: url("media/404_error.png");
+        background-image: url('media/404_error.png');
     }
+
     &.error500 {
-        background-image: url("media/500_error_alt.png");
+        background-image: url('media/500_error_alt.png');
 
         a {
             bottom: 42vh;
+
+            &.gohome {
+                top: 58vh;
+                bottom: 0;
+            }
         }
 
-        a.gohome {
-            top: 58vh;
-            bottom: 0px;
-        }
     }
+
     &.applicationerror {
-        background-image: url("media/generic_error_alt.png");
+        background-image: url('media/generic_error_alt.png');
     }
 }
 
 #pageerror {
-    opacity: 0;
-    background: url("media/generic_error.png") #fff;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     animation: fadein 1s;
     animation-delay: 5s;
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
+    opacity: 0;
+    background: url('media/generic_error.png') $cmwn-white;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
 }
 
 @keyframes fadein {
     from {opacity: 0;}
-    to {opacity: 1}
+    to {opacity: 1;}
 }
 
 #cmwn-app {
+    // scss-lint:enable IdSelector
     min-height: 100vh;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     overflow-x: hidden;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
-
-
-    .sweater, .global-header {
-        background: #fff;
-        box-shadow: 0 0 20px rgba(0,0,0,.2);
+    .sweater,
+    .global-header {
+        // scss-lint:disable ColorVariable
+        box-shadow: 0 0 20px rgba(0, 0, 0, .2);
+        background: $cmwn-white;
+        // scss-lint:enable ColorVariable
     }
 
-    .sweater, .sweater .content {
-        padding: 0;
-    }
-
-    .sweater, .sweater .content {
+    .sweater,
+    .sweater .content {
         padding: 0;
     }
 
     .sweater {
-        max-width: $monitor-max-break;
         position: relative;
-        padding: $standard;
         margin: 0;
-        margin-left: auto;
         margin-right: auto;
         margin-bottom: 2 * $standard;
+        margin-left: auto;
+        padding: $standard;
+        max-width: $monitor-max-break;
 
-        .content, .sidebar {
+        .content,
+        .sidebar {
             padding-bottom: $standard;
         }
     }
 
     .blocker {
         position: absolute;
-        padding-top: $standard;
-        margin-left: auto;
-        margin-right: auto;
-        background: white;
-        width: 100%;
         left: 0;
         z-index: $z-nav + 3;
+        margin-right: auto;
+        margin-left: auto;
+        background: $cmwn-white;
+        padding-top: $standard;
+        width: 100%;
     }
 
     .layout {
@@ -151,25 +160,25 @@ h1, h2, h3 {
     }
 
     .content {
+        padding: $standard / 2;
         order: 2;
         flex-grow: 1;
         flex-shrink: 1;
-        padding: $standard / 2;
     }
 
 
     .breadcrumb {
-        padding: $standard / 2 $standard;
-        background: #f5f5f5;
-        border-radius: 4px;
-        display: inline-block;
+        display: none;
         margin: $standard / 2 0;
+        border-radius: 4px;
+        background: $rule-medium-gray;
+        padding: $standard / 2 $standard;
         font-size: 12px;
 
-        display: none;
 
-        a + a::before, a + span::before {
-            content: " | ";
+        a + a::before,
+        a + span::before {
+            content: ' | ';
         }
     }
 
@@ -181,31 +190,31 @@ h1, h2, h3 {
         user-drag: none;
     }
 
-    .sidebar{
+    .sidebar {
+        padding: $standard / 2;
         order: 1;
         flex-grow: 0;
         flex-shrink: 0;
-        padding: $standard / 2;
 
         nav {
 
             * {
-                margin: $standard / 2 0
+                margin: $standard / 2 0;
             }
 
             li:first-child {
-                border-top: 1px solid rgb(84, 194, 242);
+                border-top: 1px solid $cmwn-blue;
             }
 
             li {
-                border-bottom: 1px solid rgb(84, 194, 242);
+                border-bottom: 1px solid $cmwn-blue;
                 padding: $standard / 2;
+            }
 
-                a {
-                    text-decoration: none;
-                    color: rgb(84, 194, 242);
-                    font-weight: bold;
-                }
+            a {
+                text-decoration: none;
+                color: $cmwn-blue;
+                font-weight: bold;
             }
         }
     }
@@ -222,50 +231,51 @@ h1, h2, h3 {
     }
 
     .global-footer {
-        order: 666;
-        width: 100%;
         position: absolute;
+        right: 0;
         bottom: 0;
         left: 0;
-        right: 0;
-        padding: 15px;
         border-top: 5px solid $cmwn-blue;
+        padding: 15px;
+        width: 100%;
+        order: 666;
 
         .links {
             a,
             a:active,
             a:visited {
+                color: $cmwn-black;
                 font-size: 13px;
-                color: #000;
             }
 
             a:not(:last-child) {
                 margin-right: 5px;
+                border-right: solid 1px $cmwn-black;
                 padding-right: 5px;
-                border-right: solid 1px #000;
             }
         }
     }
 
     .logo-pad {
+        visibility: hidden;
         margin-top: -$standard;
-        visibility:hidden;
         width: 100%;
     }
 
-    .logo, .headerLogo {
+    .logo,
+    .header-logo {
         //width: calc(100% - #{$standard});
-        z-index: $z-nav + 4;
         display: inline-block;
-        color: transparent;
+        z-index: $z-nav + 4;
         max-width: $logo-max-width;
+        color: transparent;
 
         a {
             color: transparent;
         }
 
         .read {
-            width: 0px;
+            width: 0;
         }
 
     }
@@ -277,47 +287,50 @@ h1, h2, h3 {
         }
     }
 
-    .headerLogo {
+    .header-logo {
         float: right;
-        padding-right: 10px;
-        width: calc(100% - #{$logout_size} - #{$logo-size });
+        //padding-right: 10px;
         padding: $standard 80px 0 35px;
+        width: calc(100% - #{$logout-size} - #{$logo-size });
 
         img {
             width: 100%;
         }
     }
 
-    .menu, .logout {
+    .menu,
+    .logout {
         position: absolute;
-        color: transparent;
-        right: 0;
         top: 0;
+        right: 0;
         background-size: contain;
+        color: transparent;
 
         a {
             color: transparent;
+
+            span {
+                position: absolute;
+            }
+
+            img {
+                width: $logout-size;
+            }
         }
 
-        a span{
-            position: absolute;
-        }
 
-        a img{
-            width: $logout_size;
-        }
     }
 
     .menu {
-        z-index: $z-nav + 1;
         display: none;
+        z-index: $z-nav + 1;
+        border: 0;
         padding: $standard / 2;
         width: $logout-size - ($standard / 2);
         height: $logout-size - ($standard / 2);
-        border: 0;
 
         .glyphicon {
-            color: #000;
+            color: $cmwn-black;
             font-size: 3em;
         }
 
@@ -329,28 +342,30 @@ h1, h2, h3 {
 
     .current-user-info {
         position: absolute;
-        bottom: 15px;
         right: $standard;
-        font-size: 0.7rem;
+        bottom: 15px;
+        font-size: .7rem;
     }
 
     section {
 
         h3 {
-            background: url(media/blue-header-bg.jpg);
+            background: url('media/blue-header-bg.jpg');
             background-color: $cmwn-blue;
             background-size: 100% auto;
             padding: $standard / 2 $standard;
-            color: #FFF;
             text-transform: uppercase;
+            color: $cmwn-white;
         }
     }
 
 
-    h1, h2, h3 {
+    h1,
+    h2,
+    h3 {
         font-family: $cmwn-jade-font;
-        filter: blur(0);
         -webkit-font-smoothing: antialiased;
+        filter: blur(0);
     }
 
     h1 {
@@ -382,9 +397,9 @@ h1, h2, h3 {
         //overflow: auto;
 
         .sweater {
-            width: 100%;
             margin: 0;
             padding: 0;
+            width: 100%;
         }
 
         .layout {
@@ -403,16 +418,21 @@ h1, h2, h3 {
             display: none;
         }
 
-        .headerLogo {
-            padding: 0;
+        .header-logo {
             margin: 25px 70px 0 0;
+            padding: 0;
         }
 
         .content {
             padding: 0;
         }
 
-        h1, h2, h3, h4, h5, .breadcrumb {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        .breadcrumb {
             margin-left: $standard;
         }
 
@@ -421,18 +441,18 @@ h1, h2, h3 {
         }
 
         .sidebar {
-            padding: $standard;
-            border-bottom: ($standard * 4) solid #fff;
-            background: #fff;
             position: fixed;
             top: 0;
-            bottom: 0;
             right: -110%; //extra just to account for scrollbars
-            width: 100%;
-            overflow-y: scroll;
+            bottom: 0;
             transition: right  1s ease-in-out;
+            z-index: $z-nav;
+            border-bottom: ($standard * 4) solid $cmwn-white;
+            background: $cmwn-white;
+            padding: $standard;
+            width: 100%;
             height: 100vmax;
-            z-index:  $z-nav;
+            overflow-y: scroll;
 
             &.open {
                 right: 0;
@@ -443,7 +463,10 @@ h1, h2, h3 {
         .flip.fill {
             max-width: 100%;
 
-            img, object, .item, .overlay {
+            img,
+            object,
+            .item,
+            .overlay {
                 max-width: 100%;
             }
         }
@@ -454,10 +477,10 @@ h1, h2, h3 {
         //background: #F8F8F8;
 
         .global-header {
-            padding: 0 $standard;
             position: relative;
-            margin-left: auto;
             margin-right: auto;
+            margin-left: auto;
+            padding: 0 $standard;
         }
 
     }

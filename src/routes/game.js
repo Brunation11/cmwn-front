@@ -33,7 +33,8 @@ var Page = React.createClass({
     render: function () {
         return (
            <Layout>
-                <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl} onExit={() => History.push('/profile')}/>
+                <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl}
+                    onExit={() => History.push('/profile')}/>
            </Layout>
         );
     }

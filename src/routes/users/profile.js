@@ -25,12 +25,13 @@ import FlipBgDefault from 'media/flip-placeholder-white.png';
 
 import 'routes/users/profile.scss';
 
+var mapStateToProps;
 var Page;
 
 const PAGE_UNIQUE_IDENTIFIER = 'profile';
 
-const GameWrapper = GenerateDataSource('games', PAGE_UNIQUE_IDENTIFIER);
-const FlipSource = GenerateDataSource('user_flip', PAGE_UNIQUE_IDENTIFIER);
+const GAME_WRAPPER = GenerateDataSource('games', PAGE_UNIQUE_IDENTIFIER);
+const FLIP_SOURCE = GenerateDataSource('user_flip', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     ACTION: 'Profile',
@@ -40,8 +41,18 @@ const PLAY = 'Play Now!';
 const COMING_SOON = 'Coming Soon!';
 const CLASSES = 'Classes';
 
-const BROWSER_NOT_SUPPORTED = <span><p>For the best viewing experience we recommend the desktop version in Chrome</p><p>If you don't have chrome, <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">download it for free here</a>.</p></span>;
-const PASS_UPDATED = '<p>You have successfully updated your password.<br />Be sure to remember for next time!</p>';
+const BROWSER_NOT_SUPPORTED = (
+    <span>
+        <p>For the best viewing experience we recommend the desktop version in Chrome</p>
+        <p>If you don't have chrome,{' '}
+            <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">
+                download it for free here
+            </a>.
+        </p>
+    </span>);
+
+const PASS_UPDATED = '<p>You have successfully updated your password.' +
+    '<br />Be sure to remember for next time!</p>';
 
 export var dataTransform = function (data) {
     var array = data;
@@ -126,7 +137,8 @@ export class Profile extends React.Component {
     }
 
     renderGame() {
-        var flipUrl = this.state._links && this.state._links.user_flip ? this.state._links.user_flip.href : null;
+        var flipUrl = this.state._links && this.state._links.user_flip ?
+            this.state._links.user_flip.href : null;
         if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe10())) {
             return (
                 <div>
@@ -137,7 +149,8 @@ export class Profile extends React.Component {
         }
         return (
             <div>
-                <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl} flipUrl={flipUrl} onExit={this.setState.bind(this, {gameOn: false})}/>
+                <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl}
+                    flipUrl={flipUrl} onExit={this.setState.bind(this, {gameOn: false})}/>
                     <a onClick={this.hideModal.bind(this)} className="modal-close">(close)</a>
             </div>
         );
@@ -178,12 +191,12 @@ export class Profile extends React.Component {
             return null;
         }
         return (
-           <GameWrapper transform={dataTransform}>
+           <GAME_WRAPPER transform={dataTransform}>
                <FlipBoard
                    renderFlip={this.renderFlip.bind(this)}
                    header={HEADINGS.ARCADE}
                />
-           </GameWrapper>
+           </GAME_WRAPPER>
         );
     }
 
@@ -229,14 +242,15 @@ export class Profile extends React.Component {
     renderCurrentUserProfile() {
         return (
             <div>
-                <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal.bind(this)} keyboard={false} backdrop="static">
+                <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal.bind(this)}
+                    keyboard={false} backdrop="static">
                     <Modal.Body>
                         {this.renderGame()}
                     </Modal.Body>
                 </Modal>
-                <FlipSource>
+                <FLIP_SOURCE>
                    <Trophycase className={ClassNames({hidden: !this.state.isStudent})} />
-                </FlipSource>
+                </FLIP_SOURCE>
                 {this.renderGameList()}
             </div>
         );
@@ -247,7 +261,8 @@ export class Profile extends React.Component {
         if (this.state.username == null) {
             return null;
         }
-        profile = (this.state.user_id === this.props.currentUser.user_id) ? this.renderCurrentUserProfile : this.renderUserProfile;
+        profile = (this.state.user_id === this.props.currentUser.user_id) ?
+            this.renderCurrentUserProfile : this.renderUserProfile;
 
         return (
            <Layout className={PAGE_UNIQUE_IDENTIFIER} navMenuId="navMenu">
@@ -257,7 +272,7 @@ export class Profile extends React.Component {
     }
 }
 
-var mapStateToProps = state => {
+mapStateToProps = state => {
     var data = {};
     var loading = true;
     var currentUser = {};

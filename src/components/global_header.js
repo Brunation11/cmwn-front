@@ -62,7 +62,7 @@ var GlobalHeader = React.createClass({
                         <img alt="Change My World Now" src={LOGO_URL} />
                     </Link>
                 </div>
-                <div className="headerLogo">
+                <div className="header-logo">
                     <Link to={this.props.logoLink} >
                         <img alt="Change My World Now" src={LOGO_HEADER} />
                         <span className="read">Change My World Now</span>
