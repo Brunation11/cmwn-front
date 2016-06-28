@@ -1,4 +1,5 @@
 build.zip
+docker-compose.yml
 .vagrant
 node_modules
 build

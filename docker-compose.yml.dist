@@ -1,0 +1,43 @@
+<<<<<<< HEAD:docker-compose.yml
+php:
+  build: ./docker/php
+  environment:
+    APP_API_URL: "https://api-local.changemyworldnow.com/"
+    APP_GAME_URL: "https://games-local.changemyworldnow.com/"
+    APP_MODE: "local"
+  volumes:
+    - ./:/var/www/
+
+node:
+  build: ./docker/node
+  volumes:
+    - ./:/var/www/
+=======
+version: '2'
+services:
+  php:
+    container_name: cmwn_front_php
+    build: ./docker/php
+    environment:
+      APP_API_URL: "https://api-dev.changemyworldnow.com/"
+      APP_GAME_URL: "https://games-dev.changemyworldnow.com/"
+      APP_MODE: "local"
+    volumes:
+      - ./:/var/www/
+  node:
+    container_name: cmwn_front_node
+    build: ./docker/node
+    environment:
+      DOCKER_HOST_IP: "192.168.99.100"
+    volumes:
+      - ./:/var/www/
+>>>>>>> 1590032... patch docker:docker-compose.yml.dist
+
+nginx:
+  build: ./docker/nginx
+  ports:
+    - "443:443"
+  volumes:
+    - ./:/var/www/
+  links:
+    - php
