@@ -182,6 +182,7 @@ export class Profile extends React.Component {
                <FlipBoard
                    renderFlip={this.renderFlip.bind(this)}
                    header={HEADINGS.ARCADE}
+                   id='game-flip-board'
                />
            </GameWrapper>
         );
@@ -229,7 +230,8 @@ export class Profile extends React.Component {
     renderCurrentUserProfile() {
         return (
             <div>
-                <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal.bind(this)} keyboard={false} backdrop="static">
+                <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal.bind(this)}
+                    keyboard={false} backdrop="static" id="game-modal">
                     <Modal.Body>
                         {this.renderGame()}
                     </Modal.Body>
