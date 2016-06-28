@@ -1,3 +1,5 @@
+/* eslint-disable max-lines */
+
 export default function (e) {
     var data;
     var gameData;
@@ -14,7 +16,6 @@ export default function (e) {
     }
 
     /* eslint-disable max-len */
-    /* eslint-disable no-exceed-lines */
 
     if (data.game === 'skribble') {
 
