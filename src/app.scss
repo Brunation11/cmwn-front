@@ -109,6 +109,18 @@ h1, h2, h3 {
     .sweater, .global-header {
         background: #fff;
         box-shadow: 0 0 20px rgba(0,0,0,.2);
+
+    }
+
+    .sweater:after {
+        display: block;
+        background-color: #fff;
+        height: 10px;
+        width: 100%;
+        content: " ";
+        position: absolute;
+        top: -10px;
+        margin-left: -$standard;
     }
 
     .sweater, .sweater .content {
@@ -131,17 +143,6 @@ h1, h2, h3 {
         .content, .sidebar {
             padding-bottom: $standard;
         }
-    }
-
-    .blocker {
-        position: absolute;
-        padding-top: $standard;
-        margin-left: auto;
-        margin-right: auto;
-        background: white;
-        width: 100%;
-        left: 0;
-        z-index: $z-nav + 3;
     }
 
     .layout {
@@ -254,34 +255,35 @@ h1, h2, h3 {
     }
 
     .logo, .headerLogo {
-        //width: calc(100% - #{$standard});
         z-index: $z-nav + 4;
-        display: inline-block;
+        display: inline-flex;
         color: transparent;
-        max-width: $logo-max-width;
 
         a {
             color: transparent;
+            width: 100%
         }
 
         .read {
             width: 0px;
         }
-
     }
 
     .logo {
+        width: 22vmin;
+        min-width: 180px;
+        position: relative;
 
         img {
-            width: $logo-size;
+            width: 100%;
         }
     }
 
     .headerLogo {
-        float: right;
-        padding-right: 10px;
-        width: calc(100% - #{$logout_size} - #{$logo-size });
-        padding: $standard 80px 0 35px;
+        width: calc(100% - 180px - 8em);
+        vertical-align: middle;
+        margin-top: 8px;
+        margin-left: 30px;
 
         img {
             width: 100%;
@@ -387,6 +389,10 @@ h1, h2, h3 {
             padding: 0;
         }
 
+        .sweater:after {
+            margin-left: 0;
+        }
+
         .layout {
             padding-bottom: 4 * $standard;
         }
@@ -405,7 +411,8 @@ h1, h2, h3 {
 
         .headerLogo {
             padding: 0;
-            margin: 25px 70px 0 0;
+            margin-left: 0;
+            width: calc(100% - 180px - 6em);
         }
 
         .content {
@@ -451,8 +458,6 @@ h1, h2, h3 {
     }
 
     @media (min-width: $monitor-max-break) {
-        //background: #F8F8F8;
-
         .global-header {
             padding: 0 $standard;
             position: relative;
