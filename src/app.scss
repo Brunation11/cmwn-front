@@ -144,17 +144,6 @@ h1, h2, h3 {
         }
     }
 
-    .blocker {
-        position: absolute;
-        padding-top: $standard;
-        margin-left: auto;
-        margin-right: auto;
-        background: white;
-        width: 100%;
-        left: 0;
-        z-index: $z-nav + 3;
-    }
-
     .layout {
         display: flex;
         margin-bottom: 4 * $standard;
