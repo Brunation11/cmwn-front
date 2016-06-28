@@ -56,27 +56,24 @@ var Page = React.createClass({
     renderGame: function () {
         if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe10())) {
             return (
-                <div>
-                    {BROWSER_NOT_SUPPORTED}
-                    <p><a onClick={() => this.setState({gameOn: false})} >(close)</a></p>
-                </div>
+                <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl} onExit={() => History.push('/profile')}/>
             );
         }
         return (
             <div>
-                <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl} onExit={this.hideModal}/>
-                <a onClick={this.hideModal} className="modal-close">(close)</a>
+                <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal} keyboard={false} backdrop="static">
+                    <Modal.Body>
+                        <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl} onExit={this.hideModal}/>
+                        <a onClick={this.hideModal} className="modal-close">(close)</a>
+                    </Modal.Body>
+                </Modal>
             </div>
         );
     },
     render: function () {
         return (
             <Layout className={this.state.PAGE_UNIQUE_IDENTIFIER}>
-               <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal} keyboard={false} backdrop="static">
-                    <Modal.Body>
-                        {this.renderGame()}
-                    </Modal.Body>
-                </Modal>
+                {this.renderGame()}
             </Layout>
         );
     }
