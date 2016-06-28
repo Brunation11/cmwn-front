@@ -50,7 +50,7 @@ export class EditClass extends React.Component {
             Toast.success('Class Updated');
         }).catch(err => {
             Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
-            Log.log('Server refused district update', err, postData);
+            Log.log('Server refused class update', err, postData);
         });
     }
     render () {
@@ -129,6 +129,7 @@ export class CreateStudent extends React.Component {
         <Panel header={HEADINGS.CREATE_USER} className="standard">
             <Form ref="formRef">
                  <Input
+                    id="first-name"
                     type="text"
                     value={this.state.first}
                     placeholder="First Name"
@@ -139,6 +140,7 @@ export class CreateStudent extends React.Component {
                     onChange={e => this.setState({first: e.target.value})}
                  />
                  <Input
+                    id="last-name"
                     type="text"
                     value={this.state.last}
                     placeholder="Last Name"
