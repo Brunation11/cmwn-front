@@ -1,3 +1,5 @@
+@import 'variables';
+
 .friends-page {
 
     .overlay {
@@ -15,6 +17,11 @@
 
         &.faded {
             opacity: 0;
+        }
+
+        &.nohover,
+        &.nohover:hover {
+            background-color: $cmwn-blue;
         }
     }
 
