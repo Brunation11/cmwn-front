@@ -77,7 +77,9 @@ var Component = React.createClass({
                     <div className="item">
                         <span className="overlay">
                             <div className="relwrap friend"><div className="abswrap prompts">
-                                <span className={ClassNames('pending-prompt', {faded: item.friend_status !== 'PENDING'})}>
+                                <span className={ClassNames('pending-prompt', {
+                                    faded: item.friend_status !== 'PENDING'})
+                                }>
                                     {PENDING}
                                 </span>
                                 <Button onClick={this.acceptRequest.bind(this, item)} className={ClassNames(
