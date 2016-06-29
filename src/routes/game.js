@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
+import _ from 'lodash';
+
 import Game from 'components/game';
 import History from 'components/history';
 import GLOBALS from 'components/globals';
@@ -16,6 +18,12 @@ var GamePage = React.createClass({
             gameUrl: GLOBALS.GAME_URL + this.props.params.game + '/index.html',
             isStudent: true
         };
+    },
+    componentWillMount: function () {
+        var urlParts = window.location.href.split('?')[0].split('#')[0].split('/');
+        this.setState({
+            game: _.last(urlParts),
+        });
     },
     componentDidMount: function () {
         this.resolveRole();
@@ -43,6 +51,8 @@ var GamePage = React.createClass({
                     url={this.state.gameUrl}
                     onExit={() => History.push('/profile')}
                     saveUrl={this.props.currentUser._links.save_game.href}
+                    game={this.state.game}
+                    currentUser={this.props.currentUser}
                 />
            </Layout>
         );
