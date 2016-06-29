@@ -3,5 +3,9 @@
         "mocha": false,
         "node": false,
         "phantomjs": false
+    },
+    "globals": {
+        "describe": false,
+        "it": false
     }
 }
