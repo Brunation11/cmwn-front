@@ -32,24 +32,24 @@ const ADMIN_TEXT = 'Class Administrative Dashboard';
 const CLASS_CREATED = 'Class created.';
 
 export class ProfileComponent extends React.Component {
-    constructor (props) {
+    constructor(props) {
         super(props);
         this.state = {
             isStudent: true
         };
     }
-    componentDidMount () {
+    componentDidMount() {
         this.setState(this.props.data);
         this.resolveRole();
         if (QueryString.parse(location.search).message === 'created') {
             Toast.success(CLASS_CREATED);
         }
     }
-    componentWillReceiveProps (nextProps) {
+    componentWillReceiveProps(nextProps) {
         this.setState(nextProps.data);
         this.resolveRole();
     }
-    resolveRole () {
+    resolveRole() {
         var newState = {};
         var state = Store.getState();
         if (state.currentUser && state.currentUser.type !== 'CHILD') {
@@ -59,7 +59,7 @@ export class ProfileComponent extends React.Component {
         }
         this.setState(newState);
     }
-    renderFlipsEarned (item) {
+    renderFlipsEarned(item) {
         if (item && item.roles && item.roles.data && !~item.roles.data.indexOf('Student')) {
             return null;
         }
@@ -67,7 +67,7 @@ export class ProfileComponent extends React.Component {
             <p className="user-flips" key={Shortid.generate()}>0 Flips Earned</p>
         );
     }
-    renderAdminLink () {
+    renderAdminLink() {
         if (!Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
@@ -75,7 +75,7 @@ export class ProfileComponent extends React.Component {
             <p><a id="class-dashboard-link" href={`/class/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
         );
     }
-    renderFlip (item){
+    renderFlip(item){
         return (
             <div className="flip" key={Shortid.generate()}>
                 <Link to={`/student/${item.user_id.toString()}`} id={item.username}>
@@ -86,7 +86,7 @@ export class ProfileComponent extends React.Component {
             </div>
         );
     }
-    renderClassInfo () {
+    renderClassInfo() {
         if (this.state.group_id == null || !Util.decodePermissions(this.state.scope).update) {
             return null;
         }
@@ -99,7 +99,7 @@ export class ProfileComponent extends React.Component {
            </Panel>
         );
     }
-    render () {
+    render() {
         if (this.props.data == null || this.state == null) {
             return null;
         }
@@ -118,7 +118,7 @@ export class ProfileComponent extends React.Component {
 
 ProfileComponent.defaultProps = {
     data: {}
-}
+};
 
 var mapStateToProps = state => {
     var data = {};
@@ -133,6 +133,6 @@ var mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(Component);
+var Page = connect(mapStateToProps)(ProfileComponent);
 export default Page;
 
