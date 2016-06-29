@@ -114,11 +114,11 @@ h1, h2, h3 {
     .sweater:after {
         display: block;
         background-color: #fff;
-        height: 10px;
+        height: 15px;
         width: 100%;
         content: " ";
         position: absolute;
-        top: -10px;
+        top: -12px;
         margin-left: -$standard;
     }
 
