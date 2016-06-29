@@ -6,9 +6,13 @@
 
     @media (orientation: portrait) {
         iframe {
+            width: $game-responsive-width-portrait-ie; // ie-fallback
             width: $game-responsive-width-portrait;
+            max-width: $game-responsive-width-portrait-ie; // ie-fallback
             max-width: $game-responsive-width-portrait;
+            height: $game-responsive-height-portrait-ie; // ie-fallback
             height: $game-responsive-height-portrait;
+            max-height: $game-responsive-height-portrait-ie; // ie-fallback
             max-height: $game-responsive-height-portrait;
             display: block;
             margin: $standard auto;
@@ -35,9 +39,13 @@
             iframe {
                 z-index: $z-override;
                 position: fixed;
+                width: $game-fullscreen-width-portrait-ie; // ie-fallback
                 width: $game-fullscreen-width-portrait;
+                max-width: $game-fullscreen-width-portrait-ie; // ie-fallback
                 max-width: $game-fullscreen-width-portrait;
+                height: $game-fullscreen-height-portrait-ie; // ie-fallback
                 height: $game-fullscreen-height-portrait;
+                max-height: $game-fullscreen-height-portrait-ie; // ie-fallback
                 max-height: $game-fullscreen-height-portrait;
                 top: 50%;
                 transform: translateY(-55%);
