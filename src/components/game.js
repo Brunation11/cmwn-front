@@ -5,10 +5,7 @@ import ClassNames from 'classnames';
 import _ from 'lodash';
 import {Button, Glyphicon} from 'react-bootstrap';
 
-import HttpManager from 'components/http_manager';
-import Toast from 'components/toast';
-import Log from 'components/log';
-
+import getEventsForGame from 'components/game_events';
 import SkribbleMocks from 'routes/users/mock_skribble_data';
 
 import 'components/game.scss';
@@ -17,8 +14,6 @@ const EVENT_PREFIX = '_e_';
 
 const FULLSCREEN = 'Full Screen';
 const DEMO_MODE = 'Demo Mode';
-
-const BAD_FLIP = 'There was a problem registering your earned flip. Please try again in a little while';
 
 /**
  * Game wrapper iframe component.
@@ -52,42 +47,38 @@ var Game = React.createClass({
     },
     componentWillMount: function () {
         this.setEvent();
+        this.setState({
+            currentGame: this.props.game,
+            eventHandler: getEventsForGame(
+                EVENT_PREFIX,
+                this.props.game,
+                this.props.currentUser._links,
+                this.onExit
+            )
+        });
+    },
+    componentWillReceiveProps: function (nextProps) {
+        this.setState({
+            currentGame: nextProps.game,
+            eventHandler: getEventsForGame(
+                EVENT_PREFIX,
+                nextProps.game,
+                nextProps.currentUser._links,
+                this.onExit
+            )
+        });
     },
     componentWillUnmount: function () {
         this.clearEvent();
     },
-    submitFlip: function (flip) {
-        if (!this.props.flipUrl) {
-            return;
-        }
-        HttpManager.POST({url: this.props.flipUrl}, {'flip_id': flip}).catch(err => {
-            Toast.error(BAD_FLIP);
-            Log.log('Server refused flip update', err, flip);
-        });
-    },
-    /*
-     * default events. These will always fire regardless of whether or not
-     * there is an event defined in addition to the submission behavior
-     */
-    [EVENT_PREFIX + 'Flipped']: function (e) {
-        this.submitFlip(e.gameData.id);
-    },
-    [EVENT_PREFIX + 'Flip']: function (e) {
-        this.submitFlip(e.gameData.id);
-    },
-    [EVENT_PREFIX + 'Save']: function () {
-    },
-    [EVENT_PREFIX + 'Exit']: function () {
-        this.setState({fullscreenFallback: false});
-    },
-    [EVENT_PREFIX + 'Init']: function (e) {
-        e.respond(this.props.gameState);
-    },
     /* end of default events */
+    onExit: function (nextState) {
+        this.setState(nextState);
+    },
     gameEventHandler: function (e) {
         if (e.name != null) {
             if (_.isFunction(this[EVENT_PREFIX + _.capitalize(e.name)])) {
-                this[EVENT_PREFIX + _.capitalize(e.name)](...arguments);
+                this.state.eventHandler[EVENT_PREFIX + _.capitalize(e.name)](...arguments);
             }
             if (_.isFunction(this.props['on' + _.capitalize(e.name)])) {
                 this.props['on' + _.capitalize(e.name)](...arguments);

@@ -122,13 +122,16 @@ export class Profile extends React.Component {
     }
 
     showModal(gameUrl) {
-        var urlParts;
+        var urlParts = gameUrl.split('/');
+        urlParts.pop(); // discard index.html
         if (Detector.isMobileOrTablet() || Detector.isPortrait()) {
-            urlParts = gameUrl.split('/');
-            urlParts.pop(); // discard index.html
             History.push(`/game/${_.last(urlParts)}`);
         }
-        this.setState({gameOn: true, gameUrl});
+        this.setState({
+            gameOn: true,
+            gameUrl,
+            game: _.last(urlParts),
+        });
     }
 
     hideModal() {
@@ -150,7 +153,8 @@ export class Profile extends React.Component {
         return (
             <div>
                 <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl}
-                    flipUrl={flipUrl} onExit={this.setState.bind(this, {gameOn: false})}/>
+                    flipUrl={flipUrl} onExit={this.setState.bind(this, {gameOn: false})}
+                    game={this.state.game} currentUser={this.props.currentUser}/>
                     <a onClick={this.hideModal.bind(this)} className="modal-close">(close)</a>
             </div>
         );
