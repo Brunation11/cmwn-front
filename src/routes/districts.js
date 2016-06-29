@@ -32,7 +32,9 @@ var Component = React.createClass({
                     <Table data={this.props.data} className="admin">
                         <Column dataKey="title"
                             renderCell={(data, row) => (
-                                <Link to={'/districts/' + row.org_id}>{_.startCase(data)}</Link>
+                                <Link to={'/districts/' + row.org_id} className="district-link">
+                                    {_.startCase(data)}
+                                </Link>
                             )}
                         />
                         <Column dataKey="description" />

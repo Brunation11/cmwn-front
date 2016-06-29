@@ -33,8 +33,6 @@ var sri = require('gulp-sri');
 var mocha = require('gulp-mocha');
 var zip = require('gulp-zip');
 var webdriver = require('gulp-webdriver');
-var webdriverio = require('webdriverio');
-var wdio = require('./wdio.conf.js');
 
 /** @const */
 var APP_PREFIX = 'APP_';

@@ -9,7 +9,6 @@ services:
       APP_MODE: "local"
     volumes:
       - ./:/var/www/
-
   node:
     container_name: cmwn_front_node
     build: ./docker/node

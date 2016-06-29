@@ -16,7 +16,7 @@ import GenerateDataSource from 'components/datasource';
 
 const PAGE_UNIQUE_IDENTIFIER = 'classProfile';
 
-const UserSource = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
+const USER_SOURCE = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     TITLE: 'Class Administrative Dashboard: ',
@@ -54,8 +54,11 @@ var Component = React.createClass({
     renderImport: function () {
         var state = Store.getState();
         if (this.state == null || this.state._links == null || this.state._links.import == null) {
-        //if (!state.currentUser || !state.currentUser._embedded || !state.currentUser._embedded.groups || !state.currentUser._embedded.groups.length || state.currentUser._embedded.groups[0]._links.import == null) {
-        //if (!state.currentUser || !state.currentUser._embedded || !state.currentUser._embedded.groups || !state.currentUser._embedded.groups.length) {
+        //if (!state.currentUser || !state.currentUser._embedded ||
+        //    !state.currentUser._embedded.groups || !state.currentUser._embedded.groups.length ||
+        //    state.currentUser._embedded.groups[0]._links.import == null) {
+        //if (!state.currentUser || !state.currentUser._embedded || !state.currentUser._embedded.groups ||
+        //    !state.currentUser._embedded.groups.length) {
             return null;
         }
         return (
@@ -68,7 +71,7 @@ var Component = React.createClass({
         if (!this.state || this.state.parent_id == null) {
             return null;
         }
-        return <Link to={'/school/' + this.state.parent_id} >{BREADCRUMBS}</Link>;
+        return <Link to={'/school/' + this.state.parent_id} id="return-to-school">{BREADCRUMBS}</Link>;
     },
     render: function () {
         if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
@@ -78,18 +81,26 @@ var Component = React.createClass({
             <Layout>
                 <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard">
                     <p className="right" id="editButton">
-                        <EditLink className="purple" base="/class" id={this.state.group_id} scope={this.state.scope} text="Edit this class"/>
+                        <EditLink className="purple" base="/class" id={this.state.group_id}
+                            scope={this.state.scope} text="Edit this class" />
                         {this.renderImport()}
-                        <DeleteLink className="purple" base="/class" id={this.state.group_id} scope={this.state.scope} text="Delete this class" />
+                        <DeleteLink className="purple" base="/class" id={this.state.group_id}
+                            scope={this.state.scope} text="Delete this class" />
                     </p>
                     {this.renderBreadcrumb()}
                     <p>
-                        <Link to={`/class/${this.props.data.group_id}/profile`}>Return to class profile</Link>
+                        <Link to={`/class/${this.props.data.group_id}/profile`} id="return-to-class">
+                            Return to class profile
+                        </Link>
                     </p>
                     <br />
-                    <Text label={`${HEADINGS.DESCRIPTION}: `} text={this.props.data.description}><p></p></Text>
+                    <Text label={`${HEADINGS.DESCRIPTION}: `} text={this.props.data.description}>
+                        <p></p>
+                    </Text>
                     <br />
-                    <Text label={`${HEADINGS.CREATED}: `} text={this.props.data.created_at}><p></p></Text>
+                    <Text label={`${HEADINGS.CREATED}: `} text={this.props.data.created_at}>
+                        <p></p>
+                    </Text>
                 </Panel>
                 <Panel header="Students" className="standard">
                     <div className="clear">
@@ -97,7 +108,7 @@ var Component = React.createClass({
                             {this.renderImport()}
                         </span>
                     </div>
-                    <UserSource transform={users => {
+                    <USER_SOURCE transform={users => {
                         return _.map(users, user => {
                             user = user.set('role', user.type === 'CHILD' ? 'Student' : 'Faculty');
                             return user;
@@ -108,7 +119,9 @@ var Component = React.createClass({
                                 <Column dataKey="title"
                                     renderHeader="Name"
                                     renderCell={(data, row) => (
-                                        <Link to={`/users/${row.user_id}`}>{`${row.first_name} ${row.last_name}`}</Link>
+                                        <Link to={`/users/${row.user_id}`}>
+                                            {`${row.first_name} ${row.last_name}`}
+                                        </Link>
                                     )}
                                 />
                                 <Column dataKey="username" />
@@ -121,13 +134,15 @@ var Component = React.createClass({
                                 <Column dataKey="updated_at" renderHeader="Update Users"
                                     renderCell={(data, row) => {
                                         return (
-                                            <Link to={`/users/${row.user_id}/edit`}>Edit</Link>
+                                            <Link to={`/users/${row.user_id}/edit`} className="edit-student">
+                                                Edit
+                                            </Link>
                                         );
                                     }}
                                 />
                             </Table>
                         </Paginator>
-                    </UserSource>
+                    </USER_SOURCE>
                 </Panel>
            </Layout>
 

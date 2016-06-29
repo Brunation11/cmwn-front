@@ -54,7 +54,11 @@ var UpdateUsername = React.createClass({
             .confirm(Util.formatString(CONFIRM_SET, this.state.original), () => {
                 HttpManager.POST({url: 'https://api-dev.changemyworldnow.com/user-name'}, {user_name: this.state.option}).then(server => { // eslint-disable-line
                     this.setState({username: this.state.option});
-                    Toast.spawn({addnCls: 'humane-flatty-success', waitForMove: false, timeout: 10000})('Username Updated to ' + server.response.username + '!');
+                    Toast.spawn({
+                        addnCls: 'humane-flatty-success',
+                        waitForMove: false,
+                        timeout: 10000
+                    })('Username Updated to ' + server.response.username + '!');
                 }).catch(err => {
                     Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
                 });
@@ -81,21 +85,40 @@ var UpdateUsername = React.createClass({
                         disabled
                         label="Current Username:"
                     />
-                    <Button className="purple username-btn generate" onClick={this.reloadChildUsername}><Glyphicon glyph="repeat" /> {BUTTONS.GET}</Button>
+                    <Button className="purple username-btn generate" onClick={this.reloadChildUsername}>
+                        <Glyphicon glyph="repeat" /> {BUTTONS.GET}
+                    </Button>
                     <br />
-                    <Button className="green username-btn submit" onClick={this.setChildUsername}>{Util.formatString(BUTTONS.CONFIRM)}</Button>
+                    <Button className="green username-btn submit" onClick={this.setChildUsername}>
+                        {Util.formatString(BUTTONS.CONFIRM)}
+                    </Button>
                     <br />
-                    <Button className="blue alternate-usernames-btn username-btn" onClick={this.resetLast}>Select Last Option: {this.state.last}</Button>
+                    <Button className="blue alternate-usernames-btn username-btn" onClick={this.resetLast}>
+                        Select Last Option: {this.state.last}
+                    </Button>
                     <br />
-                    <Button className="blue alternate-usernames-btn username-btn" onClick={this.resetOriginal}>Select Original: {this.state.original}</Button>
+                    <Button
+                        className="blue alternate-usernames-btn username-btn"
+                        onClick={this.resetOriginal}
+                    >
+                        Select Original: {this.state.original}
+                    </Button>
                 </div>
                 <div className="right">
                     <div className={ClassNames('note', {open: this.state.tooltipsOpen})}>
-                        <p>love your new username? Be sure to click "YES, CHANGE IT!" to make it yours forever!</p>
-                        <p className="disclaimer">Note: Once you choose to set the new username, you won't be able to change it again.</p>
+                        <p>
+                            love your new username? Be sure to click
+                            {' '}"YES, CHANGE IT!" to make it yours forever!
+                        </p>
+                        <p className="disclaimer">
+                            Note: Once you choose to set the new username,
+                            {' '}you won't be able to change it again.
+                        </p>
                     </div>
                     <div className="reminder-container">
-                        <p className={ClassNames('reminder', {animate: this.state.tooltipsOpen})}>Changed your mind? You can choose from the last choice or keep your same username!</p>
+                        <p className={ClassNames('reminder', {animate: this.state.tooltipsOpen})}>
+                            Changed your mind? You can choose from the last choice or keep your same username!
+                        </p>
                     </div>
                 </div>
            </div>

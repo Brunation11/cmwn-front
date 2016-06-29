@@ -96,6 +96,7 @@ exports.config = {
     //
     // Host of the WebDriver server
     host: '192.168.99.100',
+    // host: hostIP,
     //
     // Port the WebDriver server is on
     // port: 4444,

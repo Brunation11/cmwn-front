@@ -63,8 +63,11 @@ var Component = React.createClass({
     },
     renderImport: function () {
         var state = Store.getState();
-        if (!state.currentUser || !state.currentUser._embedded || !state.currentUser._embedded.groups || !state.currentUser._embedded.groups.length || state.currentUser._embedded.groups[0]._links.import == null) {
-        //if (!state.currentUser || !state.currentUser._embedded || !state.currentUser._embedded.groups || !state.currentUser._embedded.groups.length) {
+        if (!state.currentUser || !state.currentUser._embedded || !state.currentUser._embedded.groups ||
+            !state.currentUser._embedded.groups.length ||
+            state.currentUser._embedded.groups[0]._links.import == null) {
+        //if (!state.currentUser || !state.currentUser._embedded || !state.currentUser._embedded.groups ||
+            //!state.currentUser._embedded.groups.length) {
             return null;
         }
         return (

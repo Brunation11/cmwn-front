@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 var studentDataA = {
     'user_id': '81d58d4e-2844-11e6-a284-2dd9dce0dc3f',
     'username': 'calm-swan005',
