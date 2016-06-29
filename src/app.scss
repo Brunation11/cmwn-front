@@ -111,17 +111,6 @@ h1, h2, h3 {
 
     }
 
-    .sweater:after {
-        display: block;
-        background-color: #fff;
-        height: 15px;
-        width: 100%;
-        content: " ";
-        position: absolute;
-        top: -12px;
-        margin-left: -$standard;
-    }
-
     .sweater, .sweater .content {
         padding: 0;
     }
@@ -219,6 +208,19 @@ h1, h2, h3 {
         position: relative;
         max-width: $monitor-max-break;
         height: 120px;
+        z-index: 1;
+    }
+
+    .global-header:after {
+        display: block;
+        background: #fff;
+        height: 15px;
+        width: 100%;
+        content: " ";
+        position: absolute;
+        bottom: -12px;
+        left: 0;
+        right: 0;
     }
 
     .global-footer {
@@ -389,8 +391,8 @@ h1, h2, h3 {
             padding: 0;
         }
 
-        .sweater:after {
-            margin-left: 0;
+        .global-header:after {
+            background: none;
         }
 
         .layout {
@@ -412,7 +414,7 @@ h1, h2, h3 {
         .headerLogo {
             padding: 0;
             margin-left: 0;
-            width: calc(100% - 180px - 6em);
+            width: calc(100% - 180px - 8em);
         }
 
         .content {
@@ -464,7 +466,6 @@ h1, h2, h3 {
             margin-left: auto;
             margin-right: auto;
         }
-
     }
 
     @media (min-width: $ultrawide-min-break) {
