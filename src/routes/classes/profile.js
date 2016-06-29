@@ -31,7 +31,7 @@ const ADMIN_TEXT = 'Class Administrative Dashboard';
 
 const CLASS_CREATED = 'Class created.';
 
-export class ProfileComponent extends React.Component {
+export class Profile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -51,7 +51,6 @@ export class ProfileComponent extends React.Component {
     }
     resolveRole() {
         var newState = {};
-        var state = Store.getState();
         if (state.currentUser && state.currentUser.type !== 'CHILD') {
             newState.isStudent = false;
         } else {
@@ -85,7 +84,7 @@ export class ProfileComponent extends React.Component {
                         item.images.data.length ? item.images.data[0].url : DefaultProfile}></img>
                     <p className="linkText" >{item.username}</p>
                 </Link>
-                {this.renderFlipsEarned.bind(this, item)}
+                {this.renderFlipsEarned(item)}
             </div>
         );
     }
@@ -98,7 +97,7 @@ export class ProfileComponent extends React.Component {
                <p className="right" >
                    <EditLink id="edit-button" className="purple" text="Edit Class" base="/class" uuid={this.state.group_id} canUpdate={Util.decodePermissions(this.state.scope).update} />
                </p>
-               {this.renderAdminLink.bind(this)}
+               {this.renderAdminLink()}
            </Panel>
         );
     }
@@ -108,7 +107,7 @@ export class ProfileComponent extends React.Component {
         }
         return (
             <Layout className="classProfile">
-                {this.renderClassInfo.bind(this)}
+                {this.renderClassInfo()}
                 <USER_SOURCE>
                     <FlipBoard renderFlip={this.renderFlip.bind(this)} header={
                         HEADINGS.CLASS + this.props.data.title
@@ -119,7 +118,7 @@ export class ProfileComponent extends React.Component {
     }
 }
 
-ProfileComponent.defaultProps = {
+Profile.defaultProps = {
     data: {}
 };
 
@@ -129,6 +128,9 @@ var mapStateToProps = state => {
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
+        if(state.currentUser != null)
+            currentUser = state.currentUser;
+
     }
     return {
         data,
@@ -136,6 +138,6 @@ var mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(ProfileComponent);
+var Page = connect(mapStateToProps)(Profile);
 export default Page;
 
