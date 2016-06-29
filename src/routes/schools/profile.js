@@ -78,7 +78,7 @@ var Component = React.createClass({
             return null;
         }
         return (
-            <p><a href={`/school/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
+            <p><a id="school-admin-link" href={`/school/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
         );
     },
     renderImport: function () {
@@ -95,7 +95,7 @@ var Component = React.createClass({
         }
         return (
            <Layout className="profile">
-               <Panel header={this.props.data.title} className="standard">
+               <Panel header={this.props.data.title} id="school-header" className="standard">
                    <p className="right" >
                        <EditLink className="purple" text="Edit School" base="/school" uuid={this.state.group_id} canUpdate={Util.decodePermissions(this.state.scope).update} />
                        {this.renderImport()}

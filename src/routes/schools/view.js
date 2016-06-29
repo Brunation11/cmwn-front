@@ -56,7 +56,7 @@ var Component = React.createClass({
                 return null;
             }
             return (
-                <Link to={`/districts/${district.id}`}>
+                <Link to={`/districts/${district.id}`} className='school-district-link'>
                     {district.title}
                 </Link>
             );
@@ -87,12 +87,12 @@ var Component = React.createClass({
             <Layout>
                 <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard">
                     <p className="right" >
-                        <EditLink className="purple" base="/school" id={this.state.group_id} scope={this.state.scope} text="Edit this school"/>
+                        <EditLink id="school-view-edit" className="purple" base="/school" id={this.state.group_id} scope={this.state.scope} text="Edit this school"/>
                         {this.renderImport()}
                         <DeleteLink className="purple" base="/school" id={this.state.group_id} scope={this.state.scope} text="Delete this school" />
                     </p>
                     <p>
-                        <a href={`/school/${this.props.data.group_id}/profile`}>Return to school profile</a>
+                        <a href={`/school/${this.props.data.group_id}/profile`} id="school-return-profile">Return to school profile</a>
                     </p>
                    <Paragraph>
                        <p pre={`${HEADINGS.DISTRICTS}: `}>{this.renderDistricts()}</p>
@@ -100,46 +100,58 @@ var Component = React.createClass({
                    </Paragraph>
                 </Panel>
                 <Panel header={HEADINGS.CLASSES} className="standard">
-                    <a onClick={() => History.push('/classes')}>View All Your Classes</a>
+                    <Link to={`/classes`} id="school-view-classes">View All Your Classes</Link>
                     <ClassSource>
-                        <Table>
+                        <Table id="school-class-table">
                             <Column dataKey="title"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/class/' + row.group_id)}>{_.startCase(data)}</a>
+                                    <Link to={`/class/${row.group_id}`} className="school-class-link">
+                                        {_.startCase(data)}
+                                    </Link>
                                 )}
                             />
                             <Column dataKey="description" />
                             <Column dataKey="title" renderHeader="Admin View"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/class/' + row.group_id + '/view')}>Admin View</a>
+                                    <Link to={`/class/${row.group_id}/view`} className="school-class-view">
+                                        Admin View
+                                    </Link>
                                 )}
                             />
                             <Column dataKey="title" renderHeader="Edit"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/class/' + row.group_id + '/edit')}>Edit</a>
+                                    <Link to={`/class/${row.group_id}/edit`} className="school-class-edit"}>
+                                        Edit
+                                    </Link>
                                 )}
                             />
                         </Table>
                     </ClassSource>
                 </Panel>
                 <Panel header={HEADINGS.USERS} className="standard">
-                    <a onClick={() => History.push('/users')}>View All Your Users</a>
+                    <a onClick={() => History.push('/users')} id="school-view-users">View All Your Users</a>
                     <UserSource>
-                        <Table>
+                        <Table id="school-user-table">
                             <Column dataKey="first_name" renderHeader="Name"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/user/' + row.user_id)}>{row.first_name + ' ' + row.last_name}</a>
+                                    <Link to={`/user/${row.user_id}`} className="school-user-link">
+                                        {row.first_name + ' ' + row.last_name}
+                                    </Link>
                                 )}
                             />
                             <Column dataKey="username" />
                             <Column dataKey="title" renderHeader="Admin View"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/user/' + row.user_id + '/view')}>Admin View</a>
+                                    <Link to={`/user/${row.user_id}/view`} className="school-user-view">
+                                        Admin View
+                                    </Link>
                                 )}
                             />
                             <Column dataKey="title" renderHeader="Edit"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/user/' + row.user_id + '/edit')}>Edit</a>
+                                    <Link to={`/user/${row.user_id}/edit`} className="school-user-edit">
+                                        Edit
+                                    </Link>
                                 )}
                             />
                         </Table>
