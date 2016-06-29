@@ -4,7 +4,7 @@ import { mount, shallow } from 'enzyme';
 
 import { Profile } from 'routes/users/profile';
 import { dataTransform } from 'routes/users/profile';
-import MockFlipWrapper from 'mocks/users/MockFlipWrapper';
+import MockFlipWrapper from 'mocks/MockFlipWrapper';
 import GLOBALS from 'components/globals';
 import profileSmoke from 'smoke_tests/users/profile.test.js'
 

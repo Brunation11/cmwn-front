@@ -126,35 +126,41 @@ const SOURCES = {
     ]
 };
 
-var Home = React.createClass({
-    getInitialState: function () {
-        return {
+class Home extends React.Component {
+    constructor() {
+        super();
+        this.state = {
             viewOpen: false,
             workOpen: false,
             contactOpen: false
         };
-    },
-    openViewModal: function () {
+    }
+
+    openViewModal() {
         this.setState({viewOpen: true});
-    },
-    openModal: function (id) {
+    }
+    
+    openModal(id) {
         var state;
 
         state = {};
         state[id + 'Open'] = true;
         this.setState(state);
-    },
-    closeWork: function () {
+    }
+
+    closeWork() {
         this.setState({ workOpen: false });
-    },
-    closeContact: function () {
+    }
+
+    closeContact() {
         this.setState({ contactOpen: false });
-    },
-    render: function () {
+    }
+
+    render() {
         var logoLink = Store.getState().currentUser.user_id ? '/profile' : '/';
         return (
             <div id="home" className="home">
-                <Modal show={this.state.viewOpen} onHide={() => this.setState({viewOpen: false})}>
+                <Modal show={this.state.viewOpen} onHide={this.setState.bind(this, {viewOpen: false})}>
                     <Modal.Body>
                         <iframe id="viddler-b9cd1cb6" src="//www.viddler.com/embed/b9cd1cb6/?f=1&amp;autoplay=1&amp;player=simple&amp;secret=54225444&amp;make_responsive=0" width="100%" height="300" frameBorder="0" scrolling="no" allowFullScreen="1"></iframe>
                     </Modal.Body>
@@ -162,7 +168,7 @@ var Home = React.createClass({
                 <div className="global-header">
                     <div className="logo" ><Link to={logoLink} ><img alt="Change My World Now" src={LOGO_URL} />Change My World Now</Link></div>
                     <div className="headerLogo"><Link to={logoLink} ><img alt="Change My World Now" src={LOGO_HEADER} /><span className="read">Change My World Now</span></Link></div>
-                    <Header workOpen={this.state.workOpen} contactOpen={this.state.contactOpen} closeWork={this.closeWork} closeContact={this.closeContact} />
+                    <Header workOpen={this.state.workOpen} contactOpen={this.state.contactOpen} closeWork={this.closeWork.bind(this)} closeContact={this.closeContact.bind(this)} />
                 </div>
                 <Carousel>
                     <CarouselItem>
@@ -170,7 +176,7 @@ var Home = React.createClass({
                         <div className="content-group centered sweater">
                             <div>
                                 <h2>{COPY.SLIDES[0].HEADING}</h2>
-                                <Button className="purple" onClick={this.openViewModal}>
+                                <Button className="purple" onClick={this.openViewModal.bind(this)}>
                                     {COPY.BUTTONS.WATCH}
                                 </Button>
                             </div>
@@ -190,31 +196,28 @@ var Home = React.createClass({
                     </CarouselItem>
                 </Carousel>
                 <div className="sweater">
-                    <Layout openModal={this.openModal} />
+                    <Layout openModal={this.openModal.bind(this)} />
                 </div>
             </div>
         );
     }
-});
+};
 
-var Header = React.createClass({
-    getInitialState: function () {
-        return {
+class Header extends React.Component {
+    constructor() {
+        super();
+        this.state = {
             loginOpen: false,
             signupOpen: false,
             showContact: false
         };
-    },
-    getDefaultProps: function () {
-        return {
-            workOpen: false,
-            contactOpen: false,
-        };
-    },
-    componentDidMount: function () {
+    }
+
+    componentDidMount() {
         this.renderCaptcha();
-    },
-    componentDidUpdate: function () {
+    }
+
+    componentDidUpdate() {
         try {
             this.renderCaptcha();
         } catch(err) {
@@ -223,61 +226,73 @@ var Header = React.createClass({
             Log.warn(err, 'Captcha not fully destroyed');
             return err;
         }
-    },
-    login: function () {
+    }
+
+    login() {
         if (Store.getState().currentUser.user_id) {
             History.push('/profile');
         } else {
             History.push('/login');
         }
-    },
-    renderCaptcha: function () {
+    }
+
+    renderCaptcha() {
         var captchas = document.getElementsByClassName('grecaptcha');
         if (captchas.length) {
             grecaptcha.render(captchas[0], {'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l', callback: () => { //eslint-disable-line no-undef
                 this.setState({showContact: true});
             }});
         }
-    },
-    displayWorkModal: function () {
+    }
+
+    displayWorkModal() {
         this.setState({workOpen: true});
-    },
-    displayContactModal: function () {
+    }
+
+    displayContactModal() {
         this.setState({contactOpen: true});
-    },
-    displaySignupModal: function () {
+    }
+
+    displaySignupModal() {
         this.setState({signupOpen: true});
-    },
-    hideWorkModal: function () {
+    }
+
+    hideWorkModal() {
         this.props.closeWork();
         this.setState({workOpen: false});
-    },
-    hideContactModal: function () {
+    }
+
+    hideContactModal() {
         this.props.closeContact();
         this.setState({contactOpen: false, showContact: false});
-    },
-    loginAlert: function () {
+    }
+
+    loginAlert() {
         if (Store.getState().currentUser.user_id) {
             History.replace('/profile');
         } else {
             History.replace('/login');
         }
-    },
-    launchDemo: function () {
+    }
+
+    launchDemo() {
         this.setState({demoOpen: true});
-    },
-    confirmDemo: function () {
+    }
+
+    confirmDemo() {
         this.login(this.state.demoText);
         this.setState({demoOpen: false});
-    },
-    signupAlert: function () {
+    }
+
+    signupAlert() {
         Toast.success(COPY.ALERTS.SIGNUP.TEXT);
-    },
-    render: function () {
+    }
+
+    render() {
         var loginButtonCopy = Store.getState().currentUser.user_id ? COPY.BUTTONS.PROFILE : COPY.BUTTONS.LOGIN;
         return (
             <div>
-                <Modal show={this.state.demoOpen} onHide={this.confirmDemo}>
+                <Modal show={this.state.demoOpen} onHide={this.confirmDemo.bind(this)}>
                     <Modal.Body>
                         <h2 class="access">Please enter your Special Access Code</h2>
                         <Input
@@ -286,32 +301,32 @@ var Header = React.createClass({
                             value={this.state.demoText}
                             onChange={e => this.setState({demoText: e.target.value})} //eslint-disable-line camelcase
                         />
-                        <Button onClick={this.confirmDemo}> Submit </Button>
+                        <Button onClick={this.confirmDemo.bind(this)}> Submit </Button>
                     </Modal.Body>
                 </Modal>
-                <Modal show={this.props.workOpen || this.state.workOpen} onHide={this.hideWorkModal}>
+                <Modal show={this.props.workOpen || this.state.workOpen} onHide={this.hideWorkModal.bind(this)}>
                     <Modal.Body>
                         {COPY.MODALS.WORK}
                     </Modal.Body>
                 </Modal>
-                <Modal show={this.props.contactOpen || this.state.contactOpen} onHide={this.hideContactModal}>
+                <Modal show={this.props.contactOpen || this.state.contactOpen} onHide={this.hideContactModal.bind(this)}>
                     <Modal.Body>
                         {COPY.MODALS.PRECAPTCHA}
                         <div className="grecaptcha"></div>
                         {this.state.showContact ? COPY.MODALS.CONTACT : ''}
                     </Modal.Body>
                 </Modal>
-                <Modal show={this.state.signupOpen} onHide={() => this.setState({signupOpen: false})}>
+                <Modal show={this.state.signupOpen} onHide={this.setState.bind(this, {signupOpen: false})}>
                     <Modal.Body>
                         {COPY.MODALS.SIGNUP}
                     </Modal.Body>
                 </Modal>
                 <h1 className="fallback">Change My World Now</h1>
                 <div className="links">
-                    <a href="#" onClick={this.displayWorkModal}>
+                    <a href="#" onClick={this.displayWorkModal.bind(this)}>
                         {COPY.BUTTONS.WORK}
                     </a>
-                    <a href="#" onClick={this.displayContactModal}>
+                    <a href="#" onClick={this.displayContactModal.bind(this)}>
                         {COPY.BUTTONS.CONTACT}
                     </a>
                     <a href="/terms" target="_blank">
@@ -319,29 +334,36 @@ var Header = React.createClass({
                     </a>
                 </div>
                 <div className="actions">
-                    <Button id="signup" className="green" onClick={this.displaySignupModal}>
+                    <Button id="signup" className="green" onClick={this.displaySignupModal.bind(this)}>
                         {COPY.BUTTONS.SIGNUP}
                     </Button>
-                    <Button id="login" className="hidden" onClick={this.loginAlert}>
+                    <Button id="login" className="hidden" onClick={this.loginAlert.bind(this)}>
                         {loginButtonCopy}
                     </Button>
-                    <Button id="demo" className="purple" onClick={this.login}>
+                    <Button id="demo" className="purple" onClick={this.login.bind(this)}>
                         {loginButtonCopy}
                     </Button>
                 </div>
             </div>
         );
     }
-});
+};
 
-var Layout = React.createClass({
-    displayWorkModal: function () {
+Header.defaultProps = {
+    workOpen: false,
+    contactOpen: false,
+};
+
+class Layout extends React.Component {
+    displayWorkModal() {
         this.props.openModal('work');
-    },
-    displayContactModal: function () {
+    }
+
+    displayContactModal() {
         this.props.openModal('contact');
-    },
-    render: function () {
+    }
+
+    render() {
         return (
             <div className="layout">
                 <div className="content">
@@ -357,10 +379,10 @@ var Layout = React.createClass({
                         </div>
                     </div>
                     <footer className="links">
-                        <a href="#" onClick={this.displayWorkModal}>
+                        <a href="#" onClick={this.displayWorkModal.bind(this)}>
                             {COPY.BUTTONS.WORK}
                         </a>
-                        <a href="#" onClick={this.displayContactModal}>
+                        <a href="#" onClick={this.displayContactModal.bind(this)}>
                             {COPY.BUTTONS.CONTACT}
                         </a>
                         <a href="/terms" target="_blank">
@@ -371,6 +393,6 @@ var Layout = React.createClass({
             </div>
         );
     }
-});
+};
 
 export default Home;
