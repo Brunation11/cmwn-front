@@ -42,6 +42,12 @@ $game-responsive-width-portrait: calc(50vmin * 1.77);
 $game-responsive-height-portrait: 50vmin;
 $game-fullscreen-width-portrait: 100vmin;
 $game-fullscreen-height-portrait: calc(100vmin * 0.5625);
+// ie fallback
+$game-responsive-width-portrait-ie: calc(50vm * 1.77);
+$game-responsive-height-portrait-ie: 50vm;
+$game-fullscreen-width-portrait-ie: 100vm;
+$game-fullscreen-height-portrait-ie: calc(100vm * 0.5625);
+
 
 $game-responsive-width-landscape: calc(50vmax * 1.77);
 $game-responsive-height-landscape: 50vmax;
