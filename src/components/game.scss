@@ -59,9 +59,13 @@
 
     @media (orientation: landscape) {
         iframe {
+            width: $game-responsive-width-landscape-ie; // ie-fallback
             width: $game-responsive-width-landscape;
+            max-width: $game-responsive-width-landscape-ie; // ie-fallback
             max-width: $game-responsive-width-landscape;
+            height: $game-responsive-height-landscape-ie; // ie-fallback
             height: $game-responsive-height-landscape;
+            max-height: $game-responsive-height-landscape-ie; // ie-fallback
             max-height: $game-responsive-height-landscape;
             display: block;
             margin: $standard auto;
@@ -89,9 +93,13 @@
             iframe {
                 z-index: $z-override;
                 position: fixed;
+                width: $game-fullscreen-width-landscape-ie; // ie-fallback
                 width: $game-fullscreen-width-landscape;
+                max-width: $game-fullscreen-width-landscape-ie; // ie-fallback
                 max-width: $game-fullscreen-width-landscape;
+                height: $game-fullscreen-height-landscape-ie; // ie-fallback
                 height: $game-fullscreen-height-landscape;
+                max-height: $game-fullscreen-height-landscape-ie; // ie-fallback
                 max-height: $game-fullscreen-height-landscape;
                 margin: auto;
                 top: 50%;
