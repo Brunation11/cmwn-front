@@ -160,10 +160,12 @@ h3 {
     }
 
     .content {
+        // scss-lint:disable all
         padding: $standard / 2;
         order: 2;
         flex-grow: 1;
         flex-shrink: 1;
+        // scss-lint:enable all
     }
 
 
@@ -191,10 +193,12 @@ h3 {
     }
 
     .sidebar {
+        // scss-lint:disable all
         padding: $standard / 2;
         order: 1;
         flex-grow: 0;
         flex-shrink: 0;
+        // scss-lint:enable all
 
         nav {
 
