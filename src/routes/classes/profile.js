@@ -107,11 +107,14 @@ export class ProfileComponent extends React.Component {
             return null;
         }
         return (
-           <Layout className="classProfile">
-               {this.renderClassInfo.bind(this)}
-               <UserSource>
-                   <FlipBoard renderFlip={this.renderFlip.bind(this)} header={
-           </Layout>
+            <Layout className="classProfile">
+                {this.renderClassInfo.bind(this)}
+                <USER_SOURCE>
+                    <FlipBoard renderFlip={this.renderFlip.bind(this)} header={
+                        HEADINGS.CLASS + this.props.data.title
+                    } />
+                </USER_SOURCE>
+            </Layout>
         );
     }
 }
