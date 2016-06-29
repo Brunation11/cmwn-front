@@ -19,7 +19,7 @@ import 'routes/classes/profile.scss';
 
 const PAGE_UNIQUE_IDENTIFIER = 'classProfile';
 
-const UserSource = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
+const USER_SOURCE = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     MY_CLASSMATES: 'My Classmates',
@@ -76,15 +76,18 @@ var Component = React.createClass({
             return null;
         }
         return (
-            <p><a id="class-dashboard-link" href={`/class/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
+            <p><a id="class-dashboard-link" href={`/class/${this.props.data.group_id}/view`}>
+                {ADMIN_TEXT}
+            </a></p>
         );
     },
     renderFlip: function (item){
         return (
             <div className="flip" key={Shortid.generate()}>
                 <Link to={`/student/${item.user_id.toString()}`} id={item.username}>
-                    <img src={item.images && item.images.data && item.images.data.length ? item.images.data[0].url : DefaultProfile}></img>
-                    <p className="link-text" >{item.username}</p>
+                    <img src={item.images && item.images.data &&
+                        item.images.data.length ? item.images.data[0].url : DefaultProfile}></img>
+                    <p className="linkText" >{item.username}</p>
                 </Link>
                 {this.renderFlipsEarned(item)}
             </div>
@@ -95,12 +98,19 @@ var Component = React.createClass({
             return null;
         }
         return (
-           <Panel header={this.state.title} className="standard">
-               <p className="right" >
-                   <EditLink id="edit-button" className="purple" text="Edit Class" base="/class" uuid={this.state.group_id} canUpdate={Util.decodePermissions(this.state.scope).update} />
-               </p>
-               {this.renderAdminLink()}
-           </Panel>
+            <Panel header={this.state.title} className="standard">
+                <p className="right" >
+                    <EditLink
+                        id="edit-button"
+                        className="purple"
+                        text="Edit Class"
+                        base="/class"
+                        uuid={this.state.group_id}
+                        canUpdate={Util.decodePermissions(this.state.scope).update}
+                    />
+                </p>
+                {this.renderAdminLink()}
+            </Panel>
         );
     },
     render: function () {
@@ -110,11 +120,11 @@ var Component = React.createClass({
         return (
            <Layout className="classProfile">
                {this.renderClassInfo()}
-               <UserSource>
+               <USER_SOURCE>
                    <FlipBoard renderFlip={this.renderFlip} header={
                      HEADINGS.CLASS + this.props.data.title
                    } />
-               </UserSource>
+               </USER_SOURCE>
            </Layout>
         );
     }

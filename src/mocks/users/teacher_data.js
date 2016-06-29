@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 var teacherData = {
     'user_id': 'c54d6b64-276d-11e6-85b7-a188177b4f51',
     'username': 'teacher',

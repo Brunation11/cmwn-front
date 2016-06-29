@@ -74,6 +74,7 @@
         "no-unused-vars": ["error", {"vars": "all", "args": "after-used"}],
         "no-multiple-empty-lines": "off",
         "one-var": ["error", "never"],
+        "operator-linebreak": ["error", "after"],
         "no-empty": "error",
         "max-len": ["error", 110],
         "max-lines": ["error", 500],
@@ -83,6 +84,9 @@
     "env": {
         "es6": true,
         "browser": true
+    },
+    "globals": {
+        "grecaptcha": false
     },
     "extends": "eslint:recommended",
     "rulePaths": ["eslint-rules"]

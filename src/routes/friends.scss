@@ -4,13 +4,13 @@
         text-align: center;
     }
 
-    .btn{
-        opacity: 1;
+    .btn {
         transition: opacity 1s ease-in-out;
+        opacity: 1;
 
         &.standard {
-            width: 100%;
             margin: 5px 0;
+            width: 100%;
         }
 
         &.faded {

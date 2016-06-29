@@ -4,13 +4,13 @@ import { mount, shallow } from 'enzyme';
 
 import { Profile } from 'routes/users/profile';
 import { dataTransform } from 'routes/users/profile';
-import MockFlipWrapper from 'mocks/MockFlipWrapper';
+import MockFlipWrapper from 'mocks/mock_flip_wrapper';
 import GLOBALS from 'components/globals';
 import profileSmoke from 'smoke_tests/users/profile.test.js'
 
-import teacherData from 'mocks/users/teacherData';
-import studentDataA from 'mocks/users/studentDataA';
-import studentDataB from 'mocks/users/studentDataB';
+import teacherData from 'mocks/users/teacher_data';
+import studentDataA from 'mocks/users/student_data_a';
+import studentDataB from 'mocks/users/student_data_b';
 
 const COMING_SOON = 'Coming Soon!';
 
