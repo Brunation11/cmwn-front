@@ -31,29 +31,25 @@ const ADMIN_TEXT = 'Class Administrative Dashboard';
 
 const CLASS_CREATED = 'Class created.';
 
-var Component = React.createClass({
-    getInitialState: function () {
-        return {
+export class ProfileComponent extends React.Component {
+    constructor (props) {
+        super(props);
+        this.state = {
             isStudent: true
         };
-    },
-    getDefaultProps: function () {
-        return {
-            data: {}
-        };
-    },
-    componentDidMount: function () {
+    }
+    componentDidMount () {
         this.setState(this.props.data);
         this.resolveRole();
         if (QueryString.parse(location.search).message === 'created') {
             Toast.success(CLASS_CREATED);
         }
-    },
-    componentWillReceiveProps: function (nextProps) {
+    }
+    componentWillReceiveProps (nextProps) {
         this.setState(nextProps.data);
         this.resolveRole();
-    },
-    resolveRole: function () {
+    }
+    resolveRole () {
         var newState = {};
         var state = Store.getState();
         if (state.currentUser && state.currentUser.type !== 'CHILD') {
@@ -62,35 +58,35 @@ var Component = React.createClass({
             newState.isStudent = true;
         }
         this.setState(newState);
-    },
-    renderFlipsEarned: function (item) {
+    }
+    renderFlipsEarned (item) {
         if (item && item.roles && item.roles.data && !~item.roles.data.indexOf('Student')) {
             return null;
         }
         return (
             <p className="user-flips" key={Shortid.generate()}>0 Flips Earned</p>
         );
-    },
-    renderAdminLink: function () {
+    }
+    renderAdminLink () {
         if (!Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
         return (
             <p><a id="class-dashboard-link" href={`/class/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
         );
-    },
-    renderFlip: function (item){
+    }
+    renderFlip (item){
         return (
             <div className="flip" key={Shortid.generate()}>
                 <Link to={`/student/${item.user_id.toString()}`} id={item.username}>
                     <img src={item.images && item.images.data && item.images.data.length ? item.images.data[0].url : DefaultProfile}></img>
                     <p className="link-text" >{item.username}</p>
                 </Link>
-                {this.renderFlipsEarned(item)}
+                {this.renderFlipsEarned.bind(this, item)}
             </div>
         );
-    },
-    renderClassInfo: function () {
+    }
+    renderClassInfo () {
         if (this.state.group_id == null || !Util.decodePermissions(this.state.scope).update) {
             return null;
         }
@@ -99,26 +95,30 @@ var Component = React.createClass({
                <p className="right" >
                    <EditLink id="edit-button" className="purple" text="Edit Class" base="/class" uuid={this.state.group_id} canUpdate={Util.decodePermissions(this.state.scope).update} />
                </p>
-               {this.renderAdminLink()}
+               {this.renderAdminLink.bind(this)}
            </Panel>
         );
-    },
-    render: function () {
+    }
+    render () {
         if (this.props.data == null || this.state == null) {
             return null;
         }
         return (
            <Layout className="classProfile">
-               {this.renderClassInfo()}
+               {this.renderClassInfo.bind(this)}
                <UserSource>
-                   <FlipBoard renderFlip={this.renderFlip} header={
+                   <FlipBoard renderFlip={this.renderFlip.bind(this)} header={
                      HEADINGS.CLASS + this.props.data.title
                    } />
                </UserSource>
            </Layout>
         );
     }
-});
+}
+
+ProfileComponent.defaultProps = {
+    data: {}
+}
 
 var mapStateToProps = state => {
     var data = {};
