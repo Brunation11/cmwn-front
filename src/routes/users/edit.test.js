@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { mount, shallow } from 'enzyme';
 
 import { EditProfile } from 'routes/users/edit';
-
+import editSmoke from 'smoke_tests/users/edit.test.js'
 
 import teacherData from 'mocks/users/teacher_data';
 import studentDataA from 'mocks/users/student_data_a';
@@ -12,7 +12,6 @@ import studentDataB from 'mocks/users/student_data_b';
 var checkEditEls = function(wrapper) {
     expect(wrapper.find('Layout')).to.have.length(1);
     expect(wrapper.find('Panel')).to.have.length(1);
-    //expect(wrapper.find('ProfileImage')).to.have.length(1);
     expect(wrapper.find('UpdateUsername')).to.have.length(1);
     expect(wrapper.find('ChangePassword')).to.have.length(1);
     expect(wrapper.find('ForgotPass')).to.have.length(1);
@@ -20,7 +19,6 @@ var checkEditEls = function(wrapper) {
 };
 
 var checkAdultEls = function(wrapper) {
-    // TODO: check contents using mount after refactoring done. LB 06/21/16.
     expect(wrapper.find('Form')).to.have.length(1);
     expect(wrapper.find('Input')).to.have.length(4);
 };
@@ -52,8 +50,11 @@ var checkEditFields = function(data, currentUser) {
     
 }
 
-describe('Edit Profile', function() {
-   //TODO: lifecycle methods when mounting set up with unconnected components.  LB 06/21/16.
+describe('Edit Profile Smoke Tests', function() {
+    editSmoke();
+});
+
+describe('Edit Profile Unit Tests', function() {
    //TODO: suspend account & reset password & submit data when test mode set up for HTTPManager. LB 06/21/16.
    //TODO: test parents methods & render school info if added to render. LB 06/22/16.
 
