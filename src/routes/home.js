@@ -165,41 +165,35 @@ const SOURCES = {
     ]
 };
 
-class Home extends React.Component {
-    constructor() {
-        super();
-        this.state = {
+var Home = React.createClass({
+    getInitialState: function () {
+        return {
             viewOpen: false,
             workOpen: false,
             contactOpen: false
         };
-    }
-
-    openViewModal() {
+    },
+    openViewModal: function () {
         this.setState({viewOpen: true});
-    }
-
-    openModal(id) {
+    },
+    openModal: function (id) {
         var state;
 
         state = {};
         state[id + 'Open'] = true;
         this.setState(state);
-    }
-
-    closeWork() {
+    },
+    closeWork: function () {
         this.setState({ workOpen: false });
-    }
-
-    closeContact() {
+    },
+    closeContact: function () {
         this.setState({ contactOpen: false });
-    }
-
-    render() {
+    },
+    render: function () {
         var logoLink = Store.getState().currentUser.user_id ? '/profile' : '/';
         return (
             <div id="home" className="home">
-                <Modal show={this.state.viewOpen} onHide={this.setState.bind(this, {viewOpen: false})}>
+                <Modal show={this.state.viewOpen} onHide={() => this.setState({viewOpen: false})}>
                     <Modal.Body>
                         <iframe id="viddler-b9cd1cb6" src={'//www.viddler.com/embed/b9cd1cb6/?f=1&' +
                             'autoplay=1&player=simple&secret=54225444&make_responsive=0'}
@@ -215,7 +209,7 @@ class Home extends React.Component {
                         src={LOGO_HEADER} /><span className="read">Change My World Now</span></Link>
                     </div>
                     <Header workOpen={this.state.workOpen} contactOpen={this.state.contactOpen}
-                        closeWork={this.closeWork.bind(this)} closeContact={this.closeContact.bind(this)} />
+                        closeWork={this.closeWork} closeContact={this.closeContact} />
                 </div>
                 <Carousel>
                     <CarouselItem>
@@ -223,7 +217,7 @@ class Home extends React.Component {
                         <div className="content-group centered sweater">
                             <div>
                                 <h2>{COPY.SLIDES[0].HEADING}</h2>
-                                <Button className="purple" onClick={this.openViewModal.bind(this)}>
+                                <Button className="purple" onClick={this.openViewModal}>
                                     {COPY.BUTTONS.WATCH}
                                 </Button>
                             </div>
@@ -243,28 +237,31 @@ class Home extends React.Component {
                     </CarouselItem>
                 </Carousel>
                 <div className="sweater">
-                    <Layout openModal={this.openModal.bind(this)} />
+                    <Layout openModal={this.openModal} />
                 </div>
             </div>
         );
     }
-}
+});
 
-class Header extends React.Component {
-    constructor() {
-        super();
-        this.state = {
+var Header = React.createClass({
+    getInitialState: function () {
+        return {
             loginOpen: false,
             signupOpen: false,
             showContact: false
         };
-    }
-
-    componentDidMount() {
+    },
+    getDefaultProps: function () {
+        return {
+            workOpen: false,
+            contactOpen: false,
+        };
+    },
+    componentDidMount: function () {
         this.renderCaptcha();
-    }
-
-    componentDidUpdate() {
+    },
+    componentDidUpdate: function () {
         try {
             this.renderCaptcha();
         } catch(err) {
@@ -273,17 +270,15 @@ class Header extends React.Component {
             Log.warn(err, 'Captcha not fully destroyed');
             return err;
         }
-    }
-
-    login() {
+    },
+    login: function () {
         if (Store.getState().currentUser.user_id) {
             History.push('/profile');
         } else {
             History.push('/login');
         }
-    }
-
-    renderCaptcha() {
+    },
+    renderCaptcha: function () {
         var captchas = document.getElementsByClassName('grecaptcha');
         if (captchas.length) {
             grecaptcha.render(captchas[0], {'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l',
@@ -292,58 +287,47 @@ class Header extends React.Component {
                 }
             });
         }
-    }
-
-    displayWorkModal() {
+    },
+    displayWorkModal: function () {
         this.setState({workOpen: true});
-    }
-
-    displayContactModal() {
+    },
+    displayContactModal: function () {
         this.setState({contactOpen: true});
-    }
-
-    displaySignupModal() {
+    },
+    displaySignupModal: function () {
         this.setState({signupOpen: true});
-    }
-
-    hideWorkModal() {
+    },
+    hideWorkModal: function () {
         this.props.closeWork();
         this.setState({workOpen: false});
-    }
-
-    hideContactModal() {
+    },
+    hideContactModal: function () {
         this.props.closeContact();
         this.setState({contactOpen: false, showContact: false});
-    }
-
-    loginAlert() {
+    },
+    loginAlert: function () {
         if (Store.getState().currentUser.user_id) {
             History.replace('/profile');
         } else {
             History.replace('/login');
         }
-    }
-
-    launchDemo() {
+    },
+    launchDemo: function () {
         this.setState({demoOpen: true});
-    }
-
-    confirmDemo() {
+    },
+    confirmDemo: function () {
         this.login(this.state.demoText);
         this.setState({demoOpen: false});
-    }
-
-    signupAlert() {
+    },
+    signupAlert: function () {
         Toast.success(COPY.ALERTS.SIGNUP.TEXT);
-    }
-
-    render() {
+    },
+    render: function () {
         var loginButtonCopy = Store.getState().currentUser.user_id ?
             COPY.BUTTONS.PROFILE : COPY.BUTTONS.LOGIN;
-
         return (
             <div>
-                <Modal show={this.state.demoOpen} onHide={this.confirmDemo.bind(this)}>
+                <Modal show={this.state.demoOpen} onHide={this.confirmDemo}>
                     <Modal.Body>
                         <h2 class="access">Please enter your Special Access Code</h2>
                         <Input
@@ -352,34 +336,32 @@ class Header extends React.Component {
                             value={this.state.demoText}
                             onChange={e => this.setState({demoText: e.target.value})}
                         />
-                        <Button onClick={this.confirmDemo.bind(this)}> Submit </Button>
+                        <Button onClick={this.confirmDemo}> Submit </Button>
                     </Modal.Body>
                 </Modal>
-                <Modal show={this.props.workOpen || this.state.workOpen}
-                    onHide={this.hideWorkModal.bind(this)}>
+                <Modal show={this.props.workOpen || this.state.workOpen} onHide={this.hideWorkModal}>
                     <Modal.Body>
                         {COPY.MODALS.WORK}
                     </Modal.Body>
                 </Modal>
-                <Modal show={this.props.contactOpen || this.state.contactOpen}
-                    onHide={this.hideContactModal.bind(this)}>
+                <Modal show={this.props.contactOpen || this.state.contactOpen} onHide={this.hideContactModal}>
                     <Modal.Body>
                         {COPY.MODALS.PRECAPTCHA}
                         <div className="grecaptcha"></div>
                         {this.state.showContact ? COPY.MODALS.CONTACT : ''}
                     </Modal.Body>
                 </Modal>
-                <Modal show={this.state.signupOpen} onHide={this.setState.bind(this, {signupOpen: false})}>
+                <Modal show={this.state.signupOpen} onHide={() => this.setState({signupOpen: false})}>
                     <Modal.Body>
                         {COPY.MODALS.SIGNUP}
                     </Modal.Body>
                 </Modal>
                 <h1 className="fallback">Change My World Now</h1>
                 <div className="links">
-                    <a href="#" onClick={this.displayWorkModal.bind(this)}>
+                    <a href="#" onClick={this.displayWorkModal}>
                         {COPY.BUTTONS.WORK}
                     </a>
-                    <a href="#" onClick={this.displayContactModal.bind(this)}>
+                    <a href="#" onClick={this.displayContactModal}>
                         {COPY.BUTTONS.CONTACT}
                     </a>
                     <a href="/terms" target="_blank">
@@ -387,36 +369,29 @@ class Header extends React.Component {
                     </a>
                 </div>
                 <div className="actions">
-                    <Button id="signup" className="green" onClick={this.displaySignupModal.bind(this)}>
+                    <Button id="signup" className="green" onClick={this.displaySignupModal}>
                         {COPY.BUTTONS.SIGNUP}
                     </Button>
-                    <Button id="login" className="hidden" onClick={this.loginAlert.bind(this)}>
+                    <Button id="login" className="hidden" onClick={this.loginAlert}>
                         {loginButtonCopy}
                     </Button>
-                    <Button id="demo" className="purple" onClick={this.login.bind(this)}>
+                    <Button id="demo" className="purple" onClick={this.login}>
                         {loginButtonCopy}
                     </Button>
                 </div>
             </div>
         );
     }
-}
+});
 
-Header.defaultProps = {
-    workOpen: false,
-    contactOpen: false,
-};
-
-class Layout extends React.Component {
-    displayWorkModal() {
+var Layout = React.createClass({
+    displayWorkModal: function () {
         this.props.openModal('work');
-    }
-
-    displayContactModal() {
+    },
+    displayContactModal: function () {
         this.props.openModal('contact');
-    }
-
-    render() {
+    },
+    render: function () {
         return (
             <div className="layout">
                 <div className="content">
@@ -433,10 +408,10 @@ class Layout extends React.Component {
                         </div>
                     </div>
                     <footer className="links">
-                        <a href="#" onClick={this.displayWorkModal.bind(this)}>
+                        <a href="#" onClick={this.displayWorkModal}>
                             {COPY.BUTTONS.WORK}
                         </a>
-                        <a href="#" onClick={this.displayContactModal.bind(this)}>
+                        <a href="#" onClick={this.displayContactModal}>
                             {COPY.BUTTONS.CONTACT}
                         </a>
                         <a href="/terms" target="_blank">
@@ -447,6 +422,6 @@ class Layout extends React.Component {
             </div>
         );
     }
-}
+});
 
 export default Home;
