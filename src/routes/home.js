@@ -178,7 +178,7 @@ class Home extends React.Component {
     openViewModal() {
         this.setState({viewOpen: true});
     }
-    
+
     openModal(id) {
         var state;
 
@@ -248,7 +248,7 @@ class Home extends React.Component {
             </div>
         );
     }
-};
+}
 
 class Header extends React.Component {
     constructor() {
@@ -355,12 +355,14 @@ class Header extends React.Component {
                         <Button onClick={this.confirmDemo.bind(this)}> Submit </Button>
                     </Modal.Body>
                 </Modal>
-                <Modal show={this.props.workOpen || this.state.workOpen} onHide={this.hideWorkModal.bind(this)}>
+                <Modal show={this.props.workOpen || this.state.workOpen}
+                    onHide={this.hideWorkModal.bind(this)}>
                     <Modal.Body>
                         {COPY.MODALS.WORK}
                     </Modal.Body>
                 </Modal>
-                <Modal show={this.props.contactOpen || this.state.contactOpen} onHide={this.hideContactModal.bind(this)}>
+                <Modal show={this.props.contactOpen || this.state.contactOpen}
+                    onHide={this.hideContactModal.bind(this)}>
                     <Modal.Body>
                         {COPY.MODALS.PRECAPTCHA}
                         <div className="grecaptcha"></div>
@@ -398,7 +400,7 @@ class Header extends React.Component {
             </div>
         );
     }
-};
+}
 
 Header.defaultProps = {
     workOpen: false,
@@ -445,6 +447,6 @@ class Layout extends React.Component {
             </div>
         );
     }
-};
+}
 
 export default Home;

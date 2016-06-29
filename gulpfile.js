@@ -409,7 +409,7 @@ gulp.task('unit', function () {
     return tests;
 });
 
-gulp.task('smoke', function() {
+gulp.task('smoke', function () {
     process.env.NODE_ENV = 'production';
     process.env.BABEL_ENV = 'production';
     var tests = gulp.src(['./smoke.test.js'], {read: false})
