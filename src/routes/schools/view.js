@@ -103,7 +103,7 @@ var Component = React.createClass({
                 </Panel>
                 <Panel header={HEADINGS.CLASSES} className="standard">
                     <Link to={`/classes`} id="school-view-classes">View All Your Classes</Link>
-                    <ClassSource>
+                    <CLASS_SOURCE>
                         <Table id="school-class-table">
                             <Column dataKey="title"
                                 renderCell={(data, row) => (
@@ -122,7 +122,7 @@ var Component = React.createClass({
                             />
                             <Column dataKey="title" renderHeader="Edit"
                                 renderCell={(data, row) => (
-                                    <Link to={`/class/${row.group_id}/edit`} className="school-class-edit"}>
+                                    <Link to={`/class/${row.group_id}/edit`} className="school-class-edit">
                                         Edit
                                     </Link>
                                 )}
@@ -131,8 +131,8 @@ var Component = React.createClass({
                     </CLASS_SOURCE>
                 </Panel>
                 <Panel header={HEADINGS.USERS} className="standard">
-                    <a onClick={() => History.push('/users')} id="school-view-users">View All Your Users</a>
-                    <UserSource>
+                    <Link to={`/users`} id="school-view-users">View All Your Users</Link>
+                    <USER_SOURCE>
                         <Table id="school-user-table">
                             <Column dataKey="first_name" renderHeader="Name"
                                 renderCell={(data, row) => (
