@@ -152,10 +152,16 @@ export class Profile extends React.Component {
         }
         return (
             <div>
-                <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl}
-                    flipUrl={flipUrl} onExit={this.setState.bind(this, {gameOn: false})}
-                    game={this.state.game} currentUser={this.props.currentUser}/>
-                    <a onClick={this.hideModal.bind(this)} className="modal-close">(close)</a>
+                <Game
+                    ref="gameRef"
+                    isTeacher={!this.state.isStudent}
+                    url={this.state.gameUrl}
+                    flipUrl={flipUrl}
+                    onExit={this.setState.bind(this, {gameOn: false})}
+                    game={this.state.game}
+                    currentUser={this.props.currentUser}
+                />
+                <a onClick={this.hideModal.bind(this)} className="modal-close">(close)</a>
             </div>
         );
     }

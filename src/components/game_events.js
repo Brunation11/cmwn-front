@@ -8,7 +8,7 @@ import Skribble from 'components/game_events/skribble';
 
 const BAD_FLIP = 'There was a problem registering your earned flip. Please try again in a little while';
 
-export default function (eventPrefix, game, _links, exitCallback) {
+export default function (eventPrefix, gameId, _links, exitCallback) {
     var submitFlip = function (flip) {
         if (!_links.flip.href) {
             return;
@@ -26,7 +26,14 @@ export default function (eventPrefix, game, _links, exitCallback) {
         Flip: function (e) {
             submitFlip(e.gameData.id);
         },
-        Save: function () {
+        Save: function (e) {
+            var version = e.gameData.version || 1;
+            if (_links.save_game == null) {
+                Log.error('Something went wrong. No game save url was provided. Game data will not be saved');
+                return;
+            }
+            HttpManager.POST(this.props.saveUrl.replace('{game_id}', gameId),
+                {data: e.gameData, version});
         },
         Exit: function () {
             exitCallback({fullscreenFallback: false});
@@ -36,7 +43,7 @@ export default function (eventPrefix, game, _links, exitCallback) {
     };
 
     var events = DEFAULT_EVENTS;
-    if (game === 'skribble') {
+    if (gameId === 'skribble') {
         events = _.defaults(Skribble, events);
     }
     return _.reduce(events, (v, k, a) => {
