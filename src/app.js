@@ -415,8 +415,8 @@ if (window.Rollbar && ~window.__cmwn.MODE.indexOf('prod')){ //eslint-disable-lin
 if (window.Rollbar != null) { //eslint-disable-line no-undef
     //Quick and dirty leading edge throttle on rapid fire events
     Rollbar.configure({checkIgnore: function (isUncaught, args, payload) { //eslint-disable-line
-        var key = hashCode((args[1] && args[1].toString()) || (args[2] && args[2].toString())
-            || args.join(' '));
+        var key = hashCode((args[1] && args[1].toString()) || (args[2] && args[2].toString()) ||
+            args.join(' '));
         window.__cmwn._loggerevents = window.__cmwn._loggerevents || {};
         if (window.__cmwn._loggerevents[key] == null) {
             window.__cmwn._loggerevents[key] = Date.now();
@@ -466,8 +466,8 @@ function run() {
         }
         Log.info('Application started');
     } catch(err) {
-        Log.info('Application bootstrap failed, attempting to recover.'
-            + 'Attempt ' + window._bootstrap_attempts + ' out of 5');
+        Log.info('Application bootstrap failed, attempting to recover.' +
+            'Attempt ' + window._bootstrap_attempts + ' out of 5');
         if (window._bootstrap_attempts < 5) {
             window.setTimeout(run, 500);
         } else {

@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 var studentDataB = {
     'user_id': '97443a7e-2806-11e6-9c3e-a5b7dc3d064c',
     'username': 'joyous-impala003',

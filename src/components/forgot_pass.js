@@ -29,7 +29,8 @@ class ForgotPass extends React.Component {
         update.then(
             Toast.success.bind(this, 'Password reset code sent to user email.')
         ).catch(err => {
-            Log.warn('Could not reset password at this time.' + (err.message ? ' Message: ' + err.message : ''), err);
+            Log.warn('Could not reset password at this time.' +
+                (err.message ? ' Message: ' + err.message : ''), err);
             Toast.error(ERRORS.BAD_PASS);
         });
     }

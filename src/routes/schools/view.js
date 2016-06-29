@@ -15,8 +15,8 @@ import GenerateDataSource from 'components/datasource';
 
 const PAGE_UNIQUE_IDENTIFIER = 'district-view';
 
-const ClassSource = GenerateDataSource('group_class', PAGE_UNIQUE_IDENTIFIER);
-const UserSource = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
+const CLASS_SOURCE = GenerateDataSource('group_class', PAGE_UNIQUE_IDENTIFIER);
+const USER_SOURCE = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     TITLE: 'School Administrative Dashboard: ',
@@ -76,7 +76,8 @@ var Component = React.createClass({
             return null;
         }
         return (
-            <EditLink className="green" base="/school" id={this.state.group_id} scope={this.state.scope} text="Import Spreadsheets"/>
+            <EditLink className="green" base="/school" id={this.state.group_id} scope={this.state.scope}
+                text="Import Spreadsheets"/>
         );
     },
     render: function () {
@@ -89,7 +90,8 @@ var Component = React.createClass({
                     <p className="right" >
                         <EditLink id="school-view-edit" className="purple" base="/school" id={this.state.group_id} scope={this.state.scope} text="Edit this school"/>
                         {this.renderImport()}
-                        <DeleteLink className="purple" base="/school" id={this.state.group_id} scope={this.state.scope} text="Delete this school" />
+                        <DeleteLink className="purple" base="/school" id={this.state.group_id}
+                            scope={this.state.scope} text="Delete this school" />
                     </p>
                     <p>
                         <a href={`/school/${this.props.data.group_id}/profile`} id="school-return-profile">Return to school profile</a>
@@ -126,7 +128,7 @@ var Component = React.createClass({
                                 )}
                             />
                         </Table>
-                    </ClassSource>
+                    </CLASS_SOURCE>
                 </Panel>
                 <Panel header={HEADINGS.USERS} className="standard">
                     <a onClick={() => History.push('/users')} id="school-view-users">View All Your Users</a>
@@ -155,7 +157,7 @@ var Component = React.createClass({
                                 )}
                             />
                         </Table>
-                    </UserSource>
+                    </USER_SOURCE>
                 </Panel>
            </Layout>
         );

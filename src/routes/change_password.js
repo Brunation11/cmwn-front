@@ -19,7 +19,8 @@ const ERRORS = {
     TOO_SHORT: 'Passwords must contain at least 8 characters, including one number',
     NO_MATCH: 'Those passwords do not appear to match. Please try again.'
 };
-const CHANGE_COPY = 'You are required to change your password before using ChangeMyWorldNow.com. Please update your password using the form below to proceed.';
+const CHANGE_COPY = `You are required to change your password before using ChangeMyWorldNow.com.
+        Please update your password using the form below to proceed.`;
 
 
 var isPassValid = function (password) {
