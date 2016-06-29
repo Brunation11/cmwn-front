@@ -35,6 +35,7 @@
         display: none;
     }
 
+    // scss-lint:disable all
     .upload {
         display: inline-block;
         position: absolute;
@@ -56,6 +57,7 @@
         transition-duration: .3s;
         transition-property: box-shadow, transform;
     }
+    // scss-lint:enable all
 
     .upload:hover,
     .upload:focus,

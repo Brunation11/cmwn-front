@@ -14,6 +14,7 @@ import Util from 'components/util';
 
 import 'routes/users/edit.scss';
 
+var mapStateToProps;
 var Page;
 
 const HEADINGS = {
@@ -79,11 +80,13 @@ export class ProfileView extends React.Component {
         }
         return (
            <Layout className="edit-student">
-                <Panel header={HEADINGS.EDIT_TITLE + this.state.first_name + ' ' + this.state.last_name} className="standard edit-profile">
+                <Panel header={HEADINGS.EDIT_TITLE + this.state.first_name + ' ' + this.state.last_name}
+                    className="standard edit-profile">
                     <div className="left">
                         <ProfileImage user_id={this.state.user_id} link-below={true}/>
                         <p><a onClick={this.suspendAccount.bind(this)}>{SUSPEND}</a></p>
-                        <EditLink base="/user" uuid={this.state.user_id} canUpdate={Util.decodePermissions(this.state.scope).update} />
+                        <EditLink base="/user" uuid={this.state.user_id}
+                            canUpdate={Util.decodePermissions(this.state.scope).update} />
                     </div>
                     <div className="right">
                         <h2>{this.state.username}</h2>
@@ -94,7 +97,7 @@ export class ProfileView extends React.Component {
     }
 }
 
-var mapStateToProps = state => {
+mapStateToProps = state => {
     var data = {};
     var loading = true;
     if (state.page && state.page.data != null) {

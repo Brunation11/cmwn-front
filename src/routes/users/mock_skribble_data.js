@@ -1,6 +1,9 @@
+/* eslint-disable max-lines */
 
 export default function (e) {
-    var data, gameData, deliveryData;
+    var data;
+    var gameData;
+    var deliveryData;
 
     // console.log(e.name, e.gameData); // eslint-disable-line no-console
 
@@ -11,6 +14,8 @@ export default function (e) {
     if (!data) {
         return;
     }
+
+    /* eslint-disable max-len */
 
     if (data.game === 'skribble') {
 
@@ -353,32 +358,48 @@ export default function (e) {
                     {
                         id: 1,
                         unread: true,
-                        'username': 'epic_otter',
-                        'profile-image': 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSCsqLsKdWtygP36IwaIq73QCJELIeF9Hquco8u4pHGXpfcs3rLWg',
                         timestamp: 1465413082450,
+                        user: {
+                            'user_id': 1,
+                            name: 'epic_otter',
+                            'flips_earned': 15,
+                            'profile_image': 'media/Libraries/Images/Animals/Dogs_and_Cats/img_dogs_10-01.png'
+                        }
                     },
                     {
                         id: 2,
                         unread: false,
-                        'username': 'magical_bison',
-                        'profile-image': 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSCsqLsKdWtygP36IwaIq73QCJELIeF9Hquco8u4pHGXpfcs3rLWg',
                         timestamp: 1465413082450,
+                        user: {
+                            'user_id': 1,
+                            name: 'magical_bison',
+                            'flips_earned': 15,
+                            'profile_image': 'media/Libraries/Images/Animals/Dogs_and_Cats/img_dogs_10-01.png'
+                        }
                     }
                 ],
                 outbox: [
                     {
                         id: 3,
                         sent: true,
-                        'username': 'epic_otter',
-                        'profile-image': 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSCsqLsKdWtygP36IwaIq73QCJELIeF9Hquco8u4pHGXpfcs3rLWg',
                         timestamp: 1465413082450,
+                        user: {
+                            'user_id': 1,
+                            name: 'epic_otter',
+                            'flips_earned': 15,
+                            'profile_image': 'media/Libraries/Images/Animals/Dogs_and_Cats/img_dogs_10-01.png'
+                        }
                     },
                     {
                         id: 4,
                         sent: true,
-                        'username': 'jazzy_horse',
-                        'profile-image': 'https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSCsqLsKdWtygP36IwaIq73QCJELIeF9Hquco8u4pHGXpfcs3rLWg',
                         timestamp: 1465413082450,
+                        user: {
+                            'user_id': 1,
+                            name: 'jazzy_horse',
+                            'flips_earned': 15,
+                            'profile_image': 'media/Libraries/Images/Animals/Dogs_and_Cats/img_dogs_10-01.png'
+                        }
                     }
                 ],
                 saved: [
@@ -819,5 +840,6 @@ export default function (e) {
       //   name: 'toggle-demo-mode',
       // });
     }
+    /* eslint-enable */
 
 }

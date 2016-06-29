@@ -19,7 +19,7 @@ import 'routes/classes/profile.scss';
 
 const PAGE_UNIQUE_IDENTIFIER = 'classProfile';
 
-const UserSource = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
+const USER_SOURCE = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     MY_CLASSMATES: 'My Classmates',
@@ -72,15 +72,18 @@ export class ProfileComponent extends React.Component {
             return null;
         }
         return (
-            <p><a id="class-dashboard-link" href={`/class/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
+            <p><a id="class-dashboard-link" href={`/class/${this.props.data.group_id}/view`}>
+                {ADMIN_TEXT}
+            </a></p>
         );
     }
     renderFlip(item){
         return (
             <div className="flip" key={Shortid.generate()}>
                 <Link to={`/student/${item.user_id.toString()}`} id={item.username}>
-                    <img src={item.images && item.images.data && item.images.data.length ? item.images.data[0].url : DefaultProfile}></img>
-                    <p className="link-text" >{item.username}</p>
+                    <img src={item.images && item.images.data &&
+                        item.images.data.length ? item.images.data[0].url : DefaultProfile}></img>
+                    <p className="linkText" >{item.username}</p>
                 </Link>
                 {this.renderFlipsEarned.bind(this, item)}
             </div>
@@ -108,9 +111,6 @@ export class ProfileComponent extends React.Component {
                {this.renderClassInfo.bind(this)}
                <UserSource>
                    <FlipBoard renderFlip={this.renderFlip.bind(this)} header={
-                     HEADINGS.CLASS + this.props.data.title
-                   } />
-               </UserSource>
            </Layout>
         );
     }

@@ -15,7 +15,10 @@ const ERRORS = {
     TOO_SHORT: 'Passwords must contain at least 8 characters, including one number',
 };
 
-const PASS_UPDATED = '<p id="showMsg">You have successfully updated your password.<br />Be sure to remember for next time!</p>';
+const PASS_UPDATED = '<p id="showMsg">You have successfully updated your password.' +
+    '<br />Be sure to remember for next time!</p>';
+
+var isPassValid;
 
 class ChangePassword extends React.Component {
     constructor() {
@@ -29,11 +32,12 @@ class ChangePassword extends React.Component {
     }
 
     submit() {
+        var update;
         if (!isPassValid(this.state.new)) {
             this.setState({extraProps: {bsStyle: 'error'}});
             Toast.error(ERRORS.TOO_SHORT);
         } else if (this.state.confirm === this.state.new) {
-            var update = HttpManager.POST({url: this.props.url.href}, {
+            update = HttpManager.POST({url: this.props.url.href}, {
                 'current_password': this.state.current,
                 'password': this.state.new,
                 'password_confirmation': this.state.confirm,
@@ -53,7 +57,10 @@ class ChangePassword extends React.Component {
     }
 
     render() {
-        if (this.props.currentUser.user_id !== this.props.user_id || this.props.url == null || this.props.url.href == null) {
+        if (this.props.currentUser.user_id !== this.props.user_id ||
+            this.props.url == null ||
+            this.props.url.href == null
+        ) {
             return null;
         }
         return (
@@ -101,7 +108,7 @@ class ChangePassword extends React.Component {
     }
 }
 
-var isPassValid = function (password) {
+isPassValid = function (password) {
     return password.length >= 8 && ~password.search(/[0-9]+/);
 };
 
