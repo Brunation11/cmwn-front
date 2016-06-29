@@ -43,25 +43,25 @@ services:
       - "nginx:local.chagemyworldnow.com"
 
   selenium_chrome:
-    image: selenium/node-chrome-debug:2.53.0
+    image: selenium/node-chrome:2.53.0
     environment:
       HUB_PORT_4444_TCP_ADDR: "hub"
       DBUS_SESSION_BUS_ADDRESS: "/dev/null"
     ports:
-      - "5900:5900"
-#    volumes:
-#      - /x:/dev/shm
+      - 5900
+    volumes:
+      - /dev/shm:/dev/shm
     links:
       - "nginx:local.chagemyworldnow.com"
       - selenium_hub:hub
     privileged: true
 
   selenium_firefox:
-    image: selenium/node-firefox-debug:2.53.0
+    image: selenium/node-firefox:2.53.0
     environment:
       HUB_PORT_4444_TCP_ADDR: "hub"
     ports:
-      - "5901:5900"
+      - 5900
     links:
       - "nginx:local.chagemyworldnow.com"
       - nginx

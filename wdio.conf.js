@@ -85,7 +85,7 @@ exports.config = {
     baseUrl: 'https://local.changemyworldnow.com',
     //
     // Default timeout for all waitFor* commands.
-    waitforTimeout: 30000,
+    waitforTimeout: 20000,
     //
     // Default timeout in milliseconds for request
     // if Selenium Grid doesn't send response
@@ -153,17 +153,19 @@ exports.config = {
     // resolved to continue.
     //
     // Gets executed once before all workers get launched.
-    onPrepare: function (config, capabilities) {
-        var overrideHostIP = process.env.DOCKER_HOST_IP;
-        var hostIP = overrideHostIP || execSync('docker-machine ip front').toString().split('\n')[0];
-        if (hostIP === '' || hostIP == null) {
-            console.error('No docker IP available for selenium host. Integration tests will fail.');
-        }
-    },
+    // onPrepare: function (config, capabilities) {
+    //     var overrideHostIP = process.env.DOCKER_HOST_IP;
+    //     var hostIP = overrideHostIP || execSync('docker-machine ip front').toString().split('\n')[0];
+    //     if (hostIP === '' || hostIP == null) {
+    //         console.error('No docker IP available for selenium host. Integration tests will fail.');
+    //     }
+    //     global.hostIP = hostIP;
+    //     console.log('*****************************************HOSTIP: ' + hostIP);
+    // },
     //
     // Gets executed before test execution begins. At this point you can access all global
     // variables, such as `browser`. It is the perfect place to define custom commands.
-     before: function (capabilities, specs) {
+    before: function (capabilities, specs) {
         var chai = require('chai');
         global.expect = chai.expect;
         chai.Should();
