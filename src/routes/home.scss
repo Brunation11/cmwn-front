@@ -62,30 +62,37 @@
         margin-bottom: 20px;
 
         .logo  {
-            overflow: hidden;
+            min-width: 150px;
+            width: 20vw;
+    //         width: 22vmin;
+    //         min-width: 180px;
+    //         max-width: 210px;
+    //         position: relative;
 
-            img {
-                margin-bottom: 40px;
+    //         img {
+    //             width: 100%;
+    //         }
+    // }
+    //         overflow: hidden;
 
-                @media (max-width: 1200px) {
-                    min-width: 95px;
-                    width: 15vw;
-                }
-            }
+            // img {
+            //     margin-bottom: 40px;
+
+            // }
         }
 
         .headerLogo {
             width: calc(100% - #{$logout_size} - #{$logo-size } - 200px);
             float: none;
-            padding: 0;
+            padding-left: 5 * $standard;
             position: absolute;
             right: 300px;
-            top: 15px;
+            top: $standard;
 
             @media (max-width: $device-max-break) {
+                    padding-left: 2 * $standard;
                     width: calc(100% - 70px - 165px - 88px);
-                    top: 0;
-                    right: 0;
+                    right: 2 * $standard;
                     min-width: 299px;
                     margin: 0;
             }
