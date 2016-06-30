@@ -486,6 +486,12 @@ h1, h2, h3 {
         }
     }
 
+    @media (max-width: $device-portrait-break + 2 * $standard) {
+        .headerLogo {
+            display: none;
+        }
+    }
+
 }
 
 html.ie9 {
