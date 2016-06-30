@@ -1235,7 +1235,7 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
     if (gameId === 'skribble') {
         events = _.defaults(Skribble, events);
     }
-    return _.reduce(events, (v, k, a) => {
+    return _.reduce(events, (a, v, k) => {
         a[eventPrefix + _.upperFirst(k)] = v;
         return a;
     }, {});
