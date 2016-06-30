@@ -70,8 +70,9 @@ export default function () {
 
         describe('student viewing own edit profile', function () {
             var studentDataBB = JSON.parse(JSON.stringify(studentDataB));
+            var edit;
             studentDataBB.scope = 2;
-            var edit = <EditProfile data={studentDataBB} loading={false} currentUser={studentDataBB}/>;
+            edit = <EditProfile data={studentDataBB} loading={false} currentUser={studentDataBB}/>;
             //const WRAPPER = mount(edit);
 
             it('renders the edit profile component', function () {
@@ -89,8 +90,8 @@ export default function () {
 
         describe('viewing edit profile without permission', function () {
             it('renders a null profile', function () {
-                var edit = <EditProfile data={{user_id: 0, scope: 0}} loading={false}
-                                        currentUser={teacherData}/>;
+                var edit = <EditProfile data={{user_id: 0, scope: 0}} loading={false} //eslint-disable-line camelcase, max-len
+                    currentUser={teacherData}/>;
                 //const WRAPPER = mount(edit);
                 //expect(WRAPPER.type()).to.equal(null);
             });

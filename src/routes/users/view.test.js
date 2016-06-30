@@ -4,8 +4,6 @@ import { shallow } from 'enzyme';
 import { ProfileView } from 'routes/users/view';
 import viewSmoke from 'smoke_tests/users/view.test.js';
 
-import teacherData from 'mocks/users/teacher_data';
-import studentDataA from 'mocks/users/student_data_a';
 import studentDataB from 'mocks/users/student_data_b';
 
 describe('Profile View Smoke Tests', function () {

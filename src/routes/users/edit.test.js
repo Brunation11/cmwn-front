@@ -96,9 +96,10 @@ describe('Edit Profile Unit Tests', function () {
     });
 
     describe('student viewing own edit profile', function () {
+        var edit;
         var studentDataBB = JSON.parse(JSON.stringify(studentDataB));
         studentDataBB.scope = 2;
-        var edit = <EditProfile data={studentDataBB} loading={false} currentUser={studentDataBB}/>;
+        edit = <EditProfile data={studentDataBB} loading={false} currentUser={studentDataBB}/>;
         const WRAPPER = shallow(edit);
 
         it('renders the edit profile component', function () {
