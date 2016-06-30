@@ -6,7 +6,6 @@
         padding: $standard 0;
         padding-bottom: (2 * $standard);
         width: 100%;
-        overflow: scroll;
 
         img {
             padding: $standard / 3;
@@ -33,7 +32,6 @@
         padding: $standard;
         padding-bottom: 0;
         width: 100%;
-        overflow: scroll;
         white-space: nowrap;
 
         strong {
