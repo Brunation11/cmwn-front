@@ -255,9 +255,12 @@ export class EditProfile extends React.Component {
                 disabled={this.props.currentUser.user_id !== this.state.user_id}
                     hasFeedback
                     onChange={
-                        e => this.setState({
-                            username: e.target.value
-                        })
+                        e => {
+                            this.setState({
+                                username: e.target.value
+                            });
+                            return true;
+                        }
                     } //eslint-disable-line camelcase
                 />
                 <Input
