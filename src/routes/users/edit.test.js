@@ -1,3 +1,4 @@
+import React from 'react'; //eslint-disable-line no-unused-vars
 import {expect} from 'chai';
 import {shallow} from 'enzyme';
 
@@ -57,7 +58,7 @@ describe('Edit Profile Unit Tests', function () {
 
     describe('teacher viewing own student\'s profile edit', function () {
         var edit = <EditProfile data={studentDataB} loading={false} currentUser={teacherData}
-                                isStudent={false}/>;
+            isStudent={false}/>;
         const WRAPPER = shallow(edit);
 
         it('renders the edit profile component', function () {

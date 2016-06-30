@@ -1,3 +1,4 @@
+import React from 'react'; //eslint-disable-line no-unused-vars
 import {expect} from 'chai';
 import {mount} from 'enzyme';
 
@@ -32,7 +33,7 @@ export default function () {
 
         describe('teacher viewing own student\'s profile edit', function () {
             var edit = <EditProfile data={studentDataB} loading={false} currentUser={teacherData}
-                                    isStudent={false}/>;
+                isStudent={false}/>;
             //const WRAPPER = mount(edit);
 
             it('renders the edit profile component', function () {
@@ -51,7 +52,7 @@ export default function () {
 
         describe('teacher viewing own profile edit', function () {
             var edit = <EditProfile data={teacherData} loading={false} currentUser={teacherData}
-                                    isStudent={false}/>;
+                isStudent={false}/>;
             //const WRAPPER = mount(edit);
 
             it('renders the edit profile component', function () {
