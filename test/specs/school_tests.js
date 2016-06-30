@@ -23,21 +23,21 @@ describe('school routes integration tests', function () {
     const SCHOOL_PROFILE_URL = `${URL}/school/${SCHOOL_ID}/profile`;
     const SCHOOL_VIEW_URL = `${URL}/school/${SCHOOL_ID}/view`;
     const SCHOOL_EDIT_URL = `${URL}/school/${SCHOOL_ID}/edit`;
-//    it('should load a full, functional school profile page', function () {
-//        goToSchoolProfile();
-//        browser.waitForExist('.right');
-//        checkLink('.purple', SCHOOL_EDIT_URL);
-//        goBack(SCHOOL_PROFILE_URL);
-//        checkLink('.green', SCHOOL_EDIT_URL);
-//        goBack(SCHOOL_PROFILE_URL);
-//        checkLink('#school-admin-link', SCHOOL_VIEW_URL);
-//        goBack(SCHOOL_PROFILE_URL);
-//        browser.waitForExist('.school-district-link');
-//        var districtLink = browser.getAttribute('.school-district-link', 'href');
-//        if(Array.isArray(districtLink)) districtLink = districtLink[0];
-//        checkLink('./school-district-link', districtLink);
-//        goBack(SCHOOL_PROFILE_URL);
-//    });
+    it('should load a full, functional school profile page', function () {
+        goToSchoolProfile();
+        browser.waitForExist('.right');
+        checkLink('.purple', SCHOOL_EDIT_URL);
+        goBack(SCHOOL_PROFILE_URL);
+        checkLink('.green', SCHOOL_EDIT_URL);
+        goBack(SCHOOL_PROFILE_URL);
+        checkLink('#school-admin-link', SCHOOL_VIEW_URL);
+        goBack(SCHOOL_PROFILE_URL);
+        browser.waitForExist('.school-district-link');
+        var districtLink = browser.getAttribute('.school-district-link', 'href');
+        if(Array.isArray(districtLink)) districtLink = districtLink[0];
+        checkLink('./school-district-link', districtLink);
+        goBack(SCHOOL_PROFILE_URL);
+    });
     it('should load the school view page', function () {
         var elementAvailable = false;
         goToSchoolProfile();
