@@ -97,14 +97,14 @@ var Component = React.createClass({
                         <a href={`/school/${this.props.data.group_id}/profile`} id="school-return-profile">Return to school profile</a>
                     </p>
                    <Paragraph>
-                       <p pre={`${HEADINGS.DISTRICTS}: `}>{this.renderDistricts()}</p>
+                       <p pre={`${HEADINGS.DISTRICTS}: `} id="school-districts">{this.renderDistricts()}</p>
                        <p pre={`${HEADINGS.DESCRIPTION}: `}>{this.props.data.description}</p>
                    </Paragraph>
                 </Panel>
                 <Panel header={HEADINGS.CLASSES} className="standard">
                     <Link to={`/classes`} id="school-view-classes">View All Your Classes</Link>
                     <CLASS_SOURCE>
-                        <Table id="school-class-table">
+                        <Table>
                             <Column dataKey="title"
                                 renderCell={(data, row) => (
                                     <Link to={`/class/${row.group_id}`} className="school-class-link">
@@ -133,7 +133,7 @@ var Component = React.createClass({
                 <Panel header={HEADINGS.USERS} className="standard">
                     <Link to={`/users`} id="school-view-users">View All Your Users</Link>
                     <USER_SOURCE>
-                        <Table id="school-user-table">
+                        <Table>
                             <Column dataKey="first_name" renderHeader="Name"
                                 renderCell={(data, row) => (
                                     <Link to={`/user/${row.user_id}`} className="school-user-link">

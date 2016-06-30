@@ -57,7 +57,7 @@ var Component = React.createClass({
         }
         links = _.map(this.props.data._embedded.organization.district, district => {
             return (
-                <Link to={`/districts/${district.org_id}`}>
+                <Link to={`/districts/${district.org_id}`} className="school-district-link">
                     {district.title}
                 </Link>
             );
@@ -102,7 +102,7 @@ var Component = React.createClass({
         }
         return (
            <Layout className="profile">
-               <Panel header={this.props.data.title} id="school-header" className="standard">
+               <Panel header={this.props.data.title} className="standard">
                    <p className="right" >
                        <EditLink className="purple" text="Edit School" uuid={this.state.group_id}
                            base="/school" canUpdate={Util.decodePermissions(this.state.scope).update} />
