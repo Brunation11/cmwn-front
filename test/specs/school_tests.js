@@ -1,5 +1,5 @@
 import { login } from './login.js';
-import { USER, PASS } from '../test_data.js';
+import { USER, PASS, SUPER_USER, SUPER_PASS } from '../test_data.js';
 import { checkLink, goBack } from './helpers.js';
 
 const URL = 'https://local.changemyworldnow.com';
@@ -11,7 +11,7 @@ const MSGS = {
 };
 
 function goToSchoolProfile() {
-    login(USER, PASS); 
+    login(SUPER_USER, SUPER_PASS); 
     browser.waitForExist('#navMenu', 3000);
     browser.getUrl().should.equal(`${URL}/profile`);
     browser.url(`/school/${SCHOOL_ID}/profile`);
@@ -19,32 +19,25 @@ function goToSchoolProfile() {
     browser.waitForExist('.standard');
 }
 
-describe('school routes integration tests', function() {
+describe('school routes integration tests', function () {
     const SCHOOL_PROFILE_URL = `${URL}/school/${SCHOOL_ID}/profile`;
     const SCHOOL_VIEW_URL = `${URL}/school/${SCHOOL_ID}/view`;
     const SCHOOL_EDIT_URL = `${URL}/school/${SCHOOL_ID}/edit`;
-    it('should load a full, functional school profile page', function () {
-        var elementAvailable = false;
-        goToSchoolProfile();
-        browser.waitForExist('.right');
-        checkLink('#school-admin-link', SCHOOL_VIEW_URL);
-        goBack(SCHOOL_PROFILE_URL);
-        checkLink('.purple', SCHOOL_EDIT_URL);
-        goBack(SCHOOL_PROFILE_URL);
-        // NOTE: edit page currently not working, page will not change, only the url
-        try {
-            browser.waitForExist('.school-district-link');
-            elementAvailable = true;
-        } catch (e) {
-            console.log(`${MISSING}${MSGS.NO_DISTRICTS}`);
-        }
-        if (elementAvailable) {
-            var districtLink = browser.getAttribute('.school-district-link', 'href')[0];
-            checkLink('./school-district-link', districtLink);
-            goBack(SCHOOL_PROFILE_URL);
-            elementAvailable = false;
-        }
-    });
+//    it('should load a full, functional school profile page', function () {
+//        goToSchoolProfile();
+//        browser.waitForExist('.right');
+//        checkLink('.purple', SCHOOL_EDIT_URL);
+//        goBack(SCHOOL_PROFILE_URL);
+//        checkLink('.green', SCHOOL_EDIT_URL);
+//        goBack(SCHOOL_PROFILE_URL);
+//        checkLink('#school-admin-link', SCHOOL_VIEW_URL);
+//        goBack(SCHOOL_PROFILE_URL);
+//        browser.waitForExist('.school-district-link');
+//        var districtLink = browser.getAttribute('.school-district-link', 'href');
+//        if(Array.isArray(districtLink)) districtLink = districtLink[0];
+//        checkLink('./school-district-link', districtLink);
+//        goBack(SCHOOL_PROFILE_URL);
+//    });
     it('should load the school view page', function () {
         var elementAvailable = false;
         goToSchoolProfile();
@@ -54,6 +47,9 @@ describe('school routes integration tests', function() {
         goBack(SCHOOL_VIEW_URL);
         checkLink('.purple', SCHOOL_EDIT_URL);
         goBack(SCHOOL_VIEW_URL);
+        checkLink('.green', SCHOOL_EDIT_URL);
+        goBack(SCHOOL_VIEW_URL);
+        browser.waitForExist('button=Delete this school'); // the delete button
         browser.waitForExist('#school-districts');
         checkLink('.school-district-link');
         goBack(SCHOOL_VIEW_URL);
