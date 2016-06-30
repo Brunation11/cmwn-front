@@ -27,12 +27,13 @@
 
     .prompts {
         text-align: center;
+
         .pending-prompt {
+            margin: 0 auto;
+            text-transform: uppercase;
+            color: $cmwn-white;
             font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
             font-size: 18px;
-            text-transform: uppercase;
-            color: #fff;
-            margin: 0 auto;
         }
     }
 }
