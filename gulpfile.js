@@ -409,6 +409,17 @@ gulp.task('unit', function () {
     return tests;
 });
 
+gulp.task('smoke', function () {
+    process.env.NODE_ENV = 'production';
+    process.env.BABEL_ENV = 'production';
+    var tests = gulp.src(['./smoke.test.js'], {read: false})
+         .pipe(mocha({require: ['./src/testdom.js'], reporter: 'min'}));
+    tests.on('error', function (err) {
+        console.log('SOMETHING HAPPENED:' + err);
+    });
+    return tests;
+});
+
 gulp.task('coverage', function () {
     var proc = spawn('./test.sh');
 
