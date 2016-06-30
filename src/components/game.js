@@ -71,9 +71,11 @@ var Game = React.createClass({
      */
     [EVENT_PREFIX + 'Flipped']: function (e) {
         this.submitFlip(e.gameData.id);
+        ga('set', 'dimension5', e.gameData.id);
     },
     [EVENT_PREFIX + 'Flip']: function (e) {
         this.submitFlip(e.gameData.id);
+        ga('set', 'dimension5', e.gameData.id);
     },
     [EVENT_PREFIX + 'Save']: function (e) {
         var version = 1;
@@ -82,6 +84,7 @@ var Game = React.createClass({
             return;
         }
         version = e.gameData.version || version;
+        ga('set', 'metric1', e.gameData.currentScreenIndex);
         HttpManager.POST(this.props.saveUrl.replace('{game_id}', e.gameData.game),
             {data: e.gameData, version});
     },
@@ -90,6 +93,7 @@ var Game = React.createClass({
     },
     [EVENT_PREFIX + 'Init']: function (e) {
         e.respond(this.props.gameState);
+        ga('set', 'dimension5', e.gameData.id);
     },
     /* end of default events */
     gameEventHandler: function (e) {
