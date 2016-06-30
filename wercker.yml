@@ -14,11 +14,11 @@ build:
       name: Install Global packages
       code: npm install -g eslint eslint-plugin-react eslint-plugin-babel babel-eslint gulp
     - script:
-      name: Linter
-      code: eslint src
-    - script:
       name: +1 dump step of dumbness with keen
       code: npm rebuild node-sass
+    - script:
+      name: Linter
+      code: gulp lint
     - script:
       name: Build packages
       code: gulp build --production
