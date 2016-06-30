@@ -4,7 +4,7 @@ export function checkLink(link, url, check) {
     if(check !== undefined) {
         browser.waitForExist(check);
     } else {
-        browser.pause(5000);
+        browser.pause(3000);
     }
     expect(browser.getUrl()).to.equal(url);
 }
