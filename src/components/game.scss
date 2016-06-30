@@ -6,49 +6,48 @@
 
     @media (orientation: portrait) {
         iframe {
-            width: $game-responsive-width-portrait-ie; // ie-fallback
+            // scss-lint:disable all
             width: $game-responsive-width-portrait;
-            max-width: $game-responsive-width-portrait-ie; // ie-fallback
             max-width: $game-responsive-width-portrait;
-            height: $game-responsive-height-portrait-ie; // ie-fallback
             height: $game-responsive-height-portrait;
-            max-height: $game-responsive-height-portrait-ie; // ie-fallback
             max-height: $game-responsive-height-portrait;
-            display: block;
-            margin: $standard auto;
+            width: $game-responsive-width-portrait-ie; // ie-fallback
+            max-width: $game-responsive-width-portrait-ie; // ie-fallback
+            height: $game-responsive-height-portrait-ie; // ie-fallback
+            max-height: $game-responsive-height-portrait-ie; // ie-fallback
+            // scss-lint:enable all
         }
 
         button {
-            bottom: $standard;
             display: inline-block;
+            bottom: $standard;
             float: left;
             margin-right: $standard;
         }
 
         &.fullscreen {
-            z-index: $z-override;
             position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: $z-override;
+            background: $cmwn-black;
             width: 105vw;
             height: 105vh;
-            background: black;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
 
             iframe {
-                z-index: $z-override;
+                // scss-lint:disable all
                 position: fixed;
-                width: $game-fullscreen-width-portrait-ie; // ie-fallback
                 width: $game-fullscreen-width-portrait;
-                max-width: $game-fullscreen-width-portrait-ie; // ie-fallback
                 max-width: $game-fullscreen-width-portrait;
-                height: $game-fullscreen-height-portrait-ie; // ie-fallback
                 height: $game-fullscreen-height-portrait;
-                max-height: $game-fullscreen-height-portrait-ie; // ie-fallback
                 max-height: $game-fullscreen-height-portrait;
-                top: 50%;
-                transform: translateY(-55%);
+                width: $game-fullscreen-width-portrait-ie; // ie-fallback
+                max-width: $game-fullscreen-width-portrait-ie; // ie-fallback
+                height: $game-fullscreen-height-portrait-ie; // ie-fallback
+                max-height: $game-fullscreen-height-portrait-ie; // ie-fallback
+                // scss-lint:enable all
             }
 
             button {
@@ -59,51 +58,49 @@
 
     @media (orientation: landscape) {
         iframe {
-            width: $game-responsive-width-landscape-ie; // ie-fallback
+            // scss-lint:disable all
             width: $game-responsive-width-landscape;
-            max-width: $game-responsive-width-landscape-ie; // ie-fallback
             max-width: $game-responsive-width-landscape;
-            height: $game-responsive-height-landscape-ie; // ie-fallback
             height: $game-responsive-height-landscape;
-            max-height: $game-responsive-height-landscape-ie; // ie-fallback
             max-height: $game-responsive-height-landscape;
-            display: block;
-            margin: $standard auto;
+            width: $game-responsive-width-landscape-ie; // ie-fallback
+            max-width: $game-responsive-width-landscape-ie; // ie-fallback
+            height: $game-responsive-height-landscape-ie; // ie-fallback
+            max-height: $game-responsive-height-landscape-ie; // ie-fallback
+            // scss-lint:enable all
         }
 
         button {
-            z-index: 1000;
-            bottom: 15px;
             display: inline-block;
+            bottom: 15px;
             float: left;
+            z-index: $z-bootstrap;
             margin-right: $standard;
         }
 
         &.fullscreen {
-            z-index: $z-override;
             position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: $z-override;
+            background: $cmwn-black;
             width: 105vw;
             height: 105vh;
-            background: black;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
 
             iframe {
-                z-index: $z-override;
+                // scss-lint:disable all
                 position: fixed;
-                width: $game-fullscreen-width-landscape-ie; // ie-fallback
                 width: $game-fullscreen-width-landscape;
-                max-width: $game-fullscreen-width-landscape-ie; // ie-fallback
                 max-width: $game-fullscreen-width-landscape;
-                height: $game-fullscreen-height-landscape-ie; // ie-fallback
                 height: $game-fullscreen-height-landscape;
-                max-height: $game-fullscreen-height-landscape-ie; // ie-fallback
                 max-height: $game-fullscreen-height-landscape;
-                margin: auto;
-                top: 50%;
-                transform: translateY(-50%);
+                width: $game-fullscreen-width-landscape-ie; // ie-fallback
+                max-width: $game-fullscreen-width-landscape-ie; // ie-fallback
+                height: $game-fullscreen-height-landscape-ie; // ie-fallback
+                max-height: $game-fullscreen-height-landscape-ie; // ie-fallback
+                // scss-lint:enable all
             }
 
             button {

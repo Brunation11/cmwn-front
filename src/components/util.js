@@ -32,14 +32,6 @@ var Util = {
         item[key] = value;
         return value;
     },
-    /** from http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript */
-    uuid: function () {
-        Log.info('uuid deprecated. Use ShortId');
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);//eslint-disable-line eqeqeq
-            return v.toString(16);
-        });
-    },
     setPageTitle: function (text) {
         var titleElem = document.getElementsByTagName('title')[0];
         var title = document.createTextNode(text);
@@ -57,7 +49,8 @@ var Util = {
         var routeArray;
         var pathArray;
         var params = {};
-        var routePart, pathPart;
+        var routePart;
+        var pathPart;
         route = route.toLowerCase().replace('(', '').replace(')', '');
         path = path.toLowerCase();
         if (route.slice(-1) === '/') {
@@ -109,7 +102,8 @@ var Util = {
         return path.slice(0, -1);
     },
     attemptComponentLoad(state, endpointIdentifier, componentName) {
-        if (state.pageLoadingStage.lastCompletedStage !== GLOBALS.PAGE_LOAD_STATE.COMPONENT || state.components[endpointIdentifier + '-' + componentName].requested) {
+        if (state.pageLoadingStage.lastCompletedStage !== GLOBALS.PAGE_LOAD_STATE.COMPONENT ||
+            state.components[endpointIdentifier + '-' + componentName].requested) {
             return;
         }
         switch (state.pageLoadingStage.currentStage) {
@@ -169,7 +163,8 @@ var Util = {
             getUser = HttpManager.GET({url: Store.getState().currentUser._links.me.href});
             return getUser.then(res => {
                 /* @TODO MPR, 3/7/16: This should move to errors.js */
-                if (res && res.status === 401 && res.response && res.response.error && res.response.error.detail === 'RESET_PASSWORD') {
+                if (res && res.status === 401 && res.response &&
+                    res.response.error && res.response.error.detail === 'RESET_PASSWORD') {
                     if (~window.location.href.indexOf('change-password')) {
                         return Promise.resolve();
                     }

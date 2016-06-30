@@ -11,7 +11,7 @@ import 'components/update_username.scss';
 
 const IDENTIFIER = 'change-username';
 const CHANGE = 'create a new username';
-const CONFIRM_SET = 'Are you sure you want to change your username? You will not be able to change it back to {0}.';
+const CONFIRM_SET = 'Are you sure you want to change your username? You will not be able to change it back to {0}.'; //eslint-disable-line max-len
 const GOOD_UPDATED = 'Username updated to ';
 const BAD_UPDATE = 'Could not update your user name.';
 
@@ -34,7 +34,7 @@ const COPY = {
     DISCLAIMER: 'Note: Once you change your username, you won\'t be able to go back to your original.'
 };
 
-var Page = React.createClass({
+var UpdateUsername = React.createClass({
     getInitialState: function () {
         return {
             username: this.props.username.slice(0, -3),
@@ -114,7 +114,10 @@ var Page = React.createClass({
         return (
            <div className="update-username-container">
                 <div className="left">
-                    <Button className="purple username-btn username-picker generate" onClick={this.reloadChildUsername}>
+                    <Button
+                        className="purple username-btn username-picker generate"
+                        onClick={this.reloadChildUsername}
+                    >
                         <Glyphicon glyph="repeat" /> {BUTTONS.GENERATE}
                     </Button>
                     <br />
@@ -166,5 +169,5 @@ var Page = React.createClass({
     }
 });
 
-export default Page;
+export default UpdateUsername;
 

@@ -1,6 +1,7 @@
 /** validation rules. Follows bootstrap conventsions.*/
 /**
- * length validation. Defaults to 3 just because. Exported as len because we don't want to overwrite the length property.
+ * length validation. Defaults to 3 just because.
+ * Exported as len because we don't want to overwrite the length property.
  * @param {string} str
  * @param {number} [min = 3] - length to check against
  */
@@ -44,8 +45,10 @@ var regex = function (test, str) {
 };
 
 /**
- * Validate can be called itself to join several rules. Rules are specified as strings passed as additional arguments
- * @param {string} str
+ * Validate can be called itself to join several rules.
+ * Rules are specified as strings passed as additional arguments
+ * @param {string} str, a string
+ * @returns {string} 'error' or 'success'
  */
 var Validate = function (str) {
     var rules = Array.prototype.slice.call(arguments, 1);

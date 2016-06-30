@@ -6,6 +6,9 @@ import EventManager from 'components/event_manager';
 import Store from 'components/store';
 
 var Layout = React.createClass({
+    getDefaultProps: function () {
+        return {navMenuId: ''};
+    },
     getInitialState: function () {
         return {menuIsOpen: false};
     },
@@ -18,7 +21,7 @@ var Layout = React.createClass({
         var state = Store.getState();
         return (
              <div className={'layout ' + this.props.className}>
-                <Sidebar menuIsOpen={this.state.menuIsOpen}/>
+                <Sidebar menuIsOpen={this.state.menuIsOpen} navMenuId={this.props.navMenuId}/>
                 <div className="content">
                     {this.props.children}
                 </div>

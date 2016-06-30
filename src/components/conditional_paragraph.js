@@ -1,8 +1,8 @@
 import React from 'react';
 import _ from 'lodash';
 
-var Component = React.createClass({
-    render: function () {
+class Component extends React.Component {
+    render() {
         if (this.props.children == null) {
             return null;
         }
@@ -18,17 +18,18 @@ var Component = React.createClass({
                             return a;
                         }, {});
                         if (_.isString(child.props.children) || _.isObject(child.props.children)) {
-                            return React.cloneElement(child, childProps, [child.props.pre, child.props.children, child.props.post]);
+                            return React.cloneElement(child, childProps,
+                                [child.props.pre, child.props.children, child.props.post]);
                         } else if (_.isArray(child.props.children)) {
-                            return React.cloneElement(child, childProps, [child.props.pre, ...child.props.children, child.props.post]);
+                            return React.cloneElement(child, childProps,
+                                [child.props.pre, ...child.props.children, child.props.post]);
                         }
                     }
                     return null;
                 })}
-            </div>
-        );
+            </div>);
     }
-});
+}
 
 export default Component;
 

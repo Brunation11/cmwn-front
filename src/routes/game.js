@@ -10,7 +10,9 @@ import Detector from 'components/browser_detector';
 
 import Layout from 'layouts/one_col';
 
-var Page = React.createClass({
+const PAGE_UNIQUE_IDENTIFIER = 'single-game';
+
+var GamePage = React.createClass({
     getInitialState: function () {
         return {
             gameUrl: GLOBALS.GAME_URL + this.props.params.game + '/index.html',
@@ -20,8 +22,9 @@ var Page = React.createClass({
         };
     },
     componentDidMount: function () {
+        var boundModal;
         this.resolveRole();
-        var boundModal = this.showModal.bind(this, GLOBALS.GAME_URL + this.props.params.game + '/index.html');
+        boundModal = this.showModal.bind(this, GLOBALS.GAME_URL + this.props.params.game + '/index.html');
         boundModal();
     },
     componentWillReceiveProps: function () {
@@ -54,14 +57,31 @@ var Page = React.createClass({
     renderGame: function () {
         if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe10())) {
             return (
-                <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl} onExit={() => History.push('/profile')}/>
+                <Game
+                    ref="gameRef"
+                    isTeacher={!this.state.isStudent}
+                    url={this.state.gameUrl}
+                    onExit={() =>
+                        History.push('/profile')
+                    }
+                />
             );
         }
         return (
             <div>
-                <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal} keyboard={false} backdrop="static">
+                <Modal
+                    className="full-width"
+                    show={this.state.gameOn}
+                    onHide={this.hideModal}
+                    keyboard={false}
+                    backdrop="static">
                     <Modal.Body>
-                        <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl} onExit={this.hideModal}/>
+                        <Game
+                            ref="gameRef"
+                            isTeacher={!this.state.isStudent}
+                            url={this.state.gameUrl}
+                            onExit={this.hideModal}
+                        />
                         <a onClick={this.hideModal} className="modal-close">(close)</a>
                     </Modal.Body>
                 </Modal>
@@ -77,5 +97,24 @@ var Page = React.createClass({
     }
 });
 
+var mapStateToProps = state => {
+    var data = {};
+    var loading = true;
+    var currentUser = {};
+    if (state.page && state.page.data != null) {
+        loading = state.page.loading;
+        data = state.page.data;
+        currentUser = state.currentUser;
+    }
+    return {
+        data,
+        loading,
+        currentUser
+    };
+};
+
+
+var Page = connect(mapStateToProps)(GamePage); //eslint-disable-line no-undef
+Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
 

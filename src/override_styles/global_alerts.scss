@@ -1,6 +1,7 @@
 @import 'variables';
 
 .swal2-container {
+    // scss-lint:disable all
     div.swal2-overlay[style] {
         display: none !important;
     }
@@ -22,13 +23,18 @@
             text-decoration: underline;
         }
     }
+    // scss-lint:enable all
 
-    .warning, .notice, .success {
-        .swal2-content, a {
-            color: #fff;
+    .warning,
+    .notice,
+    .success {
+        .swal2-content,
+        a {
+            color: $cmwn-white;
         }
     }
 
+    // scss-lint:disable all
     .warning {
         background: $cmwn-red !important;
     }
@@ -40,17 +46,19 @@
     .success {
         background: $cmwn-green !important;
     }
+    // scss-lint:enable all
 
     .scroll-left {
         .swal2-content {
-            transform:translateX(100%);
+            transform: translateX(100%);
             animation: scroll-left 15s linear infinite;
         }
 
         @keyframes scroll-left {
-            0%   {
+            0% {
                 transform: translateX(100%);
             }
+
             100% {
                 transform: translateX(-100%);
             }

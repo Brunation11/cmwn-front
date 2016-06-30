@@ -74,7 +74,7 @@ var routes = [
     { path: 'classes(/)', title: 'Classes', endpoint: '/group?type=class', component: Classes},
     { path: 'class(/)', onEnter: redirect('/classes')},
     { path: 'class/:id(/)', title: 'Classes', endpoint: '/group/:id', component: ClassProfile},
-    { path: 'classes/:id(/)', onEnter: redirect('/group/:id')},
+    { path: 'classes/:id(/)', onEnter: redirect('/class/:id')},
     { path: 'class/:id/view(/)', title: 'Classes', endpoint: '/group/:id', component: ClassView},
     { path: 'classes/:id/view(/)', onEnter: redirect('/class/:id/view')},
     { path: 'class/:id/edit(/)', title: 'Edit Classes', endpoint: '/group/:id', component: ClassEdit},
@@ -82,7 +82,8 @@ var routes = [
     { path: 'class/:id/profile(/)', title: 'Classes', endpoint: '/group/:id', component: ClassProfile},
     { path: 'classes/:id/profile(/)', onEnter: redirect('/class/:id/profile')},
     { path: 'friends(/)', title: 'Friends', endpoint: '$$friend', component: Friends},
-    { path: 'friends/suggested(/)', title: 'Suggested Friends', endpoint: '$$suggested_friends', component: SuggestedFriends},
+    { path: 'friends/suggested(/)', title: 'Suggested Friends', endpoint: '$$suggested_friends',
+        component: SuggestedFriends},
     { path: 'suggestedfriends(/)', onEnter: redirect('/friends/suggested')}
 ];
 

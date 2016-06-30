@@ -1,3 +1,4 @@
+/* eslint-disable vars-on-top */
 /**
  * App.js
  * # Production Application Entrypoint
@@ -144,7 +145,7 @@ import 'overrides.scss';
 
 import 'media/logo.png';
 
-const BROWSER_NOT_SUPPORTED = 'For the best viewing experience we recommend the desktop version in Chrome.<br />If you don\'t have chrome, <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">download it for free here</a>.';
+const BROWSER_NOT_SUPPORTED = 'For the best viewing experience we recommend the desktop version in Chrome.<br />If you don\'t have chrome, <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">download it for free here</a>.'; //eslint-disable-line max-len
 
 //htaccess should take care of it but if somehow it does not, this should overkill the issue
 if (window.location.protocol !== 'https:') {
@@ -182,9 +183,9 @@ document.onmousedown = function (e) {
     }
 };
 
-//█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
+//█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
 //█  1. Top Level React Components
-//█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
+//█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
 
 var AppComponent = React.createClass({
     getInitialState: function () {
@@ -242,7 +243,7 @@ var AppComponent = React.createClass({
     }
 });
 
-const mapStateToProps = state => {
+var mapStateToProps = state => {
     var currentUser = {};
     if (state.currentUser != null) {
         currentUser = state.currentUser;
@@ -251,6 +252,7 @@ const mapStateToProps = state => {
         currentUser
     };
 };
+
 
 var App = connect(mapStateToProps)(AppComponent);
 
@@ -264,7 +266,8 @@ var Landing = React.createClass({
     }
 });
 
-/** List of all routes. As-is, routes cannot be loaded dynamically at runtime, and must be registered here first **/
+/** List of all routes. As-is, routes cannot be loaded dynamically at runtime, and must be
+registered here first **/
 var routes = {
     path: '/',
     component: App,
@@ -275,14 +278,15 @@ var routes = {
 };
 
 
-//█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
+//█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
 //█  2. Page Lifecycle Definition
-//█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
+//█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
 
 var progressivePageLoad = function () {
     var pageRoute;
     var state = Store.getState();
-    if (state.pageLoadingStage.currentStage !== state.pageLoadingStage.lastCompletedStage || state.pageLoadingStage.currentStage >= GLOBALS.PAGE_LOAD_STATE.FINAL) {
+    if (state.pageLoadingStage.currentStage !== state.pageLoadingStage.lastCompletedStage ||
+        state.pageLoadingStage.currentStage >= GLOBALS.PAGE_LOAD_STATE.FINAL) {
         return;
     }
     switch (state.pageLoadingStage.currentStage) {
@@ -304,7 +308,8 @@ var progressivePageLoad = function () {
             sequence: true,
             payload: [
                 Actions.FINISH_BOOTSTRAP,
-                Actions.ADVANCE_LOAD_STAGE //Note: Finish bootstrap is not async, so loader complete must be called manually
+                Actions.ADVANCE_LOAD_STAGE //Note: Finish bootstrap is not async,
+                //so loader complete must be called manually
             ]
         });
         break;
@@ -316,7 +321,8 @@ var progressivePageLoad = function () {
                 if (state.currentUser._links[state.location.endpoint.slice(2)].templated) {
                     pageRoute = Util.modifyTemplatedQueryParams(
                         Store.getState().currentUser._links[state.location.endpoint.slice(2)].href,
-                        {page: state.page.pageNum, per_page: state.page.itemCount} //eslint-disable-line camelcase
+                        {page: state.page.pageNum,
+                        per_page: state.page.itemCount} //eslint-disable-line camelcase
                     );
                 } else {
                     pageRoute = Store.getState().currentUser._links[state.location.endpoint.slice(2)].href;
@@ -339,8 +345,10 @@ var progressivePageLoad = function () {
             ]
         });
         break;
-    //components load after page, and are invoked through on the page, via a Datasource component calling Util.attemptGetComponentData
-    //additional cases should be added here. Be sure to update the globals file with new states. They must be sequential, and
+    //components load after page, and are invoked through on the page, via a Datasource component
+    //calling Util.attemptGetComponentData
+    //additional cases should be added here. Be sure to update the globals file with new states.
+    //They must be sequential, and
     //should always occur on every page load, so as not to block one another.
     //Make sure final is always last, naturally
     case GLOBALS.PAGE_LOAD_STATE.FINAL:
@@ -348,12 +356,14 @@ var progressivePageLoad = function () {
     }
 };
 
-//█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
-//█  3. Events occurring on transition. Note: DO NOT ISSUE SIDE EFFECTS. Dispatch actions via the store.
-//█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
+//█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
+//█  3. Events occurring on transition. Note: DO NOT ISSUE SIDE EFFECTS.
+//█     Dispatch actions via the store.
+//█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
 
 History.listen(location => {
-    var pathContext = _.find(routes.childRoutes, i => Util.matchPathAndExtractParams(i.path, location.pathname) !== false);
+    var pathContext = _.find(routes.childRoutes, i =>
+        Util.matchPathAndExtractParams(i.path, location.pathname) !== false);
     if (pathContext == null && location.pathname !== '/') {
         //at this point we already know whether or not our path 404d...
         Errors.show404();
@@ -377,9 +387,9 @@ History.listen(location => {
     });
 });
 
-//█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
+//█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
 //█  4. App Level Store Subscription. Note: Runs **VERY** frequently, so be careful what you add here.
-//█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
+//█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
 
 var lastState = {page: {}};
 Store.subscribe(() => {
@@ -396,9 +406,9 @@ Store.subscribe(() => {
     lastState = Store.getState();
 });
 
-//█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
+//█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
 //█  5. Error Tracker and Logging Initialzation
-//█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
+//█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
 
 /** We need to generate a hash of the errors being generated to prevent them from firing too frequently**/
 //from http://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript-jquery
@@ -415,7 +425,8 @@ if (window.Rollbar && ~window.__cmwn.MODE.indexOf('prod')){ //eslint-disable-lin
 if (window.Rollbar != null) { //eslint-disable-line no-undef
     //Quick and dirty leading edge throttle on rapid fire events
     Rollbar.configure({checkIgnore: function (isUncaught, args, payload) { //eslint-disable-line
-        var key = hashCode((args[1] && args[1].toString()) || (args[2] && args[2].toString()) || args.join(' '));
+        var key = hashCode((args[1] && args[1].toString()) || (args[2] && args[2].toString()) ||
+            args.join(' '));
         window.__cmwn._loggerevents = window.__cmwn._loggerevents || {};
         if (window.__cmwn._loggerevents[key] == null) {
             window.__cmwn._loggerevents[key] = Date.now();
@@ -428,24 +439,24 @@ if (window.Rollbar != null) { //eslint-disable-line no-undef
     }});
 }
 
-/** Function enabling an interactive debugging mode via the console **/
+/* Function enabling an interactive debugging mode via the console */
 window.__cmwn.interactiveDebug = function () {
     window.debugging = true;
     Rollbar.configure({reportLevel: 'info'}); //eslint-disable-line
 };
 
 
-//█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
+//█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
 //█  6. Application Bootstrap
-//█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
+//█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
 
-/**
+/*
  * Attaches the App component to the routes, which are then attached to the Router, which is then attached
  * to the redux store via the Provider. This Provider is then rendered in the React shadow dom, and then is
  * appended to the the actual dom node with ID cmwn-app as soon as it is available.
  * Also outputs the console warning if this is successful, and will attempt to re-bootstrap up to 5 times
  * if any of these steps fail. A generic application error is shown if this fails.
- **/
+ */
 function run() {
     window._bootstrap_attempts = window._bootstrap_attempts || 0; //eslint-disable-line camelcase
     try {
@@ -455,8 +466,8 @@ function run() {
                     <Router history={History} routes={routes} />
                 </Provider>
         ), document.getElementById('cmwn-app'));
-        console.log('%cWoah there, World Changer!', 'font-weight: bold; color: red; font-size: 60px; font-family: Helvetica, Impact, Arial, sans-serif; text-shadow: 2px 2px grey;'); //eslint-disable-line no-console
-        console.log('%cChangeMyWorldNow will never ask you to enter any of your information in this space, or ask you to paste anything here. For your security, we recommend you close this console.', 'font-weight: bold; color: #2CC4F4; font-size: 25px; font-family: Helvetica, Impact, Arial, sans-serif;'); //eslint-disable-line no-console
+        console.log('%cWoah there, World Changer!', 'font-weight: bold; color: red; font-size: 60px; font-family: Helvetica, Impact, Arial, sans-serif; text-shadow: 2px 2px grey;'); //eslint-disable-line no-console, max-len
+        console.log('%cChangeMyWorldNow will never ask you to enter any of your information in this space, or ask you to paste anything here. For your security, we recommend you close this console.', 'font-weight: bold; color: #2CC4F4; font-size: 25px; font-family: Helvetica, Impact, Arial, sans-serif;'); //eslint-disable-line no-console, max-len
         if (GLOBALS.MODE.toLowerCase() === 'prod' || GLOBALS.MODE.toLowerCase() === 'production') {
             console.info = _.noop; //eslint-disable-line no-console
             console.log = _.noop; //eslint-disable-line no-console
@@ -465,7 +476,8 @@ function run() {
         }
         Log.info('Application started');
     } catch(err) {
-        Log.info('Application bootstrap failed, attempting to recover. Attempt ' + window._bootstrap_attempts + ' out of 5');
+        Log.info('Application bootstrap failed, attempting to recover.' +
+            'Attempt ' + window._bootstrap_attempts + ' out of 5');
         if (window._bootstrap_attempts < 5) {
             window.setTimeout(run, 500);
         } else {
@@ -474,9 +486,9 @@ function run() {
     }
 }
 
-const loadedStates = ['complete', 'loaded', 'interactive'];
+const LOADED_STATES = ['complete', 'loaded', 'interactive'];
 
-if (loadedStates.indexOf(document.readyState) !== -1 && document.getElementById('cmwn-app')) {
+if (LOADED_STATES.indexOf(document.readyState) !== -1 && document.getElementById('cmwn-app')) {
     run();
     console.info('running'); //eslint-disable-line
 } else {
@@ -485,4 +497,3 @@ if (loadedStates.indexOf(document.readyState) !== -1 && document.getElementById(
 
 // We only need to export this for testing purposes. It is never imported in production.
 export default App;
-
