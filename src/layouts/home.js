@@ -22,7 +22,7 @@ import PARTNER_SHES_THE_FIRST_LOGO from 'media/home/ShesTheFirst_Logo-pinkstar_@
 import PARTNER_STOW_IT_DONT_THROWIT from 'media/home/StowItDontThrowIt_@2x.png';
 import PARTNER_TEACHING_THE_WORLD_THROUGH_ART from 'media/home/teachingtheworldthroughart_@2x.png';
 
-const SOURCES = {
+export const SOURCES = {
     PARTNERS: [
         PARTNER_NATIONAL_WILDLIFE_FEDERATION_LOGO,
         PARTNER_ECO_SCHOOLS_LOGO,
@@ -44,7 +44,7 @@ const SOURCES = {
     ]
 };
 
-const COPY = {
+export const COPY = {
     BUTTONS: {
         WORK: 'Work with Us',
         CONTACT: 'Contact Us',
@@ -72,6 +72,8 @@ const COPY = {
 
 class Layout extends React.Component {
     displayWorkModal() {
+        console.log("inner work");
+        console.log(this.props.openModal);
         this.props.openModal('work');
     }
 
@@ -96,10 +98,10 @@ class Layout extends React.Component {
                         </div>
                     </div>
                     <footer className="links">
-                        <a href="#" onClick={this.displayWorkModal.bind(this)}>
+                        <a href="#" id="work-modal-link" onClick={this.displayWorkModal.bind(this)}>
                             {COPY.BUTTONS.WORK}
                         </a>
-                        <a href="#" onClick={this.displayContactModal.bind(this)}>
+                        <a href="#" id="contact-modal-link" onClick={this.displayContactModal.bind(this)}>
                             {COPY.BUTTONS.CONTACT}
                         </a>
                         <a href="/terms" target="_blank">

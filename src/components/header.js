@@ -1,13 +1,9 @@
 import React from 'react';
 import {Input, Button, Modal} from 'react-bootstrap';
-import { connect } from 'react-redux';
 
 import Toast from 'components/toast';
 import Log from 'components/log';
 import History from 'components/history';
-
-var ConnectedHeader;
-var mapStateToProps;
 
 const COPY = {
     BUTTONS: {
@@ -101,9 +97,7 @@ class Header extends React.Component {
 
     renderCaptcha() {
         var captchas = document.getElementsByClassName('grecaptcha');
-        console.log(captchas);
         if (captchas.length) {
-            console.log(captchas[0]);
             grecaptcha.render(captchas[0], {'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l',
                 callback: () => { //eslint-disable-line no-undef
                     this.setState({showContact: true});
@@ -225,15 +219,4 @@ Header.defaultProps = {
     contactOpen: false,
 };
 
-mapStateToProps = state => {
-    var currentUser = {};
-    if (state.currentUser) {
-        currentUser = state.currentUser;
-    }
-    return {
-        currentUser
-    };
-};
-
-ConnectedHeader = connect(mapStateToProps)(Header);
-export default ConnectedHeader;
+export default Header;

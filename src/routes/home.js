@@ -63,7 +63,7 @@ const SOURCES = {
     SHINE: '',
 };
 
-class Home extends React.Component {
+export class Home extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -113,7 +113,8 @@ class Home extends React.Component {
                         src={LOGO_HEADER} /><span className="read">Change My World Now</span></Link>
                     </div>
                     <Header workOpen={this.state.workOpen} contactOpen={this.state.contactOpen}
-                        closeWork={this.closeWork.bind(this)} closeContact={this.closeContact.bind(this)} />
+                        closeWork={this.closeWork.bind(this)} closeContact={this.closeContact.bind(this)}
+                        currentUser={this.props.currentUser}/>
                 </div>
                 <Carousel>
                     <CarouselItem>
