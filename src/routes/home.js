@@ -1,8 +1,8 @@
 import React from 'react';
 import {Link} from 'react-router';
 import {Carousel, CarouselItem, Button, Modal} from 'react-bootstrap';
+import { connect } from 'react-redux';
 
-import Store from 'components/store';
 import Layout from 'layouts/home';
 import Header from 'components/header';
 
@@ -12,6 +12,9 @@ import LOGO_HEADER from 'media/header-header.png';
 import SLIDE_A_BG_URL from 'media/home/green_background.png';
 import SLIDE_B_BG_URL from 'media/home/purple_background.png';
 import SLIDE_C_BG_URL from 'media/home/blue_background.png';
+
+var ConnectedHome;
+var mapStateToProps;
 
 const COPY = {
     BUTTONS: {
@@ -91,7 +94,7 @@ class Home extends React.Component {
     }
 
     render() {
-        var logoLink = Store.getState().currentUser.user_id ? '/profile' : '/';
+        var logoLink = this.props.currentUser.user_id ? '/profile' : '/';
         return (
             <div id="home" className="home">
                 <Modal show={this.state.viewOpen} onHide={this.setState.bind(this, {viewOpen: false})}>
@@ -145,4 +148,15 @@ class Home extends React.Component {
     }
 }
 
-export default Home;
+mapStateToProps = state => {
+    var currentUser = {};
+    if (state.currentUser) {
+        currentUser = state.currentUser;
+    }
+    return {
+        currentUser
+    };
+};
+
+ConnectedHome = connect(mapStateToProps)(Home);
+export default ConnectedHome;
