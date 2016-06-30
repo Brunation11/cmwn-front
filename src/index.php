@@ -164,6 +164,8 @@ if (!$https && $proxy !== 'https') {
           ga('create', 'UA-26000499-1', 'auto');
           ga('require', 'linkid');
           ga('require', 'displayfeatures');
+          ga('set', 'anonymizeIp', true);
+          ga('set', 'forceSSL', true);
           ga('send', 'pageview');
 
         </script>
