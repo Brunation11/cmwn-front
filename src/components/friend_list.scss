@@ -1,10 +1,8 @@
 .friend-list {
-
-    
     .panel {
-        max-height: 100vh;
+        transition: max-height .8s;
         border: 0;
-        transition: max-height 0.8s;
+        max-height: 100vh;
 
         &.collapsed {
             max-height: 0;

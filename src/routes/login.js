@@ -46,7 +46,8 @@ var Component = React.createClass({
         var dataUrl;
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
             if (this.props.data._links && this.props.data._links.login == null) {
-                if (this.refs.login.getValue() === this.props.data.username || this.refs.login.getValue() === this.props.data.email) {
+                if (this.refs.login.getValue() === this.props.data.username ||
+                    this.refs.login.getValue() === this.props.data.email) {
                     History.push('/profile');
                 } else {
                     //but why
@@ -62,7 +63,9 @@ var Component = React.createClass({
                 'password': this.refs.password.getValue()
             });
             req.then(res => {
-                if (res.response && res.response.status && res.response.detail && res.response.status === 401 && res.response.detail.toLowerCase() === 'reset_password') {
+                if (res.response && res.response.status && res.response.detail &&
+                    res.response.status === 401 && res.response.detail.toLowerCase() === 'reset_password'
+                ) {
                     History.push('/change-password');
                     return;
                 }
@@ -70,11 +73,13 @@ var Component = React.createClass({
                     Log.info(e, 'User login success');
                     History.push('/profile');
                 } else {
-                    Toast.error(ERRORS.LOGIN + (res.response && res.response.data && res.response.data.message ? ' Message: ' + res.response.data.message : ''));
+                    Toast.error(ERRORS.LOGIN + (res.response && res.response.data &&
+                        res.response.data.message ? ' Message: ' + res.response.data.message : ''));
                     Log.log(res, 'Invalid login.', req);
                 }
             }).catch(res => {
-                if (res.response && res.response.status && res.response.detail && res.response.status === 401 && res.response.detail.toLowerCase() === 'reset_password') {
+                if (res.response && res.response.status && res.response.detail &&
+                    res.response.status === 401 && res.response.detail.toLowerCase() === 'reset_password') {
                     History.push('/change-password');
                     return;
                 }
@@ -99,7 +104,8 @@ var Component = React.createClass({
                 if (res.status < 300 && res.status >= 200) {
                     Toast.success('Password reset successful. Please check your email for the next step.');
                 } else {
-                    Toast.error(ERRORS.LOGIN + (res.response && res.response.data && res.response.data.message ? ' Message: ' + res.response.data.message : ''));
+                    Toast.error(ERRORS.LOGIN + (res.response && res.response.data &&
+                        res.response.data.message ? ' Message: ' + res.response.data.message : ''));
                     Log.log(res, 'Password reset failure', req);
                 }
             }).catch(err => {
@@ -113,11 +119,14 @@ var Component = React.createClass({
                 <Tabs activeKey={this.state.key} onSelect={this.handleSelect} >
                     <Tab eventKey={1} title={'Login'}>
                         <br />
-                        <form method="POST" >
+                        <form method="POST" id="login-form" >
                             <input type="hidden" name="_token" value={this.state._token} />
-                            <Input ref="login" type="text" name="email" label={LABELS.LOGIN} />
-                            <Input ref="password" type="password" name="password" label={LABELS.PASSWORD} />
-                            <Button onKeyPress={this.login} onClick={this.login} >{LABELS.SUBMIT}</Button>
+                            <Input ref="login" type="text" id="email" name="email" label={LABELS.LOGIN} />
+                            <Input ref="password" type="password" id="password" name="password"
+                                label={LABELS.PASSWORD} />
+                            <Button id="login-button" onKeyPress={this.login} onClick={this.login}>
+                                {LABELS.SUBMIT}
+                            </Button>
                         </form>
                     </Tab>
                     <Tab eventKey={2} title={'Forgot Password'} >
@@ -125,7 +134,9 @@ var Component = React.createClass({
                         <form method="POST" >
                             <input type="hidden" name="_token" value={this.state._token} />
                             <Input ref="reset" type="text" name="email" label={LABELS.LOGIN} />
-                            <Button onKeyPress={this.forgotPass} onClick={this.forgotPass} >{LABELS.RESET}</Button>
+                            <Button onKeyPress={this.forgotPass} onClick={this.forgotPass}>
+                                {LABELS.RESET}
+                            </Button>
                         </form>
                     </Tab>
                 </Tabs>
@@ -134,7 +145,7 @@ var Component = React.createClass({
     }
 });
 
-const mapStateToProps = state => {
+var mapStateToProps = state => {
     var data = {};
     var loading = true;
     if (state.currentUser) {

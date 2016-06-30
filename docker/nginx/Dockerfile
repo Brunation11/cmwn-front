@@ -4,10 +4,13 @@ MAINTAINER Chuck "MANCHUCK" Reeves <chuck@manchuck.com>
 RUN apt-get update && apt-get install -y \
     nginx openssl
 
-COPY entrypoint.sh /opt/entrypoint.sh
+RUN mkdir -p /etc/nginx/ssl
 
-RUN chmod a+x /opt/entrypoint.sh
-RUN /opt/entrypoint.sh
+RUN openssl req -x509 -newkey rsa:2048 \
+      -subj "/C=XX/ST=XXXX/L=XXXX/O=XXXX/CN=api-local.changemyworldnow.com" \
+      -keyout "/etc/nginx/ssl/key.pem" \
+      -out "/etc/nginx/ssl/cert.crt" \
+      -days 3650 -nodes -sha256
 
 COPY nginx.conf /etc/nginx/nginx.conf
 

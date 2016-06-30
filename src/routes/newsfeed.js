@@ -31,9 +31,11 @@ var Page = React.createClass({
                                     {type: 'p', text: 'New Game!', attributes: {'className': 'new-game'}},
                                     {type: 'h3', text: item.title},
                                     {type: 'p', text: item.description},
-                                    {type: Button, text: 'Play Now', attributes: {'className': 'standard purple', onClick: () => {
-                                        window.location.href = '/profile?open=' + item.uuid;
-                                    }}},
+                                    {type: Button, text: 'Play Now', attributes: {'className':
+                                        'standard purple', onClick: () => {
+                                            window.location.href = '/profile?open=' + item.uuid;
+                                        }
+                                    }},
                                 ],
                                 source: 'ChangeMyWorldNow',
                                 sourceImage: cmwnIcon,

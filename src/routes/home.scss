@@ -1,28 +1,40 @@
 @import 'variables';
 
+// scss-lint:disable IdSelector
 #home.home {
+
+// scss-lint:enable IdSelector
+
     text-align: center;
 
-    .logo-button, .logo-button:hover, .logo-button:active, a.logo-button:focus {
+    // scss-lint:disable QualifyingElement
+    .logo-button,
+    .logo-button:hover,
+    .logo-button:active,
+    a.logo-button:focus {
         cursor: pointer;
     }
+    // scss-lint:enable QualifyingElement
 
     h2 {
-        font-size: 36px;
         text-transform: uppercase;
+        font-size: 36px;
     }
 
     footer {
-        padding: 30px;
         border-top: solid 5px $cmwn-blue;
+        padding: 30px;
 
         .links {
+            position: relative;
+            top: auto;
+            right: auto;
             font-size: 13px;
         }
     }
 
     button:active {
-        transform: scale(0.95);
+        transform: scale(.95);
     }
 
     .fallback {
@@ -33,22 +45,25 @@
         a,
         a:active,
         a:visited {
+            color: $cmwn-black;
             font-size: 11px;
-            color: #000;
         }
 
         a:not(:last-child) {
             margin-right: 5px;
+            border-right: solid 1px $cmwn-black;
             padding-right: 5px;
-            border-right: solid 1px #000;
         }
     }
 
-    .sweater, .global-header {
-        box-shadow: 0px 0px 20px rgba(0,0,0,0.2);
+    .sweater,
+    .global-header {
+        box-shadow: 0 0 20px $cmwn-light-gray;
     }
 
-    .sweater, .carousel, .global-header {
+    .sweater,
+    .carousel,
+    .global-header {
         text-align: left;
     }
 
@@ -61,103 +76,97 @@
     .global-header {
         margin-bottom: 20px;
 
-        .logo  {
+        .logo {
             overflow: hidden;
 
             img {
                 margin-bottom: 40px;
 
                 @media (max-width: 1200px) {
-                    min-width: 95px;
                     width: 15vw;
+                    min-width: 95px;
                 }
             }
         }
 
-        .headerLogo {
-            width: calc(100% - #{$logout_size} - #{$logo-size } - 200px);
+        .header-logo {
+            position: absolute;
+            top: 15px;
+            right: 300px;
             float: none;
             padding: 0;
-            position: absolute;
-            right: 300px;
-            top: 15px;
+            width: calc(100% - #{$logout-size} - #{$logo-size } - 200px);
 
             @media (max-width: $device-max-break) {
-                    width: calc(100% - 70px - 165px - 88px);
-                    top: 0;
-                    right: 0;
-                    min-width: 299px;
-                    margin: 0;
+                top: 0;
+                right: 0;
+                margin: 0;
+                width: calc(100% - 70px - 165px - 88px);
+                min-width: 299px;
             }
         }
 
         .links {
             position: absolute;
-            top: 10px; right: 20px;
+            top: 10px;
+            right: 20px;
 
             @media (max-width: $device-max-break) {
                 display: none;
+            }
+        }
+
+        .actions {
+            position: absolute;
+            right: 20px;
+            bottom: 0;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            box-shadow: 0 0 20px $cmwn-light-gray;
+
+            button {
+                margin: 10px;
+                outline: none;
+                border: 0;
+                padding: 3px 0;
+                width: 110px;
+                text-transform: uppercase;
+                color: $cmwn-white;
+                font-family: 'CMWNJadeRegular';
+            }
+
+            button:hover {
+                background-color: transparent;
+                color: $cmwn-purple;
+            }
+
+            button:first-child {
+                //margin-right: 0;
+                background-color: $cmwn-green;
+            }
+
+            button:first-child:hover {
+                background-color: transparent;
+                color: $cmwn-green;
             }
         }
     }
 
     .global-header::after {
         position: absolute;
-        left: 0px; right: 0px;
         top: 100%;
+        right: 0;
+        left: 0;
+        background-color: $cmwn-white;
         height: 20px;
-
-        content: "";
-        background-color: white;
-    }
-
-    footer.links {
-        position: relative;
-        top: auto; right: auto;
-    }
-
-    .global-header .actions {
-        position: absolute;
-        bottom: 0; right: 20px;
-
-        border-top-left-radius: 4px;
-        border-top-right-radius: 4px;
-        box-shadow: 0px 0px 20px rgba(0,0,0,0.2);
-
-        button {
-            margin: 10px;
-            padding: 3px 0px;
-            width: 110px;
-
-            font-family: "CMWNJadeRegular";
-            text-transform: uppercase;
-            border: none;
-            color: #fff;
-            outline: none;
-        }
-
-        button:hover {
-            background-color: transparent;
-            color: $cmwn-purple;
-        }
-
-        button:first-child {
-            /*margin-right: 0;*/
-
-            background-color: $cmwn-green;
-        }
-
-        button:first-child:hover {
-            background-color: transparent;
-            color: $cmwn-green;
-        }
+        content: '';
     }
 
     .carousel {
-        max-width: 1358px;
+        z-index: 1;
         margin: auto;
         margin-bottom: -10px;
-        z-index: 1;
+        max-width: 1358px;
 
         .item {
             position: relative;
@@ -180,20 +189,24 @@
             .content-group {
                 position: absolute;
                 top: 40px;
-                width: 100%;
                 margin: 0;
-
-                background-color: transparent;
                 box-shadow: none;
+                background-color: transparent;
+                width: 100%;
+
+                // scss-lint:disable SelectorDepth, NestingDepth
 
                 > * {
-                    margin-left: 80px;
                     margin-right: 20px;
+                    margin-left: 80px;
 
                     @media (max-width: $device-max-break) {
                         margin-left: 20px;
                     }
                 }
+
+                // scss-lint:enable SelectorDepth, NestingDepth
+
             }
 
             .content-group::before {
@@ -201,7 +214,10 @@
             }
 
             .centered {
-                top: 0; bottom: 0;
+                top: 0;
+                bottom: 0;
+
+                // scss-lint:disable SelectorDepth, NestingDepth
 
                 > h2 {
                     font-size: 55px;
@@ -211,20 +227,23 @@
                     display: inline-block;
                     vertical-align: middle;
                 }
+
+                // scss-lint:enable SelectorDepth, NestingDepth
+
             }
 
             .centered::after {
                 display: inline-block;
-                content: "";
-                vertical-align: middle;
                 height: 100%;
+                vertical-align: middle;
+                content: '';
             }
 
             h2 {
-                width: 420px;
                 margin: 0;
                 margin-bottom: 20px;
-                color: #fff;
+                width: 420px;
+                color: $cmwn-white;
 
                 @media (max-width: $device-max-break) {
                     width: auto;
@@ -233,33 +252,33 @@
             }
 
             button {
+                outline: none;
+                border: 0;
+                box-shadow: 0 0 20px $cmwn-medium-gray;
+                background-color: $cmwn-purple;
                 padding: 5px;
                 padding-right: 20px;
-                border: none;
-
-                box-shadow: 0px 0px 20px rgba(0,0,0,0.6);
-                font-family: "CMWNJadeRegular";
-                font-size: 18px;
-                line-height: 50px;
                 text-transform: uppercase;
-                background-color: $cmwn-purple;
-                color: #fff;
-                outline: none;
+                line-height: 50px;
+                color: $cmwn-white;
+                font-family: 'CMWNJadeRegular';
+                font-size: 18px;
             }
 
             button:hover {
-                background-color: #fff;
+                background-color: $cmwn-white;
                 color: $cmwn-purple;
             }
 
             button::before {
                 float: left;
-                width: 70px; height: 50px;
                 margin-right: 20px;
 
-                content: "";
-                background: #000 url(../media/home/btn_play.png) center no-repeat;
+                background: $cmwn-black url('../media/home/btn_play.png') center no-repeat;
                 background-size: 20px;
+                width: 70px;
+                height: 50px;
+                content: '';
             }
         }
 
@@ -277,9 +296,10 @@
     .message {
         overflow: hidden;
 
-        h2, p {
-            margin-left: 20px;
+        h2,
+        p {
             margin-right: 40px;
+            margin-left: 20px;
         }
 
         h2 {
@@ -298,38 +318,36 @@
 
         img {
             float: left;
-            width: 50%;
             margin-right: 20px;
+            width: 50%;
 
             @media (max-width: $device-max-break) {
-                width: 40%;
                 margin-right: 10px;
                 margin-bottom: 25px;
+                width: 40%;
             }
         }
 
         p {
+            line-height: 26px;
             color: $copy-medium-gray;
             font-size: 17px;
-            line-height: 26px;
 
             @media (max-width: $device-max-break) {
                 clear: both;
                 margin: 50px 15px;
                 margin-top: 0;
-
-                font-size: 14px;
                 line-height: 24px;
+                font-size: 14px;
             }
         }
     }
 
     .message::after {
         display: block;
-        border-bottom: solid 1px $rule-light-gray;
-
-        content: "";
         clear: both;
+        border-bottom: solid 1px $rule-light-gray;
+        content: '';
     }
 
     .partners {
@@ -340,32 +358,32 @@
         }
 
         .logos {
-            line-height: 0;
             margin-right: -20px;
             text-align: center;
+            line-height: 0;
         }
 
         .cell {
             display: inline-block;
-            width: 120px; height: 120px;
-            border: solid 1px $rule-light-gray;
             margin-right: 20px;
             margin-bottom: 20px;
-
+            border: solid 1px $rule-light-gray;
             background-repeat: no-repeat;
             background-position: center;
             background-size: 70%;
+            width: 120px;
+            height: 120px;
         }
     }
 
     &::after {
         position: absolute;
-        left: 0px; right: 0px;
+        right: 0;
         bottom: 100%;
+        left: 0;
+        box-shadow: 0 0 20px $cmwn-black;
         height: 10px;
-
-        content: "";
-        box-shadow: 0px 0px 20px #000;
+        content: '';
     }
 }
 
