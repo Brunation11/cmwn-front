@@ -32,7 +32,9 @@ var Component = React.createClass({
                     <Table data={this.props.data} className="admin">
                         <Column dataKey="title"
                             renderCell={(data, row) => (
-                                <Link to={'/districts/' + row.org_id}>{_.startCase(data)}</Link>
+                                <Link to={'/districts/' + row.org_id} className="district-link">
+                                    {_.startCase(data)}
+                                </Link>
                             )}
                         />
                         <Column dataKey="description" />
@@ -47,7 +49,7 @@ var Component = React.createClass({
     }
 });
 
-const mapStateToProps = state => {
+var mapStateToProps = state => {
     var data = [];
     var loading = true;
     if (state.page && state.page.data && state.page.data._embedded && state.page.data._embedded.org) {

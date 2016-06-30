@@ -2,32 +2,39 @@
 
 cat $PWD/bin/splash.txt
 
-docker-machine active
+bash $PWD/bin/setup-docker.sh front
 if [ $? != 0 ]
 then
-    echo "[installer] no default docker-machine running"
-    echo "[installer] you should check for updates in composer.json yourself"
+    >&2 echo "[installer] no $target_docker_name docker-machine running"
+    exit 1
+fi
+
+echo "[installer] Building docker containers"
+eval $(docker-machine env front)
+
+DOCKER_IP=`docker-machine ip front`
+
+if [ -z "$DOCKER_IP" ]
+then
+    >&2 echo "Looks like we did not the correct docker-machine set up"
     exit 1
 fi
 
 echo "[installer] Installing hooks"
 bash $PWD/bin/install-git-hooks.sh
 
-echo "[api-installer] Building docker containers"
-eval $(docker-machine env)
+echo "[installer] Building docker containers"
 
 docker-compose build
 
 echo "[installer] Installing node modules"
-docker-compose run node npm install
+docker-compose run --rm node npm install
 
 echo "[installer] building production"
-docker-compose run node gulp build --production
-
-DOCKER_IP=$(docker-machine ip)
+docker-compose run --rm node gulp build --production
 
 cat <<EOF
-[api-installer] Completed!
+[installer] Completed!
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!                                                    !!
