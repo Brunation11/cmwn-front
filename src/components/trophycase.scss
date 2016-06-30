@@ -73,7 +73,7 @@
         animation-iteration-count: infinite;
         animation-direction: alternate;
         margin: 0 .5rem;
-        box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+        box-shadow: 0 0 1px $cmwn-trans;
         vertical-align: middle;
         backface-visibility: hidden;
     }
@@ -92,7 +92,7 @@
     .buzz {
         display: inline-block;
         transform: translateZ(0);
-        box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+        box-shadow: 0 0 1px $cmwn-trans;
         vertical-align: middle;
         backface-visibility: hidden;
     }
@@ -111,7 +111,7 @@
         display: inline-block;
         position: relative;
         transform: translateY(-5px) translateZ(0);
-        box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+        box-shadow: 0 0 1px $cmwn-trans;
         vertical-align: middle;
         backface-visibility: hidden;
         transition-duration: .3s;
@@ -124,7 +124,7 @@
         left: 5%;
         transform: translateY(5px);
         z-index: -1;
-        background: radial-gradient(ellipse at center, rgba(0, 0, 0, .35) 0%, rgba(0, 0, 0, 0) 80%);
+        background: radial-gradient(ellipse at center, $cmwn-more-trans-gray 0%, $cmwn-trans 80%);
         width: 90%;
         height: 10px;
         content: '';

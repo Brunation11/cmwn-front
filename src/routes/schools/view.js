@@ -10,7 +10,6 @@ import DeleteLink from 'components/delete_link';
 import {Table, Column} from 'components/table';
 import Util from 'components/util';
 import Paragraph from 'components/conditional_paragraph';
-import History from 'components/history';
 import GenerateDataSource from 'components/datasource';
 
 const PAGE_UNIQUE_IDENTIFIER = 'district-view';
@@ -56,7 +55,7 @@ var Component = React.createClass({
                 return null;
             }
             return (
-                <Link to={`/districts/${district.id}`} className='school-district-link'>
+                <Link to={`/districts/${district.id}`} className="school-district-link">
                     {district.title}
                 </Link>
             );
@@ -88,13 +87,16 @@ var Component = React.createClass({
             <Layout>
                 <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard">
                     <p className="right" id="buttons">
-                        <EditLink className="purple" base="/school" id={this.state.group_id} scope={this.state.scope} text="Edit this school"/>
+                        <EditLink className="purple" base="/school" id={this.state.group_id}
+                            scope={this.state.scope} text="Edit this school"/>
                         {this.renderImport()}
                         <DeleteLink className="purple" base="/school" id={this.state.group_id}
                             scope={this.state.scope} text="Delete this school" />
                     </p>
                     <p>
-                        <a href={`/school/${this.props.data.group_id}/profile`} id="school-return-profile">Return to school profile</a>
+                        <a href={`/school/${this.props.data.group_id}/profile`} id="school-return-profile">
+                            Return to school profile
+                        </a>
                     </p>
                    <Paragraph>
                        <p pre={`${HEADINGS.DISTRICTS}: `} id="school-districts">{this.renderDistricts()}</p>
@@ -102,7 +104,7 @@ var Component = React.createClass({
                    </Paragraph>
                 </Panel>
                 <Panel header={HEADINGS.CLASSES} className="standard">
-                    <Link to={`/classes`} id="school-view-classes">View All Your Classes</Link>
+                    <Link to={'/classes'} id="school-view-classes">View All Your Classes</Link>
                     <CLASS_SOURCE>
                         <Table>
                             <Column dataKey="title"
@@ -131,7 +133,7 @@ var Component = React.createClass({
                     </CLASS_SOURCE>
                 </Panel>
                 <Panel header={HEADINGS.USERS} className="standard">
-                    <Link to={`/users`} id="school-view-users">View All Your Users</Link>
+                    <Link to={'/users'} id="school-view-users">View All Your Users</Link>
                     <USER_SOURCE>
                         <Table>
                             <Column dataKey="first_name" renderHeader="Name"

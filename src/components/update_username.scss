@@ -6,7 +6,7 @@
         margin: 0 auto;
         margin-bottom: 2rem;
         border-radius: $standard / 3;
-        box-shadow: 0 0 6px rgba(46, 163, 242, .9);
+        box-shadow: 0 0 6px $cmwn-medium-blue;
         background-color: $cmwn-blue;
         height: 3rem;
         text-align: center;
@@ -155,15 +155,15 @@
     }
 
     .generate:hover {
-        box-shadow: 0 0 6px rgba(120, 81, 147, .9);
+        box-shadow: 0 0 6px $cmwn-medium-purple;
     }
 
     .submit:hover {
-        box-shadow: 0 0 6px rgba(71, 183, 44, .9);
+        box-shadow: 0 0 6px $cmwn-medium-green;
     }
 
     .alternate-usernames-btn:hover {
-        box-shadow: 0 0 6px rgba(46, 163, 242, .9);
+        box-shadow: 0 0 6px $cmwn-medium-blue;
     }
 
 }

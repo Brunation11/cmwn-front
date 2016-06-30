@@ -84,7 +84,9 @@ var Component = React.createClass({
             return null;
         }
         return (
-            <p><a id="school-admin-link" href={`/school/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
+            <p><a id="school-admin-link" href={`/school/${this.props.data.group_id}/view`}>
+                {ADMIN_TEXT}
+            </a></p>
         );
     },
     renderImport: function () {
