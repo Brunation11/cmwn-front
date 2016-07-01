@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Input, Tabs, Tab} from 'react-bootstrap';
+import {Modal, Button, Input, Tabs, Tab} from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import Util from 'components/util';
@@ -22,6 +22,26 @@ const ERRORS = {
     LOGIN: 'Sorry, that wasn\'t quite right. Please try again.'
 };
 
+const MESSAGE_START = 'Don\'t have a login yet?  Contact your school to get started with Change ' +
+ 'My World Now and ';
+const MESSAGE_LINK = 'submit a request';
+const MESSAGE_END = ' for us to contact your school!';
+
+
+const SIGNUP = (<span>
+    <p>We are so excited about your interest to work with us!</p>
+    <p dangerouslySetInnerHTML={{__html: 'Click <a href=\'mailto:&#106;&#111;&#110;&#105;&#064;' +
+        '&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#099;&#097;' +
+        '&#116;&#104;&#121;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;' +
+        '&#111;&#109;?subject=Sign up with CMWN&body=Thank you for your interest in Change My ' +
+        'World Now!%0D%0A%0D%0AIf you would like to launch Change My World Now in your school ' +
+        'please provide the following information and someone from our team will contact you.' +
+        '%0D%0A%0D%0AWhat is your relationship to the school?:%0D%0AYour Name:%0D%0AYour School' +
+        ':%0D%0AYour Email:%0D%0ASchool Grades:' +
+        '%0D%0APrincipal Name:%0D%0APrincipal Email:' +
+        '%0D%0ASchool Phone:%0D%0ACity/State:\'>here</a> to contact us.'}}>
+    </p>
+</span>);
 var Component = React.createClass({
     getInitialState: function () {
         return {
@@ -38,6 +58,9 @@ var Component = React.createClass({
     },
     handleSelect: function (index) {
         this.setState({key: index});
+    },
+    displaySignupModal: function () {
+        this.setState({signupOpen: true});
     },
     getToken: function () {
     },
@@ -128,6 +151,16 @@ var Component = React.createClass({
                                 {LABELS.SUBMIT}
                             </Button>
                         </form>
+                        <div><br /><p>
+                            {MESSAGE_START}
+                            <a onClick={this.displaySignupModal}>{MESSAGE_LINK}</a>
+                            {MESSAGE_END}
+                        </p></div>
+                        <Modal show={this.state.signupOpen} onHide={() => this.setState({signupOpen: false})}>
+                            <Modal.Body>
+                                {SIGNUP}
+                            </Modal.Body>
+                        </Modal>
                     </Tab>
                     <Tab eventKey={2} title={'Forgot Password'} >
                         <br />
