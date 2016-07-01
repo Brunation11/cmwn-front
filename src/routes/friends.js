@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import {Button} from 'react-bootstrap';
 import Shortid from 'shortid';
 
+import PopOver from 'components/popover';
 import Log from 'components/log';
 import HttpManager from 'components/http_manager';
 import FlipBoard from 'components/flipboard';
@@ -71,6 +72,15 @@ var Component = React.createClass({
 
     renderFlip: function (item){
         return (
+            <PopOver
+                element={item}
+                type="user"
+                body={this.renderUserFlip(item)}
+            />
+        );
+    },
+    renderUserFlip: function (item) {
+        return (
             <div className="flip" key={Shortid.generate()}>
                 <Link to={`/profile/${item.user_id == null ? item.friend_id : item.user_id}`}
                     className="friend-link">
@@ -120,7 +130,7 @@ var Component = React.createClass({
 
                            return data;
                        }}/>
-                   </Paginator >
+                   </Paginator>
                 </form>
            </Layout>
         );
