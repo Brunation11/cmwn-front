@@ -105,8 +105,19 @@ var Component = React.createClass({
                     <Paginator rowCount={this.props.rowCount} currentPage={this.props.currentPage}
                         pageCount={this.props.pageCount} data={this.props.data} pagePaginator={true}>
                        <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.FRIENDS} transform={data => {
-                           data = data.set('image', _.has(data, '_embedded.image[0].url') ?
-                               data.images.data[0].url : DefaultProfile);
+                           var image;
+                           if (!_.has(data, '_embedded.image')) {
+                               image = DefaultProfile;
+                           } else {
+                               if (data._embedded.image.url != null) {
+                                   image = data._embedded.image.url;
+                               } else {
+                                   image = data.images.data[0].url;
+                               }
+                           }
+
+                           data = data.set('image', image);
+
                            return data;
                        }}/>
                    </Paginator >
