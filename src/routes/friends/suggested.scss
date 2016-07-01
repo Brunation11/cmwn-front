@@ -1,6 +1,7 @@
-.suggestedfriends {
+.suggested-friends {
     td img {
         width: 200px;
+        max-width: 200px;
     }
 
     .overlay {
@@ -8,11 +9,18 @@
     }
 
     .btn.standard {
-        width: 100%;
         margin: 5px 0;
+        width: 100%;
     }
 
     .hidden {
         visibility: hidden;
+    }
+
+    .flip {
+
+        img {
+            max-width: 200px;
+        }
     }
 }

@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import {Button} from 'react-bootstrap';
 import Shortid from 'shortid';
 
+import PopOver from 'components/popover';
 import Log from 'components/log';
 import HttpManager from 'components/http_manager';
 import FlipBoard from 'components/flipboard';
@@ -28,7 +29,7 @@ const FRIEND_ADDED = 'Great! You are now friends with ';
 const FRIEND_PROBLEM = 'There was a problem adding your friend. Please try again in a little while.';
 const PROFILE = 'View Profile';
 const REQUESTED = 'Accept Request';
-const PENDING = 'Request Pending';
+const PENDING = 'Request Sent';
 
 const PAGE_UNIQUE_IDENTIFIER = 'friends-page';
 
@@ -68,21 +69,41 @@ var Component = React.createClass({
         Toast.error(FRIEND_PROBLEM);
         Log.error(e, 'Friend request failed');
     },
+
     renderFlip: function (item){
         return (
+            <PopOver
+                element={item}
+                type="user"
+                body={this.renderUserFlip(item)}
+            />
+        );
+    },
+    renderUserFlip: function (item) {
+        return (
             <div className="flip" key={Shortid.generate()}>
-                <Link to={`/profile/${item.user_id == null ? item.friend_id : item.user_id}`}>
+                <Link to={`/profile/${item.user_id == null ? item.friend_id : item.user_id}`}
+                    className="friend-link">
                     <div className="item">
                         <span className="overlay">
-                            <div className="relwrap"><div className="abswrap">
-                                <Button onClick={this.doNothing} className={ClassNames('blue standard', {faded: item.friend_status !== 'PENDING'})}>{PENDING}</Button>
-                                <Button onClick={this.acceptRequest.bind(this, item)} className={ClassNames('blue standard', {faded: item.friend_status !== 'NEEDS_YOUR_ACCEPTANCE'})}>{REQUESTED}</Button>
+                            <div className="relwrap friend"><div className="abswrap prompts">
+                                <span className={ClassNames('pending-prompt', {
+                                    faded: item.friend_status !== 'PENDING'})
+                                }>
+                                    {PENDING}
+                                </span>
+                                <Button onClick={this.acceptRequest.bind(this, item)} className={ClassNames(
+                                    'blue standard',
+                                    {faded: item.friend_status !== 'NEEDS_YOUR_ACCEPTANCE'}
+                                )}>
+                                    {REQUESTED}
+                                </Button>
                                 <Button className="purple standard">{PROFILE}</Button>
                             </div></div>
                         </span>
                         <img src={item.image}></img>
                     </div>
-                    <p className="linkText" >{item.username}</p>
+                    <p className="link-text" >{item.username}</p>
                 </Link>
             </div>
         );
@@ -91,25 +112,43 @@ var Component = React.createClass({
         return (
            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <form>
-                    <Paginator rowCount={this.props.rowCount} currentPage={this.props.currentPage} pageCount={this.props.pageCount} data={this.props.data} pagePaginator={true}>
-                       <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.FRIENDS} transform={data => {
-                           data = data.set('image', _.has(data, '_embedded.image[0].url') ? data.images.data[0].url : DefaultProfile);
-                           return data;
-                       }}/>
-                   </Paginator >
+                    <Paginator rowCount={this.props.rowCount} currentPage={this.props.currentPage}
+                        pageCount={this.props.pageCount} data={this.props.data} pagePaginator={true}>
+                       <FlipBoard
+                           renderFlip={this.renderUserFlip}
+                           header={HEADINGS.FRIENDS}
+                           transform={data => {
+                               var image;
+                               if (!_.has(data, '_embedded.image')) {
+                                   image = DefaultProfile;
+                               } else {
+                                   if (data._embedded.image.url != null) {
+                                       image = data._embedded.image.url;
+                                   } else {
+                                       image = data.images.data[0].url;
+                                   }
+                               }
+
+                               data = data.set('image', image);
+
+                               return data;
+                           }}
+                       />
+                   </Paginator>
                 </form>
            </Layout>
         );
     }
 });
 
-const mapStateToProps = state => {
+var mapStateToProps = state => {
     var data = [];
     var loading = true;
     var rowCount = 1;
     var currentPage = 1;
     var pageCount = 1;
-    if (state.page && state.page.data != null && state.page.data._embedded && state.page.data._embedded.friend) {
+    if (state.page && state.page.data != null &&
+        state.page.data._embedded && state.page.data._embedded.friend) {
         loading = state.page.loading;
         data = state.page.data._embedded.friend;
         rowCount = state.page.data.page_size;
