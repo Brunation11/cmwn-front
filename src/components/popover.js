@@ -42,7 +42,7 @@ var PopOver = React.createClass({
                         >
                             {state.element.description}
                         </Popover>}>
-                        <img src={`/flips/${state.element.flip_id}-earned.ggif`} />
+                        <img src={`/flips/${state.element.flip_id}-earned.gif`} />
                 </OverlayTrigger>
             </ButtonToolbar>
         );

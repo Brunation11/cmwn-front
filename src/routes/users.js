@@ -32,10 +32,20 @@ var Component = React.createClass({
         this.setState({key: index});
     },
     renderFlip: function (item){
+        var image;
+        if (!_.has(item, '_embedded.image')) {
+            image = DefaultProfile;
+        } else {
+            if (item._embedded.image.url != null) {
+                image = item._embedded.image.url;
+            } else {
+                image = item.images.data[0].url;
+            }
+        }
         return (
             <div className="flip" key={Shortid.generate()}>
                 <Link to={`/users/${item.user_id}`}>
-                    <img src={DefaultProfile}></img><p>{`${item.first_name} ${item.last_name}`}</p>
+                    <img src={image}></img><p>{`${item.first_name} ${item.last_name}`}</p>
                 </Link>
             </div>
         );

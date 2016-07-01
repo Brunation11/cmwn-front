@@ -404,6 +404,10 @@ h3 {
         clear: both;
     }
 
+    .placeholder {
+        padding: $standard;
+    }
+
     @media (max-width: $device-max-break) {
         font-size: $min-base-font-size; //IE vmax fallback
         //overflow: auto;
