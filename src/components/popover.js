@@ -1,6 +1,5 @@
 import React from 'react';
 import {ButtonToolbar, OverlayTrigger, Popover} from 'react-bootstrap';
-import {Link} from 'react-router';
 import Shortid from 'shortid';
 import Moment from 'moment';
 import _ from 'lodash';
@@ -36,7 +35,7 @@ var PopOver = React.createClass({
                     overlay={
                         <Popover id={Shortid.generate()} title={state.element.title + '  |  earned: ' + Moment(state.element.earned).format('MMM Do YYYY')}>{state.element.description}
                         </Popover>}>
-                        <img src={`/flips/${state.element.flip_id}-earned.gif`} />
+                        <img src={`/flips/${state.element.flip_id}-earned.ggif`} />
                 </OverlayTrigger>
             </ButtonToolbar>
         );
