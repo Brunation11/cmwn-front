@@ -5,7 +5,6 @@
     .flip-list {
         margin-top: -40%;
         width: 100%;
-        overflow: scroll;
 
         .single-flip {
             width: 50%;
@@ -65,7 +64,6 @@
     .in-progress {
         padding: 0 $standard;
         width: 100%;
-        overflow: scroll;
         white-space: nowrap;
 
         strong {
