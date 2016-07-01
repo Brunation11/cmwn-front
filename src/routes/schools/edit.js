@@ -84,35 +84,37 @@ var Component = React.createClass({
             return null;
         }
         return (
-           <Layout>
-              <Panel header={HEADINGS.EDIT_TITLE + this.props.data.title} className="standard">
-                  <Link to={'/school/' + this.props.data.group_id + '/view'} id="school-return-dash">Return to School Dashboard</Link>
-                  <br />
-                 <Input
-                    type="text"
-                    value={this.state.title}
-                    placeholder="title"
-                    label="Title"
-                    bsStyle={Validate.min(3, this.state.title)}
-                    hasFeedback
-                    ref="titleInput"
-                    id="school-edit-name"
-                    onChange={() => this.setState({title: this.refs.titleInput.getValue()})}
-                 />
-                 <Input
-                    type="textarea"
-                    value={this.state.description}
-                    placeholder="description"
-                    label="Description"
-                    ref="descriptionInput"
-                    id="school-edit-desc"
-                    onChange={() => this.setState({description: this.refs.descriptionInput.getValue()})}
-                 />
-                 <Button onClick={this.submitData} id="school-edit-submit"> Save </Button>
-              </Panel>
-              {''/*<CreateClass data={this.props.data} />*/}
-              <BulkUpload url={this.props.data._links.import.href} />
-           </Layout>
+            <Layout>
+                <Panel header={HEADINGS.EDIT_TITLE + this.props.data.title} className="standard">
+                    <Link to={'/school/' + this.props.data.group_id + '/view'} id="school-return-dash">
+                        Return to School Dashboard
+                    </Link>
+                    <br />
+                    <Input
+                        type="text"
+                        value={this.state.title}
+                        placeholder="title"
+                        label="Title"
+                        bsStyle={Validate.min(3, this.state.title)}
+                        hasFeedback
+                        ref="titleInput"
+                        id="school-edit-name"
+                        onChange={() => this.setState({title: this.refs.titleInput.getValue()})}
+                    />
+                    <Input
+                        type="textarea"
+                        value={this.state.description}
+                        placeholder="description"
+                        label="Description"
+                        ref="descriptionInput"
+                        id="school-edit-desc"
+                        onChange={() => this.setState({description: this.refs.descriptionInput.getValue()})}
+                    />
+                    <Button onClick={this.submitData} id="school-edit-submit"> Save </Button>
+                </Panel>
+                {''/*<CreateClass data={this.props.data} />*/}
+                <BulkUpload url={this.props.data._links.import.href} />
+            </Layout>
          );
     }
 });
