@@ -16,4 +16,11 @@
     .hidden {
         visibility: hidden;
     }
+
+    .flip {
+
+        img {
+            max-width: 200px;
+        }
+    }
 }
