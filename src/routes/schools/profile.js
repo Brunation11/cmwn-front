@@ -31,8 +31,6 @@ const ADMIN_TEXT = 'School Administrative Dashboard';
 
 const ORG_CREATED = 'School created successfully';
 
-const NO_SCHOOLS = 'Sorry, none of your schools have profiles to display at this time.';
-
 var Component = React.createClass({
     getInitialState: function () {
         return {
@@ -100,9 +98,7 @@ var Component = React.createClass({
     },
     render: function () {
         if (this.props.data == null) {
-            return (
-                <h2>{NO_SCHOOLS}</h2>
-            );
+            return null;
         }
         return (
            <Layout className="profile">

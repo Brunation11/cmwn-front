@@ -15,14 +15,15 @@
             width: 100%;
         }
 
-        &.faded {
-            opacity: 0;
-        }
 
         &.nohover,
         &.nohover:hover {
             background-color: $cmwn-blue;
         }
+    }
+
+    .faded {
+        opacity: 0;
     }
 
     .prompts {
