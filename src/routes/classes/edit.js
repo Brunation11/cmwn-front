@@ -26,21 +26,21 @@ const ERRORS = {
 };
 
 export class EditClass extends React.Component {
-    constructor (props) {
+    constructor(props) {
         super(props);
-        this.state =  {
+        this.state = {
             code: '',
             title: '',
             description: ''
         };
     }
-    componentWillMount () {
+    componentWillMount() {
         this.setState(this.props.data);
     }
-    componentWillReceiveProps (newProps) {
+    componentWillReceiveProps(newProps) {
         this.setState(newProps.data);
     }
-    submitData () {
+    submitData() {
         var postData = {
             title: this.state.title,
             organization_id: this.props.data.organization_id, //eslint-disable-line camelcase
@@ -53,7 +53,7 @@ export class EditClass extends React.Component {
             Log.log('Server refused class update', err, postData);
         });
     }
-    render () {
+    render() {
         if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
@@ -92,16 +92,16 @@ export class EditClass extends React.Component {
            </Layout>
          );
     }
-};
+}
 
 export class CreateStudent extends React.Component {
-    constructor (props) {
+    constructor(props) {
         super(props);
         this.state = {
             title: ''
         };
     }
-    submitData () {
+    submitData() {
         var postData = {
             first_name: this.state.first, //eslint-disable-line camelcase
             group_id: this.props.data.group_id, //eslint-disable-line camelcase
@@ -126,7 +126,7 @@ export class CreateStudent extends React.Component {
             Toast.error(ERRORS.INVALID_SUBMISSION);
         }
     }
-    render () {
+    render() {
         return (
         <Panel header={HEADINGS.CREATE_USER} className="standard">
             <Form ref="formRef">
@@ -157,9 +157,9 @@ export class CreateStudent extends React.Component {
         </Panel>
         );
     }
-};
+}
 
-var mapStateToProps = state => {
+var mapStateToProps = state => { // eslint-disable-line vars-on-top
     var data = {title: ''};
     var loading = true;
     if (state.page && state.page.data != null) {
@@ -172,6 +172,5 @@ var mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(EditClass);
+var Page = connect(mapStateToProps)(EditClass); // eslint-disable-line vars-on-top
 export default Page;
-

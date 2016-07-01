@@ -5,7 +5,7 @@ import { shallow } from 'enzyme';
 import { Profile } from 'routes/classes/profile';
 
 import teacherData from 'mocks/users/teacher_data';
-import classData from 'mocks/users/classData';
+import classData from 'mocks/users/class_data';
 
 
 var checkElementsTeacher = function (data, currentUser){

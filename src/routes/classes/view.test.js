@@ -5,7 +5,7 @@ import { shallow } from 'enzyme';
 import { View } from 'routes/classes/view';
 
 import teacherData from 'mocks/users/teacher_data';
-import classData from 'mocks/users/classData';
+import classData from 'mocks/users/class_data';
 
 var nullGroup = {group_id: null}; // eslint-disable-line camelcase
 

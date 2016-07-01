@@ -149,17 +149,18 @@ export class View extends React.Component{
 
         );
     }
-};
+}
 
-var mapStateToProps = state => {
+var mapStateToProps = state => { // eslint-disable-line vars-on-top
     var data = {title: ''};
-    var currentUser = {};
+    var currentUser = {}; // eslint-disable-line no-unused-vars
     var loading = true;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
-        if(state.currentUser != null)
+        if (state.currentUser != null){
             currentUser = state.currentUser;
+        }
     }
     return {
         data,
@@ -167,6 +168,6 @@ var mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(View);
+var Page = connect(mapStateToProps)(View); // eslint-disable-line vars-on-top
 export default Page;
 

@@ -2,7 +2,7 @@ import React from 'react'; // eslint-disable-line no-unused-vars
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
 
-import classData from 'mocks/users/classData';
+import classData from 'mocks/users/class_data';
 import { EditClass } from 'routes/classes/edit';
 import { CreateStudent } from 'routes/classes/edit';
 

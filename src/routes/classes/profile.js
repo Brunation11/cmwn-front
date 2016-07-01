@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'; // eslint-disable-line no-unused-vars
 import QueryString from 'query-string';
 import {Link} from 'react-router';
 import {Panel} from 'react-bootstrap';
@@ -11,7 +11,7 @@ import FlipBoard from 'components/flipboard';
 import EditLink from 'components/edit_link';
 import Util from 'components/util';
 import GenerateDataSource from 'components/datasource';
-import Store from 'components/store';
+import Store from 'components/store'; // eslint-disable-line no-unused-vars
 
 import DefaultProfile from 'media/profile_tranparent.png';
 
@@ -95,7 +95,9 @@ export class Profile extends React.Component {
         return (
            <Panel header={this.state.title} className="standard">
                <p className="right" >
-                   <EditLink id="edit-button" className="purple" text="Edit Class" base="/class" uuid={this.state.group_id} canUpdate={Util.decodePermissions(this.state.scope).update} />
+                   <EditLink id="edit-button" className="purple" text="Edit Class" base="/class"
+                    uuid={this.state.group_id} canUpdate=
+                    {Util.decodePermissions(this.state.scope).update} />
                </p>
                {this.renderAdminLink()}
            </Panel>
@@ -122,15 +124,16 @@ Profile.defaultProps = {
     data: {}
 };
 
-var mapStateToProps = state => {
+var mapStateToProps = state => { // eslint-disable-line vars-on-top
     var data = {};
-    var currentUser = {};
+    var currentUser = {}; // eslint-disable-line no-unused-vars
     var loading = true;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
-        if(state.currentUser != null)
+        if (state.currentUser != null){
             currentUser = state.currentUser;
+        }
 
     }
     return {
@@ -139,6 +142,6 @@ var mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(Profile);
+var Page = connect(mapStateToProps)(Profile); // eslint-disable-line vars-on-top
 export default Page;
 
