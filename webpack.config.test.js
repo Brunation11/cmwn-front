@@ -7,7 +7,13 @@ var webpack = require('webpack');
 var autoprefixer = require('autoprefixer');
 
 module.exports = {
-    devtool: 'eval',
+    devtool: 'cheap-source-map',
+    target: 'web',
+    externals: {
+        'cheerio': 'window',
+        'react/lib/ExecutionEnvironment': true,
+        'react/lib/ReactContext': true,
+    },
     resolve: {
         root: path.resolve('./src'),
         extensions: ['', '.js']

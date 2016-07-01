@@ -4,9 +4,7 @@ import {Panel} from 'react-bootstrap';
 import {Link} from 'react-router';
 import Shortid from 'shortid';
 
-import Fetcher from 'components/fetcher';
-import GLOBALS from 'components/globals';
-
+import PopOver from 'components/popover';
 import 'components/trophycase.scss';
 
 import DISABLED_FLIP from 'media/flip-disabled.png';
@@ -18,35 +16,68 @@ const HEADINGS = {
 };
 
 var Trophycase = React.createClass({
+    getInitialState: function () {
+        return {
+            flips: []
+        };
+    },
+    componentDidMount: function () {
+        if (this.props.data && this.props.data) {
+            this.setState({flips: this.props.data});
+        }
+    },
+    componentWillReceiveProps: function (nextProps) {
+        if (nextProps.data && nextProps.data) {
+            this.setState({flips: nextProps.data});
+        }
+    },
     renderPartial: function (items) {
         return (
-           <div className="flip-list">
-               {_.map(items, (item) => (<Link to="" key={Shortid.generate()}><img src={`/flips/${item.uuid}.png`} ></img><div className="partial" style={{height: `${item.progress}%`}} ><img src={`/flips/${item.uuid}_grey.png`} ></img></div></Link>))}
-           </div>
+            <div className="flip-list">
+                {_.map(items, (item) => (
+                    <Link to="" key={Shortid.generate()}>
+                        <img src={`/flips/${item.flip_id}.gif`} ></img>
+                        <div className="partial" style={{height: `${item.progress}%`}} >
+                            <img src={`/flips/${item.flip_id}_grey.png`} ></img>
+                        </div>
+                    </Link>
+                ))}
+            </div>
         );
     },
     renderComplete: function (items) {
         return (
-           <div className="flip-list">
-               {_.map(items, (item) => (<Link to="" key={Shortid.generate()}><img src={`/flips/${item.uuid}.png`} ></img></Link>))}
-           </div>
+            <div className="flip-list">
+                {_.map(items, (item) => (
+                    <div className="single-flip">
+                        <PopOver
+                            element={item}
+                            placement="bottom"
+                            type="flip"
+                        />
+                    </div>
+                ))}
+            </div>
         );
     },
-    renderCase: function (props) {
-        var complete, inProgress;
-        if (props.data && props.data.length === 0) {
+    renderCase: function () {
+        var complete = [];
+        var inProgress = [];
+        if (this.state && !this.state.flips.length) {
             return null;
         }
-        complete = _.filter(props.data, item => item.progress === 100);
-        inProgress = _.difference(props.data, complete);
+        complete = this.state.flips;
+        // complete = _.filter(this.state.flips, item => item.progress === 100);
+        //inProgress = _.difference(this.state.flips, complete);
         return (
-            <Panel className="standard" header={HEADINGS.FLIPBOARD}>
+            <Panel className="trophycase standard" header={HEADINGS.FLIPBOARD}>
                 <div className="earned">
-                    {EARNED}<strong>{complete.length}</strong>
-                    <img className="spacer" src={DISABLED_FLIP} />
+                    <span className="earned-header">{EARNED}<strong className="earned-value">
+                        {complete.length}
+                    </strong></span>
                     {this.renderComplete(complete)}
                 </div>
-                <div className="in-progress  hidden">
+                <div className="in-progress hidden">
                     {IN_PROGRESS}<strong>{inProgress.length}</strong>
                     <img className="spacer" src={DISABLED_FLIP} />
                     {this.renderPartial(inProgress)}
@@ -55,11 +86,8 @@ var Trophycase = React.createClass({
         );
     },
     render: function () {
-        var Self = this;
         return (
-            <Fetcher className={'trophycase ' + this.props.className} url={GLOBALS.API_URL + 'flips'} renderNoData={Self.renderCase.bind(this, {})}>
-                <Self.renderCase />
-            </Fetcher>
+            this.renderCase()
         );
     }
 });

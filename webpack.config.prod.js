@@ -5,7 +5,6 @@
 var path = require('path');
 var webpack = require('webpack');
 var autoprefixer = require('autoprefixer');
-
 module.exports = {
     devtool: 'source-map',
     resolve: {
@@ -32,11 +31,25 @@ module.exports = {
             mangle: {},
             compressor: {
                 warnings: false
+            },
+            output: {
+                comments: function (node, comment) {
+                    var text = comment.value;
+                    var type = comment.type;
+                    if (type === 'comment2') {
+                        // multiline comment
+                        return (/@copyright/i).test(text);
+                    }
+                }
             }
         })
     ],
     module: {
         loaders: [{
+            test: /dev_reducers|devtool/,
+            loader: 'null'
+        },
+        {
             test: /\.js$/,
             loader: 'babel',
             include: path.join(__dirname, 'src'),

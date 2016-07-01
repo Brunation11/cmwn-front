@@ -2,15 +2,19 @@ import React from 'react';
 import _ from 'lodash';
 import ClassNames from 'classnames';
 import {Link} from 'react-router';
+import { connect } from 'react-redux';
 import {Button} from 'react-bootstrap';
 import Shortid from 'shortid';
 
-import Fetcher from 'components/fetcher';
+import PopOver from 'components/popover';
 import Log from 'components/log';
 import HttpManager from 'components/http_manager';
 import FlipBoard from 'components/flipboard';
-import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
+import Paginator from 'components/paginator';
+import Actions from 'components/actions';
+import Store from 'components/store';
+
 import Layout from 'layouts/two_col';
 
 import DefaultProfile from 'media/profile_tranparent.png';
@@ -25,36 +29,37 @@ const FRIEND_ADDED = 'Great! You are now friends with ';
 const FRIEND_PROBLEM = 'There was a problem adding your friend. Please try again in a little while.';
 const PROFILE = 'View Profile';
 const REQUESTED = 'Accept Request';
-const PENDING = 'Request Pending';
+const PENDING = 'Request Sent';
 
-var Page = React.createClass({
-    getInitialState: function () {
-        HttpManager.GET({url: GLOBALS.API_URL + 'users?include=roles,flips,images', handleErrors: false}).then(res => {
-            this.friends = res.response.data;
-        });
-        return {};
-    },
+const PAGE_UNIQUE_IDENTIFIER = 'friends-page';
+
+var Component = React.createClass({
     addFriend: function (item, e) {
+        var state = Store.getState();
+        var id = item.user_id != null ? item.user_id : item.friend_id;
         e.stopPropagation();
         e.preventDefault();
-        HttpManager.POST({url: GLOBALS.API_URL + 'friends/', handleErrors: false}, {
-            'user_id': item.uuid
-        }).catch(this.friendErr);
-        item.relationship = 'Pending';
-        this.forceUpdate;
-    },
-    acceptRequest: function (item, e) {
-        e.stopPropagation();
-        e.preventDefault();
-        HttpManager.POST({url: GLOBALS.API_URL + 'friends/', handleErrors: false}, {
-            'user_id': item.uuid
+        HttpManager.POST({url: state.currentUser._links.friend.href}, {
+            'friend_id': id
         }).then(() => {
             this.refs.fetcher.getData().then(() => {
                 Toast.success(FRIEND_ADDED + item.username);
                 this.forceUpdate();
             });
+            Actions.dispatch.START_RELOAD_PAGE(Store.getState());
         }).catch(this.friendErr);
-        e.target.className += ' faded'; //element will be replaced so we need to cheat a little
+    },
+    acceptRequest: function (item, e) {
+        var state = Store.getState();
+        var id = item.user_id != null ? item.user_id : item.friend_id;
+        e.stopPropagation();
+        e.preventDefault();
+        HttpManager.POST({url: state.currentUser._links.friend.href}, {
+            'friend_id': id
+        }).then(() => {
+            Toast.success(FRIEND_ADDED + item.username);
+            Actions.dispatch.START_RELOAD_PAGE(Store.getState());
+        }).catch(this.friendErr);
     },
     doNothing: function (e) {
         e.stopPropagation();
@@ -64,63 +69,103 @@ var Page = React.createClass({
         Toast.error(FRIEND_PROBLEM);
         Log.error(e, 'Friend request failed');
     },
-    transformFriend: function (type, item) {
-        var realFriend = _.find(this.friends, friend => friend.uuid === item.uuid);
-        if (realFriend != null) {
-            item = realFriend;
-        }
-        item.relationship = type;
-        item.image = _.has(item, 'images.data[0].url') ? item.images.data[0].url : DefaultProfile;
-        item.flips = item.flips == null ? 0 : item.flips.data.length;
-        return item;
-    },
-    renderFlipsEarned: function (item) {
-        if (item.roles && item.roles.data && !~item.roles.data.indexOf('Student')) {
-            return null;
-        }
-        return (
-            <p className="userFlips" key={Shortid.generate()}>{item.flips} Flips Earned</p>
-        );
-    },
+
     renderFlip: function (item){
         return (
+            <PopOver
+                element={item}
+                type="user"
+                body={this.renderUserFlip(item)}
+            />
+        );
+    },
+    renderUserFlip: function (item) {
+        return (
             <div className="flip" key={Shortid.generate()}>
-                <Link to={`/student/${item.uuid}`}>
+                <Link to={`/profile/${item.user_id == null ? item.friend_id : item.user_id}`}
+                    className="friend-link">
                     <div className="item">
                         <span className="overlay">
-                            <div className="relwrap"><div className="abswrap">
-                                <Button onClick={this.doNothing} className={ClassNames('blue standard', {faded: item.relationship !== 'pending'})}>{PENDING}</Button>
-                                <Button onClick={this.acceptRequest.bind(this, item)} className={ClassNames('blue standard', {faded: item.relationship !== 'requested'})}>{REQUESTED}</Button>
+                            <div className="relwrap friend"><div className="abswrap prompts">
+                                <span className={ClassNames('pending-prompt', {
+                                    faded: item.friend_status !== 'PENDING'})
+                                }>
+                                    {PENDING}
+                                </span>
+                                <Button onClick={this.acceptRequest.bind(this, item)} className={ClassNames(
+                                    'blue standard',
+                                    {faded: item.friend_status !== 'NEEDS_YOUR_ACCEPTANCE'}
+                                )}>
+                                    {REQUESTED}
+                                </Button>
                                 <Button className="purple standard">{PROFILE}</Button>
                             </div></div>
                         </span>
                         <img src={item.image}></img>
                     </div>
-                    <p className="linkText" >{item.username}</p>
+                    <p className="link-text" >{item.username}</p>
                 </Link>
-                {this.renderFlipsEarned(item)}
             </div>
         );
     },
     render: function () {
         return (
-           <Layout className="friends-page">
+           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <form>
-                    <Fetcher ref="fetcher" url={ GLOBALS.API_URL + 'friends?include=roles,images,flips'} transform={data => {
-                        data = [].concat(
-                            _.map(data.friendrequests, this.transformFriend.bind(this, 'requested')),
-                            _.map(data.acceptedfriends, this.transformFriend.bind(this, 'accepted')),
-                            _.map(data.pendingfriends, this.transformFriend.bind(this, 'pending'))
-                        );
-                        return data;
-                    }}>
-                       <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.FRIENDS} />
-                    </Fetcher>
+                    <Paginator rowCount={this.props.rowCount} currentPage={this.props.currentPage}
+                        pageCount={this.props.pageCount} data={this.props.data} pagePaginator={true}>
+                       <FlipBoard
+                           renderFlip={this.renderUserFlip}
+                           header={HEADINGS.FRIENDS}
+                           transform={data => {
+                               var image;
+                               if (!_.has(data, '_embedded.image')) {
+                                   image = DefaultProfile;
+                               } else {
+                                   if (data._embedded.image.url != null) {
+                                       image = data._embedded.image.url;
+                                   } else {
+                                       image = data.images.data[0].url;
+                                   }
+                               }
+
+                               data = data.set('image', image);
+
+                               return data;
+                           }}
+                       />
+                   </Paginator>
                 </form>
            </Layout>
         );
     }
 });
 
+var mapStateToProps = state => {
+    var data = [];
+    var loading = true;
+    var rowCount = 1;
+    var currentPage = 1;
+    var pageCount = 1;
+    if (state.page && state.page.data != null &&
+        state.page.data._embedded && state.page.data._embedded.friend) {
+        loading = state.page.loading;
+        data = state.page.data._embedded.friend;
+        rowCount = state.page.data.page_size;
+        currentPage = state.page.data.page;
+        pageCount = state.page.data.page_count;
+    }
+    return {
+        data,
+        loading,
+        rowCount,
+        currentPage,
+        pageCount
+    };
+};
+
+var Page = connect(mapStateToProps)(Component);
+Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
+
 

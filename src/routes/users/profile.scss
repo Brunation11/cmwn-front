@@ -1,39 +1,154 @@
+@import 'variables';
+
 .profile {
 
+    .panel-body {
+        display: flex;
+        padding: $standard;
+        flex-wrap: wrap;
+        justify-content: space-between;
+
+
+        > * {
+            position: relative;
+            flex: 1 0 275px;//arbitrary, looks good as a breakpoint
+        }
+
+        .right {
+            z-index: 2;
+            margin: 0 auto;
+
+            label,
+            span,
+            h3,
+            h2,
+            p,
+            a {
+                //fixes a horrible chrome/osx font aliasing issue http://stackoverflow.com/questions/8024061/webkit-blurry-text-with-css-scale-translate3d
+                transform: translate3d(0, 0, 0);
+                filter: blur(0);
+            }
+
+            .input-group-addon {
+                margin: 0;
+                border: 0;
+                padding: 0;
+            }
+
+            .has-addon {
+
+                // scss-lint:disable SelectorDepth, NestingDepth
+
+                .form-control-feedback::before {
+                    margin-left: -75px;
+                }
+                // scss-lint:enable SelectorDepth, NestingDepth
+
+            }
+        }
+
+        .left {
+            z-index: 1;
+            margin: 0 auto;
+
+            > * {
+                position: relative;
+                margin: 0 auto;
+                text-align: center;
+            }
+        }
+
+        .frame {
+            margin-top: ($standard * 5);
+            width: 100%;
+
+            > * {
+                margin: 0 auto;
+                width: 100%;
+
+                // scss-lint:disable SelectorDepth, NestingDepth
+
+                > * {
+                    margin: 0 auto;
+                    border: 1px solid $cmwn-blue;
+                    border-radius: 10px;
+                    box-shadow: -5px 5px 5px $cmwn-lighter-blue;
+                    padding: $standard;
+                    width: 60%;
+                }
+                // scss-lint:enable SelectorDepth, NestingDepth
+            }
+        }
+
+        .user-metadata {
+            padding: 1rem;
+            color: $cmwn-blue;
+            font-size: 1rem;
+
+            .field {
+                border-radius: 5px;
+                box-shadow: 0 0 6px $cmwn-medium-blue;
+                background: url('../../media/blue-header-bg.jpg');
+                padding: $standard / 3;
+                color: $cmwn-white;
+                font-size: 1.25rem;
+            }
+        }
+    }
+
     .flip {
-        flex-basis: 280px;
-        border: 1px solid #eeeeee;
+        border: 1px solid $cmwn-off-white;
         border-collapse: collapse;
+        flex-basis: 280px;
 
         object {
             display: inline-block;
-            background: #fff;
-            border: 1px solid black;
+            border: 1px solid $cmwn-black;
+            background: $cmwn-white;
             border-collapse: collapse;
         }
     }
 
     .link-below {
-        
+
         .below {
             display: none;
         }
     }
 
-    .infopanel {
+    .item {
 
-        .profile-image {
-            float: left;
-            padding-right: 15px;
+        .overlay {
+            overflow: scroll;
+
+            .text {
+                font-size: .75rem;
+
+                @media (min-width: $device-portrait-break) and (max-width: 590px) {
+                    font-size: 1rem;
+                }
+
+                @media (min-width: 590px) and (max-width: $device-max-break) {
+                    font-size: .65rem;
+                }
+
+                @media (min-width: $device-max-break) and (max-width: $monitor-max-break) {
+                    font-size: .3rem;
+                }
+
+                @media (min-width: $monitor-max-break) and (max-width: $ultrawide-min-break) {
+                    font-size: 1rem;
+                }
+            }
         }
-    }
 
-    .item > .coming-soon {
-        background: url(../../media/coming-soon.png) no-repeat right top;
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        .coming-soon {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: url('../../media/coming-soon.png') no-repeat right top;
+        }
     }
 }

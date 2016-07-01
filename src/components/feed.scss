@@ -1,0 +1,59 @@
+@import 'variables';
+$feed-item-color: #ddd;
+
+.feed {
+
+    a {
+        color: $cmwn-purple;
+    }
+
+    .source-image {
+        display: inline-block;
+        float: left;
+        background-repeat: no-repeat;
+        background-size: contain;
+        padding-right: 50px;
+        height: 40px;
+    }
+
+    .source-user {
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .source-date {
+        display: block;
+    }
+
+    .standard {
+
+        & > .image { // scss-lint:disable UnnecessaryParentReference
+            float: left;
+        }
+
+        .message {
+            display: inline-block;
+            padding: $standard;
+
+            p {
+                margin: 0;
+            }
+
+            h3 {
+                margin: 0;
+            }
+
+            .btn {
+                margin: 15px 0 0 7.5px;
+            }
+        }
+    }
+
+    li.feed-item {// scss-lint:disable QualifyingElement
+        margin-bottom: $standard;
+        border: $feed-item-color solid 1px;
+        border-radius: $standard;
+        padding: $standard;
+        overflow: auto;
+    }
+}

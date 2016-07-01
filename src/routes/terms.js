@@ -14,6 +14,8 @@ var Page = React.createClass({
     }
 });
 
+const BULLET = String.fromCharCode(8226);
+
 const TERMS = (
 <div className="terms">
   <div>
@@ -23,17 +25,20 @@ const TERMS = (
 
       <p className="p2 ft1">Effective: February 18, 2016</p>
 
-      <p className="p3 ft3">Change My World Now (&#8220;CMWN&#8221;) is provided by
-      Gina&#8217;s Ink, Incorporated. CMWN is dedicated to protecting the privacy of
+      <p className="p3 ft3">Change My World Now ("CMWN") is provided by
+      Gina's Ink, Incorporated. CMWN is dedicated to protecting the privacy of
       children and handling any personal information we obtain from our users with care
       and respect. This document describes our commitment to privacy and the things that
-      we are doing to keep kids&#8217; information safe and secure. As described in more
+      we are doing to keep kids' information safe and secure. As described in more
       detail below, <span className="ft2">CMWN does not sell, rent or trade personal
       information from kids.</span></p>
 
-      <p className="p4 ft5">By using and accessing CMWN, located at <a href="www.changemyworldnow.com" className=
-      "ft4">www.changemyworldnow.com</a>, you are accepting and agree to comply with
-      this Privacy Policy &amp; Conditions of Use.</p>
+      <p className="p4 ft5"> By using and accessing CMWN, located at{' '}
+          <a href="www.changemyworldnow.com" className="ft4">
+              www.changemyworldnow.com
+          </a>
+          , you are accepting and agree to comply with this Privacy Policy &amp; Conditions of Use.
+      </p>
 
       <p className="p5 ft6">What are the rules for accessing CMWN?</p>
 
@@ -46,13 +51,13 @@ const TERMS = (
       <p className="p7 ft3">If you are a student, there are some rules that apply to
       you:</p>
 
-      <p className="p8 ft7"><span className="ft8">&#8226;</span><span className="ft9">You
+      <p className="p8 ft7"><span className="ft8">{BULLET}</span><span className="ft9">You
       will only be able to register for and access CMWN if your school has agreed with
       CMWN to provide access to you. If you are under 13, your parent or guardian must
-      provide verifiable parental consent (&#8220;Consent&#8221;) to your
+      provide verifiable parental consent ("Consent") to your
       school.</span></p>
 
-      <p className="p9 ft7"><span className="ft8">&#8226;</span><span className="ft9">You
+      <p className="p9 ft7"><span className="ft8">{BULLET}</span><span className="ft9">You
       will only access CMWN using the</span> log-in and password information given to you
       by your school. You may not use any log-in information which you receive from other
       students or which you did not receive directly from your school. You should keep
@@ -61,25 +66,28 @@ const TERMS = (
 
       <p className="p10 ft3">If you are a school, the following rules also apply:</p>
 
-      <p className="p11 ft7"><span className="ft8">&#8226;</span><span className=
-      "ft9">You represent and acknowledge that you are solely responsible for complying
-      with the Children&#8217;s Online Privacy Protection Act (&#8220;COPPA&#8221;),
-      where applicable. For more information on COPPA and kid&#8217;s privacy, please
-      see </span> <a href="http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online" className=
-      "ft10">http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online</a>
-      .</p>
+      <p className="p11 ft7">
+          <span className="ft8">{BULLET}</span><span className="ft9">You represent and acknowledge that you
+          are solely responsible for complying with the Children's Online Privacy Protection
+          Act ("COPPA"), where applicable. For more information on COPPA and kid's privacy
+          , please see </span>
+          <a href="http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online"
+              className="ft10">
+              http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online
+          </a>.
+      </p>
 
-      <p className="p12 ft7"><span className="ft8">&#8226;</span><span className=
+      <p className="p12 ft7"><span className="ft8">{BULLET}</span><span className=
       "ft9">Where applicable, you must obtain Consent from all parents or guardians whose
       children under the age of 13 will be accessing CMWN and provide a copy to us upon
       our request.</span></p>
 
-      <p className="p13 ft5"><span className="ft8">&#8226;</span><span className=
+      <p className="p13 ft5"><span className="ft8">{BULLET}</span><span className=
       "ft11">When obtaining Consent, you must provide parents or guardians with the
       disclosures required under COPPA, including a copy of our Privacy Policy and
       Conditions of Use.</span></p>
 
-      <p className="p14 ft3"><span className="ft8">&#8226;</span><span className=
+      <p className="p14 ft3"><span className="ft8">{BULLET}</span><span className=
       "ft12">You are solely responsible for the activities of your registered users on
       CMWN. You will only grant access to current students, parents/guardians, and
       teachers and staff members, and will immediately revoke digital access and require
@@ -92,49 +100,52 @@ const TERMS = (
     <p className="p10 ft3">If you are using CMWN as a Teacher, the following rules also
     apply:</p>
 
-    <p className="p17 ft5"><span className="ft8">&#8226;</span><span className="ft11">You
+    <p className="p17 ft5"><span className="ft8">{BULLET}</span><span className="ft11">You
     represent and warrant that you have permission from your school to use CMWN as part
     of your curriculum.</span></p>
 
-    <p className="p18 ft7"><span className="ft8">&#8226;</span><span className="ft9">You
+    <p className="p18 ft7"><span className="ft8">{BULLET}</span><span className="ft9">You
     understand that the school is responsible for complying with COPPA, where applicable,
     which requires Consent for online collection of personal information from children
-    under 13. For more information on COPPA, please see </span><a href="http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online">
-    http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online.</a></p>
+    under 13. For more information on COPPA, please see </span>
+        <a href="http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online">
+        http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online.
+        </a>
+    </p>
 
     <p className="p7 ft3">If you are using CMWN as a Parent or Guardian, the following
     rules also apply:</p>
 
-    <p className="p19 ft3"><span className="ft8">&#8226;</span><span className="ft12">You
-    will only use the</span> log-in information provided to you by your child&#8217;s
+    <p className="p19 ft3"><span className="ft8">{BULLET}</span><span className="ft12">You
+    will only use the</span> log-in information provided to you by your child's
     school.</p>
 
-    <p className="p20 ft3"><span className="ft8">&#8226;</span><span className="ft12">You
+    <p className="p20 ft3"><span className="ft8">{BULLET}</span><span className="ft12">You
     understand that your acceptance of this Privacy Policy indicates that you are
     agreeing to the Privacy Policy both on your own behalf as well as on behalf of your
     child or children who use CMWN, and that, if you have a child under the age of 13,
-    that child may not use CMWN until you have provided Consent to your child&#8217;s
+    that child may not use CMWN until you have provided Consent to your child's
     school. Although the process may vary, many schools will request that you sign a
     consent form at the beginning of each school year.</span></p>
 
     <p className="p21 ft1">What types of personal information do we collect?</p>
 
-    <p className="p22 ft5"><span className="ft8">&#8226;</span><span className=
+    <p className="p22 ft5"><span className="ft8">{BULLET}</span><span className=
     "ft14">Information Collection Without Registration</span>. We do not collect personal
     information from kids unless they are registered for CMWN by their school.</p>
 
-    <p className="p14 ft3"><span className="ft8">&#8226;</span><span className=
+    <p className="p14 ft3"><span className="ft8">{BULLET}</span><span className=
     "ft15">Information from Kids Collected in Registration</span>. When schools register
     their students for CMWN, we obtain certain personal information related to each
-    student, including the child&#8217;s first and last name, email address (this is
+    student, including the child's first and last name, email address (this is
     optional), date of birth, gender, grade level, classes, and school/district. We
     collect birth dates to validate the ages of our guests, including students. We
     collect first and last name since we discourage students from using their last names
     on their profile pages and/or as part of their user name. By collecting a
-    student&#8217;s last name, we can safeguard against unnecessary disclosure of
+    student's last name, we can safeguard against unnecessary disclosure of
     personal information on our website.</p>
 
-    <p className="p23 ft3"><span className="ft8">&#8226;</span><span className=
+    <p className="p23 ft3"><span className="ft8">{BULLET}</span><span className=
     "ft15">Information Collected While Logged On</span>. Students are given the
     opportunity to create profile pages on our website and to participate in creative and
     educational activities. In their profiles, kids can make notes about activities they
@@ -147,7 +158,7 @@ const TERMS = (
     misconstrued or expose the child or others to any risk, it will not be published and
     the school may be notified.</p>
 
-    <p className="p24 ft3"><span className="ft8">&#8226;</span><span className=
+    <p className="p24 ft3"><span className="ft8">{BULLET}</span><span className=
     "ft15">Information Collected from Parents or Guardians</span>. We also collect
     certain information from the school about parents/guardians as part of the
     registration process, including first and last name, address, phone number, and email
@@ -161,12 +172,12 @@ const TERMS = (
     parents or guardians who are under the age of 18 are not registered for CMWN and
     cannot interact with children on CMWN.</p>
 
-    <p className="p28 ft3"><span className="ft8">&#8226;</span><span className=
+    <p className="p28 ft3"><span className="ft8">{BULLET}</span><span className=
     "ft15">Cookie Policy</span>. Technologies such as cookies, beacons, tags and scripts
     may be used by CMWN and our partners who provide online customer support, storage,
     and video management. These technologies are used to make it easier for students and
     teachers to navigate our site, analyzing trends, administering the site, tracking
-    users&#8217; movements throughout the site and to gather demographic information
+    users' movements throughout the site and to gather demographic information
     about our user base as a whole. We may receive reports based on the use of these
     technologies by our partners on an aggregated basis<span className="ft2">.</span></p>
 
@@ -178,11 +189,14 @@ const TERMS = (
     <p className="p30 ft7">You may be able to manage or block these technologies through
     your website browser, although CMWN does not control and cannot guarantee the
     effectiveness of such tools. In addition, blocking or deleting cookies may limit
-    users&#8217; ability to use and enjoy CMWN.</p>
+    users' ability to use and enjoy CMWN.</p>
 
     <p className="p31 ft5">CMWN uses Google Analytics to monitor our website activity. To
-    learn how Google Analytics collects and processes data, please visit:
-    <a href="www.google.com/policies/privacy/partners" className="ft17"> www.google.com/policies/privacy/partners</a></p>
+    learn how Google Analytics collects and processes data, please visit:{' '}
+        <a href="www.google.com/policies/privacy/partners" className="ft17">
+            www.google.com/policies/privacy/partners
+        </a>
+    </p>
 
     <p className="p32 ft7"><span className="ft18">Do Not Track Disclosure</span>. Do Not
     Track (DNT) is a privacy preference that users can set in some web browsers, allowing
@@ -193,7 +207,7 @@ const TERMS = (
     <p className="p5 ft1">How do we use and share the personally identifiable information
     that we have collected about kids?</p>
 
-    <p className="p33 ft19">CMWN does not share, sell, rent or trade children&#8217;s
+    <p className="p33 ft19">CMWN does not share, sell, rent or trade children's
     personal information with third parties other than as disclosed within this privacy
     policy or after notice and obtaining written consent from a school.</p>
 
@@ -220,7 +234,7 @@ const TERMS = (
     be provided to our school partners and posted on our Site.</p>
 
     <p className="p36 ft7">In compliance with applicable law, we reserve the right to
-    share a child&#8217;s personal information with third parties to the extent required
+    share a child's personal information with third parties to the extent required
     by law and to the extent reasonably necessary to protect the security and integrity
     of our website, to take precautions against liability, to respond to judicial
     process, or to provide information to law enforcement agencies or for an
@@ -230,7 +244,7 @@ const TERMS = (
     for the collection of information from their kids?</p>
 
     <p className="p38 ft3">Because CMWN contracts with schools to provide its services
-    under the school&#8217;s direction and control, we rely on schools to (1) provide the
+    under the school's direction and control, we rely on schools to (1) provide the
     notice and disclosure information required under COPPA, including a copy of this
     Privacy Policy &amp; Conditions of Use; and (2) obtain Consent from the parents or
     guardians of all children under 13 before they are permitted to use the website.
@@ -243,7 +257,7 @@ const TERMS = (
     parent or guardian or student, presents any risk to other users or to the person or
     to the website, or for any reason whatsoever. Even after registration CMWN reserves
     the right to continue to monitor all use and activities of persons using the website
-    and reserves the right to terminate that person&#8217;s access to the website at any
+    and reserves the right to terminate that person's access to the website at any
     time.</p>
 
     <p className="p40 ft1">What does CMWN do to keep personal information safe and
@@ -268,7 +282,7 @@ const TERMS = (
     information that may be collected from children. They can also request that CMWN stop
     collecting further personal information from their child and can request that any
     personal information we have collected be deleted from our records. Generally, we
-    will keep children&#8217;s information only for the time specified by the school or
+    will keep children's information only for the time specified by the school or
     otherwise required by law.</p>
 
     <p className="p40 ft6">What are my rights as a California resident<span className=
@@ -286,7 +300,7 @@ const TERMS = (
     contact us as explained below.</p>
 
     <p className="p45 ft3"><span className="ft23">Right to Removal of Posted Information
-    &#8211; California Minors</span>. If you are under 18 years of age, reside in
+    - California Minors</span>. If you are under 18 years of age, reside in
     California, and have a registered account with CMWN, you have the right to request
     removal of unwanted information that you publicly post on CMWN. To request removal of
     such information, you can contact your school or contact us directly as explained
@@ -310,18 +324,16 @@ const TERMS = (
 
     <p className="p49 ft5">If you have questions or need further assistance, you are
     welcome to contact us directly by sending an email with your questions or comments to
-    <a href="mailto:info@changemyworldnow.com" className="ft4"> info@changemyworldnow.com</a>. You can also write to us
-    at:</p>
+    <a href="mailto:info@changemyworldnow.com" className="ft4"> info@changemyworldnow.com</a>
+    . You can also write to us at:</p>
 
     <p className="p5 ft3">Change My World Now</p>
 
-    <p className="p50 ft3">Gina&#8217;s Ink, Incorporated</p>
+    <p className="p50 ft3">Gina's Ink, Incorporated</p>
 
-    <p className="p50 ft3">600 Third Ave</p>
+    <p className="p50 ft3">21 W 46th Street, Suite 605 </p>
 
-    <p className="p50 ft3">2<span className="ft25">nd</span> Floor</p>
-
-    <p className="p50 ft3">New York City, NY 10016</p>
+    <p className="p50 ft3">New York, New York 10036</p>
   </div>
 </div>
 );

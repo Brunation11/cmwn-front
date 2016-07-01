@@ -1,10 +1,10 @@
 import React from 'react';
 
-import Authorization from 'components/authorization';
 import HttpManager from 'components/http_manager';
 import Log from 'components/log';
 import History from 'components/history';
 import Toast from 'components/toast';
+import Store from 'components/store';
 import GLOBALS from 'components/globals';
 import {Panel, Button, Input} from 'react-bootstrap';
 
@@ -19,7 +19,9 @@ const ERRORS = {
     TOO_SHORT: 'Passwords must contain at least 8 characters, including one number',
     NO_MATCH: 'Those passwords do not appear to match. Please try again.'
 };
-const CHANGE_COPY = 'You are required to change your password before using ChangeMyWorldNow.com. Please update your password using the form below to proceed.';
+const CHANGE_COPY = `You are required to change your password before using ChangeMyWorldNow.com.
+        Please update your password using the form below to proceed.`;
+
 
 var isPassValid = function (password) {
     return password.length >= 8 && ~password.search(/[0-9]+/);
@@ -27,14 +29,13 @@ var isPassValid = function (password) {
 
 var Page = React.createClass({
     getInitialState: function () {
-        this.uuid = Authorization.currentUser.uuid;
         return {};
     },
     render: function () {
         return (
            <Layout className="change-password">
                 {CHANGE_COPY}
-                <ChangePassword uuid={this.uuid} />
+                <ChangePassword />
            </Layout>
          );
     }
@@ -49,21 +50,34 @@ var ChangePassword = React.createClass({
             extraProps: {}
         };
     },
+    componentDidMount: function () {
+        var state = Store.getState();
+        if (state.currentUser.user_id != null) {
+            window.location.href = '/logout';
+        }
+    },
     submit: function () {
+        var update;
+        var state = Store.getState();
+        if (state.currentUser.user_id != null) {
+            window.location.href = '/logout';
+        }
         if (!isPassValid(this.state.new)) {
             this.setState({extraProps: {bsStyle: 'error'}});
             Toast.error(ERRORS.TOO_SHORT);
         } else if (this.state.confirm === this.state.new) {
-            var update = HttpManager.POST({url: `${GLOBALS.API_URL}auth/password`, handleErrors: false}, {
-                'current_password': this.state.current,
+            update = HttpManager.POST({url: `${GLOBALS.API_URL}password`}, {
+//                'current_password': this.state.current,
                 'password': this.state.new,
                 'password_confirmation': this.state.confirm
             });
             update.then(() => {
-                Authorization.reloadUser().then(() => {
-                    History.replace('/profile?message=updated');
-                });
+                History.replace('/profile?message=updated');
             }).catch(err => {
+                if (err.status === 0) {
+                    //non-error response from update password indicates password already changed successfully
+                    History.replace('/profile?message=updated');
+                }
                 Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
                 Toast.error(ERRORS.BAD_PASS);
             });
@@ -75,43 +89,46 @@ var ChangePassword = React.createClass({
     },
     render: function () {
         return (
-            <Panel header={HEADINGS.PASSWORD} className="standard">
-                <form>
-                <Input
-                    type="password"
-                    value={this.state.current}
-                    placeholder="********"
-                    label="Current Password"
-                    validate="required"
-                    ref="currentInput"
-                    name="currentInput"
-                    onChange={e => this.setState({current: e.target.value})}
-                />
-                <Input
-                    type="password"
-                    value={this.state.new}
-                    placeholder="********"
-                    label="New Password"
-                    validate="required"
-                    ref="newInput"
-                    name="newInput"
-                    onChange={e => this.setState({new: e.target.value})}
-                    {...this.state.extraProps}
-                />
-                <Input
-                    type="password"
-                    value={this.state.confirm}
-                    placeholder="********"
-                    label="Confirm Password"
-                    validate="required"
-                    ref="confirmInput"
-                    name="confirmInput"
-                    onChange={e => this.setState({confirm: e.target.value})}
-                    {...this.state.extraProps}
-                />
-                <Button onClick={this.submit}>Update</Button>
-                </form>
-            </Panel>
+            <div>
+                <Panel header={HEADINGS.PASSWORD} className="standard">
+                    <form>
+    {''/*                <Input
+                        type="password"
+                        value={this.state.current}
+                        placeholder="********"
+                        label="Current Password"
+                        validate="required"
+                        ref="currentInput"
+                        name="currentInput"
+                        onChange={e => this.setState({current: e.target.value})}
+                    />
+    */}
+                    <Input
+                        type="password"
+                        value={this.state.new}
+                        placeholder="********"
+                        label="New Password"
+                        validate="required"
+                        ref="newInput"
+                        name="newInput"
+                        onChange={e => this.setState({new: e.target.value})}
+                        {...this.state.extraProps}
+                    />
+                    <Input
+                        type="password"
+                        value={this.state.confirm}
+                        placeholder="********"
+                        label="Confirm Password"
+                        validate="required"
+                        ref="confirmInput"
+                        name="confirmInput"
+                        onChange={e => this.setState({confirm: e.target.value})}
+                        {...this.state.extraProps}
+                    />
+                    <Button onClick={this.submit}>Update</Button>
+                    </form>
+                </Panel>
+            </div>
         );
     }
 });
