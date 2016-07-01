@@ -56,8 +56,8 @@
             display: inline-block;
             position: absolute;
             left: 0;
+            background: $cmwn-white;
             overflow: hidden;
-            background: #fff;
         }
     }
 
@@ -66,7 +66,8 @@
         white-space: nowrap;
         padding: 0 $standard;
         width: 100%;
-        display: inline-block;
+        overflow: scroll;
+        white-space: nowrap;
 
         strong {
             color: $cmwn-purple;
@@ -74,18 +75,18 @@
     }
 
     .earned-header {
-      font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
-      font-size: 1.25rem;
+        font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
+        font-size: 1.25rem;
     }
 
     .earned-value {
-      font-size: 2rem;
+        font-size: 2rem;
     }
 
     .spacer {
         display: block;
-        padding: 10px;
         visibility: hidden;
+        padding: 10px;
     }
 
     // /* Pulse */

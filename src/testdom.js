@@ -1,3 +1,5 @@
+'use strict';
+
 /* eslint-disable */
 var jsdom = require('jsdom')
 var _ = require('lodash')

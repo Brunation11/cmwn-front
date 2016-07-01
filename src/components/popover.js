@@ -60,22 +60,17 @@ var PopOver = React.createClass({
             <ButtonToolbar>
                 <OverlayTrigger
                     trigger={state.trigger}
-                    rootClose
-                    placement={state.placement}
-                    overlay={
-                        <Popover id={Shortid.generate()} className="user-flip">
-                        <span className="popover-title">{state.element.username + '\'s  Flips'}</span>
-                            {_.map(state.flips, (item) => (
-                                <div>
-                                    <img src={`/flips/${item.flip_id}.png`} />
-                                    <span className="flip-name">{item.title}</span>
-                                    <span className="flip-earned">{item.earned}</span>
-                                </div>
-                            ))}
-                        </Popover>
-                    }
-                >
-                    {this.props.body}
+                    rootClose placement={state.placement}
+                    overlay={(
+                        <Popover
+                            id="popover"
+                            title={state.element.title + '  |  earned: ' +
+                                Moment(new Date(state.element.earned)) .format('MMM Do YYYY')}
+                        >{state.element.description}</Popover>
+                    )}>
+                    <Link to="" key={Shortid.generate()}>
+                        <img src={`/flips/${state.element.flip_id}.png`} ></img>
+                    </Link>
                 </OverlayTrigger>
             </ButtonToolbar>
         );

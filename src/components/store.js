@@ -1,3 +1,4 @@
+/* eslint-disable vars-on-top */
 import _ from 'lodash';
 import { combineReducers, createStore, compose, applyMiddleware } from 'redux';
 import { routerReducer } from 'react-router-redux';
@@ -16,14 +17,14 @@ const INITIAL_STATE = Immutable({
     locationBeforeTransitions: null
 });
 
-var isAvailable = window.__cmwn.MODE === 'dev' || window.__cmwn.MODE === 'development' || window.__cmwn.MODE === 'local';
+var isAvailable = window.__cmwn.MODE === 'dev' || window.__cmwn.MODE === 'development' ||
+    window.__cmwn.MODE === 'local';
 
 var populate = function (host, key, storageKey) {
+    var prop = window.localStorage[storageKey];
     if (window.localStorage == null) {
         return null;
     }
-    var prop = window.localStorage[storageKey];
-
     if (prop != null && prop !== 'null' && prop !== 'undefined') {
         try {
             host[key] = JSON.parse(prop);
@@ -195,7 +196,8 @@ var componentReducer = (allComponents = Immutable({_componentsToLoad: 0, _compon
 
     //component-wide reducers
     if (action.type in reducers) {
-        return allComponents.set(action.endpointIdentifier + '-' + action.componentName, reducers[action.type]());
+        return allComponents.set(action.endpointIdentifier + '-' +
+            action.componentName, reducers[action.type]());
     } else if (action.type === ACTION_CONSTANTS.COMPONENT_LOADER_COMPLETE) {
         allComponents = allComponents.set('_componentsLoaded', allComponents._componentsLoaded + 1);
     } else if (action.type === ACTION_CONSTANTS.REGISTER_COMPONENT) {
@@ -208,19 +210,20 @@ var componentReducer = (allComponents = Immutable({_componentsToLoad: 0, _compon
             total_items: 0, //eslint-disable-line camelcase
             page_size: GLOBALS.DEFAULT_PAGINATION_ROWS //eslint-disable-line camelcase
         };
-        allComponents = allComponents.set('_componentsToLoad', allComponents._componentsToLoad == null ? 1 : allComponents._componentsToLoad + 1);
+        allComponents = allComponents.set('_componentsToLoad',
+            allComponents._componentsToLoad == null ? 1 : allComponents._componentsToLoad + 1);
         return allComponents.merge({[action.endpointIdentifier + '-' + action.componentName]: resetData});
     }
     return allComponents;
 };
-const composeMiddleware = [
+const COMPOSE_MIDDLE_WARE = [
     applyMiddleware(combineActionsMiddleware, thunk, promiseMiddleware())
 ];
 if (isAvailable && DevTools && DevTools.instrument != null) {
-    composeMiddleware.push(DevTools.instrument());
+    COMPOSE_MIDDLE_WARE.push(DevTools.instrument());
 }
 
-const Store = createStore( function (state = {}, action) {
+var Store = createStore( function (state = {}, action) {
     if (action == null || action.error) {
         Log.error(action.payload);
     }
@@ -241,14 +244,17 @@ const Store = createStore( function (state = {}, action) {
                 return {currentStage: 0, lastCompletedStage: 0};
             }
             if (action_.type === ACTION_CONSTANTS.LOADER_START) {
-                return {currentStage: loaderState.currentStage + 1, lastCompletedStage: loaderState.lastCompletedStage};
+                return {currentStage: loaderState.currentStage + 1,
+                    lastCompletedStage: loaderState.lastCompletedStage};
             }
             if (action_.type === ACTION_CONSTANTS.ADVANCE_LOAD_STAGE) {
-                return {currentStage: loaderState.currentStage, lastCompletedStage: loaderState.lastCompletedStage + 1};
+                return {currentStage: loaderState.currentStage,
+                    lastCompletedStage: loaderState.lastCompletedStage + 1};
             }
             if (action_.type === ACTION_CONSTANTS.LOADER_ERROR) {
                 if (loaderState.currentStage === GLOBALS.PAGE_LOAD_STATE.COMPONENT) {
-                    Log.error('HAL link required for component load not provided. Will not load because: ' + action.payload);
+                    Log.error('HAL link required for component load not provided. ' +
+                        'Will not load because: ' + action.payload);
                 } else if (action_.error) {
                     Log.error('Loader error at stage ' + loaderState.currentStage + ' : ' + action_.payload);
                 } else {
@@ -262,6 +268,6 @@ const Store = createStore( function (state = {}, action) {
         state = devReducer(state, action);
     }
     return state;
-}, Immutable({routing: INITIAL_STATE}), compose(...composeMiddleware));
+}, Immutable({routing: INITIAL_STATE}), compose(...COMPOSE_MIDDLE_WARE));
 export default Store;
 

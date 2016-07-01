@@ -3,6 +3,7 @@ require('app-module-path').addPath(__dirname + '/src');
 /*global require process*/
 /*eslint-env node */
 /*eslint no-console:0 */
+/*eslint-disable vars-on-top */
 var gulp = require('gulp');
 var del = require('del');
 var args = require('yargs').argv;
@@ -14,8 +15,11 @@ var webpackDevConfig = require('./webpack.config.dev.js');
 var webpackProdConfig = require('./webpack.config.prod.js');
 var appPackage = require('./package.json');
 var exec = require('child_process').exec;
+var execSync = require('child_process').execSync;
 var spawn = require('child_process').spawn;
 var eslint = require('gulp-eslint');
+var scsslint = require('gulp-scss-lint');
+var scssLintStylish = require('gulp-scss-lint-stylish');
 var fs = require('fs');
 var eslintConfigJs = JSON.parse(fs.readFileSync('./.eslintrc'));
 var eslintConfigTest = JSON.parse(fs.readFileSync('./.eslintrc_test'));
@@ -28,7 +32,7 @@ var mergeStream = require('merge-stream');
 var sri = require('gulp-sri');
 var mocha = require('gulp-mocha');
 var zip = require('gulp-zip');
-
+var webdriver = require('gulp-webdriver');
 
 /** @const */
 var APP_PREFIX = 'APP_';
@@ -67,7 +71,7 @@ ___  ______  ______  ______  ______  ______  ______  ______  ______  ______  ___
 (______)(______)(______)(______)(______)(______)(______)(______)(______)(______)(______)(______)(______)
 */
 
-/**
+/*
  * Higher order function. Starts an arbitrary shell command
  * note that this is not a gulp best practice, and should be
  * used sparingly and only with justification.
@@ -183,7 +187,10 @@ var buildIndexPage = function () {
                 _.each(process.env, function (value, key) {
                     if (key.indexOf(APP_PREFIX) === 0) {
                         console.log('Writing ' + key + ' : ' + value);
-                        output += '\nwindow.__cmwn.' + _.capitalize(key.split(APP_PREFIX)[1]) + ' = ' + JSON.stringify(value) + ';';
+                        output +=
+                            '\nwindow.__cmwn.' +
+                            _.capitalize(key.split(APP_PREFIX)[1]) +
+                            ' = ' + JSON.stringify(value) + ';';
                     }
                 });
                 output += '\n</script>';
@@ -194,7 +201,12 @@ var buildIndexPage = function () {
             starttag: '<!-- app:js -->',
             transform: function () {
                 if (mode === 'production' || mode === 'prod') {
-                    return '<script src="/cmwn-' + appPackage.version + '.js" integrity="' + sriHashes['build/cmwn-' + appPackage.version + '.js'] + '" crossorigin="anonymous"></script>';
+                    return '<script src="/cmwn-' +
+                        appPackage.version +
+                        '.js" integrity="' +
+                        sriHashes['build/cmwn-' +
+                        appPackage.version + '.js'] +
+                        '" crossorigin="anonymous"></script>';
                 }
                 return '<script src="/cmwn-' + appPackage.version + '.js"></script>';
             }
@@ -228,7 +240,8 @@ var buildAndCopyStaticResources = function () {
                     include: path.join(__dirname, 'src')
                 }, {
                     test: /\.scss$/,
-                    loader: ExtractTextPlugin.extract('style-loader', 'css-loader!autoprefixer-loader!sass-loader')
+                    loader: ExtractTextPlugin.extract('style-loader',
+                        'css-loader!autoprefixer-loader!sass-loader')
                 }, {
                     test: /\.(jpe?g|png|gif|svg)$/i,
                     loader: 'url-loader?limit=10000'
@@ -319,7 +332,8 @@ gulp.task('build', ['primary-style', 'webpack:build', 'index'], zipTheBuild);
 gulp.task('webpack:build', selectBuildMode);
 /** Convienience methods to run only the webpack portion of a build*/
 gulp.task('build-warning', function () {
-    console.log(gutil.colors.yellow('Warning: `gulp webpack:build` does not build the index or some styles. Run `gulp build` to build all artifacts'));
+    console.log(gutil.colors.yellow('Warning: `gulp webpack:build` does not build the index or some styles.' +
+        ' Run `gulp build` to build all artifacts'));
 });
 gulp.task('webpack:build-prod', ['build-warning'], buildProduction);
 gulp.task('webpack:build-production', ['build-warning'], buildProduction);
@@ -348,11 +362,12 @@ gulp.task('primary-style', buildAndCopyStaticResources);
 
 /** Creates Single Resource Integrity (SRI) hashes for the primary JS*/
 gulp.task('sri', ['webpack:build', 'explicit-utf-8'], function () {
-    return gulp.src('./build/cmwn-' + appPackage.version + '.js').pipe(sri({algorithms: ['sha256']})).pipe(gulp.dest('./build'));
+    return gulp.src('./build/cmwn-' +
+        appPackage.version + '.js').pipe(sri({algorithms: ['sha256']})).pipe(gulp.dest('./build'));
 });
 
 /*·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´Lint and Testing Tasks`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·*/
-gulp.task('lint', ['lint-js', 'lint-config']);
+gulp.task('lint', ['lint-js', 'lint-config', 'lint-scss']);
 gulp.task('lint-js', function () {
     return gulp.src(['src/**/*.js', '!src/**/*.test.js'])
         // eslint() attaches the lint output to the eslint property
@@ -360,23 +375,33 @@ gulp.task('lint-js', function () {
         .pipe(eslint(eslintConfigJs))
         // eslint.format() outputs the lint results to the console.
         // Alternatively use eslint.formatEach() (see Docs).
-        .pipe(eslint.format());
+        .pipe(eslint.format())
         // To have the process exit with an error code (1) on
         // lint error, return the stream and pipe to failAfterError last.
-//        .pipe(eslint.failAfterError());
+        .pipe(eslint.failAfterError());
 });
 gulp.task('lint-test', function () {
     return gulp.src(['src/**/*.test.js'])
         .pipe(eslint(_.defaultsDeep(eslintConfigTest, eslintConfigJs)))
-        .pipe(eslint.format());
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError());
 });
 gulp.task('lint-config', function () {
     return gulp.src(['gulpfile.js', 'webpack.config.dev.js', 'webpack.config.prod.js'])
         .pipe(eslint(_.defaultsDeep(eslintConfigConfig, eslintConfigJs)))
-        .pipe(eslint.format());
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError());
+});
+gulp.task('lint-scss', function () {
+    return gulp.src(['src/**/*.scss'])
+        .pipe(scsslint({
+            'reporterOutput': 'scssReport.json', // file output
+            customReport: scssLintStylish
+        }))
+        .pipe(scsslint.failReporter());
 });
 
-gulp.task('test', function () {
+gulp.task('unit', function () {
     process.env.NODE_ENV = 'production';
     process.env.BABEL_ENV = 'production';
     var tests = gulp.src(['src/**/*.test.js'], {read: false})
@@ -388,13 +413,38 @@ gulp.task('test', function () {
 });
 
 gulp.task('coverage', function () {
-    exec('./test.sh', function (error, stdout) {
-        console.log(stdout);
+    var proc = spawn('./test.sh');
+
+    proc.on('exit', function (exitCode) {
+        console.log('process exited with code ' + exitCode);
     });
+
+    proc.stdout.on('data', function (chunk) {
+        console.log('' + chunk);
+    });
+
+    proc.stdout.on('end', function () {
+        console.log('finished collecting data chunks from stdout');
+    });
+});
+
+gulp.task('e2e', () => {
+    var overrideHostIP = process.env.DOCKER_HOST_IP;
+    var hostIP = overrideHostIP || execSync('docker-machine ip front').toString().split('\n')[0];
+    if (hostIP === '' || hostIP == null) {
+        console.error('No docker IP available for selenium host. Integration tests will fail.');
+    }
+    return gulp.src('wdio.conf.js').pipe(webdriver({
+        host: hostIP
+    }));
+});
+
+gulp.task('test', ['e2e', 'unit'], () => {
 });
 
 //this task is only required when some post-build task intentionally clears the console, as our tests do
 gulp.task('showBuildErrors', function () {
     console.log(fs.readFileSync('build_errors.log'));
 });
+
 
