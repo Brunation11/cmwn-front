@@ -301,7 +301,7 @@ h3 {
 
     .header-logo {
         margin-top: 8px;
-        margin-left: 30px;
+        margin-left: $standard * 2;
         width: calc(100% - 180px - 8em);
         vertical-align: middle;
 
