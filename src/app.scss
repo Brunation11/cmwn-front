@@ -111,6 +111,7 @@ h3 {
 #cmwn-app {
     // scss-lint:enable IdSelector
     min-height: 100vh;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     overflow-x: hidden;
 
     .sweater,
@@ -122,8 +123,7 @@ h3 {
     }
 
     .sweater,
-    .sweater
-    .content {
+    .sweater .content {
         padding: 0;
     }
 
@@ -302,7 +302,7 @@ h3 {
 
     .header-logo {
         margin-top: 8px;
-        margin-left: 30px;
+        margin-left: $standard * 2;
         width: calc(100% - 180px - 8em);
         vertical-align: middle;
 
@@ -523,11 +523,9 @@ h3 {
     }
 
     @media (max-width: $device-portrait-break + 2 * $standard) {
-        // scss-lint:disable all
         .header-logo {
             display: none;
         }
-        // scss-lint:enable all
     }
 
 }
