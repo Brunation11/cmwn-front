@@ -215,7 +215,7 @@ var Home = React.createClass({
                             <img alt="Change My World Now" src={LOGO_URL} />
                         </span>
                     </div>
-                    <div className="headerLogo">
+                    <div className="header-logo">
                         <span className="logo-button" onClick={this.logoLink}>
                             <img alt="Change My World Now" src={LOGO_HEADER} />
                         </span>
