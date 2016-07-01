@@ -28,7 +28,7 @@ const FRIEND_ADDED = 'Great! You are now friends with ';
 const FRIEND_PROBLEM = 'There was a problem adding your friend. Please try again in a little while.';
 const PROFILE = 'View Profile';
 const REQUESTED = 'Accept Request';
-const PENDING = 'Request Pending';
+const PENDING = 'Request Sent';
 
 const PAGE_UNIQUE_IDENTIFIER = 'friends-page';
 
@@ -77,8 +77,8 @@ var Component = React.createClass({
                     <div className="item">
                         <span className="overlay">
                             <div className="relwrap friend"><div className="abswrap">
-                                <Button onClick={this.doNothing} className={ClassNames(
-                                    'blue standard',
+                                <Button disabled onClick={this.doNothing} className={ClassNames(
+                                    'blue standard nohover',
                                     {faded: item.friend_status !== 'PENDING'}
                                 )}>
                                     {PENDING}
