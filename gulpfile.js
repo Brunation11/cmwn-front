@@ -375,27 +375,30 @@ gulp.task('lint-js', function () {
         .pipe(eslint(eslintConfigJs))
         // eslint.format() outputs the lint results to the console.
         // Alternatively use eslint.formatEach() (see Docs).
-        .pipe(eslint.format());
+        .pipe(eslint.format())
         // To have the process exit with an error code (1) on
         // lint error, return the stream and pipe to failAfterError last.
-//        .pipe(eslint.failAfterError());
+        .pipe(eslint.failAfterError());
 });
 gulp.task('lint-test', function () {
     return gulp.src(['src/**/*.test.js'])
         .pipe(eslint(_.defaultsDeep(eslintConfigTest, eslintConfigJs)))
-        .pipe(eslint.format());
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError());
 });
 gulp.task('lint-config', function () {
     return gulp.src(['gulpfile.js', 'webpack.config.dev.js', 'webpack.config.prod.js'])
         .pipe(eslint(_.defaultsDeep(eslintConfigConfig, eslintConfigJs)))
-        .pipe(eslint.format());
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError());
 });
 gulp.task('lint-scss', function () {
     return gulp.src(['src/**/*.scss'])
         .pipe(scsslint({
             'reporterOutput': 'scssReport.json', // file output
             customReport: scssLintStylish
-        }));
+        }))
+        .pipe(scsslint.failReporter());
 });
 
 gulp.task('unit', function () {

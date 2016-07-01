@@ -1,8 +1,8 @@
 import React from 'react';
-import {Link} from 'react-router';
 import _ from 'lodash';
 import {Input, Carousel, CarouselItem, Button, Modal} from 'react-bootstrap';
 import Shortid from 'shortid';
+import ClassNames from 'classnames';
 
 import Toast from 'components/toast';
 import Log from 'components/log';
@@ -103,8 +103,7 @@ const COPY = {
         WORK: <span>
             <p>We are so excited about your interest to work with us!</p>
             <p dangerouslySetInnerHTML={{__html: 'Click <a href=\'mailto:&#106;&#111;&#110;&#105;&#064;' +
-                '&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#097;' +
-                '&#114;&#114;&#111;&#110;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;' +
+                '&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;' +
                 '&#046;&#099;&#111;&#109;?subject=Work With Us!\'>here</a> to contact us.'}}>
             </p>
         </span>,
@@ -173,6 +172,16 @@ var Home = React.createClass({
             contactOpen: false
         };
     },
+    componentDidMount: function () {
+        History.replace('/home');
+    },
+    logoLink: function () {
+        if (Store.getState().currentUser.user_id) {
+            History.replace('/profile');
+        } else {
+            History.replace('/home');
+        }
+    },
     openViewModal: function () {
         this.setState({viewOpen: true});
     },
@@ -190,7 +199,6 @@ var Home = React.createClass({
         this.setState({ contactOpen: false });
     },
     render: function () {
-        var logoLink = Store.getState().currentUser.user_id ? '/profile' : '/';
         return (
             <div id="home" className="home">
                 <Modal show={this.state.viewOpen} onHide={() => this.setState({viewOpen: false})}>
@@ -202,14 +210,22 @@ var Home = React.createClass({
                     </Modal.Body>
                 </Modal>
                 <div className="global-header">
-                    <div className="logo" ><Link to={logoLink} ><img alt="Change My World Now"
-                        src={LOGO_URL} />Change My World Now</Link>
+                    <div className="logo" >
+                        <span className="logo-button" onClick={this.logoLink}>
+                            <img alt="Change My World Now" src={LOGO_URL} />
+                        </span>
                     </div>
-                    <div className="header-logo"><Link to={logoLink} ><img alt="Change My World Now"
-                        src={LOGO_HEADER} /><span className="read">Change My World Now</span></Link>
+                    <div className="header-logo">
+                        <span className="logo-button" onClick={this.logoLink}>
+                            <img alt="Change My World Now" src={LOGO_HEADER} />
+                        </span>
                     </div>
-                    <Header workOpen={this.state.workOpen} contactOpen={this.state.contactOpen}
-                        closeWork={this.closeWork} closeContact={this.closeContact} />
+                    <Header
+                        workOpen={this.state.workOpen}
+                        contactOpen={this.state.contactOpen}
+                        closeWork={this.closeWork}
+                        closeContact={this.closeContact}
+                    />
                 </div>
                 <Carousel>
                     <CarouselItem>
@@ -249,7 +265,8 @@ var Header = React.createClass({
         return {
             loginOpen: false,
             signupOpen: false,
-            showContact: false
+            showContact: false,
+            verified: false
         };
     },
     getDefaultProps: function () {
@@ -280,12 +297,20 @@ var Header = React.createClass({
     },
     renderCaptcha: function () {
         var captchas = document.getElementsByClassName('grecaptcha');
-        if (captchas.length) {
-            grecaptcha.render(captchas[0], {'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l',
-                callback: () => { //eslint-disable-line no-undef
-                    this.setState({showContact: true});
-                }
-            });
+
+        if (this.state.verified) {
+            return;
+        } else {
+            if (captchas.length) {
+                grecaptcha.render(captchas[0], {'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l',
+                    callback: () => { //eslint-disable-line no-undef
+                        this.setState({
+                            showContact: true,
+                            verified: true
+                        });
+                    }
+                });
+            }
         }
     },
     displayWorkModal: function () {
@@ -346,9 +371,11 @@ var Header = React.createClass({
                 </Modal>
                 <Modal show={this.props.contactOpen || this.state.contactOpen} onHide={this.hideContactModal}>
                     <Modal.Body>
-                        {COPY.MODALS.PRECAPTCHA}
-                        <div className="grecaptcha"></div>
-                        {this.state.showContact ? COPY.MODALS.CONTACT : ''}
+                        {this.state.verified ? '' : COPY.MODALS.PRECAPTCHA}
+                        <div className={ClassNames('grecaptcha', {
+                            hidden: (this.props.loggedIn || this.state.verified)})
+                        }></div>
+                        {this.state.verified ? COPY.MODALS.CONTACT : ''}
                     </Modal.Body>
                 </Modal>
                 <Modal show={this.state.signupOpen} onHide={() => this.setState({signupOpen: false})}>

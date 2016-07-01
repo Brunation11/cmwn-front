@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import QueryString from 'query-string';
 import {Link} from 'react-router';
 import {Panel} from 'react-bootstrap';
@@ -17,7 +18,7 @@ import DefaultProfile from 'media/profile_tranparent.png';
 
 import 'routes/classes/profile.scss';
 
-const PAGE_UNIQUE_IDENTIFIER = 'classProfile';
+const PAGE_UNIQUE_IDENTIFIER = 'class-profile';
 
 const USER_SOURCE = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
 
@@ -82,11 +83,20 @@ var Component = React.createClass({
         );
     },
     renderFlip: function (item){
+        var image;
+        if (!_.has(item, '_embedded.image')) {
+            image = DefaultProfile;
+        } else {
+            if (item._embedded.image.url != null) {
+                image = item._embedded.image.url;
+            } else {
+                image = item.images.data[0].url;
+            }
+        }
         return (
             <div className="flip" key={Shortid.generate()}>
                 <Link to={`/student/${item.user_id.toString()}`} id={item.username}>
-                    <img src={item.images && item.images.data &&
-                        item.images.data.length ? item.images.data[0].url : DefaultProfile}></img>
+                    <img src={image}></img>
                     <p className="linkText" >{item.username}</p>
                 </Link>
                 {this.renderFlipsEarned(item)}
@@ -118,7 +128,7 @@ var Component = React.createClass({
             return null;
         }
         return (
-           <Layout className="classProfile">
+           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                {this.renderClassInfo()}
                <USER_SOURCE>
                    <FlipBoard renderFlip={this.renderFlip} header={
