@@ -2,6 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import {Modal} from 'react-bootstrap';
 import {connect} from 'react-redux';
+
 import Game from 'components/game';
 import History from 'components/history';
 import GLOBALS from 'components/globals';
