@@ -11,8 +11,7 @@ exports.config = {
     // directory is where your package.json resides, so `wdio` will be called from there.
     //
     specs: [
-        './test/specs/school_profile_test.js'
-        //'./test/specs/*.js'
+        './test/specs/*.js'
     ],
     // Patterns to exclude.
     exclude: [
@@ -79,7 +78,7 @@ exports.config = {
     connectionRetryCount: 3,
     //
     // Host of the WebDriver server
-    // host: hostIP,
+    host: '192.168.99.100',
     //
     // Port the WebDriver server is on
     // port: 4444,

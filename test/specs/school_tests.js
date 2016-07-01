@@ -19,6 +19,40 @@ function goToSchoolProfile() {
     browser.waitForExist('.standard');
 }
 
+function changeSchool(name, desc) {
+    enterText('#school-edit-name', name);
+    enterText('#school-edit-desc', desc);
+    browser.click('#school-edit-submit');
+    browser.waitForExist('.humane-flatty-success');
+}
+
+function enterText(element, text) {
+    browser.waitForExist(element);
+    browser.clearElement(element);
+    if(text) browser.setValue(element, text);
+}
+
+function trySubmit(teacherCode, studentCode, msg, checked) {
+    enterText('#teacher-code', teacherCode);
+    enterText('#student-code', studentCode);
+    if(checked) {
+        browser.waitForExist('#import-terms-check');
+        browser.click('#import-terms-check');
+    };
+    browser.submitForm('#import-form');
+    browser.waitForVisible('.humane-flatty-error');
+    expect(browser.getText('.humane-flatty-error')).to.contain(msg);
+    browser.refresh(); // to get message to go away
+}
+
+function invalidAccess(url) {
+    browser.url(url);
+    browser.waitForExist('.logout-page');
+    expect(browser.getUrl()).to.equal(`${URL}/logout`);
+    browser.waitForExist('#login-form');
+    expect(browser.getUrl()).to.equal(`${URL}/login`);
+}
+ 
 describe('school routes integration tests', function () {
     const SCHOOL_PROFILE_URL = `${URL}/school/${SCHOOL_ID}/profile`;
     const SCHOOL_VIEW_URL = `${URL}/school/${SCHOOL_ID}/view`;
@@ -49,7 +83,8 @@ describe('school routes integration tests', function () {
         goBack(SCHOOL_VIEW_URL);
         checkLink('.green', SCHOOL_EDIT_URL);
         goBack(SCHOOL_VIEW_URL);
-        browser.waitForExist('button=Delete this school'); // the delete button
+        expect(browser.selectByIndex('.purple', 1).getText()).to.equal('Delete this school');
+        //browser.waitForExist('button=Delete this school'); // the delete button
         browser.waitForExist('#school-districts');
         checkLink('.school-district-link');
         goBack(SCHOOL_VIEW_URL);
@@ -103,5 +138,71 @@ describe('school routes integration tests', function () {
             goBack(SCHOOL_VIEW_URL);
             elementAvailable = false;
         }
+    });
+    var errorBeforeRevert = false;
+    it('should test the school edit page', function () {
+        const BAD_PASS = {
+            A: 'a',
+            B: 'b',
+            LONG_A: 'asdfjkla',
+            LONG_B: 'qweruiop'
+        };
+        const GOOD_PASS = {
+            A: 'asdfjkl1',
+            B: 'qweruio1'
+        };
+        const MSGS = {
+            FILL: 'Please fill out all required fields',
+            AGREE: 'You must agree to the terms to submit import.',
+            DIFF: 'Teacher and Student access codes must be different',
+            MIN: 'Passwords must be a minimum of 8 characters and contain a number.',
+            FILE: 'Please select an XLSX file to import.'
+        };
+        goToSchoolProfile();
+        browser.waitForExist('.right');
+        checkLink('.purple', SCHOOL_EDIT_URL);
+        changeSchool('Foo school', 'We\'re so bar!');
+        try {
+            checkLink('#school-return-dash', SCHOOL_VIEW_URL);
+            browser.waitForExist('div*=Foo school');
+            browser.waitForExist('span*=We\'re so bar!');
+            goBack(SCHOOL_EDIT_URL);
+            changeSchool('Ginas school', 'description');
+        }
+        catch (e) {
+            errorBeforeRevert = true;
+            throw e;
+        }
+        browser.refresh();
+        checkLink('#school-return-dash', SCHOOL_VIEW_URL);
+        browser.waitForExist('div*=Ginas school');
+        browser.waitForExist('span*=description');
+        goBack(SCHOOL_EDIT_URL);
+        trySubmit(BAD_PASS.A, null, MSGS.FILL);
+        trySubmit(null, BAD_PASS.A, MSGS.FILL);
+        trySubmit(BAD_PASS.A, BAD_PASS.A, MSGS.AGREE);
+        trySubmit(BAD_PASS.A, BAD_PASS.A, MSGS.DIFF, true);
+        trySubmit(BAD_PASS.A, BAD_PASS.B, MSGS.MIN, true);
+        trySubmit(BAD_PASS.LONG_A, BAD_PASS.LONG_B, MSGS.MIN, true);
+        trySubmit(GOOD_PASS.A, BAD_PASS.LONG_B, MSGS.MIN, true);
+        trySubmit(BAD_PASS.LONG_A, GOOD_PASS.B, MSGS.MIN, true);
+        trySubmit(GOOD_PASS.A, GOOD_PASS.B, MSGS.FILE, true);
+    });
+    if(errorBeforeRevert) {
+        it('should change back the school to Gina\'s on failure', function() {
+            login(SUPER_USER, SUPER_PASS);
+            goToSchoolProfile();
+            browser.waitForExist('.right');
+            checkLink('.purple', SCHOOL_EDIT_URL);       
+            changeSchool('Ginas school', 'description');
+        });
+    }
+    it('should try to access the school routes without logging in', function () {
+        browser.deleteCookie();
+        browser.url('/');
+        browser.waitForExist('#logout-button', 5000, true);
+        invalidAccess(SCHOOL_PROFILE_URL);
+        invalidAccess(SCHOOL_VIEW_URL);
+        invalidAccess(SCHOOL_EDIT_URL);
     });
 });

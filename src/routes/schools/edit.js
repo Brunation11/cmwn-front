@@ -86,7 +86,7 @@ var Component = React.createClass({
         return (
            <Layout>
               <Panel header={HEADINGS.EDIT_TITLE + this.props.data.title} className="standard">
-                  <Link to={'/school/' + this.props.data.group_id + '/view'}>Return to School Dashboard</Link>
+                  <Link to={'/school/' + this.props.data.group_id + '/view'} id="school-return-dash">Return to School Dashboard</Link>
                   <br />
                  <Input
                     type="text"
@@ -96,6 +96,7 @@ var Component = React.createClass({
                     bsStyle={Validate.min(3, this.state.title)}
                     hasFeedback
                     ref="titleInput"
+                    id="school-edit-name"
                     onChange={() => this.setState({title: this.refs.titleInput.getValue()})}
                  />
                  <Input
@@ -104,9 +105,10 @@ var Component = React.createClass({
                     placeholder="description"
                     label="Description"
                     ref="descriptionInput"
+                    id="school-edit-desc"
                     onChange={() => this.setState({description: this.refs.descriptionInput.getValue()})}
                  />
-                 <Button onClick={this.submitData} > Save </Button>
+                 <Button onClick={this.submitData} id="school-edit-submit"> Save </Button>
               </Panel>
               {''/*<CreateClass data={this.props.data} />*/}
               <BulkUpload url={this.props.data._links.import.href} />
@@ -199,7 +201,7 @@ var BulkUpload = React.createClass({
           <Panel header={HEADINGS.UPLOAD} className="standard">
             <iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe"></iframe>
             <Form ref="formRef" method="post" target="dummyframe" encType="multipart/form-data"
-                action={this.props.url} onSubmit={e => {
+                action={this.props.url} id="import-form" onSubmit={e => {
                     try {
                         if (!this.refs.formRef.isValid()) {
                             e.preventDefault();
@@ -257,6 +259,7 @@ var BulkUpload = React.createClass({
                     validate="required"
                     ref="teacherInput"
                     name="teacher_code"
+                    id="teacher-code"
                     onChange={e => this.setState({teacherCode: e.target.value})}
                 />
                 <Input
@@ -267,6 +270,7 @@ var BulkUpload = React.createClass({
                     validate="required"
                     ref="studentInput"
                     name="student_code"
+                    id="student-code"
                     onChange={e => this.setState({studentCode: e.target.value})}
                 />
                 <FormControls.Static value={TERMS_COPY} />
@@ -276,6 +280,7 @@ var BulkUpload = React.createClass({
                     ref="tosInput"
                     label="I accept the terms and conditions."
                     name="tos"
+                    id="import-terms-check"
                     onChange={e => this.setState({tos: e.target.checked})}
                 />
                 <br />

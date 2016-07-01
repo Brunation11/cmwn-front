@@ -34,6 +34,15 @@ describe('logout integration tests', function() {
         expect(browser.getUrl()).to.equal(LOGIN_URL);
         browser.waitForExist('#logout-button', 5000, true); // make sure no logout button
     });
+    it('should logout when refreshed if cookies deleted' function() {
+        login(USER, PASS);
+        browser.deleteCookie();
+        browser.refresh();
+        browser.waitForExist('.logout-page');
+        expect(browser.getUrl()).to.equal(LOGOUT_URL);
+        browser.waitForExist('#login-form');
+        expect(browser.getUrl()).to.equal(LOGIN_URL);
+    });
     // Will not run this test for now
     // it('should logout of a profile if left idle for too long', function() {
     //     login(USER, PASS);
