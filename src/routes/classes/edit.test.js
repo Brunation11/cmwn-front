@@ -2,7 +2,7 @@ import React from 'react';
 import { expect } from 'chai';
 import { mount, shallow } from 'enzyme';
 
-import teacherData from 'mocks/users/teacherData';
+import teacherData from 'mocks/users/teacher_data';
 import classData from 'mocks/users/classData';
 import { EditClass } from 'routes/classes/edit';
 import { CreateStudent } from 'routes/classes/edit';
