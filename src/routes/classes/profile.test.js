@@ -9,15 +9,11 @@ import studentDataA from 'mocks/users/student_data_a';
 import studentDataB from 'mocks/users/student_data_b';
 import classData from 'mocks/users/classData';
 
-var checkProfileRender = function(data, currentUser) {
-    var profile = <Profile data={data} loading={false} currentUser={currentUser}/>;
-    const wrapper = shallow(profile);
-    expect(wrapper.instance()).to.be.instanceOf(Profile);
-}
 
 var checkElementsTeacher = function(data, currentUser){
 	var profile = <Profile data={data} loading={false} currentUser={currentUser}/>;
 	const wrapper = shallow(profile);
+	expect(wrapper.instance()).to.be.instanceOf(Profile);
 	var layout = wrapper.find('Layout');
 	expect(layout).to.have.length(1);
 }
@@ -25,6 +21,7 @@ var checkElementsTeacher = function(data, currentUser){
 var checkElementsNullData = function(currentUser){
 	var profile = <Profile data={null} loading={false} currentUser={currentUser}/>;
     const wrapper = shallow(profile);
+    expect(wrapper.instance()).to.be.instanceOf(Profile);
     expect(wrapper.children()).to.have.length(0);
 }
 
