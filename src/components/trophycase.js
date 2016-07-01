@@ -42,7 +42,7 @@ var Trophycase = React.createClass({
         return (
             <div className="flip-list">
                 {_.map(items, (item) => (
-                    <div className="flip float pulse buzz">
+                    <div className="single-flip">
                         <PopOver
                             element={item}
                             placement="top"
