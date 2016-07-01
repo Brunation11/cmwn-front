@@ -3,48 +3,48 @@
 .trophycase {
 
     .flip-list {
-        overflow: scroll;
-        width: 100%;
         margin-top: -40%;
+        width: 100%;
+        overflow: scroll;
 
         .single-flip {
-          width: 50%;
+            width: 50%;
 
-          img {
-            width: 100%;
-          }
+            img {
+                width: 100%;
+            }
         }
 
         @media (min-width: $device-portrait-break) and (max-width: $device-portrait-break + ($device-max-break - $device-portrait-break) / 2) {
-          margin-top: -28%;
+            margin-top: -28%;
 
-          .single-flip {
-            width: 33%;
-          }
+            .single-flip {
+                width: 33%;
+            }
         }
 
         @media (min-width: $device-portrait-break + ($device-max-break - $device-portrait-break) / 2) and (max-width: $device-max-break) {
-          margin-top: -26%;
+            margin-top: -26%;
 
-          .single-flip {
-            width: 33%;
-          }
+            .single-flip {
+                width: 33%;
+            }
         }
 
         @media (min-width: $device-max-break) and (max-width: $monitor-max-break) {
-          margin-top: -20%;
+            margin-top: -20%;
 
-          .single-flip {
-            width: 25%;
-          }
+            .single-flip {
+                width: 25%;
+            }
         }
 
         @media (min-width: $monitor-max-break) and (max-width: $ultrawide-min-break) {
-          margin-top: -18%;
+            margin-top: -18%;
 
-          .single-flip {
-            width: 20%;
-          }
+            .single-flip {
+                width: 20%;
+            }
         }
 
         a {
@@ -61,9 +61,8 @@
         }
     }
 
-    .earned, .in-progress {
-        overflow: scroll;
-        white-space: nowrap;
+    .earned,
+    .in-progress {
         padding: 0 $standard;
         width: 100%;
         overflow: scroll;

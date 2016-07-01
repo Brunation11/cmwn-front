@@ -2,7 +2,6 @@ import React from 'react';
 import {ButtonToolbar, OverlayTrigger, Popover} from 'react-bootstrap';
 import Shortid from 'shortid';
 import Moment from 'moment';
-import _ from 'lodash';
 
 import 'components/popover.scss';
 import GLOBALS from 'components/globals';
@@ -33,7 +32,15 @@ var PopOver = React.createClass({
                     rootClose
                     placement={state.placement}
                     overlay={
-                        <Popover id={Shortid.generate()} title={state.element.title + '  |  earned: ' + Moment(state.element.earned).format('MMM Do YYYY')}>{state.element.description}
+                        <Popover
+                            id={Shortid.generate()}
+                            title={
+                                state.element.title +
+                                '  |  earned: ' +
+                                Moment(state.element.earned).format('MMM Do YYYY')
+                            }
+                        >
+                            {state.element.description}
                         </Popover>}>
                         <img src={`/flips/${state.element.flip_id}-earned.ggif`} />
                 </OverlayTrigger>

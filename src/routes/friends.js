@@ -112,12 +112,20 @@ var Component = React.createClass({
         return (
            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <form>
-                    <Paginator rowCount={this.props.rowCount} currentPage={this.props.currentPage} pageCount={this.props.pageCount} data={this.props.data} pagePaginator={true}>
+                    <Paginator
+                        rowCount={this.props.rowCount}
+                        currentPage={this.props.currentPage}
+                        pageCount={this.props.pageCount}
+                        data={this.props.data}
+                        pagePaginator={true}
+                    >
                         <FlipBoard
                             renderFlip={this.renderFlip}
                             header={HEADINGS.FRIENDS}
                             transform={data => {
-                                data = data.set('image', _.has(data, '_embedded.image[0].url') ? data.images.data[0].url : DefaultProfile);
+                                data = data.set(
+                                    'image', _.has(data,
+                                    '_embedded.image[0].url') ? data.images.data[0].url : DefaultProfile);
                                 return data;
                             }}
                         />
