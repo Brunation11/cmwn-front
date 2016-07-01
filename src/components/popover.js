@@ -36,9 +36,7 @@ var PopOver = React.createClass({
                     overlay={
                         <Popover id={Shortid.generate()} title={state.element.title + '  |  earned: ' + Moment(state.element.earned).format('MMM Do YYYY')}>{state.element.description}
                         </Popover>}>
-                    <Link to="" key={Shortid.generate()}>
-                        <img src={`/flips/${state.element.flip_id}.png`} ></img>
-                    </Link>
+                        <img src={`/flips/${state.element.flip_id}-earned.gif`} />
                 </OverlayTrigger>
             </ButtonToolbar>
         );
