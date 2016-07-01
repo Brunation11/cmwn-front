@@ -52,7 +52,7 @@ var Trophycase = React.createClass({
                     <div className="single-flip">
                         <PopOver
                             element={item}
-                            placement="top"
+                            placement="bottom"
                             type="flip"
                         />
                     </div>
