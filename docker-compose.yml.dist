@@ -1,0 +1,59 @@
+version: '2'
+services:
+  php:
+    container_name: cmwn_front_php
+    build: ./docker/php
+    environment:
+      APP_API_URL: "https://api-staging.changemyworldnow.com/"
+      APP_GAME_URL: "https://games-dev.changemyworldnow.com/"
+      APP_MODE: "local"
+    volumes:
+      - ./:/var/www/
+  node:
+    container_name: cmwn_front_node
+    build: ./docker/node
+    environment:
+      DOCKER_HOST_IP: "192.168.99.100"
+    volumes:
+      - ./:/var/www/
+
+  nginx:
+    container_name: local.changemyworldnow.com
+    hostname: "local"
+    domainname: "changemyworldnow.com"
+    build: ./docker/nginx
+    ports:
+      - "443:443"
+    volumes:
+      - ./:/var/www/
+    links:
+      - php
+
+  selenium_hub:
+    container_name: selenium_hub
+    image: selenium/hub
+    ports:
+      - "4444:4444"
+    links:
+      - "nginx:local.chagemyworldnow.com"
+
+  selenium_chrome:
+    image: selenium/node-chrome
+    environment:
+      HUB_PORT_4444_TCP_ADDR: "hub"
+    ports:
+      - 5900
+    links:
+      - "nginx:local.chagemyworldnow.com"
+      - selenium_hub:hub
+
+  selenium_firefox:
+    image: selenium/node-firefox
+    environment:
+      HUB_PORT_4444_TCP_ADDR: "hub"
+    ports:
+      - 5900
+    links:
+      - "nginx:local.chagemyworldnow.com"
+      - nginx
+      - selenium_hub:hub
