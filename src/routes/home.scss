@@ -7,6 +7,15 @@
 
     text-align: center;
 
+    // scss-lint:disable QualifyingElement
+    .logo-button,
+    .logo-button:hover,
+    .logo-button:active,
+    a.logo-button:focus {
+        cursor: pointer;
+    }
+    // scss-lint:enable QualifyingElement
+
     h2 {
         text-transform: uppercase;
         font-size: 36px;
@@ -68,30 +77,28 @@
         margin-bottom: 20px;
 
         .logo {
-            overflow: hidden;
-
-            img {
-                margin-bottom: 40px;
-
-                @media (max-width: 1200px) {
-                    width: 15vw;
-                    min-width: 95px;
-                }
-            }
+            width: 20vw;
+            min-width: 150px;
         }
 
+        // scss-lint:disable all
         .header-logo {
+        // scss-lint:enable all
             position: absolute;
-            top: 15px;
+            top: $standard;
             right: 300px;
             float: none;
-            padding: 0;
+            padding-left: 5 * $standard;
             width: calc(100% - #{$logout-size} - #{$logo-size } - 200px);
 
+            img {
+                width: 100%;
+            }
+
             @media (max-width: $device-max-break) {
-                top: 0;
-                right: 0;
+                right: 2 * $standard;
                 margin: 0;
+                padding-left: 2 * $standard;
                 width: calc(100% - 70px - 165px - 88px);
                 min-width: 299px;
             }
@@ -111,7 +118,6 @@
             position: absolute;
             right: 20px;
             bottom: 0;
-
             border-top-left-radius: 4px;
             border-top-right-radius: 4px;
             box-shadow: 0 0 20px $cmwn-light-gray;
