@@ -28,17 +28,18 @@ const HEADINGS = {
 
 const BREADCRUMBS = 'Return to school profile';
 
-var Component = React.createClass({
-    getInitialState: function () {
-        return {scope: 7};
-    },
-    componentDidMount: function () {
+export class Component extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {scope: 7};
+    }
+    componentDidMount() {
         this.setState(this.props.data);
-    },
-    componentWillReceiveProps: function (nextProps) {
+    }
+    componentWillReceiveProps(nextProps) {
         this.setState(nextProps.data);
-    },
-    renderSchools: function () {
+    }
+    renderSchools() {
         var links = _.map(this.props.data.schools, school => {
             return (
                 <Link to={`school/${school.uuid}`}>
@@ -50,8 +51,8 @@ var Component = React.createClass({
             return null;
         }
         return <span>{`${HEADINGS.CLASSES}: `}{links}</span>;
-    },
-    renderImport: function () {
+    }
+    renderImport() {
         var state = Store.getState();
         if (this.state == null || this.state._links == null || this.state._links.import == null) {
         //if (!state.currentUser || !state.currentUser._embedded ||
@@ -66,14 +67,14 @@ var Component = React.createClass({
                     History.push('/schools/' + state.currentUser._embedded.groups[0].group_id + '/edit');
                 }} >Import Spreadsheet</Button>
                 );
-    },
-    renderBreadcrumb: function () {
+    }
+    renderBreadcrumb() {
         if (!this.state || this.state.parent_id == null) {
             return null;
         }
         return <Link to={'/school/' + this.state.parent_id} id="return-to-school">{BREADCRUMBS}</Link>;
-    },
-    render: function () {
+    }
+    render() {
         if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
@@ -148,7 +149,7 @@ var Component = React.createClass({
 
         );
     }
-});
+};
 
 var mapStateToProps = state => {
     var data = {title: ''};
