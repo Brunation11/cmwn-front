@@ -89,7 +89,7 @@ export class View extends React.Component{
                             scope={this.state.scope} text="Delete this class" />
                     </p>
                     {this.renderBreadcrumb()}
-                    <p>
+                    <p id="class-profile">
                         <Link to={`/class/${this.props.data.group_id}/profile`} id="return-to-class">
                             Return to class profile
                         </Link>
