@@ -17,7 +17,7 @@ import Util from 'components/util';
 import 'routes/users/profile.scss';
 import FlipBgDefault from 'media/icon_class_blue.png';
 
-const PAGE_UNIQUE_IDENTIFIER = 'classProfile';
+const PAGE_UNIQUE_IDENTIFIER = 'class-profile';
 
 const CLASS_SOURCE = GenerateDataSource('group_class', PAGE_UNIQUE_IDENTIFIER);
 
@@ -30,6 +30,8 @@ const HEADINGS = {
 const ADMIN_TEXT = 'School Administrative Dashboard';
 
 const ORG_CREATED = 'School created successfully';
+
+const NO_SCHOOLS = 'Sorry, none of your schools have profiles to display at this time.';
 
 var Component = React.createClass({
     getInitialState: function () {
@@ -98,7 +100,9 @@ var Component = React.createClass({
     },
     render: function () {
         if (this.props.data == null) {
-            return null;
+            return (
+                <h2>{NO_SCHOOLS}</h2>
+            );
         }
         return (
            <Layout className="profile">
