@@ -28,7 +28,7 @@ const HEADINGS = {
 
 const BREADCRUMBS = 'Return to school profile';
 
-export class Component extends React.Component{
+export class View extends React.Component{
     constructor(props) {
         super(props);
         this.state = {scope: 7};
@@ -80,7 +80,7 @@ export class Component extends React.Component{
         }
         return (
             <Layout>
-                <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard">
+                <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard" id="panel-1">
                     <p className="right" id="editButton">
                         <EditLink className="purple" base="/class" id={this.state.group_id}
                             scope={this.state.scope} text="Edit this class" />
@@ -103,7 +103,7 @@ export class Component extends React.Component{
                         <p></p>
                     </Text>
                 </Panel>
-                <Panel header="Students" className="standard">
+                <Panel header="Students" className="standard" id="panel-2">
                     <div className="clear">
                         <span className="buttons-right">
                             {this.renderImport()}
@@ -153,10 +153,13 @@ export class Component extends React.Component{
 
 var mapStateToProps = state => {
     var data = {title: ''};
+    var currentUser = {};
     var loading = true;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
+        if(state.currentUser != null)
+            currentUser = state.currentUser;
     }
     return {
         data,
@@ -164,6 +167,6 @@ var mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(Component);
+var Page = connect(mapStateToProps)(View);
 export default Page;
 
