@@ -1,6 +1,82 @@
+@import 'variables';
+@import 'functions';
+
 .datatable {
+
+    background: url('../media/blue-header-bg.jpg');
+    background-color: $cmwn-blue;
+    background-size: 100% auto;
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    //border-right: 1px solid $cmwn-white;
+    //border-top: 1px solid #ddd;
+
+    td {
+        padding: $standard / 2;
+        //border-left: 1px solid #ddd;
+    }
+
+    thead {
+
+        tr {
+            text-transform: uppercase;
+            color: $cmwn-white;
+            font-family: $cmwn-jade-font;
+            font-size: 1.2rem;
+            -webkit-font-smoothing: antialiased;
+            filter: blur(0);
+        }
+
+        td {
+            white-space: pre;
+            //border-left: $cmwn-white solid 1px;
+        }
+    }
+
+    tbody {
+
+        tr {
+            //border-bottom: 1px solid #ddd;
+            background: $cmwn-white;
+        }
+
+        td {
+            border-right: 2px solid $cmwn-white;
+            border-left: 2px solid $cmwn-white;
+        }
+
+        &:nth-child(even) {
+            background: $cmwn-off-white;
+
+            td {
+                border-right: 2px solid $cmwn-off-white;
+                border-left: 2px solid $cmwn-off-white;
+            }
+        }
+    }
 
     .right {
         text-align: right;
+    }
+
+    &.admin {
+        background: none;
+        color: $cmwn-black;
+
+        tr {
+            color: $cmwn-black;
+        }
+
+        thead {
+            border-bottom: 1px solid $cmwn-black;
+        }
+
+        tbody {
+
+            td {
+                border: 0;
+            }
+        }
     }
 }

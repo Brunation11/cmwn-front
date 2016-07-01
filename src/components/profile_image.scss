@@ -1,10 +1,26 @@
+@import 'variables';
+
+.profile-image-popover {
+    color: $cmwn-gray;
+
+    strong {
+        color: $cmwn-purple;
+    }
+
+    a {
+        cursor: pointer;
+        color: $cmwn-purple;
+    }
+}
+
 .profile-image {
     position: relative;
     z-index: 2;
+    padding-bottom: $standard;
     text-align: center;
 
     .profile-pic {
-        transform: translate3d(0px, 0px, 0px); //fix for image jitter in chrome: http://stackoverflow.com/questions/12980153/image-moves-on-hover-chrome-opacity-issue
+        transform: translate3d(0, 0, 0); //fix for image jitter in chrome: http://stackoverflow.com/questions/12980153/image-moves-on-hover-chrome-opacity-issue
     }
 
     &.link-below .below {
@@ -14,40 +30,52 @@
     .below {
         display: none;
     }
-    
+
     &.link-below .upload {
         display: none;
     }
 
+    // scss-lint:disable all
     .upload {
-        z-index: 1;
-        text-align: center;
-        background: rgba(200,200,200,0.8);
-        color: white;
-        padding: 15px;
+        display: inline-block;
         position: absolute;
-        left: 0;
         right: 0;
         bottom: 0;
-        opacity: 0;
-        transition: opacity 0.8s, z-index 0s
-    }
-
-    &:hover .upload {
+        left: 0;
+        transform: translateZ(0);
         opacity: 1;
-        z-index: 3;
-        cursor: pointer;
+        z-index: 1;
+        border: 0;
+        box-shadow: 0 0 1px $cmwn-trans;
+        background: $cmwn-purple;
+        padding: ($standard / 2);
+        width: 100%;
+        vertical-align: middle;
+        text-align: center;
+        color: $cmwn-white;
+        backface-visibility: hidden;
+        transition-duration: .3s;
+        transition-property: box-shadow, transform;
+    }
+    // scss-lint:enable all
+
+    .upload:hover,
+    .upload:focus,
+    .upload:active {
+        transform: scale(1.1);
+        outline: none;
+        box-shadow: 0 10px 10px -10px $cmwn-trans-gray;
     }
 }
 
-#cloudinary-overlay {
+#cloudinary-overlay { // scss-lint:disable IdSelector
 
     .widget {
+        transition: max-width .8s;
         max-width: 0;
-        transition: max-width 0.8s;
     }
 
-    &.with_theme .widget {
+    &.with_theme .widget { // scss-lint:disable SelectorFormat
         max-width: 101vw;
     }
 }

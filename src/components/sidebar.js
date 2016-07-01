@@ -1,49 +1,59 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import SiteNav from 'components/site_nav';
-import FriendList from 'components/friend_list';
+//import FriendList from 'components/friend_list';
 import ProfileImage from 'components/profile_image';
-import Authorization from 'components/authorization';
-import EventManager from 'components/event_manager';
 import History from 'components/history';
 
 import 'components/sidebar.scss';
 
 const WELCOME = 'Welcome';
 
-var Sidebar = React.createClass({
-    componentDidMount: function () {
-        EventManager.listen('userChanged', () => {
-            this.forceUpdate();
-        });
-    },
+var Component = React.createClass({
     attemptNavigate: function () {
-        History.replace('/profile');
+        History.push('/profile');
     },
     renderWelcome: function () {
         return (
             <div>
                 <p className="welcome">{WELCOME}</p>
-                <p className="username">{Authorization.currentUser.username}<a onClick={this.attemptNavigate} > </a></p>
+                <p className="username">
+                    <a onClick={this.attemptNavigate} >
+                        {this.props.currentUser.username}
+                    </a>
+                </p>
             </div>
         );
     },
     render: function () {
-        if (Authorization.currentUser.username == null || Authorization.currentUser.username.toLowerCase() === 'null') {
+        if (this.props.currentUser.username == null ||
+            this.props.currentUser.username.toLowerCase() === 'null') {
             return null;
         }
         return (
-            <div className={'sidebar ' + (this.props.menuIsOpen ? 'open' : '')}>
+            <div id={this.props.navMenuId} className={'sidebar ' + (this.props.menuIsOpen ? 'open' : '')}>
                 {this.renderWelcome()}
                 <a onClick={this.attemptNavigate} >
-                    <ProfileImage uuid={Authorization.currentUser.uuid}/>
+                    <ProfileImage user_id={this.props.currentUser.user_id}/>
                 </a>
                 <SiteNav />
-                <FriendList />
+                {''/*<FriendList />*/}
             </div>
         );
     }
 });
+
+var mapStateToProps = state => {
+    var data = [];
+    state.currentUser;
+    if (state.currentUser && state.currentUser._links) {
+        data = state.currentUser._links;
+    }
+    return { currentUser: state.currentUser, data };
+};
+
+var Sidebar = connect(mapStateToProps)(Component);
 
 export default Sidebar;
 

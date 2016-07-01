@@ -5,14 +5,14 @@
     border-radius: 0;
 
     .panel-heading {
-        font-size: 1.2rem;
-        font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
-        color: #fff;
-        text-transform: uppercase;
-        background: url(media/blue-header-bg.jpg);
+        border-radius: 0;
+        background: url('media/blue-header-bg.jpg');
         background-color: $cmwn-blue;
         background-size: 100% auto;
-        border-radius: 0;
+        text-transform: uppercase;
+        color: $cmwn-white;
+        font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
+        font-size: 1.2rem;
     }
 
     .panel-body {

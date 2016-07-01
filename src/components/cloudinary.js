@@ -16,6 +16,8 @@ const CLOUDINARY_URLS = [
 
 const UPLOAD_ERROR = 'Your image could not be uploaded at this time. Please try again later.';
 
+var Cloudinary;
+
 /**
  * Singleton. Used to manage lazy loading the cloudinary instance
  * as it wants jquery. Currently just dumps window.cloudinary on
@@ -30,12 +32,14 @@ class _Cloudinary {
     /**
      * loads cloudinary.
      * @param {function} callback - function to execute once cloudinary is loaded
+     * @return {object} Promise or this._loaded
      * has signature callback(event, error). Event will only be populated if files
      * have not already been previously loaded.
      */
     load(callback) {
+        var promises;
         if (!this.isLoaded) {
-            var promises = _.map(CLOUDINARY_URLS, url => {
+            promises = _.map(CLOUDINARY_URLS, url => {
                 return new Promise((res, rej) => {
                     try {
                         Loader(url, res);
@@ -63,7 +67,7 @@ class _Cloudinary {
     }
 }
 
-var Cloudinary = new _Cloudinary();
+Cloudinary = new _Cloudinary();
 
 export default Cloudinary;
 

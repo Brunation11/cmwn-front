@@ -1,20 +1,48 @@
 import React from 'react';
-import {Link} from 'react-router';
+import {Button} from 'react-bootstrap';
 
-const EDIT = 'edit';
+import Util from 'components/util';
+import History from 'components/history';
 
-var Page = React.createClass({
-    render: function () {
-        if (!this.props.canUpdate || this.props.uuid == null) {
+const EDIT = 'Edit';
+
+class EditLink extends React.Component {
+    constructor() {
+        super();
+        this.state = {};
+    }
+
+    componentDidMount() {
+        this.setupState(this.props);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setupState(nextProps);
+    }
+
+    setupState(props) {
+        var state = {};
+        state.base = props.base;
+        state.uuid = props.uuid || props.id;
+        state.canUpdate = props.canUpdate !=
+            null ? props.canUpdate : Util.decodePermissions(props.scope).update;
+        this.setState(state);
+    }
+
+    render() {
+        if ((!this.state.canUpdate && !this.state.scope) ||
+            (this.state.uuid == null && this.state.id == null)) {
             return null;
         }
         return (
-            <p>
-                <Link to={`${this.props.base}/${this.props.uuid}/edit`} >{EDIT}</Link>
-            </p>
+            <Button className={this.props.className + ' standard'}
+                onClick={() => History.push(`${this.state.base}/${this.state.uuid}/edit`)} >
+                {this.props.text ? this.props.text : EDIT}</Button>
         );
     }
-});
+}
 
-export default Page;
+EditLink.defaultProps = {base: ''};
+
+export default EditLink;
 

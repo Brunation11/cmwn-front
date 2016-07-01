@@ -6,21 +6,24 @@
 import _ from 'lodash';
 //import Cookie from 'cookie';
 
-import History from 'components/history';
-import Errors from 'components/errors';
+// import PublicRoutes from 'public_routes';
+// import History from 'components/history';
+// import Errors from 'components/errors';
 import Log from 'components/log';
-import PublicRoutes from 'public_routes';
 
 const APP_COOKIE_NAME = 'cmwn_token';
 
+var HttpManager;
+
 /**
  * Bundles requests into an array of request objects
- * @param {array|string|object} requests - arrays will have makeRequestObj on each of their items, strings will be set to the url of a new request object.
+ * @param {array|string|object} requests - arrays will have makeRequestObj
+ * on each of their items, strings will be set to the url of a new request object.
+ * @param {string|object} [body] - request info. Should be a properly formatted JSON
+ * or query string
  * @param {object} [headers] - the headers to be sent with requests. If you need
  * each to have different headers, configure the .headers property of individual
  * request objects
- * @param {string|object} [body] - request info. Should be a properly formatted JSON
- * or query string
  * @returns {array|object} - returns an array when an array is passed in, otherwise a request object
  */
 var _makeRequestObj = function (requests, body = '', headers = {}) {
@@ -44,53 +47,16 @@ var _getRequestPromise = function (method, request, body, headers) {
         return Promise.resolve({data: []});
     }
     request = _makeRequestObj(request, body, headers);
-    if (!_.isArray(request)) {
-        request = [request];
-    }
+    request = _.map([].concat(request), i => _.defaults(i, {method}));
     promise = _makeRequest.call(this, method, request);
     if (request.length === 1) {
-        return promise.then((res) => {
-            if (res[0].status === 401) {
-                //are we unauthorized because we need to update our password?
-                if (res[0].response && res[0].response.error && res[0].response.error.code === 'RESET_PASSWORD') {
-                    return Promise.resolve(res[0]);
-                }
-                if (!PublicRoutes.hasPath(window.location.pathname)) {
-                    //if we have encountered an unauthorized user, we want to cancel all
-                    //further requests until the user can be fully logged out
-                    window.__USER_UNAUTHORIZED = true;
-                    //force user to login screen on any 401, via the logout, regardless of access pattern
-                    History.replace('/logout');
-                }
+        return promise.then((server) => {
+            if (server[0].status == null || server[0].status < 200 || server[0].status >= 300) {
+                throw server[0];
             }
-
-            if (window.location.pathname === '/login' || window.location.pathname === '/logout') {
-                //don't display errors occuring during login and logout, they are handled separately
-                return Promise.resolve(res[0]);
-            }
-
-            if (request[0].handleErrors === false && res[0].status > 399) {
-                throw 'Server error.';
-            }
-
-            if (res[0].status > 499) {
-                Errors.show500(request[0].url, res);
-            } else if (res[0].status === 403) {
-                Errors.show403(request[0].url, res);
-            } else if (res[0].status === 404) {
-                Errors.show404(request[0].url, res);
-            } else if (res[0].status > 399) {
-                Errors.showApplication(res);
-            } else if (res[0].status === 0 || res[0].response == null || res[0].response.length === 0 && request[0].url.indexOf('logout') === -1) {
-                throw 'no data recieved from ' + request[0].url;
-            }
-            return Promise.resolve(res[0]);
+            return Promise.resolve(server[0]);
         }).catch(err => {
-            if (request[0].handleErrors === false || method !== 'GET') { //assume non-gets are not navigational
-                return Promise.reject(err);
-            } else {
-                Errors.showApplication(err, request);
-            }
+            return Promise.reject(err);
         });
     }
     return promise;
@@ -102,7 +68,8 @@ var _makeRequest = function (verb, requests){
         var abort;
         var promise = new Promise((res, rej) => {
             var xhr = new XMLHttpRequest();
-            var url, body;
+            var url;
+            var body;
             abort = () => { //Promise constructor does not expose `this`, must attach outside
                 xhr.abort();
                 res(null);
@@ -120,19 +87,12 @@ var _makeRequest = function (verb, requests){
                         Log.info(err, 'recieved non-standard data format from api');
                     }
                     return res({
+                        url,
                         status: xhr.status,
                         response,
-                        request: xhr
+                        request: _.defaults({body: ''}, req, {xhr})
                     });
                 };
-                if (!req.withoutToken && this._token != null && verb === 'GET') {
-                    if (req.url.indexOf('?') === -1) {
-                        req.url += `?_token=${this._token}`;
-                    } else {
-                        req.url += `&_token=${this._token}`;
-                    }
-                }
-
 
                 url = req.url;
 
@@ -140,22 +100,25 @@ var _makeRequest = function (verb, requests){
 
                 xhr.withCredentials = true;
 
+                xhr.setRequestHeader('Accept', 'application/json');
+
                 _.each(req.headers, (header, key) => {
                     xhr.setRequestHeader(key, header);
                 });
                 if (!req.withoutXSRF && this._token != null) {
-                    xhr.setRequestHeader('X-CSRF-TOKEN', this._token);
+                    xhr.setRequestHeader('X-CSRF', this._token);
                 }
                 if (_.isObject(req.body)) {
                     req.body = (_.defaults({_token: this._token}, req.body));
                 }
-                if (req.asJSON) {
-                    req.body = JSON.stringify(req.body);
-                } else {
+                if (req.asFormData) {
                     req.body = _.reduce(req.body, (acc, val, key) => {
                         acc.append(key, val);
                         return acc;
                     }, new FormData());
+                } else {
+                    req.body = JSON.stringify(req.body);
+                    xhr.setRequestHeader('Content-Type', 'application/json');
                 }
                 //ie9 dislikes these events being undefined
                 xhr.onload = _.noop;
@@ -193,7 +156,7 @@ var _makeRequest = function (verb, requests){
 class _HttpManager {
     constructor() {
         var csrf = window.localStorage[APP_COOKIE_NAME];
-        if (csrf != null) {
+        if (csrf != null && csrf !== 'null' && csrf !== 'undefined') {
             this.setToken(csrf);
         }
     }
@@ -218,7 +181,7 @@ class _HttpManager {
     }
 }
 
-var HttpManager = new _HttpManager();
+HttpManager = new _HttpManager();
 
 export default HttpManager;
 

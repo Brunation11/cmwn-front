@@ -6,12 +6,12 @@ import EventManager from 'components/event_manager';
 
 var Layout = React.createClass({
     getInitialState: function () {
+        return {menuIsOpen: false};
+    },
+    componentDidMount: function () {
         EventManager.listen('menuIsOpen', val => {
-            this.menuIsOpen = val;
-            this.forceUpdate();
+            this.setState({menuIsOpen: val});
         });
-        EventManager.update('menuIsOpen', false);
-        return {};
     },
     render: function () {
         return (
