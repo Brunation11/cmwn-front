@@ -167,13 +167,13 @@ class Header extends React.Component {
                         <Button onClick={this.confirmDemo.bind(this)}> Submit </Button>
                     </Modal.Body>
                 </Modal>
-                <Modal show={this.props.workOpen || this.state.workOpen}
+                <Modal id="work-modal" show={this.props.workOpen || this.state.workOpen}
                        onHide={this.hideWorkModal.bind(this)}>
                     <Modal.Body>
                         {COPY.MODALS.WORK}
                     </Modal.Body>
                 </Modal>
-                <Modal show={this.props.contactOpen || this.state.contactOpen}
+                <Modal id="contact-modal" show={this.props.contactOpen || this.state.contactOpen}
                        onHide={this.hideContactModal.bind(this)}>
                     <Modal.Body>
                         {COPY.MODALS.PRECAPTCHA}

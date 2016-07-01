@@ -10,7 +10,7 @@ var doc = jsdom.jsdom('<!doctype html><html><body></body></html>')
 // get the window object out of the document
 var win = doc.defaultView
 
-// set globals for mocha that make access to document and window feel 
+// set globals for mocha that make access to document and window feel
 // natural in the test environment
 global.document = doc
 global.window = win
@@ -34,7 +34,19 @@ global.window.Rollbar = global.window.Rollbar || {
 	configure: _.noop
 };
 
-// take all properties of the window object and also attach it to the 
+global.window.grecaptcha = {
+    render: function(container, params) {
+        if (params && params.callback) {
+            setTimeout(params.callback, 20000);
+        }
+        return null;
+    },
+    reset: function(a, b) {
+        return null;
+    }
+};
+
+// take all properties of the window object and also attach it to the
 // mocha global object
 propagateToGlobal(win)
 

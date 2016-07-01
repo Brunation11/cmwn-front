@@ -72,8 +72,6 @@ export const COPY = {
 
 class Layout extends React.Component {
     displayWorkModal() {
-        console.log("inner work");
-        console.log(this.props.openModal);
         this.props.openModal('work');
     }
 

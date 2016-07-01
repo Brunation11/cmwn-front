@@ -7,6 +7,19 @@ import { COPY } from 'layouts/home';
 import { SOURCES } from 'layouts/home';
 
 
+export var checkLayoutContents = function (wrapper) {
+    expect(wrapper.children()).to.have.lengthOf(1);
+    expect(wrapper.children('.content')).to.have.lengthOf(1);
+    expect(wrapper.find('.layout').children('.content')).to.have.lengthOf(1);
+    expect(wrapper.find('.content-group .message')).to.have.lengthOf(1);
+    expect(wrapper.find('.content-group .message').children()).to.have.lengthOf(2 +
+        COPY.PARAGRAPHS.length);
+    expect(wrapper.find('.content-group .partners').children()).to.have.lengthOf(2);
+    expect(wrapper.find('.logos').children()).to.have.lengthOf(SOURCES.PARTNERS.length);
+    expect(wrapper.find('footer.links')).to.have.lengthOf(1);
+    expect(wrapper.find('footer.links').children()).to.have.lengthOf(3);
+};
+
 describe('Layout/Home Unit Tests', function () {
     describe('Anonymous user viewing homepage', function () {
         it('Renders homepage using mount', function () {
@@ -16,17 +29,7 @@ describe('Layout/Home Unit Tests', function () {
 
         it('Has the correct home contents', function () {
             const WRAPPER = shallow(<Layout />);
-            expect(WRAPPER.instance()).to.be.instanceOf(Layout);
-            expect(WRAPPER.children()).to.have.lengthOf(1);
-            expect(WRAPPER.children('.content')).to.have.lengthOf(1);
-            expect(WRAPPER.find('.layout').children('.content')).to.have.lengthOf(1);
-            expect(WRAPPER.find('.content-group .message')).to.have.lengthOf(1);
-            expect(WRAPPER.find('.content-group .message').children()).to.have.lengthOf(2 +
-                COPY.PARAGRAPHS.length);
-            expect(WRAPPER.find('.content-group .partners').children()).to.have.lengthOf(2);
-            expect(WRAPPER.find('.logos').children()).to.have.lengthOf(SOURCES.PARTNERS.length);
-            expect(WRAPPER.find('footer.links')).to.have.lengthOf(1);
-            expect(WRAPPER.find('footer.links').children()).to.have.lengthOf(3);
+            checkLayoutContents(WRAPPER);
         });
 
         it('responds to clicking links', function () {

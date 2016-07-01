@@ -1,6 +1,6 @@
 import React from 'react';
-import {Link} from 'react-router';
-import {Carousel, CarouselItem, Button, Modal} from 'react-bootstrap';
+import { Link } from 'react-router';
+import { Carousel, CarouselItem, Button, Modal } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import Layout from 'layouts/home';
@@ -97,7 +97,8 @@ export class Home extends React.Component {
         var logoLink = this.props.currentUser.user_id ? '/profile' : '/';
         return (
             <div id="home" className="home">
-                <Modal show={this.state.viewOpen} onHide={this.setState.bind(this, {viewOpen: false})}>
+                <Modal id="video-modal"
+                    show={this.state.viewOpen} onHide={this.setState.bind(this, {viewOpen: false})}>
                     <Modal.Body>
                         <iframe id="viddler-b9cd1cb6" src={'//www.viddler.com/embed/b9cd1cb6/?f=1&' +
                             'autoplay=1&player=simple&secret=54225444&make_responsive=0'}
@@ -122,7 +123,8 @@ export class Home extends React.Component {
                         <div className="content-group centered sweater">
                             <div>
                                 <h2>{COPY.SLIDES[0].HEADING}</h2>
-                                <Button className="purple" onClick={this.openViewModal.bind(this)}>
+                                <Button className="purple" id="video-btn"
+                                    onClick={this.openViewModal.bind(this)}>
                                     {COPY.BUTTONS.WATCH}
                                 </Button>
                             </div>
@@ -149,6 +151,7 @@ export class Home extends React.Component {
     }
 }
 
+/* istanbul ignore next */
 mapStateToProps = state => {
     var currentUser = {};
     if (state.currentUser) {
