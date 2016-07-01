@@ -40,18 +40,18 @@ export class Profile extends React.Component {
     }
     componentDidMount() {
         this.setState(this.props.data);
-        this.resolveRole();
+        this.resolveRole(this.props);
         if (QueryString.parse(location.search).message === 'created') {
             Toast.success(CLASS_CREATED);
         }
     }
     componentWillReceiveProps(nextProps) {
         this.setState(nextProps.data);
-        this.resolveRole();
+        this.resolveRole(nextProps);
     }
-    resolveRole() {
+    resolveRole(props) {
         var newState = {};
-        if (state.currentUser && state.currentUser.type !== 'CHILD') {
+        if (props.currentUser && props.currentUser.type !== 'CHILD') {
             newState.isStudent = false;
         } else {
             newState.isStudent = true;
@@ -71,7 +71,7 @@ export class Profile extends React.Component {
             return null;
         }
         return (
-            <p><a id="class-dashboard-link" href={`/class/${this.props.data.group_id}/view`}>
+            <p><a id="  " href={`/class/${this.props.data.group_id}/view`}>
                 {ADMIN_TEXT}
             </a></p>
         );
@@ -124,6 +124,7 @@ Profile.defaultProps = {
 
 var mapStateToProps = state => {
     var data = {};
+    var currentUser = {};
     var loading = true;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
