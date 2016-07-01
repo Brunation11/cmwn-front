@@ -116,12 +116,39 @@
         }
     }
 
-    .item > .coming-soon {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        background: url('../../media/coming-soon.png') no-repeat right top;
+    .item {
+
+        .overlay {
+            overflow: scroll;
+
+            .text {
+                font-size: .75rem;
+
+                @media (min-width: $device-portrait-break) and (max-width: 590px) {
+                    font-size: 1rem;
+                }
+
+                @media (min-width: 590px) and (max-width: $device-max-break) {
+                    font-size: .65rem;
+                }
+
+                @media (min-width: $device-max-break) and (max-width: $monitor-max-break) {
+                    font-size: .30rem;
+                }
+
+                @media (min-width: $monitor-max-break) and (max-width: $ultrawide-min-break) {
+                    font-size: 1rem;
+                }
+            }
+        }
+
+        .coming-soon {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: url('../../media/coming-soon.png') no-repeat right top;
+        }
     }
 }
