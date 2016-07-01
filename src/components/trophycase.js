@@ -36,7 +36,7 @@ var Trophycase = React.createClass({
             <div className="flip-list">
                 {_.map(items, (item) => (
                     <Link to="" key={Shortid.generate()}>
-                        <img src={`/flips/${item.flip_id}.png`} ></img>
+                        <img src={`/flips/${item.flip_id}.gif`} ></img>
                         <div className="partial" style={{height: `${item.progress}%`}} >
                             <img src={`/flips/${item.flip_id}_grey.png`} ></img>
                         </div>
@@ -52,7 +52,7 @@ var Trophycase = React.createClass({
                     <div className="single-flip">
                         <PopOver
                             element={item}
-                            placement="top"
+                            placement="bottom"
                             type="flip"
                         />
                     </div>
