@@ -1,3 +1,5 @@
+@import 'variables';
+
 .friends-page {
 
     .overlay {
@@ -13,9 +15,32 @@
             width: 100%;
         }
 
-        &.faded {
-            opacity: 0;
+
+        &.nohover,
+        &.nohover:hover {
+            background-color: $cmwn-blue;
         }
     }
 
+    .faded {
+        opacity: 0;
+    }
+
+    .prompts {
+        text-align: center;
+
+        .pending-prompt {
+            margin: 0 auto;
+            text-transform: uppercase;
+            color: $cmwn-white;
+            font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
+            font-size: 18px;
+        }
+    }
+
+    .flip {
+        img {
+            max-width: 200px;
+        }
+    }
 }
