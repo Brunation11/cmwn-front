@@ -4,6 +4,8 @@ import { mount } from 'enzyme';
 
 import { Home } from 'routes/home';
 import { checkLayoutContents } from 'layouts/home.test.js';
+import { checkHeaderContents } from 'components/header.test.js';
+
 
 export default function() {
     describe('Anonymous user viewing homepage', function () {
@@ -20,6 +22,7 @@ export default function() {
             expect(WRAPPER.children('.global-header')).to.have.lengthOf(1);
             expect(WRAPPER.children('Carousel')).to.have.lengthOf(1);
             expect(WRAPPER.children('.sweater')).to.have.lengthOf(1);
+            expect(WRAPPER.find('Header').find('.actions')).to.have.lengthOf(1);
             // TODO: weird iframe behavior?
             //expect(WRAPPER.find('#viddler-b9cd1cb6')).to.have.lengthOf(1);
             //expect(WRAPPER.find('iframe')).to.be.ok;
@@ -37,11 +40,20 @@ export default function() {
             checkLayoutContents(LAYOUT);
         });
 
+        it('has the correct Header contentens', function() {
+            const WRAPPER = mount(<Home currentUser={{}} />);
+            const HEADER = WRAPPER.find('Header');
+            checkHeaderContents(HEADER);
+        });
+
         it('responds to clicking the work modal link', function () {
             const WRAPPER = mount(<Home currentUser={{}} />);
             expect(WRAPPER.state('workOpen')).to.be.false;
             WRAPPER.find('#work-modal-link').simulate('click');
             expect(WRAPPER.state('workOpen')).to.be.true;
+
+            //WRAPPER.find('#work-modal').simulate('hide');
+            //expect(WRAPPER.state('workOpen')).to.be.false;
         });
 
         it('responds to clicking the contact modal link', function () {
@@ -49,14 +61,16 @@ export default function() {
             expect(WRAPPER.state('contactOpen')).to.be.false;
             WRAPPER.find('#contact-modal-link').simulate('click');
             expect(WRAPPER.state('contactOpen')).to.be.true;
+
+            // TODO: is open state not propagating down to component in unit tests?
+            //WRAPPER.find('#contact-modal').simulate('hide');
+            //expect(WRAPPER.state('contactOpen')).to.be.false;
         });
 
         it('opens and closes the video', function () {
             const WRAPPER = mount(<Home currentUser={{}} />);
             expect(WRAPPER.state('viewOpen')).to.be.false;
             WRAPPER.find('#video-btn').simulate('click');
-            expect(WRAPPER.state('viewOpen')).to.be.true;
-
             //TODO: how to simulate closing modal?
 
             //WRAPPER.find('#video-modal').simulate('hide');

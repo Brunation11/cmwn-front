@@ -5,7 +5,7 @@ import Toast from 'components/toast';
 import Log from 'components/log';
 import History from 'components/history';
 
-const COPY = {
+export const COPY = {
     BUTTONS: {
         WORK: 'Work with Us',
         CONTACT: 'Contact Us',
@@ -68,7 +68,7 @@ class Header extends React.Component {
         this.state = {
             loginOpen: false,
             signupOpen: false,
-            showContact: false
+            showContact: false,
         };
     }
 
@@ -98,24 +98,11 @@ class Header extends React.Component {
     renderCaptcha() {
         var captchas = document.getElementsByClassName('grecaptcha');
         if (captchas.length) {
-            grecaptcha.render(captchas[0], {'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l',
-                callback: () => { //eslint-disable-line no-undef
-                    this.setState({showContact: true});
-                }
+            grecaptcha.render(captchas[0], {
+                'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l',
+                callback: () => {console.log('hi');}//this.setState.bind(this, {showContact: true})
             });
         }
-    }
-
-    displayWorkModal() {
-        this.setState({workOpen: true});
-    }
-
-    displayContactModal() {
-        this.setState({contactOpen: true});
-    }
-
-    displaySignupModal() {
-        this.setState({signupOpen: true});
     }
 
     hideWorkModal() {
@@ -155,10 +142,11 @@ class Header extends React.Component {
 
         return (
             <div>
-                <Modal show={this.state.demoOpen} onHide={this.confirmDemo.bind(this)}>
+                <Modal id="demo-modal" show={this.state.demoOpen} onHide={this.confirmDemo.bind(this)}>
                     <Modal.Body>
                         <h2 class="access">Please enter your Special Access Code</h2>
                         <Input
+                            id="demoCode"
                             ref="demoCode"
                             type="text"
                             value={this.state.demoText}
@@ -181,17 +169,18 @@ class Header extends React.Component {
                         {this.state.showContact ? COPY.MODALS.CONTACT : ''}
                     </Modal.Body>
                 </Modal>
-                <Modal show={this.state.signupOpen} onHide={this.setState.bind(this, {signupOpen: false})}>
+                <Modal id="signup-modal" show={this.state.signupOpen}
+                    onHide={this.setState.bind(this, {signupOpen: false})}>
                     <Modal.Body>
                         {COPY.MODALS.SIGNUP}
                     </Modal.Body>
                 </Modal>
                 <h1 className="fallback">Change My World Now</h1>
                 <div className="links">
-                    <a href="#" onClick={this.displayWorkModal.bind(this)}>
+                    <a href="#" onClick={this.setState.bind(this, {workOpen: true})}>
                         {COPY.BUTTONS.WORK}
                     </a>
-                    <a href="#" onClick={this.displayContactModal.bind(this)}>
+                    <a href="#" onClick={this.setState.bind(this, {contactOpen: true})}>
                         {COPY.BUTTONS.CONTACT}
                     </a>
                     <a href="/terms" target="_blank">
@@ -199,7 +188,8 @@ class Header extends React.Component {
                     </a>
                 </div>
                 <div className="actions">
-                    <Button id="signup" className="green" onClick={this.displaySignupModal.bind(this)}>
+                    <Button id="signup" className="green"
+                        onClick={this.setState.bind(this, {signupOpen: true})}>
                         {COPY.BUTTONS.SIGNUP}
                     </Button>
                     <Button id="login" className="hidden" onClick={this.loginAlert.bind(this)}>
