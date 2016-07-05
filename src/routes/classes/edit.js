@@ -18,7 +18,7 @@ const HEADINGS = {
     CREATE_USER: 'Create User in this Class'
 };
 
-const BAD_UPDATE = 'There was a problem updating your profile. Please try again later.';
+const BAD_CLASS_UPDATE = 'There was a problem updating your class. Please try again later.';
 
 const ERRORS = {
     BAD_UPDATE: 'Could not create user. Please try again later.',
@@ -49,7 +49,7 @@ export class EditClass extends React.Component {
         HttpManager.PUT({url: this.props.data._links.self.href}, postData).then(() => {
             Toast.success('Class Updated');
         }).catch(err => {
-            Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
+            Toast.error(BAD_CLASS_UPDATE + (err.message ? ' Message: ' + err.message : ''));
             Log.log('Server refused class update', err, postData);
         });
     }
