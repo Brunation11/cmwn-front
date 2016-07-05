@@ -11,7 +11,6 @@ import EditLink from 'components/edit_link';
 import DeleteLink from 'components/delete_link';
 import Text from 'components/nullable_text';
 import Util from 'components/util';
-import Store from 'components/store';
 import GenerateDataSource from 'components/datasource';
 
 const PAGE_UNIQUE_IDENTIFIER = 'classProfile';
@@ -28,9 +27,12 @@ const HEADINGS = {
 
 const BREADCRUMBS = 'Return to school profile';
 
+var mapStateToProps;
+var Page;
+
 export class View extends React.Component{
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.state = {scope: 7};
     }
     componentDidMount() {
@@ -53,7 +55,6 @@ export class View extends React.Component{
         return <span>{`${HEADINGS.CLASSES}: `}{links}</span>;
     }
     renderImport() {
-        var state = Store.getState();
         if (this.state == null || this.state._links == null || this.state._links.import == null) {
         //if (!state.currentUser || !state.currentUser._embedded ||
         //    !state.currentUser._embedded.groups || !state.currentUser._embedded.groups.length ||
@@ -64,7 +65,7 @@ export class View extends React.Component{
         }
         return (
                 <Button className="standard green" onClick={ () => {
-                    History.push('/schools/' + state.currentUser._embedded.groups[0].group_id + '/edit');
+                    History.push('/schools/' + this.props.currentUser._embedded.groups[0].group_id + '/edit');
                 }} >Import Spreadsheet</Button>
                 );
     }
@@ -151,7 +152,7 @@ export class View extends React.Component{
     }
 }
 
-var mapStateToProps = state => { // eslint-disable-line vars-on-top
+mapStateToProps = state => {
     var data = {title: ''};
     var currentUser = {}; // eslint-disable-line no-unused-vars
     var loading = true;
@@ -164,10 +165,11 @@ var mapStateToProps = state => { // eslint-disable-line vars-on-top
     }
     return {
         data,
-        loading
+        loading,
+        currentUser
     };
 };
 
-var Page = connect(mapStateToProps)(View); // eslint-disable-line vars-on-top
+Page = connect(mapStateToProps)(View);
 export default Page;
 

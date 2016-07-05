@@ -26,8 +26,8 @@ const ERRORS = {
 };
 
 export class EditClass extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.state = {
             code: '',
             title: '',

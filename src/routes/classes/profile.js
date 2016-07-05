@@ -12,7 +12,6 @@ import FlipBoard from 'components/flipboard';
 import EditLink from 'components/edit_link';
 import Util from 'components/util';
 import GenerateDataSource from 'components/datasource';
-import Store from 'components/store'; // eslint-disable-line no-unused-vars
 
 import DefaultProfile from 'media/profile_tranparent.png';
 
@@ -32,9 +31,12 @@ const ADMIN_TEXT = 'Class Administrative Dashboard';
 
 const CLASS_CREATED = 'Class created.';
 
+var mapStateToProps;
+var Page;
+
 export class Profile extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.state = {
             isStudent: true
         };
@@ -50,9 +52,9 @@ export class Profile extends React.Component {
         this.setState(nextProps.data);
         this.resolveRole(nextProps);
     }
-    resolveRole(props) {
+    resolveRole() {
         var newState = {};
-        if (props.currentUser && props.currentUser.type !== 'CHILD') {
+        if (this.props.currentUser && this.props.currentUser.type !== 'CHILD') {
             newState.isStudent = false;
         } else {
             newState.isStudent = true;
@@ -72,7 +74,7 @@ export class Profile extends React.Component {
             return null;
         }
         return (
-            <p><a id="  " href={`/class/${this.props.data.group_id}/view`}>
+            <p><a id="class-dashboard-link" href={`/class/${this.props.data.group_id}/view`}>
                 {ADMIN_TEXT}
             </a></p>
         );
@@ -134,7 +136,7 @@ Profile.defaultProps = {
     data: {}
 };
 
-var mapStateToProps = state => { // eslint-disable-line vars-on-top
+mapStateToProps = state => {
     var data = {};
     var currentUser = {}; // eslint-disable-line no-unused-vars
     var loading = true;
@@ -148,10 +150,11 @@ var mapStateToProps = state => { // eslint-disable-line vars-on-top
     }
     return {
         data,
-        loading
+        loading,
+        currentUser
     };
 };
 
-var Page = connect(mapStateToProps)(Profile); // eslint-disable-line vars-on-top
+Page = connect(mapStateToProps)(Profile);
 export default Page;
 
