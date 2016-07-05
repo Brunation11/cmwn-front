@@ -41,34 +41,34 @@ var checkUpdatingUser = function (wrapper) {
 
 describe('<EditClass />', function () { // eslint-disable-line no-undef
     var editClass = <EditClass data={classData}/>;
-    var wrapper = shallow(editClass);
+    const WRAPPER = shallow(editClass);
 
     it('ckecks that EditClass component is rendered correctly', () => { // eslint-disable-line no-undef
-        expect(wrapper.instance()).to.be.instanceOf(EditClass);
+        expect(WRAPPER.instance()).to.be.instanceOf(EditClass);
     });
 
     it('checks that the elements are present', () => { // eslint-disable-line no-undef
-        checkEditClass(wrapper);
+        checkEditClass(WRAPPER);
     });
 
     it('checks that class info gets updated', () => { // eslint-disable-line no-undef
-        checkUpdatingClass(wrapper);
+        checkUpdatingClass(WRAPPER);
     });
 });
 
 describe('<CreateStudent />', function () { // eslint-disable-line no-undef
     var createStudent = <CreateStudent />;
-    var wrapper = shallow(createStudent);
+    const WRAPPER = shallow(createStudent);
 
     it('ckecks that CreateStudent component is rendered correctly', () => { // eslint-disable-line no-undef
-        expect(wrapper.instance()).to.be.instanceOf(CreateStudent);
+        expect(WRAPPER.instance()).to.be.instanceOf(CreateStudent);
     });
 
     it('checks that the elements are present', () => { // eslint-disable-line no-undef
-        checkCreateStudent(wrapper);
+        checkCreateStudent(WRAPPER);
     });
 
     it('checks that user info gets updated', () => { // eslint-disable-line no-undef
-        checkUpdatingUser(wrapper);
+        checkUpdatingUser(WRAPPER);
     });
 });
