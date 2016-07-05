@@ -1,4 +1,6 @@
 var e2eReport = require('./e2e_report.js');
+var hostIP;
+
 exports.config = {
     
     //
@@ -11,12 +13,24 @@ exports.config = {
     // directory is where your package.json resides, so `wdio` will be called from there.
     //
     specs: [
-        './test/specs/*.js'
+        './test/specs/**/*.js'
     ],
+    // You can add a suite to define sets of tests to be called togehter as a group
+    // These suites can be called individually by running "wdio --suite someFeature"
+    suites: {
+        games: [
+            './test/specs/games/*.js'
+        ],
+        classes: [
+            './test/specs/classes/*.js'
+        ],
+        mobile: [
+            './test/specs/mobile/*.js'
+        ]
+    },
     // Patterns to exclude.
     exclude: [
         './test/specs/donottest/*.js'
-        // 'path/to/excluded/files'
     ],
     //
     // ============
@@ -42,6 +56,9 @@ exports.config = {
     //
     capabilities: [{
         browserName: 'chrome'
+//    },
+//    {
+//        browserName: 'firefox'
     }],
     //
     // ===================
@@ -68,16 +85,17 @@ exports.config = {
     baseUrl: 'https://local.changemyworldnow.com',
     //
     // Default timeout for all waitFor* commands.
-    waitforTimeout: 10000,
+    waitforTimeout: 20000,
     //
     // Default timeout in milliseconds for request
     // if Selenium Grid doesn't send response
-    connectionRetryTimeout: 90000,
+    connectionRetryTimeout: 180000,
     //
     // Default request retries count
     connectionRetryCount: 3,
     //
     // Host of the WebDriver server
+    host: '192.168.99.100',
     // host: hostIP,
     //
     // Port the WebDriver server is on
@@ -124,7 +142,7 @@ exports.config = {
     // See the full list at http://mochajs.org/
     mochaOpts: {
         compilers: ['js:babel-core/register'],
-        timeout: 99999999
+        timeout: 120000
     },
     //
     // =====
@@ -137,12 +155,22 @@ exports.config = {
     //
     // Gets executed once before all workers get launched.
     // onPrepare: function (config, capabilities) {
+    //     var overrideHostIP = process.env.DOCKER_HOST_IP;
+    //     var hostIP = overrideHostIP || execSync('docker-machine ip front').toString().split('\n')[0];
+    //     if (hostIP === '' || hostIP == null) {
+    //         console.error('No docker IP available for selenium host. Integration tests will fail.');
+    //     }
+    //     global.hostIP = hostIP;
+    //     console.log('*****************************************HOSTIP: ' + hostIP);
     // },
     //
     // Gets executed before test execution begins. At this point you can access all global
     // variables, such as `browser`. It is the perfect place to define custom commands.
-    // before: function (capabilities, specs) {
-    // },
+    before: function (capabilities, specs) {
+        var chai = require('chai');
+        global.expect = chai.expect;
+        chai.Should();
+    },
     //
     // Hook that gets executed before the suite starts
     // beforeSuite: function (suite) {
@@ -152,11 +180,6 @@ exports.config = {
     // beforeEach in Mocha)
     // beforeHook: function () {
     // },
-    before: function() {
-        var chai = require('chai');
-        global.expect = chai.expect;
-        chai.Should();
-    }
     //
     // Hook that gets executed _after_ a hook within the suite starts (e.g. runs after calling
     // afterEach in Mocha)
