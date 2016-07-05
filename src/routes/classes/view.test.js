@@ -27,12 +27,12 @@ var checkWithNullGroupId = function (data, currentUser){
     expect(WRAPPER.children()).to.have.length(0);
 };
 
-describe('class <View />', function () { // eslint-disable-line no-undef
-    it('check that elements get rendered', () => { // eslint-disable-line no-undef
+describe('class <View />', function () {
+    it('check that elements get rendered', () => {
         checkElements(classData, teacherData);
-    }); // eslint-disable-line indent
+    });
 
-    it('check that render returns null if group_id is null', () => { // eslint-disable-line no-undef
+    it('check that render returns null if group_id is null', () => {
         checkWithNullGroupId(nullGroup, teacherData);
     });
 });
