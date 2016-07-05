@@ -1,11 +1,12 @@
 import React from 'react';
 import {Input, Panel, Button, Glyphicon} from 'react-bootstrap';
 import Alertify from 'alertify.js';
+import ClassNames from 'classnames';
 
+import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
 import Util from 'components/util';
 import Toast from 'components/toast';
-import ClassNames from 'classnames';
 
 import 'components/update_username.scss';
 
@@ -39,7 +40,7 @@ var Page = React.createClass({
         };
     },
     reloadChildUsername: function () {
-        HttpManager.GET({url: 'https://api-dev.changemyworldnow.com/user-name'}).then(server => {
+        HttpManager.GET({url: `${GLOBALS.API_URL}user-name`}).then(server => {
             this.setState({last: this.state.option, option: server.response.user_name});
         }).catch(err => {}); // eslint-disable-line
         this.setStyleOnClick();
@@ -52,7 +53,7 @@ var Page = React.createClass({
             .okBtn(BUTTONS.CONFIRM)
             .cancelBtn(BUTTONS.CANCEL)
             .confirm(Util.formatString(CONFIRM_SET, this.state.original), () => {
-                HttpManager.POST({url: 'https://api-dev.changemyworldnow.com/user-name'}, {user_name: this.state.option}).then(server => { // eslint-disable-line
+                HttpManager.POST({url: `${GLOBALS.API_URL}user-name`}, {user_name: this.state.option}).then(server => { // eslint-disable-line
                     this.setState({username: this.state.option});
                     Toast.spawn({addnCls: 'humane-flatty-success', waitForMove: false, timeout: 10000})('Username Updated to ' + server.response.username + '!');
                 }).catch(err => {
