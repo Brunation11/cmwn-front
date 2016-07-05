@@ -21,7 +21,7 @@ var checkElements = function (data, currentUser) {
 };
 
 var checkWithNullGroupId = function (data, currentUser){
-    var view = <View data={data} currentUser = {currentUser}/>;
+    var view = <View data={data} currentUser={currentUser}/>;
     const WRAPPER = shallow(view);
     expect(WRAPPER.instance()).to.be.instanceOf(View);
     expect(WRAPPER.children()).to.have.length(0);
