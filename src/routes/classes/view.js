@@ -33,7 +33,7 @@ var Page;
 export class View extends React.Component{
     constructor() {
         super();
-        this.state = {scope: 7};
+        this.state = {scope: 0};
     }
     componentDidMount() {
         this.setState(this.props.data);
@@ -154,7 +154,7 @@ export class View extends React.Component{
 
 mapStateToProps = state => {
     var data = {title: ''};
-    var currentUser = {}; // eslint-disable-line no-unused-vars
+    var currentUser = {};
     var loading = true;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
