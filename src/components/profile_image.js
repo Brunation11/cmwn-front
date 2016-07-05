@@ -111,8 +111,9 @@ var ProfileImage = React.createClass({
     },
     renderUploadButton: function () {
         var state = Store.getState();
-        if (this.props.user_id !== state.currentUser.user_id || (this.props.user && this.props.user.user_id !== state.currentUser.user_id)) {
-            return null
+        if (this.props.user_id !== state.currentUser.user_id ||
+           (this.props.user && this.props.user.user_id !== state.currentUser.user_id)) {
+            return null;
         }
         if ((this.state.profileImage === GLOBALS.DEFAULT_PROFILE) || this.state.isModerated) {
             return (

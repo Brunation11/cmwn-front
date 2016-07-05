@@ -1,6 +1,6 @@
 {
   "name": "cmwn-platorm-frontend",
-  "version": "0.3.2",
+  "version": "0.3.4",
   "description": "ChangeMyWorldNow Platform Frontend (React)",
   "main": "index.html",
   "scripts": {
@@ -130,7 +130,7 @@
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.5.0",
-    "wdio-mocha-framework": "^0.3.1",
+    "wdio-mocha-framework": "^0.3.4",
     "webdriverio": "^4.0.9",
     "webpack": "^1.13.0",
     "webpack-dev-middleware": "^1.2.0",
