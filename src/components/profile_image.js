@@ -35,8 +35,8 @@ var Component = React.createClass({
             }
         } else {
             if (this.props.user._embedded.image) {
-                this.setState({profileImage: this.props.currentUser._embedded.image.url});
-                this.setState({isModerated: this.props.currentUser._embedded.image.is_moderated});
+                this.setState({profileImage: this.props.user._embedded.image.url});
+                this.setState({isModerated: this.props.user._embedded.image.is_moderated});
             } else {
                 HttpManager.GET({
                     url: (this.props.user._links.user_image.href),
@@ -107,6 +107,10 @@ var Component = React.createClass({
         );
     },
     renderUploadButton: function () {
+        var state = Store.getState();
+        if (this.props.user_id !== state.currentUser.user_id || (this.props.user && this.props.user.user_id !== state.currentUser.user_id)) {
+            return null
+        }
         if ((this.state.profileImage === GLOBALS.DEFAULT_PROFILE) || this.state.isModerated) {
             return (
                 <button className="upload" onClick={this.startUpload}>Upload Image</button>
@@ -132,9 +136,9 @@ var Component = React.createClass({
         }
     },
     render: function () {
-        if (this.props.user_id == null) {
-            return null;
-        }
+        // if (!this.props.currentUser || !this.props.user) {
+            // return null;
+        // }
         return (
             <div className={Classnames('profile-image', {'link-below': this.props['link-below']})} >
                 {this.renderImage(this.state.profileImage)}
