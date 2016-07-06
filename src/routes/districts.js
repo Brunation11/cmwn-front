@@ -14,7 +14,7 @@ const CREATE_TEXT = 'Create District';
 var mapStateToProps;
 var Page;
 
-class District extends React.Component{
+export class District extends React.Component{
     renderCreateDistrict(){
         if (this.props.currentUser.scope === -1) {
             return (
