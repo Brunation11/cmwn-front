@@ -10,19 +10,23 @@ import Layout from 'layouts/two_col';
 import Form from 'components/form';
 
 const ERRORS = {
-    BAD_UPDATE: 'There was a problem updating your profile. Please try again later.',
+    BAD_UPDATE: 'There was a problem creating a district. Please try again later.',
     INVALID_SUBMISSION: 'Invalid submission. Please update fields highlighted in red and submit again'
 };
 
-var Component = React.createClass({
-    getInitialState: function () {
-        return {
+var mapStateToProps;
+var Page;
+
+export class CreateDistrict extends React.Component{
+    constructor(){
+        super();
+        this.state = {
             title: '',
             districtId: 1,
             code: ''
         };
-    },
-    submitData: function () {
+    }
+    submitData() {
         var postData = {
             title: this.state.title,
             meta: {
@@ -44,8 +48,8 @@ var Component = React.createClass({
         } else {
             Toast.error(ERRORS.INVALID_SUBMISSION);
         }
-    },
-    render: function () {
+    }
+    render() {
         return (
            <Layout>
                 <Form ref="formRef">
@@ -80,14 +84,14 @@ var Component = React.createClass({
                         name="codeInput"
                         onChange={e => this.setState({code: e.target.value})} //eslint-disable-line camelcase
                     />
-                    <Button onClick={this.submitData}> Create </Button>
+                    <Button onClick={this.submitData.bind(this)}> Create </Button>
                 </Form>
            </Layout>
         );
     }
-});
+};
 
-var mapStateToProps = state => {
+mapStateToProps = state => {
     var data = {};
     var loading = true;
     if (state.page && state.page.data != null) {
@@ -100,6 +104,6 @@ var mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(Component);
+Page = connect(mapStateToProps)(CreateDistrict);
 export default Page;
 
