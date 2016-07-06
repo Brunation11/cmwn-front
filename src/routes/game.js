@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import Game from 'components/game';
 import History from 'components/history';
 import GLOBALS from 'components/globals';
-import Store from 'components/store';
 
 import Layout from 'layouts/one_col';
 

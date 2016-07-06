@@ -3,32 +3,31 @@ import { expect } from 'chai';
 import { mount, shallow } from 'enzyme';
 
 import { ChangePassword } from 'routes/change_password';
+import { isPassValid } from 'routes/change_password';
 
 import teacherData from 'mocks/users/teacher_data';
-/*
-describe('<Page />', function() {
-   describe('Check Page', function() {
-       var Page = <Page />;
-       const WRAPPER = shallow(Page);
-       const CHANGE_COPY = `You are required to change your password before using ChangeMyWorldNow.com.
-        Please update your password using the form below to proceed.`;
-       
-       it('renders the component', function() {
-          expect(WRAPPER.instance().to.be.instanceOf(Page)); 
-       });
-       
-       it('has the correct elements', function() {
-           expect(WRAPPER.children()).to.have.length(1);
-           expect(WRAPPER.find('Layout')).to.have.length(1);
-           expect(WRAPPER.find('Layout').text()).to.equal(CHANGE_COPY);
-           expect(WRAPPER.find('ChangePassword')).to.have.length(1);
-       });
-   });
-});
-*/
+import studentDataA from 'mocks/users/student_data_a';
+
+var checkCorrectElements = function(WRAPPER) {
+    expect(WRAPPER.children()).to.have.length(1);
+    expect(WRAPPER.find('Panel')).to.have.length(1);
+    expect(WRAPPER.find('form')).to.have.length(1);
+    expect(WRAPPER.find('Input')).to.have.length(2);
+    expect(WRAPPER.find('Button')).to.have.length(1);
+}
+
+var checkChangingPass = function(WRAPPER) {
+    var newInput = WRAPPER.find({name: 'newInput'});
+    newInput.simulate('change', {target: {value: 'business5'}});
+    expect(WRAPPER.state('new')).to.equal('business5');
+    var confirmInput = WRAPPER.find({name: 'confirmInput'});
+    confirmInput.simulate('change', {target: {value: 'business5'}});
+    expect(WRAPPER.state('confirm')).to.equal('business5');
+}
+
 describe('<ChangePassword />', function() {
-   describe('Check changepass page', function() {
-        var changePass = <ChangePassword currentUser={teacherData}/>; 
+   describe('Teacher viewing changepass page', function() {
+        var changePass = <ChangePassword currentUser={teacherData} data={teacherData} loading={false}/>; 
         const WRAPPER = shallow(changePass);
        
         it('renders the component', function() {              
@@ -36,41 +35,42 @@ describe('<ChangePassword />', function() {
         }); 
        
        it('has the correct elements', function() {
-           expect(WRAPPER.children()).to.have.length(1);
-           expect(WRAPPER.find('Panel')).to.have.length(1);
-           expect(WRAPPER.find('form')).to.have.length(1);
-           expect(WRAPPER.find('Input')).to.have.length(3);
-           expect(WRAPPER.find('Button')).to.have.length(1);
+           checkCorrectElements(WRAPPER);
        });
+       
+       it('updates state for changing password', function() {
+            checkChangingPass(WRAPPER);
+        });
     });
     
-    describe('Attempting to change password', function() {
-        var changePass = <ChangePassword currentUser={teacherData} data={teacherData} loading={false}/>; 
+    describe('Student viewing changepass page', function() {
+        var changePass = <ChangePassword currentUser={studentDataA} data={studentDataA} loading={false}/>; 
         const WRAPPER = shallow(changePass);
        
-        it('updates state for changing password ', function() {
-           var currentInput = WRAPPER.find({name: 'currentInput'});
-           console.log('Password: ');
-            console.log(data.username);
-            expect(WRAPPER.state('current')).to.equal('business2');
-           var newInput = WRAPPER.find({name: 'newInput'});
-           newInput.value = 'business5';
-           // newInput.simulate('change', {target: {value: 'business5'}});
-           var confirmInput = WRAPPER.find({name: 'confirmInput'});
-           confirmInput.value = 'business5';
-           WRAPPER.find('Button').simulate('click');
-           expect(WRAPPER.state('current')).to.equal('business5');
-       }); 
+       it('renders the component', function() {              
+            expect(WRAPPER.instance()).to.be.instanceOf(ChangePassword);
+        }); 
+       
+       it('has the correct elements', function() {
+           checkCorrectElements(WRAPPER);
+        });
+    
+        it('updates state for changing password', function() {
+            checkChangingPass(WRAPPER);
+        });
+    });
+    
+    describe('isPassValid method', function() {
+        it('password is valid', function() {
+            expect(isPassValid('business5')).to.not.equal(0);
+        });
         
-        it('doesnt update state if new and confirm password are different', function() {
-            var currentInput = WRAPPER.find({name: 'currentInput'});
-            expect(WRAPPER.state('current')).to.equal('business2');
-            var newInput = WRAPPER.find({name: 'newInput'});
-            newInput.value = 'business5';
-            var confirmInput = WRAPPER.find({name: 'confirmInput'});
-            confirmInput.value = 'business2';
-            WRAPPER.find('Button').simulate('click');
-            expect(WRAPPER.state('current')).to.equal(/*...*/);
+        it('password is not valid if too short', function() {
+            expect(isPassValid('bus3')).to.equal(false); 
+        });
+        
+        it('password is not valid if no number', function() {
+            expect(isPassValid('business')).to.equal(0);
         });
     });
 

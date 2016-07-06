@@ -19,8 +19,6 @@ describe('<GamePage />', function() {
            expect(WRAPPER.children()).to.have.length(1);
            expect(WRAPPER.find('Layout')).to.have.length(1);
            expect(WRAPPER.find('Game')).to.have.length(1);
-           console.log('Dog');
-           console.log(WRAPPER.saveUrl);
        });
     }); 
 });

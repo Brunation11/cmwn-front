@@ -9,7 +9,6 @@ var teacherData = {
     'last_name': 'Teacher',
     'gender': 'male',
     'birthdate': null,
-    'current': 'business2',
     'meta': [],
     'created': '2016-05-31 20:25:09',
     'updated': '2016-06-13 19:47:24',

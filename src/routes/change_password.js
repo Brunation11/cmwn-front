@@ -5,7 +5,6 @@ import HttpManager from 'components/http_manager';
 import Log from 'components/log';
 import History from 'components/history';
 import Toast from 'components/toast';
-import Store from 'components/store';
 import GLOBALS from 'components/globals';
 import {Panel, Button, Input} from 'react-bootstrap';
 
@@ -28,7 +27,7 @@ const PAGE_UNIQUE_IDENTIFIER = 'change-pass';
 var mapStateToProps;
 var OtherPage;
 
-var isPassValid = function (password) {
+export var isPassValid = function (password) {
     return password.length >= 8 && ~password.search(/[0-9]+/);
 };
 
@@ -101,7 +100,7 @@ export class ChangePassword extends React.Component {
             <div>
                 <Panel header={HEADINGS.PASSWORD} className="standard">
                     <form>
-                    <Input
+    {''/*                <Input
                         type="password"
                         value={this.state.current}
                         placeholder="********"
@@ -111,6 +110,7 @@ export class ChangePassword extends React.Component {
                         name="currentInput"
                         onChange={e => this.setState({current: e.target.value})}
                     />
+    */}
     
                     <Input
                         type="password"
