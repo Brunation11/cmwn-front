@@ -33,24 +33,36 @@ var Trophycase = React.createClass({
     },
     renderPartial: function (items) {
         return (
-           <div className="flip-list">
-               {_.map(items, (item) => (<Link to="" key={Shortid.generate()}><img src={`/flips/${item.flip_id}.png`} ></img><div className="partial" style={{height: `${item.progress}%`}} ><img src={`/flips/${item.flip_id}_grey.png`} ></img></div></Link>))}
-           </div>
+            <div className="flip-list">
+                {_.map(items, (item) => (
+                    <Link to="" key={Shortid.generate()}>
+                        <img src={`/flips/${item.flip_id}.gif`} ></img>
+                        <div className="partial" style={{height: `${item.progress}%`}} >
+                            <img src={`/flips/${item.flip_id}_grey.png`} ></img>
+                        </div>
+                    </Link>
+                ))}
+            </div>
         );
     },
     renderComplete: function (items) {
         return (
             <div className="flip-list">
                 {_.map(items, (item) => (
-                    <div className="flip float pulse buzz">
-                        <PopOver element={item} trigger="hover" placement="top"/>
+                    <div className="single-flip">
+                        <PopOver
+                            element={item}
+                            placement="bottom"
+                            type="flip"
+                        />
                     </div>
                 ))}
             </div>
         );
     },
     renderCase: function () {
-        var complete = [], inProgress = [];
+        var complete = [];
+        var inProgress = [];
         if (this.state && !this.state.flips.length) {
             return null;
         }
@@ -60,7 +72,9 @@ var Trophycase = React.createClass({
         return (
             <Panel className="trophycase standard" header={HEADINGS.FLIPBOARD}>
                 <div className="earned">
-                    <span className="earned-header">{EARNED}<strong className="earned-value"> {complete.length}</strong></span>
+                    <span className="earned-header">{EARNED}<strong className="earned-value">
+                        {complete.length}
+                    </strong></span>
                     {this.renderComplete(complete)}
                 </div>
                 <div className="in-progress hidden">

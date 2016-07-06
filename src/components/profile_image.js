@@ -16,10 +16,13 @@ const PIC_ALT = 'Profile Picture';
 const UPLOAD_ERROR = 'There was a problem uploading your image. Please refresh the page and try again.';
 const MODERATION = 'Your image has been submitted for moderation and should appear shortly.';
 const PENDINGHEADER = 'Woah there World Changer!';
-const PENDING = ' We\'re reviewing your image and it should appear shortly. Other users will continue to see your last approved image until we\'ve reviewed this one. To continue uploading a new image click ';
-const NO_IMAGE = 'Looks like there was a problem displaying this users profile. Please refresh the page to try again.';
+const PENDING = ' We\'re reviewing your image and it should appear shortly. ' +
+                'Other users will continue to see your last approved image until we\'ve reviewed this one.' +
+                'To continue uploading a new image click ';
+const NO_IMAGE = 'Looks like there was a problem displaying this users profile. ' +
+                'Please refresh the page to try again.';
 
-var Component = React.createClass({
+var ProfileImage = React.createClass({
     getInitialState: function () {
         return {
             profileImage: GLOBALS.DEFAULT_PROFILE,
@@ -139,7 +142,7 @@ var Component = React.createClass({
     }
 });
 
-const mapStateToProps = state => {
+var mapStateToProps = state => {
     var data = [];
     state.currentUser;
     if (state.currentUser && state.currentUser._links) {
@@ -148,7 +151,7 @@ const mapStateToProps = state => {
     return { currentUser: state.currentUser, data };
 };
 
-var Image = connect(mapStateToProps)(Component);
+var Image = connect(mapStateToProps)(ProfileImage);
 
 export default Image;
 

@@ -15,8 +15,8 @@ import GenerateDataSource from 'components/datasource';
 
 const PAGE_UNIQUE_IDENTIFIER = 'district-view';
 
-const ClassSource = GenerateDataSource('group_class', PAGE_UNIQUE_IDENTIFIER);
-const UserSource = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
+const CLASS_SOURCE = GenerateDataSource('group_class', PAGE_UNIQUE_IDENTIFIER);
+const USER_SOURCE = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     TITLE: 'School Administrative Dashboard: ',
@@ -47,10 +47,11 @@ var Component = React.createClass({
         this.setState(newProps.data);
     },
     renderDistricts: function () {
+        var links;
         if (!this.state || this.state._embedded == null) {
             return null;
         }
-        var links = _.map(this.state._embedded.organizations, district => {
+        links = _.map(this.state._embedded.organizations, district => {
             if (district.type !== 'district') {
                 return null;
             }
@@ -75,7 +76,8 @@ var Component = React.createClass({
             return null;
         }
         return (
-            <EditLink className="green" base="/school" id={this.state.group_id} scope={this.state.scope} text="Import Spreadsheets"/>
+            <EditLink className="green" base="/school" id={this.state.group_id} scope={this.state.scope}
+                text="Import Spreadsheets"/>
         );
     },
     render: function () {
@@ -86,9 +88,11 @@ var Component = React.createClass({
             <Layout>
                 <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard">
                     <p className="right" >
-                        <EditLink className="purple" base="/school" id={this.state.group_id} scope={this.state.scope} text="Edit this school"/>
+                        <EditLink className="purple" base="/school" id={this.state.group_id}
+                            scope={this.state.scope} text="Edit this school"/>
                         {this.renderImport()}
-                        <DeleteLink className="purple" base="/school" id={this.state.group_id} scope={this.state.scope} text="Delete this school" />
+                        <DeleteLink className="purple" base="/school" id={this.state.group_id}
+                            scope={this.state.scope} text="Delete this school" />
                     </p>
                     <p>
                         <a href={`/school/${this.props.data.group_id}/profile`}>Return to school profile</a>
@@ -100,40 +104,50 @@ var Component = React.createClass({
                 </Panel>
                 <Panel header={HEADINGS.CLASSES} className="standard">
                     <a onClick={() => History.push('/classes')}>View All Your Classes</a>
-                    <ClassSource>
+                    <CLASS_SOURCE>
                         <Table>
                             <Column dataKey="title"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/class/' + row.group_id)}>{_.startCase(data)}</a>
+                                    <a onClick={() => History.push('/class/' + row.group_id)}>
+                                        {_.startCase(data)}
+                                    </a>
                                 )}
                             />
                             <Column dataKey="description" />
                             <Column dataKey="title" renderHeader="Admin View"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/class/' + row.group_id + '/view')}>Admin View</a>
+                                    <a onClick={() => History.push('/class/' + row.group_id + '/view')}>
+                                        Admin View
+                                    </a>
                                 )}
                             />
                             <Column dataKey="title" renderHeader="Edit"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/class/' + row.group_id + '/edit')}>Edit</a>
+                                    <a onClick={() => History.push('/class/' + row.group_id + '/edit')}>
+                                        Edit
+                                    </a>
                                 )}
                             />
                         </Table>
-                    </ClassSource>
+                    </CLASS_SOURCE>
                 </Panel>
                 <Panel header={HEADINGS.USERS} className="standard">
                     <a onClick={() => History.push('/users')}>View All Your Users</a>
-                    <UserSource>
+                    <USER_SOURCE>
                         <Table>
                             <Column dataKey="first_name" renderHeader="Name"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/user/' + row.user_id)}>{row.first_name + ' ' + row.last_name}</a>
+                                    <a onClick={() => History.push('/user/' + row.user_id)}>
+                                        {row.first_name + ' ' + row.last_name}
+                                    </a>
                                 )}
                             />
                             <Column dataKey="username" />
                             <Column dataKey="title" renderHeader="Admin View"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/user/' + row.user_id + '/view')}>Admin View</a>
+                                    <a onClick={() => History.push('/user/' + row.user_id + '/view')}>
+                                        Admin View
+                                    </a>
                                 )}
                             />
                             <Column dataKey="title" renderHeader="Edit"
@@ -142,14 +156,14 @@ var Component = React.createClass({
                                 )}
                             />
                         </Table>
-                    </UserSource>
+                    </USER_SOURCE>
                 </Panel>
            </Layout>
         );
     }
 });
 
-const mapStateToProps = state => {
+var mapStateToProps = state => {
     var data = {};
     var loading = true;
     if (state.page && state.page.data != null) {

@@ -6,27 +6,28 @@ import Moment from 'moment';
 
 import 'components/dropdown_datepicker.scss';
 
-var Page = React.createClass({
-    getDefaultProps: function () {
-        return {
-            onChange: _.identity
-        };
-    },
-    getInitialState: function () {
-        var month = 0, day = 0, year = 0;
+class Page extends React.Component {
+    constructor(props) {
+        super(props);
+        var month = 0; //eslint-disable-line vars-on-top
+        var day = 0; //eslint-disable-line vars-on-top
+        var year = 0; //eslint-disable-line vars-on-top
         if (this.props.value != null) {
             month = Moment(this.props.value).month() + 1;
             day = Moment(this.props.value).date();
             year = Moment(this.props.value).year();
         }
-        return {
+        this.state = {
             month: month,
             day: day,
             year: year
         };
-    },
-    componentWillReceiveProps: function (nextProps) {
-        var month = 0, day = 0, year = 0;
+        this.setState = this.setState.bind(this);
+    }
+    componentWillReceiveProps(nextProps) {
+        var month = 0;
+        var day = 0;
+        var year = 0;
         if (nextProps.value != null) {
             month = Moment(nextProps.value).month() + 1;
             day = Moment(nextProps.value).date();
@@ -37,26 +38,29 @@ var Page = React.createClass({
                 year: year
             });
         }
-    },
-    getDate: function (nextState) {
-        var month = nextState.month || this.state.month,
-            day = nextState.day || this.state.day,
-            year = nextState.year || this.state.year;
+    }
+
+    getDate(nextState) {
+        var month = nextState.month || this.state.month;
+        var day = nextState.day || this.state.day;
+        var year = nextState.year || this.state.year;
         if (!month || !day || !year) {
             return null;
         }
         return Moment(`${month}-${day}-${year}`).format('MM-DD-YYYY');
-    },
-    reset: function () {
+    }
+
+    reset() {
         this.setState({
             month: 0,
             day: 0,
             year: 0
         });
-    },
-    renderMonthOptions: function () {
+    }
+
+    renderMonthOptions() {
         var items = [
-            <option value={0} >Select Month</option>
+            <option value={0} key={Shortid.generate()} disabled>Select Month</option>
         ];
 
         _.each(Moment.monthsShort(), (month, i) => {
@@ -66,10 +70,11 @@ var Page = React.createClass({
         });
 
         return items;
-    },
-    renderDayOptions: function () {
+    }
+
+    renderDayOptions() {
         var items = [
-            <option value={0} >Select Day</option>
+            <option value={0} key={Shortid.generate()} disabled>Select Day</option>
         ];
 
         _.each(Array((new Date(0, this.state.month, 0).getDate())), (day, i) => {
@@ -79,10 +84,11 @@ var Page = React.createClass({
         });
 
         return items;
-    },
-    renderYearOptions: function () {
+    }
+
+    renderYearOptions() {
         var items = [
-            <option value={0} >Select Month</option>
+            <option value={0} key={Shortid.generate()} disabled>Select Year</option>
         ];
         var currentYear = new Date().getFullYear();
 
@@ -93,8 +99,9 @@ var Page = React.createClass({
         });
 
         return items;
-    },
-    render: function () {
+    }
+
+    render() {
         return (
             <span className="form-inline dropdown-datepicker" >
                 <label>Birthday:</label>
@@ -145,7 +152,10 @@ var Page = React.createClass({
             </span>
         );
     }
-});
+
+}
+
+Page.defaultProps = {onChange: _.identity};
 
 export default Page;
 
