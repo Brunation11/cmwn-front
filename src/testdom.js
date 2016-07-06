@@ -37,11 +37,7 @@ global.window.Rollbar = global.window.Rollbar || {
 global.window.grecaptcha = {
     render: function(container, params) {
         if (params && params.callback) {
-            console.log('cb');
-            // TODO: timeout not working but that probably will not fix problem
-            //params.callback();
-            _.delay(() => {console.log('delay');}, 1000);
-            //setTimeout(params.callback, 1000);
+            params.callback();
         }
         return null;
     },

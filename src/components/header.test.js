@@ -83,7 +83,6 @@ describe('Header unit tests', function () {
             expect(WRAPPER.find('#contact-modal').find('p')).to.have.lengthOf(0);
             WRAPPER.find('.links').children('a').at(1).simulate('click');
             expect(WRAPPER.state('contactOpen')).to.be.true;
-            expect(WRAPPER.state('showContact')).to.be.true;
 
             WRAPPER.find('#contact-modal').simulate('hide');
             expect(WRAPPER.state('contactOpen')).to.be.false;

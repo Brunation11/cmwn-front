@@ -68,7 +68,6 @@ class Header extends React.Component {
         this.state = {
             loginOpen: false,
             signupOpen: false,
-            showContact: false,
             verified: false
         };
     }
@@ -107,13 +106,24 @@ class Header extends React.Component {
                     'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l',
                     callback: () => { //eslint-disable-line no-undef
                         this.setState({
-                            showContact: true,
                             verified: true
                         });
                     }
                 });
             }
         }
+    }
+
+    displayWorkModal() {
+        this.setState({workOpen: true});
+    }
+
+    displayContactModal() {
+        this.setState({contactOpen: true});
+    }
+
+    displaySignupModal() {
+        this.setState({signupOpen: true});
     }
 
     hideWorkModal() {
@@ -123,7 +133,7 @@ class Header extends React.Component {
 
     hideContactModal() {
         this.props.closeContact();
-        this.setState({contactOpen: false, showContact: false});
+        this.setState({contactOpen: false});
     }
 
     loginAlert() {
@@ -190,10 +200,10 @@ class Header extends React.Component {
                 </Modal>
                 <h1 className="fallback">Change My World Now</h1>
                 <div className="links">
-                    <a href="#" onClick={this.setState.bind(this, {workOpen: true})}>
+                    <a href="#" onClick={this.displayWorkModal.bind(this)}>
                         {COPY.BUTTONS.WORK}
                     </a>
-                    <a href="#" onClick={this.setState.bind(this, {contactOpen: true})}>
+                    <a href="#" onClick={this.displayContactModal.bind(this)}>
                         {COPY.BUTTONS.CONTACT}
                     </a>
                     <a href="/terms" target="_blank">
@@ -202,7 +212,7 @@ class Header extends React.Component {
                 </div>
                 <div className="actions">
                     <Button id="signup" className="green"
-                        onClick={this.setState.bind(this, {signupOpen: true})}>
+                        onClick={this.displaySignupModal.bind(this)}>
                         {COPY.BUTTONS.SIGNUP}
                     </Button>
                     <Button id="login" className="hidden" onClick={this.loginAlert.bind(this)}>

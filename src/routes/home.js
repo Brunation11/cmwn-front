@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import Layout from 'layouts/home';
 import Header from 'components/header';
+import History from 'components/history';
 
 import 'routes/home.scss';
 import LOGO_URL from 'media/header-logo.png';
@@ -73,7 +74,7 @@ export class Home extends React.Component {
     }
 
     componentDidMount() {
-        History.replace('/home');
+        //History.replace('/home');
     }
 
     logoLink() {
@@ -96,14 +97,6 @@ export class Home extends React.Component {
         this.setState(state);
     }
 
-    closeWork() {
-        this.setState({ workOpen: false });
-    }
-
-    closeContact() {
-        this.setState({ contactOpen: false });
-    }
-
     render() {
         return (
             <div id="home" className="home">
@@ -118,20 +111,20 @@ export class Home extends React.Component {
                 </Modal>
                 <div className="global-header">
                     <div className="logo" >
-                        <span className="logo-button" onClick={this.logoLink}>
+                        <span className="logo-button" onClick={this.logoLink.bind(this)}>
                             <img alt="Change My World Now" src={LOGO_URL} />
                         </span>
                     </div>
                     <div className="header-logo">
-                        <span className="logo-button" onClick={this.logoLink}>
+                        <span className="logo-button" onClick={this.logoLink.bind(this)}>
                             <img alt="Change My World Now" src={LOGO_HEADER} />
                         </span>
                     </div>
                     <Header
                         workOpen={this.state.workOpen}
                         contactOpen={this.state.contactOpen}
-                        closeWork={this.closeWork.bind(this)}
-                        closeContact={this.closeContact.bind(this)}
+                        closeWork={this.setState.bind(this, { workOpen: false })}
+                        closeContact={this.setState.bind(this, { contactOpen: false })}
                         currentUser={this.props.currentUser}
                     />
                 </div>
@@ -161,7 +154,7 @@ export class Home extends React.Component {
                         </div>
                     </CarouselItem>
                 </Carousel>
-                <div className="sweater">
+                <div id="layout-sweater" className="sweater">
                     <Layout openModal={this.openModal.bind(this)} />
                 </div>
             </div>

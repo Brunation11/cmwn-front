@@ -23,15 +23,12 @@ export default function() {
             expect(WRAPPER.children('Carousel')).to.have.lengthOf(1);
             expect(WRAPPER.children('.sweater')).to.have.lengthOf(1);
             expect(WRAPPER.find('Header').find('.actions')).to.have.lengthOf(1);
-            // TODO: weird iframe behavior?
-            //expect(WRAPPER.find('#viddler-b9cd1cb6')).to.have.lengthOf(1);
-            //expect(WRAPPER.find('iframe')).to.be.ok;
             expect(WRAPPER.find('.global-header').children()).to.have.lengthOf(3);
-            //expect(WRAPPER.find('Carousel').children()).to.have.lengthOf(3);
-            //expect(WRAPPER.find('.sweater').children()).to.have.lengthOf(1);
-
-            //expect(WRAPPER.find('.layout')).children('content').to.have.lengthOf(1);
-            //expect(WRAPPER.find('.content-group .message')).to.have.lengthOf(1)
+            expect(WRAPPER.find('CarouselItem')).to.have.lengthOf(3);
+            expect(WRAPPER.find('.carousel-indicators li')).to.have.lengthOf(3);
+            expect(WRAPPER.find('.carousel-inner .item')).to.have.lengthOf(3);
+            expect(WRAPPER.find('#layout-sweater')).to.have.lengthOf(1);
+            expect(WRAPPER.find('#layout-sweater').children()).to.have.lengthOf(1);
         });
 
         it('has the correct Layout contents', function () {
@@ -46,59 +43,47 @@ export default function() {
             checkHeaderContents(HEADER);
         });
 
-        it('responds to clicking the work modal link', function () {
+        it('responds to clicking the header work modal link', function () {
             const WRAPPER = mount(<Home currentUser={{}} />);
             expect(WRAPPER.state('workOpen')).to.be.false;
             WRAPPER.find('#work-modal-link').simulate('click');
             expect(WRAPPER.state('workOpen')).to.be.true;
-
-            //WRAPPER.find('#work-modal').simulate('hide');
-            //expect(WRAPPER.state('workOpen')).to.be.false;
         });
 
-        it('responds to clicking the contact modal link', function () {
+        it('responds to clicking the header contact modal link', function () {
             const WRAPPER = mount(<Home currentUser={{}} />);
             expect(WRAPPER.state('contactOpen')).to.be.false;
             WRAPPER.find('#contact-modal-link').simulate('click');
             expect(WRAPPER.state('contactOpen')).to.be.true;
+        });
 
-            // TODO: is open state not propagating down to component in unit tests?
-            //WRAPPER.find('#contact-modal').simulate('hide');
-            //expect(WRAPPER.state('contactOpen')).to.be.false;
+        it('responds to clicking the footer work modal link', function () {
+            const WRAPPER = mount(<Home currentUser={{}} />);
+            expect(WRAPPER.state('workOpen')).to.be.false;
+            WRAPPER.find('footer.links').children('a').at(0).simulate('click');
+            expect(WRAPPER.state('workOpen')).to.be.true;
+        });
+
+        it('responds to clicking the footer contact modal link', function () {
+            const WRAPPER = mount(<Home currentUser={{}} />);
+            expect(WRAPPER.state('contactOpen')).to.be.false;
+            WRAPPER.find('footer.links').children('a').at(1).simulate('click');
+            expect(WRAPPER.state('contactOpen')).to.be.true;
+        });
+
+        it('responds to clicking school sign up link', function() {
+            const WRAPPER = mount(<Home currentUser={{}} />);
+            expect(WRAPPER.state('viewOpen')).to.be.false;
+            WRAPPER.find('#video-btn').simulate('click');
+            expect(WRAPPER.state('viewOpen')).to.be.true;
         });
 
         it('opens and closes the video', function () {
             const WRAPPER = mount(<Home currentUser={{}} />);
             expect(WRAPPER.state('viewOpen')).to.be.false;
-            WRAPPER.find('#video-btn').simulate('click');
-            //TODO: how to simulate closing modal?
-
-            //WRAPPER.find('#video-modal').simulate('hide');
-            //expect(WRAPPER.state('viewOpen')).to.be.false;
-        });
-
-        it('clicks through the carousel slides', function () {
-            const WRAPPER = mount(<Home currentUser={{}} />);
-            expect(WRAPPER.find('.carousel-indicators li')).to.have.lengthOf(3);
-            expect(WRAPPER.find('.carousel-inner .item')).to.have.lengthOf(3);
-
-            //TODO: carsousel simulation behavior is really tricky-- might just test for integration
-            /*
-            WRAPPER.find('.carousel-indicators li').at(1).simulate('click');
-            WRAPPER.find('.carousel-indicators li').at(2).simulate('click');
-            expect(WRAPPER.find('.carousel-indicators li').at(2).hasClass('active')).to.be.true;
-
-            expect(WRAPPER.find('.carousel-inner .item').at(2).hasClass('next') ||
-                WRAPPER.find('.carousel-inner .item').at(2).hasClass('active')).to.be.true;
-
-
-            WRAPPER.find('ol.carousel-indicators').children().get(2).simulate('click');
-            expect(WRAPPER.find('ol.carousel-indicators').children().get(2).hasClass('active')).to.be.true;
-            expect(WRAPPER.find('div.carousel-inner').children().get(2).hasClass('active')).to.be.true;
-
-            WRAPPER.find('ol.carousel-indicators').children().get(1).simulate('click');
-            expect(WRAPPER.find('ol.carousel-indicators').children().get(1).hasClass('active')).to.be.true;
-            expect(WRAPPER.find('div.carousel-inner').children().get(1).hasClass('active')).to.be.true;*/
+            // TODO: investigate opening video modal gives minified exception sometimes. LB 06/06/16
+            //WRAPPER.find('#video-btn').simulate('click');
+            //expect(WRAPPER.state('viewOpen')).to.be.true;
         });
     });
 };
