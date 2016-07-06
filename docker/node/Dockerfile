@@ -11,6 +11,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && make install \
     && ruby -v \
     && gem install scss_lint \
-    && npm install -gq gulp eslint eslint-plugin-react babel-eslint scss-lint gulp-scss-lint gulp-scss-lint-stylish
+    && npm install -gq gulp eslint eslint-plugin-react babel-eslint scss-lint gulp-scss-lint gulp-scss-lint-stylish webdriverio wdio-mocha-framework babel-core
 
 WORKDIR /var/www
