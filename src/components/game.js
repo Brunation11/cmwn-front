@@ -56,13 +56,13 @@ var Game = React.createClass({
     componentWillUnmount: function () {
         this.clearEvent();
     },
-    submitFlip: function (flipId) {
+    submitFlip: function (flip) {
         if (!this.props.flipUrl) {
             return;
         }
-        HttpManager.POST({url: this.props.flipUrl}, {'flip_id': flipId}).catch(err => {
+        HttpManager.POST({url: this.props.flipUrl}, {'flip_id': flip}).catch(err => {
             Toast.error(BAD_FLIP);
-            Log.log('Server refused flip update', err, flipId);
+            Log.log('Server refused flip update', err, flip);
         });
     },
     /*
@@ -70,12 +70,10 @@ var Game = React.createClass({
      * there is an event defined in addition to the submission behavior
      */
     [EVENT_PREFIX + 'Flipped']: function (e) {
-        this.setState({flipId: e.gameData.id || e.gameData.game});
-        this.submitFlip(this.state.flipId);
+        this.submitFlip(e.gameData.id);
     },
     [EVENT_PREFIX + 'Flip']: function (e) {
-        this.setState({flipId: e.gameData.id || e.gameData.game});
-        this.submitFlip(this.state.flipId);
+        this.submitFlip(e.gameData.id);
     },
     [EVENT_PREFIX + 'Save']: function (e) {
         var version = 1;
