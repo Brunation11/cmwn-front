@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router';
 import { Carousel, CarouselItem, Button, Modal } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
@@ -73,6 +72,18 @@ export class Home extends React.Component {
         };
     }
 
+    componentDidMount() {
+        History.replace('/home');
+    }
+
+    logoLink() {
+        if (this.props.currentUser.user_id) {
+            History.replace('/profile');
+        } else {
+            History.replace('/home');
+        }
+    }
+
     openViewModal() {
         this.setState({viewOpen: true});
     }
@@ -94,7 +105,6 @@ export class Home extends React.Component {
     }
 
     render() {
-        var logoLink = this.props.currentUser.user_id ? '/profile' : '/';
         return (
             <div id="home" className="home">
                 <Modal id="video-modal"
@@ -107,15 +117,23 @@ export class Home extends React.Component {
                     </Modal.Body>
                 </Modal>
                 <div className="global-header">
-                    <div className="logo" ><Link to={logoLink} ><img alt="Change My World Now"
-                        src={LOGO_URL} />Change My World Now</Link>
+                    <div className="logo" >
+                        <span className="logo-button" onClick={this.logoLink}>
+                            <img alt="Change My World Now" src={LOGO_URL} />
+                        </span>
                     </div>
-                    <div className="header-logo"><Link to={logoLink} ><img alt="Change My World Now"
-                        src={LOGO_HEADER} /><span className="read">Change My World Now</span></Link>
+                    <div className="header-logo">
+                        <span className="logo-button" onClick={this.logoLink}>
+                            <img alt="Change My World Now" src={LOGO_HEADER} />
+                        </span>
                     </div>
-                    <Header workOpen={this.state.workOpen} contactOpen={this.state.contactOpen}
-                        closeWork={this.closeWork.bind(this)} closeContact={this.closeContact.bind(this)}
-                        currentUser={this.props.currentUser}/>
+                    <Header
+                        workOpen={this.state.workOpen}
+                        contactOpen={this.state.contactOpen}
+                        closeWork={this.closeWork.bind(this)}
+                        closeContact={this.closeContact.bind(this)}
+                        currentUser={this.props.currentUser}
+                    />
                 </div>
                 <Carousel>
                     <CarouselItem>
@@ -150,7 +168,6 @@ export class Home extends React.Component {
         );
     }
 }
-
 
 /* istanbul ignore next */
 mapStateToProps = state => {

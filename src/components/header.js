@@ -30,8 +30,7 @@ export const COPY = {
         WORK: <span>
             <p>We are so excited about your interest to work with us!</p>
             <p dangerouslySetInnerHTML={{__html: 'Click <a href=\'mailto:&#106;&#111;&#110;&#105;&#064;' +
-                '&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#097;' +
-                '&#114;&#114;&#111;&#110;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;' +
+                '&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;' +
                 '&#046;&#099;&#111;&#109;?subject=Work With Us!\'>here</a> to contact us.'}}>
             </p>
         </span>,
@@ -98,10 +97,11 @@ class Header extends React.Component {
     }
 
     renderCaptcha() {
+        var captchas;
         if (this.state.verified) {
             return;
         } else {
-            var captchas = document.getElementsByClassName('grecaptcha');
+            captchas = document.getElementsByClassName('grecaptcha');
             if (captchas.length) {
                 grecaptcha.render(captchas[0], {
                     'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l',
@@ -176,7 +176,9 @@ class Header extends React.Component {
                     onHide={this.hideContactModal.bind(this)}>
                     <Modal.Body>
                         {this.state.verified ? '' : COPY.MODALS.PRECAPTCHA}
-                        <div className={ClassNames('grecaptcha', {hidden: (this.props.loggedIn || this.state.verified)})}></div>
+                        <div className={ClassNames('grecaptcha', {
+                            hidden: (this.props.loggedIn || this.state.verified)
+                        })}></div>
                         {this.state.verified ? COPY.MODALS.CONTACT : ''}
                     </Modal.Body>
                 </Modal>
