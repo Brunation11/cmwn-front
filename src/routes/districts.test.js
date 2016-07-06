@@ -18,6 +18,6 @@ var checkElements = function (data, currentUser){
 
 describe('test districts page', function () {
     it('check that all elements in districts appear', function () {
-        checkElements(teacherData.organizations, teacherData);
+        checkElements(teacher_data.organizations, teacher_data);
     });
 });
