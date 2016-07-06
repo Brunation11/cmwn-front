@@ -48,8 +48,14 @@ const COPY = {
     },
     SLIDES: [
         {
-            HEADING: <span>Change my world now is the kids' social activation platform for the <span className="em">now</span> generation</span>,
-            /*I don't know that i love this convention for copy with arbitrary styling. It's clean but doesn't allow for programmatic transformation of text by the js below*/
+            HEADING: (
+                <span>
+                    Change my world now is the kids' social activation platform for the
+                        <span className="em"> now </span>
+                    generation
+                </span>),
+            /*I don't know that i love this convention for copy with arbitrary styling. It's clean but
+              doesn't allow for programmatic transformation of text by the js below*/
             TEXT: '',
             ALT: ''
         },
@@ -65,16 +71,27 @@ const COPY = {
         },
     ],
     HEADINGS: {
-        WORLD_HELP: <span>The World needs help and we believe it is the kids of today who are going to be the ones to save it!</span>,
+        WORLD_HELP: (
+            <span>
+                The World needs help and we believe it is the kids of today who are going to be the ones to
+                save it!
+            </span>),
         SHINE: 'It\'s Time to Shine',
         PARTNERS: 'Our Partners'
     },
     PARAGRAPHS: [
-        <span>At <strong>Change My World Now</strong>, our team is committed to giving this next generation everything they need to take charge of their world and to become compassionate, responsible stewards of the future they are creating. With safety and parents in mind, we have built a place where kids, ages 6-14, can discover the world around them and take action through our amazing games and content.</span>
+        (<span>
+            At <strong>Change My World Now</strong>,
+            our team is committed to giving this next generation everything they need to take charge of their
+            world and to become compassionate, responsible stewards of the future they are creating. With
+            safety and parents in mind, we have built a place where kids, ages 6-14, can discover the world
+            around them and take action through our amazing games and content.
+        </span>)
     ],
     ALERTS: {
         LOGIN: {
-            TEXT: 'Thanks for your interest! We\'ll be launching very soon, and will keep you notified of updates!',
+            TEXT: 'Thanks for your interest! We\'ll be launching very soon, and will keep you notified of ' +
+                'updates!',
             ACTION: 'close'
         },
         SIGNUP: {
@@ -83,17 +100,39 @@ const COPY = {
         }
     },
     MODALS: {
-        WORK: <span><p>We are so excited about your interest to work with us!</p><p>Click <a href="mailto:&#106;&#111;&#110;&#105;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#097;&#114;&#114;&#111;&#110;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;?subject=Work With Us!">here</a> to contact us.</p></span>,
+        WORK: <span>
+            <p>We are so excited about your interest to work with us!</p>
+            <p dangerouslySetInnerHTML={{__html: 'Click <a href=\'mailto:&#106;&#111;&#110;&#105;&#064;' +
+                '&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#097;' +
+                '&#114;&#114;&#111;&#110;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;' +
+                '&#046;&#099;&#111;&#109;?subject=Work With Us!\'>here</a> to contact us.'}}>
+            </p>
+        </span>,
 
         PRECAPTCHA: 'Thanks for your interest! Please check the box below to display contact information.',
         CONTACT: <span>
             <p>Postage can be sent to:</p>
             <p>21 W 46th Street, Suite 605<br />New York, New York 10036<br /></p>
             <p>Or give us a call at &#40;&#54;&#52;&#54;&#41;&#32;&#56;&#54;&#49;&#45;&#48;&#53;&#55;&#49;</p>
-            <p>Click <a href="mailto:&#105;&#110;&#102;&#111;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#106;&#111;&#110;&#105;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;">here</a> to contact us.</p>
+            <p dangerouslySetInnerHTML={{__html: 'Click <a href=\'mailto:&#105;&#110;&#102;&#111;&#064;' +
+                '&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#106;&#111;' +
+                '&#110;&#105;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;' +
+                '&#109;\'>here</a> to contact us.'}}>
+            </p>
         </span>,
 
-        SIGNUP: <span><p>We are so excited about your interest to work with us!</p><p>Click <a href="mailto:&#106;&#111;&#110;&#105;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#099;&#097;&#116;&#104;&#121;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;?subject=Sign up with CMWN&body=Thank you for your interest in Change My World Now!%0D%0A%0D%0AIf you would like to launch Change My World Now in your school please provide the following information and someone from our team will contact you.%0D%0A%0D%0AYour Name:%0D%0AYour School:%0D%0AYour Email:%0D%0ASchool Grades:%0D%0APrincipal Name:%0D%0ASchool Phone:%0D%0ACity/State:">here</a> to contact us.</p></span>
+        SIGNUP: <span>
+            <p>We are so excited about your interest to work with us!</p>
+            <p dangerouslySetInnerHTML={{__html: 'Click <a href=\'mailto:&#106;&#111;&#110;&#105;&#064;' +
+                '&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#099;&#097;' +
+                '&#116;&#104;&#121;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;' +
+                '&#111;&#109;?subject=Sign up with CMWN&body=Thank you for your interest in Change My ' +
+                'World Now!%0D%0A%0D%0AIf you would like to launch Change My World Now in your school ' +
+                'please provide the following information and someone from our team will contact you.' +
+                '%0D%0A%0D%0AYour Name:%0D%0AYour School:%0D%0AYour Email:%0D%0ASchool Grades:' +
+                '%0D%0APrincipal Name:%0D%0ASchool Phone:%0D%0ACity/State:\'>here</a> to contact us.'}}>
+            </p>
+        </span>
     }
 };
 
@@ -165,7 +204,10 @@ var Home = React.createClass({
             <div id="home" className="home">
                 <Modal show={this.state.viewOpen} onHide={() => this.setState({viewOpen: false})}>
                     <Modal.Body>
-                        <iframe id="viddler-b9cd1cb6" src="//www.viddler.com/embed/b9cd1cb6/?f=1&amp;autoplay=1&amp;player=simple&amp;secret=54225444&amp;make_responsive=0" width="100%" height="300" frameBorder="0" scrolling="no" allowFullScreen="1"></iframe>
+                        <iframe id="viddler-b9cd1cb6" src={'//www.viddler.com/embed/b9cd1cb6/?f=1&' +
+                            'autoplay=1&player=simple&secret=54225444&make_responsive=0'}
+                            width="100%" height="300" frameBorder="0" scrolling="no" allowFullScreen="1">
+                        </iframe>
                     </Modal.Body>
                 </Modal>
                 <div className="global-header">
@@ -179,7 +221,12 @@ var Home = React.createClass({
                             <img alt="Change My World Now" src={LOGO_HEADER} />
                         </span>
                     </div>
-                    <Header workOpen={this.state.workOpen} contactOpen={this.state.contactOpen} closeWork={this.closeWork} closeContact={this.closeContact} />
+                    <Header
+                        workOpen={this.state.workOpen}
+                        contactOpen={this.state.contactOpen}
+                        closeWork={this.closeWork}
+                        closeContact={this.closeContact}
+                    />
                 </div>
                 <Carousel>
                     <CarouselItem>
@@ -250,17 +297,20 @@ var Header = React.createClass({
         }
     },
     renderCaptcha: function () {
+        var captchas = document.getElementsByClassName('grecaptcha');
+
         if (this.state.verified) {
             return;
         } else {
-            var captchas = document.getElementsByClassName('grecaptcha');
             if (captchas.length) {
-                grecaptcha.render(captchas[0], {'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l', callback: () => { //eslint-disable-line no-undef
-                    this.setState({
-                        showContact: true,
-                        verified: true
-                    });
-                }});
+                grecaptcha.render(captchas[0], {'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l',
+                    callback: () => { //eslint-disable-line no-undef
+                        this.setState({
+                            showContact: true,
+                            verified: true
+                        });
+                    }
+                });
             }
         }
     },
@@ -299,7 +349,8 @@ var Header = React.createClass({
         Toast.success(COPY.ALERTS.SIGNUP.TEXT);
     },
     render: function () {
-        var loginButtonCopy = Store.getState().currentUser.user_id ? COPY.BUTTONS.PROFILE : COPY.BUTTONS.LOGIN;
+        var loginButtonCopy = Store.getState().currentUser.user_id ?
+            COPY.BUTTONS.PROFILE : COPY.BUTTONS.LOGIN;
         return (
             <div>
                 <Modal show={this.state.demoOpen} onHide={this.confirmDemo}>
@@ -309,7 +360,7 @@ var Header = React.createClass({
                             ref="demoCode"
                             type="text"
                             value={this.state.demoText}
-                            onChange={e => this.setState({demoText: e.target.value})} //eslint-disable-line camelcase
+                            onChange={e => this.setState({demoText: e.target.value})}
                         />
                         <Button onClick={this.confirmDemo}> Submit </Button>
                     </Modal.Body>
@@ -322,7 +373,9 @@ var Header = React.createClass({
                 <Modal show={this.props.contactOpen || this.state.contactOpen} onHide={this.hideContactModal}>
                     <Modal.Body>
                         {this.state.verified ? '' : COPY.MODALS.PRECAPTCHA}
-                        <div className={ClassNames('grecaptcha', {hidden: (this.props.loggedIn || this.state.verified)})}></div>
+                        <div className={ClassNames('grecaptcha', {
+                            hidden: (this.props.loggedIn || this.state.verified)})
+                        }></div>
                         {this.state.verified ? COPY.MODALS.CONTACT : ''}
                     </Modal.Body>
                 </Modal>
@@ -378,7 +431,8 @@ var Layout = React.createClass({
                     <div className="content-group partners">
                         <h2>{COPY.HEADINGS.PARTNERS}</h2>
                         <div className="logos">
-                            {_.map(SOURCES.PARTNERS, url => <div className="cell" style={{backgroundImage: `url(${url})`}} key={Shortid.generate()}></div>)}
+                            {_.map(SOURCES.PARTNERS, url => <div className="cell" style={{backgroundImage:
+                                `url(${url})`}} key={Shortid.generate()}></div>)}
                         </div>
                     </div>
                     <footer className="links">

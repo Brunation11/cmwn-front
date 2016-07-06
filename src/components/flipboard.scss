@@ -1,62 +1,69 @@
 @import 'variables';
 
+$overlay-color: #fff;
+
 .flipboard {
 
-     img {
-         vertical-align: initial;
-     }
+    img {
+        vertical-align: initial;
+    }
 
     .panel-body {
 
-        & > * {
+        & > * { // scss-lint:disable UnnecessaryParentReference
             display: inline-block;
-            padding: 15px;
-            text-align: center;
             padding: $standard;
-        }
-    }
-
-    .flip > a {
-        font-weight: bold;
-        max-width: $flip-standard-size;
-        margin: 0 auto;
-
-        .linkText {
-            margin-bottom: 0;
+            text-align: center;
         }
     }
 
     .flip {
         margin: auto;
- 
+
+        > a {
+            margin: 0 auto;
+            max-width: $flip-standard-size;
+            font-weight: bold;
+
+            .link-text {
+                margin-bottom: 0;
+            }
+        }
+
         &.fill {
-            padding: 5px;
-            border: 0;
-            max-width: 50%;
-            width: 100%;
             margin-top: 0;
             margin-bottom: 0;
+            border: 0;
+            padding: 5px;
+            width: 100%;
+            max-width: 50%;
 
-            .item, img, .overlay, object {
+            .item,
+            img,
+            .overlay,
+            object {
+                z-index: 3;
+                margin: auto;
                 width: 100%;
                 max-width: $max-flip-size;
                 max-height: 236px;
-                margin: auto;
-                z-index: 3;
             }
         }
-        
+
         .item {
-            max-width: $flip-standard-size;
             position: relative;
             margin: auto;
+            max-width: $flip-standard-size;
 
-            .heading, .text, .play{
+            .heading,
+            .text,
+            .play {
                 display: block;
                 padding-bottom: $standard;
             }
 
-            .heading, .play {
+            .heading,
+            .play {
                 font-weight: bold;
             }
 
@@ -69,38 +76,38 @@
             }
 
             .play {
-                font-size: 1.1rem;
-                text-decoration: underline;
                 text-transform: uppercase;
+                text-decoration: underline;
+                font-size: 1.1rem;
             }
         }
 
-        .userFlips {
+        .user-flips {
             color: $copy-medium-gray;
             font-weight: bold;
         }
 
         .overlay {
-            max-width: $flip-standard-size;
-            margin: auto;
-            color: #ffffff;
-            opacity: 0;
-            background: rgba($cmwn-blue, 0.6);
+            display: table-caption;
             position: absolute;
-            overflow: hidden;
             top: 0;
+            right: 0;
             bottom: 0;
             left: 0;
-            right: 0;
-            display: table-caption;
+            transition: opacity .5s;
+            opacity: 0;
+            margin: auto;
+            background: rgba($cmwn-blue, .6);
             padding: $standard;
+            max-width: $flip-standard-size;
+            overflow: hidden;
             text-align: left;
-            transition: opacity 0.5s;
+            color: $overlay-color;
 
             &:hover {
                 opacity: 1;
             }
-            
+
             .relwrap {
                 position: relative;
                 height: 100%;
@@ -114,8 +121,8 @@
         }
 
         p {
+            margin: 5px auto 10px;
             max-width: 200px;
-            margin: 5px auto 10px auto;
         }
     }
 }

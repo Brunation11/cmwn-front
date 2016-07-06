@@ -6,14 +6,9 @@ import Shortid from 'shortid';
 
 import 'components/feed.scss';
 
-var Page = React.createClass({
-    getDefaultProps: function () {
-        return {
-            data: null,
-            transform: _.identity
-        };
-    },
-    renderItems: function () {
+class Page extends React.Component {
+
+    renderItems() {
         if (this.props.data == null) {
             return null;
         }
@@ -25,19 +20,24 @@ var Page = React.createClass({
             return (
                 <li className={'feed-item ' + item.style} key={Shortid.generate()}>
                     <p className="source">
-                        <span className="source-image" style={{backgroundImage: 'url(' + item.sourceImage + ')'}}></span>
-                        <span className="source-user">{item.source}</span><span className="source-posted" > posted</span>
+                        <span className="source-image" style={{backgroundImage: 'url(' +
+                            item.sourceImage + ')'}}></span>
+                        <span className="source-user">{item.source}</span>
+                        <span className="source-posted" > posted</span>
                         <span className="source-date">{date.toLocaleDateString('en-us', options)}</span>
                     </p>
                     <div className="message">
-                        {(_.isString(item.message) ? item.message : _.map(item.message, message => <message.type {...message.attributes}>{message.text}</message.type>))}
+                        {(_.isString(item.message) ? item.message : _.map(item.message,
+                            message => <message.type {...message.attributes}>{message.text}</message.type>))}
                     </div>
-                    <a className="image" href={item.image.href || ''}><img src={item.image.url || item.image} /></a>
+                    <a className="image" href={item.image.href || ''}>
+                        <img src={item.image.url || item.image} /></a>
                 </li>
            );
         });
-    },
-    render: function () {
+    }
+
+    render() {
         return (
            <div className={Classnames('feed', this.props.className)}>
                <ol>
@@ -46,8 +46,12 @@ var Page = React.createClass({
            </div>
         );
     }
-});
+}
+
+Page.defaultProps = {
+    data: null,
+    transform: _.identity
+};
 
 export default Page;
-
 

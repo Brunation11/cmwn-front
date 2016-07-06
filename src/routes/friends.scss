@@ -1,31 +1,39 @@
+@import 'variables';
+
 .friends-page {
 
     .overlay {
         text-align: center;
     }
 
-    .btn{
-        opacity: 1;
+    .btn {
         transition: opacity 1s ease-in-out;
+        opacity: 1;
 
         &.standard {
-            width: 100%;
             margin: 5px 0;
+            width: 100%;
         }
 
         &.faded {
             opacity: 0;
         }
+
+        &.nohover,
+        &.nohover:hover {
+            background-color: $cmwn-blue;
+        }
     }
 
     .prompts {
         text-align: center;
+
         .pending-prompt {
+            margin: 0 auto;
+            text-transform: uppercase;
+            color: $cmwn-white;
             font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
             font-size: 18px;
-            text-transform: uppercase;
-            color: #fff;
-            margin: 0 auto;
         }
     }
 }
