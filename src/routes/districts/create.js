@@ -89,7 +89,7 @@ export class CreateDistrict extends React.Component{
            </Layout>
         );
     }
-};
+}
 
 mapStateToProps = state => {
     var data = {};
