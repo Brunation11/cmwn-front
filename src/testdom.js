@@ -38,8 +38,10 @@ global.window.grecaptcha = {
     render: function(container, params) {
         if (params && params.callback) {
             console.log('cb');
-            // TODO: look into callback problem
-            setTimeout(params.callback, 1000);
+            // TODO: timeout not working but that probably will not fix problem
+            //params.callback();
+            _.delay(() => {console.log('delay');}, 1000);
+            //setTimeout(params.callback, 1000);
         }
         return null;
     },

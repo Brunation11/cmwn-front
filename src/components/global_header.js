@@ -3,7 +3,7 @@ import {Link} from 'react-router';
 import ClassNames from 'classnames';
 import {Button, Glyphicon} from 'react-bootstrap';
 
-// import Store from 'components/store';
+import Store from 'components/store';
 import EventManager from 'components/event_manager';
 
 //import LOGO_URL from 'media/logo.png';

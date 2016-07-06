@@ -41,7 +41,8 @@ class Footer extends React.Component {
             viewOpen: false,
             workOpen: false,
             contactOpen: false,
-            showContact: false
+            showContact: false,
+            verified: false
         };
     }
 
@@ -97,7 +98,7 @@ class Footer extends React.Component {
                 <Modal show={this.state.contactOpen} onHide={this.closeContact.bind(this)}>
                     <Modal.Body>
                         {COPY.MODALS.PRECAPTCHA}
-                        <div className={ClassNames('grecaptcha', {hidden: this.props.loggedIn})}></div>
+                        <div className={ClassNames('grecaptcha', {hidden: (this.props.loggedIn || this.state.verified)})}></div>
                         {this.state.showContact ? COPY.MODALS.CONTACT : ''}
                     </Modal.Body>
                 </Modal>

@@ -151,6 +151,7 @@ export class Home extends React.Component {
     }
 }
 
+
 /* istanbul ignore next */
 mapStateToProps = state => {
     var currentUser = {};

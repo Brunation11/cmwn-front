@@ -40,7 +40,8 @@
     "ruby": "^0.6.1",
     "screenfull": "^3.0.0",
     "seamless-immutable": "^5.1.0",
-    "shortid": "^2.2.4"
+    "shortid": "^2.2.4",
+    "sweetalert2": "^3.3.4"
   },
   "devDependencies": {
     "app-module-path": "^1.1.0",

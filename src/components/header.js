@@ -1,5 +1,6 @@
 import React from 'react';
 import {Input, Button, Modal} from 'react-bootstrap';
+import ClassNames from 'classnames';
 
 import Toast from 'components/toast';
 import Log from 'components/log';
@@ -69,6 +70,7 @@ class Header extends React.Component {
             loginOpen: false,
             signupOpen: false,
             showContact: false,
+            verified: false
         };
     }
 
@@ -96,12 +98,21 @@ class Header extends React.Component {
     }
 
     renderCaptcha() {
-        var captchas = document.getElementsByClassName('grecaptcha');
-        if (captchas.length) {
-            grecaptcha.render(captchas[0], {
-                'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l',
-                callback: () => {console.log('hi');}//this.setState.bind(this, {showContact: true})
-            });
+        if (this.state.verified) {
+            return;
+        } else {
+            var captchas = document.getElementsByClassName('grecaptcha');
+            if (captchas.length) {
+                grecaptcha.render(captchas[0], {
+                    'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l',
+                    callback: () => { //eslint-disable-line no-undef
+                        this.setState({
+                            showContact: true,
+                            verified: true
+                        });
+                    }
+                });
+            }
         }
     }
 
@@ -162,11 +173,11 @@ class Header extends React.Component {
                     </Modal.Body>
                 </Modal>
                 <Modal id="contact-modal" show={this.props.contactOpen || this.state.contactOpen}
-                       onHide={this.hideContactModal.bind(this)}>
+                    onHide={this.hideContactModal.bind(this)}>
                     <Modal.Body>
-                        {COPY.MODALS.PRECAPTCHA}
-                        <div className="grecaptcha"></div>
-                        {this.state.showContact ? COPY.MODALS.CONTACT : ''}
+                        {this.state.verified ? '' : COPY.MODALS.PRECAPTCHA}
+                        <div className={ClassNames('grecaptcha', {hidden: (this.props.loggedIn || this.state.verified)})}></div>
+                        {this.state.verified ? COPY.MODALS.CONTACT : ''}
                     </Modal.Body>
                 </Modal>
                 <Modal id="signup-modal" show={this.state.signupOpen}

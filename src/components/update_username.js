@@ -1,24 +1,30 @@
 import React from 'react';
 import {Input, Panel, Button, Glyphicon} from 'react-bootstrap';
-import Alertify from 'alertify.js';
+import SweetAlert from 'sweetalert2';
 
 import HttpManager from 'components/http_manager';
 import Util from 'components/util';
-import Toast from 'components/toast';
 import ClassNames from 'classnames';
+import Store from 'components/store';
 
 import 'components/update_username.scss';
 
 const IDENTIFIER = 'change-username';
 
 const CHANGE = 'Update your Username';
-const CONFIRM_SET = 'Are you sure? Once you leave this page, you will not be able to change back to {0}.';
-const BAD_UPDATE = 'Could not update your user name.';
-// const CONFIRM_RESET = 'Are you sure? If you change back to {0} you may not be able to return to {1}.';
+const CONFIRM_SET = 'Are you sure you want to change your username? You will not be able to change it back to {0}.';
+const GOOD_UPDATED = 'Username updated to ';
+const BAD_UPDATE = 'Could not update your username.';
+
+
+const TITLES = {
+    SAVED: 'SAVED!',
+    ERROR: 'OH NO!'
+};
 
 const BUTTONS = {
     CONFIRM: 'Yes, change it!',
-    CANCEL: 'No, go back.',
+    CANCEL: 'No',
     GET: 'Generate New Name',
     SET: 'Set {0} as my Username',
     LAST: 'Reset to {0}'
@@ -60,10 +66,16 @@ var UpdateUsername = React.createClass({
                         timeout: 10000
                     })('Username Updated to ' + server.response.username + '!');
                 }).catch(err => {
-                    Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
+                    SweetAlert({
+                        title: TITLES.ERROR,
+                        text: (BAD_UPDATE + (err.message ? ' Message: ' + err.message : '')),
+                        type: 'error',
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
                 });
             }
-        );
+        });
     },
     resetLast: function () {
         this.setState({option: this.state.last, last: this.state.option});
