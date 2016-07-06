@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import HttpManager from 'components/http_manager';
 import Log from 'components/log';
@@ -22,16 +23,22 @@ const ERRORS = {
 const CHANGE_COPY = `You are required to change your password before using ChangeMyWorldNow.com.
         Please update your password using the form below to proceed.`;
 
+const PAGE_UNIQUE_IDENTIFIER = 'change-pass';
+
+var mapStateToProps;
+var OtherPage;
 
 var isPassValid = function (password) {
     return password.length >= 8 && ~password.search(/[0-9]+/);
 };
 
-var Page = React.createClass({
-    getInitialState: function () {
-        return {};
-    },
-    render: function () {
+export class Page extends React.Component {
+    constructor() {
+        super();
+        this.state = {};
+    }
+    
+    render() {
         return (
            <Layout className="change-password">
                 {CHANGE_COPY}
@@ -39,27 +46,28 @@ var Page = React.createClass({
            </Layout>
          );
     }
-});
+}
 
-var ChangePassword = React.createClass({
-    getInitialState: function () {
-        return {
+export class ChangePassword extends React.Component {
+    constructor() {
+        super();
+        this.state = {
             current: '',
             new: '',
             confirm: '',
             extraProps: {}
-        };
-    },
-    componentDidMount: function () {
-        var state = Store.getState();
-        if (state.currentUser.user_id != null) {
+        }
+    }
+    
+    componentDidMount() {
+        if (this.props.currentUser.user_id != null) {
             window.location.href = '/logout';
         }
-    },
-    submit: function () {
+    }
+    
+    submit() {
         var update;
-        var state = Store.getState();
-        if (state.currentUser.user_id != null) {
+        if (this.props.currentUser.user_id != null) {
             window.location.href = '/logout';
         }
         if (!isPassValid(this.state.new)) {
@@ -86,13 +94,14 @@ var ChangePassword = React.createClass({
             Toast.error(ERRORS.NO_MATCH);
             /** @TODO MPR, 02/11/16: check on change, not submit*/
         }
-    },
-    render: function () {
+    }
+    
+    render() {
         return (
             <div>
                 <Panel header={HEADINGS.PASSWORD} className="standard">
                     <form>
-    {''/*                <Input
+                    <Input
                         type="password"
                         value={this.state.current}
                         placeholder="********"
@@ -102,7 +111,7 @@ var ChangePassword = React.createClass({
                         name="currentInput"
                         onChange={e => this.setState({current: e.target.value})}
                     />
-    */}
+    
                     <Input
                         type="password"
                         value={this.state.new}
@@ -125,14 +134,32 @@ var ChangePassword = React.createClass({
                         onChange={e => this.setState({confirm: e.target.value})}
                         {...this.state.extraProps}
                     />
-                    <Button onClick={this.submit}>Update</Button>
+                    <Button onClick={this.submit.bind(this)}>Update</Button>
                     </form>
                 </Panel>
             </div>
         );
     }
-});
+}
 
-export default Page;
+mapStateToProps = state => {
+    var data = {};
+    var loading = true;
+    var currentUser = {};
+    if (state.page && state.page.data != null) {
+        loading = state.page.loading;
+        data = state.page.data;
+        if (state.currentUser != null) {
+            currentUser = state.currentUser;
+        }
+    }
+    return {
+        data,
+        loading,
+        currentUser
+    };
+};
 
-
+OtherPage = connect(mapStateToProps)(Page);
+OtherPage._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
+export default OtherPage;

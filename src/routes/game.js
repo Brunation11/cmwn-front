@@ -10,30 +10,37 @@ import Layout from 'layouts/one_col';
 
 const PAGE_UNIQUE_IDENTIFIER = 'single-game';
 
-var GamePage = React.createClass({
-    getInitialState: function () {
-        return {
+var mapStateToProps;
+var Page;
+
+export class GamePage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
             gameUrl: GLOBALS.GAME_URL + this.props.params.game + '/index.html',
             isStudent: true
         };
-    },
-    componentDidMount: function () {
+    }
+    
+    componentDidMount() {
         this.resolveRole();
-    },
-    componentWillReceiveProps: function () {
+    }
+    
+    componentWillReceiveProps() {
         this.resolveRole();
-    },
-    resolveRole: function () {
+    }
+    
+    resolveRole() {
         var newState = {};
-        var state = Store.getState();
-        if (state.currentUser && state.currentUser.type !== 'CHILD') {
+        if (this.props.currentUser && this.props.currentUser.type !== 'CHILD') {
             newState.isStudent = false;
         } else {
             newState.isStudent = true;
         }
         this.setState(newState);
-    },
-    render: function () {
+    }
+    
+    render() {
         return (
            <Layout>
                 <Game
@@ -47,16 +54,18 @@ var GamePage = React.createClass({
            </Layout>
         );
     }
-});
+}
 
-var mapStateToProps = state => {
+mapStateToProps = state => {
     var data = {};
     var loading = true;
     var currentUser = {};
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
-        currentUser = state.currentUser;
+        if (state.currentUser != null) {
+            currentUser = state.currentUser;
+        }
     }
     return {
         data,
@@ -65,8 +74,7 @@ var mapStateToProps = state => {
     };
 };
 
-
-var Page = connect(mapStateToProps)(GamePage);
+Page = connect(mapStateToProps)(GamePage);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
 
