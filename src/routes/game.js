@@ -26,7 +26,7 @@ var GamePage = React.createClass({
         });
         this.resolveRole();
     },
-    resolveRole() {;
+    resolveRole: function () {
         var state = Store.getState();
         // remember we actually want current user here, not the user whose
         // profile we are looking at
