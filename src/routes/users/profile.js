@@ -150,6 +150,7 @@ export class Profile extends React.Component {
         return (
             <div>
                 <Game
+                    className="modal-game"
                     ref="gameRef"
                     isTeacher={!this.state.isStudent}
                     url={this.state.gameUrl}
@@ -170,7 +171,7 @@ export class Profile extends React.Component {
             onClick = _.noop;
             playText = COMING_SOON;
         } else {
-            onClick = this.showModal.bind(this, GLOBALS.GAME_URL + item.game_id + '/index.html');
+            onClick = this.showModal.bind(this, `${GLOBALS.GAME_URL}${item.game_id}/index.html`);
             playText = PLAY;
         }
         return (
@@ -183,7 +184,7 @@ export class Profile extends React.Component {
                             <span className="play">{playText}</span>
                         </span>
                         <div className={ClassNames('coming-soon', { hidden: !item.coming_soon})} />
-                        <object data={GLOBALS.GAME_URL + item.game_id + '/thumb.jpg'} type="image/png" >
+                        <object data={`${GLOBALS.GAME_URL}${item.game_id}/thumb.jpg`} type="image/png" >
                             <img src={FlipBgDefault}></img>
                         </object>
                     </div>
