@@ -13,38 +13,48 @@ const PAGE_UNIQUE_IDENTIFIER = 'single-game';
 var GamePage = React.createClass({
     getInitialState: function () {
         return {
-            gameUrl: GLOBALS.GAME_URL + this.props.params.game + '/index.html',
             isStudent: true
         };
     },
     componentDidMount: function () {
-        this.resolveRole();
-    },
-    componentWillReceiveProps: function () {
-        this.resolveRole();
-    },
-    resolveRole: function () {
-        var newState = {};
         var state = Store.getState();
-        if (state.currentUser && state.currentUser.type !== 'CHILD') {
-            newState.isStudent = false;
+        this.setState({
+            gameId: this.props.params.game,
+            gameUrl: `${GLOBALS.GAME_URL}${this.props.params.game}/index.html`,
+            flipUrl: state.currentUser._links.user_flip.href,
+            saveUrl: state.currentUser._links.save_game.href,
+        });
+        this.resolveRole();
+    },
+    resolveRole() {;
+        var state = Store.getState();
+        // remember we actually want current user here, not the user whose
+        // profile we are looking at
+        if (state.currentUser &&
+            state.currentUser.type &&
+            state.currentUser.type !== 'CHILD') {
+            this.setState({
+                isStudent: false
+            });
         } else {
-            newState.isStudent = true;
+            this.setState({
+                isStudent: true
+            });
         }
-        this.setState(newState);
     },
     render: function () {
         return (
-           <Layout>
+            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <Game
                     className={PAGE_UNIQUE_IDENTIFIER}
                     ref="gameRef"
                     isTeacher={!this.state.isStudent}
                     url={this.state.gameUrl}
+                    flipUrl={this.state.flipUrl}
+                    saveUrl={this.state.saveUrl}
                     onExit={() => History.push('/profile')}
-                    saveUrl={this.props.currentUser._links.save_game.href}
                 />
-           </Layout>
+            </Layout>
         );
     }
 });
@@ -65,8 +75,6 @@ var mapStateToProps = state => {
     };
 };
 
-
 var Page = connect(mapStateToProps)(GamePage);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
-
