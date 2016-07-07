@@ -13,7 +13,8 @@ const PAGE_UNIQUE_IDENTIFIER = 'single-game';
 var GamePage = React.createClass({
     getInitialState: function () {
         return {
-            gameUrl: GLOBALS.GAME_URL + this.props.params.game + '/index.html',
+            gameUrl: `${GLOBALS.GAME_URL}${this.props.params.game}/index.html`,
+            flipUrl: `${GLOBALS.API_URL}user/${Store.getState().currentUser.user_id}/flip`,
             isStudent: true
         };
     },
@@ -34,8 +35,6 @@ var GamePage = React.createClass({
         this.setState(newState);
     },
     render: function () {
-        var flipUrl = this.state._links && this.state._links.user_flip ?
-            this.state._links.user_flip.href : null;
         return (
            <Layout>
                 <Game
@@ -43,7 +42,7 @@ var GamePage = React.createClass({
                     ref="gameRef"
                     isTeacher={!this.state.isStudent}
                     url={this.state.gameUrl}
-                    flipUrl={flipUrl}
+                    flipUrl={this.state.flipUrl}
                     onExit={() => History.push('/profile')}
                     saveUrl={this.props.currentUser._links.save_game.href}
                 />

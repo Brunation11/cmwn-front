@@ -103,7 +103,6 @@ var Game = React.createClass({
     },
     /* end of default events */
     gameEventHandler: function (e) {
-        console.log(e);
         if (e.name != null) {
             if (_.isFunction(this[EVENT_PREFIX + _.capitalize(e.name)])) {
                 this[EVENT_PREFIX + _.capitalize(e.name)](...arguments);
