@@ -17,7 +17,7 @@ import Util from 'components/util';
 import 'routes/users/profile.scss';
 import FlipBgDefault from 'media/icon_class_blue.png';
 
-const PAGE_UNIQUE_IDENTIFIER = 'class-profile';
+const PAGE_UNIQUE_IDENTIFIER = 'school-profile';
 
 const CLASS_SOURCE = GenerateDataSource('group_class', PAGE_UNIQUE_IDENTIFIER);
 
@@ -27,31 +27,41 @@ const HEADINGS = {
     DISTRICTS: 'Member of Districts'
 };
 
-const ADMIN_TEXT = 'School Administrative Dashboard';
+const TEXT = {
+    ADMIN: 'School Administrative Dashboard',
+    NO_SCHOOLS: 'Sorry, none of your schools have profiles to display at this time.',
+    IMPORT: 'Import Spreadsheets',
+    EDIT: 'Edit School',
+};
 
-const ORG_CREATED = 'School created successfully';
+const SUCCESS = 'School created successfully';
 
-const NO_SCHOOLS = 'Sorry, none of your schools have profiles to display at this time.';
+var mapStateToProps;
+var Page;
 
-var Component = React.createClass({
-    getInitialState: function () {
-        return {
+export class SchoolProfile extends React.Component {
+    constructor() {
+        super();
+        this.state = {
             school: [],
             districts: [],
             classes: [],
             users: []
         };
-    },
-    componentDidMount: function () {
+    }
+
+    componentDidMount() {
         this.setState(this.props.data);
         if (QueryString.parse(location.search).message === 'created') {
-            Toast.success(ORG_CREATED);
+            Toast.success(SUCCESS);
         }
-    },
-    componentWillReceiveProps: function (nextProps) {
+    }
+
+    componentWillReceiveProps(nextProps) {
         this.setState(nextProps.data);
-    },
-    renderDistricts: function () {
+    }
+
+    renderDistricts() {
         var links;
         if (!this.props.data || !this.props.data._embedded || !this.props.data._embedded.organization ||
             this.props.data._embedded.organization.district) {
@@ -65,13 +75,14 @@ var Component = React.createClass({
             );
         });
         return (
-            <p>
+            <p className="school-districts-list">
                 {`${HEADINGS.DISTRICTS}: `}
                 {links}
             </p>
         );
-    },
-    renderFlip: function (item){
+    }
+
+    renderFlip(item) {
         return (
             <div className="flip" key={Shortid.generate()}>
                 <Link to={`/class/${item.group_id}/profile`}>
@@ -80,51 +91,54 @@ var Component = React.createClass({
                 </Link>
             </div>
         );
-    },
-    renderAdminLink: function () {
+    }
+
+    renderAdminLink() {
         if (!Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
         return (
-            <p><a href={`/school/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
+            <p><a href={`/school/${this.props.data.group_id}/view`}>{TEXT.ADMIN}</a></p>
         );
-    },
-    renderImport: function () {
+    }
+
+    renderImport() {
         if (this.state == null || this.state._links == null || this.state._links.import == null) {
             return null;
         }
         return (
             <EditLink className="green" base="/school" id={this.state.group_id} scope={this.state.scope}
-                text="Import Spreadsheets"/>
+                text={TEXT.IMPORT}/>
         );
-    },
-    render: function () {
+    }
+
+    render() {
         if (this.props.data == null) {
             return (
-                <h2>{NO_SCHOOLS}</h2>
+                <h2>{TEXT.NO_SCHOOLS}</h2>
             );
         }
         return (
-           <Layout className="profile">
+           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                <Panel header={this.props.data.title} className="standard">
                    <p className="right" >
-                       <EditLink className="purple" text="Edit School" uuid={this.state.group_id}
+                       <EditLink className="purple" text={TEXT.EDIT} uuid={this.state.group_id}
                            base="/school" canUpdate={Util.decodePermissions(this.state.scope).update} />
-                       {this.renderImport()}
+                       {this.renderImport().bind(this)}
                    </p>
-                   {this.renderAdminLink()}
-                   {this.renderDistricts()}
+                   {this.renderAdminLink().bind(this)}
+                   {this.renderDistricts().bind(this)}
                    {this.props.data.description}
                </Panel>
                <CLASS_SOURCE>
-                   <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.MY_CLASSES} />
+                   <FlipBoard renderFlip={this.renderFlip.bind(this)} header={HEADINGS.MY_CLASSES} />
                </CLASS_SOURCE>
            </Layout>
         );
     }
-});
+}
 
-var mapStateToProps = state => {
+mapStateToProps = state => {
     var data = {};
     var loading = true;
     if (state.page && state.page.data != null) {
@@ -137,6 +151,7 @@ var mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(Component);
+Page = connect(mapStateToProps)(SchoolProfile);
+Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
 
