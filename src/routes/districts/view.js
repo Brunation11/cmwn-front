@@ -13,7 +13,6 @@ import Util from 'components/util';
 import History from 'components/history';
 import GenerateDataSource from 'components/datasource';
 import Text from 'components/nullable_text';
-import Store from 'components/store';
 import {Table, Column} from 'components/table';
 
 const DISTRICT_CREATED = 'Disctrict created successfully';
@@ -36,17 +35,23 @@ const SCHOOL_SOURCE = GenerateDataSource('group_school', PAGE_UNIQUE_IDENTIFIER)
 const CLASS_SOURCE = GenerateDataSource('group_class', PAGE_UNIQUE_IDENTIFIER);
 const USER_SOURCE = GenerateDataSource('org_users', PAGE_UNIQUE_IDENTIFIER);
 
-var Component = React.createClass({
-    componentDidMount: function () {
+var mapStateToProps;
+var Page;
+
+export class ViewDistrict extends React.Component{
+    constructor(){
+        super();
+    }
+
+    componentDidMount() {
         if (QueryString.parse(location.search).message === 'created') {
             Toast.success(DISTRICT_CREATED);
         }
-    },
-    render: function () {
-        var state = Store.getState();
+    }
+    render() {
         var code = this.props.data.meta == null ? null : this.props.data.meta.code;
         var systemId = this.props.data.meta == null ? null : this.props.data.meta.system_id;
-        var showHelpers = state.currentUser.type === 'ADULT';
+        var showHelpers = this.props.currentUser.type === 'ADULT';
         if (this.props.data.org_id == null) {
             return null;
         }
@@ -162,21 +167,26 @@ var Component = React.createClass({
            </Layout>
         );
     }
-});
+}
 
-var mapStateToProps = state => {
+mapStateToProps = state => {
     var data = {};
+    var currentUser = {}; // eslint-disable-line no-unused-vars
     var loading = true;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
+        if (state.currentUser != null){
+            currentUser = state.currentUser;
+        }
     }
     return {
         data,
-        loading
+        loading,
+        currentUser
     };
 };
 
-var Page = connect(mapStateToProps)(Component);
+Page = connect(mapStateToProps)(ViewDistrict);
 export default Page;
 
