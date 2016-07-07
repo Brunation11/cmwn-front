@@ -34,6 +34,8 @@ var GamePage = React.createClass({
         this.setState(newState);
     },
     render: function () {
+        var flipUrl = this.state._links && this.state._links.user_flip ?
+            this.state._links.user_flip.href : null;
         return (
            <Layout>
                 <Game
@@ -41,6 +43,7 @@ var GamePage = React.createClass({
                     ref="gameRef"
                     isTeacher={!this.state.isStudent}
                     url={this.state.gameUrl}
+                    flipUrl={flipUrl}
                     onExit={() => History.push('/profile')}
                     saveUrl={this.props.currentUser._links.save_game.href}
                 />

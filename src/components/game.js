@@ -70,12 +70,20 @@ var Game = React.createClass({
      * there is an event defined in addition to the submission behavior
      */
     [EVENT_PREFIX + 'Flipped']: function (e) {
-        this.setState({flipId: e.gameData.id || e.gameData.game});
-        this.submitFlip(this.state.flipId);
+        var self = this;
+        self.setState({
+            flipId: e.gameData.id || e.gameData.game
+        }, () => {
+            self.submitFlip(self.state.flipId);
+        });
     },
     [EVENT_PREFIX + 'Flip']: function (e) {
-        this.setState({flipId: e.gameData.id || e.gameData.game});
-        this.submitFlip(this.state.flipId);
+        var self = this;
+        self.setState({
+            flipId: e.gameData.id || e.gameData.game
+        }, () => {
+            self.submitFlip(self.state.flipId);
+        });
     },
     [EVENT_PREFIX + 'Save']: function (e) {
         var version = 1;
@@ -95,6 +103,7 @@ var Game = React.createClass({
     },
     /* end of default events */
     gameEventHandler: function (e) {
+        console.log(e);
         if (e.name != null) {
             if (_.isFunction(this[EVENT_PREFIX + _.capitalize(e.name)])) {
                 this[EVENT_PREFIX + _.capitalize(e.name)](...arguments);
