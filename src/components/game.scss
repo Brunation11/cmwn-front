@@ -39,9 +39,6 @@
             iframe {
                 // scss-lint:disable all
                 position: fixed;
-                top: 50%;
-                transform: translateY(-55%);
-                z-index: $z-override;
                 width: $game-fullscreen-width-portrait;
                 max-width: $game-fullscreen-width-portrait;
                 height: $game-fullscreen-height-portrait;
@@ -95,10 +92,6 @@
             iframe {
                 // scss-lint:disable all
                 position: fixed;
-                top: 50%;
-                transform: translateY(-50%);
-                z-index: $z-override;
-                margin: auto;
                 width: $game-fullscreen-width-landscape;
                 max-width: $game-fullscreen-width-landscape;
                 height: $game-fullscreen-height-landscape;

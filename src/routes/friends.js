@@ -75,8 +75,9 @@ var Component = React.createClass({
             <PopOver
                 element={item}
                 type="user"
-                body={this.renderUserFlip(item)}
-            />
+            >
+                {this.renderUserFlip(item)}
+            </PopOver>
         );
     },
     renderUserFlip: function (item) {
@@ -114,7 +115,9 @@ var Component = React.createClass({
                     <Paginator rowCount={this.props.rowCount} currentPage={this.props.currentPage}
                         pageCount={this.props.pageCount} data={this.props.data} pagePaginator={true}>
                        <FlipBoard
-                           renderFlip={this.renderUserFlip}
+                            // add conditional to check if user has flips
+                            // render either renderflip or renderuserflip
+                           renderFlip={this.renderFlip}
                            header={HEADINGS.FRIENDS}
                            transform={data => {
                                var image;
@@ -164,5 +167,4 @@ var mapStateToProps = state => {
 var Page = connect(mapStateToProps)(Component);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
-
 

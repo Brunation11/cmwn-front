@@ -75,7 +75,8 @@ var GamePage = React.createClass({
                     show={this.state.gameOn}
                     onHide={this.hideModal}
                     keyboard={false}
-                    backdrop="static">
+                    backdrop="static"
+                >
                     <Modal.Body>
                         <Game
                             ref="gameRef"
@@ -118,4 +119,3 @@ var mapStateToProps = state => {
 var Page = connect(mapStateToProps)(GamePage); //eslint-disable-line no-undef
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
-
