@@ -57,7 +57,7 @@ export class ViewDistrict extends React.Component{
         }
         return (
             <Layout>
-                <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard">
+                <Panel id="panel-1" header={HEADINGS.TITLE + this.props.data.title} className="standard">
                     <p className="right" >
                         <EditLink className="purple" text="Edit District" base="/district"
                             uuid={this.props.data.org_id}
@@ -77,7 +77,8 @@ export class ViewDistrict extends React.Component{
                         <p></p>
                     </Text>
                 </Panel>
-                <Panel header={HEADINGS.SCHOOLS} className={ClassNames('standard', {hidden: !showHelpers})}>
+                <Panel id="panel-2" header={HEADINGS.SCHOOLS} className=
+                        {ClassNames('standard', {hidden: !showHelpers})}>
                     <a onClick={() => History.push('/schools')}>View All Your Schools</a>
                     <SCHOOL_SOURCE>
                         <Table className="admin">
@@ -106,7 +107,8 @@ export class ViewDistrict extends React.Component{
                         </Table>
                     </SCHOOL_SOURCE>
                 </Panel>
-                <Panel header={HEADINGS.CLASSES} className={ClassNames('standard', {hidden: !showHelpers})}>
+                <Panel id="panel-3" header={HEADINGS.CLASSES} className=
+                        {ClassNames('standard', {hidden: !showHelpers})}>
                     <a onClick={() => History.push('/classes')}>View All Your Classes</a>
                     <CLASS_SOURCE>
                         <Table className="admin">
@@ -135,7 +137,8 @@ export class ViewDistrict extends React.Component{
                         </Table>
                     </CLASS_SOURCE>
                 </Panel>
-                <Panel header={HEADINGS.USERS} className={ClassNames('standard', {hidden: !showHelpers})}>
+                <Panel id="panel-4" header={HEADINGS.USERS} className=
+                        {ClassNames('standard', {hidden: !showHelpers})}>
                     <a onClick={() => History.push('/users')}>View All Your Users</a>
                     <USER_SOURCE>
                         <Table className="admin">
