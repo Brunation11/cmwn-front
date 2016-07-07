@@ -439,14 +439,17 @@ gulp.task('coverage', function () {
     });
 });
 
+
 gulp.task('e2e', () => {
     var overrideHostIP = process.env.DOCKER_HOST_IP;
     var hostIP = overrideHostIP || execSync('docker-machine ip front').toString().split('\n')[0];
     if (hostIP === '' || hostIP == null) {
         console.error('No docker IP available for selenium host. Integration tests will fail.');
     }
+    var browser = args.firefox ? 'firefox' : 'chrome'; // chrome by default
     return gulp.src('wdio.conf.js').pipe(webdriver({
-        host: hostIP
+        host: hostIP,
+        capabilities: [{ browserName: browser }]
     }));
 });
 

@@ -109,7 +109,7 @@ export class Profile extends React.Component {
                <p className="right" >
                    <EditLink id="edit-button" className="purple" text="Edit Class" base="/class"
                     uuid={this.state.group_id} canUpdate=
-                    {Util.decodePermissions(this.state.scope).update} />
+                        {Util.decodePermissions(this.state.scope).update} />
                </p>
                {this.renderAdminLink()}
            </Panel>
