@@ -16,10 +16,9 @@ const PAGE_UNIQUE_IDENTIFIER = 'single-game';
 var GamePage = React.createClass({
     getInitialState: function () {
         return {
-            gameUrl: GLOBALS.GAME_URL + this.props.params.game + '/index.html',
-            isStudent: true,
-            gameOn: false,
-            PAGE_UNIQUE_IDENTIFIER: this.props.params.game
+            gameUrl: `${GLOBALS.GAME_URL}${this.props.params.game}/index.html`,
+            flipUrl: `${GLOBALS.API_URL}user/${Store.getState().currentUser.user_id}/flip`,
+            isStudent: true
         };
     },
     componentDidMount: function () {
@@ -62,9 +61,9 @@ var GamePage = React.createClass({
                     ref="gameRef"
                     isTeacher={!this.state.isStudent}
                     url={this.state.gameUrl}
-                    onExit={() =>
-                        History.push('/profile')
-                    }
+                    flipUrl={this.state.flipUrl}
+                    saveUrl={this.props.currentUser._links.save_game.href}
+                    onExit={() => History.push('/profile')}
                 />
             );
         }
