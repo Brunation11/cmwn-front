@@ -14,27 +14,26 @@ const ERRORS = {
     BAD_DELETE: 'Sorry, there was a problem deleting. Please refresh and try again.'
 };
 
-var Page = React.createClass({
-    getDefaultProps: function () {
-        return {base: '/'};
-    },
-    getInitialState: function () {
-        return {};
-    },
-    componentDidMount: function () {
+class Page extends React.Component {
+    constructor() {
+        super();
+        this.state = {};
+    }
+    componentDidMount() {
         this.setupState(this.props);
-    },
-    componentWillReceiveProps: function (nextProps) {
+    }
+    componentWillReceiveProps(nextProps) {
         this.setupState(nextProps);
-    },
-    setupState: function (props) {
+    }
+    setupState(props) {
         var state = {};
         state.base = props.base;
         state.uuid = props.uuid || props.id;
-        state.canDelete = props.canDelete != null ? props.canDelete : Util.decodePermissions(props.scope).delete;
+        state.canDelete = props.canDelete !=
+            null ? props.canDelete : Util.decodePermissions(props.scope).delete;
         this.setState(state);
-    },
-    suspendAccount: function () {
+    }
+    suspendAccount() {
         if (window.confirm(CONFIRM_DELETE)) { //eslint-disable-line no-alert
             HttpManager.DELETE({url: GLOBALS.API_URL.slice(0, -1) + this.state.base + '/' + this.state.uuid})
                 .then(() => {
@@ -45,16 +44,23 @@ var Page = React.createClass({
                     Log.error('User not deleted: ' + err.message, err);
                 });
         }
-    },
-    render: function () {
-        if ((!this.state.canDelete && !this.state.scope) || (this.state.uuid == null && this.state.id == null)) {
+    }
+
+    render() {
+        if (
+            (!this.state.canDelete && !this.state.scope) ||
+            (this.state.uuid == null && this.state.id == null)
+        ) {
             return null;
         }
         return (
-            <Button className={this.props.className + ' standard'} onClick={this.suspendAccount} >{this.props.text ? this.props.text : DELETE}</Button>
+            <Button className={this.props.className + ' standard'}
+                onClick={this.suspendAccount.bind(this)} >
+                {this.props.text ? this.props.text : DELETE}</Button>
         );
     }
-});
+}
+
+Page.defaultProps = {base: '/'};
 
 export default Page;
-

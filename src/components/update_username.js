@@ -1,30 +1,45 @@
 import React from 'react';
-import {Input, Panel, Button, Glyphicon} from 'react-bootstrap';
-import Alertify from 'alertify.js';
+import {Panel, Button, Glyphicon} from 'react-bootstrap';
+import SweetAlert from 'sweetalert2';
 
 import HttpManager from 'components/http_manager';
 import Util from 'components/util';
-import Toast from 'components/toast';
 import ClassNames from 'classnames';
+import Store from 'components/store';
 
 import 'components/update_username.scss';
 
 const IDENTIFIER = 'change-username';
 
-const CHANGE = 'Update your Username';
-const CONFIRM_SET = 'Are you sure? Once you leave this page, you will not be able to change back to {0}.';
+const TITLES = {
+    SAVED: 'SAVED!',
+    ERROR: 'OH NO!'
+};
+
+const CHANGE = 'create a new username';
+const CONFIRM_SET = 'Are you sure you want to change your username? ' +
+    'You will not be able to change it back to {0}.';
 const BAD_UPDATE = 'Could not update your user name.';
+const GOOD_UPDATED = 'Username updated to ';
 // const CONFIRM_RESET = 'Are you sure? If you change back to {0} you may not be able to return to {1}.';
 
 const BUTTONS = {
-    CONFIRM: 'Yes, change it!',
+    CONFIRM: 'How about this one?',
+    PREVIOUS: 'This name is still available!',
+    ORIGINAL: 'You can also keep your original.',
     CANCEL: 'No, go back.',
     GET: 'Generate New Name',
     SET: 'Set {0} as my Username',
     LAST: 'Reset to {0}'
 };
 
-var Page = React.createClass({
+const COPY = {
+    NOTE: 'Click to select the name you want.',
+    DISCLAIMER: 'Note: Once you change your username, you won\'t be able to go back to your original.'
+};
+
+
+var UpdateUsername = React.createClass({
     getInitialState: function () {
         return {
             username: this.props.username.slice(0, -3),
@@ -48,18 +63,47 @@ var Page = React.createClass({
         this.setState({tooltipsOpen: true});
     },
     setChildUsername: function () {
-        Alertify
-            .okBtn(BUTTONS.CONFIRM)
-            .cancelBtn(BUTTONS.CANCEL)
-            .confirm(Util.formatString(CONFIRM_SET, this.state.original), () => {
-                HttpManager.POST({url: 'https://api-dev.changemyworldnow.com/user-name'}, {user_name: this.state.option}).then(server => { // eslint-disable-line
-                    this.setState({username: this.state.option});
-                    Toast.spawn({addnCls: 'humane-flatty-success', waitForMove: false, timeout: 10000})('Username Updated to ' + server.response.username + '!');
+        SweetAlert({
+            text: Util.formatString(CONFIRM_SET, this.state.original),
+            type: 'warning',
+            showConfirmButton: true,
+            confirmButtonText: BUTTONS.CONFIRM,
+            confirmButtonColor: '#47B72C',
+            confirmButtonClass: 'cmwn-font float-shadow',
+            showCancelButton: true,
+            cancelButtonText: BUTTONS.CANCEL,
+            cancelButtonColor: '#7829BB',
+            cancelButtonClass: 'cmwn-font float-shadow',
+            closeOnConfirm: false,
+            buttonStyling: false
+        }).then(isConfirm => {
+            if (isConfirm) {
+                HttpManager.POST({
+                    url: Store.getState().page.data._links.user_name.href
+                }, {
+                    user_name: this.state.option // eslint-disable-line
+                }).then(server => {
+                    this.setState({
+                        username: this.state.option
+                    });
+                    SweetAlert({
+                        title: TITLES.SAVED,
+                        text: (GOOD_UPDATED + server.response.username + '!'),
+                        type: 'success',
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
                 }).catch(err => {
-                    Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
+                    SweetAlert({
+                        title: TITLES.ERROR,
+                        text: (BAD_UPDATE + (err.message ? ' Message: ' + err.message : '')),
+                        type: 'error',
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
                 });
             }
-        );
+        });
     },
     resetLast: function () {
         this.setState({option: this.state.last, last: this.state.option});
@@ -75,27 +119,41 @@ var Page = React.createClass({
         return (
            <div className="update-username-container">
                 <div className="left">
-                    <Input
-                        type="text"
-                        value={this.state.option}
-                        disabled
-                        label="Current Username:"
-                    />
-                    <Button className="purple username-btn generate" onClick={this.reloadChildUsername}><Glyphicon glyph="repeat" /> {BUTTONS.GET}</Button>
+                    <Button
+                        className="purple username-btn username-picker generate"
+                        onClick={this.reloadChildUsername}
+                    >
+                        <Glyphicon glyph="repeat" /> {BUTTONS.GET}
+                    </Button>
                     <br />
-                    <Button className="green username-btn submit" onClick={this.setChildUsername}>{Util.formatString(BUTTONS.CONFIRM)}</Button>
+                    <Button className="green username-btn username-picker" onClick={this.setChildUsername}>
+                        {BUTTONS.CONFIRM}
+                        <br />
+                        <span className="username username-picker">
+                            {this.state.option}
+                        </span>
+                    </Button>
                     <br />
-                    <Button className="blue alternate-usernames-btn username-btn" onClick={this.resetLast}>Select Last Option: {this.state.last}</Button>
+                    <Button className="green username-btn username-picker" onClick={this.resetLast}>
+                        {BUTTONS.PREVIOUS}
+                        <br />
+                        <span className="username username-picker">
+                            {this.state.last}
+                        </span>
+                    </Button>
                     <br />
-                    <Button className="blue alternate-usernames-btn username-btn" onClick={this.resetOriginal}>Select Original: {this.state.original}</Button>
+                    <Button className="green username-btn username-picker" onClick={this.resetOriginal}>
+                        {BUTTONS.ORIGINAL}
+                        <br />
+                        <span className="username username-picker">
+                            {this.state.original}
+                        </span>
+                    </Button>
                 </div>
                 <div className="right">
                     <div className={ClassNames('note', {open: this.state.tooltipsOpen})}>
-                        <p>love your new username? Be sure to click "YES, CHANGE IT!" to make it yours forever!</p>
-                        <p className="disclaimer">Note: Once you choose to set the new username, you won't be able to change it again.</p>
-                    </div>
-                    <div className="reminder-container">
-                        <p className={ClassNames('reminder', {animate: this.state.tooltipsOpen})}>Changed your mind? You can choose from the last choice or keep your same username!</p>
+                        <p>{COPY.NOTE}</p>
+                        <p className="disclaimer">{COPY.DISCLAIMER}</p>
                     </div>
                 </div>
            </div>
@@ -116,5 +174,5 @@ var Page = React.createClass({
     }
 });
 
-export default Page;
+export default UpdateUsername;
 
