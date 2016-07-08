@@ -6,7 +6,6 @@ import _ from 'lodash';
 import {Button, Glyphicon} from 'react-bootstrap';
 
 import getEventsForGame from 'components/game_events';
-import SkribbleMocks from 'routes/users/mock_skribble_data';
 
 import 'components/game.scss';
 
@@ -77,15 +76,15 @@ var Game = React.createClass({
     },
     gameEventHandler: function (e) {
         if (e.name != null) {
-            if (_.isFunction(this[EVENT_PREFIX + _.capitalize(e.name)])) {
+            if (_.isFunction(this[EVENT_PREFIX + _.upperFirst(e.name)])) {
+                this[EVENT_PREFIX + _.upperFirst(e.name)](...arguments);
+            }
+            if (_.isFunction(this.state.eventHandler[EVENT_PREFIX + _.upperFirst(e.name)])) {
                 this.state.eventHandler[EVENT_PREFIX + _.upperFirst(e.name)](...arguments);
             }
-            if (_.isFunction(this.props['on' + _.capitalize(e.name)])) {
-                this.props['on' + _.capitalize(e.name)](...arguments);
+            if (_.isFunction(this.props['on' + _.upperFirst(e.name)])) {
+                this.props['on' + _.upperFirst(e.name)](...arguments);
             }
-        }
-        if (e && e.respond != null) {
-            SkribbleMocks(e);
         }
 
     },

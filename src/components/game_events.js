@@ -10,28 +10,50 @@ import Skribble from 'components/game_events/skribble';
 
 const BAD_FLIP = 'There was a problem registering your earned flip. Please try again in a little while';
 
-var resolveFinalMediaState = function (segments, result) {
+var mediaCache = {};
+
+var resolveFinalMediaState = function (segments, result, parentItem = {}) {
     var url = GLOBALS.API_URL + 'media';
     var splitSegments = segments.split('/');
     var nextSegment = splitSegments.shift();
+    var isBase = false;
     var item;
 
+    if (result) parentItem.items = result._embedded.items;
+
+    //cache hit.
+    //if (mediaCache[segments] != null) return mediaCache[segments];
+
     //base case. we have results and no further segments to resolve
-    if (!nextSegment && result != null) return Promise.resolve(result);
+    if (!nextSegment && result != null) {
+        mediaCache[segments] = parentItem;
+        return Promise.resolve(parentItem);
+    }
 
     if (result != null) {
         item = _.find(result._embedded.media, i => i.name === nextSegment);
         //api is inconsistent. The following line can be removed once this is rectified
         if (!item) item = _.find(result._embedded.items, i => i.name === nextSegment);
-        if (!item) return Promise.reject('Error: 404, provided media path does not exist');
+        if (!item) return Promise.reject('Error: 404, provided media path ' + nextSegment + ' does not exist');
         url += '/' + item.media_id;
     } else {
         //initial case. no results, need the base media folders
         splitSegments.unshift(nextSegment);
+        if (mediaCache['__base'] != null) {
+            return Promise.resolve(resolveFinalMediaState(splitSegments.join('/'), mediaCache['__base'], item));
+        }
+        isBase = true;
     }
 
-    return HttpManager.GET(url).then(server =>
-        resolveFinalMediaState(splitSegments.join('/'), server.response));
+    if (item && mediaCache[item.media_id] != null) {
+        return Promise.resolve(resolveFinalMediaState(splitSegments.join('/'), mediaCache[item.media_id], item));
+    } else {
+        return HttpManager.GET(url).then(server => {
+            var id = isBase ? '__base' : item.media_id;
+            mediaCache[id] = server.response;
+            return resolveFinalMediaState(splitSegments.join('/'), server.response, item);
+        });
+    }
 };
 
 export default function (eventPrefix, gameId, _links, exitCallback) {
@@ -73,10 +95,12 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
         setData: function () {
         },
         getMedia: function (e) {
+            var respond = e.respond;
+            console.log('Requested path ' + e.gameData.path);
             e.gameData = e.gameData || {};
             e.gameData.path = e.gameData.path || 'skribble/menu';
             resolveFinalMediaState(e.gameData.path)
-                .then(response => e.respond(response._embedded.items))
+                .then(response => respond(response))
                 .catch(err => Log.error(err));
         },
         getFriends: function (e) {
@@ -1054,8 +1078,6 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
             /* eslint-enable */
         }
     };
-
-    DEFAULT_EVENTS.getMedia({});
 
     events = DEFAULT_EVENTS;
     if (gameId === 'skribble') {
