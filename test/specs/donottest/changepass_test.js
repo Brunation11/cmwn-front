@@ -1,4 +1,4 @@
-var login = require("./login");
+var login = require("../login");
 var time = 60000; // one minute
 
 describe('tests changing password', function() {

@@ -1,4 +1,4 @@
-var login = require("./login");
+var login = require("../login");
 var USER = "teacher";
 var PASSWD = "business2";
 var time = 60000; // one minute
