@@ -1,43 +1,39 @@
 import React from 'react';
 import {Panel, Button, Glyphicon} from 'react-bootstrap';
 import SweetAlert from 'sweetalert2';
+import ClassNames from 'classnames';
 
+import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
 import Util from 'components/util';
-import ClassNames from 'classnames';
 import Store from 'components/store';
 
 import 'components/update_username.scss';
 
 const IDENTIFIER = 'change-username';
+const CHANGE = 'create a new username';
+const CONFIRM_SET = 'Are you sure you want to change your username? You will not be able to change it back to {0}.'; //eslint-disable-line max-len
+const GOOD_UPDATED = 'Username updated to ';
+const BAD_UPDATE = 'Could not update your user name.';
+
+const BUTTONS = {
+    GENERATE: 'Generate New Name',
+    NEW: 'How about this one?',
+    PREVIOUS: 'This name is still available!',
+    ORIGINAL: 'You can also keep your original.',
+    CONFIRM: 'Yes, change it!',
+    CANCEL: 'No',
+};
 
 const TITLES = {
     SAVED: 'SAVED!',
     ERROR: 'OH NO!'
 };
 
-const CHANGE = 'create a new username';
-const CONFIRM_SET = 'Are you sure you want to change your username? ' +
-    'You will not be able to change it back to {0}.';
-const BAD_UPDATE = 'Could not update your user name.';
-const GOOD_UPDATED = 'Username updated to ';
-// const CONFIRM_RESET = 'Are you sure? If you change back to {0} you may not be able to return to {1}.';
-
-const BUTTONS = {
-    CONFIRM: 'How about this one?',
-    PREVIOUS: 'This name is still available!',
-    ORIGINAL: 'You can also keep your original.',
-    CANCEL: 'No, go back.',
-    GET: 'Generate New Name',
-    SET: 'Set {0} as my Username',
-    LAST: 'Reset to {0}'
-};
-
 const COPY = {
     NOTE: 'Click to select the name you want.',
     DISCLAIMER: 'Note: Once you change your username, you won\'t be able to go back to your original.'
 };
-
 
 var UpdateUsername = React.createClass({
     getInitialState: function () {
@@ -54,7 +50,7 @@ var UpdateUsername = React.createClass({
         };
     },
     reloadChildUsername: function () {
-        HttpManager.GET({url: 'https://api-dev.changemyworldnow.com/user-name'}).then(server => {
+        HttpManager.GET({url: `${GLOBALS.API_URL}user-name`}).then(server => {
             this.setState({last: this.state.option, option: server.response.user_name});
         }).catch(err => {}); // eslint-disable-line
         this.setStyleOnClick();
@@ -123,11 +119,11 @@ var UpdateUsername = React.createClass({
                         className="purple username-btn username-picker generate"
                         onClick={this.reloadChildUsername}
                     >
-                        <Glyphicon glyph="repeat" /> {BUTTONS.GET}
+                        <Glyphicon glyph="repeat" /> {BUTTONS.GENERATE}
                     </Button>
                     <br />
                     <Button className="green username-btn username-picker" onClick={this.setChildUsername}>
-                        {BUTTONS.CONFIRM}
+                        {BUTTONS.NEW}
                         <br />
                         <span className="username username-picker">
                             {this.state.option}

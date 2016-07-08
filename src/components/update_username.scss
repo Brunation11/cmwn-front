@@ -6,6 +6,13 @@
 
 .float-shadow {
     display: inline-block;
+    position: relative;
+    transform: translateZ(0);
+    box-shadow: 0 0 1px $cmwn-black;
+    vertical-align: middle;
+    transition-duration: .3s;
+    transition-property: transform;
+    backface-visibility: hidden;
 }
 
 .float-shadow::before {
@@ -66,7 +73,7 @@
         &::after {
             position: absolute;
             top: 4rem;
-            left: -13px;
+            left: -$standard;
             transform: rotate(-45deg);
             border-bottom: 25px solid transparent;
             border-left: 33px solid $cmwn-blue;
@@ -82,15 +89,15 @@
     .reminder-container {
         position: relative;
         left: -2.75rem;
-        transform: translateZ(0);
-        box-shadow: 0 0 1px $cmwn-black;
         width: 100%;
         height: 150px;
         overflow: hidden;
-        vertical-align: middle;
-        transition-duration: .3s;
-        transition-property: transform;
-        backface-visibility: hidden;
+      }
+
+    input,
+    label {
+        font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
+        font-size: 1.5rem;
     }
 
     .reminder {
@@ -159,7 +166,7 @@
         outline: none;
         border: 0;
         border-radius: $standard / 2;
-        padding: .5rem .5rem .25rem;
+        padding: .5rem;
         width: 100%;
         vertical-align: top;
         color: $cmwn-white;
@@ -167,9 +174,21 @@
         font-size: 1.25rem;
     }
 
+    .username {
+        background: $cmwn-blue;
+        padding: .25rem;
+        width: 90%;
+        font-size: 1.5rem;
+    }
+
     .username-btn {
         transform: translateZ(0);
         backface-visibility: hidden;
+    }
+
+    .generate {
+        margin-bottom: 1rem;
+        font-size: 2rem;
     }
 
     .username-btn:hover,
@@ -181,17 +200,5 @@
         animation-iteration-count: 1;
         outline: none;
         border: 0;
-    }
-
-    .username {
-        background: $cmwn-blue;
-        padding: .25rem;
-        width: 90%;
-        font-size: 1.5rem;
-    }
-
-    .generate {
-        margin-bottom: 1rem;
-        font-size: 2rem;
     }
 }

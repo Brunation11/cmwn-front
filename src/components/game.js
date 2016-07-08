@@ -70,7 +70,6 @@ var Game = React.createClass({
     componentWillUnmount: function () {
         this.clearEvent();
     },
-    /* end of default events */
     onExit: function (nextState) {
         this.setState(nextState);
     },

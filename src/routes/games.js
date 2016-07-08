@@ -2,7 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import ClassNames from 'classnames';
 import Shortid from 'shortid';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
 import Detector from 'components/browser_detector';
 import FlipBoard from 'components/flipboard';

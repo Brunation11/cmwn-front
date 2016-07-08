@@ -5,7 +5,7 @@
     .flip-list {
         margin-top: -40%;
         width: 100%;
-        overflow-y: scroll;
+        overflow-x: auto;
 
         .single-flip {
             display: inline-block;
@@ -179,5 +179,3 @@
   //   transform: perspective(500px) rotateY(0) scale(1);
   // }
 }
-
-

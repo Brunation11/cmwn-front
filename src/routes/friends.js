@@ -75,8 +75,9 @@ var Component = React.createClass({
             <PopOver
                 element={item}
                 type="user"
-                body={this.renderUserFlip(item)}
-            />
+            >
+                {this.renderUserFlip(item)}
+            </PopOver>
         );
     },
     renderUserFlip: function (item) {
@@ -86,16 +87,15 @@ var Component = React.createClass({
                     className="friend-link">
                     <div className="item">
                         <span className="overlay">
-                            <div className="relwrap friend"><div className="abswrap prompts">
+                            <div className="relwrap"><div className="abswrap prompts">
                                 <span className={ClassNames('pending-prompt', {
-                                    faded: item.friend_status !== 'PENDING'})
-                                }>
-                                    {PENDING}
-                                </span>
-                                <Button onClick={this.acceptRequest.bind(this, item)} className={ClassNames(
-                                    'blue standard',
-                                    {faded: item.friend_status !== 'NEEDS_YOUR_ACCEPTANCE'}
-                                )}>
+                                    faded: item.friend_status !== 'PENDING'
+                                })}>{PENDING}</span>
+                                <Button
+                                    onClick={this.acceptRequest.bind(this, item)}
+                                    className={ClassNames('blue standard', {
+                                        faded: item.friend_status !== 'NEEDS_YOUR_ACCEPTANCE'
+                                    })}>
                                     {REQUESTED}
                                 </Button>
                                 <Button className="purple standard">{PROFILE}</Button>
@@ -115,7 +115,9 @@ var Component = React.createClass({
                     <Paginator rowCount={this.props.rowCount} currentPage={this.props.currentPage}
                         pageCount={this.props.pageCount} data={this.props.data} pagePaginator={true}>
                        <FlipBoard
-                           renderFlip={this.renderUserFlip}
+                            // add conditional to check if user has flips
+                            // render either renderflip or renderuserflip
+                           renderFlip={this.renderFlip}
                            header={HEADINGS.FRIENDS}
                            transform={data => {
                                var image;
@@ -128,9 +130,7 @@ var Component = React.createClass({
                                        image = data.images.data[0].url;
                                    }
                                }
-
                                data = data.set('image', image);
-
                                return data;
                            }}
                        />
@@ -167,5 +167,4 @@ var mapStateToProps = state => {
 var Page = connect(mapStateToProps)(Component);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
-
 

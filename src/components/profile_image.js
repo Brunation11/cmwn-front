@@ -37,21 +37,26 @@ var ProfileImage = React.createClass({
                 this.setState({isModerated: this.props.currentUser._embedded.image.is_moderated});
             }
         } else {
-            HttpManager.GET({
-                url: (GLOBALS.API_URL + 'user/' + this.props.user_id + '/image'),
-                handleErrors: false
-            })
-            .then(res => {
-                this.setState({profileImage: res.response.url});
-            }).catch(e => {
-                if (e.status === 404) {
-                    //if a user has never uploaded an image, we expect a 404
-                    this.setState({profileImage: GLOBALS.DEFAULT_PROFILE});
-                } else {
-                    Toast.error(NO_IMAGE);
-                    Log.error(e, 'Image could not be extracted from user');
-                }
-            });
+            if (this.props.user._embedded.image) {
+                this.setState({profileImage: this.props.user._embedded.image.url});
+                this.setState({isModerated: this.props.user._embedded.image.is_moderated});
+            } else {
+                HttpManager.GET({
+                    url: (this.props.user._links.user_image.href),
+                    handleErrors: false
+                })
+                .then(res => {
+                    this.setState({profileImage: res.response.url});
+                }).catch(e => {
+                    if (e.status === 404) {
+                        //if a user has never uploaded an image, we expect a 404
+                        this.setState({profileImage: GLOBALS.DEFAULT_PROFILE});
+                    } else {
+                        Toast.error(NO_IMAGE);
+                        Log.error(e, 'Image could not be extracted from user');
+                    }
+                });
+            }
         }
     },
     startUpload: function (e) {
@@ -105,6 +110,11 @@ var ProfileImage = React.createClass({
         );
     },
     renderUploadButton: function () {
+        var state = Store.getState();
+        if (this.props.user_id !== state.currentUser.user_id ||
+           (this.props.user && this.props.user.user_id !== state.currentUser.user_id)) {
+            return null;
+        }
         if ((this.state.profileImage === GLOBALS.DEFAULT_PROFILE) || this.state.isModerated) {
             return (
                 <button className="upload" onClick={this.startUpload}>Upload Image</button>
@@ -130,9 +140,9 @@ var ProfileImage = React.createClass({
         }
     },
     render: function () {
-        if (this.props.user_id == null) {
-            return null;
-        }
+        // if (!this.props.currentUser || !this.props.user) {
+            // return null;
+        // }
         return (
             <div className={Classnames('profile-image', {'link-below': this.props['link-below']})} >
                 {this.renderImage(this.state.profileImage)}
