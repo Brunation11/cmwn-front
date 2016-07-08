@@ -23,7 +23,7 @@ var GamePage = React.createClass({
         this.setState({
             gameId: this.props.params.game,
             gameUrl: `${GLOBALS.GAME_URL}${this.props.params.game}/index.html`,
-            flipUrl: state.currentUser._links.user_flip.href,
+            flipUrl: state.currentUser._links.flip.href,
             saveUrl: state.currentUser._links.save_game.href,
         });
         this.resolveRole();
