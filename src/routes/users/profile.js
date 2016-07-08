@@ -148,9 +148,8 @@ export class Profile extends React.Component {
             );
         }
         return (
-            <div>
+            <div className="modal-game">
                 <Game
-                    className="modal-game"
                     ref="gameRef"
                     isTeacher={!this.state.isStudent}
                     url={this.state.gameUrl}
