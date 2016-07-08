@@ -13,16 +13,25 @@ const BAD_FLIP = 'There was a problem registering your earned flip. Please try a
 var resolveFinalMediaState = function (segments, result) {
     var url = GLOBALS.API_URL + 'media';
     var splitSegments = segments.split('/');
-    var nextSegment = segments[0];
+    var nextSegment = splitSegments.shift();
+    var item;
 
-    if (splitSegments.length && result != null) return Promise.resolve(result);
+    //base case. we have results and no further segments to resolve
+    if (!nextSegment && result != null) return Promise.resolve(result);
 
     if (result != null) {
-        url = _.find(result._embedded.items, i => i.name === nextSegment);
-        if (!url) return Promise.reject('Error: 404, provided media path does not exist');
+        item = _.find(result._embedded.media, i => i.name === nextSegment);
+        //api is inconsistent. The following line can be removed once this is rectified
+        if (!item) item = _.find(result._embedded.items, i => i.name === nextSegment);
+        if (!item) return Promise.reject('Error: 404, provided media path does not exist');
+        url += '/' + item.media_id;
+    } else {
+        //initial case. no results, need the base media folders
+        splitSegments.unshift(nextSegment);
     }
 
-    return HttpManager.GET(url).then(server => resolveFinalMediaState(segments, server.response));
+    return HttpManager.GET(url).then(server =>
+        resolveFinalMediaState(splitSegments.join('/'), server.response));
 };
 
 export default function (eventPrefix, gameId, _links, exitCallback) {
@@ -65,7 +74,7 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
         },
         getMedia: function (e) {
             e.gameData = e.gameData || {};
-            e.gameData.path = e.gameData.path || 'Skribble/Menu';
+            e.gameData.path = e.gameData.path || 'skribble/menu';
             resolveFinalMediaState(e.gameData.path)
                 .then(response => e.respond(response._embedded.items))
                 .catch(err => Log.error(err));

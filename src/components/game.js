@@ -78,7 +78,7 @@ var Game = React.createClass({
     gameEventHandler: function (e) {
         if (e.name != null) {
             if (_.isFunction(this[EVENT_PREFIX + _.capitalize(e.name)])) {
-                this.state.eventHandler[EVENT_PREFIX + _.capitalize(e.name)](...arguments);
+                this.state.eventHandler[EVENT_PREFIX + _.upperFirst(e.name)](...arguments);
             }
             if (_.isFunction(this.props['on' + _.capitalize(e.name)])) {
                 this.props['on' + _.capitalize(e.name)](...arguments);
