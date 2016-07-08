@@ -22,7 +22,7 @@ class FlipBoard extends React.Component {
 
     render() {
         if (!this.state.data.length) {
-            return null;
+            return this.props.renderNoData();
         }
         return (
             <div className="flipboard">
@@ -37,6 +37,7 @@ class FlipBoard extends React.Component {
 FlipBoard.defaultProps = {
     header: 'Flipboard',
     transform: _.identity,
+    renderNoData: () => null,
     renderFlip: () => <div className="flip" key={Shortid.generate()}></div>
 };
 

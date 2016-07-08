@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+sleep 1
+set -x
+
 target_docker_name="front"
 
 bash $PWD/bin/setup-docker.sh $target_docker_name
@@ -13,3 +16,8 @@ eval $(docker-machine env $target_docker_name)
 
 echo "[pre-commit] Running lint"
 docker-compose run --rm node gulp lint
+
+if [ $? != 0 ]; then
+    echo "build failed"
+    exit 157
+fi
