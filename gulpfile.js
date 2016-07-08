@@ -375,33 +375,47 @@ gulp.task('lint-js', function () {
         .pipe(eslint(eslintConfigJs))
         // eslint.format() outputs the lint results to the console.
         // Alternatively use eslint.formatEach() (see Docs).
-        .pipe(eslint.format());
+        .pipe(eslint.format())
         // To have the process exit with an error code (1) on
         // lint error, return the stream and pipe to failAfterError last.
-//        .pipe(eslint.failAfterError());
+        .pipe(eslint.failAfterError());
 });
 gulp.task('lint-test', function () {
     return gulp.src(['src/**/*.test.js'])
         .pipe(eslint(_.defaultsDeep(eslintConfigTest, eslintConfigJs)))
-        .pipe(eslint.format());
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError());
 });
 gulp.task('lint-config', function () {
     return gulp.src(['gulpfile.js', 'webpack.config.dev.js', 'webpack.config.prod.js'])
         .pipe(eslint(_.defaultsDeep(eslintConfigConfig, eslintConfigJs)))
-        .pipe(eslint.format());
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError());
 });
 gulp.task('lint-scss', function () {
     return gulp.src(['src/**/*.scss'])
         .pipe(scsslint({
             'reporterOutput': 'scssReport.json', // file output
             customReport: scssLintStylish
-        }));
+        }))
+        .pipe(scsslint.failReporter());
 });
 
 gulp.task('unit', function () {
     process.env.NODE_ENV = 'production';
     process.env.BABEL_ENV = 'production';
     var tests = gulp.src(['src/**/*.test.js'], {read: false})
+         .pipe(mocha({require: ['./src/testdom.js'], reporter: 'min'}));
+    tests.on('error', function (err) {
+        console.log('SOMETHING HAPPENED:' + err);
+    });
+    return tests;
+});
+
+gulp.task('smoke', function () {
+    process.env.NODE_ENV = 'production';
+    process.env.BABEL_ENV = 'production';
+    var tests = gulp.src(['./smoke.test.js'], {read: false})
          .pipe(mocha({require: ['./src/testdom.js'], reporter: 'min'}));
     tests.on('error', function (err) {
         console.log('SOMETHING HAPPENED:' + err);
@@ -425,14 +439,17 @@ gulp.task('coverage', function () {
     });
 });
 
+
 gulp.task('e2e', () => {
     var overrideHostIP = process.env.DOCKER_HOST_IP;
     var hostIP = overrideHostIP || execSync('docker-machine ip front').toString().split('\n')[0];
     if (hostIP === '' || hostIP == null) {
         console.error('No docker IP available for selenium host. Integration tests will fail.');
     }
+    var browser = args.firefox ? 'firefox' : 'chrome'; // chrome by default
     return gulp.src('wdio.conf.js').pipe(webdriver({
-        host: hostIP
+        host: hostIP,
+        capabilities: [{ browserName: browser }]
     }));
 });
 
