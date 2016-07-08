@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import QueryString from 'query-string';
 import {Link} from 'react-router';
 import {Panel} from 'react-bootstrap';
@@ -17,9 +18,9 @@ import DefaultProfile from 'media/profile_tranparent.png';
 
 import 'routes/classes/profile.scss';
 
-const PAGE_UNIQUE_IDENTIFIER = 'classProfile';
+const PAGE_UNIQUE_IDENTIFIER = 'class-profile';
 
-const UserSource = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
+const USER_SOURCE = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     MY_CLASSMATES: 'My Classmates',
@@ -68,7 +69,7 @@ var Component = React.createClass({
             return null;
         }
         return (
-            <p className="userFlips" key={Shortid.generate()}>0 Flips Earned</p>
+            <p className="user-flips" key={Shortid.generate()}>0 Flips Earned</p>
         );
     },
     renderAdminLink: function () {
@@ -76,14 +77,26 @@ var Component = React.createClass({
             return null;
         }
         return (
-            <p><a href={`/class/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
+            <p><a id="class-dashboard-link" href={`/class/${this.props.data.group_id}/view`}>
+                {ADMIN_TEXT}
+            </a></p>
         );
     },
     renderFlip: function (item){
+        var image;
+        if (!_.has(item, '_embedded.image')) {
+            image = DefaultProfile;
+        } else {
+            if (item._embedded.image.url != null) {
+                image = item._embedded.image.url;
+            } else {
+                image = item.images.data[0].url;
+            }
+        }
         return (
             <div className="flip" key={Shortid.generate()}>
-                <Link to={`/student/${item.user_id.toString()}`}>
-                    <img src={item.images && item.images.data && item.images.data.length ? item.images.data[0].url : DefaultProfile}></img>
+                <Link to={`/student/${item.user_id.toString()}`} id={item.username}>
+                    <img src={image}></img>
                     <p className="linkText" >{item.username}</p>
                 </Link>
                 {this.renderFlipsEarned(item)}
@@ -95,12 +108,19 @@ var Component = React.createClass({
             return null;
         }
         return (
-           <Panel header={this.state.title} className="standard">
-               <p className="right" >
-                   <EditLink className="purple" text="Edit Class" base="/class" uuid={this.state.group_id} canUpdate={Util.decodePermissions(this.state.scope).update} />
-               </p>
-               {this.renderAdminLink()}
-           </Panel>
+            <Panel header={this.state.title} className="standard">
+                <p className="right" >
+                    <EditLink
+                        id="edit-button"
+                        className="purple"
+                        text="Edit Class"
+                        base="/class"
+                        uuid={this.state.group_id}
+                        canUpdate={Util.decodePermissions(this.state.scope).update}
+                    />
+                </p>
+                {this.renderAdminLink()}
+            </Panel>
         );
     },
     render: function () {
@@ -108,19 +128,19 @@ var Component = React.createClass({
             return null;
         }
         return (
-           <Layout className="classProfile">
+           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                {this.renderClassInfo()}
-               <UserSource>
+               <USER_SOURCE>
                    <FlipBoard renderFlip={this.renderFlip} header={
                      HEADINGS.CLASS + this.props.data.title
                    } />
-               </UserSource>
+               </USER_SOURCE>
            </Layout>
         );
     }
 });
 
-const mapStateToProps = state => {
+var mapStateToProps = state => {
     var data = {};
     var loading = true;
     if (state.page && state.page.data != null) {

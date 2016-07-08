@@ -17,9 +17,9 @@ import Util from 'components/util';
 import 'routes/users/profile.scss';
 import FlipBgDefault from 'media/icon_class_blue.png';
 
-const PAGE_UNIQUE_IDENTIFIER = 'classProfile';
+const PAGE_UNIQUE_IDENTIFIER = 'class-profile';
 
-const ClassSource = GenerateDataSource('group_class', PAGE_UNIQUE_IDENTIFIER);
+const CLASS_SOURCE = GenerateDataSource('group_class', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     ALL_CLASSES: 'All Classes',
@@ -50,10 +50,12 @@ var Component = React.createClass({
         this.setState(nextProps.data);
     },
     renderDistricts: function () {
-        if (!this.props.data || !this.props.data._embedded || !this.props.data._embedded.organization || this.props.data._embedded.organization.district) {
+        var links;
+        if (!this.props.data || !this.props.data._embedded || !this.props.data._embedded.organization ||
+            this.props.data._embedded.organization.district) {
             return null;
         }
-        var links = _.map(this.props.data._embedded.organization.district, district => {
+        links = _.map(this.props.data._embedded.organization.district, district => {
             return (
                 <Link to={`/districts/${district.org_id}`}>
                     {district.title}
@@ -69,7 +71,12 @@ var Component = React.createClass({
     },
     renderFlip: function (item){
         return (
-            <div className="flip" key={Shortid.generate()}><Link to={`/class/${item.group_id}/profile`}><img src={FlipBgDefault}></img><p>{item.title}</p></Link></div>
+            <div className="flip" key={Shortid.generate()}>
+                <Link to={`/class/${item.group_id}/profile`}>
+                    <img src={FlipBgDefault}></img>
+                    <p>{item.title}</p>
+                </Link>
+            </div>
         );
     },
     renderAdminLink: function () {
@@ -85,7 +92,8 @@ var Component = React.createClass({
             return null;
         }
         return (
-            <EditLink className="green" base="/school" id={this.state.group_id} scope={this.state.scope} text="Import Spreadsheets"/>
+            <EditLink className="green" base="/school" id={this.state.group_id} scope={this.state.scope}
+                text="Import Spreadsheets"/>
         );
     },
     render: function () {
@@ -96,22 +104,23 @@ var Component = React.createClass({
            <Layout className="profile">
                <Panel header={this.props.data.title} className="standard">
                    <p className="right" >
-                       <EditLink className="purple" text="Edit School" base="/school" uuid={this.state.group_id} canUpdate={Util.decodePermissions(this.state.scope).update} />
+                       <EditLink className="purple" text="Edit School" uuid={this.state.group_id}
+                           base="/school" canUpdate={Util.decodePermissions(this.state.scope).update} />
                        {this.renderImport()}
                    </p>
                    {this.renderAdminLink()}
                    {this.renderDistricts()}
                    {this.props.data.description}
                </Panel>
-               <ClassSource>
+               <CLASS_SOURCE>
                    <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.MY_CLASSES} />
-               </ClassSource>
+               </CLASS_SOURCE>
            </Layout>
         );
     }
 });
 
-const mapStateToProps = state => {
+var mapStateToProps = state => {
     var data = {};
     var loading = true;
     if (state.page && state.page.data != null) {
