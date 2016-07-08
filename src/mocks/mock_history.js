@@ -7,10 +7,11 @@ class History {
     }
 
     go(n) {
-        if (n > -1 && n < this.historyStack.length) {
-            this.currentIndex = n;
+        var nextIndex = this.currentIndex + n;
+        if (nextIndex > -1 && nextIndex < this.historyStack.length) {
+            this.currentIndex = nextIndex;
         } else {
-            throw new Error(`Error: ${n} is not within the current history size of ` +
+            throw new Error(`moving ${n} to ${nextIndex} is not within the current history size of ` +
                 this.historyStack.length);
         }
     }
@@ -57,7 +58,7 @@ class History {
                 search: location.search || ''
             };
         } else {
-            throw new Error('Error: Not a properly formatted location, provide path string or ' +
+            throw new Error('not a properly formatted location, provide path string or ' +
                 'LocationDescriptorObject');
         }
     }
@@ -144,13 +145,15 @@ class History {
 
     // Methods for mock purposes
     getCurrentLocation() {
-        return this.historyStack[this.currentIndex];
+        return this.historyStack[this.currentIndex] || null;
+    }
+
+    getCurrentSize() {
+        return this.historyStack.length;
     }
 
     getLocation(n) {
-        if (n > -1 && n < this.historyStack.length) {
-            return this.historyStack[n];
-        }
+        return this.historyStack[n];
     }
 }
 
