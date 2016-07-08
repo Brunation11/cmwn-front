@@ -23,15 +23,11 @@ describe('tests opening game on games page', function() {
         // Changes focus back to the parent
         browser.frameParent();
         // Checks if the purple button shows up
-        var purpleBtn = browser.getText('.purple');
-        expect(purpleBtn).to.equal('FULL SCREEN');
-        var pBtnVisible = browser.isVisible('.purple');
-        expect(pBtnVisible).to.equal(true);
+        expect(browser.getText('.purple')).to.equal('FULL SCREEN');
+        expect(browser.isVisible('.purple')).to.equal(true);
         // Checks if the green button shows up
-        var greenBtn = browser.getText('.green');
-        expect(greenBtn).to.equal('DEMO MODE');
-        var gBtnVisible = browser.isVisible('.green');
-        expect(gBtnVisible).to.equal(true);
+        expect(browser.getText('.green')).to.equal('DEMO MODE');
+        expect(browser.isVisible('.green')).to.equal(true);
     });
     
     // Checks if pressing "(close)" closes the game
@@ -47,7 +43,6 @@ describe('tests opening game on games page', function() {
         browser.click('.modal-close');
         browser.waitForVisible('.sidebar', time);
         // Checks if the "(close)" link is still shown
-        var visible = browser.isVisible('.modal-close');
-        expect(visible).to.not.equal(true);
+        expect(browser.isVisible('.modal-close')).to.not.equal(true);
     });
 });
