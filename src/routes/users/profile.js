@@ -17,6 +17,7 @@ import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
 // import Util from 'components/util';
 import History from 'components/history';
+import Store from 'components/store';
 import GenerateDataSource from 'components/datasource';
 
 import Layout from 'layouts/two_col';
@@ -137,8 +138,6 @@ export class Profile extends React.Component {
     }
 
     renderGame() {
-        var flipUrl = this.state._links && this.state._links.user_flip ?
-            this.state._links.user_flip.href : null;
         if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe10())) {
             return (
                 <div>
@@ -153,9 +152,9 @@ export class Profile extends React.Component {
                     ref="gameRef"
                     isTeacher={!this.state.isStudent}
                     url={this.state.gameUrl}
-                    flipUrl={flipUrl}
+                    flipUrl={this.state._links.user_flip.href}
                     onExit={this.setState.bind(this, {gameOn: false})}
-                    saveUrl={this.props.currentUser._links.save_game.href}
+                    saveUrl={this.state._links.save_game.href}
                 />
                     <a onClick={this.hideModal.bind(this)} className="modal-close">(close)</a>
             </div>
@@ -264,10 +263,11 @@ export class Profile extends React.Component {
 
     render() {
         var profile;
+        var state = Store.getState();
         if (this.state.username == null) {
             return null;
         }
-        profile = (this.state.user_id === this.props.currentUser.user_id) ?
+        profile = (this.state.user_id === state.currentUser.user_id) ?
             this.renderCurrentUserProfile : this.renderUserProfile;
 
         return (
