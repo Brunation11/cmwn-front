@@ -59,7 +59,7 @@ export var dataTransform = function(data) {
     return _.filter(array, v => !v.coming_soon).concat(_.filter(array, v => v.coming_soon));
 }
 
-export class Profile extends React.Component {
+export class GamesPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = _.defaults({
@@ -170,5 +170,5 @@ var mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(Profile);
+var Page = connect(mapStateToProps)(GamesPage);
 export default Page;
