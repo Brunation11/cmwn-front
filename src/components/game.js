@@ -53,6 +53,25 @@ var Game = React.createClass({
     componentWillMount: function () {
         this.setEvent();
     },
+    componentDidMount: function () {
+        var self = this;
+        var frame = ReactDOM.findDOMNode(self.refs.gameRef);
+        frame.onload = function (e) {
+            frame.contentWindow.onclick = function (e) {
+                console.log('fired ' + e);
+                HttpManager.GET({
+                    url: (GLOBALS.API_URL),
+                    handleErrors: false
+                }).then(res => {
+                    console.log('in the http response');
+                }).catch(e => {
+                    console.log('oh no caught an error');
+                    console.log(e);
+                });
+            };
+        };
+        console.log('mounted');
+    },
     componentWillUnmount: function () {
         this.clearEvent();
     },
