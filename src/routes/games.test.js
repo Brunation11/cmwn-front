@@ -1,6 +1,6 @@
 import React from 'react';
-import { expect, mount } from 'chai';
-import { shallow } from 'enzyme';
+import { expect } from 'chai';
+import { shallow, mount } from 'enzyme';
 
 import { GamesPage } from 'routes/games';
 import { dataTransform } from 'routes/games';
