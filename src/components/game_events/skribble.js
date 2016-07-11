@@ -23,15 +23,24 @@ var unboundEvents = {
     },
     saveSkribble: function (options, e) {
         var url = options._links.self.href + '/skribble';
-        var skramble = e.gameData.skramble;
+        var skramble = e.gameData.skribble.skramble;
+        var skribbleData = e.gameData.skribble;
+        skribbleData.items = _.map(skribbleData.items, item => {
+            item.type = item.asset_type;
+            return item;
+        });
+        skribbleData.messages = _.map(skribbleData.messages, item => {
+            item.type = item.asset_type;
+            return item;
+        });
         if (e.gameData.skribble_id == null) {
             url += (skramble ? '?skramble=' + skramble : '');
-            HttpManager.POST(url, e.gameData.skribble)
+            HttpManager.POST(url, skribbleData)
                 .then(server => e.respond(server.response))
                 .catch(err => Log.error(err));
         } else {
             url += e.gameData.skribble_id + (skramble ? '?skramble=' + skramble : '');
-            HttpManager.PUT(url, e.gameData.skribble)
+            HttpManager.PUT(url, skribbleData)
                 .then(server => e.respond(server.response))
                 .catch(err => Log.error(err));
         }
