@@ -16,7 +16,7 @@ var unboundEvents = {
         var url;
         if (e.gameData.skribble_id) {
             url = options._links.self.href + '/skribble/' + e.gameData.skribble_id;
-            HttpManager.PUT(url, e.gameData)
+            HttpManager.PUT(url, e.gameData.skribble)
                 .then(server => e.respond(server.response._embedded))
                 .catch(err => Log.error(err));
         }
@@ -26,12 +26,12 @@ var unboundEvents = {
         var scramble = e.gameData.scramble;
         if (e.gameData.skribble_id == null) {
             url += (scramble ? '?scramble=' + scramble : '');
-            HttpManager.POST(url, e.gameData)
+            HttpManager.POST(url, e.gameData.skribble)
                 .then(server => e.respond(server.response))
                 .catch(err => Log.error(err));
         } else {
             url += e.gameData.skribble_id + (scramble ? '?scramble=' + scramble : '');
-            HttpManager.PUT(url, e.gameData)
+            HttpManager.PUT(url, e.gameData.skribble)
                 .then(server => e.respond(server.response))
                 .catch(err => Log.error(err));
         }
