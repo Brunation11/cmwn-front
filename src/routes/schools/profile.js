@@ -13,6 +13,7 @@ import GenerateDataSource from 'components/datasource';
 import EditLink from 'components/edit_link';
 import Toast from 'components/toast';
 import Util from 'components/util';
+import Log from 'components/log';
 
 import 'routes/users/profile.scss';
 import FlipBgDefault from 'media/icon_class_blue.png';
@@ -69,17 +70,19 @@ export class SchoolProfile extends React.Component {
         }
         links = _.map(this.props.data._embedded.organization.district, district => {
             return (
-                <Link to={`/districts/${district.org_id}`}>
+                <Link to={`/districts/${district.org_id}`} className="school-district-link">
                     {district.title}
                 </Link>
             );
         });
         return (
-            <p className="school-districts-list">
+            <p>
                 {`${HEADINGS.DISTRICTS}: `}
                 {links}
             </p>
         );
+        //TODO: change to match network response (this.props.data._embedded.organization)
+        //NOTE: will not be an array, will be only one district
     }
 
     renderFlip(item) {
@@ -98,7 +101,9 @@ export class SchoolProfile extends React.Component {
             return null;
         }
         return (
-            <p><a href={`/school/${this.props.data.group_id}/view`}>{TEXT.ADMIN}</a></p>
+            <p><a href={`/school/${this.props.data.group_id}/view`} className="school-admin-link">
+                {TEXT.ADMIN}
+            </a></p>
         );
     }
 
@@ -124,10 +129,10 @@ export class SchoolProfile extends React.Component {
                    <p className="right" >
                        <EditLink className="purple" text={TEXT.EDIT} uuid={this.state.group_id}
                            base="/school" canUpdate={Util.decodePermissions(this.state.scope).update} />
-                       {this.renderImport().bind(this)}
+                       {this.renderImport()}
                    </p>
-                   {this.renderAdminLink().bind(this)}
-                   {this.renderDistricts().bind(this)}
+                   {this.renderAdminLink()}
+                   {this.renderDistricts()}
                    {this.props.data.description}
                </Panel>
                <CLASS_SOURCE>

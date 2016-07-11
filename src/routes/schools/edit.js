@@ -139,7 +139,7 @@ export class ProfileEdit extends React.Component {
                     bsStyle={Validate.min(3, this.state.title)}
                     hasFeedback
                     ref={REFS.TITLE}
-                    onChange={() => this.setState({title: this.refs.titleInput.getValue()}).bind(this)}
+                    onChange={() => this.setState({title: this.refs.titleInput.getValue()})}
                  />
                  <Input
                     type="textarea"
@@ -147,13 +147,12 @@ export class ProfileEdit extends React.Component {
                     placeholder={LABELS.DESCRIPT}
                     label={LABELS.DESCRIPT}
                     ref={REFS.DESCRIPT}
-                    onChange={() => this.setState({description: this.refs.descriptionInput.getValue()})
-                        .bind(this)}
+                    onChange={() => this.setState({description: this.refs.descriptionInput.getValue()})}
                  />
                  <Button onClick={this.submitData.bind(this)} > Save </Button>
               </Panel>
               {''/*<CreateClass data={this.props.data} />*/}
-              <BulkUpload url={this.props.data._links.import.href} />
+              <BulkUpload data={this.props.data} url={this.props.data._links.import.href} />
            </Layout>
          );
     }
@@ -269,7 +268,7 @@ export class BulkUpload extends React.Component {
                 studentCode: '',
                 teacherCode: '',
                 tos: false
-            }).bind(this);
+            });
             ReactDOM.findDOMNode(this.refs.fileInput).value = '';
             ReactDOM.findDOMNode(this.refs.fileInput).type = '';
             ReactDOM.findDOMNode(this.refs.fileInput).type = 'file';
@@ -277,11 +276,11 @@ export class BulkUpload extends React.Component {
         }, 0);
     }
 
-    render(props) {
+    render() {
         if (this.props.url == null) {
             return null;
         }
-        if (props.page.data == null || props.page.data._links.import == null) {
+        if (this.props.data == null || this.props.data._links.import == null) {
             return null;
         }
         return (
@@ -303,7 +302,7 @@ export class BulkUpload extends React.Component {
                     validate="required"
                     ref={REFS.TEACHER_INPUT}
                     name="teacher_code"
-                    onChange={e => this.setState({teacherCode: e.target.value}).bind(this)}
+                    onChange={e => this.setState({teacherCode: e.target.value})}
                 />
                 <Input
                     type="text"
@@ -313,7 +312,7 @@ export class BulkUpload extends React.Component {
                     validate="required"
                     ref={REFS.STUDENT_INPUT}
                     name="student_code"
-                    onChange={e => this.setState({studentCode: e.target.value}).bind(this)}
+                    onChange={e => this.setState({studentCode: e.target.value})}
                 />
                 <FormControls.Static value={TERMS_COPY} />
                 <Input
@@ -322,7 +321,7 @@ export class BulkUpload extends React.Component {
                     ref={REFS.TOS_INPUT}
                     label={LABELS.ACCEPT}
                     name="tos"
-                    onChange={e => this.setState({tos: e.target.checked}).bind(this)}
+                    onChange={e => this.setState({tos: e.target.checked})}
                 />
                 <br />
                 <Button type="submit" >{LABELS.SUBMIT}</Button>

@@ -114,7 +114,7 @@ export class ProfileView extends React.Component {
                         <a href={`/school/${this.props.data.group_id}/profile`}>Return to school profile</a>
                     </p>
                    <Paragraph>
-                       <p pre={`${HEADINGS.DISTRICTS}: `}>{this.renderDistricts().bind(this)}</p>
+                       <p pre={`${HEADINGS.DISTRICTS}: `}>{this.renderDistricts.bind(this)}</p>
                        <p pre={`${HEADINGS.DESCRIPTION}: `}>{this.props.data.description}</p>
                    </Paragraph>
                 </Panel>
