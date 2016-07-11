@@ -73,7 +73,7 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
         if (!_links.flip.href) {
             return;
         }
-        HttpManager.POST({url: _links.flip.href}, {'flip_id': flip}).catch(err => {
+        HttpManager.POST({url: _links.user_flip.href}, {'flip_id': flip}).catch(err => {
             Toast.error(BAD_FLIP);
             Log.log('Server refused flip update', err, flip);
         });
@@ -131,9 +131,12 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
     };
 
     events = DEFAULT_EVENTS;
-    if (gameId === 'skribble') {
-        events = _.defaults(Skribble, events);
+    switch (gameId) {
+    case 'skribble':
+        events = _.defaults(Skribble({_links}), events);
+        break;
     }
+
     return _.reduce(events, (a, v, k) => {
         a[eventPrefix + _.upperFirst(k)] = v;
         return a;
