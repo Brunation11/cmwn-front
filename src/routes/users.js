@@ -32,10 +32,20 @@ var Component = React.createClass({
         this.setState({key: index});
     },
     renderFlip: function (item){
+        var image;
+        if (!_.has(item, '_embedded.image')) {
+            image = DefaultProfile;
+        } else {
+            if (item._embedded.image.url != null) {
+                image = item._embedded.image.url;
+            } else {
+                image = item.images.data[0].url;
+            }
+        }
         return (
             <div className="flip" key={Shortid.generate()}>
                 <Link to={`/users/${item.user_id}`}>
-                    <img src={DefaultProfile}></img><p>{`${item.first_name} ${item.last_name}`}</p>
+                    <img src={image}></img><p>{`${item.first_name} ${item.last_name}`}</p>
                 </Link>
             </div>
         );
@@ -67,8 +77,11 @@ var Component = React.createClass({
     },
     renderImport: function () {
         var state = Store.getState();
-        if (!state.currentUser || !state.currentUser._embedded || !state.currentUser._embedded.groups || !state.currentUser._embedded.groups.length || state.currentUser._embedded.groups[0]._links.import == null) {
-        //if (!state.currentUser || !state.currentUser._embedded || !state.currentUser._embedded.groups || !state.currentUser._embedded.groups.length) {
+        if (!state.currentUser || !state.currentUser._embedded || !state.currentUser._embedded.groups ||
+            !state.currentUser._embedded.groups.length ||
+            state.currentUser._embedded.groups[0]._links.import == null) {
+        //if (!state.currentUser || !state.currentUser._embedded || !state.currentUser._embedded.groups ||
+            //!state.currentUser._embedded.groups.length) {
             return null;
         }
         return (
@@ -79,10 +92,10 @@ var Component = React.createClass({
     },
     renderAdminView: function () {
         var children = _.filter(this.props.data, {type: 'CHILD'});
-        children = children || [];
         var adults = _.filter(this.props.data, {type: 'ADULT'});
         var tabIndex = 1;
         var tabs = [];
+        children = children || [];
         if (children && children.length) {
             tabs.push(
                 <Tab eventKey={tabIndex} title={'Students'}>
@@ -132,7 +145,7 @@ var Component = React.createClass({
     }
 });
 
-const mapStateToProps = state => {
+var mapStateToProps = state => {
     var data = {};
     var loading = true;
     if (state.page && state.page.data && state.page.data._embedded && state.page.data._embedded.user) {

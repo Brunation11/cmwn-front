@@ -69,7 +69,9 @@ var show500 = function (url) {
         }
     }
     _errors.push(
-        <div id="triggerederror" className="error500"><a href={link} className="gohome"> </a><a onClick={() => window.location.reload()}> </a></div>
+        <div id="triggerederror" className="error500">
+            <a href={link} className="gohome"> </a><a onClick={() => window.location.reload()}> </a>
+        </div>
     );
     _.each(_handlers, handler => handler());
     Log.error('Displayed 500: ' + url, ...arguments, window.location, currentUser);
@@ -91,7 +93,8 @@ var showApplication = function (err) {
         <div id="triggerederror" className="applicationerror"><a href={link}> </a></div>
     );
     _.each(_handlers, handler => handler());
-    Log.error('Displayed Application Error: ' + (err && err.message != null ? err.message : err), ...arguments, window.location, currentUser);
+    Log.error('Displayed Application Error: ' +
+        (err && err.message != null ? err.message : err), ...arguments, window.location, currentUser);
     EventManager.update('errorChange', _errors);
 };
 
@@ -105,8 +108,10 @@ var handle401 = function (err) {
             Util.matchPathAndExtractParams(path.path, window.location.pathname) !== false
         , false)
     ) {
-        Log.info('User not authenticated, page: ' + window.location.pathname + ' message: ' + (_.isString(err) ? err : err.message));
-        if (window.location.pathname !== '/logout' && window.location.pathname !== '/logout/' && window.location.pathname !== '/login' && window.location.pathname !== '/login/') {
+        Log.info('User not authenticated, page: ' + window.location.pathname + ' message: ' +
+            (_.isString(err) ? err : err.message));
+        if (window.location.pathname !== '/logout' && window.location.pathname !== '/logout/' &&
+            window.location.pathname !== '/login' && window.location.pathname !== '/login/') {
             History.push('/logout');
         }
     }
@@ -164,7 +169,8 @@ var handlePageErrors = function (res) {
         show404(res.request.url, res);
     } else if (res.status > 399) {
         showApplication(res);
-    } else if (res.status === 0 || res.response == null || res.response.length === 0 && res.request.url.indexOf('logout') === -1) {
+    } else if (res.status === 0 || res.response == null || res.response.length === 0 &&
+        res.request.url.indexOf('logout') === -1) {
         showApplication(res);
         throw 'Invalid status (' + res.status + ') or corrupt/empty data recieved from ' + res.request.url;
     }
@@ -173,5 +179,6 @@ var handlePageErrors = function (res) {
 //make sure these clear when the back button is hit
 window.onpopstate = clearErrors;
 
-export default {renderErrors, handle401, show403, show404, show500, showApplication, onError, clearErrors, handlePageErrors};
+export default {renderErrors, handle401, show403, show404, show500,
+    showApplication, onError, clearErrors, handlePageErrors};
 

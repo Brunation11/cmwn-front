@@ -1,14 +1,16 @@
+$datepicker-color: #3c763d;
+
 .dropdown-datepicker {
-  label {
-    color: #3C763D;
+    label {
+        color: $datepicker-color;
   }
 
-  .birthday-input {
-    border-color: #3C763D;
-  }
+    .birthday-input {
+        border-color: $datepicker-color;
+    }
 
-  .birthday-input:focus {
-    box-shadow: 0 0 5px #3C763D;
-  }
+    .birthday-input:focus {
+        box-shadow: 0 0 5px $datepicker-color;
+    }
 }
 
