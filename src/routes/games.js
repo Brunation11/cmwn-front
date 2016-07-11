@@ -17,6 +17,9 @@ import FlipBgDefault from 'media/flip-placeholder-white.png';
 
 import 'routes/users/profile.scss';
 
+var mapStateToProps;
+var Page;
+
 const GAME_WRAPPER = GenerateDataSource('games', 'games-list');
 
 const HEADINGS = {
@@ -35,29 +38,29 @@ const BROWSER_NOT_SUPPORTED = (
         </p>
     </span>);
 
-export var dataTransform = function(data) {
+export var dataTransform = function (data) {
     var array = data;
     var currentIndex;
     var temporaryValue;
     var randomIndex;
     if (array == null) {
-       array = [];
+        array = [];
     } else if (!_.isArray(array)) {
-       return [];
+        return [];
     }
     currentIndex = array.length;
     // While there remain elements to shuffle...
     while (0 !== currentIndex) {
-       // Pick a remaining element...
-       randomIndex = Math.floor(Math.random() * currentIndex);
-       currentIndex -= 1;
-       // And swap it with the current element.
-       temporaryValue = array[currentIndex];
-       array[currentIndex] = array[randomIndex];
-       array[randomIndex] = temporaryValue;
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
     }
     return _.filter(array, v => !v.coming_soon).concat(_.filter(array, v => v.coming_soon));
-}
+};
 
 export class GamesPage extends React.Component {
     constructor(props) {
@@ -67,7 +70,7 @@ export class GamesPage extends React.Component {
             gameId: -1
         }, _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {});
     }
-    
+
     showModal(gameUrl) {
         var urlParts;
         if (Detector.isMobileOrTablet() || Detector.isPortrait()) {
@@ -77,37 +80,31 @@ export class GamesPage extends React.Component {
         }
         this.setState({gameOn: true, gameUrl});
     }
-    
+
     hideModal() {
         this.setState({gameOn: false});
         this.refs.gameRef.dispatchPlatformEvent('quit');
     }
-    
+
     renderGame() {
         if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe9() ||
             Detector.isIe10() || Detector.isIe11() || Detector.isFirefox() || Detector.isEdge())) {
             return (
                 <div>
                     {BROWSER_NOT_SUPPORTED}
-                    <p><a onClick={this.setState.bind(this, {gameOn: false})} >(close)</a></p>
+                    <p><a onClick={() => this.setState({gameOn: false})} >(close)</a></p>
                 </div>
             );
         }
         return (
             <div>
-                <Game
-                    ref="gameRef"
-                    isTeacher={!this.state.isStudent}
-                    url={this.state.gameUrl}
-                    flipUrl={flipUrl}
-                    onExit={this.setState.bind(this, {gameOn: false})}
-                    saveUrl={this.props.currentUser._links.save_game.href}
-                />
-                    <a onClick={this.hideModal.bind(this)} className="modal-close">(close)</a>
+                <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl}
+                    onExit={() => this.setState({gameOn: false})}/>
+                    <a onClick={this.hideModal} className="modal-close">(close)</a>
             </div>
         );
     }
-    
+
     renderFlip(item) {
         var onClick;
         var playText;
@@ -136,7 +133,7 @@ export class GamesPage extends React.Component {
             </div>
         );
     }
-    
+
     renderGameList() {
         return (
            <GAME_WRAPPER transform={dataTransform}>
@@ -147,7 +144,7 @@ export class GamesPage extends React.Component {
            </GAME_WRAPPER>
         );
     }
-    
+
     render() {
         return (
            <Layout className="games">
@@ -157,7 +154,7 @@ export class GamesPage extends React.Component {
     }
 }
 
-var mapStateToProps = state => {
+mapStateToProps = state => {
     var data = {};
     var loading = true;
     if (state.page && state.page.data != null) {
@@ -170,5 +167,5 @@ var mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(GamesPage);
+Page = connect(mapStateToProps)(GamesPage);
 export default Page;

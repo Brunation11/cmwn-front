@@ -20,15 +20,15 @@ export class GamePage extends React.Component {
             isStudent: true
         };
     }
-    
+
     componentDidMount() {
         this.resolveRole();
     }
-    
+
     componentWillReceiveProps() {
         this.resolveRole();
     }
-    
+
     resolveRole() {
         var newState = {};
         if (this.props.currentUser && this.props.currentUser.type !== 'CHILD') {
@@ -38,7 +38,7 @@ export class GamePage extends React.Component {
         }
         this.setState(newState);
     }
-    
+
     render() {
         return (
            <Layout>

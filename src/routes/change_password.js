@@ -36,7 +36,7 @@ export class Page extends React.Component {
         super();
         this.state = {};
     }
-    
+
     render() {
         return (
            <Layout className="change-password">
@@ -55,15 +55,15 @@ export class ChangePassword extends React.Component {
             new: '',
             confirm: '',
             extraProps: {}
-        }
+        };
     }
-    
+
     componentDidMount() {
         if (this.props.currentUser.user_id != null) {
             window.location.href = '/logout';
         }
     }
-    
+
     submit() {
         var update;
         if (this.props.currentUser.user_id != null) {
@@ -94,7 +94,7 @@ export class ChangePassword extends React.Component {
             /** @TODO MPR, 02/11/16: check on change, not submit*/
         }
     }
-    
+
     render() {
         return (
             <div>
@@ -111,7 +111,7 @@ export class ChangePassword extends React.Component {
                         onChange={e => this.setState({current: e.target.value})}
                     />
     */}
-    
+
                     <Input
                         type="password"
                         value={this.state.new}
