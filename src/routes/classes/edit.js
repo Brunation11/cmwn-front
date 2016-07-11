@@ -18,28 +18,29 @@ const HEADINGS = {
     CREATE_USER: 'Create User in this Class'
 };
 
-const BAD_UPDATE = 'There was a problem updating your profile. Please try again later.';
+const BAD_CLASS_UPDATE = 'There was a problem updating your class. Please try again later.';
 
 const ERRORS = {
-    BAD_UPDATE: 'Could not create school. Please try again later.',
+    BAD_UPDATE: 'Could not create user. Please try again later.',
     INVALID_SUBMISSION: 'Invalid submission. Please update fields highlighted in red and submit again'
 };
 
-var Component = React.createClass({
-    getInitialState: function () {
-        return {
+export class EditClass extends React.Component {
+    constructor() {
+        super();
+        this.state = {
             code: '',
             title: '',
             description: ''
         };
-    },
-    componentWillMount: function () {
+    }
+    componentWillMount() {
         this.setState(this.props.data);
-    },
-    componentWillReceiveProps: function (newProps) {
+    }
+    componentWillReceiveProps(newProps) {
         this.setState(newProps.data);
-    },
-    submitData: function () {
+    }
+    submitData() {
         var postData = {
             title: this.state.title,
             organization_id: this.props.data.organization_id, //eslint-disable-line camelcase
@@ -48,11 +49,11 @@ var Component = React.createClass({
         HttpManager.PUT({url: this.props.data._links.self.href}, postData).then(() => {
             Toast.success('Class Updated');
         }).catch(err => {
-            Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
-            Log.log('Server refused district update', err, postData);
+            Toast.error(BAD_CLASS_UPDATE + (err.message ? ' Message: ' + err.message : ''));
+            Log.log('Server refused class update', err, postData);
         });
-    },
-    render: function () {
+    }
+    render() {
         if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
@@ -85,21 +86,22 @@ var Component = React.createClass({
                         {description: e.target.value} //eslint-disable-line camelcase
                     )}
                 />
-                 <Button id="save-button" onClick={this.submitData} > Save </Button>
+                 <Button id="save-button" onClick={this.submitData.bind(this)} > Save </Button>
               </Panel>
               <CreateStudent data={this.props.data}/>
            </Layout>
          );
     }
-});
+}
 
-var CreateStudent = React.createClass({
-    getInitialState: function () {
-        return {
+export class CreateStudent extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
             title: ''
         };
-    },
-    submitData: function () {
+    }
+    submitData() {
         var postData = {
             first_name: this.state.first, //eslint-disable-line camelcase
             group_id: this.props.data.group_id, //eslint-disable-line camelcase
@@ -123,12 +125,13 @@ var CreateStudent = React.createClass({
         } else {
             Toast.error(ERRORS.INVALID_SUBMISSION);
         }
-    },
-    render: function () {
+    }
+    render() {
         return (
         <Panel header={HEADINGS.CREATE_USER} className="standard">
             <Form ref="formRef">
                  <Input
+                    id="first-name"
                     type="text"
                     value={this.state.first}
                     placeholder="First Name"
@@ -139,6 +142,7 @@ var CreateStudent = React.createClass({
                     onChange={e => this.setState({first: e.target.value})}
                  />
                  <Input
+                    id="last-name"
                     type="text"
                     value={this.state.last}
                     placeholder="Last Name"
@@ -148,14 +152,14 @@ var CreateStudent = React.createClass({
                     ref="lastInput"
                     onChange={e => this.setState({last: e.target.value})}
                  />
-                <Button onClick={this.submitData}> Create </Button>
+                <Button onClick={this.submitData.bind(this)}> Create </Button>
             </Form>
         </Panel>
         );
     }
-});
+}
 
-var mapStateToProps = state => {
+var mapStateToProps = state => { // eslint-disable-line vars-on-top
     var data = {title: ''};
     var loading = true;
     if (state.page && state.page.data != null) {
@@ -168,6 +172,5 @@ var mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(Component);
+var Page = connect(mapStateToProps)(EditClass); // eslint-disable-line vars-on-top
 export default Page;
-

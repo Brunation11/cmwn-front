@@ -66,19 +66,21 @@ export class SchoolProfile extends React.Component {
         var links;
         if (!this.props.data || !this.props.data._embedded || !this.props.data._embedded.organization ||
             this.props.data._embedded.organization.district) {
+            Log.log('NOT RENDERING DISTRICTS');
             return null;
         }
-        links = _.map(this.props.data._embedded.organization.district, district => {
-            return (
-                <Link to={`/districts/${district.org_id}`} className="school-district-link">
-                    {district.title}
-                </Link>
-            );
-        });
+        //links = _.map(this.props.data._embedded.organization.district, district => {
+        //    return (
+        //        <Link to={`/districts/${district.org_id}`} className="school-district-link">
+        //            {district.title}
+        //        </Link>
+        //    );
+        //});
+        Log.log('RENDERING DISTRICTS');
         return (
             <p>
                 {`${HEADINGS.DISTRICTS}: `}
-                {links}
+                {this.props.data.organization.title}
             </p>
         );
         //TODO: change to match network response (this.props.data._embedded.organization)
@@ -119,9 +121,7 @@ export class SchoolProfile extends React.Component {
 
     render() {
         if (this.props.data == null) {
-            return (
-                <h2>{TEXT.NO_SCHOOLS}</h2>
-            );
+            return null;
         }
         return (
            <Layout className={PAGE_UNIQUE_IDENTIFIER}>

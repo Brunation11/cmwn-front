@@ -5,8 +5,10 @@
     .flip-list {
         margin-top: -40%;
         width: 100%;
+        overflow-y: scroll;
 
         .single-flip {
+            display: inline-block;
             width: 50%;
 
             img {
@@ -38,11 +40,15 @@
             }
         }
 
-        @media (min-width: $monitor-max-break) and (max-width: $ultrawide-min-break) {
+        @media (min-width: $monitor-max-break) and (max-width: $ultrawide-min-break * 2) {
             margin-top: -18%;
 
             .single-flip {
                 width: 20%;
+
+                img {
+                    max-width: 150px;
+                }
             }
         }
 
