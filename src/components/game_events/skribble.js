@@ -23,14 +23,14 @@ var unboundEvents = {
     },
     saveSkribble: function (options, e) {
         var url = options._links.self.href + '/skribble';
-        var scramble = e.gameData.scramble;
+        var skramble = e.gameData.skramble;
         if (e.gameData.skribble_id == null) {
-            url += (scramble ? '?scramble=' + scramble : '');
+            url += (skramble ? '?skramble=' + skramble : '');
             HttpManager.POST(url, e.gameData.skribble)
                 .then(server => e.respond(server.response))
                 .catch(err => Log.error(err));
         } else {
-            url += e.gameData.skribble_id + (scramble ? '?scramble=' + scramble : '');
+            url += e.gameData.skribble_id + (skramble ? '?skramble=' + skramble : '');
             HttpManager.PUT(url, e.gameData.skribble)
                 .then(server => e.respond(server.response))
                 .catch(err => Log.error(err));
