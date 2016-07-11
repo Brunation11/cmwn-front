@@ -36,26 +36,25 @@ class History {
     }
 
     createLocation(location) {
-        var a;
+        var url;
 
         if (typeof location === 'string') {
-            a = document.createElement('a');
-            a.href = location;
+            url = new URL(location, 'http://www.example.com');
 
             return {
-                pathname: a.pathname,
-                query: this.parseSearch(a.search),
-                hash: a.hash,
+                pathname: url.pathname,
+                query: this.parseSearch(url.search),
+                hash: url.hash,
                 state: null,
-                search: a.search
+                search: url.search
             };
-        } else if (typeof location === 'object' && location.pathname) {
+        } else if (location && typeof location === 'object' && _.isString(location.pathname)) {
             return {
                 pathname: location.pathname,
-                query: location.query || {},
-                hash: location.hash || '',
-                state: location.state || null,
-                search: location.search || ''
+                query: this.parseSearch(_.isString(location.search) ? location.search : ''),
+                hash: _.isString(location.hash) ? location.hash : '',
+                search: _.isString(location.search) ? location.search : '',
+                state: location.state || null
             };
         } else {
             throw new Error('not a properly formatted location, provide path string or ' +
@@ -67,11 +66,13 @@ class History {
     parseSearch(search) {
         var query = {};
         var pairs = [];
-        if (search.length > 1) {
+        var isString = _.isString(search);
+        search = isString ? search.substring(search.indexOf('?')) : search;
+        if (isString && search.length > 1) {
             pairs = search.substring(1).split('&');
             _.forEach(pairs, pair => {
                 // split at first index of '=' in case value has the character too
-                var parts = this.splitAtIndex(pair.indexOf('='));
+                var parts = this.splitAtIndex(pair, pair.indexOf('='));
                 if (parts.length === 1 && parts[0]) {
                     query[parts[0]] = null;
                 } else if (parts.length === 2 && parts[0]) {
@@ -84,12 +85,18 @@ class History {
 
     // split string at given index and return both parts as array
     splitAtIndex(s, n) {
-        if (n < 0 || n >= s.length) {
-            return [s];
-        } else {
-            return [s.substring(0, n), s.substring(n + 1)];
+        if (_.isString(s) || _.isNull(s) || _.isUndefined(s) || _.isNumber(s)) {
+            s = _.toString(s);
+            if (_.isNumber(n) && n > -1 && n < s.length) {
+                return [s.substring(0, n), s.substring(n + 1)];
+            } else {
+                return [s];
+            }
         }
+        return undefined;
     }
+
+    // good reference in node_modules/react-router/umd/reactRouter.js
 
     /*
     listen(listener) {
