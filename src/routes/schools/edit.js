@@ -87,7 +87,7 @@ var isPassValid = function (password) {
 var mapStateToProps;
 var Page;
 
-export class ProfileEdit extends React.Component {
+export class SchoolEdit extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -344,7 +344,7 @@ mapStateToProps = state => {
     };
 };
 
-Page = connect(mapStateToProps)(ProfileEdit);
+Page = connect(mapStateToProps)(SchoolEdit);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
 

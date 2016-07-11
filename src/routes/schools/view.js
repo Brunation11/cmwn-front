@@ -39,7 +39,7 @@ const TEXT = {
 var mapStateToProps;
 var Page;
 
-export class ProfileView extends React.Component {
+export class SchoolView extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -60,21 +60,14 @@ export class ProfileView extends React.Component {
     }
 
     renderDistricts() {
-        var links;
-        if (!this.state || this.state._embedded == null) {
+        if (!this.state || !this.state.organization) {
             return null;
         }
-        links = _.map(this.state._embedded.organizations, district => {
-            if (district.type !== 'district') {
-                return null;
-            }
-            return (
-                <Link to={`/districts/${district.id}`}>
-                    {district.title}
-                </Link>
-            );
-        });
-        return links;
+        return (
+            <Link to={`/districts/${this.state.organization.org_id}`}>
+                {this.state.organization.title}
+            </Link>
+        );
     }
 
     renderAdminLink() {
@@ -113,15 +106,15 @@ export class ProfileView extends React.Component {
                     <p>
                         <a href={`/school/${this.props.data.group_id}/profile`}>Return to school profile</a>
                     </p>
-                   <Paragraph>
-                       <p pre={`${HEADINGS.DISTRICTS}: `}>{this.renderDistricts.bind(this)}</p>
+                   <Paragraph className="school-district">
+                       <p pre={`${HEADINGS.DISTRICTS}: `}>{this.renderDistricts()}</p>
                        <p pre={`${HEADINGS.DESCRIPTION}: `}>{this.props.data.description}</p>
                    </Paragraph>
                 </Panel>
                 <Panel header={HEADINGS.CLASSES} className="standard">
                     <Link to="/classes">View All Your Classes</Link>
                     <CLASS_SOURCE>
-                        <Table>
+                        <Table className="school-classes">
                             <Column dataKey="title"
                                 renderCell={(data, row) => (
                                     <Link to={`/class/${row.group_id}`}>
@@ -150,7 +143,7 @@ export class ProfileView extends React.Component {
                 <Panel header={HEADINGS.USERS} className="standard">
                     <Link to="/users">View All Your Users</Link>
                     <USER_SOURCE>
-                        <Table>
+                        <Table className="school-users">
                             <Column dataKey="first_name" renderHeader="Name"
                                 renderCell={(data, row) => (
                                     <Link to={`/user/${row.user_id}`}>
@@ -194,7 +187,7 @@ mapStateToProps = state => {
     };
 };
 
-Page = connect(mapStateToProps)(ProfileView);
+Page = connect(mapStateToProps)(SchoolView);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
 

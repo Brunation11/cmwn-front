@@ -13,7 +13,6 @@ import GenerateDataSource from 'components/datasource';
 import EditLink from 'components/edit_link';
 import Toast from 'components/toast';
 import Util from 'components/util';
-import Log from 'components/log';
 
 import 'routes/users/profile.scss';
 import FlipBgDefault from 'media/icon_class_blue.png';
@@ -63,28 +62,15 @@ export class SchoolProfile extends React.Component {
     }
 
     renderDistricts() {
-        var links;
-        if (!this.props.data || !this.props.data._embedded || !this.props.data._embedded.organization ||
-            this.props.data._embedded.organization.district) {
-            Log.log('NOT RENDERING DISTRICTS');
+        if (!this.props.data.organization) {
             return null;
         }
-        //links = _.map(this.props.data._embedded.organization.district, district => {
-        //    return (
-        //        <Link to={`/districts/${district.org_id}`} className="school-district-link">
-        //            {district.title}
-        //        </Link>
-        //    );
-        //});
-        Log.log('RENDERING DISTRICTS');
         return (
-            <p>
+            <p className="school-district">
                 {`${HEADINGS.DISTRICTS}: `}
                 {this.props.data.organization.title}
             </p>
         );
-        //TODO: change to match network response (this.props.data._embedded.organization)
-        //NOTE: will not be an array, will be only one district
     }
 
     renderFlip(item) {
