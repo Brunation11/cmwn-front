@@ -117,11 +117,19 @@ var Component = React.createClass({
                 <form>
                     <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.SUGGESTED} data={this.props.data}
                         transform={data => {
-                            //data = _.map(data, item => {
-                            data = data.set('image', _.has(data, '_embedded.image[0].url') ?
-                                data.images.data[0].url : DefaultProfile);
-                            //    return item;
-                            //});
+                            var image;
+                            if (!_.has(data, '_embedded.image')) {
+                                image = DefaultProfile;
+                            } else {
+                                if (data._embedded.image.url != null) {
+                                    image = data._embedded.image.url;
+                                } else {
+                                    image = data.images.data[0].url;
+                                }
+                            }
+
+                            data = data.set('image', image);
+
                             return data;
                         }}
                     />

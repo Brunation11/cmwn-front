@@ -3,7 +3,6 @@ import {Link} from 'react-router';
 import ClassNames from 'classnames';
 import {Button, Glyphicon} from 'react-bootstrap';
 
-// import Store from 'components/store';
 import EventManager from 'components/event_manager';
 
 //import LOGO_URL from 'media/logo.png';
@@ -49,7 +48,7 @@ var GlobalHeader = React.createClass({
             return null;
         }
         return (
-            <div className="logout"><a href="/logout" onClick={this.logout}>
+            <div className="logout"><a href="/logout" onClick={this.logout} id="logout-button">
                 <img src={LOGOUT_URL} alt={LOGOUT} />{LOGOUT}
             </a></div>
         );
@@ -69,9 +68,10 @@ var GlobalHeader = React.createClass({
                     </Link>
                 </div>
                 <Button className={ClassNames('menu', {hidden: this.props.currentUser == null})}
-                    onClick={this.toggleMenu}>
+                    onClick={this.toggleMenu}
+                >
                     <Glyphicon glyph="glyphicon glyphicon-menu-hamburger" />
-                   <span className="fallback">{MENU}</span>
+                    <span className="fallback">{MENU}</span>
                 </Button>
                 {this.renderLogout()}
                 <div className="blocker"></div>
