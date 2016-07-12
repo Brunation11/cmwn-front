@@ -108,12 +108,19 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
         },
         getMedia: function (e) {
             var respond = e.respond;
-            Log.info('Requested path ' + e.gameData.path);
             e.gameData = e.gameData || {};
-            e.gameData.path = e.gameData.path || 'skribble/menu';
-            resolveFinalMediaState(e.gameData.path)
-                .then(response => respond(response))
-                .catch(err => Log.error(err));
+            if (e.gameData.media_id) {
+                Log.info('Requested id ' + e.gameData.media_id);
+                HttpManager.GET(GLOBALS.API_URL + 'media/' + e.gameData.media_id)
+                    .then(server => respond(server.response))
+                    .catch(err => Log.error(err));
+            } else {
+                Log.info('Requested path ' + e.gameData.path);
+                e.gameData.path = e.gameData.path || 'skribble/menu';
+                resolveFinalMediaState(e.gameData.path)
+                    .then(response => respond(response))
+                    .catch(err => Log.error(err));
+            }
         },
         getFriends: function (e) {
             HttpManager.GET(_links.friend.href)
