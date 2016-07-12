@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import ClassNames from 'classnames';
 
 import SiteNav from 'components/site_nav';
 //import FriendList from 'components/friend_list';
@@ -28,7 +29,8 @@ var Component = React.createClass({
         return (
             <div>
                 <p className="welcome">{WELCOME}</p>
-                <p className={'username ' + (this.state.tooLong ? 'smaller-text' : 'regular-text')}>
+                <p className={ClassNames({'username': true, 'smaller-text': this.state.tooLong,
+                    'regular-text': !this.state.tooLong})}>
                     <a onClick={this.attemptNavigate}>
                         {this.props.currentUser.username}
                     </a>
