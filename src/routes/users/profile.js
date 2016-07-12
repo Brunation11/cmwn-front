@@ -268,12 +268,11 @@ export class Profile extends React.Component {
 
     render() {
         var profile;
-        if (this.state.username == null) {
+        if (this.state.user_id == null || this.props.currentUser.user_id == null) {
             return null;
         }
-        profile = (this.state.user_id === this.props.currentUser.user_id) ?
-            this.renderCurrentUserProfile : this.renderUserProfile;
-
+        profile = this.state.user_id === this.props.currentUser.user_id ?
+        this.renderCurrentUserProfile : this.renderUserProfile;
         return (
            <Layout className={PAGE_UNIQUE_IDENTIFIER} navMenuId="navMenu">
                {profile.apply(this)}
