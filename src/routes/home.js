@@ -74,7 +74,7 @@ export class Home extends React.Component {
     }
 
     componentDidMount() {
-        //History.replace('/home');
+        History.replace('/home');
     }
 
     logoLink() {

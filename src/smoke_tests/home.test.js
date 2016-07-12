@@ -5,6 +5,7 @@ import { mount } from 'enzyme';
 import { Home } from 'routes/home';
 import { checkLayoutContents } from 'layouts/home.test.js';
 import { checkHeaderContents } from 'components/header.test.js';
+import History from 'components/history';
 
 
 export default function() {
@@ -12,6 +13,8 @@ export default function() {
         it('Renders homepage using mount', function () {
             const WRAPPER = mount(<Home currentUser={{}} />);
             expect(WRAPPER.instance()).to.be.instanceOf(Home);
+            expect(History.getCurrentLocation().pathname).to.equal('/home');
+            expect(History.getCurrentSize()).to.equal(1);
         });
 
         it('Has the correct home contents', function () {
@@ -41,6 +44,24 @@ export default function() {
             const WRAPPER = mount(<Home currentUser={{}} />);
             const HEADER = WRAPPER.find('Header');
             checkHeaderContents(HEADER);
+        });
+
+        it('responds properly to clicking logo as anonymous user', function() {
+            const WRAPPER = mount(<Home currentUser={{}} />);
+            expect(History.getCurrentSize()).to.equal(1);
+            expect(History.getCurrentLocation().pathname).to.equal('/home');
+            WRAPPER.find('.logo-button').at(0).simulate('click');
+            expect(History.getCurrentSize()).to.equal(1);
+            expect(History.getCurrentLocation().pathname).to.equal('/home');
+        });
+
+        it('responds properly to clicking logo as logged in user', function() {
+            const WRAPPER = mount(<Home currentUser={{user_id: 'test'}} />);
+            expect(History.getCurrentSize()).to.equal(1);
+            expect(History.getCurrentLocation().pathname).to.equal('/home');
+            WRAPPER.find('.logo-button').at(0).simulate('click');
+            expect(History.getCurrentSize()).to.equal(1);
+            expect(History.getCurrentLocation().pathname).to.equal('/profile');
         });
 
         it('responds to clicking the header work modal link', function () {
