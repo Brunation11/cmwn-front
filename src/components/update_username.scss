@@ -4,9 +4,18 @@
     font-family: $cmwn-jade-font;
 }
 
-.float-shadow {
-    display: inline-block;
-}
+    input:disabled {
+        margin: 0 auto;
+        margin-bottom: 2rem;
+        border-radius: $standard / 3;
+        box-shadow: 0 0 6px $cmwn-medium-blue;
+        background-color: $cmwn-blue;
+        height: 3rem;
+        text-align: center;
+        color: $cmwn-white;
+        font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
+        font-size: 2rem;
+    }
 
 .float-shadow::before {
     position: absolute;
