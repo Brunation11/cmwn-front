@@ -149,12 +149,20 @@ describe('Profile Unit Tests', function () {
             expect(dataTransform(null)).to.be.an.instanceof(Array).and.to.be.empty;
         });
 
+        it('handles undefined input', function () {
+            expect(dataTransform(null)).to.be.an.instanceof(Array).and.to.be.empty;
+        });
+
         it('handles empty list', function () {
             expect(dataTransform([])).to.be.an.instanceof(Array).and.to.be.empty;
         });
 
         it('handles non array', function () {
             expect(dataTransform({})).to.be.an.instanceof(Array).and.to.be.empty;
+        });
+
+        it('handles nonsense', function () {
+            expect(dataTransform("cat dog!!!!")).to.be.an.instanceof(Array).and.to.be.empty;
         });
 
         it('handles one element', function () {

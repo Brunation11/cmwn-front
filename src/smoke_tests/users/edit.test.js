@@ -91,8 +91,8 @@ export default function () {
 
         describe('viewing edit profile without permission', function () {
             it('renders a null profile', function () {
-                var edit = <EditProfile data={{user_id: 0, scope: 0}} loading={false} //eslint-disable-line camelcase, max-len
-                    currentUser={teacherData}/>;
+                var edit = <EditProfile data={{user_id: 0, scope: 0}} //eslint-disable-line camelcase
+                    loading={false} currentUser={teacherData}/>;
                 //const WRAPPER = mount(edit);
                 //expect(WRAPPER.type()).to.equal(null);
             });
