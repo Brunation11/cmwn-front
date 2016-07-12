@@ -86,6 +86,7 @@
         "browser": true
     },
     "globals": {
+        "__cmwn": true,
         "grecaptcha": false
     },
     "extends": "eslint:recommended",
