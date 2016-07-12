@@ -11,7 +11,6 @@ import EditLink from 'components/edit_link';
 import DeleteLink from 'components/delete_link';
 import Text from 'components/nullable_text';
 import Util from 'components/util';
-import Store from 'components/store';
 import GenerateDataSource from 'components/datasource';
 
 const PAGE_UNIQUE_IDENTIFIER = 'classProfile';
@@ -28,17 +27,21 @@ const HEADINGS = {
 
 const BREADCRUMBS = 'Return to school profile';
 
-var Component = React.createClass({
-    getInitialState: function () {
-        return {scope: 7};
-    },
-    componentDidMount: function () {
+var mapStateToProps;
+var Page;
+
+export class View extends React.Component{
+    constructor() {
+        super();
+        this.state = {scope: 0};
+    }
+    componentDidMount() {
         this.setState(this.props.data);
-    },
-    componentWillReceiveProps: function (nextProps) {
+    }
+    componentWillReceiveProps(nextProps) {
         this.setState(nextProps.data);
-    },
-    renderSchools: function () {
+    }
+    renderSchools() {
         var links = _.map(this.props.data.schools, school => {
             return (
                 <Link to={`school/${school.uuid}`}>
@@ -50,9 +53,8 @@ var Component = React.createClass({
             return null;
         }
         return <span>{`${HEADINGS.CLASSES}: `}{links}</span>;
-    },
-    renderImport: function () {
-        var state = Store.getState();
+    }
+    renderImport() {
         if (this.state == null || this.state._links == null || this.state._links.import == null) {
         //if (!state.currentUser || !state.currentUser._embedded ||
         //    !state.currentUser._embedded.groups || !state.currentUser._embedded.groups.length ||
@@ -63,23 +65,23 @@ var Component = React.createClass({
         }
         return (
                 <Button className="standard green" onClick={ () => {
-                    History.push('/schools/' + state.currentUser._embedded.groups[0].group_id + '/edit');
+                    History.push('/schools/' + this.props.currentUser._embedded.groups[0].group_id + '/edit');
                 }} >Import Spreadsheet</Button>
                 );
-    },
-    renderBreadcrumb: function () {
+    }
+    renderBreadcrumb() {
         if (!this.state || this.state.parent_id == null) {
             return null;
         }
         return <Link to={'/school/' + this.state.parent_id} id="return-to-school">{BREADCRUMBS}</Link>;
-    },
-    render: function () {
+    }
+    render() {
         if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
         return (
             <Layout>
-                <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard">
+                <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard" id="panel-1">
                     <p className="right" id="editButton">
                         <EditLink className="purple" base="/class" id={this.state.group_id}
                             scope={this.state.scope} text="Edit this class" />
@@ -88,7 +90,7 @@ var Component = React.createClass({
                             scope={this.state.scope} text="Delete this class" />
                     </p>
                     {this.renderBreadcrumb()}
-                    <p>
+                    <p id="class-profile">
                         <Link to={`/class/${this.props.data.group_id}/profile`} id="return-to-class">
                             Return to class profile
                         </Link>
@@ -102,7 +104,7 @@ var Component = React.createClass({
                         <p></p>
                     </Text>
                 </Panel>
-                <Panel header="Students" className="standard">
+                <Panel header="Students" className="standard" id="panel-2">
                     <div className="clear">
                         <span className="buttons-right">
                             {this.renderImport()}
@@ -148,21 +150,26 @@ var Component = React.createClass({
 
         );
     }
-});
+}
 
-var mapStateToProps = state => {
+mapStateToProps = state => {
     var data = {title: ''};
+    var currentUser = {};
     var loading = true;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
+        if (state.currentUser != null){
+            currentUser = state.currentUser;
+        }
     }
     return {
         data,
-        loading
+        loading,
+        currentUser
     };
 };
 
-var Page = connect(mapStateToProps)(Component);
+Page = connect(mapStateToProps)(View);
 export default Page;
 
