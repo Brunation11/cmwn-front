@@ -16,7 +16,8 @@ describe('tests changing password', function() {
         var msg = browser.getText('#show-msg');
         expect(msg).to.equal("You have successfully updated your password.\nBe sure to remember for next time!");
         browser.url('/profile');
-        browser.waitForExist('#login-form', time);      browser.getUrl().should.equal('https://local.changemyworldnow.com/login');
+        browser.waitForExist('#login-form', time);
+        browser.getUrl().should.equal('https://local.changemyworldnow.com/login');
         // Checks if you successfully log back in with new password
         login.login("teacher", "business1");
         browser.waitForExist('.sidebar', time);
