@@ -223,7 +223,7 @@ export class Profile extends React.Component {
                 <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
                     <div className="left">
                         <div className="frame">
-                            <ProfileImage user_id={this.state.user_id} link-below={true}/>
+                            <ProfileImage user={this.state} link-below={true}/>
                         </div>
                     </div>
                     <div className="right">
@@ -262,12 +262,11 @@ export class Profile extends React.Component {
 
     render() {
         var profile;
-        if (this.state.username == null) {
+        if (this.state.user_id == null || this.props.currentUser.user_id == null) {
             return null;
         }
-        profile = (this.state.user_id === this.props.currentUser.user_id) ?
-            this.renderCurrentUserProfile : this.renderUserProfile;
-
+        profile = this.state.user_id === this.props.currentUser.user_id ?
+        this.renderCurrentUserProfile : this.renderUserProfile;
         return (
            <Layout className={PAGE_UNIQUE_IDENTIFIER} navMenuId="navMenu">
                {profile.apply(this)}
