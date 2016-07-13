@@ -44,8 +44,8 @@ const CONFIRM_DELETE = 'Are you sure you want to delete this user? This action c
 export class EditProfile extends React.Component {
     constructor(props) {
         super(props);
-        var state; //eslint-disable-line vars-on-top
-        var isStudent; //eslint-disable-line vars-on-top
+        var state;
+        var isStudent;
         state = _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {};
         isStudent = props.isStudent !== null && props.isStudent !== undefined ? props.isStudent : true;
         this.state = _.defaults({}, state, {isStudent: isStudent, dob: new Date().toISOString()});

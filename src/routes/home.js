@@ -94,23 +94,23 @@ export class Home extends React.Component {
         return (
             <div id="home" className="home">
                 <Modal id="video-modal"
-                    show={this.state.viewOpen} onHide={this.setState.bind(this, {viewOpen: false})}>
+                       show={this.state.viewOpen} onHide={this.setState.bind(this, {viewOpen: false})}>
                     <Modal.Body>
                         <iframe id="viddler-b9cd1cb6" src={'//www.viddler.com/embed/b9cd1cb6/?f=1&' +
                             'autoplay=1&player=simple&secret=54225444&make_responsive=0'}
-                            width="100%" height="300" frameBorder="0" scrolling="no" allowFullScreen="1">
+                                width="100%" height="300" frameBorder="0" scrolling="no" allowFullScreen="1">
                         </iframe>
                     </Modal.Body>
                 </Modal>
                 <div className="global-header">
-                    <div className="logo" >
+                    <div className="logo">
                         <span className="logo-button" onClick={this.logoLink.bind(this)}>
-                            <img alt="Change My World Now" src={LOGO_URL} />
+                            <img alt="Change My World Now" src={LOGO_URL}/>
                         </span>
                     </div>
                     <div className="header-logo">
                         <span className="logo-button" onClick={this.logoLink.bind(this)}>
-                            <img alt="Change My World Now" src={LOGO_HEADER} />
+                            <img alt="Change My World Now" src={LOGO_HEADER}/>
                         </span>
                     </div>
                     <Header
@@ -123,37 +123,38 @@ export class Home extends React.Component {
                 </div>
                 <Carousel>
                     <CarouselItem>
-                        <img className="bg" src={SOURCES.SLIDEBG[0]} />
+                        <img className="bg" src={SOURCES.SLIDEBG[0]}/>
                         <div className="content-group centered sweater">
                             <div>
                                 <h2>{COPY.SLIDES[0].HEADING}</h2>
                                 <Button className="purple" id="video-btn"
-                                    onClick={this.openViewModal.bind(this)}>
+                                        onClick={this.openViewModal.bind(this)}>
                                     {COPY.BUTTONS.WATCH}
                                 </Button>
                             </div>
                         </div>
                     </CarouselItem>
                     <CarouselItem>
-                        <img className="bg" src={SOURCES.SLIDEBG[1]} />
+                        <img className="bg" src={SOURCES.SLIDEBG[1]}/>
                         <div className="content-group centered sweater">
                             <h2>{COPY.SLIDES[1].HEADING}</h2>
                         </div>
                     </CarouselItem>
                     <CarouselItem>
-                        <img className="bg" src={SOURCES.SLIDEBG[2]} />
+                        <img className="bg" src={SOURCES.SLIDEBG[2]}/>
                         <div className="content-group centered sweater">
                             <h2>{COPY.SLIDES[2].HEADING}</h2>
                         </div>
                     </CarouselItem>
                 </Carousel>
                 <div id="layout-sweater" className="sweater">
-                    <Layout openModal={this.openModal.bind(this)} />
+                    <Layout openModal={this.openModal.bind(this)}/>
                 </div>
             </div>
         );
     }
 }
+
 
 /* istanbul ignore next */
 mapStateToProps = state => {

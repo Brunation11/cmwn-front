@@ -119,7 +119,7 @@ class Footer extends React.Component {
                     <a onClick={this.displayContact.bind(this)}>
                         {COPY.BUTTONS.CONTACT}
                     </a>
-                    <a href="/terms" target="_blank">
+                    <a href="/terms" target="_blank" id="terms-and-conds">
                         {COPY.BUTTONS.TERMS}
                     </a>
                 </footer>

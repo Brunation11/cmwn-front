@@ -1,5 +1,5 @@
 import React from 'react';
-import {Input, Button, Modal} from 'react-bootstrap';
+import {Button, Modal} from 'react-bootstrap';
 import ClassNames from 'classnames';
 
 import Toast from 'components/toast';
@@ -181,8 +181,7 @@ class Header extends React.Component {
                     </a>
                 </div>
                 <div className="actions">
-                    <Button id="signup" className="green"
-                        onClick={this.displaySignupModal.bind(this)}>
+                    <Button id="signup" className="green" onClick={this.displaySignupModal.bind(this)}>
                         {COPY.BUTTONS.SIGNUP}
                     </Button>
                     <Button id="login" className="purple" onClick={this.login.bind(this)}>
