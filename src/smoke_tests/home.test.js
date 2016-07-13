@@ -8,7 +8,7 @@ import { checkHeaderContents } from 'components/header.test.js';
 import History from 'components/history';
 
 
-export default function() {
+export default function () {
     describe('Anonymous user viewing homepage', function () {
         it('Renders homepage using mount', function () {
             const WRAPPER = mount(<Home currentUser={{}} />);
@@ -40,13 +40,13 @@ export default function() {
             checkLayoutContents(LAYOUT);
         });
 
-        it('has the correct Header contentens', function() {
+        it('has the correct Header contentens', function () {
             const WRAPPER = mount(<Home currentUser={{}} />);
             const HEADER = WRAPPER.find('Header');
             checkHeaderContents(HEADER);
         });
 
-        it('responds properly to clicking logo as anonymous user', function() {
+        it('responds properly to clicking logo as anonymous user', function () {
             const WRAPPER = mount(<Home currentUser={{}} />);
             expect(History.getCurrentSize()).to.equal(1);
             expect(History.getCurrentLocation().pathname).to.equal('/home');
@@ -55,27 +55,13 @@ export default function() {
             expect(History.getCurrentLocation().pathname).to.equal('/home');
         });
 
-        it('responds properly to clicking logo as logged in user', function() {
-            const WRAPPER = mount(<Home currentUser={{user_id: 'test'}} />);
+        it('responds properly to clicking logo as logged in user', function () {
+            const WRAPPER = mount(<Home currentUser={{user_id: 'test'}} />); //eslint-disable-line camel-case
             expect(History.getCurrentSize()).to.equal(1);
             expect(History.getCurrentLocation().pathname).to.equal('/home');
             WRAPPER.find('.logo-button').at(0).simulate('click');
             expect(History.getCurrentSize()).to.equal(1);
             expect(History.getCurrentLocation().pathname).to.equal('/profile');
-        });
-
-        it('responds to clicking the header work modal link', function () {
-            const WRAPPER = mount(<Home currentUser={{}} />);
-            expect(WRAPPER.state('workOpen')).to.be.false;
-            WRAPPER.find('#work-modal-link').simulate('click');
-            expect(WRAPPER.state('workOpen')).to.be.true;
-        });
-
-        it('responds to clicking the header contact modal link', function () {
-            const WRAPPER = mount(<Home currentUser={{}} />);
-            expect(WRAPPER.state('contactOpen')).to.be.false;
-            WRAPPER.find('#contact-modal-link').simulate('click');
-            expect(WRAPPER.state('contactOpen')).to.be.true;
         });
 
         it('responds to clicking the footer work modal link', function () {
@@ -92,19 +78,11 @@ export default function() {
             expect(WRAPPER.state('contactOpen')).to.be.true;
         });
 
-        it('responds to clicking school sign up link', function() {
+        it('opens the video modal', function () {
             const WRAPPER = mount(<Home currentUser={{}} />);
             expect(WRAPPER.state('viewOpen')).to.be.false;
             WRAPPER.find('#video-btn').simulate('click');
             expect(WRAPPER.state('viewOpen')).to.be.true;
         });
-
-        it('opens and closes the video', function () {
-            const WRAPPER = mount(<Home currentUser={{}} />);
-            expect(WRAPPER.state('viewOpen')).to.be.false;
-            // TODO: investigate opening video modal gives minified exception sometimes. LB 06/06/16
-            //WRAPPER.find('#video-btn').simulate('click');
-            //expect(WRAPPER.state('viewOpen')).to.be.true;
-        });
     });
-};
+}

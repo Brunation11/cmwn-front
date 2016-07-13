@@ -16,7 +16,7 @@ import SLIDE_C_BG_URL from 'media/home/blue_background.png';
 var ConnectedHome;
 var mapStateToProps;
 
-const COPY = {
+export const COPY = {
     BUTTONS: {
         WORK: 'Work with Us',
         CONTACT: 'Contact Us',
@@ -53,7 +53,7 @@ const COPY = {
     ]
 };
 
-const SOURCES = {
+export const SOURCES = {
     LOGO: '',
     SLIDEBG: [
         SLIDE_A_BG_URL,
