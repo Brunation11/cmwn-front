@@ -1,37 +1,103 @@
-var login_test = require('../login_test.js');
-var USER = 'teacher';
-var PASSWD = 'business2';
+var login = require("../login");
+var USER = "teacher";
+var PASSWD = "business2";
+const TIME = 60000; // one minute
 
 describe('tests buttons for game', function() {
     // Checks if the game takes up full screen if you press the "FULL SCREEN" button
-    it('should assert opening the game when pressed', function() {
-        login_test.login(USER, PASSWD);
-        browser.waitForExist('.sidebar');
-        browser.url('/game/happy-fish-face');
-        browser.waitForExist('#happy-fish-face');
-        // check the size of the game
-        // Checks if pressing the full screen button increases the size of the game
-        var beforeSize = browser.getAttribute('.purple standard btn btn-default', 'zoom');
-        browser.click('.purple standard btn btn-default');
-        var afterSize = browser.getAttribute('.purple standard btn btn-default', 'zoom');
-        expect(afterSize).to.be.above(beforeSize);
+    it('should make the game full screen when the button is pressed', function() {
+        login.login(USER, PASSWD);
+        browser.waitForExist('.sidebar', TIME);
+        browser.url('/game/be-bright');
+        browser.waitForExist('.game', TIME);
+        // Changes focus to the iframe
+        browser.frame(0);
+        browser.waitForExist('.pl-game', TIME);
+        // Gets the transform of the element
+        var beforeSize = browser.getCssProperty('.pl-game', 'transform');
+        // Extract just the size number
+        var parenIdx = beforeSize.value.indexOf('(');
+        var commaIdx = beforeSize.value.indexOf(',');
+        var size1 = beforeSize.value.substring(parenIdx + 1, commaIdx);
+        // Changes focus back to the parent
+        browser.frameParent();
+        browser.waitForExist('.purple', TIME);
+        browser.click('.purple');
+        browser.frame(0);
+        browser.waitForExist('.pl-game', TIME);
+        // Gets the transform of the element after pressing the "FULL SCREEN" button
+        var afterSize = browser.getCssProperty('.pl-game', 'transform');
+        var size2 = afterSize.value.substring(parenIdx + 1, commaIdx);
+        expect(size2).to.be.above(size1);
     });
-    
+
     // Checks the "DEMO MODE" button
     it('should assert the demo mode when pressed', function() {
-        login_test.login(USER, PASSWD);
-        browser.waitForExist('.sidebar');
-        browser.url('/game/happy-fish-face');
-        browser.waitForExist('#happy-fish-face');
-        // check the size of the game
+        login.login(USER, PASSWD);
+        browser.waitForExist('.sidebar', TIME);
+        browser.url('/game/be-bright');
+        browser.waitForExist('.green', TIME);
         // Checks if the demo mode works
-        browser.click('.green standard btn btn-default');
-        browser.waitForExist('.pl-scope pl-game READY DEMO');
-        var location1 = browser.getLocation('.next-screen', 'y');
-        browser.click('.next-screen'); // Press play
-        browser.pressKeycode(22); // press the right key
-        // It should go to the next slide
-        var location2 = browser.getLocation('next-screen', 'y');
-        expect(location1).to.not.equal(location2);
+        browser.click('.green');
+        browser.frame(0);
+        browser.waitForExist('.pl-game', TIME);
+        // "DEMO" should be a class name after pressing "DEMO MODE"
+        var className = browser.getAttribute('.pl-game', 'class');
+        expect(className).to.contain('DEMO');
+        browser.click('.pl-game');
+        browser.waitForVisible('.next-screen', TIME);
+        browser.click('.next-screen');
+        // The next slide should also have an arrow
+        browser.waitForExist('.next-screen', TIME);
+        // Returns an array of which ".next-screen" classes are visible
+        var visible = browser.isVisible('.next-screen');
+        expect(visible).to.contain(true);
+    });
+    
+    it('should quit the game when the yes button is pressed', function() {
+        login.login(USER, PASSWD);
+        browser.waitForExist('.sidebar', TIME);
+        browser.url('/game/be-bright');
+        browser.waitForExist('.game', TIME);
+        // Changes focus to the iframe
+        browser.frame(0);
+        browser.waitForExist('.close', TIME);
+        browser.click('.close');
+        browser.waitForVisible('.quit-yes', TIME);
+        browser.click('.quit-yes');
+        browser.waitForVisible('.flip', TIME);
+        var url = browser.getUrl();
+        expect(url).to.equal('https://local.changemyworldnow.com/profile');
+    });
+    
+    it('should go back to the same screen when the no button is pressed', function() {
+        login.login(USER, PASSWD);
+        browser.waitForExist('.sidebar', TIME);
+        browser.url('/game/be-bright');
+        browser.waitForExist('.game', TIME);
+        // Changes focus to the iframe
+        browser.frame(0);
+        browser.waitForExist('.close', TIME);
+        browser.click('.close');
+        browser.waitForVisible('.quit-no', TIME);
+        // Should be on the first screen after you click `No`
+        browser.click('.quit-no');
+        browser.waitForExist('.SCREEN-1');
+        var currentScreen = browser.isVisible('.SCREEN-1');
+        expect(currentScreen).to.be.equal(true);
+    });
+    
+    it('should go to the next screen when PLAY is pressed', function() {
+        login.login(USER, PASSWD);
+        browser.waitForExist('.sidebar', TIME);
+        browser.url('/game/be-bright');
+        browser.waitForExist('.game', TIME);
+        // Changes focus to the iframe
+        browser.frame(0);
+        browser.waitForVisible('.next-screen', TIME);
+        browser.click('.next-screen');
+        browser.waitForExist('.SCREEN-2', TIME);
+        var nextScreen = browser.isVisible('.SCREEN-2');
+        expect(nextScreen).to.equal(true);
     });
 });
