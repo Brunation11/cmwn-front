@@ -1,22 +1,22 @@
 var login = require("../login");
 var USER = "teacher";
 var PASSWD = "business2";
-var time = 60000; // one minute
+const TIME = 60000; // one minute
 
 describe('tests opening game on games page', function() {
     // Checks if the game opens when you press on the game
     it('should assert opening the game when pressed', function() {
         login.login(USER, PASSWD);
-        browser.waitForExist('.sidebar', time);
+        browser.waitForExist('.sidebar', TIME);
         browser.url('/games');
         //browser.url('/profile');
-        browser.waitForExist('.flip', time);
+        browser.waitForExist('.flip', TIME);
         // Presses the game to open it
         browser.click('.flip');
-        browser.waitForExist('.modal-body', time);
+        browser.waitForExist('.modal-body', TIME);
         // Focuses on the iframe to access elements inside
         browser.frame(0);
-        browser.waitForExist('.pl-game', time);
+        browser.waitForExist('.pl-game', TIME);
         // Checks if the game popped up
         var visible = browser.isVisible('.pl-game');
         expect(visible).to.equal(true);
@@ -33,15 +33,15 @@ describe('tests opening game on games page', function() {
     // Checks if pressing "(close)" closes the game
     it('should close the game when pressing the (close) link', function() {
         login.login(USER, PASSWD);
-        browser.waitForExist('.sidebar', time);
+        browser.waitForExist('.sidebar', TIME);
         browser.url('/games');
         //browser.url('/profile');
-        browser.waitForExist('.flip', time);
+        browser.waitForExist('.flip', TIME);
         // Presses the game to open it
         browser.click('.flip');
-        browser.waitForExist('.modal-close', time);
+        browser.waitForExist('.modal-close', TIME);
         browser.click('.modal-close');
-        browser.waitForVisible('.sidebar', time);
+        browser.waitForVisible('.sidebar', TIME);
         // Checks if the "(close)" link is still shown
         expect(browser.isVisible('.modal-close')).to.not.equal(true);
     });
