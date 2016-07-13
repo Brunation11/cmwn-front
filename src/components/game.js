@@ -47,7 +47,8 @@ var Game = React.createClass({
     },
     getInitialState: function () {
         return {
-            fullscreenFallback: false
+            fullscreenFallback: false,
+            demo: false
         };
     },
     componentWillMount: function () {
@@ -125,6 +126,7 @@ var Game = React.createClass({
     dispatchPlatformEvent(name, data) {
         /** TODO: MPR, 1/15/16: Polyfill event */
         var event = new Event('platform-event', {bubbles: true, cancelable: false});
+        this.toggleDemoButton();
         _.defaults(event, {type: 'platform-event', name, data});
         ReactDOM.findDOMNode(this.refs.gameRef).contentWindow.dispatchEvent(event);
     },
@@ -134,6 +136,13 @@ var Game = React.createClass({
             Screenfull.request(ReactDOM.findDOMNode(self.refs.gameRef));
         } else {
             self.setState({fullscreenFallback: true});
+        }
+    },
+    toggleDemoButton: function () {
+        if (this.state.demo){
+            this.setState({demo: false});
+        } else {
+            this.setState({demo: true});
         }
     },
     render: function () {
@@ -150,7 +159,8 @@ var Game = React.createClass({
                         <Glyphicon glyph="fullscreen" /> {FULLSCREEN}
                     </Button>
                     <Button className={ClassNames(
-                            'green standard',
+                            {'purple standard': !this.state.demo},
+                            {'green standard': this.state.demo},
                             {hidden: !this.props.isTeacher}
                         )}
                         onClick={() => this.dispatchPlatformEvent('toggle-demo-mode')}>{DEMO_MODE}
