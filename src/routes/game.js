@@ -46,13 +46,13 @@ var GamePage = React.createClass({
         return (
             <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <Game
-                    className={PAGE_UNIQUE_IDENTIFIER}
                     ref="gameRef"
                     isTeacher={!this.state.isStudent}
                     url={this.state.gameUrl}
                     flipUrl={this.state.flipUrl}
-                    saveUrl={this.state.saveUrl}
                     onExit={() => History.push('/profile')}
+                    game={this.state.game}
+                    currentUser={this.props.currentUser}
                 />
             </Layout>
         );
