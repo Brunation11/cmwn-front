@@ -25,13 +25,13 @@ export class GamePage extends React.Component {
         this.resolveRole();
     }
 
-    componentWillReceiveProps() {
-        this.resolveRole();
+    componentWillReceiveProps(nextProps) {
+        this.resolveRole(nextProps);
     }
 
-    resolveRole() {
+    resolveRole(props) {
         var newState = {};
-        if (this.props.currentUser && this.props.currentUser.type !== 'CHILD') {
+        if (props.currentUser && props.currentUser.type !== 'CHILD') {
             newState.isStudent = false;
         } else {
             newState.isStudent = true;
@@ -62,9 +62,9 @@ mapStateToProps = state => {
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
-        if (state.currentUser != null) {
-            currentUser = state.currentUser;
-        }
+    }
+    if (state.currentUser != null) {
+        currentUser = state.currentUser;
     }
     return {
         data,

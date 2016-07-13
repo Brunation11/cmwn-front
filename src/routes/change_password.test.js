@@ -46,9 +46,11 @@ describe('<ChangePassword />', function () {
             var newInput;
             var confirmInput;
             newInput = WRAPPER.find({name: 'newInput'});
+            expect(WRAPPER.state('new')).to.equal('');
             newInput.simulate('change', {target: {value: 'business5'}});
             expect(WRAPPER.state('new')).to.equal('business5');
             confirmInput = WRAPPER.find({name: 'confirmInput'});
+            expect(WRAPPER.state('confirm')).to.equal('');
             confirmInput.simulate('change', {target: {value: 'business5'}});
             expect(WRAPPER.state('confirm')).to.equal('business5');
         });
