@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import React from 'react'; //eslint-disable-line no-unused-vars
 import {expect} from 'chai';
 import _ from 'lodash';
@@ -173,7 +174,7 @@ describe('Mock History Object', function () {
         });
     });
 
-    describe('pushing replacing locations in history', function () {
+    describe('pushing and replacing locations in history', function () {
 
         it('pushes a location to an empty history', function () {
             var history = new History;
@@ -207,14 +208,58 @@ describe('Mock History Object', function () {
             expect(_.isEqual(history.getCurrentLocation(), input)).to.be.true;
         });
 
-        it('replaces a location for an empty history', function () {
-            var history = new History;
+        it('does not push duplicate simple string to history', function () {
+            var history = new History();
+            history.push('/home');
+            expect(history.getCurrentSize()).to.equal(1);
+            expect(history.getCurrentLocation().pathname).to.equal('/home');
+            history.push('/home');
+            expect(history.getCurrentSize()).to.equal(1);
+            expect(history.getCurrentLocation().pathname).to.equal('/home');
+        });
+
+        it('does not push duplicate complicated objects to history', function () {
+            var history = new History();
             var input = {
                 pathname: '/home',
-                query: {},
+                query: {'a': 'b'},
+                hash: '#thing',
+                state: null,
+                search: '?a=b'
+            };
+            history.push(input);
+            expect(history.getCurrentSize()).to.equal(1);
+            expect(history.getCurrentLocation().pathname).to.equal('/home');
+            history.push(input);
+            expect(history.getCurrentSize()).to.equal(1);
+            expect(history.getCurrentLocation().pathname).to.equal('/home');
+        });
+
+        it('does not push duplicate complicated object/ string to history', function () {
+            var history = new History();
+            var input = {
+                pathname: '/home',
+                query: {'a': 'b'},
+                hash: '#thing',
+                state: null,
+                search: '?a=b'
+            };
+            history.push(input);
+            expect(history.getCurrentSize()).to.equal(1);
+            expect(history.getCurrentLocation().pathname).to.equal('/home');
+            history.push('/home?a=b#thing');
+            expect(history.getCurrentSize()).to.equal(1);
+            expect(history.getCurrentLocation().pathname).to.equal('/home');
+        });
+
+        it('replaces a location for an empty history', function () {
+            var history = new History();
+            var input = {
+                pathname: '/home',
+                query: {'a': 'b'},
                 hash: '',
                 state: null,
-                search: ''
+                search: '?a=b'
             };
             history.replace(input);
             expect(history.getCurrentSize()).to.equal(1);
@@ -223,7 +268,7 @@ describe('Mock History Object', function () {
 
 
         it('replaces one location in history', function () {
-            var history = new History;
+            var history = new History();
             var input = {
                 pathname: '/home',
                 query: {},
@@ -238,7 +283,7 @@ describe('Mock History Object', function () {
         });
 
         it('replaces multiple locations in history', function () {
-            var history = new History;
+            var history = new History();
             var input = {
                 pathname: '/home',
                 query: {},
@@ -253,8 +298,55 @@ describe('Mock History Object', function () {
             expect(_.isEqual(history.getCurrentLocation(), input)).to.be.true;
         });
 
+        it('does not replace duplicate simple string to history', function () {
+            var history = new History();
+            history.push('/home');
+            history.push('/thing');
+            expect(history.getCurrentSize()).to.equal(2);
+            expect(history.getCurrentLocation().pathname).to.equal('/thing');
+            history.replace('/home');
+            expect(history.getCurrentSize()).to.equal(1);
+            expect(history.getCurrentLocation().pathname).to.equal('/home');
+        });
+
+        it('does not replace duplicate complicated objects to history', function () {
+            var history = new History();
+            var input = {
+                pathname: '/home',
+                query: {'a': 'b'},
+                hash: '#thing',
+                state: null,
+                search: '?a=b'
+            };
+            history.push(input);
+            history.push('/thing');
+            expect(history.getCurrentSize()).to.equal(2);
+            expect(history.getCurrentLocation().pathname).to.equal('/thing');
+            history.replace(input);
+            expect(history.getCurrentSize()).to.equal(1);
+            expect(history.getCurrentLocation().pathname).to.equal('/home');
+        });
+
+        it('does not replace duplicate complicated object/ string to history', function () {
+            var history = new History();
+            var input = {
+                pathname: '/home',
+                query: {'a': 'b'},
+                hash: '#thing',
+                state: null,
+                search: '?a=b'
+            };
+            history.push('/home?a=b#thing');
+            history.push('/thing');
+            expect(history.getCurrentSize()).to.equal(2);
+            expect(history.getCurrentLocation().pathname).to.equal('/thing');
+            history.replace(input);
+            expect(history.getCurrentSize()).to.equal(1);
+            expect(history.getCurrentLocation().pathname).to.equal('/home');
+        });
+
         it('handles combination of pushing and replacing', function () {
-            var history = new History;
+            var history = new History();
             var input = {
                 pathname: '/home',
                 query: {},
@@ -284,7 +376,7 @@ describe('Mock History Object', function () {
 
         it('handles undefined string input', function () {
             var history = new History();
-            var result = history.splitAtIndex(undefined, 0)
+            var result = history.splitAtIndex(undefined, 0);
             expect(_.isEqual(result, [''])).to.be.true;
         });
 

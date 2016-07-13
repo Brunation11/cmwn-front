@@ -25,14 +25,17 @@ class History {
     }
 
     push(location) {
-        this.historyStack.push(this.createLocation(location));
-        this.currentIndex++;
+        var newLoc = this.createLocation(location);
+        if (!_.isEqual(newLoc, this.getCurrentLocation())) {
+            this.historyStack.push(newLoc);
+            this.currentIndex++;
+        }
     }
 
     replace(location) {
         this.historyStack.pop();
-        this.historyStack.push(this.createLocation(location));
-        this.currentIndex += this.currentIndex < 0 ? 1 : 0;
+        this.currentIndex -= this.currentIndex < 0 ? 0 : 1;
+        this.push(location);
     }
 
     createLocation(location) {
@@ -96,7 +99,7 @@ class History {
         return undefined;
     }
 
-    // good reference in node_modules/react-router/umd/reactRouter.js
+    // good reference for history methods in node_modules/react-router/umd/reactRouter.js
 
     /*
     listen(listener) {
