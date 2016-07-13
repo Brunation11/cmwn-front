@@ -33,13 +33,13 @@ var unboundEvents = {
             item.type = item.asset_type;
             return item;
         });
-        if (e.gameData.skribble_id == null) {
+        if (skribbleData.skribble_id == null) {
             url += (skramble ? '?skramble=' + skramble : '');
             HttpManager.POST(url, skribbleData)
                 .then(server => e.respond(server.response))
                 .catch(err => Log.error(err));
         } else {
-            url += e.gameData.skribble_id + (skramble ? '?skramble=' + skramble : '');
+            url += '/' + skribbleData.skribble_id + (skramble ? '?skramble=' + skramble : '');
             HttpManager.PUT(url, skribbleData)
                 .then(server => e.respond(server.response))
                 .catch(err => Log.error(err));
