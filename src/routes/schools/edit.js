@@ -126,8 +126,7 @@ export class SchoolEdit extends React.Component {
         if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
-        return (
-           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+        const SCHOOL_EDIT = (
               <Panel header={HEADINGS.EDIT_TITLE + this.props.data.title} className="standard">
                   <Link to={`/school/${this.props.data.group_id}/view`}>Return to School Dashboard</Link>
                   <br />
@@ -151,8 +150,19 @@ export class SchoolEdit extends React.Component {
                  />
                  <Button onClick={this.submitData.bind(this)} > Save </Button>
               </Panel>
-              {''/*<CreateClass data={this.props.data} />*/}
-              <BulkUpload data={this.props.data} url={this.props.data._links.import.href} />
+        );
+        if (this.props.data._links.import == null) {
+            return (
+                <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+                    {SCHOOL_EDIT}
+                </Layout>
+            );
+        }
+        return (
+           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+                {SCHOOL_EDIT}
+                {''/*<CreateClass data={this.props.data} />*/}
+                <BulkUpload data={this.props.data} url={this.props.data._links.import.href} />
            </Layout>
          );
     }
