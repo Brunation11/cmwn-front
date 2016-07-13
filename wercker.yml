@@ -18,6 +18,9 @@ build:
       name: Linter
       code: gulp lint
     - script:
+      name: Unit Tests
+      code: gulp unit
+    - script:
       name: Build packages
       code: gulp build --production
   after-steps:
