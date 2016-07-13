@@ -83,10 +83,10 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
 
     const DEFAULT_EVENTS = {
         flipped: function (e) {
-            submitFlip(e.gameData.id);
+            submitFlip(e.gameData.id || e.GameData.game);
         },
         flip: function (e) {
-            submitFlip(e.gameData.id);
+            submitFlip(e.gameData.id || e.GameData.game);
         },
         save: function (e) {
             var version = e.gameData.version || 1;
