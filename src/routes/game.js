@@ -6,7 +6,6 @@ import Game from 'components/game';
 import History from 'components/history';
 import GLOBALS from 'components/globals';
 import Store from 'components/store';
-import Detector from 'components/browser_detector';
 
 import Layout from 'layouts/one_col';
 
@@ -28,41 +27,10 @@ var GamePage = React.createClass({
         var state = Store.getState();
         this.setState({
             gameId: this.props.params.game,
-            gameUrl: `${GLOBALS.GAME_URL}${this.props.params.game}/index.html`,
             flipUrl: state.currentUser._links.user_flip.href,
             saveUrl: state.currentUser._links.save_game.href,
         });
         this.resolveRole();
-    },
-    showModal: function (gameUrl) {
-        var urlParts;
-        if (Detector.isMobileOrTablet() || Detector.isPortrait()) {
-            urlParts = gameUrl.split('/');
-            urlParts.pop(); //discard index.html
-            History.push(`/game/${_.last(urlParts)}`);
-        }
-        this.setState({gameOn: true, gameUrl});
-    },
-    hideModal: function () {
-        this.setState({gameOn: false});
-        this.refs.gameRef.dispatchPlatformEvent('quit');
-        History.push('/profile');
-    },
-    resolveRole: function () {
-        var state = Store.getState();
-        // remember we actually want current user here, not the user whose
-        // profile we are looking at
-        if (state.currentUser &&
-            state.currentUser.type &&
-            state.currentUser.type !== 'CHILD') {
-            this.setState({
-                isStudent: false
-            });
-        } else {
-            this.setState({
-                isStudent: true
-            });
-        }
     },
     render: function () {
         return (
@@ -70,7 +38,7 @@ var GamePage = React.createClass({
                 <Game
                     ref="gameRef"
                     isTeacher={!this.state.isStudent}
-                    url={this.state.gameUrl}
+                    url={`${GLOBALS.GAME_URL}${this.props.params.game}/index.html`}
                     flipUrl={this.state.flipUrl}
                     onExit={() => History.push('/profile')}
                     game={this.state.game}
