@@ -73,7 +73,6 @@ var GamePage = React.createClass({
                     url={this.state.gameUrl}
                     flipUrl={this.state.flipUrl}
                     onExit={() => History.push('/profile')}
-                    saveUrl={this.props.currentUser._links.save_game.href}
                     game={this.state.game}
                     currentUser={this.props.currentUser}
                 />
