@@ -165,6 +165,11 @@ class History {
     getLocation(n) {
         return this.historyStack[n];
     }
+
+    reset() {
+        this.historyStack = [];
+        this.currentIndex = -1;
+    }
 }
 
 export default History;

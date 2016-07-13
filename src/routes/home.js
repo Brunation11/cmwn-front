@@ -18,14 +18,7 @@ var mapStateToProps;
 
 export const COPY = {
     BUTTONS: {
-        WORK: 'Work with Us',
-        CONTACT: 'Contact Us',
-        DEMO: 'Demo',
-        SIGNUP: 'School Signup',
         WATCH: 'Watch the video',
-        TERMS: 'Terms & Conditions',
-        LOGIN: 'Login',
-        PROFILE: 'Profile'
     },
     SLIDES: [
         {

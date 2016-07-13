@@ -136,23 +136,6 @@ class Header extends React.Component {
         this.setState({contactOpen: false});
     }
 
-    loginAlert() {
-        if (this.props.currentUser.user_id) {
-            History.replace('/profile');
-        } else {
-            History.replace('/login');
-        }
-    }
-
-    launchDemo() {
-        this.setState({demoOpen: true});
-    }
-
-    confirmDemo() {
-        this.login(this.state.demoText);
-        this.setState({demoOpen: false});
-    }
-
     signupAlert() {
         Toast.success(COPY.ALERTS.SIGNUP.TEXT);
     }
@@ -163,19 +146,6 @@ class Header extends React.Component {
 
         return (
             <div>
-                <Modal id="demo-modal" show={this.state.demoOpen} onHide={this.confirmDemo.bind(this)}>
-                    <Modal.Body>
-                        <h2 class="access">Please enter your Special Access Code</h2>
-                        <Input
-                            id="demoCode"
-                            ref="demoCode"
-                            type="text"
-                            value={this.state.demoText}
-                            onChange={e => this.setState({demoText: e.target.value})}
-                        />
-                        <Button onClick={this.confirmDemo.bind(this)}> Submit </Button>
-                    </Modal.Body>
-                </Modal>
                 <Modal id="work-modal" show={this.props.workOpen || this.state.workOpen}
                        onHide={this.hideWorkModal.bind(this)}>
                     <Modal.Body>
@@ -215,10 +185,7 @@ class Header extends React.Component {
                         onClick={this.displaySignupModal.bind(this)}>
                         {COPY.BUTTONS.SIGNUP}
                     </Button>
-                    <Button id="login" className="hidden" onClick={this.loginAlert.bind(this)}>
-                        {loginButtonCopy}
-                    </Button>
-                    <Button id="demo" className="purple" onClick={this.login.bind(this)}>
+                    <Button id="login" className="purple" onClick={this.login.bind(this)}>
                         {loginButtonCopy}
                     </Button>
                 </div>

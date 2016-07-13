@@ -15,6 +15,7 @@ export default function () {
             expect(WRAPPER.instance()).to.be.instanceOf(Home);
             expect(History.getCurrentLocation().pathname).to.equal('/home');
             expect(History.getCurrentSize()).to.equal(1);
+            History.reset();
         });
 
         it('Has the correct home contents', function () {
@@ -53,15 +54,38 @@ export default function () {
             WRAPPER.find('.logo-button').at(0).simulate('click');
             expect(History.getCurrentSize()).to.equal(1);
             expect(History.getCurrentLocation().pathname).to.equal('/home');
+            History.reset();
         });
 
         it('responds properly to clicking logo as logged in user', function () {
-            const WRAPPER = mount(<Home currentUser={{user_id: 'test'}} />); //eslint-disable-line camel-case
+            const WRAPPER = mount(<Home currentUser={{user_id: 'test'}} />); //eslint-disable-line camelcase
             expect(History.getCurrentSize()).to.equal(1);
             expect(History.getCurrentLocation().pathname).to.equal('/home');
             WRAPPER.find('.logo-button').at(0).simulate('click');
             expect(History.getCurrentSize()).to.equal(1);
             expect(History.getCurrentLocation().pathname).to.equal('/profile');
+            History.reset();
+        });
+
+
+        it('responds properly to clicking login as anyonymous user', function() {
+            const WRAPPER = mount(<Home currentUser={{}} />);
+            expect(History.getCurrentLocation().pathname).to.equal('/home');
+            expect(History.getCurrentSize()).to.equal(1);
+            WRAPPER.find('#login').simulate('click');
+            expect(History.getCurrentLocation().pathname).to.equal('/login');
+            expect(History.getCurrentSize()).to.equal(2);
+            History.reset();
+        });
+
+        it('responds properly to clicking login as logged in user', function() {
+            const WRAPPER = mount(<Home currentUser={{user_id: 'test'}} />); //eslint-disable-line camelcase
+            expect(History.getCurrentLocation().pathname).to.equal('/home');
+            expect(History.getCurrentSize()).to.equal(1);
+            WRAPPER.find('#login').simulate('click');
+            expect(History.getCurrentLocation().pathname).to.equal('/profile');
+            expect(History.getCurrentSize()).to.equal(2);
+            History.reset();
         });
 
         it('responds to clicking the footer work modal link', function () {
