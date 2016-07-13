@@ -37,7 +37,7 @@ var checkModalContents = function (wrapper) {
     expect(wrapper.find('#signup-modal')).to.have.lengthOf(1);
     expect(wrapper.find('#work-modal').find('p')).to.have.lengthOf(2);
     expect(wrapper.find('#signup-modal').find('p')).to.have.lengthOf(2);
-}
+};
 
 
 describe('Header unit tests', function () {
@@ -115,7 +115,7 @@ describe('Header unit tests', function () {
             expect(WRAPPER.find('#login').html().split('>')[1]).to.equal(COPY.BUTTONS.PROFILE + '</button');
         });
 
-        it('clicking login routes to profile page', function() {
+        it('clicking login routes to profile page', function () {
             const WRAPPER = shallow(header);
             expect(History.getCurrentLocation()).to.be.null;
             WRAPPER.find('#login').simulate('click');

@@ -71,7 +71,7 @@ describe('Home Page Unit Tests', function () {
     });
 
     it('responds properly to clicking logo as logged in user', function () {
-        const WRAPPER = shallow(<Home currentUser={{user_id: 'test'}} />);
+        const WRAPPER = shallow(<Home currentUser={{user_id: 'test'}} />); //eslint-disable-line camelcase
         expect(History.getCurrentSize()).to.equal(1);
         expect(History.getCurrentLocation().pathname).to.equal('/home');
         WRAPPER.find('.logo-button').at(0).simulate('click');

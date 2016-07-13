@@ -68,7 +68,7 @@ export default function () {
         });
 
 
-        it('responds properly to clicking login as anyonymous user', function() {
+        it('responds properly to clicking login as anyonymous user', function () {
             const WRAPPER = mount(<Home currentUser={{}} />);
             expect(History.getCurrentLocation().pathname).to.equal('/home');
             expect(History.getCurrentSize()).to.equal(1);
@@ -78,7 +78,7 @@ export default function () {
             History.reset();
         });
 
-        it('responds properly to clicking login as logged in user', function() {
+        it('responds properly to clicking login as logged in user', function () {
             const WRAPPER = mount(<Home currentUser={{user_id: 'test'}} />); //eslint-disable-line camelcase
             expect(History.getCurrentLocation().pathname).to.equal('/home');
             expect(History.getCurrentSize()).to.equal(1);
