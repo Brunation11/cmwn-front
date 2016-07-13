@@ -100,7 +100,7 @@ export class GamesPage extends React.Component {
             <div>
                 <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl}
                     onExit={() => this.setState({gameOn: false})}/>
-                    <a onClick={this.hideModal} className="modal-close">(close)</a>
+                    <a onClick={this.hideModal.bind(this)} className="modal-close">(close)</a>
             </div>
         );
     }

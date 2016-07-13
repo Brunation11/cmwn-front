@@ -22,7 +22,7 @@ export class GamePage extends React.Component {
     }
 
     componentDidMount() {
-        this.resolveRole();
+        this.resolveRole(this.props);
     }
 
     componentWillReceiveProps(nextProps) {
