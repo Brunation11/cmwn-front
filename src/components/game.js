@@ -6,6 +6,8 @@ import _ from 'lodash';
 import {Button, Glyphicon} from 'react-bootstrap';
 
 import getEventsForGame from 'components/game_events';
+import GLOBALS from 'components/globals';
+import HttpManager from 'components/http_manager';
 
 import 'components/game.scss';
 
@@ -55,6 +57,18 @@ var Game = React.createClass({
                 this.onExit
             )
         });
+    },
+    componentDidMount: function () {
+        var frame = ReactDOM.findDOMNode(this.refs.gameRef);
+        var callApi = _.debounce(function () {
+            HttpManager.GET({
+                url: (GLOBALS.API_URL),
+                handleErrors: false
+            });
+        }, 10000);
+        frame.addEventListener('load', function () {
+            frame.contentWindow.addEventListener('click', callApi, false);
+        }, false);
     },
     componentWillReceiveProps: function (nextProps) {
         this.setState({
