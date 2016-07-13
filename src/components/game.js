@@ -66,11 +66,37 @@ var Game = React.createClass({
                 handleErrors: false
             });
         }, 10000);
+
+        this.setState({
+            currentGame: this.props.game,
+            eventHandler: getEventsForGame(
+                EVENT_PREFIX,
+                this.props.game,
+                this.props.currentUser._links,
+                this.onExit
+            )
+        });
+
+        if (!frame) {
+            return;
+        }
+
         frame.addEventListener('load', function () {
             frame.contentWindow.addEventListener('click', callApi, false);
         }, false);
     },
     componentWillReceiveProps: function (nextProps) {
+        var frame = ReactDOM.findDOMNode(this.refs.gameRef);
+        var callApi = _.debounce(function () {
+            HttpManager.GET({
+                url: (GLOBALS.API_URL),
+                handleErrors: false
+            });
+        }, 10000);
+        frame.addEventListener('load', function () {
+            frame.contentWindow.addEventListener('click', callApi, false);
+        }, false);
+
         this.setState({
             currentGame: nextProps.game,
             eventHandler: getEventsForGame(
