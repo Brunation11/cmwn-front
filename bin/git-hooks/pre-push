@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 sleep 1
-set -x
+#set -x
 
 target_docker_name="front"
 
@@ -14,11 +14,15 @@ fi
 echo "[post-merge] connecting to containers"
 eval $(docker-machine env $target_docker_name)
 
-echo "[pre-commit] Running lint"
-docker-compose run --rm node gulp lint
+echo "[pre-push] Running lint"
+docker-compose run -T --rm node gulp lint --color >> push.log 2>&1
 
 if [ $? != 0 ]; then
     echo "build failed"
+    cat testlint.log
+    cat configlint.log
+    cat scsslint.log
+    cat jslint.log
     exit 157
 fi
 
