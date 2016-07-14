@@ -1,13 +1,9 @@
 import React from 'react';
-import _ from 'lodash';
-import {Modal} from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import Game from 'components/game';
 import History from 'components/history';
 import GLOBALS from 'components/globals';
-import Store from 'components/store';
-import Detector from 'components/browser_detector';
 
 import Layout from 'layouts/one_col';
 
