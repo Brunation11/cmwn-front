@@ -1,23 +1,23 @@
 #!/usr/bin/env bash
-sleep 1
-set -x
+#sleep 1
+#set -x
 
-target_docker_name="front"
+#target_docker_name="front"
 
-bash $PWD/bin/setup-docker.sh $target_docker_name
-if [ $? != 0 ]
-then
-    >&2 echo "[post-merge] no $target_docker_name docker-machine running"
-    exit 1
-fi
+#bash $PWD/bin/setup-docker.sh $target_docker_name
+#if [ $? != 0 ]
+#then
+#    >&2 echo "[post-merge] no $target_docker_name docker-machine running"
+#    exit 1
+#fi
 
-echo "[post-merge] connecting to containers"
-eval $(docker-machine env $target_docker_name)
+#echo "[post-merge] connecting to containers"
+#eval $(docker-machine env $target_docker_name)
 
-echo "[pre-commit] Running lint"
-docker-compose run --rm node gulp lint
+#echo "[pre-commit] Running lint"
+#docker-compose run --rm node gulp lint
 
-if [ $? != 0 ]; then
-    echo "build failed"
-    exit 157
-fi
+#if [ $? != 0 ]; then
+#    echo "build failed"
+#    exit 157
+#fi
