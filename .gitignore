@@ -30,3 +30,4 @@ coverage/**/*
 lib
 lib/**/*
 .nyc_output
+tar-*
