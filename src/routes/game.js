@@ -12,28 +12,19 @@ const PAGE_UNIQUE_IDENTIFIER = 'single-game';
 var GamePage = React.createClass({
     getInitialState: function () {
         return {
-            gameUrl: GLOBALS.GAME_URL + this.props.params.game + '/index.html',
-            isStudent: true,
-            gameOn: false,
-            PAGE_UNIQUE_IDENTIFIER: this.props.params.game
+            isStudent: true
         };
     },
     componentDidMount: function () {
         this.resolveRole(this.props);
         this.setState({
             gameId: this.props.params.game,
-            gameUrl: `${GLOBALS.GAME_URL}${this.props.params.game}/index.html`,
-            flipUrl: this.props.currentUser._links.user_flip.href,
-            saveUrl: this.props.currentUser._links.save_game.href,
         });
     },
     componentWillReceiveProps: function (nextProps) {
         this.resolveRole(nextProps);
         this.setState({
             gameId: this.props.params.game,
-            gameUrl: `${GLOBALS.GAME_URL}${this.props.params.game}/index.html`,
-            flipUrl: nextProps.currentUser._links.user_flip.href,
-            saveUrl: nextProps.currentUser._links.save_game.href,
         });
     },
     resolveRole: function (props) {
@@ -56,10 +47,8 @@ var GamePage = React.createClass({
             <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <Game
                     ref="gameRef"
-                    game={this.state.game}
                     isTeacher={!this.state.isStudent}
-                    url={this.state.gameUrl}
-                    flipUrl={this.state.flipUrl}
+                    url={`${GLOBALS.GAME_URL}${this.props.params.game}/index.html`}
                     currentUser={this.props.currentUser}
                     onExit={() => History.push('/profile')
                     }
@@ -85,6 +74,7 @@ var mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(GamePage);
+var Page = connect(mapStateToProps)(GamePage); //eslint-disable-line no-undef
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
+
