@@ -158,9 +158,9 @@ var Game = React.createClass({
                     <Button className="purple standard" onClick={this.makeFullScreen}>
                         <Glyphicon glyph="fullscreen" /> {FULLSCREEN}
                     </Button>
-                    <Button className={ClassNames(
-                            {'purple standard': !this.state.demo},
-                            {'green standard': this.state.demo},
+                    <Button className={ClassNames('standard',
+                            {'purple': !this.state.demo},
+                            {'green': this.state.demo},
                             {hidden: !this.props.isTeacher}
                         )}
                         onClick={() => this.dispatchPlatformEvent('toggle-demo-mode')}>{DEMO_MODE}
