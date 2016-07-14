@@ -18,12 +18,20 @@ $cmwn-black: #000;
 $cmwn-gray: #808080;
 $cmwn-white: #fff;
 $cmwn-purple: #7829bb;
+$cmwn-lighter-purple: rgba(120, 81, 147, .9);
+$cmwn-lighter-green: rgba(71, 183, 44, .9);
 $cmwn-trans: rgba(0, 0, 0, 0);
+$cmwn-other-trans: rgba(0, 0, 0, 0) 80%;
 $cmwn-trans-gray: rgba(0, 0, 0, .5);
+$cmwn-trans-medium-gray: rgba(0, 0, 0, .35) 0%;
 $cmwn-light-gray: rgba(0, 0, 0, .2);
 $cmwn-medium-gray: rgba(0, 0, 0, .6);
+$cmwn-more-trans-gray: rgba(0, 0, 0, .35);
+$cmwn-trans: rgba(0, 0, 0, 0);
 $cmwn-lighter-blue: rgba(46, 163, 242, .5);
 $cmwn-medium-blue: rgba(46, 163, 242, .9);
+$cmwn-medium-green: rgba(71, 183, 44, .9);
+$cmwn-medium-purple: rgba(120, 81, 147, .9);
 $cmwn-off-white: #eee;
 $cmwn-dark-gray: #333;
 
@@ -55,7 +63,7 @@ $z-bootstrap: 1000;
 $game-responsive-width-portrait: calc(50vmin * 1.77);
 $game-responsive-height-portrait: 50vmin;
 $game-fullscreen-width-portrait: 100vmin;
-$game-fullscreen-height-portrait: calc(100vmin * 0.5625);
+$game-fullscreen-height-portrait: calc(100vmin * .5625);
 // ie fallback
 $game-responsive-width-portrait-ie: calc(50vm * 1.77);
 $game-responsive-height-portrait-ie: 50vm;
@@ -67,7 +75,7 @@ $game-responsive-width-max: 100%; // max out at 985px (max width of sweater)
 $game-responsive-height-landscape: 50vmax;
 $game-responsive-height-max: 554px; // preserve 9:16 ratio of max sweater width (985px)
 $game-fullscreen-width-landscape: 100vmax;
-$game-fullscreen-height-landscape: calc(100vmax * 0.5625);
+$game-fullscreen-height-landscape: calc(100vmax * .5625);
 // ie fallback
 $game-responsive-width-landscape-ie: calc(50vw * 1.77);
 $game-responsive-height-landscape-ie: 50vw;

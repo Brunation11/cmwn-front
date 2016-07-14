@@ -57,7 +57,7 @@ var Component = React.createClass({
         }
         links = _.map(this.props.data._embedded.organization.district, district => {
             return (
-                <Link to={`/districts/${district.org_id}`}>
+                <Link to={`/districts/${district.org_id}`} className="school-district-link">
                     {district.title}
                 </Link>
             );
@@ -84,7 +84,9 @@ var Component = React.createClass({
             return null;
         }
         return (
-            <p><a href={`/school/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
+            <p><a id="school-admin-link" href={`/school/${this.props.data.group_id}/view`}>
+                {ADMIN_TEXT}
+            </a></p>
         );
     },
     renderImport: function () {
