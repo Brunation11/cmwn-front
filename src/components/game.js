@@ -65,7 +65,7 @@ var Game = React.createClass({
                 url: (GLOBALS.API_URL),
                 handleErrors: false
             });
-        }, 10000);
+        }, 5000);
 
         this.setState({
             currentGame: this.props.game,

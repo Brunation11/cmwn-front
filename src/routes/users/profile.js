@@ -140,8 +140,6 @@ export class Profile extends React.Component {
     }
 
     renderGame() {
-        var flipUrl = this.state._links && this.state._links.user_flip ?
-            this.state._links.user_flip.href : null;
         if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe10())) {
             return (
                 <div>
@@ -156,7 +154,6 @@ export class Profile extends React.Component {
                     ref="gameRef"
                     isTeacher={!this.state.isStudent}
                     url={this.state.gameUrl}
-                    flipUrl={flipUrl}
                     onExit={this.setState.bind(this, {gameOn: false})}
                     game={this.state.game}
                     currentUser={this.props.currentUser}

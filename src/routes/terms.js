@@ -34,7 +34,7 @@ const TERMS = (
       information from kids.</span></p>
 
       <p className="p4 ft5"> By using and accessing CMWN, located at{' '}
-          <a href="www.changemyworldnow.com" className="ft4">
+          <a href="www.changemyworldnow.com" className="ft4" id="home-link">
               www.changemyworldnow.com
           </a>
           , you are accepting and agree to comply with this Privacy Policy &amp; Conditions of Use.
@@ -72,7 +72,7 @@ const TERMS = (
           Act ("COPPA"), where applicable. For more information on COPPA and kid's privacy
           , please see </span>
           <a href="http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online"
-              className="ft10">
+              className="ft10" id="ftc-link-1">
               http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online
           </a>.
       </p>
@@ -108,7 +108,8 @@ const TERMS = (
     understand that the school is responsible for complying with COPPA, where applicable,
     which requires Consent for online collection of personal information from children
     under 13. For more information on COPPA, please see </span>
-        <a href="http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online">
+        <a href="http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online"
+            id="ftc-link-2">
         http://www.consumer.ftc.gov/articles/0031-protecting-your-childs-privacy-online.
         </a>
     </p>
@@ -193,7 +194,7 @@ const TERMS = (
 
     <p className="p31 ft5">CMWN uses Google Analytics to monitor our website activity. To
     learn how Google Analytics collects and processes data, please visit:{' '}
-        <a href="www.google.com/policies/privacy/partners" className="ft17">
+        <a href="www.google.com/policies/privacy/partners" className="ft17" id="google-link">
             www.google.com/policies/privacy/partners
         </a>
     </p>
@@ -324,7 +325,7 @@ const TERMS = (
 
     <p className="p49 ft5">If you have questions or need further assistance, you are
     welcome to contact us directly by sending an email with your questions or comments to
-    <a href="mailto:info@changemyworldnow.com" className="ft4"> info@changemyworldnow.com</a>
+    <a href="mailto:info@changemyworldnow.com" className="ft4" id="mail-to"> info@changemyworldnow.com</a>
     . You can also write to us at:</p>
 
     <p className="p5 ft3">Change My World Now</p>

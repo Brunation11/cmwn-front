@@ -1,44 +1,48 @@
-var login_test = require('../login_test.js');
-var USER = 'teacher';
-var PASSWD = 'business2';
+var login = require("../login");
+var USER = "teacher";
+var PASSWD = "business2";
+const TIME = 60000; // one minute
 
 describe('tests opening game on games page', function() {
-    // Checks if the game opens when you press on "PLAY NOW!"
+    // Checks if the game opens when you press on the game
     it('should assert opening the game when pressed', function() {
-        login_test.login(USER, PASSWD);
-        browser.waitForExist('.sidebar');
+        login.login(USER, PASSWD);
+        browser.waitForExist('.sidebar', TIME);
         browser.url('/games');
-        browser.waitForExist('.panel-body');
-        browser.click('.play');
-        browser.waitForExist('.pl-scope pl-game READY');
-        // Checks if the game popped up since its width is 960
-        var width = browser.getElementSize('.pl-scope pl-game READY', 'width');
-        expect(width).to.equal(960);
+        //browser.url('/profile');
+        browser.waitForExist('.flip', TIME);
+        // Presses the game to open it
+        browser.click('.flip');
+        browser.waitForExist('.modal-body', TIME);
+        // Focuses on the iframe to access elements inside
+        browser.frame(0);
+        browser.waitForExist('.pl-game', TIME);
+        // Checks if the game popped up
+        var visible = browser.isVisible('.pl-game');
+        expect(visible).to.equal(true);
+        // Changes focus back to the parent
+        browser.frameParent();
         // Checks if the purple button shows up
-        var purpleBtn = browser.getText('.purple standard btn btn-default');
-        expect(purpleBtn).to.equal("Full Screen");
+        expect(browser.getText('.purple')).to.equal('FULL SCREEN');
+        expect(browser.isVisible('.purple')).to.equal(true);
         // Checks if the green button shows up
-        var greenBtn = browser.getText('.green standard btn btn-default');
-        expect(greenBtn).to.equal("Demo Mode");
+        expect(browser.getText('.green')).to.equal('DEMO MODE');
+        expect(browser.isVisible('.green')).to.equal(true);
     });
     
     // Checks if pressing "(close)" closes the game
-    it('should assert closing the game when pressed', function() {
-        login_test.login(USER, PASSWD);
-        browser.waitForExist('.sidebar');
+    it('should close the game when pressing the (close) link', function() {
+        login.login(USER, PASSWD);
+        browser.waitForExist('.sidebar', TIME);
         browser.url('/games');
-        browser.waitForExist('.panel-heading');
-        browser.click('.play');
-        browser.waitForExist('.modal-close');
+        //browser.url('/profile');
+        browser.waitForExist('.flip', TIME);
+        // Presses the game to open it
+        browser.click('.flip');
+        browser.waitForExist('.modal-close', TIME);
         browser.click('.modal-close');
-        browser.pause(3000);
+        browser.waitForVisible('.sidebar', TIME);
         // Checks if the "(close)" link is still shown
-        var source = browser.getSource();
-        var idx = source.indexOf(".modal-close");
-        expect(idx).to.equal(-1);
-        /*
-        var tagName = browser.getTagName('.modal-close');
-        expect(tagName).to.be.null;
-        */
+        expect(browser.isVisible('.modal-close')).to.not.equal(true);
     });
 });

@@ -1,11 +1,9 @@
 import React from 'react';
-import _ from 'lodash';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 import Game from 'components/game';
 import History from 'components/history';
 import GLOBALS from 'components/globals';
-import Store from 'components/store';
 
 import Layout from 'layouts/one_col';
 
@@ -17,20 +15,32 @@ var GamePage = React.createClass({
             isStudent: true
         };
     },
-    componentWillMount: function () {
-        var urlParts = window.location.href.split('?')[0].split('#')[0].split('/');
-        this.setState({
-            game: _.last(urlParts),
-        });
-    },
     componentDidMount: function () {
-        var state = Store.getState();
+        this.resolveRole(this.props);
         this.setState({
             gameId: this.props.params.game,
-            flipUrl: state.currentUser._links.user_flip.href,
-            saveUrl: state.currentUser._links.save_game.href,
         });
-        this.resolveRole();
+    },
+    componentWillReceiveProps: function (nextProps) {
+        this.resolveRole(nextProps);
+        this.setState({
+            gameId: this.props.params.game,
+        });
+    },
+    resolveRole: function (props) {
+        // remember we actually want current user here, not the user whose
+        // profile we are looking at
+        if (props.currentUser &&
+            props.currentUser.type &&
+            props.currentUser.type !== 'CHILD') {
+            this.setState({
+                isStudent: false
+            });
+        } else {
+            this.setState({
+                isStudent: true
+            });
+        }
     },
     render: function () {
         return (
@@ -39,10 +49,9 @@ var GamePage = React.createClass({
                     ref="gameRef"
                     isTeacher={!this.state.isStudent}
                     url={`${GLOBALS.GAME_URL}${this.props.params.game}/index.html`}
-                    flipUrl={this.state.flipUrl}
-                    onExit={() => History.push('/profile')}
-                    game={this.state.game}
                     currentUser={this.props.currentUser}
+                    onExit={() => History.push('/profile')
+                    }
                 />
             </Layout>
         );
