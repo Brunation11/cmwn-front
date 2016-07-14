@@ -10,7 +10,7 @@ import _ from 'lodash';
 // import History from 'components/history';
 // import Errors from 'components/errors';
 import Log from 'components/log';
-import TimerModal from 'components/timer_modal';
+import {timerInfo} from 'components/timer_modal';
 
 const APP_COOKIE_NAME = 'cmwn_token';
 
@@ -163,19 +163,19 @@ class _HttpManager {
         // default time?
     }
     GET(request, body, headers){
-        TimerModal.setState({lastTime: new Date()});
+        timerInfo.setLastTime(new Date());
         return _getRequestPromise.call(this, 'GET', request, body, headers);
     }
     POST(request, body, headers){
-        TimerModal.setState({lastTime: new Date()});
+        timerInfo.setLastTime(new Date());
         return _getRequestPromise.call(this, 'POST', request, body, headers);
     }
     PUT(request, body, headers){
-        TimerModal.setState({lastTime: new Date()});
+        timerInfo.setLastTime(new Date());
         return _getRequestPromise.call(this, 'PUT', request, body, headers);
     }
     DELETE(request, body, headers){
-        TimerModal.setState({lastTime: new Date()});
+        timerInfo.setLastTime(new Date());
         return _getRequestPromise.call(this, 'DELETE', request, body, headers);
     }
     setToken(_token) {

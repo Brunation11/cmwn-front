@@ -224,7 +224,7 @@ var AppComponent = React.createClass({
         return (
             <div>
                 {Errors.renderErrors()}
-                <TimerModal></TimerModal>
+                <TimerModal currentUser={this.props.currentUser}></TimerModal>
                 <GlobalHeader logoLink={this.state.logoLink} currentUser={this.props.currentUser} />
                 <div className="sweater">
                     {this.props.children}
