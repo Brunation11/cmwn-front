@@ -61,7 +61,7 @@ var Game = React.createClass({
                 url: (GLOBALS.API_URL),
                 handleErrors: false
             });
-        }, 10000);
+        }, 5000);
         frame.addEventListener('load', function () {
             frame.contentWindow.addEventListener('click', callApi, false);
         }, false);
