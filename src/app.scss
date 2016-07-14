@@ -114,6 +114,10 @@ h3 {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     overflow-x: hidden;
 
+    .cmwn-font {
+        font-family: $cmwn-jade-font;
+    }
+
     .sweater,
     .global-header {
         // scss-lint:disable ColorVariable
@@ -142,17 +146,6 @@ h3 {
         }
     }
 
-    .blocker {
-        position: absolute;
-        left: 0;
-        z-index: $z-nav + 3;
-        margin-right: auto;
-        margin-left: auto;
-        background: $cmwn-white;
-        padding-top: $standard;
-        width: 100%;
-    }
-
     .layout {
         display: flex;
         margin-bottom: 4 * $standard;
@@ -163,6 +156,7 @@ h3 {
         // scss-lint:disable all
         padding: $standard / 2;
         order: 2;
+        width: 100%;
         flex-grow: 1;
         flex-shrink: 1;
         // scss-lint:enable all
@@ -230,8 +224,23 @@ h3 {
 
     .global-header {
         position: relative;
+        z-index: 1;
         max-width: $monitor-max-break;
         height: 120px;
+    }
+
+    .global-header::after {
+        display: block;
+        position: absolute;
+        right: 0;
+        bottom: -12px;
+        left: 0;
+        // scss-lint:disable all
+        background: #fff;
+        // scss-lint:enable all
+        width: 100%;
+        height: 15px;
+        content: '';
     }
 
     .global-footer {
@@ -269,33 +278,37 @@ h3 {
     .logo,
     .header-logo {
         //width: calc(100% - #{$standard});
-        display: inline-block;
+        display: inline-flex;
         z-index: $z-nav + 4;
         max-width: $logo-max-width;
         color: transparent;
 
         a {
+            width: 100%;
             color: transparent;
         }
 
         .read {
             width: 0;
         }
-
     }
 
     .logo {
+        position: relative;
+        width: 22vmin;
+        min-width: 180px;
+        max-width: 210px;
 
         img {
-            width: $logo-size;
+            width: 100%;
         }
     }
 
     .header-logo {
-        float: right;
-        //padding-right: 10px;
-        padding: $standard 80px 0 35px;
-        width: calc(100% - #{$logout-size} - #{$logo-size });
+        margin-top: 8px;
+        margin-left: $standard * 2;
+        width: calc(100% - 180px - 8em);
+        vertical-align: middle;
 
         img {
             width: 100%;
@@ -396,6 +409,10 @@ h3 {
         clear: both;
     }
 
+    .placeholder {
+        padding: $standard;
+    }
+
     @media (max-width: $device-max-break) {
         font-size: $min-base-font-size; //IE vmax fallback
         //overflow: auto;
@@ -404,6 +421,10 @@ h3 {
             margin: 0;
             padding: 0;
             width: 100%;
+        }
+
+        .global-header::after {
+            background: none;
         }
 
         .layout {
@@ -423,8 +444,9 @@ h3 {
         }
 
         .header-logo {
-            margin: 25px 70px 0 0;
+            margin-left: 0;
             padding: 0;
+            width: calc(100% - 180px - 8em);
         }
 
         .content {
@@ -478,15 +500,12 @@ h3 {
     }
 
     @media (min-width: $monitor-max-break) {
-        //background: #F8F8F8;
-
         .global-header {
             position: relative;
             margin-right: auto;
             margin-left: auto;
             padding: 0 $standard;
         }
-
     }
 
     @media (min-width: $ultrawide-min-break) {
@@ -504,6 +523,12 @@ h3 {
 
         .logo {
             margin-left: -$ultrawide-logo-offset;
+        }
+    }
+
+    @media (max-width: $device-portrait-break + 2 * $standard) {
+        .header-logo {
+            display: none;
         }
     }
 
