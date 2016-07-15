@@ -1,1 +1,1 @@
-{"src/components/update_username.scss":[{"line":220,"column":1,"length":1,"severity":"error","reason":"Merge rule `.username` with rule on line 180","linter":"MergeableSelector"},{"line":227,"column":1,"length":1,"severity":"error","reason":"Merge rule `.generate` with rule on line 192","linter":"MergeableSelector"}]}
+{}
