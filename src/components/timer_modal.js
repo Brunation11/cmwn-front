@@ -10,17 +10,6 @@ import History from 'components/history';
 const TIMEOUT_WAIT = 15000;
 const TIMEOUT_WARNING = 6000;
 
-var timerInfo;
-
-class TimerInfo {
-    constructor () {
-        this.lastTime = new Date();
-    }
-
-    setLastTime (date) {
-        this.lastTime = date;
-    }
-}
 
 class TimerModal extends React.Component {
 
@@ -32,7 +21,7 @@ class TimerModal extends React.Component {
     }
 
     getTimeRemaining () {
-        var endTime = Date.parse(this.props.timerInfo.lastTime) + TIMEOUT_WAIT;
+        var endTime = Date.parse(HttpManager.lastTime) + TIMEOUT_WAIT;
         return endTime - Date.parse(new Date());
     }
 
@@ -41,14 +30,16 @@ class TimerModal extends React.Component {
         this.timeUpdate = window.setInterval(function () {
             var time = self.getTimeRemaining();
             if (time <= 0 && self.props.currentUser.user_id) {
-                //console.log("logout");
-                window.clearInterval(this.timeUpdate);
-                window.clearTimeout(this.resetConfirm);
                 History.push('/logout');
             } else {
                 self.setState({timeRemaining: time});
             }
         }, 1000);
+    }
+
+    componentWillUnmount() {
+        window.clearInterval(this.timeUpdate);
+        window.clearTimeout(this.resetConfirm);
     }
 
     resetTimer () {
@@ -82,10 +73,4 @@ class TimerModal extends React.Component {
     }
 }
 
-timerInfo = new TimerInfo();
-TimerModal.defaultProps = {
-    timerInfo
-};
-
-export {timerInfo};
 export default TimerModal;
