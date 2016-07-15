@@ -315,6 +315,7 @@ export class BulkUpload extends React.Component {
                     validate="required"
                     ref={REFS.TEACHER_INPUT}
                     name="teacher_code"
+                    id="teacher-code"
                     onChange={e => this.setState({teacherCode: e.target.value})}
                 />
                 <Input
@@ -325,6 +326,7 @@ export class BulkUpload extends React.Component {
                     validate="required"
                     ref={REFS.STUDENT_INPUT}
                     name="student_code"
+                    id="student-code"
                     onChange={e => this.setState({studentCode: e.target.value})}
                 />
                 <FormControls.Static value={TERMS_COPY} />
@@ -334,6 +336,7 @@ export class BulkUpload extends React.Component {
                     ref={REFS.TOS_INPUT}
                     label={LABELS.ACCEPT}
                     name="tos"
+                    id="import-terms-check"
                     onChange={e => this.setState({tos: e.target.checked})}
                 />
                 <br />

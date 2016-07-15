@@ -52,7 +52,7 @@ var PopOver = React.createClass({
         var state = this.state;
         // get users flips and set to state
         HttpManager.GET({
-            url: (GLOBALS.API_URL + 'user/' + state.element.friend_id + '/flip'),
+            url: (`${GLOBALS.API_URL}user/${state.element.friend_id}/flip`),
             handleErrors: false
         })
         .then(res => {
@@ -61,9 +61,6 @@ var PopOver = React.createClass({
     },
     renderUser: function () {
         var state = this.state;
-        // check if flips have been set in state (http succeeded), and if there are any flips to display.
-        // render popover only if state contains flips
-        // if (state.flip && state.flip.length > 0) {
         return (
             <ButtonToolbar>
                 <OverlayTrigger
@@ -72,13 +69,13 @@ var PopOver = React.createClass({
                     overlay={(
                         <Popover
                             id="popover"
-                            title={state.element.title + '  |  earned: ' +
-                                Moment(new Date(state.element.earned)) .format('MMM Do YYYY')}
-                        >{state.element.description}</Popover>
-                    )}>
-                    <Link to="" key={Shortid.generate()}>
-                        <img src={`/flips/${state.element.flip_id}.png`} ></img>
-                    </Link>
+                            title={`Earned: ${state.flips.length}`}
+                        >
+                            {state.flips}
+                        </Popover>
+                    )}
+                >
+                    {this.props.children}
                 </OverlayTrigger>
             </ButtonToolbar>
         );
