@@ -152,9 +152,9 @@ mapStateToProps = state => {
         state.page.data._embedded.suggest) {
         loading = state.page.loading;
         data = state.page.data._embedded.suggest;
-        if (state.currentUser != null){
-            currentUser = state.currentUser;
-        }
+    }
+    if (state.currentUser != null){
+        currentUser = state.currentUser;
     }
     return {
         data,
