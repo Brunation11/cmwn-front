@@ -1,8 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
 import _ from 'lodash';
-import Immutable from 'seamless-immutable';
-import { connect } from 'react-redux';
 
 import PublicRoutes from 'public_routes';
 import PrivateRoutes from 'private_routes';
@@ -70,7 +68,7 @@ var buildMenuRoutes = function (links) {
     }, []);
 };
 
-var Component = React.createClass({
+var SiteNav = React.createClass({
     renderNavItems: function () {
         var menuItems = buildMenuRoutes(this.props.data);
 //        var menuItems = _.reduce(this.props.data, (a, i, k) => {
@@ -84,7 +82,7 @@ var Component = React.createClass({
 //            return a;
 //        }, []);
         //manually hidden items for children
-        menuItems = _.filter(menuItems, item =>this.props.currentUser.type !== 'CHILD' || (
+        menuItems = _.filter(menuItems, item => this.props.currentUser.type !== 'CHILD' || (
             this.props.currentUser.type === 'CHILD' &&
             !~IGNORED_ROUTES_FOR_CHILDREN.indexOf(item.label))
         );
@@ -102,17 +100,6 @@ var Component = React.createClass({
         );
     }
 });
-
-var mapStateToProps = state => {
-    var data = [];
-    state.currentUser;
-    if (state.currentUser && state.currentUser._links) {
-        data = state.currentUser._links.asMutable();
-    }
-    return { currentUser: state.currentUser, data: Immutable(data) };
-};
-
-var SiteNav = connect(mapStateToProps)(Component);
 
 export default SiteNav;
 
