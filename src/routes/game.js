@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import Game from 'components/game';
 import History from 'components/history';
 import GLOBALS from 'components/globals';
-import Store from 'components/store';
 
 import Layout from 'layouts/one_col';
 
@@ -13,38 +12,48 @@ const PAGE_UNIQUE_IDENTIFIER = 'single-game';
 var GamePage = React.createClass({
     getInitialState: function () {
         return {
-            gameUrl: GLOBALS.GAME_URL + this.props.params.game + '/index.html',
             isStudent: true
         };
     },
     componentDidMount: function () {
-        this.resolveRole();
+        this.resolveRole(this.props);
+        this.setState({
+            gameId: this.props.params.game,
+        });
     },
-    componentWillReceiveProps: function () {
-        this.resolveRole();
+    componentWillReceiveProps: function (nextProps) {
+        this.resolveRole(nextProps);
+        this.setState({
+            gameId: this.props.params.game,
+        });
     },
-    resolveRole: function () {
-        var newState = {};
-        var state = Store.getState();
-        if (state.currentUser && state.currentUser.type !== 'CHILD') {
-            newState.isStudent = false;
+    resolveRole: function (props) {
+        // remember we actually want current user here, not the user whose
+        // profile we are looking at
+        if (props.currentUser &&
+            props.currentUser.type &&
+            props.currentUser.type !== 'CHILD') {
+            this.setState({
+                isStudent: false
+            });
         } else {
-            newState.isStudent = true;
+            this.setState({
+                isStudent: true
+            });
         }
-        this.setState(newState);
     },
     render: function () {
         return (
-           <Layout>
+            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <Game
-                    className={PAGE_UNIQUE_IDENTIFIER}
                     ref="gameRef"
                     isTeacher={!this.state.isStudent}
-                    url={this.state.gameUrl}
-                    onExit={() => History.push('/profile')}
-                    saveUrl={this.props.currentUser._links.save_game.href}
+                    url={`${GLOBALS.GAME_URL}${this.props.params.game}/index.html`}
+                    currentUser={this.props.currentUser}
+                    onExit={() => History.push('/profile')
+                    }
                 />
-           </Layout>
+            </Layout>
         );
     }
 });
@@ -65,8 +74,7 @@ var mapStateToProps = state => {
     };
 };
 
-
-var Page = connect(mapStateToProps)(GamePage);
+var Page = connect(mapStateToProps)(GamePage); //eslint-disable-line no-undef
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
 
