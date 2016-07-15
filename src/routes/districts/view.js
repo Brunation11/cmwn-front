@@ -179,9 +179,9 @@ mapStateToProps = state => {
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
-        if (state.currentUser != null){
-            currentUser = state.currentUser;
-        }
+    }
+    if (state.currentUser != null){
+        currentUser = state.currentUser;
     }
     return {
         data,

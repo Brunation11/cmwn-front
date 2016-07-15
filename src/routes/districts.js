@@ -53,13 +53,13 @@ export class District extends React.Component{
 mapStateToProps = state => {
     var data = [];
     var loading = true;
-    var currentUser = {}; // eslint-disable-line no-unused-vars
+    var currentUser = {};
     if (state.page && state.page.data && state.page.data._embedded && state.page.data._embedded.org) {
         loading = state.page.loading;
         data = state.page.data._embedded.org;
-        if (state.currentUser != null){
-            currentUser = state.currentUser;
-        }
+    }
+    if (state.currentUser != null){
+        currentUser = state.currentUser;
     }
     return {
         data,

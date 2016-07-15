@@ -391,7 +391,7 @@ var Header = React.createClass({
                     <a href="#" onClick={this.displayContactModal}>
                         {COPY.BUTTONS.CONTACT}
                     </a>
-                    <a href="/terms" target="_blank">
+                    <a href="/terms" target="_blank" id="terms-and-conds">
                         {COPY.BUTTONS.TERMS}
                     </a>
                 </div>

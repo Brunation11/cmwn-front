@@ -75,7 +75,7 @@ export class EditDistrict extends React.Component{
                     validate="required"
                     hasFeedback
                     ref="titleInput"
-                    onChange={() => this.setState.bind(this, {title: this.refs.titleInput.getValue()})}
+                    onChange={() => this.setState({title: this.refs.titleInput.getValue()})}
                  />
                  <Input
                     type="textarea"
@@ -83,10 +83,9 @@ export class EditDistrict extends React.Component{
                     placeholder="description"
                     label="Description"
                     ref="descriptionInput"
-                    onChange={() => this.setState.bind(this,
-                        {description: this.refs.descriptionInput.getValue()})}
+                    onChange={() => this.setState({description: this.refs.descriptionInput.getValue()})}
                  />
-                 <Button onClick={this.submitData.bind(this)} > Save </Button>
+                 <Button onClick={this.submitData} > Save </Button>
               </Panel>
               <CreateSchool districtId={this.props.data.org_id} data={this.props.data}/>
            </Layout>

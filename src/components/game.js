@@ -5,6 +5,7 @@ import ClassNames from 'classnames';
 import _ from 'lodash';
 import {Button, Glyphicon} from 'react-bootstrap';
 
+import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
 import Toast from 'components/toast';
 import Log from 'components/log';
@@ -52,6 +53,18 @@ var Game = React.createClass({
     },
     componentWillMount: function () {
         this.setEvent();
+    },
+    componentDidMount: function () {
+        var frame = ReactDOM.findDOMNode(this.refs.gameRef);
+        var callApi = _.debounce(function () {
+            HttpManager.GET({
+                url: (GLOBALS.API_URL),
+                handleErrors: false
+            });
+        }, 5000);
+        frame.addEventListener('load', function () {
+            frame.contentWindow.addEventListener('click', callApi, false);
+        }, false);
     },
     componentWillUnmount: function () {
         this.clearEvent();
