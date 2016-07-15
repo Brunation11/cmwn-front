@@ -17,7 +17,7 @@ import Util from 'components/util';
 import 'routes/users/profile.scss';
 import FlipBgDefault from 'media/icon_class_blue.png';
 
-const PAGE_UNIQUE_IDENTIFIER = 'school-profile';
+export const PAGE_UNIQUE_IDENTIFIER = 'school-profile';
 
 const CLASS_SOURCE = GenerateDataSource('group_class', PAGE_UNIQUE_IDENTIFIER);
 
