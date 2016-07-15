@@ -70,16 +70,25 @@ class History {
         var query = {};
         var pairs = [];
         var isString = _.isString(search);
-        search = isString ? search.substring(search.indexOf('?')) : search;
-        if (isString && search.length > 1) {
-            pairs = search.substring(1).split('&');
+        search = isString ? search.substring(search.indexOf('?') + 1) : search;
+        search = isString && search.indexOf('&') === 0 ? search.substring(1) : search;
+        if (isString && search.length > 0) {
+            pairs = search.split('&');
             _.forEach(pairs, pair => {
                 // split at first index of '=' in case value has the character too
                 var parts = this.splitAtIndex(pair, pair.indexOf('='));
-                if (parts.length === 1 && parts[0]) {
-                    query[parts[0]] = null;
-                } else if (parts.length === 2 && parts[0]) {
-                    query[parts[0]] = parts[1];
+                var value;
+                if (!_.isUndefined(parts[0]) && !_.isNull(parts[0])) {
+                    value = parts.length === 2 ? parts[1] : null;
+                }
+
+                // concat the values if there is already a value associated with the key
+                if (value !== undefined) {
+                    if (query[parts[0]] !== undefined) {
+                        query[parts[0]] = [].concat(query[parts[0]]).concat(value);
+                    } else {
+                        query[parts[0]] = value;
+                    }
                 }
             });
         }

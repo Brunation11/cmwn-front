@@ -6,19 +6,22 @@ import _ from 'lodash';
 import History from 'mocks/mock_history';
 
 describe('Mock History Object', function () {
+    var history;
+
+    beforeEach(function () {
+       history = new History;
+    });
+
     it('constructs with defaults', function () {
-        var history = new History();
         expect(history.historyStack).to.be.an.instanceof(Array).and.to.be.empty;
         expect(history.currentIndex).to.equal(-1);
     });
 
     it('getCurrentLocation returns null for empty history', function () {
-        var history = new History();
         expect(history.getCurrentLocation()).to.be.null;
     });
 
     it('getLocation returns undefined for empty history', function () {
-        var history = new History();
         expect(history.getLocation(0)).to.be.undefined;
         expect(history.getLocation(1)).to.be.undefined;
         expect(history.getLocation(-5)).to.be.undefined;
@@ -26,8 +29,13 @@ describe('Mock History Object', function () {
     });
 
     describe('go(n)', function () {
+        var history;
+
+        beforeEach(function () {
+            history = new History;
+        });
+
         it('does not work for an empty history', function () {
-            var history = new History();
             expect(history.go.bind(null, 0)).to.throw(Error);
             expect(history.go.bind(null, -5)).to.throw(Error);
             expect(history.go.bind(null, 5)).to.throw(Error);
@@ -35,32 +43,26 @@ describe('Mock History Object', function () {
         });
 
         it('does not work for null input', function () {
-            var history = new History();
             expect(history.go.bind(null, null)).to.throw(Error);
         });
 
         it('does not work for undefined input', function () {
-            var history = new History();
             expect(history.go.bind(null, undefined)).to.throw(Error);
         });
 
         it('does not work for none [] input', function () {
-            var history = new History();
             expect(history.go.bind(null, [])).to.throw(Error);
         });
 
         it('does not work for none {} input', function () {
-            var history = new History();
             expect(history.go.bind(null, {})).to.throw(Error);
         });
 
         it('does not work for nonsense input', function () {
-            var history = new History();
             expect(history.go.bind(null, () => 'asfhaksf')).to.throw(Error);
         });
 
         it('does not go too high out of bounds', function () {
-            var history = new History();
             history.push('/home');
             history.push('/profile');
             history.push('/settings');
@@ -69,7 +71,6 @@ describe('Mock History Object', function () {
         });
 
         it('does not go too low out of bounds', function () {
-            var history = new History();
             history.push('/home');
             history.push('/profile');
             history.push('/settings');
@@ -78,7 +79,6 @@ describe('Mock History Object', function () {
         });
 
         it('moves to front', function () {
-            var history = new History();
             history.push('/home');
             history.push('/profile');
             history.push('/settings');
@@ -88,7 +88,6 @@ describe('Mock History Object', function () {
         });
 
         it('moves backwards then forward to end', function () {
-            var history = new History();
             history.push('/home');
             history.push('/profile');
             history.push('/settings');
@@ -100,20 +99,23 @@ describe('Mock History Object', function () {
     });
 
     describe('goForward()', function () {
+        var history;
+
+        beforeEach(function () {
+            history = new History;
+        });
+
         it('does not work for an empty history', function () {
-            var history = new History();
             expect(history.goForward).to.throw(Error);
         });
 
         it('does not work from top of history', function () {
-            var history = new History();
             history.push('/home');
             history.push('/profile');
             expect(history.goForward).to.throw(Error);
         });
 
         it('works for going forward one entry in history', function () {
-            var history = new History();
             history.push('/profile');
             history.push('/home');
             history.go(-1);
@@ -123,7 +125,6 @@ describe('Mock History Object', function () {
         });
 
         it('works for going forward multiple entries in history', function () {
-            var history = new History();
             history.push('/home');
             history.push('/profile');
             history.push('/settings');
@@ -139,19 +140,22 @@ describe('Mock History Object', function () {
     });
 
     describe('goBackward()', function () {
+        var history;
+
+        beforeEach(function () {
+            history = new History;
+        });
+
         it('does not work for an empty history', function () {
-            var history = new History();
             expect(history.goBack).to.throw(Error);
         });
 
         it('does not work for one entry history', function () {
-            var history = new History();
             history.push('/home');
             expect(history.goBack).to.throw(Error);
         });
 
         it('works for going back one entry in history', function () {
-            var history = new History();
             history.push('/home');
             history.push('/profile');
             expect(history.getCurrentLocation().pathname).to.equal('/profile');
@@ -160,7 +164,6 @@ describe('Mock History Object', function () {
         });
 
         it('works for going back multiple entries in history', function () {
-            var history = new History();
             history.push('/home');
             history.push('/profile');
             history.push('/settings');
@@ -175,9 +178,13 @@ describe('Mock History Object', function () {
     });
 
     describe('pushing and replacing locations in history', function () {
+        var history;
+
+        beforeEach(function () {
+            history = new History;
+        });
 
         it('pushes a location to an empty history', function () {
-            var history = new History;
             var input = {
                 pathname: '/home',
                 query: {},
@@ -191,7 +198,6 @@ describe('Mock History Object', function () {
         });
 
         it('pushes mupltiple locations to an history', function () {
-            var history = new History;
             var input = {
                 pathname: '/home',
                 query: {},
@@ -209,7 +215,6 @@ describe('Mock History Object', function () {
         });
 
         it('does not push duplicate simple string to history', function () {
-            var history = new History();
             history.push('/home');
             expect(history.getCurrentSize()).to.equal(1);
             expect(history.getCurrentLocation().pathname).to.equal('/home');
@@ -219,7 +224,6 @@ describe('Mock History Object', function () {
         });
 
         it('does not push duplicate complicated objects to history', function () {
-            var history = new History();
             var input = {
                 pathname: '/home',
                 query: {'a': 'b'},
@@ -236,7 +240,6 @@ describe('Mock History Object', function () {
         });
 
         it('does not push duplicate complicated object/ string to history', function () {
-            var history = new History();
             var input = {
                 pathname: '/home',
                 query: {'a': 'b'},
@@ -253,7 +256,6 @@ describe('Mock History Object', function () {
         });
 
         it('replaces a location for an empty history', function () {
-            var history = new History();
             var input = {
                 pathname: '/home',
                 query: {'a': 'b'},
@@ -268,7 +270,6 @@ describe('Mock History Object', function () {
 
 
         it('replaces one location in history', function () {
-            var history = new History();
             var input = {
                 pathname: '/home',
                 query: {},
@@ -283,7 +284,6 @@ describe('Mock History Object', function () {
         });
 
         it('replaces multiple locations in history', function () {
-            var history = new History();
             var input = {
                 pathname: '/home',
                 query: {},
@@ -299,7 +299,6 @@ describe('Mock History Object', function () {
         });
 
         it('does not replace duplicate simple string to history', function () {
-            var history = new History();
             history.push('/home');
             history.push('/thing');
             expect(history.getCurrentSize()).to.equal(2);
@@ -310,7 +309,6 @@ describe('Mock History Object', function () {
         });
 
         it('does not replace duplicate complicated objects to history', function () {
-            var history = new History();
             var input = {
                 pathname: '/home',
                 query: {'a': 'b'},
@@ -328,7 +326,6 @@ describe('Mock History Object', function () {
         });
 
         it('does not replace duplicate complicated object/ string to history', function () {
-            var history = new History();
             var input = {
                 pathname: '/home',
                 query: {'a': 'b'},
@@ -346,7 +343,6 @@ describe('Mock History Object', function () {
         });
 
         it('handles combination of pushing and replacing', function () {
-            var history = new History();
             var input = {
                 pathname: '/home',
                 query: {},
@@ -367,97 +363,86 @@ describe('Mock History Object', function () {
     });
 
     describe('splitAtIndex(s, n)', function () {
-        // Tests for split at index
+        var history;
+
+        beforeEach(function () {
+            history = new History;
+        });
+
         it('handles null string input', function () {
-            var history = new History();
             var result = history.splitAtIndex(null, 0);
             expect(_.isEqual(result, [''])).to.be.true;
         });
 
         it('handles undefined string input', function () {
-            var history = new History();
             var result = history.splitAtIndex(undefined, 0);
             expect(_.isEqual(result, [''])).to.be.true;
         });
 
         it('handles none [] string input', function () {
-            var history = new History();
             expect(history.splitAtIndex([], 0)).to.be.undefined;
         });
 
         it('handles none {} string input', function () {
-            var history = new History();
             expect(history.splitAtIndex({}, 0)).to.be.undefined;
         });
 
         it('handles nonsense string input', function () {
-            var history = new History();
             expect(history.splitAtIndex({'cat': 5, 'dog': null, 'cow': 'sadfjjsaf'})).to.be.undefined;
         });
 
         it('handles null split index input', function () {
-            var history = new History();
             var result = history.splitAtIndex('cat', null);
             expect(_.isEqual(result, ['cat'])).to.be.true;
         });
 
         it('handles undefined split index input', function () {
-            var history = new History();
             var result = history.splitAtIndex('cat', undefined);
             expect(_.isEqual(result, ['cat'])).to.be.true;
         });
 
         it('handles none [] split index input', function () {
-            var history = new History();
             var result = history.splitAtIndex('cat', []);
             expect(_.isEqual(result, ['cat'])).to.be.true;
 
         });
 
         it('handles none {} split index input', function () {
-            var history = new History();
             var result = history.splitAtIndex('cat', []);
             expect(_.isEqual(result, ['cat'])).to.be.true;
         });
 
         it('handles nonsense split index input', function () {
-            var history = new History();
             var result = history.splitAtIndex('cat', {'cat': 5, 'dog': null, 'cow': 'sadfjjsaf'});
             expect(_.isEqual(result, ['cat'])).to.be.true;
         });
 
         it('handles split at negative index', function () {
-            var history = new History();
             var result = history.splitAtIndex('kangaroo', -1);
             expect(_.isEqual(result, ['kangaroo'])).to.be.true;
         });
 
         it('handles split out of bounds large index', function () {
-            var history = new History();
             var result = history.splitAtIndex('kangaroo', 10);
             expect(_.isEqual(result, ['kangaroo'])).to.be.true;
         });
 
         it('splits at first character', function () {
-            var history = new History();
             var result = history.splitAtIndex('kangaroo', 0);
             expect(_.isEqual(result, ['', 'angaroo'])).to.be.true;
         });
 
         it('splits at last character', function () {
-            var history = new History();
             var result = history.splitAtIndex('kangaroo', 7);
             expect(_.isEqual(result, ['kangaro', ''])).to.be.true;
         });
 
         it('splits at middle odd character', function () {
-            var history = new History();
             var result = history.splitAtIndex('kangaroo', 3);
             expect(_.isEqual(result, ['kan', 'aroo'])).to.be.true;
         });
 
         it('splits at middle even character', function () {
-            var history = new History();
             var result = history.splitAtIndex('kangaroo', 4);
             expect(_.isEqual(result, ['kang', 'roo'])).to.be.true;
         });
@@ -466,147 +451,154 @@ describe('Mock History Object', function () {
 
     // Parse search unit tests
     describe('parseSearch(s)', function () {
+        var history;
+
+        beforeEach(function () {
+            history = new History;
+        });
+
         it('handles null input', function () {
-            var history = new History();
             var result = history.parseSearch(null);
             expect(_.isEqual(result, {})).to.be.true;
         });
 
         it('handles undefined input', function () {
-            var history = new History();
             var result = history.parseSearch(undefined);
             expect(_.isEqual(result, {})).to.be.true;
         });
 
         it('handles none [] input', function () {
-            var history = new History();
             var result = history.parseSearch([]);
             expect(_.isEqual(result, {})).to.be.true;
         });
 
         it('handles none {} input', function () {
-            var history = new History();
             var result = history.parseSearch({});
             expect(_.isEqual(result, {})).to.be.true;
         });
 
         it('handles nonsense input', function () {
-            var history = new History();
             var result = history.parseSearch({'cat': 5, 'dog': null, 'cow': 'sadfjjsaf'});
             expect(_.isEqual(result, {})).to.be.true;
         });
 
         it('handles empty search string', function () {
-            var history = new History();
             var result = history.parseSearch('?');
             expect(_.isEqual(result, {})).to.be.true;
         });
 
         it('handles one key value pair', function () {
-            var history = new History();
             var result = history.parseSearch('?cat=dog');
             expect(_.isEqual(result, {'cat': 'dog'})).to.be.true;
         });
 
         it('handles multiple key value pairs', function () {
-            var history = new History();
             var result = history.parseSearch('?cat=dog&thing=5&6=6');
             expect(_.isEqual(result, {'cat': 'dog', 'thing': '5', '6': '6'})).to.be.true;
         });
 
+        it('handles only ampersand', function () {
+            var result = history.parseSearch('?&');
+            expect(_.isEqual(result, {})).to.be.true;
+        });
+
+        it('handles preceeded by ampersand', function () {
+            var result = history.parseSearch('?&cat=dog');
+            expect(_.isEqual(result, {'cat': 'dog'})).to.be.true;
+        });
+
         it('handles empty key value pair', function () {
-            var history = new History();
             var result = history.parseSearch('?cat=');
             expect(_.isEqual(result, {'cat': ''})).to.be.true;
         });
 
         it('handles empty key without = value ', function () {
-            var history = new History();
             var result = history.parseSearch('?cat');
             expect(_.isEqual(result, {'cat': null})).to.be.true;
         });
 
         it('handles value with equal sign', function () {
-            var history = new History();
             var result = history.parseSearch('?cat==3');
             expect(_.isEqual(result, {'cat': '=3'})).to.be.true;
         });
 
         it('handles trailing & sign', function () {
-            var history = new History();
             var result = history.parseSearch('?cat=dog&');
-            expect(_.isEqual(result, {'cat': 'dog'})).to.be.true;
+            expect(_.isEqual(result, {'cat': 'dog', '': null})).to.be.true;
         });
 
         it('handles multiple & signs', function () {
-            var history = new History();
             var result = history.parseSearch('?cat=dog&&&thing=me');
-            expect(_.isEqual(result, {'cat': 'dog', 'thing': 'me'})).to.be.true;
+            expect(_.isEqual(result, {'cat': 'dog', '': [null, null],'thing': 'me'})).to.be.true;
         });
 
         it('handles empty key', function () {
-            var history = new History();
             var result = history.parseSearch('?=cat');
-            expect(_.isEqual(result, {})).to.be.true;
+            expect(_.isEqual(result, {'': 'cat'})).to.be.true;
         });
 
         it('handles empty key and value', function () {
-            var history = new History();
             var result = history.parseSearch('?=');
-            expect(_.isEqual(result, {})).to.be.true;
+            expect(_.isEqual(result, {'': ''})).to.be.true;
+        });
+
+        it('handles duplicate key', function() {
+            var result = history.parseSearch('?dog=cat&dog=mouse');
+            expect(_.isEqual(result, {dog: ['cat', 'mouse']})).to.be.true;
+        });
+
+        it('handles complex duplicate key', function() {
+            var result = history.parseSearch('?dog=cat&dog=mouse&cat=thing&dog=woof');
+            expect(_.isEqual(result, {dog: ['cat', 'mouse', 'woof'], 'cat': 'thing'})).to.be.true;
         });
     });
 
     describe('createLocation(location)', function () {
+        var history;
+
+        beforeEach(function () {
+            history = new History;
+        });
+
         it('handles null input', function () {
-            var history = new History();
             expect(history.createLocation.bind(null, null)).to.throw(Error);
         });
 
         it('handles undefined input', function () {
-            var history = new History();
             expect(history.createLocation.bind(null, undefined)).to.throw(Error);
         });
 
         it('handles none [] input', function () {
-            var history = new History();
             expect(history.createLocation.bind(null, [])).to.throw(Error);
         });
 
         it('handles none {} input', function () {
-            var history = new History();
             expect(history.createLocation.bind(null, {})).to.throw(Error);
         });
 
         it('handles nonsense input', function () {
-            var history = new History();
             expect(history.createLocation.bind(null, () => {
                 return {'cat': 5, 'dog': null};
             })).to.throw(Error);
         });
 
         it('handles pathname null input in object', function () {
-            var history = new History();
             expect(history.createLocation.bind(null, {pathname: null})).to.throw(Error);
         });
 
         it('handles pathname undefined input in object', function () {
-            var history = new History();
             expect(history.createLocation.bind(null, {pathname: undefined})).to.throw(Error);
         });
 
         it('handles pathname none [] input in object', function () {
-            var history = new History();
             expect(history.createLocation.bind(null, {pathname: []})).to.throw(Error);
         });
 
         it('handles pathname none {} input in object', function () {
-            var history = new History();
             expect(history.createLocation.bind(null, {pathname: {}})).to.throw(Error);
         });
 
         it('handles pathname nonsense input in object', function () {
-            var history = new History();
             expect(history.createLocation.bind(null, {
                 pathname: () => {
                     return {'cat': 5, 'dog': null};
@@ -615,7 +607,6 @@ describe('Mock History Object', function () {
         });
 
         it('handles a simple string', function () {
-            var history = new History();
             var result = history.createLocation('/route');
             expect(result.pathname).to.equal('/route');
             expect(result.search).to.equal('');
@@ -625,7 +616,6 @@ describe('Mock History Object', function () {
         });
 
         it('handles a string with search params', function () {
-            var history = new History();
             var result = history.createLocation('/route?thing=b&c=b');
             expect(result.pathname).to.equal('/route');
             expect(result.search).to.equal('?thing=b&c=b');
@@ -635,7 +625,6 @@ describe('Mock History Object', function () {
         });
 
         it('handles a string with hash', function () {
-            var history = new History();
             var result = history.createLocation('/route#thing');
             expect(result.pathname).to.equal('/route');
             expect(result.search).to.equal('');
@@ -645,7 +634,6 @@ describe('Mock History Object', function () {
         });
 
         it('handles a string with search params followed by hash', function () {
-            var history = new History();
             var result = history.createLocation('/route?thing=b&c=b#thing');
             expect(result.pathname).to.equal('/route');
             expect(result.search).to.equal('?thing=b&c=b');
@@ -655,7 +643,6 @@ describe('Mock History Object', function () {
         });
 
         it('handles a string with incomplete search params followed by hash', function () {
-            var history = new History();
             var result = history.createLocation('/route?thing&c=#thing');
             expect(result.pathname).to.equal('/route');
             expect(result.search).to.equal('?thing&c=');
@@ -665,7 +652,6 @@ describe('Mock History Object', function () {
         });
 
         it('handles simple object with pathname field', function () {
-            var history = new History();
             var input = {pathname: '/route'};
             var result = history.createLocation(input);
             expect(result.pathname).to.equal('/route');
@@ -676,7 +662,6 @@ describe('Mock History Object', function () {
         });
 
         it('handles simple object with fields', function () {
-            var history = new History();
             var input = {
                 pathname: '/route',
                 search: '?c=d&l=B',
@@ -691,7 +676,6 @@ describe('Mock History Object', function () {
         });
 
         it('handles simple object with undefined fields', function () {
-            var history = new History();
             var input = {
                 pathname: '/route',
                 search: undefined,
@@ -707,7 +691,6 @@ describe('Mock History Object', function () {
         });
 
         it('handles simple object with null fields', function () {
-            var history = new History();
             var input = {
                 pathname: '/route',
                 search: null,
