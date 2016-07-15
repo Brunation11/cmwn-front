@@ -12,16 +12,6 @@ import 'components/sidebar.scss';
 const WELCOME = 'Welcome';
 
 var Component = React.createClass({
-    getInitialState: function () {
-        if (this.props.currentUser.username.length >= 25){
-            return {
-                tooLong: true
-            };
-        }
-        return {
-            tooLong: false
-        };
-    },
     attemptNavigate: function () {
         History.push('/profile');
     },
@@ -29,8 +19,9 @@ var Component = React.createClass({
         return (
             <div>
                 <p className="welcome">{WELCOME}</p>
-                <p className={ClassNames({'username': true, 'smaller-text': this.state.tooLong,
-                    'regular-text': !this.state.tooLong})}>
+                <p className={ClassNames('username',
+                    {'smaller-text': this.props.currentUser.username.length >= 25,
+                    'regular-text': this.props.currentUser.username.length < 25})}>
                     <a onClick={this.attemptNavigate}>
                         {this.props.currentUser.username}
                     </a>
