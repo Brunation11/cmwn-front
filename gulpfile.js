@@ -398,9 +398,10 @@ gulp.task('lint-config', function () {
 gulp.task('lint-scss', function () {
     return gulp.src(['src/**/*.scss'])
         .pipe(scsslint({
-            'reporterOutput': 'scsslint.log', // file output
-            customReport: scssLintStylish
+            customReport: scssLintStylish,
+            'filePipeOutput': 'scsslint.log' // file output
         }))
+        .pipe(gulp.dest('./'))
         .pipe(scsslint.failReporter());
 });
 

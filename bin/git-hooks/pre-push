@@ -21,7 +21,7 @@ if [ $? != 0 ]; then
     echo "build failed"
     cat testlint.log
     cat configlint.log
-    cat scsslint.log
+    python -m json.tool scsslint.log
     cat jslint.log
     exit 157
 fi
