@@ -15,6 +15,10 @@ var addHardcodedEntries = function (menuItems) {
     return menuItems;
 };
 
+const IGNORED_ROUTES_FOR_CHILDREN = [
+    'Friends and Network'
+];
+
 var buildMenuRoutes = function (links) {
     var allRoutes = PublicRoutes.concat(PrivateRoutes);
     //goal here is to read all of our routes and match them against the list of available
@@ -79,6 +83,11 @@ var Component = React.createClass({
 //            }
 //            return a;
 //        }, []);
+        //manually hidden items for children
+        menuItems = _.filter(menuItems, item =>this.props.currentUser.type !== 'CHILD' || (
+            this.props.currentUser.type === 'CHILD' &&
+            !~IGNORED_ROUTES_FOR_CHILDREN.indexOf(item.label))
+        );
         menuItems = addHardcodedEntries(menuItems);
         return _.map(menuItems, item =>
             (<li key={`(${item.label})-${item.url}`}><Link to={item.url}>{item.label}</Link></li>));
