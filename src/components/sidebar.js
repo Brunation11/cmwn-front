@@ -40,7 +40,8 @@ var Component = React.createClass({
                 <a onClick={this.attemptNavigate} >
                     <ProfileImage data={this.props.currentUser} currentUser={this.props.currentUser} />
                 </a>
-                <SiteNav />
+                <SiteNav currentUser={this.props.currentUser}
+                    data={this.props.currentUser._links.asMutable()} />
                 {''/*<FriendList />*/}
             </div>
         );
