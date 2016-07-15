@@ -5,11 +5,10 @@ import ClassNames from 'classnames';
 import _ from 'lodash';
 import {Button, Glyphicon} from 'react-bootstrap';
 
+import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
 import Toast from 'components/toast';
 import Log from 'components/log';
-
-import SkribbleMocks from 'routes/users/mock_skribble_data';
 
 import 'components/game.scss';
 
@@ -52,6 +51,18 @@ var Game = React.createClass({
     },
     componentWillMount: function () {
         this.setEvent();
+    },
+    componentDidMount: function () {
+        var frame = ReactDOM.findDOMNode(this.refs.gameRef);
+        var callApi = _.debounce(function () {
+            HttpManager.GET({
+                url: (GLOBALS.API_URL),
+                handleErrors: false
+            });
+        }, 5000);
+        frame.addEventListener('load', function () {
+            frame.contentWindow.addEventListener('click', callApi, false);
+        }, false);
     },
     componentWillUnmount: function () {
         this.clearEvent();
@@ -103,10 +114,6 @@ var Game = React.createClass({
                 this.props['on' + _.capitalize(e.name)](...arguments);
             }
         }
-        if (e && e.respond != null) {
-            SkribbleMocks(e);
-        }
-
     },
     setEvent: function () {
         window.addEventListener('game-event', this.gameEventHandler);

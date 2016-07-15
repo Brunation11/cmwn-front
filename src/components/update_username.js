@@ -1,10 +1,11 @@
 import React from 'react';
 import {Panel, Button, Glyphicon} from 'react-bootstrap';
 import SweetAlert from 'sweetalert2';
+import ClassNames from 'classnames';
 
+import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
 import Util from 'components/util';
-import ClassNames from 'classnames';
 import Store from 'components/store';
 
 import 'components/update_username.scss';
@@ -54,7 +55,7 @@ var UpdateUsername = React.createClass({
         };
     },
     reloadChildUsername: function () {
-        HttpManager.GET({url: 'https://api-dev.changemyworldnow.com/user-name'}).then(server => {
+        HttpManager.GET({url: `${GLOBALS.API_URL}user-name`}).then(server => {
             this.setState({last: this.state.option, option: server.response.user_name});
         }).catch(err => {}); // eslint-disable-line
         this.setStyleOnClick();

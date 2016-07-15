@@ -1,9 +1,13 @@
 import React from 'react';
+import _ from 'lodash';
+import {Modal} from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import Game from 'components/game';
 import History from 'components/history';
 import GLOBALS from 'components/globals';
+import Store from 'components/store';
+import Detector from 'components/browser_detector';
 
 import Layout from 'layouts/one_col';
 
@@ -17,16 +21,37 @@ export class GamePage extends React.Component {
         super(props);
         this.state = {
             gameUrl: GLOBALS.GAME_URL + this.props.params.game + '/index.html',
-            isStudent: true
+            isStudent: true,
+            gameOn: false,
+            PAGE_UNIQUE_IDENTIFIER: this.props.params.game
         };
     }
 
     componentDidMount() {
+        var boundModal;
         this.resolveRole(this.props);
+        boundModal = this.showModal.bind(this, GLOBALS.GAME_URL + this.props.params.game + '/index.html');
+        boundModal();
     }
 
     componentWillReceiveProps(nextProps) {
         this.resolveRole(nextProps);
+    }
+    
+    showModal(gameUrl) {
+        var urlParts;
+        if (Detector.isMobileOrTablet() || Detector.isPortrait()) {
+            urlParts = gameUrl.split('/');
+            urlParts.pop(); //discard index.html
+            History.push(`/game/${_.last(urlParts)}`);
+        }
+        this.setState({gameOn: true, gameUrl});
+    }
+    
+    hideModal() {
+        this.setState({gameOn: false});
+        this.refs.gameRef.dispatchPlatformEvent('quit');
+        History.push('/profile');
     }
 
     resolveRole(props) {
@@ -38,22 +63,48 @@ export class GamePage extends React.Component {
         }
         this.setState(newState);
     }
-
-    render() {
-        if (this.props.currentUser == null) {
-            return null;
-        }
-        return (
-           <Layout>
+    
+    renderGame() {
+        if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe10())) {
+            return (
                 <Game
-                    className={PAGE_UNIQUE_IDENTIFIER}
                     ref="gameRef"
                     isTeacher={!this.state.isStudent}
                     url={this.state.gameUrl}
-                    onExit={() => History.push('/profile')}
-                    saveUrl={this.props.currentUser._links.save_game.href}
+                    onExit={() =>
+                        History.push('/profile')
+                    }
                 />
-           </Layout>
+            );
+        }
+        return (
+            <div>
+                <Modal
+                    className="full-width"
+                    show={this.state.gameOn}
+                    onHide={this.hideModal}
+                    keyboard={false}
+                    backdrop="static"
+                >
+                    <Modal.Body>
+                        <Game
+                            ref="gameRef"
+                            isTeacher={!this.state.isStudent}
+                            url={this.state.gameUrl}
+                            onExit={this.hideModal}
+                        />
+                        <a onClick={this.hideModal} className="modal-close">(close)</a>
+                    </Modal.Body>
+                </Modal>
+            </div>
+        );
+    }
+
+    render() {
+        return (
+            <Layout className={this.state.PAGE_UNIQUE_IDENTIFIER}>
+                {this.renderGame()}
+            </Layout>
         );
     }
 }
@@ -79,4 +130,3 @@ mapStateToProps = state => {
 Page = connect(mapStateToProps)(GamePage);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
-

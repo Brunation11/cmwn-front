@@ -44,8 +44,8 @@ const CONFIRM_DELETE = 'Are you sure you want to delete this user? This action c
 export class EditProfile extends React.Component {
     constructor(props) {
         super(props);
-        var state; //eslint-disable-line vars-on-top
-        var isStudent; //eslint-disable-line vars-on-top
+        var state;
+        var isStudent;
         state = _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {};
         isStudent = props.isStudent !== null && props.isStudent !== undefined ? props.isStudent : true;
         this.state = _.defaults({}, state, {isStudent: isStudent, dob: new Date().toISOString()});
@@ -385,7 +385,8 @@ export class EditProfile extends React.Component {
     }
 
     render() {
-        var userType = this.state.isStudent ? this.renderChild : this.renderAdult;
+        var userType = (this.state.isStudent || this.props.data.type === 'CHILD') ?
+            this.renderChild : this.renderAdult;
 
         if (this.props.data == null || this.props.data.user_id == null ||
             !Util.decodePermissions(this.props.data.scope).update) {
@@ -447,4 +448,3 @@ mapStateToProps = state => {
 
 Page = connect(mapStateToProps)(EditProfile);
 export default Page;
-
