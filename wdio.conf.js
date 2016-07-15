@@ -2,7 +2,7 @@ var e2eReport = require('./e2e_report.js');
 var hostIP;
 
 exports.config = {
-    
+
     //
     // ==================
     // Specify Test Files
@@ -13,7 +13,7 @@ exports.config = {
     // directory is where your package.json resides, so `wdio` will be called from there.
     //
     specs: [
-        './test/specs/**/*.js'
+        './test/specs/users/user_profile_test.js'
     ],
     // You can add a suite to define sets of tests to be called togehter as a group
     // These suites can be called individually by running "wdio --suite someFeature"

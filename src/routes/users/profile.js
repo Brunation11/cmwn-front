@@ -155,7 +155,7 @@ export class Profile extends React.Component {
                     game={this.state.game}
                     currentUser={this.props.currentUser}
                 />
-                    <a onClick={this.hideModal.bind(this)} className="modal-close">(close)</a>
+                <a id="close-modal" onClick={this.hideModal.bind(this)} className="modal-close">(close)</a>
             </div>
         );
     }
@@ -172,7 +172,7 @@ export class Profile extends React.Component {
             playText = PLAY;
         }
         return (
-            <div className="flip fill" key={Shortid.generate()}>
+            <div className="flip fill" id={item.game_id} key={Shortid.generate()}>
                 <a onClick={onClick.bind(this)} >
                     <div className="item">
                         <span className="overlay">
@@ -230,13 +230,15 @@ export class Profile extends React.Component {
                     <div className="right">
                         <div className="user-metadata">
                             <p>Username:</p>
-                            <p className="standard field">{this.state.username}</p>
+                            <p className="standard field" id="username">{this.state.username}</p>
                             <p>First Name:</p>
-                            <p className="standard field">{this.state.first_name}</p>
+                            <p className="standard field" id="first_name">{this.state.first_name}</p>
                             <p>Last Name:</p>
-                            <p className="standard field">{this.state.last_name}</p>
+                            <p className="standard field" id="last_name">{this.state.last_name}</p>
                             <p>Birthday:</p>
-                            <p className="standard field">{Moment(ISODate).format('MM-DD-YYYY')}</p>
+                            <p className="standard field" id="birthday">
+                                {Moment(ISODate).format('MM-DD-YYYY')}
+                            </p>
                         </div>
                     </div>
                 </Panel>
@@ -249,7 +251,6 @@ export class Profile extends React.Component {
             <div>
                 <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal.bind(this)}
                     keyboard={false} backdrop="static" id="game-modal">
-                    keyboard={false} backdrop="static">
                     <Modal.Body>
                         {this.renderGame()}
                     </Modal.Body>
