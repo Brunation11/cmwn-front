@@ -153,13 +153,15 @@ var Component = React.createClass({
 var mapStateToProps = state => {
     var data = {title: ''};
     var loading = true;
+    var currentUser = state.currentUser;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
     }
     return {
         data,
-        loading
+        loading,
+        currentUser
     };
 };
 
