@@ -2,11 +2,16 @@ import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
 
+import gameSmoke from 'smoke_tests/game.test.js';
 import { GamePage } from 'routes/game';
 
 import studentDataA from 'mocks/users/student_data_a';
 
 describe('<GamePage />', function () {
+    describe('Game Page Smoke Tests', function () {
+        gameSmoke();
+    });
+
     describe('Checks game page', function () {
         var game = <GamePage data={studentDataA} loading={false}
             currentUser={studentDataA} params={{game: 'be-bright'}}/>;

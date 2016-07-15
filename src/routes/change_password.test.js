@@ -2,6 +2,7 @@ import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
 
+import changePassSmoke from 'smoke_tests/change_password.test.js';
 import { ChangePassword } from 'routes/change_password';
 import { Page } from 'routes/change_password';
 import { isPassValid } from 'routes/change_password';
@@ -25,8 +26,12 @@ describe('<Page />', function () {
     });
 });
 
-describe('<ChangePassword />', function () {
+describe('<ChangePassword />', function () {    
     describe('Checks changepass page', function () {
+        describe('ChangePassword Smoke Tests', function () {
+            changePassSmoke();
+        });
+        
         var changePass = <ChangePassword currentUser={studentDataA} data={studentDataA} loading={false}/>;
         const WRAPPER = shallow(changePass);
 

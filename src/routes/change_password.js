@@ -41,7 +41,7 @@ export class Page extends React.Component {
         return (
            <Layout className="change-password">
                 {CHANGE_COPY}
-                <ChangePassword />
+                <ChangePassword currentUser={this.props.currentUser} data={this.props.data} loading={this.props.loading} />
            </Layout>
          );
     }

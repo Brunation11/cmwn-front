@@ -40,6 +40,9 @@ export class GamePage extends React.Component {
     }
 
     render() {
+        if (this.props.currentUser == null) {
+            return null;
+        }
         return (
            <Layout>
                 <Game

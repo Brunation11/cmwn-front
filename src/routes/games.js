@@ -17,6 +17,8 @@ import FlipBgDefault from 'media/flip-placeholder-white.png';
 
 import 'routes/users/profile.scss';
 
+const PAGE_UNIQUE_IDENTIFIER = 'games';
+
 var mapStateToProps;
 var Page;
 
@@ -168,4 +170,5 @@ mapStateToProps = state => {
 };
 
 Page = connect(mapStateToProps)(GamesPage);
+Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
