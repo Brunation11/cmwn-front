@@ -84,6 +84,7 @@ var ProfileImage = React.createClass({
                 }
                 self.setState({profileImage: result[0].secure_url});
                 self.setState({isModerated: false});
+                ga('set', 'dimension6', 1);
                 HttpManager.POST({url: this.props.data.user_image.href}, {
                     url: result[0].secure_url,
                     image_id: result[0].public_id
