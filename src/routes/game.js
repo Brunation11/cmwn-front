@@ -1,13 +1,9 @@
 import React from 'react';
-import _ from 'lodash';
-import {Modal} from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import Game from 'components/game';
 import History from 'components/history';
 import GLOBALS from 'components/globals';
-import Store from 'components/store';
-import Detector from 'components/browser_detector';
 
 import Layout from 'layouts/one_col';
 
@@ -16,84 +12,47 @@ const PAGE_UNIQUE_IDENTIFIER = 'single-game';
 var GamePage = React.createClass({
     getInitialState: function () {
         return {
-            gameUrl: GLOBALS.GAME_URL + this.props.params.game + '/index.html',
-            isStudent: true,
-            gameOn: false,
-            PAGE_UNIQUE_IDENTIFIER: this.props.params.game
+            isStudent: true
         };
     },
     componentDidMount: function () {
-        var boundModal;
-        this.resolveRole();
-        boundModal = this.showModal.bind(this, GLOBALS.GAME_URL + this.props.params.game + '/index.html');
-        boundModal();
+        this.resolveRole(this.props);
+        this.setState({
+            gameId: this.props.params.game,
+        });
     },
-    componentWillReceiveProps: function () {
-        this.resolveRole();
+    componentWillReceiveProps: function (nextProps) {
+        this.resolveRole(nextProps);
+        this.setState({
+            gameId: this.props.params.game,
+        });
     },
-    showModal: function (gameUrl) {
-        var urlParts;
-        if (Detector.isMobileOrTablet() || Detector.isPortrait()) {
-            urlParts = gameUrl.split('/');
-            urlParts.pop(); //discard index.html
-            History.push(`/game/${_.last(urlParts)}`);
-        }
-        this.setState({gameOn: true, gameUrl});
-    },
-    hideModal: function () {
-        this.setState({gameOn: false});
-        this.refs.gameRef.dispatchPlatformEvent('quit');
-        History.push('/profile');
-    },
-    resolveRole: function () {
-        var newState = {};
-        var state = Store.getState();
-        if (state.currentUser && state.currentUser.type !== 'CHILD') {
-            newState.isStudent = false;
+    resolveRole: function (props) {
+        // remember we actually want current user here, not the user whose
+        // profile we are looking at
+        if (props.currentUser &&
+            props.currentUser.type &&
+            props.currentUser.type !== 'CHILD') {
+            this.setState({
+                isStudent: false
+            });
         } else {
-            newState.isStudent = true;
+            this.setState({
+                isStudent: true
+            });
         }
-        this.setState(newState);
-    },
-    renderGame: function () {
-        if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe10())) {
-            return (
-                <Game
-                    ref="gameRef"
-                    isTeacher={!this.state.isStudent}
-                    url={this.state.gameUrl}
-                    onExit={() =>
-                        History.push('/profile')
-                    }
-                />
-            );
-        }
-        return (
-            <div>
-                <Modal
-                    className="full-width"
-                    show={this.state.gameOn}
-                    onHide={this.hideModal}
-                    keyboard={false}
-                    backdrop="static"
-                >
-                    <Modal.Body>
-                        <Game
-                            ref="gameRef"
-                            isTeacher={!this.state.isStudent}
-                            url={this.state.gameUrl}
-                            onExit={this.hideModal}
-                        />
-                        <a onClick={this.hideModal} className="modal-close">(close)</a>
-                    </Modal.Body>
-                </Modal>
-            </div>
-        );
     },
     render: function () {
         return (
-            <Layout className={this.state.PAGE_UNIQUE_IDENTIFIER}>
-                {this.renderGame()}
+            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+                <Game
+                    ref="gameRef"
+                    isTeacher={!this.state.isStudent}
+                    url={`${GLOBALS.GAME_URL}${this.props.params.game}/index.html`}
+                    currentUser={this.props.currentUser}
+                    onExit={() => History.push('/profile')
+                    }
+                />
             </Layout>
         );
     }
@@ -115,7 +74,7 @@ var mapStateToProps = state => {
     };
 };
 
-
-var Page = connect(mapStateToProps)(GamePage);
+var Page = connect(mapStateToProps)(GamePage); //eslint-disable-line no-undef
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
+
