@@ -1,14 +1,12 @@
 import React from 'react';
 import {ButtonToolbar, OverlayTrigger, Popover} from 'react-bootstrap';
 import Classnames from 'classnames';
-import { connect } from 'react-redux';
 
 import Cloudinary from 'components/cloudinary';
 import Toast from 'components/toast';
 import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
 import Log from 'components/log';
-import Store from 'components/store';
 
 import 'components/profile_image.scss';
 
@@ -22,7 +20,7 @@ const PENDING = ' We\'re reviewing your image and it should appear shortly. ' +
 const NO_IMAGE = 'Looks like there was a problem displaying this users profile. ' +
                 'Please refresh the page to try again.';
 
-var ProfileImage = React.createClass({
+export var Image = React.createClass({
     getInitialState: function () {
         return {
             profileImage: GLOBALS.DEFAULT_PROFILE,
@@ -30,33 +28,25 @@ var ProfileImage = React.createClass({
         };
     },
     componentDidMount: function () {
-        var state = Store.getState();
-        if (this.props.user_id === state.currentUser.user_id) {
-            if (this.props.currentUser._embedded.image) {
-                this.setState({profileImage: this.props.currentUser._embedded.image.url});
-                this.setState({isModerated: this.props.currentUser._embedded.image.is_moderated});
-            }
+        if (this.props.data._embedded.image) {
+            this.setState({profileImage: this.props.data._embedded.image.url});
+            this.setState({isModerated: this.props.data._embedded.image.is_moderated});
         } else {
-            if (this.props.user._embedded.image) {
-                this.setState({profileImage: this.props.user._embedded.image.url});
-                this.setState({isModerated: this.props.user._embedded.image.is_moderated});
-            } else {
-                HttpManager.GET({
-                    url: (this.props.user._links.user_image.href),
-                    handleErrors: false
-                })
-                .then(res => {
-                    this.setState({profileImage: res.response.url});
-                }).catch(e => {
-                    if (e.status === 404) {
-                        //if a user has never uploaded an image, we expect a 404
-                        this.setState({profileImage: GLOBALS.DEFAULT_PROFILE});
-                    } else {
-                        Toast.error(NO_IMAGE);
-                        Log.error(e, 'Image could not be extracted from user');
-                    }
-                });
-            }
+            HttpManager.GET({
+                url: (this.props.data._links.user_image.href),
+                handleErrors: false
+            })
+            .then(res => {
+                this.setState({profileImage: res.response.url});
+            }).catch(e => {
+                if (e.status === 404) {
+                    //if a user has never uploaded an image, we expect a 404
+                    this.setState({profileImage: GLOBALS.DEFAULT_PROFILE});
+                } else {
+                    Toast.error(NO_IMAGE);
+                    Log.error(e, 'Image could not be extracted from user');
+                }
+            });
         }
     },
     startUpload: function (e) {
@@ -84,7 +74,7 @@ var ProfileImage = React.createClass({
                 }
                 self.setState({profileImage: result[0].secure_url});
                 self.setState({isModerated: false});
-                HttpManager.POST({url: this.props.data.user_image.href}, {
+                HttpManager.POST({url: this.props.data._links.user_image.href}, {
                     url: result[0].secure_url,
                     image_id: result[0].public_id
                 }).then(() => {
@@ -110,9 +100,8 @@ var ProfileImage = React.createClass({
         );
     },
     renderUploadButton: function () {
-        var state = Store.getState();
-        if (this.props.user_id !== state.currentUser.user_id ||
-            (this.props.user && this.props.user.user_id !== state.currentUser.user_id)) {
+        if (this.props.data.user_id !== this.props.currentUser.user_id ||
+            (this.props.data && this.props.data.user_id !== this.props.currentUser.user_id)) {
             return null;
         }
         if ((this.state.profileImage === GLOBALS.DEFAULT_PROFILE) || this.state.isModerated) {
@@ -151,17 +140,6 @@ var ProfileImage = React.createClass({
         );
     }
 });
-
-var mapStateToProps = state => {
-    var data = [];
-    state.currentUser;
-    if (state.currentUser && state.currentUser._links) {
-        data = state.currentUser._links;
-    }
-    return { currentUser: state.currentUser, data };
-};
-
-var Image = connect(mapStateToProps)(ProfileImage);
 
 export default Image;
 
