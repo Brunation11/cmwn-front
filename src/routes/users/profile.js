@@ -226,7 +226,11 @@ export class Profile extends React.Component {
                 <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
                     <div className="left">
                         <div className="frame">
-                            <ProfileImage user={this.state} link-below={true}/>
+                            <ProfileImage
+                                data={this.props.data}
+                                currentUser={this.props.currentUser}
+                                link-below={true}
+                             />
                         </div>
                     </div>
                     <div className="right">
