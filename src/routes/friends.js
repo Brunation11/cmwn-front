@@ -70,15 +70,21 @@ var Component = React.createClass({
     },
 
     renderFlip: function (item){
-        return (
-            <PopOver
-                element={item}
-                type="user"
-                trigger="click"
-            >
-                {this.renderUserFlip(item)}
-            </PopOver>
-        );
+        if (item.embedded && item.embedded.flips) {
+            return (
+                <PopOver
+                    element={item}
+                    type="user"
+                    trigger="click"
+                >
+                    {this.renderUserFlip(item)}
+                </PopOver>
+            );
+        } else {
+            return (
+                this.renderUserFlip(item)
+            );
+        }
     },
     renderUserFlip: function (item) {
         return (
