@@ -12,7 +12,7 @@ import Util from 'components/util';
 import Paragraph from 'components/conditional_paragraph';
 import GenerateDataSource from 'components/datasource';
 
-const PAGE_UNIQUE_IDENTIFIER = 'school-view';
+export const PAGE_UNIQUE_IDENTIFIER = 'school-view';
 
 const CLASS_SOURCE = GenerateDataSource('group_class', PAGE_UNIQUE_IDENTIFIER);
 const USER_SOURCE = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
@@ -90,7 +90,8 @@ export class SchoolView extends React.Component {
     }
 
     render() {
-        if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
+        if (this.props.data == null || this.props.data.group_id == null ||
+            !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
         return (
