@@ -104,7 +104,9 @@ $overlay-color: #fff;
             text-align: left;
             color: $overlay-color;
 
-            &:hover {
+            &:hover,
+            &:focus,
+            &:active {
                 opacity: 1;
             }
 
