@@ -68,8 +68,7 @@ var PopOver = React.createClass({
                     overlay={(
                         <Popover
                             id="popover"
-                            title={`Earned:
-                                ${Moment(new Date(state.element.earned)) .format('MMM Do YYYY')}`}
+                            title={`Earned: ${state.flips.length}`}
                         >
                             {state.flips}
                         </Popover>
