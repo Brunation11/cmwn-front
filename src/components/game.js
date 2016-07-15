@@ -89,7 +89,7 @@ var Game = React.createClass({
     },
     [EVENT_PREFIX + 'Flip']: function (e) {
         this.submitFlip(e.gameData.id);
-        ga('set', 'dimension5', e.gameData.id);
+        ga('set', 'dimension5', e.gameData.id || e.gameData.game || e.gameData.flip);
     },
     [EVENT_PREFIX + 'Save']: function (e) {
         var version = 1;
@@ -107,7 +107,7 @@ var Game = React.createClass({
     },
     [EVENT_PREFIX + 'Init']: function (e) {
         e.respond(this.props.gameState);
-        ga('set', 'dimension5', e.gameData.id);
+        ga('set', 'dimension4', e.gameData.id || e.gameData.game || e.gameData.flip);
     },
     /* end of default events */
     gameEventHandler: function (e) {
