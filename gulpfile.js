@@ -5,6 +5,7 @@ require('app-module-path').addPath(__dirname + '/src');
 /*eslint no-console:0 */
 /*eslint-disable vars-on-top */
 var gulp = require('gulp');
+var os = require('os');
 var del = require('del');
 var args = require('yargs').argv;
 var path = require('path');
@@ -19,6 +20,7 @@ var execSync = require('child_process').execSync;
 var spawn = require('child_process').spawn;
 var eslint = require('gulp-eslint');
 var scsslint = require('gulp-scss-lint');
+var scsslint2 = require('gulp-scsslint');
 var scssLintStylish = require('gulp-scss-lint-stylish');
 var fs = require('fs');
 var eslintConfigJs = JSON.parse(fs.readFileSync('./.eslintrc'));
@@ -403,6 +405,32 @@ gulp.task('lint-scss', function () {
         }))
         .pipe(gulp.dest('./'))
         .pipe(scsslint.failReporter());
+});
+gulp.task('lint-scss2', function () {
+    fs.unlinkSync('./scsslint.log');
+    fs.writeFileSync('./scsslint.log', '');
+    return gulp.src(['src/**/*.scss'])
+        .pipe(scsslint2({
+            config: '.scss-lint.yml'
+        }))
+        .pipe(scsslint2.reporter(function (file) {
+            var count = 0;
+            if(file.scsslint.success) return;
+            fs.appendFile('./scsslint.log', '[4m' + file.history[0] + '[24m');
+            fs.appendFile('./scsslint.log', os.EOL);
+            console.log('[4m' + file.history[0] + '[24m');
+            _.each(file.scsslint.results, result => {
+                var errors = '';
+                errors += '[37m' + 'line: ' + result.line + ', col: ' + result.column  + ' ';
+                errors += '[31m' + result.linter + ': ';
+                errors += '[91m' + result.reason + '[0m';
+                errors += os.EOL;
+                console.log(errors);
+                fs.appendFile('./scsslint.log', errors);
+            });
+            fs.appendFile('./scsslint.log', os.EOL);
+        }))
+        .pipe(scsslint2.reporter('fail'));
 });
 
 gulp.task('unit', function () {
