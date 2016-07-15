@@ -1,4 +1,5 @@
 build.zip
+docker-compose.yml
 .vagrant
 node_modules
 build
@@ -29,3 +30,4 @@ coverage/**/*
 lib
 lib/**/*
 .nyc_output
+scssReport.json

@@ -33,7 +33,11 @@ const ERRORS = {
     INVALID_SUBMISSION: 'Invalid submission. Please update fields highlighted in red and submit again'
 };
 
-const TERMS_COPY = <span>By checking the box below, you agree that you have read, understand and accept the <a href="/terms" target="_blank">Change My World Now Terms and Conditions</a>.</span>;
+const TERMS_COPY = (
+    <span>
+        By checking the box below, you agree that you have read, understand and accept the{' '}
+            <a href="/terms" target="_blank">Change My World Now Terms and Conditions</a>.
+    </span>);
 
 var checkPerms = function (data) {
     if (data && data.scope && !Util.decodePermissions(data.scope).update) {
@@ -80,33 +84,37 @@ var Component = React.createClass({
             return null;
         }
         return (
-           <Layout>
-              <Panel header={HEADINGS.EDIT_TITLE + this.props.data.title} className="standard">
-                  <Link to={'/school/' + this.props.data.group_id + '/view'}>Return to School Dashboard</Link>
-                  <br />
-                 <Input
-                    type="text"
-                    value={this.state.title}
-                    placeholder="title"
-                    label="Title"
-                    bsStyle={Validate.min(3, this.state.title)}
-                    hasFeedback
-                    ref="titleInput"
-                    onChange={() => this.setState({title: this.refs.titleInput.getValue()})}
-                 />
-                 <Input
-                    type="textarea"
-                    value={this.state.description}
-                    placeholder="description"
-                    label="Description"
-                    ref="descriptionInput"
-                    onChange={() => this.setState({description: this.refs.descriptionInput.getValue()})}
-                 />
-                 <Button onClick={this.submitData} > Save </Button>
-              </Panel>
-              {''/*<CreateClass data={this.props.data} />*/}
-              <BulkUpload url={this.props.data._links.import.href} />
-           </Layout>
+            <Layout>
+                <Panel header={HEADINGS.EDIT_TITLE + this.props.data.title} className="standard">
+                    <Link to={'/school/' + this.props.data.group_id + '/view'} id="school-return-dash">
+                        Return to School Dashboard
+                    </Link>
+                    <br />
+                    <Input
+                        type="text"
+                        value={this.state.title}
+                        placeholder="title"
+                        label="Title"
+                        bsStyle={Validate.min(3, this.state.title)}
+                        hasFeedback
+                        ref="titleInput"
+                        id="school-edit-name"
+                        onChange={() => this.setState({title: this.refs.titleInput.getValue()})}
+                    />
+                    <Input
+                        type="textarea"
+                        value={this.state.description}
+                        placeholder="description"
+                        label="Description"
+                        ref="descriptionInput"
+                        id="school-edit-desc"
+                        onChange={() => this.setState({description: this.refs.descriptionInput.getValue()})}
+                    />
+                    <Button onClick={this.submitData} id="school-edit-submit"> Save </Button>
+                </Panel>
+                {''/*<CreateClass data={this.props.data} />*/}
+                <BulkUpload url={this.props.data._links.import.href} />
+            </Layout>
          );
     }
 });
@@ -194,8 +202,8 @@ var BulkUpload = React.createClass({
         return (
           <Panel header={HEADINGS.UPLOAD} className="standard">
             <iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe"></iframe>
-            <Form ref="formRef" method="post" target="dummyframe" encType="multipart/form-data" action={this.props.url}
-                onSubmit={e => {
+            <Form ref="formRef" method="post" target="dummyframe" encType="multipart/form-data"
+                action={this.props.url} id="import-form" onSubmit={e => {
                     try {
                         if (!this.refs.formRef.isValid()) {
                             e.preventDefault();
@@ -209,7 +217,9 @@ var BulkUpload = React.createClass({
                             e.preventDefault();
                             Toast.error('Teacher and Student access codes must be different');
                             return false;
-                        } else if (!isPassValid(this.state.teacherCode) || !isPassValid(this.state.studentCode)) {
+                        } else if (!isPassValid(this.state.teacherCode) ||
+                            !isPassValid(this.state.studentCode)
+                        ) {
                             e.preventDefault();
                             Toast.error('Passwords must be a minimum of 8 characters and contain a number.');
                             return false;
@@ -222,7 +232,8 @@ var BulkUpload = React.createClass({
                         e.preventDefault();
                         return false;
                     }
-                    Toast.success('Import submitted for processing. You will recieve an email once processing is complete.');
+                    Toast.success('Import submitted for processing. You will recieve an email' +
+                        'once processing is complete.');
                     window.setTimeout(() => {
                         this.setState({
                             studentCode: '',
@@ -240,7 +251,8 @@ var BulkUpload = React.createClass({
                 <input type="hidden" name="type" value="Nyc\DoeImporter" />
                 <input type="hidden" name="organization" value={this.props.organization_id} />
                 <input type="hidden" name="organization_id" value={this.props.organization_id} />
-                <Input ref="fileInput" accept=".xlsx" type="file" name="file" chars="40" label="Upload Spreadsheet"/>
+                <Input ref="fileInput" accept=".xlsx" type="file" name="file" chars="40"
+                    label="Upload Spreadsheet"/>
                 <Input
                     type="text"
                     value={this.state.teacherCode}
@@ -249,7 +261,8 @@ var BulkUpload = React.createClass({
                     validate="required"
                     ref="teacherInput"
                     name="teacher_code"
-                    onChange={e => this.setState({teacherCode: e.target.value})} //eslint-disable-line camelcase
+                    id="teacher-code"
+                    onChange={e => this.setState({teacherCode: e.target.value})}
                 />
                 <Input
                     type="text"
@@ -259,7 +272,8 @@ var BulkUpload = React.createClass({
                     validate="required"
                     ref="studentInput"
                     name="student_code"
-                    onChange={e => this.setState({studentCode: e.target.value})} //eslint-disable-line camelcase
+                    id="student-code"
+                    onChange={e => this.setState({studentCode: e.target.value})}
                 />
                 <FormControls.Static value={TERMS_COPY} />
                 <Input
@@ -268,7 +282,8 @@ var BulkUpload = React.createClass({
                     ref="tosInput"
                     label="I accept the terms and conditions."
                     name="tos"
-                    onChange={e => this.setState({tos: e.target.checked})} //eslint-disable-line camelcase
+                    id="import-terms-check"
+                    onChange={e => this.setState({tos: e.target.checked})}
                 />
                 <br />
                 <Button type="submit" >{LABELS.SUBMIT}</Button>

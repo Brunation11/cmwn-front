@@ -9,16 +9,29 @@ import DefaultProfile from 'media/icon_school_blue.png';
 
 const TITLE = 'MY SCHOOLS';
 
+const NO_SCHOOLS = 'Sorry, none of your schools currently have a profile.' +
+    ' Please check back again in a little while.';
+
 var Component = React.createClass({
     renderFlip: function (item){
         return (
-            <div className="flip" key={Shortid.generate()}><a href={`/school/${item.group_id}`}><img src={DefaultProfile}></img><p>{`${item.title}`}</p></a></div>
+            <div className="flip" key={Shortid.generate()}>
+                <a href={`/school/${item.group_id}`}>
+                    <img src={DefaultProfile}></img>
+                    <p>{`${item.title}`}</p>
+                </a>
+            </div>
         );
     },
     render: function () {
         return (
             <Layout>
-                <FlipBoard data={this.props.data} header={TITLE} renderFlip={this.renderFlip} />
+                <FlipBoard
+                    data={this.props.data}
+                    header={TITLE}
+                    renderFlip={this.renderFlip}
+                    renderNoData={() => (<h2 className="placeholder">{NO_SCHOOLS}</h2>)}
+                />
             </Layout>
         );
     }

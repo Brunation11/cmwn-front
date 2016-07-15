@@ -10,13 +10,12 @@ import DeleteLink from 'components/delete_link';
 import {Table, Column} from 'components/table';
 import Util from 'components/util';
 import Paragraph from 'components/conditional_paragraph';
-import History from 'components/history';
 import GenerateDataSource from 'components/datasource';
 
 const PAGE_UNIQUE_IDENTIFIER = 'district-view';
 
-const ClassSource = GenerateDataSource('group_class', PAGE_UNIQUE_IDENTIFIER);
-const UserSource = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
+const CLASS_SOURCE = GenerateDataSource('group_class', PAGE_UNIQUE_IDENTIFIER);
+const USER_SOURCE = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     TITLE: 'School Administrative Dashboard: ',
@@ -56,7 +55,7 @@ var Component = React.createClass({
                 return null;
             }
             return (
-                <Link to={`/districts/${district.id}`}>
+                <Link to={`/districts/${district.id}`} className="school-district-link">
                     {district.title}
                 </Link>
             );
@@ -76,7 +75,8 @@ var Component = React.createClass({
             return null;
         }
         return (
-            <EditLink className="green" base="/school" id={this.state.group_id} scope={this.state.scope} text="Import Spreadsheets"/>
+            <EditLink className="green" base="/school" id={this.state.group_id} scope={this.state.scope}
+                text="Import Spreadsheets"/>
         );
     },
     render: function () {
@@ -86,64 +86,80 @@ var Component = React.createClass({
         return (
             <Layout>
                 <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard">
-                    <p className="right" >
-                        <EditLink className="purple" base="/school" id={this.state.group_id} scope={this.state.scope} text="Edit this school"/>
+                    <p className="right" id="buttons">
+                        <EditLink className="purple" base="/school" id={this.state.group_id}
+                            scope={this.state.scope} text="Edit this school"/>
                         {this.renderImport()}
-                        <DeleteLink className="purple" base="/school" id={this.state.group_id} scope={this.state.scope} text="Delete this school" />
+                        <DeleteLink className="purple" base="/school" id={this.state.group_id}
+                            scope={this.state.scope} text="Delete this school" />
                     </p>
                     <p>
-                        <a href={`/school/${this.props.data.group_id}/profile`}>Return to school profile</a>
+                        <a href={`/school/${this.props.data.group_id}/profile`} id="school-return-profile">
+                            Return to school profile
+                        </a>
                     </p>
                    <Paragraph>
-                       <p pre={`${HEADINGS.DISTRICTS}: `}>{this.renderDistricts()}</p>
+                       <p pre={`${HEADINGS.DISTRICTS}: `} id="school-districts">{this.renderDistricts()}</p>
                        <p pre={`${HEADINGS.DESCRIPTION}: `}>{this.props.data.description}</p>
                    </Paragraph>
                 </Panel>
                 <Panel header={HEADINGS.CLASSES} className="standard">
-                    <a onClick={() => History.push('/classes')}>View All Your Classes</a>
-                    <ClassSource>
+                    <Link to={'/classes'} id="school-view-classes">View All Your Classes</Link>
+                    <CLASS_SOURCE>
                         <Table>
                             <Column dataKey="title"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/class/' + row.group_id)}>{_.startCase(data)}</a>
+                                    <Link to={`/class/${row.group_id}`} className="school-class-link">
+                                        {_.startCase(data)}
+                                    </Link>
                                 )}
                             />
                             <Column dataKey="description" />
                             <Column dataKey="title" renderHeader="Admin View"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/class/' + row.group_id + '/view')}>Admin View</a>
+                                    <Link to={`/class/${row.group_id}/view`} className="school-class-view">
+                                        Admin View
+                                    </Link>
                                 )}
                             />
                             <Column dataKey="title" renderHeader="Edit"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/class/' + row.group_id + '/edit')}>Edit</a>
+                                    <Link to={`/class/${row.group_id}/edit`} className="school-class-edit">
+                                        Edit
+                                    </Link>
                                 )}
                             />
                         </Table>
-                    </ClassSource>
+                    </CLASS_SOURCE>
                 </Panel>
                 <Panel header={HEADINGS.USERS} className="standard">
-                    <a onClick={() => History.push('/users')}>View All Your Users</a>
-                    <UserSource>
+                    <Link to={'/users'} id="school-view-users">View All Your Users</Link>
+                    <USER_SOURCE>
                         <Table>
                             <Column dataKey="first_name" renderHeader="Name"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/user/' + row.user_id)}>{row.first_name + ' ' + row.last_name}</a>
+                                    <Link to={`/user/${row.user_id}`} className="school-user-link">
+                                        {row.first_name + ' ' + row.last_name}
+                                    </Link>
                                 )}
                             />
                             <Column dataKey="username" />
                             <Column dataKey="title" renderHeader="Admin View"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/user/' + row.user_id + '/view')}>Admin View</a>
+                                    <Link to={`/user/${row.user_id}/view`} className="school-user-view">
+                                        Admin View
+                                    </Link>
                                 )}
                             />
                             <Column dataKey="title" renderHeader="Edit"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/user/' + row.user_id + '/edit')}>Edit</a>
+                                    <Link to={`/user/${row.user_id}/edit`} className="school-user-edit">
+                                        Edit
+                                    </Link>
                                 )}
                             />
                         </Table>
-                    </UserSource>
+                    </USER_SOURCE>
                 </Panel>
            </Layout>
         );

@@ -4,40 +4,39 @@ $tab-overlap: 4px;
 
 .standard > .nav-tabs {
     border-bottom: 1px solid $cmwn-blue;
-    
+
     li {
-        background: $cmwn-blue;
-        box-shadow: inset 0px -37px 40px -37px #333;
+        margin-right: -$tab-overlap;
+        border: 1px solid $cmwn-blue;
         border-radius: 5px;
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
-        margin-right: -$tab-overlap;
-        border: 1px solid $cmwn-blue;
+        box-shadow: inset 0 -37px 40px -37px $cmwn-dark-gray;
+        background: $cmwn-blue;
 
         a {
-            font-family: $helvetica;
-            color: white;
-            letter-spacing: 1px;
+            margin-right: 0;
+            margin-left: $tab-overlap / 2;
             border: 0;
             padding: 5px 20px;
             width: 100px;
             text-align: center;
-            margin-left: $tab-overlap / 2;
-            margin-right: 0px;
-
+            letter-spacing: 1px;
+            color: $cmwn-white;
+            font-family: $helvetica;
         }
-        
+
         &.active {
-            background: white;
             z-index: 1;
-            box-shadow: none;
+            margin-left: 0;
             border: 1px solid $cmwn-blue;
             border-bottom-color: transparent;
-            margin-left: 0;
+            box-shadow: none;
+            background: $cmwn-white;
 
             a {
-                color: $cmwn-blue;
                 border: 0;
+                color: $cmwn-blue;
             }
         }
     }

@@ -2,23 +2,41 @@
 //* variables.scss
 //* contains all globally used colors, measuerments, etc
 //**//
+// scss-lint:disable all
 
 $cmwn-jade-font: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
 $helvetica: "Helvetica Neue", Helvetica, Arial, sans-serif;
 //*************************colors************************
-$cmwn-blue: #2CC4F4;
-$cmwn-blue-light: lighten(#2CC4F4, 10%);
-$cmwn-blue-dark: darken(#2CC4F4, 10%);
-$cmwn-green: #47B72C;
-$cmwn-purple: #7829BB;
-$rule-light-gray: #E6E6E6; // 10% Gray
+
+$cmwn-blue: #2cc4f4;
+$cmwn-blue-light: lighten($cmwn-blue, 10%);
+$cmwn-blue-dark: darken($cmwn-blue, 10%);
+$cmwn-green: #47b72c;
+$cmwn-purple: #7829bb;
+$rule-medium-gray: #f5f5f5;
+$rule-light-gray: #e6e6e6; // 10% Gray
 $copy-medium-gray: #666; // 60% Gray
 $cmwn-black: #000;
 $cmwn-gray: #808080;
 $cmwn-white: #fff;
 $cmwn-purple: #7829bb;
+$cmwn-lighter-purple: rgba(120, 81, 147, .9);
+$cmwn-lighter-green: rgba(71, 183, 44, .9);
 $cmwn-trans: rgba(0, 0, 0, 0);
-$cmwn-trans-gray: rgba(0, 0, 0, 0.5);
+$cmwn-other-trans: rgba(0, 0, 0, 0) 80%;
+$cmwn-trans-gray: rgba(0, 0, 0, .5);
+$cmwn-trans-medium-gray: rgba(0, 0, 0, .35) 0%;
+$cmwn-light-gray: rgba(0, 0, 0, .2);
+$cmwn-medium-gray: rgba(0, 0, 0, .6);
+$cmwn-more-trans-gray: rgba(0, 0, 0, .35);
+$cmwn-trans: rgba(0, 0, 0, 0);
+$cmwn-lighter-blue: rgba(46, 163, 242, .5);
+$cmwn-medium-blue: rgba(46, 163, 242, .9);
+$cmwn-medium-green: rgba(71, 183, 44, .9);
+$cmwn-medium-purple: rgba(120, 81, 147, .9);
+$cmwn-off-white: #eee;
+$cmwn-dark-gray: #333;
+
 //************************measures**********************
 //page
 $standard: 15px;
@@ -48,24 +66,34 @@ $game-responsive-width-portrait: calc(50vmin * 1.77);
 $game-responsive-height-portrait: 50vmin;
 $game-fullscreen-width-portrait: 100vmin;
 $game-fullscreen-height-portrait: calc(100vmin * 0.5625);
+// ie fallback
+$game-responsive-width-portrait-ie: calc(50vm * 1.77);
+$game-responsive-height-portrait-ie: 50vm;
+$game-fullscreen-width-portrait-ie: 100vm;
+$game-fullscreen-height-portrait-ie: calc(100vm * 0.5625);
 
 $game-responsive-width-landscape: calc(50vmax * 1.77);
 $game-responsive-height-landscape: 50vmax;
 $game-fullscreen-width-landscape: 100vmax;
 $game-fullscreen-height-landscape: calc(100vmax * 0.5625);
+// ie fallback
+$game-responsive-width-landscape-ie: calc(50vw * 1.77);
+$game-responsive-height-landscape-ie: 50vw;
+$game-fullscreen-width-landscape-ie: 100vw;
+$game-fullscreen-height-landscape-ie: calc(100vw * 0.5625);
 
 $iphone2g-4s-min-width: 320px;
 $iphone2g-4s-max-width: 480px;
-$game-fullscreen-height-landscape-iphone2g-4s: calc(85vmax * 0.5625);
+$game-fullscreen-height-landscape-iphone2g-4s: calc(85vmax * .5625);
 
 $iphone5-min-width: 320px;
 $iphone5-max-width: 568px;
-$game-fullscreen-height-landscape-iphone5: calc(72vmax * 0.5625);
+$game-fullscreen-height-landscape-iphone5: calc(72vmax * .5625);
 
 $iphone6-min-width: 375px;
 $iphone6-max-width: 667px;
-$game-fullscreen-height-landscape-iphone6: calc(100vmax * 0.5625);
+$game-fullscreen-height-landscape-iphone6: calc(100vmax * .5625);
 
 $iphone6plus-min-width: 414px;
 $iphone6plus-max-width: 736px;
-$game-fullscreen-height-landscape-iphone6plus: calc(100vmax * 0.5625);
+$game-fullscreen-height-landscape-iphone6plus: calc(100vmax * .5625);

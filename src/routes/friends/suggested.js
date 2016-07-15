@@ -19,7 +19,10 @@ import DefaultProfile from 'media/profile_tranparent.png';
 
 const PAGE_UNIQUE_IDENTIFIER = 'suggested-friends';
 
-const NO_FRIENDS = <div>You are already friends with everyone in your group. <br /> Great Work! <br /> Let's Take Action!</div>;
+const NO_FRIENDS = (
+    <div>You are already friends with everyone in your group.
+        <br /> Great Work! <br /> Let's Take Action!
+    </div>);
 const HEADINGS = {
     SUGGESTED: 'Suggested Friends'
 };
@@ -71,13 +74,31 @@ var Component = React.createClass({
                 <div className="item">
                     <span className="overlay">
                         <div className="relwrap"><div className="abswrap">
-                            <Button onClick={this.addFriend.bind(this, item)} className={ClassNames('green standard', {hidden: item.relationship === 'Pending' || item.relationship === 'requested'})}>{ADD_FRIEND}</Button>
+                            <Button onClick={this.addFriend.bind(this, item)} className={ClassNames(
+                                    'green standard',
+                                    {hidden: item.relationship === 'Pending' ||
+                                    item.relationship === 'requested'}
+                            )}>
+                                {ADD_FRIEND}
+                            </Button>
                             <Button
                                 onClick={this.addFriend.bind(this, item)}
-                                className={ClassNames('blue standard', {hidden: item.relationship !== 'Pending'})}
-                            >{ACCEPT}</Button>
-                            <Button className={ClassNames('blue standard', {hidden: item.relationship !== 'requested'})}>{REQUESTED}</Button>
-                            <Button className="purple standard" onClick={History.push.bind(null, '/profile/' + item.suggest_id)}>{PROFILE}</Button>
+                                className={ClassNames(
+                                    'blue standard',
+                                    {hidden: item.relationship !== 'Pending'}
+                            )}>
+                                {ACCEPT}
+                            </Button>
+                            <Button className={ClassNames(
+                                'blue standard',
+                                {hidden: item.relationship !== 'requested'}
+                            )}>
+                                {REQUESTED}
+                            </Button>
+                            <Button className="purple standard" onClick={History.push.bind(null,
+                                '/profile/' + item.suggest_id)}>
+                                {PROFILE}
+                            </Button>
                         </div></div>
                     </span>
                     <img src={item.image}></img>
@@ -94,13 +115,24 @@ var Component = React.createClass({
         return (
            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <form>
-                    <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.SUGGESTED} data={this.props.data} transform={data => {
-                        //data = _.map(data, item => {
-                        data = data.set('image', _.has(data, '_embedded.image[0].url') ? data.images.data[0].url : DefaultProfile);
-                        //    return item;
-                        //});
-                        return data;
-                    }} />
+                    <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.SUGGESTED} data={this.props.data}
+                        transform={data => {
+                            var image;
+                            if (!_.has(data, '_embedded.image')) {
+                                image = DefaultProfile;
+                            } else {
+                                if (data._embedded.image.url != null) {
+                                    image = data._embedded.image.url;
+                                } else {
+                                    image = data.images.data[0].url;
+                                }
+                            }
+
+                            data = data.set('image', image);
+
+                            return data;
+                        }}
+                    />
                 </form>
            </Layout>
         );
@@ -110,7 +142,8 @@ var Component = React.createClass({
 var mapStateToProps = state => {
     var data = [];
     var loading = true;
-    if (state.page && state.page.data != null && state.page.data._embedded && state.page.data._embedded.suggest) {
+    if (state.page && state.page.data != null && state.page.data._embedded &&
+        state.page.data._embedded.suggest) {
         loading = state.page.loading;
         data = state.page.data._embedded.suggest;
     }

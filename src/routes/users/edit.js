@@ -25,6 +25,7 @@ import ChangePassword from 'components/change_password';
 
 import 'routes/users/edit.scss';
 
+var mapStateToProps;
 var Page;
 
 const HEADINGS = {
@@ -100,7 +101,8 @@ export class EditProfile extends React.Component {
         }
         //note: This should only appear for adults, who have email addresses
         HttpManager.GET(this.props.data._links.forgot.href, {email: this.props.data.email}).then(
-            Toast.success.bind(this, 'Password Reset. This user will recieve an email with further instructions.')
+            Toast.success.bind(this, 'Password Reset. This user will recieve an email with further ' +
+                'instructions.')
         ).catch(err => {
             Toast.error(ERRORS.BAD_RESET + (err.message ? ' Message: ' + err.message : ''));
             Log.log('Server refused profile update', err);
@@ -153,7 +155,7 @@ export class EditProfile extends React.Component {
     }
 
     renderParent(parent, i) {
-        /** TODO MPR, 11/14/15: Implement Autocomplete, store parent ID*/
+        // TODO: MPR, 11/14/15: Implement Autocomplete, store parent ID
         return (
             <span>
                 <Input
@@ -250,11 +252,34 @@ export class EditProfile extends React.Component {
                     ]}
                     name="usernameInput"
                     validationEvent="onBlur"
-                    disabled={this.state.isStudent}
+                disabled={this.props.currentUser.user_id !== this.state.user_id}
                     hasFeedback
-                    onChange={e => this.setState({username: e.target.value})} //eslint-disable-line camelcase
+                    onChange={
+                        e => {
+                            this.setState({
+                                username: e.target.value
+                            });
+                            return true;
+                        }
+                    } //eslint-disable-line camelcase
                 />
-                {this.renderEmail()}
+                <Input
+                    type="textarea"
+                    value={this.state.email}
+                    placeholder="Email"
+                    label="Email"
+                    ref="emailInput"
+                    validate="required"
+                    name="emailInput"
+                    validationEvent="onBlur"
+                    disabled
+                    hasFeedback
+                    onChange={
+                        e => this.setState({
+                            email: e.target.value
+                        })
+                    } //eslint-disable-line camelcase
+                />
                 <Input
                     type="text"
                     value={this.state.first_name}
@@ -265,8 +290,12 @@ export class EditProfile extends React.Component {
                     name="firstnameInput"
                     validationEvent="onBlur"
                     hasFeedback
-                    onChange={e => this.setState({first_name: e.target.value})} //eslint-disable-line camelcase
                     disabled={this.state.isStudent}
+                    onChange={
+                        e => this.setState({
+                            first_name: e.target.value //eslint-disable-line camelcase
+                        })
+                    }
                 />
                 <Input
                     type="text"
@@ -276,13 +305,29 @@ export class EditProfile extends React.Component {
                     validate="required"
                     ref="lastnameInput"
                     name="lastnameInput"
-                    onChange={e => this.setState({last_name: e.target.value})} //eslint-disable-line camelcase
-                    disabled={this.state.isStudent}
+                    hasFeedback
+                    onChange={
+                        e => this.setState({
+                            last_name: e.target.value //eslint-disable-line camelcase
+                        })
+                    }
+                    // disabled={this.state.isStudent}
                 />
-                <DropdownDatepicker ref="dropdownDatepicker" disabled={this.state.isStudent} value={this.state.dob} onChange={date => {
-                    this.setState({dob: date, birthdate: Date.parse(date)});
-                }} />
-                {''/*
+                <DropdownDatepicker
+                    ref="dropdownDatepicker"
+                    disabled={this.state.isStudent}
+                    value={this.state.dob}
+                    hasFeedback
+                    onChange={
+                        date => {
+                            this.setState({
+                                dob: date,
+                                birthdate: Date.parse(date)
+                            });
+                        }
+                    }
+                />
+                {/*
                 <Input
                     type="select"
                     value={this.state.gender}
@@ -314,7 +359,8 @@ export class EditProfile extends React.Component {
                 <h3>School Information</h3>
                 {this.renderSchoolInformation()}
                 */}
-                <Button className="user-metadata-btn" disabled={this.state.isStudent} onClick={this.submitData.bind(this)}> Save </Button>
+                <Button className="user-metadata-btn" disabled={this.state.isStudent}
+                    onClick={this.submitData.bind(this)}> Save </Button>
             </Form>
         );
     }
@@ -339,18 +385,24 @@ export class EditProfile extends React.Component {
     }
 
     render() {
-        var userType = this.state.isStudent ? this.renderChild : this.renderAdult;
+        var userType = (this.state.isStudent || this.props.data.type === 'CHILD') ?
+            this.renderChild : this.renderAdult;
 
-        if (this.props.data == null || this.props.data.user_id == null || !Util.decodePermissions(this.props.data.scope).update) {
+        if (this.props.data == null || this.props.data.user_id == null ||
+            !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
 
         return (
            <Layout className="edit-student">
-                <Panel header={HEADINGS.EDIT_TITLE + this.state.first_name + ' ' + this.state.last_name} className="standard edit-profile">
+                <Panel header={HEADINGS.EDIT_TITLE + this.state.first_name + ' ' + this.state.last_name}
+                    className="standard edit-profile">
                     <div className="left">
                         <ProfileImage user_id={this.props.data.user_id} link-below={true}/>
-                        <p className={ClassNames({hidden: !Util.decodePermissions(this.props.data.scope).delete})}><a onClick={this.suspendAccount.bind(this)}>{SUSPEND}</a></p>
+                        <p className={ClassNames({hidden:
+                            !Util.decodePermissions(this.props.data.scope).delete})}>
+                            <a onClick={this.suspendAccount.bind(this)}>{SUSPEND}</a>
+                        </p>
                     </div>
                     <div className="right">
                         {userType.call(this)}
@@ -369,14 +421,16 @@ export class EditProfile extends React.Component {
                     url={this.state._links.password}
                     currentUser={this.props.currentUser}
                 />
-                <ForgotPass data={this.props.data} user_id={this.state.user_id} currentUser={this.props.currentUser}/>
-                <CodeChange data={this.props.data} user_id={this.state.user_id} currentUser={this.props.currentUser}/>
+                <ForgotPass data={this.props.data} user_id={this.state.user_id}
+                    currentUser={this.props.currentUser}/>
+                <CodeChange data={this.props.data} user_id={this.state.user_id}
+                    currentUser={this.props.currentUser}/>
             </Layout>
         );
     }
 }
 
-var mapStateToProps = state => {
+mapStateToProps = state => {
     var data = {};
     var currentUser = {};
     var loading = true;
@@ -394,4 +448,3 @@ var mapStateToProps = state => {
 
 Page = connect(mapStateToProps)(EditProfile);
 export default Page;
-

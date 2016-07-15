@@ -17,7 +17,7 @@ import FlipBgDefault from 'media/flip-placeholder-white.png';
 
 import 'routes/users/profile.scss';
 
-const GameWrapper = GenerateDataSource('games', 'games-list');
+const GAME_WRAPPER = GenerateDataSource('games', 'games-list');
 
 const HEADINGS = {
     ACTION: 'Profile',
@@ -26,7 +26,14 @@ const HEADINGS = {
 const PLAY = 'Play Now!';
 const COMING_SOON = 'Coming Soon!';
 
-const BROWSER_NOT_SUPPORTED = <span><p>For the best viewing experience we reccomend the desktop version in Chrome</p><p>If you don't have chrome, <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">download it for free here</a>.</p></span>;
+const BROWSER_NOT_SUPPORTED = (
+    <span>
+        <p>For the best viewing experience we reccomend the desktop version in Chrome</p>
+        <p>If you don't have chrome,{' '}
+            <a href="https://www.google.com/chrome/browser/desktop/index.html"
+                target="_blank">download it for free here</a>.
+        </p>
+    </span>);
 
 var Profile = React.createClass({
     getInitialState: function () {
@@ -50,7 +57,8 @@ var Profile = React.createClass({
         this.refs.gameRef.dispatchPlatformEvent('quit');
     },
     renderGame: function () {
-        if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe9() || Detector.isIe10() || Detector.isIe11() || Detector.isFirefox() || Detector.isEdge())) {
+        if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe9() ||
+            Detector.isIe10() || Detector.isIe11() || Detector.isFirefox() || Detector.isEdge())) {
             return (
                 <div>
                     {BROWSER_NOT_SUPPORTED}
@@ -60,7 +68,8 @@ var Profile = React.createClass({
         }
         return (
             <div>
-                <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl} onExit={() => this.setState({gameOn: false})}/>
+                <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl}
+                    onExit={() => this.setState({gameOn: false})}/>
                     <a onClick={this.hideModal} className="modal-close">(close)</a>
             </div>
         );
@@ -95,7 +104,7 @@ var Profile = React.createClass({
     },
     renderGameList: function () {
         return (
-           <GameWrapper transform={data => {
+           <GAME_WRAPPER transform={data => {
                var array = data;
                var currentIndex;
                var temporaryValue;
@@ -122,7 +131,7 @@ var Profile = React.createClass({
                    renderFlip={this.renderFlip}
                    header={HEADINGS.ARCADE}
                />
-           </GameWrapper>
+           </GAME_WRAPPER>
         );
     },
     render: function () {

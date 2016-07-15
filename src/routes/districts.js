@@ -5,24 +5,25 @@ import {Panel} from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import {Table, Column} from 'components/table';
-import Store from 'components/store';
 
 import Layout from 'layouts/two_col';
 
 const TITLE = 'My Districts';
 const CREATE_TEXT = 'Create District';
 
-var Component = React.createClass({
-    renderCreateDistrict: function () {
-        var state = Store.getState();
-        if (state.currentUser.scope === -1) {
+var mapStateToProps;
+var Page;
+
+export class District extends React.Component{
+    renderCreateDistrict(){
+        if (this.props.currentUser.scope === -1) {
             return (
                 <p><a href={'/districts/create'}>{CREATE_TEXT}</a></p>
             );
         }
         return null;
-    },
-    render: function () {
+    }
+    render() {
         return (
             <Layout className="district-list">
                 <Panel header={TITLE} className="standard" >
@@ -32,7 +33,9 @@ var Component = React.createClass({
                     <Table data={this.props.data} className="admin">
                         <Column dataKey="title"
                             renderCell={(data, row) => (
-                                <Link to={'/districts/' + row.org_id} className="district-link">{_.startCase(data)}</Link>
+                                <Link to={'/districts/' + row.org_id} className="district-link">
+                                    {_.startCase(data)}
+                                </Link>
                             )}
                         />
                         <Column dataKey="description" />
@@ -45,21 +48,26 @@ var Component = React.createClass({
             </Layout>
         );
     }
-});
+}
 
-var mapStateToProps = state => {
+mapStateToProps = state => {
     var data = [];
     var loading = true;
+    var currentUser = {};
     if (state.page && state.page.data && state.page.data._embedded && state.page.data._embedded.org) {
         loading = state.page.loading;
         data = state.page.data._embedded.org;
     }
+    if (state.currentUser != null){
+        currentUser = state.currentUser;
+    }
     return {
         data,
-        loading
+        loading,
+        currentUser
     };
 };
 
-var Page = connect(mapStateToProps)(Component);
+Page = connect(mapStateToProps)(District);
 export default Page;
 
