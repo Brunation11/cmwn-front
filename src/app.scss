@@ -214,6 +214,13 @@ h3 {
                 color: $cmwn-blue;
                 font-weight: bold;
             }
+
+            .active-menu {
+                background: $cmwn-blue;
+                a {
+                    color: $cmwn-white;
+                }
+            }
         }
     }
 
