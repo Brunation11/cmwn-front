@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import ClassNames from 'classnames';
 
 import SiteNav from 'components/site_nav';
 //import FriendList from 'components/friend_list';
@@ -18,8 +19,10 @@ var Component = React.createClass({
         return (
             <div>
                 <p className="welcome">{WELCOME}</p>
-                <p className="username">
-                    <a onClick={this.attemptNavigate} >
+                <p className={ClassNames('username',
+                    {'smaller-text': this.props.currentUser.username.length >= 25,
+                    'regular-text': this.props.currentUser.username.length < 25})}>
+                    <a onClick={this.attemptNavigate}>
                         {this.props.currentUser.username}
                     </a>
                 </p>
@@ -37,7 +40,8 @@ var Component = React.createClass({
                 <a onClick={this.attemptNavigate} >
                     <ProfileImage user_id={this.props.currentUser.user_id}/>
                 </a>
-                <SiteNav />
+                <SiteNav currentUser={this.props.currentUser}
+                    data={this.props.currentUser._links.asMutable()} />
                 {''/*<FriendList />*/}
             </div>
         );

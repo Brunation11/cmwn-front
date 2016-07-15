@@ -125,7 +125,6 @@ var Game = React.createClass({
                 this.props['on' + _.upperFirst(e.name)](...arguments);
             }
         }
-
     },
     setEvent: function () {
         window.addEventListener('game-event', this.gameEventHandler);

@@ -118,8 +118,8 @@ describe('Edit Profile Unit Tests', function () {
 
     describe('viewing edit profile without permission', function () {
         it('renders a null profile', function () {
-            var edit = <EditProfile data={{user_id: 0, scope: 0}} loading={false}
-                currentUser={teacherData}/>; //eslint-disable-line camelcase
+            var edit = <EditProfile data={{user_id: 0, scope: 0}} //eslint-disable-line camelcase
+                loading={false} currentUser={teacherData}/>;
             const WRAPPER = shallow(edit);
             expect(WRAPPER.type()).to.equal(null);
         });
