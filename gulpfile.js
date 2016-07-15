@@ -369,7 +369,7 @@ gulp.task('sri', ['webpack:build', 'explicit-utf-8'], function () {
 });
 
 /*·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´Lint and Testing Tasks`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·*/
-gulp.task('lint', ['lint-js', 'lint-config', 'lint-scss']);
+gulp.task('lint', ['lint-js', 'lint-config', 'lint-scss2']);
 gulp.task('lint-js', function () {
     return gulp.src(['src/**/*.js', '!src/**/*.test.js'])
         // eslint() attaches the lint output to the eslint property
@@ -414,14 +414,14 @@ gulp.task('lint-scss2', function () {
             config: '.scss-lint.yml'
         }))
         .pipe(scsslint2.reporter(function (file) {
-            var count = 0;
-            if(file.scsslint.success) return;
+            //var count = 0;
+            if (file.scsslint.success) return;
             fs.appendFile('./scsslint.log', '[4m' + file.history[0] + '[24m');
             fs.appendFile('./scsslint.log', os.EOL);
             console.log('[4m' + file.history[0] + '[24m');
             _.each(file.scsslint.results, result => {
                 var errors = '';
-                errors += '[37m' + 'line: ' + result.line + ', col: ' + result.column  + ' ';
+                errors += '[37m' + 'line: ' + result.line + ', col: ' + result.column + ' ';
                 errors += '[31m' + result.linter + ': ';
                 errors += '[91m' + result.reason + '[0m';
                 errors += os.EOL;

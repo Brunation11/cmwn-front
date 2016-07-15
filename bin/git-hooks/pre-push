@@ -19,10 +19,10 @@ docker-compose run -T --rm node gulp lint --color >> push.log 2>&1
 
 if [ $? != 0 ]; then
     echo "build failed"
-    cat testlint.log
-    cat configlint.log
-    python -m json.tool scsslint.log
-    cat jslint.log
+    cat testlint.log 2>/dev/null
+    cat configlint.log 2>/dev/null
+    cat scsslint.log 2>/dev/null
+    cat jslint.log 2>/dev/null
     exit 157
 fi
 
