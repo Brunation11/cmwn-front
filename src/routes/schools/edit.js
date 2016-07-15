@@ -15,7 +15,7 @@ import History from 'components/history';
 
 import Layout from 'layouts/two_col';
 
-const PAGE_UNIQUE_IDENTIFIER = 'school-edit';
+export const PAGE_UNIQUE_IDENTIFIER = 'school-edit';
 
 const HEADINGS = {
     EDIT_TITLE: 'Edit School: ',
@@ -123,14 +123,17 @@ export class SchoolEdit extends React.Component {
     }
 
     render() {
-        if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
+        if (this.props.data == null || this.props.data.group_id == null ||
+            !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
         const SCHOOL_EDIT = (
-              <Panel header={HEADINGS.EDIT_TITLE + this.props.data.title} className="standard">
-                  <Link to={`/school/${this.props.data.group_id}/view`}>Return to School Dashboard</Link>
-                  <br />
-                 <Input
+            <Panel header={HEADINGS.EDIT_TITLE + this.props.data.title} className="standard">
+                <Link to={'/school/' + this.props.data.group_id + '/view'} id="school-return-dash">
+                    Return to School Dashboard
+                </Link>
+                <br />
+                <Input
                     type="text"
                     value={this.state.title}
                     placeholder={LABELS.TITLE}
@@ -138,18 +141,20 @@ export class SchoolEdit extends React.Component {
                     bsStyle={Validate.min(3, this.state.title)}
                     hasFeedback
                     ref={REFS.TITLE}
+                    id="school-edit-name"
                     onChange={() => this.setState({title: this.refs.titleInput.getValue()})}
-                 />
-                 <Input
+                />
+                <Input
                     type="textarea"
                     value={this.state.description}
                     placeholder={LABELS.DESCRIPT}
                     label={LABELS.DESCRIPT}
                     ref={REFS.DESCRIPT}
+                    id="school-edit-description"
                     onChange={() => this.setState({description: this.refs.descriptionInput.getValue()})}
-                 />
-                 <Button onClick={this.submitData.bind(this)} > Save </Button>
-              </Panel>
+                />
+                <Button onClick={this.submitData.bind(this)} > Save </Button>
+            </Panel>
         );
         if (this.props.data._links.import == null) {
             return (
@@ -246,31 +251,31 @@ export class BulkUpload extends React.Component {
     }
 
     checkForm(e) {
+        var result = true;
         try {
             if (!this.refs.formRef.isValid()) {
+                result = false;
                 e.preventDefault();
                 Toast.error(ERRORS.NOT_FILLED);
-                return false;
             } else if (this.state.tos === false) {
+                result = false;
                 e.preventDefault();
                 Toast.error(ERRORS.NO_AGREE);
-                return false;
             } else if (this.state.teacherCode === this.state.studentCode) {
+                result = false;
                 e.preventDefault();
                 Toast.error(ERRORS.SAME_CODES);
-                return false;
             } else if (!isPassValid(this.state.teacherCode) || !isPassValid(this.state.studentCode)) {
+                result = false;
                 e.preventDefault();
                 Toast.error(ERRORS.PASSW_REQ);
-                return false;
             } else if (!this.refs.fileInput.getValue()) {
+                result = false;
                 e.preventDefault();
                 Toast.error(ERRORS.NO_FILE);
-                return false;
             }
         } catch(err) {
             e.preventDefault();
-            return false;
         }
         Toast.success(SUCCESS.IMPORT);
         window.setTimeout(() => {
@@ -284,17 +289,15 @@ export class BulkUpload extends React.Component {
             ReactDOM.findDOMNode(this.refs.fileInput).type = 'file';
             ReactDOM.findDOMNode(this.refs.formRef).reset();
         }, 0);
+        return result;
     }
 
     render() {
-        if (this.props.url == null) {
-            return null;
-        }
         if (this.props.data == null || this.props.data._links.import == null) {
             return null;
         }
         return (
-          <Panel header={HEADINGS.UPLOAD} className="standard">
+          <Panel header={HEADINGS.UPLOAD} className="school-import standard">
             <iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe"></iframe>
             <Form ref={REFS.FORM} method="post" target="dummyframe" encType="multipart/form-data"
                 action={this.props.url} onSubmit={e => this.checkForm(e)}>
