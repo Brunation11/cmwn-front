@@ -385,7 +385,8 @@ export class EditProfile extends React.Component {
     }
 
     render() {
-        var userType = this.state.isStudent ? this.renderChild : this.renderAdult;
+        var userType = (this.state.isStudent || this.props.data.type === 'CHILD') ?
+            this.renderChild : this.renderAdult;
 
         if (this.props.data == null || this.props.data.user_id == null ||
             !Util.decodePermissions(this.props.data.scope).update) {

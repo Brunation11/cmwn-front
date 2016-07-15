@@ -162,7 +162,7 @@ describe('Profile Unit Tests', function () {
         });
 
         it('handles nonsense', function () {
-            expect(dataTransform("cat dog!!!!")).to.be.an.instanceof(Array).and.to.be.empty;
+            expect(dataTransform('cat dog!!!!')).to.be.an.instanceof(Array).and.to.be.empty;
         });
 
         it('handles one element', function () {
