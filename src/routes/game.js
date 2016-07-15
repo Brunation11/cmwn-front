@@ -93,7 +93,7 @@ export class GamePage extends React.Component {
                             url={this.state.gameUrl}
                             onExit={this.hideModal}
                         />
-                        <a onClick={this.hideModal} className="modal-close">(close)</a>
+                        <a onClick={this.hideModal.bind(this)} className="modal-close">(close)</a>
                     </Modal.Body>
                 </Modal>
             </div>
