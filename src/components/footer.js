@@ -41,7 +41,6 @@ class Footer extends React.Component {
             viewOpen: false,
             workOpen: false,
             contactOpen: false,
-            showContact: false,
             verified: false
         };
     }
@@ -63,7 +62,7 @@ class Footer extends React.Component {
 
     displayContact() {
         if (this.props.loggedIn || this.state.verified) {
-            this.setState({contactOpen: true, showContact: true});
+            this.setState({contactOpen: true});
             return;
         }
         this.setState({ contactOpen: true });
@@ -78,15 +77,21 @@ class Footer extends React.Component {
     }
 
     renderCaptcha() {
-        var captchas = document.getElementsByClassName('grecaptcha');
-        if (captchas.length) {
-            grecaptcha.render(captchas[0], //eslint-disable-line no-undef
-                {'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l', callback: () => {
-                    this.setState({
-                        showContact: true,
-                        verified: true
-                    });
-                }});
+        var captchas;
+        if (this.state.verified) {
+            return;
+        } else {
+            captchas = document.getElementsByClassName('grecaptcha');
+            if (captchas.length) {
+                grecaptcha.render(captchas[0], {
+                    'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l',
+                    callback: () => {
+                        this.setState({
+                            verified: true
+                        });
+                    }
+                });
+            }
         }
     }
 
@@ -100,11 +105,11 @@ class Footer extends React.Component {
                 </Modal>
                 <Modal show={this.state.contactOpen} onHide={this.closeContact.bind(this)}>
                     <Modal.Body>
-                        {COPY.MODALS.PRECAPTCHA}
+                        {this.state.verified ? '' : COPY.MODALS.PRECAPTCHA}
                         <div className={ClassNames('grecaptcha', {
                             hidden: (this.props.loggedIn || this.state.verified)
                         })}></div>
-                        {this.state.showContact ? COPY.MODALS.CONTACT : ''}
+                        {this.state.verified ? COPY.MODALS.CONTACT : ''}
                     </Modal.Body>
                 </Modal>
                 <footer className="links">
