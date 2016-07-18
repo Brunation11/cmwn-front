@@ -6,7 +6,6 @@ import ClassNames from 'classnames';
 import PublicRoutes from 'public_routes';
 import PrivateRoutes from 'private_routes';
 import Util from 'components/util';
-import GLOBALS from 'components/globals';
 
 var addHardcodedEntries = function (menuItems) {
     menuItems.unshift({url: '/profile', label: 'Action Items'});
@@ -94,18 +93,29 @@ var SiteNav = React.createClass({
             return null;
         }
 
-        var active;
         _.map(menuItems, item => {
             var currentUrl = window.location.href.replace(/^.*changemyworldnow.com/, '');
-            if (sessionStorage.active_item == item.url ||
-                currentUrl == item.url) {
-                sessionStorage.active_item = item.url;
-                active = item.url;
+            if (sessionStorage.activeItem === item.label) {
+                return;
+            } else if (currentUrl === item.url) {
+                sessionStorage.activeItem = item.label;
             }
         });
 
-        return _.map(menuItems, item =>
-            (<li className={ClassNames({'active-menu': active == item.url})} key={`(${item.label})-${item.url}`}><Link to={item.url}>{item.label}</Link></li>));
+        return _.map(menuItems, item => (
+            <li
+                className={ClassNames({
+                    'active-menu': sessionStorage.activeItem === item.label
+                })}
+                key={`(${item.label})-${item.url}`}
+            >
+                <Link
+                    to={item.url}
+                >
+                    {item.label}
+                </Link>
+            </li>
+        ));
     },
     render: function () {
         return (
