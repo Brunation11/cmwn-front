@@ -32,23 +32,28 @@ const REQUESTED = 'Request Sent';
 const ACCEPT = 'Accept';
 const PROFILE = 'View Profile';
 
-var Component = React.createClass({
-    addFriend: function (item, e) {
-        var state = Store.getState();
+var mapStateToProps;
+var Page;
+
+export class Suggested extends React.Component{
+    constructor(){
+        super();
+    }
+    addFriend(item, e) {
         var id = item.user_id != null ? item.user_id : item.suggest_id;
         e.stopPropagation();
         e.preventDefault();
         ga('set', 'dimension7', 'sent');
-        HttpManager.POST({url: state.currentUser._links.friend.href}, {
+        HttpManager.POST({url: this.props.currentUser._links.friend.href}, {
             'friend_id': id
         }).then(() => {
             Actions.dispatch.START_RELOAD_PAGE(Store.getState());
         }).catch(this.friendErr);
-    },
-    friendErr: function () {
+    }
+    friendErr() {
         Toast.error(FRIEND_PROBLEM);
-    },
-    renderNoData: function (data) {
+    }
+    renderNoData(data) {
         if (data == null) {
             //render nothing before a request has been made
             return null;
@@ -60,16 +65,16 @@ var Component = React.createClass({
                 <p><a onClick={History.goBack}>Back</a></p>
             </Panel>
         );
-    },
-    renderFlipsEarned: function (item) {
+    }
+    renderFlipsEarned(item) {
         if (item.roles && item.roles.data && !~item.roles.data.indexOf('Student')) {
             return null;
         }
         return (
             <p className="user-flips">{item.flips.data.length} Flips Earned</p>
         );
-    },
-    renderFlip: function (item){
+    }
+    renderFlip(item){
         return (
             <div className="flip">
                 <div className="item">
@@ -108,8 +113,8 @@ var Component = React.createClass({
                 {''/*this.renderFlipsEarned(item)*/}
             </div>
         );
-    },
-    render: function () {
+    }
+    render() {
         if (this.props.data == null) {
             return this.renderNoData();
         }
@@ -138,23 +143,28 @@ var Component = React.createClass({
            </Layout>
         );
     }
-});
+}
 
-var mapStateToProps = state => {
+mapStateToProps = state => {
     var data = [];
+    var currentUser = {};
     var loading = true;
     if (state.page && state.page.data != null && state.page.data._embedded &&
         state.page.data._embedded.suggest) {
         loading = state.page.loading;
         data = state.page.data._embedded.suggest;
     }
+    if (state.currentUser != null){
+        currentUser = state.currentUser;
+    }
     return {
         data,
-        loading
+        loading,
+        currentUser
     };
 };
 
-var Page = connect(mapStateToProps)(Component);
+Page = connect(mapStateToProps)(Suggested);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
 
