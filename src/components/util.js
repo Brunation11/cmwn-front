@@ -107,17 +107,17 @@ var Util = {
             return;
         }
         switch (state.pageLoadingStage.currentStage) {
-        case GLOBALS.PAGE_LOAD_STATE.COMPONENT: // This always needs to come after page load
-            Store.dispatch({
-                type: 'combo',
-                types: ['COMPONENT_LOADER_START', 'LOADER_SUCCESS', 'LOADER_ERROR'],
-                sequence: true,
-                payload: [
-                    Actions.COMPONENT_REQUESTED.bind(null, {endpointIdentifier, componentName} ),
-                    Actions.COMPONENT_DATA.bind(null, endpointIdentifier, componentName)
-                ]
-            });
-            break;
+            case GLOBALS.PAGE_LOAD_STATE.COMPONENT: // This always needs to come after page load
+                Store.dispatch({
+                    type: 'combo',
+                    types: ['COMPONENT_LOADER_START', 'LOADER_SUCCESS', 'LOADER_ERROR'],
+                    sequence: true,
+                    payload: [
+                        Actions.COMPONENT_REQUESTED.bind(null, {endpointIdentifier, componentName} ),
+                        Actions.COMPONENT_DATA.bind(null, endpointIdentifier, componentName)
+                    ]
+                });
+                break;
         }
     },
     decodePermissions(val) {
@@ -196,8 +196,9 @@ var Util = {
         return url;
     },
     scrubPIIFromStore(store) {
+        /* eslint-disable camelcase */
         var state = {};
-        if(store && store.currentUser) {
+        if (store && store.currentUser) {
             state.currentUser = store.currentUser.asMutable();
             state.currentUser.meta = {};
             state.currentUser.first_name = 'Dana Katherine';
@@ -206,7 +207,7 @@ var Util = {
             state.currentUser.gender = 'female';
             state.currentUser.birthdate = '1964-02-23 00:00:00';
         }
-        if(store && store.page && store.page.data && store.page.data.user_id) {
+        if (store && store.page && store.page.data && store.page.data.user_id) {
             state.page = {};
             state.page.data = store.page.data.asMutable();
             state.page.data.meta = {};
@@ -216,6 +217,7 @@ var Util = {
             state.page.data.gender = 'male';
             state.page.data.birthdate = '1961-08-13 00:00:00';
         }
+        /* eslint-enable camelcase */
         state = _.defaults(state, store);
         return state;
     }

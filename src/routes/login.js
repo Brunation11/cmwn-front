@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import {Modal, Button, Input, Tabs, Tab} from 'react-bootstrap';
 import { connect } from 'react-redux';
 
@@ -8,6 +9,8 @@ import Log from 'components/log';
 import History from 'components/history';
 import HttpManager from 'components/http_manager';
 import Store from 'components/store';
+import Actions from 'components/actions';
+import GLOBALS from 'components/globals';
 
 import Layout from 'layouts/one_col';
 
@@ -67,49 +70,75 @@ var Component = React.createClass({
     login: function (e) {
         var req;
         var dataUrl;
+        var logout;
+        var logoutUrl;
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
             if (this.props.data._links && this.props.data._links.login == null) {
                 if (this.refs.login.getValue() === this.props.data.username ||
                     this.refs.login.getValue() === this.props.data.email) {
                     History.push('/profile');
-                } else {
-                    //but why
-                    History.push('/logout');
                 }
             }
-            if (this.props.loading || !_.has(this, 'props.data._links.login.href')) return;
-            dataUrl = this.props.data._links.login.href;
-            Util.logout();
-            req = HttpManager.POST({
-                url: dataUrl,
-            }, {
-                'username': this.refs.login.getValue(),
-                'password': this.refs.password.getValue()
-            });
-            req.then(res => {
-                if (res.response && res.response.status && res.response.detail &&
-                    res.response.status === 401 && res.response.detail.toLowerCase() === 'reset_password'
-                ) {
-                    History.push('/change-password');
-                    return;
+            if (this.props.loading || !_.has(this, 'props.data._links.login.href')) {
+                //essentially, if you are trying to login as someone else, we assume
+                //that you are not them and want to log you out.
+                //also yes, I am cheating the logout url here.
+                logoutUrl = GLOBALS.API_URL + 'logout';
+                if (_.has(this, 'props.currentUser._links.logout.href')) {
+                    logoutUrl = this.props.currentUser._links.login.href;
                 }
-                if (res.status < 300 && res.status >= 200) {
-                    Log.info(e, 'User login success');
-                    History.push('/profile');
-                } else {
-                    Toast.error(ERRORS.LOGIN + (res.response && res.response.data &&
-                        res.response.data.message ? ' Message: ' + res.response.data.message : ''));
-                    Log.log(res, 'Invalid login.', req);
-                }
-            }).catch(res => {
-                if (res.response && res.response.status && res.response.detail &&
-                    res.response.status === 401 && res.response.detail.toLowerCase() === 'reset_password') {
-                    History.push('/change-password');
-                    return;
-                }
-                Toast.error(ERRORS.LOGIN + (res.detail ? ' Message: ' + res.detail : ''));
-                Log.log(e, 'Invalid login');
-            });
+
+                logout = HttpManager.GET({url: logoutUrl, handleErrors: false});
+                logout.then(() => {
+                    Store.dispatch({
+                        type: 'combo',
+                        types: ['LOADER_START', 'LOADER_SUCCESS', 'LOADER_ERROR'],
+                        sequence: true,
+                        payload: [
+                            Actions.PAGE_LOADING,
+                            Actions.AUTHORIZE_APP
+                        ]
+                    });
+                });
+            } else {
+                dataUrl = this.props.currentUser._links.login.href;
+                Util.logout();
+                req = HttpManager.POST({
+                    url: dataUrl,
+                }, {
+                    'username': this.refs.login.getValue(),
+                    'password': this.refs.password.getValue()
+                });
+                req.then(res => {
+                    if (res.response && res.response.status && res.response.detail &&
+                        res.response.status === 401 && res.response.detail.toLowerCase() === 'reset_password'
+                    ) {
+                        History.push('/change-password');
+                        return;
+                    }
+                    if (res.status < 300 && res.status >= 200) {
+                        Log.info(e, 'User login success');
+                        History.push('/profile');
+                    } else {
+                        Toast.error(ERRORS.LOGIN + (res.response && res.response.data &&
+                            res.response.data.message ? ' Message: ' + res.response.data.message : ''));
+                        Log.log(res, 'Invalid login.', req);
+                    }
+                }).catch(res => {
+                    if (
+                        res.response &&
+                        res.response.status &&
+                        res.response.detail &&
+                        res.response.status === 401 &&
+                        res.response.detail.toLowerCase() === 'reset_password'
+                    ) {
+                        History.push('/change-password');
+                        return;
+                    }
+                    Toast.error(ERRORS.LOGIN + (res.detail ? ' Message: ' + res.detail : ''));
+                    Log.log(e, 'Invalid login');
+                });
+            }
         }
     },
     forgotPass: function (e) {

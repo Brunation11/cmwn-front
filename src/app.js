@@ -280,69 +280,71 @@ var progressivePageLoad = function () {
         return;
     }
     switch (state.pageLoadingStage.currentStage) {
-    case GLOBALS.PAGE_LOAD_STATE.INITIALIZE: //Fresh Reload. Reset Everything
-        Store.dispatch({
-            type: 'combo',
-            types: ['LOADER_START', 'LOADER_SUCCESS', 'LOADER_ERROR'],
-            sequence: true,
-            payload: [
-                Actions.PAGE_LOADING,
-                Actions.AUTHORIZE_APP
-            ]
-        });
-        break;
-    case GLOBALS.PAGE_LOAD_STATE.BOOTSTRAPPED:
-        Store.dispatch({
-            type: 'combo',
-            types: ['LOADER_START', 'LOADER_SUCCESS', 'LOADER_ERROR'],
-            sequence: true,
-            payload: [
-                Actions.FINISH_BOOTSTRAP,
-                Actions.ADVANCE_LOAD_STAGE //Note: Finish bootstrap is not async,
-                //so loader complete must be called manually
-            ]
-        });
-        break;
-    case GLOBALS.PAGE_LOAD_STATE.PAGE: //We are authorized. Store the current user and proceed to page load
-        if (state.location.endpoint && state.location.endpoint.indexOf('$') === 0) {
-            //Looking for the string $$ at the beginning of a route to indicate
-            //that it should be pulled directly from the users context
-            if (state.currentUser._links[state.location.endpoint.slice(2)] != null) {
-                if (state.currentUser._links[state.location.endpoint.slice(2)].templated) {
-                    pageRoute = Util.modifyTemplatedQueryParams(
-                        Store.getState().currentUser._links[state.location.endpoint.slice(2)].href,
-                        {page: state.page.pageNum,
-                        per_page: state.page.itemCount} //eslint-disable-line camelcase
-                    );
+        case GLOBALS.PAGE_LOAD_STATE.INITIALIZE: //Fresh Reload. Reset Everything
+            Store.dispatch({
+                type: 'combo',
+                types: ['LOADER_START', 'LOADER_SUCCESS', 'LOADER_ERROR'],
+                sequence: true,
+                payload: [
+                    Actions.PAGE_LOADING,
+                    Actions.AUTHORIZE_APP
+                ]
+            });
+            break;
+        case GLOBALS.PAGE_LOAD_STATE.BOOTSTRAPPED:
+            Store.dispatch({
+                type: 'combo',
+                types: ['LOADER_START', 'LOADER_SUCCESS', 'LOADER_ERROR'],
+                sequence: true,
+                payload: [
+                    Actions.FINISH_BOOTSTRAP,
+                    Actions.ADVANCE_LOAD_STAGE //Note: Finish bootstrap is not async,
+                    //so loader complete must be called manually
+                ]
+            });
+            break;
+        case GLOBALS.PAGE_LOAD_STATE.PAGE: //We are authorized.
+            // Store the current user and proceed to page load
+            if (state.location.endpoint && state.location.endpoint.indexOf('$') === 0) {
+                //Looking for the string $$ at the beginning of a route to indicate
+                //that it should be pulled directly from the users context
+                if (state.currentUser._links[state.location.endpoint.slice(2)] != null) {
+                    if (state.currentUser._links[state.location.endpoint.slice(2)].templated) {
+                        pageRoute = Util.modifyTemplatedQueryParams(
+                            Store.getState().currentUser._links[state.location.endpoint.slice(2)].href,
+                            {page: state.page.pageNum,
+                            per_page: state.page.itemCount} //eslint-disable-line camelcase
+                        );
+                    } else {
+                        pageRoute =
+                            Store.getState().currentUser._links[state.location.endpoint.slice(2)].href;
+                    }
                 } else {
-                    pageRoute = Store.getState().currentUser._links[state.location.endpoint.slice(2)].href;
+                    Log.error('Route could not be loaded, route endpoint not provided for the current user');
                 }
             } else {
-                Log.error('Route could not be loaded, route endpoint not provided for the current user');
+                pageRoute = GLOBALS.API_URL + Util.replacePathPlaceholdersFromParamObject(
+                    state.location.endpoint == null ? '' : state.location.endpoint,
+                    Util.matchPathAndExtractParams(state.location.path, state.location.pathname)
+                );
             }
-        } else {
-            pageRoute = GLOBALS.API_URL + Util.replacePathPlaceholdersFromParamObject(
-                state.location.endpoint == null ? '' : state.location.endpoint,
-                Util.matchPathAndExtractParams(state.location.path, state.location.pathname)
-            );
-        }
-        Store.dispatch({
-            type: 'combo',
-            types: ['LOADER_START', 'LOADER_SUCCESS', 'LOADER_ERROR'],
-            sequence: true,
-            payload: [
-                Actions.PAGE_DATA.bind(null, pageRoute, state.location.title),
-            ]
-        });
-        break;
-    //components load after page, and are invoked through on the page, via a Datasource component
-    //calling Util.attemptGetComponentData
-    //additional cases should be added here. Be sure to update the globals file with new states.
-    //They must be sequential, and
-    //should always occur on every page load, so as not to block one another.
-    //Make sure final is always last, naturally
-    case GLOBALS.PAGE_LOAD_STATE.FINAL:
-        break;
+            Store.dispatch({
+                type: 'combo',
+                types: ['LOADER_START', 'LOADER_SUCCESS', 'LOADER_ERROR'],
+                sequence: true,
+                payload: [
+                    Actions.PAGE_DATA.bind(null, pageRoute, state.location.title),
+                ]
+            });
+            break;
+        //components load after page, and are invoked through on the page, via a Datasource component
+        //calling Util.attemptGetComponentData
+        //additional cases should be added here. Be sure to update the globals file with new states.
+        //They must be sequential, and
+        //should always occur on every page load, so as not to block one another.
+        //Make sure final is always last, naturally
+        case GLOBALS.PAGE_LOAD_STATE.FINAL:
+            break;
     }
 };
 

@@ -110,6 +110,8 @@ module.exports = {
             var sourceCode = context.getSourceLines();
             var lineNum;
             var superArr = [];
+            var idx;
+            var line;
 
             for (lineNum = 0; lineNum < sourceCode.length; lineNum++) {
                 if (sourceCode[lineNum].indexOf('super(') <= -1) {
@@ -127,9 +129,9 @@ module.exports = {
             }
             // statements[i].expression.callee.type === 'Super'
             for (; i < l; ++i) {
-                var idx;
                 // Gets the line number of the var
-                var { loc: { start: { line }} } = statements[i];
+                //var { loc: { start: { line }} } = statements[i];
+                line = statements[i].loc.start.line;
                 for (idx = 0; idx < superArr.length; idx++) {
                     // If line number of var = one of line numbers of super()
                     if (line === superArr[idx] + 1) {
@@ -162,7 +164,8 @@ module.exports = {
          */
         function blockScopeVarCheck(node, parent, grandParent) {
             if (context.options[0] === 'except-super' && isSuperOnTop(node, parent.body) &&
-                (/Function/.test(grandParent.type)) && parent.type === 'BlockStatement') {
+                (/Function/.test(grandParent.type)) && parent.type === 'BlockStatement'
+            ) {
                 return;
             }
 
