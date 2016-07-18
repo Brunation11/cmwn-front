@@ -215,6 +215,14 @@ h3 {
                 font-weight: bold;
             }
         }
+
+        .active-menu {
+            background: $cmwn-blue;
+
+            a {
+                color: $cmwn-white;
+            }
+        }
     }
 
     .profile-pic {

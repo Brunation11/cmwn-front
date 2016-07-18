@@ -398,7 +398,11 @@ export class EditProfile extends React.Component {
                 <Panel header={HEADINGS.EDIT_TITLE + this.state.first_name + ' ' + this.state.last_name}
                     className="standard edit-profile">
                     <div className="left">
-                        <ProfileImage user_id={this.props.data.user_id} link-below={true}/>
+                        <ProfileImage
+                            data={this.props.data}
+                            currentUser={this.props.currentUser}
+                            link-below={true}
+                        />
                         <p className={ClassNames({hidden:
                             !Util.decodePermissions(this.props.data.scope).delete})}>
                             <a onClick={this.suspendAccount.bind(this)}>{SUSPEND}</a>
