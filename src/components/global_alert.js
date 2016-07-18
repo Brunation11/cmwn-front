@@ -101,7 +101,7 @@ var GlobalAlert = function (args) {
                       (args.animate ? (' ' + args.animate) : '')
                       )
     });
-    document.body.insertBefore(document.body.lastChild, document.body.firstChild)
+    document.body.insertBefore(document.body.lastChild, document.body.firstChild);
 };
 
 export default GlobalAlert;
