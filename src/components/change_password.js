@@ -15,7 +15,7 @@ const ERRORS = {
     TOO_SHORT: 'Passwords must contain at least 8 characters, including one number',
 };
 
-const PASS_UPDATED = '<p id="showMsg">You have successfully updated your password.' +
+const PASS_UPDATED = '<p id="show-msg">You have successfully updated your password.' +
     '<br />Be sure to remember for next time!</p>';
 
 var isPassValid;
@@ -67,7 +67,7 @@ class ChangePassword extends React.Component {
             <Panel header={HEADINGS.PASSWORD} className="standard">
             <form>
             <Input
-                id="oldPass"
+                id="old-pass"
                 type="password"
                 value={this.state.current}
                 placeholder="********"
@@ -78,7 +78,7 @@ class ChangePassword extends React.Component {
                 onChange={e => this.setState({current: e.target.value})}
             />
             <Input
-                id="newPass"
+                id="new-pass"
                 type="password"
                 value={this.state.new}
                 placeholder="********"
@@ -90,7 +90,7 @@ class ChangePassword extends React.Component {
                 {...this.state.extraProps}
             />
             <Input
-                id="confirmPass"
+                id="confirm-pass"
                 type="password"
                 value={this.state.confirm}
                 placeholder="********"
@@ -101,7 +101,7 @@ class ChangePassword extends React.Component {
                 onChange={e => this.setState({confirm: e.target.value})}
                 {...this.state.extraProps}
             />
-            <Button onClick={this.submit.bind(this)} id="updateBtn">Update</Button>
+            <Button onClick={this.submit.bind(this)} id="update-btn">Update</Button>
             </form>
         </Panel>
         );

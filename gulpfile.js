@@ -412,6 +412,17 @@ gulp.task('unit', function () {
     return tests;
 });
 
+gulp.task('smoke', function () {
+    process.env.NODE_ENV = 'production';
+    process.env.BABEL_ENV = 'production';
+    var tests = gulp.src(['./smoke.test.js'], {read: false})
+         .pipe(mocha({require: ['./src/testdom.js'], reporter: 'min'}));
+    tests.on('error', function (err) {
+        console.log('SOMETHING HAPPENED:' + err);
+    });
+    return tests;
+});
+
 gulp.task('coverage', function () {
     var proc = spawn('./test.sh');
 
@@ -428,14 +439,17 @@ gulp.task('coverage', function () {
     });
 });
 
+
 gulp.task('e2e', () => {
     var overrideHostIP = process.env.DOCKER_HOST_IP;
     var hostIP = overrideHostIP || execSync('docker-machine ip front').toString().split('\n')[0];
     if (hostIP === '' || hostIP == null) {
         console.error('No docker IP available for selenium host. Integration tests will fail.');
     }
+    var browser = args.firefox ? 'firefox' : 'chrome'; // chrome by default
     return gulp.src('wdio.conf.js').pipe(webdriver({
-        host: hostIP
+        host: hostIP,
+        capabilities: [{ browserName: browser }]
     }));
 });
 
