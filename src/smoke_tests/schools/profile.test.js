@@ -4,21 +4,20 @@ import { mount } from 'enzyme';
 
 import { SchoolProfile } from 'routes/schools/profile';
 import { PAGE_UNIQUE_IDENTIFIER } from 'routes/schools/profile';
-import EditLink from 'components/edit_link';
-
-import MockFunctionWrapper from 'mocks/mock_function_wrapper';
 
 import schoolStudentData from 'mocks/schools/school_student_data';
 import schoolTeacherData from 'mocks/schools/school_teacher_data';
 import schoolPrincipalData from 'mocks/schools/school_principal_data';
 
-var render = function (data) {
+var createWrapper = function (data) {
     var profile = <SchoolProfile data={data} loading={false} />;
     const WRAPPER = mount(profile);
-    if(WRAPPER.type() == null) {
-        return WRAPPER;
+    if(WRAPPER.children().length === 0) {
+        return null;
     }
     expect(WRAPPER.instance()).to.be.instanceof(SchoolProfile);
+    expect(WRAPPER.hasClass(PAGE_UNIQUE_IDENTIFIER)).to.equal(true);
+    return WRAPPER;
 };
 
 var checkBasicComponents = function (WRAPPER) {
@@ -37,25 +36,34 @@ var checkSuperUserComponents = function (WRAPPER) {
     expect(WRAPPER.find('.green')).to.have.length(1);
 };
 
-export default function () {
-    describe('student viewing school profile', function () {
+var profileSmokeTests = function () {
+    describe('when given no data', function () {
+        const WRAPPER = createWrapper(null);
+        it('should return null', function () {
+            expect(WRAPPER).to.equal(null);
+        });
+    });
+    describe('when viewed by a student', function () {
+        const WRAPPER = createWrapper(schoolStudentData);
         it('should load components with no permissions', function () {
-            const WRAPPER = render(schoolStudentData);
             checkBasicComponents(WRAPPER);
         });
-    describe('teacher viewing school profile', function () {
+    });
+    describe('when viewed by a teacher', function () {
+        const WRAPPER = createWrapper(schoolTeacherData);
         it('should load components with admin permissions', function () {
-            const WRAPPER = render(schoolTeacherData);
             checkBasicComponents(WRAPPER);
             checkAdminComponents(WRAPPER);
         });
     });
-    describe('superuser viewing school profile', function () {
+    describe('when viewed by a superuser', function () {
+        const WRAPPER = createWrapper(schoolPrincipalData);
         it('should load components with all permissions', function () {
-            const WRAPPER = render(schoolPrincipalData);
             checkBasicComponents(WRAPPER);
             checkAdminComponents(WRAPPER);
             checkSuperUserComponents(WRAPPER);
-        }):
+        });
     });
 };
+
+export default profileSmokeTests;
