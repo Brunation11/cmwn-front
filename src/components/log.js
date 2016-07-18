@@ -49,11 +49,15 @@ class Logger {
                 }
             });
 
-            additionalData.state = state;
+//            additionalData.state = state;
+            Rollbar.configure({payload: {custom: {state}}});
 
             if (window.Rollbar[verb] != null) {
                 window.Rollbar[verb](arguments[0], additionalData); //eslint-disable-line no-undef
             }
+
+            //reset the state for future requests
+            Rollbar.configure({payload: {custom: {state: {}}}});
         };
     }
 }
