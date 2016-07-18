@@ -71,11 +71,11 @@ Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
                     //configure trackers to logged in user
                     Rollbar.configure({payload: {person: {id: server.response.user_id, //eslint-disable-line no-undef, max-len
                         username: server.response.username}}});
-                    ('set', 'userId', server.response.user_id);
-                    ('set', 'dimension1', server.response.type);
-                    ('set', 'dimension2',
+                    ga('set', 'userId', server.response.user_id);
+                    ga('set', 'dimension1', server.response.type);
+                    ga('set', 'dimension2',
                         (new Date(Date.now()).getFullYear()) - (Moment(server.response.birthdate).year()));
-                    ('set', 'dimension3', server.response.gender);
+                    ga('set', 'dimension3', server.response.gender);
 
                     if (server.response.user_id == null) {
                         Errors.handle401();
