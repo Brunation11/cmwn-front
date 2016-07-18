@@ -39,7 +39,7 @@ var Component = React.createClass({
         var id = item.user_id != null ? item.user_id : item.friend_id;
         e.stopPropagation();
         e.preventDefault();
-        ga('set', 'dimension7', 'send');
+        ('set', 'dimension7', 'send');
         HttpManager.POST({url: state.currentUser._links.friend.href}, {
             'friend_id': id
         }).then(() => {
@@ -55,7 +55,7 @@ var Component = React.createClass({
         var id = item.user_id != null ? item.user_id : item.friend_id;
         e.stopPropagation();
         e.preventDefault();
-        ga('set', 'dimension7', 'recieved');
+        ('set', 'dimension7', 'recieved');
         HttpManager.POST({url: state.currentUser._links.friend.href}, {
             'friend_id': id
         }).then(() => {

@@ -38,7 +38,7 @@ var Component = React.createClass({
         var id = item.user_id != null ? item.user_id : item.suggest_id;
         e.stopPropagation();
         e.preventDefault();
-        ga('set', 'dimension7', 'sent');
+        ('set', 'dimension7', 'sent');
         HttpManager.POST({url: state.currentUser._links.friend.href}, {
             'friend_id': id
         }).then(() => {
