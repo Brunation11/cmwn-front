@@ -301,3 +301,4 @@ mapStateToProps = state => {
 Page = connect(mapStateToProps)(Profile);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
+

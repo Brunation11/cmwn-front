@@ -7,6 +7,7 @@ import Toast from 'components/toast';
 import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
 import Log from 'components/log';
+import History from 'components/history';
 
 import 'components/profile_image.scss';
 
@@ -74,6 +75,7 @@ export var Image = React.createClass({
                 }
                 self.setState({profileImage: result[0].secure_url});
                 self.setState({isModerated: false});
+                ('set', 'dimension6', 1);
                 HttpManager.POST({url: this.props.data._links.user_image.href}, {
                     url: result[0].secure_url,
                     image_id: result[0].public_id
@@ -87,10 +89,17 @@ export var Image = React.createClass({
             /* eslint-enable camelcase */
         });
     },
+    attemptNavigate: function () {
+        if (this.props.data.user_id === this.props.currentUser.user_id ||
+            (this.props.data && this.props.data.user_id === this.props.currentUser.user_id)) {
+            History.push('/profile');
+        }
+    },
     renderImage: function (url) {
         var style = {'backgroundImage': `url(${url})`};
         return (
              <div
+                onClick={this.attemptNavigate}
                 className="profile-pic"
                 alt={PIC_ALT}
                 style={style}
