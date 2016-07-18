@@ -11,11 +11,13 @@ import schoolStudentData from 'mocks/schools/school_student_data';
 import schoolTeacherData from 'mocks/schools/school_teacher_data';
 import schoolPrincipalData from 'mocks/schools/school_principal_data';
 
+import profileSmokeTests from 'smoke_tests/schooles/profile.test';
+
 var createWrapper = function (data) {
     var profile = <SchoolProfile data={data} loading={false} />;
     const WRAPPER = shallow(profile);
-    if(WRAPPER.type() === null) {
-        return WRAPPER;
+    if(WRAPPER.type() == null) {
+        return null;
     }
     expect(WRAPPER.instance()).to.be.instanceOf(SchoolProfile);
     expect(WRAPPER.hasClass(PAGE_UNIQUE_IDENTIFIER)).to.equal(true);
@@ -25,9 +27,7 @@ var createWrapper = function (data) {
 var checkAllUserContent = function (WRAPPER) {
     expect(WRAPPER.children()).to.have.length(2);
     expect(WRAPPER.find('Panel')).to.have.length(1);
-    console.log('RIGHT: ' + WRAPPER.find('.right').debug());
     expect(WRAPPER.find('.right')).to.have.length(1);
-    console.log('SCHOOL DIS: ' + WRAPPER.find('.school-district').debug());
     expect(WRAPPER.find('.school-district')).to.have.length(1);
     const CLASS_ITEM = {
         group_id: '9ee15bf2-0288-11e6-8b6b-0800274f2cef', //eslint-disable-line camelcase
@@ -54,23 +54,34 @@ var checkSuperUserContent = function (WRAPPER, data) {
 };
    
 describe('school profile unit tests', function () {
-    it('should render null when given no data', function () {
-        const WRAPPER = createWrapper();
-        expect(WRAPPER.type()).to.equal(null);
+    describe('when given no data', function () {
+        const WRAPPER = createWrapper(null);
+        it('should render null', function () {
+            expect(WRAPPER).to.equal(null);
+        });
     });
-    it('should render a school profile with student permissions', function () {
-        const WRAPPER = createWrapper(schoolStudentData);
-        checkAllUserContent(WRAPPER);
+    describe('when viewed by a student', function () {
+        it('should render a school profile with student permissions', function () {
+            const WRAPPER = createWrapper(schoolStudentData);
+            checkAllUserContent(WRAPPER);
+        });
     });
-    it('should render a school profile with teacher permissions', function () {
-        const WRAPPER = createWrapper(schoolTeacherData);
-        checkAllUserContent(WRAPPER);
-        checkAdminContent(WRAPPER);
-    }); 
-    it('should render a school profile with superuser permissions', function () {
-        const WRAPPER = createWrapper(schoolPrincipalData);
-        checkAllUserContent(WRAPPER);
-        checkAdminContent(WRAPPER);
-        checkSuperUserContent(WRAPPER, schoolPrincipalData);
+    describe('when viewed by a teacher', function () {
+        it('should render a school profile with teacher permissions', function () {
+            const WRAPPER = createWrapper(schoolTeacherData);
+            checkAllUserContent(WRAPPER);
+            checkAdminContent(WRAPPER);
+        }); 
+    });
+    describe('when viewed by a superuser', function () {
+        it('should render a school profile with superuser permissions', function () {
+            const WRAPPER = createWrapper(schoolPrincipalData);
+            checkAllUserContent(WRAPPER);
+            checkAdminContent(WRAPPER);
+            checkSuperUserContent(WRAPPER, schoolPrincipalData);
+        });
+    });
+    describe('smoke tests', function () {
+        profileSmokeTests();
     });
 });

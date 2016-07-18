@@ -46,7 +46,7 @@ const LABELS = {
     ACCEPT: 'I accept the terms and conditions.'
 };
 
-const ERRORS = {
+export const ERRORS = {
     BAD_UPDATE: 'There was a problem updating your profile. Please try again later.',
     COULDNT_CREATE: 'Could not create school. Please try again later.',
     INVALID_SUBMISSION: 'Invalid submission. Please update fields highlighted in red and submit again',
@@ -57,7 +57,7 @@ const ERRORS = {
     NO_FILE: 'Please select an XLSX file to import.'
 };
 
-const SUCCESS = {
+export const SUCCESS = {
     IMPORT: 'Import submitted for processing. You will recieve an email once processing is complete.',
     SCHOOL_UPDATE: 'School Updated'
 };
@@ -251,33 +251,33 @@ export class BulkUpload extends React.Component {
     }
 
     checkForm(e) {
-        var result = true;
+        var result = SUCCESS.IMPORT;
         try {
             if (!this.refs.formRef.isValid()) {
-                result = false;
                 e.preventDefault();
-                Toast.error(ERRORS.NOT_FILLED);
+                result = ERRORS.NOT_FILLED;
+                Toast.error(result);
             } else if (this.state.tos === false) {
-                result = false;
                 e.preventDefault();
-                Toast.error(ERRORS.NO_AGREE);
+                result = ERRORS.NO_AGREE;
+                Toast.error(result);
             } else if (this.state.teacherCode === this.state.studentCode) {
-                result = false;
                 e.preventDefault();
-                Toast.error(ERRORS.SAME_CODES);
+                result = ERRORS.SAME_CODES;
+                Toast.error(result);
             } else if (!isPassValid(this.state.teacherCode) || !isPassValid(this.state.studentCode)) {
-                result = false;
                 e.preventDefault();
-                Toast.error(ERRORS.PASSW_REQ);
+                result = ERRORS.PASSW_REQ;
+                Toast.error(result);
             } else if (!this.refs.fileInput.getValue()) {
-                result = false;
                 e.preventDefault();
-                Toast.error(ERRORS.NO_FILE);
+                result = ERRORS.NO_FILE;
+                Toast.error(result);
             }
         } catch(err) {
             e.preventDefault();
         }
-        Toast.success(SUCCESS.IMPORT);
+        Toast.success(result);
         window.setTimeout(() => {
             this.setState({
                 studentCode: '',

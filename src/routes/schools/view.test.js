@@ -9,12 +9,13 @@ import schoolStudentData from 'mocks/schools/school_student_data';
 import schoolTeacherData from 'mocks/schools/school_teacher_data';
 import schoolPrincipalData from 'mocks/schools/school_principal_data';
 
+import viewSmokeTests from 'smoke_tests/schools/view.test';
 
 var createWrapper = function (data) {
     var view = <SchoolView data={data} loading={false}/>;
     const WRAPPER = shallow(view);
-    if(WRAPPER.type() === null) {
-        return WRAPPER;
+    if(WRAPPER.type() == null) {
+        return null;
     }
     expect(WRAPPER.instance()).to.be.instanceOf(SchoolView);
     expect(WRAPPER.hasClass(PAGE_UNIQUE_IDENTIFIER)).to.equal(true);
@@ -40,21 +41,32 @@ var checkSuperUserContent = function (WRAPPER) {
 };
 
 describe('school view unit tests', function () {
-    it('should render null when given no data', function () {
-        const WRAPPER = createWrapper();
-        expect(WRAPPER.type()).to.equal(null);
+    describe('when given no data', function () {
+        const WRAPPER = createWrapper(null);
+        it('should render null', function () {
+            expect(WRAPPER).to.equal(null);
+        });
     });
-    it('should render null when viewed by a student', function () {
+    describe('when viewed by a student', function () {
         const WRAPPER = createWrapper(schoolStudentData);
-        expect(WRAPPER.type()).to.equal(null);
+        it('should render null', function () {
+            expect(WRAPPER).to.equal(null);
+        });
     });
-    it('should render a school view page when viewed by a teacher', function () {
-        const WRAPPER = createWrapper(schoolTeacherData);
-        checkAdminContent(WRAPPER);
+    describe('when viewed by a teacher', function () {
+        it('should render a school view page', function () {
+            const WRAPPER = createWrapper(schoolTeacherData);
+            checkAdminContent(WRAPPER);
+        });
     });
-    it('should render a school view page when viewed by a principal', function () {
-        const WRAPPER = createWrapper(schoolPrincipalData);
-        checkAdminContent(WRAPPER);
-        checkSuperUserContent(WRAPPER);
+    describe('when viewed by a superuser', function () {
+        it('should render a school view page', function () {
+            const WRAPPER = createWrapper(schoolPrincipalData);
+            checkAdminContent(WRAPPER);
+            checkSuperUserContent(WRAPPER);
+        });
+    });
+    describe('smoke tests', function () {
+        viewSmokeTests();
     });
 });
