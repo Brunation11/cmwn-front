@@ -73,7 +73,6 @@ class Friends extends React.Component {
         Log.error(e, 'Friend request failed');
     }
 
-<<<<<<< ea534b305643814e555e65fbc79ad5ce8e8cb1e1
     renderFlip(item) {
         if (item.embedded && item.embedded.flips) {
             return (
@@ -93,20 +92,6 @@ class Friends extends React.Component {
     }
 
     renderUserFlip(item) {
-=======
-    renderFlip: function (item){
-        return (
-            <PopOver
-                element={item}
-                type="user"
-                trigger="click"
-            >
-                {this.renderUserFlip(item)}
-            </PopOver>
-        );
-    },
-    renderUserFlip: function (item) {
->>>>>>> add active and focus rules to properly render hover on mobile devices
         return (
             <div className="flip" key={Shortid.generate()}>
                 <div className="item">
