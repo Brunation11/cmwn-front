@@ -129,15 +129,19 @@
         font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
         font-size: 1.25rem;
 
-        @media (min-width: 100px) and (max-width: $device-portrait-break) {
+        @media (min-width: $standard) and (max-width: $max-flip-size) {
+            font-size: .7rem;
+        }
+
+        @media (min-width: $max-flip-size) and (max-width: $device-portrait-break) {
+            font-size: .85rem;
+        }
+
+        @media (min-width: $device-portrait-break) and (max-width: $iphone5-max-width) {
             font-size: .95rem;
         }
 
-        @media (min-width: $device-portrait-break) and (max-width: 590px) {
-            font-size: .95rem;
-        }
-
-        @media (min-width: 590px) and (max-width: $device-max-break) {
+        @media (min-width: $iphone5-max-width) and (max-width: $device-max-break) {
             font-size: 1rem;
         }
 
@@ -184,22 +188,6 @@
     .generate {
         margin-bottom: 1rem;
         font-size: 2rem;
-
-        @media (min-width: 100px) and (max-width: $device-portrait-break) {
-            font-size: 1rem;
-        }
-
-        @media (min-width: $device-portrait-break) and (max-width: 590px) {
-            font-size: 1rem;
-        }
-
-        @media (min-width: 590px) and (max-width: $device-max-break) {
-            font-size: 1.2rem;
-        }
-
-        @media (min-width: $device-max-break) and (max-width: $monitor-max-break) {
-            font-size: 1.3rem;
-        }
     }
 
     input:disabled {
