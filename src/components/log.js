@@ -1,5 +1,9 @@
 /* eslint-disable no-console, no-debugger*/
+import _ from 'lodash';
+
 import GLOBALS from 'components/globals';
+import Store from 'components/store';
+import Util from 'components/util';
 
 var Log;
 
@@ -21,13 +25,34 @@ class Logger {
     }
     write(verb, label, color) {
         return function () {
+            var state = Util.scrubPIIFromStore(Store.getState());
+            var additionalData = {};
             if (GLOBALS.MODE.toLowerCase() === 'local' ||
                 GLOBALS.MODE.toLowerCase() === 'dev' ||
                 GLOBALS.MODE.toLowerCase() === 'development') {
                 console[verb](`%c ${label}: `, `color: ${color};`, ...arguments);
             }
+
+            _.each(arguments, arg => {
+                switch (typeof arg) {
+                    case 'string':
+                        additionalData.extraMessages += arg;
+                        break;
+                    case 'number':
+                        additionalData.extraMessages += arg;
+                        break;
+                    case 'boolean':
+                        additionalData.extraMessages += arg;
+                        break;
+                    case 'object':
+                        additionalData = _.defaults(additionalData, arg);
+                }
+            });
+
+            additionalData.state = state;
+
             if (window.Rollbar[verb] != null) {
-                window.Rollbar[verb](...arguments); //eslint-disable-line no-undef
+                window.Rollbar[verb](arguments[0], additionalData); //eslint-disable-line no-undef
             }
         };
     }
