@@ -16,6 +16,9 @@ const HEADINGS = {
 
 const BAD_CLASS_UPDATE = 'There was a problem updating your class. Please try again later.';
 
+var mapStateToProps;
+var Page;
+
 export class EditClass extends React.Component {
     constructor() {
         super();
@@ -84,7 +87,7 @@ export class EditClass extends React.Component {
     }
 }
 
-var mapStateToProps = state => { // eslint-disable-line vars-on-top
+mapStateToProps = state => {
     var data = {title: ''};
     var loading = true;
     var currentUser = state.currentUser;
@@ -99,5 +102,5 @@ var mapStateToProps = state => { // eslint-disable-line vars-on-top
     };
 };
 
-var Page = connect(mapStateToProps)(EditClass); // eslint-disable-line vars-on-top
+Page = connect(mapStateToProps)(EditClass); // eslint-disable-line vars-on-top
 export default Page;
