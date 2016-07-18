@@ -47,7 +47,7 @@ var Component = React.createClass({
                 this.forceUpdate();
             });
             Actions.dispatch.START_RELOAD_PAGE(Store.getState());
-        }).catch(this.friendErr.bind(null, postBody);
+        }).catch(this.friendErr.bind(null, postBody));
     },
     acceptRequest: function (item, e) {
         var state = Store.getState();
@@ -59,7 +59,7 @@ var Component = React.createClass({
         HttpManager.POST({url: state.currentUser._links.friend.href}, postBody).then(() => {
             Toast.success(FRIEND_ADDED + item.username);
             Actions.dispatch.START_RELOAD_PAGE(Store.getState());
-        }).catch(this.friendErr);
+        }).catch(this.friendErr.bind(null, postBody));
     },
     doNothing: function (e) {
         e.stopPropagation();

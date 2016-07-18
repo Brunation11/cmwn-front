@@ -197,7 +197,6 @@ var Util = {
     },
     scrubPIIFromStore(store) {
         var state = {};
-        debugger;
         if(store && store.currentUser) {
             state.currentUser = store.currentUser.asMutable();
             state.currentUser.meta = {};
@@ -208,6 +207,7 @@ var Util = {
             state.currentUser.birthdate = '1964-02-23 00:00:00';
         }
         if(store && store.page && store.page.data && store.page.data.user_id) {
+            state.page = {};
             state.page.data = store.page.data.asMutable();
             state.page.data.meta = {};
             state.page.data.first_name = 'Fox William';

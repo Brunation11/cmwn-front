@@ -77,6 +77,7 @@ var Component = React.createClass({
                     History.push('/logout');
                 }
             }
+            if (this.props.loading || !_.has(this, 'props.data._links.login.href')) return;
             dataUrl = this.props.data._links.login.href;
             Util.logout();
             req = HttpManager.POST({
