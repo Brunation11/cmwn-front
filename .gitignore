@@ -31,3 +31,4 @@ lib
 lib/**/*
 .nyc_output
 tar-*
+scssReport.json
