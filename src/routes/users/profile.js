@@ -221,10 +221,39 @@ export class Profile extends React.Component {
 
     renderUserProfile() {
         var ISODate = (new Date(this.state.birthdate)).toISOString();
+        if (this.state.friend_status === 'FRIEND') {
+            return (
+                <div>
+                    <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
+                        <div className="left">
+                            <div className="frame">
+                                <ProfileImage
+                                    data={this.props.data}
+                                    currentUser={this.props.currentUser}
+                                    link-below={true}
+                                 />
+                            </div>
+                        </div>
+                        <div className="right">
+                            <div className="user-metadata">
+                                <p>Username:</p>
+                                <p className="standard field">{this.state.username}</p>
+                                <p>First Name:</p>
+                                <p className="standard field">{this.state.first_name}</p>
+                                <p>Last Name:</p>
+                                <p className="standard field">{this.state.last_name}</p>
+                                <p>Birthday:</p>
+                                <p className="standard field">{Moment(ISODate).format('MM-DD-YYYY')}</p>
+                            </div>
+                        </div>
+                    </Panel>
+                </div>
+            );
+        }
         return (
             <div>
                 <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
-                    <div className="left">
+                    <div className="center">
                         <div className="frame">
                             <ProfileImage
                                 data={this.props.data}
@@ -233,18 +262,9 @@ export class Profile extends React.Component {
                              />
                         </div>
                     </div>
-                    <div className="right">
-                        <div className="user-metadata">
-                            <p>Username:</p>
-                            <p className="standard field">{this.state.username}</p>
-                            <p>First Name:</p>
-                            <p className="standard field">{this.state.first_name}</p>
-                            <p>Last Name:</p>
-                            <p className="standard field">{this.state.last_name}</p>
-                            <p>Birthday:</p>
-                            <p className="standard field">{Moment(ISODate).format('MM-DD-YYYY')}</p>
-                        </div>
-                    </div>
+                   <FLIP_SOURCE>
+                       <Trophycase className={ClassNames({hidden: !this.state.isStudent})} />
+                    </FLIP_SOURCE>
                 </Panel>
             </div>
         );
