@@ -124,7 +124,10 @@ export class Suggested extends React.Component{
         return (
            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <form>
-                    <FlipBoard renderFlip={self.renderFlip.bind(self)} header={HEADINGS.SUGGESTED} data={self.props.data}
+                    <FlipBoard
+                        renderFlip={self.renderFlip.bind(self)}
+                        header={HEADINGS.SUGGESTED}
+                        data={self.props.data}
                         transform={data => {
                             var image;
                             if (!_.has(data, '_embedded.image')) {
