@@ -86,7 +86,9 @@
         "browser": true
     },
     "globals": {
-        "grecaptcha": false
+        "__cmwn": true,
+        "grecaptcha": false,
+        "ga": true
     },
     "extends": "eslint:recommended",
     "rulePaths": ["eslint-rules"]

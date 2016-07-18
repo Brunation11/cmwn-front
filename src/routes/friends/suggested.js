@@ -43,6 +43,7 @@ export class Suggested extends React.Component{
         var id = item.user_id != null ? item.user_id : item.suggest_id;
         e.stopPropagation();
         e.preventDefault();
+        ga('set', 'dimension7', 'sent');
         HttpManager.POST({url: this.props.currentUser._links.friend.href}, {
             'friend_id': id
         }).then(() => {
@@ -152,9 +153,9 @@ mapStateToProps = state => {
         state.page.data._embedded.suggest) {
         loading = state.page.loading;
         data = state.page.data._embedded.suggest;
-        if (state.currentUser != null){
-            currentUser = state.currentUser;
-        }
+    }
+    if (state.currentUser != null){
+        currentUser = state.currentUser;
     }
     return {
         data,

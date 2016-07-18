@@ -3,6 +3,7 @@ import { expect } from 'chai';
 import { shallow } from 'enzyme';
 
 import { Suggested } from 'routes/friends/suggested';
+import MockFlipWrapper from 'mocks/mock_flip_wrapper';
 
 import studentDataB from 'mocks/users/student_data_b';
 
@@ -26,3 +27,26 @@ describe('renders null suggested friends', function (){
         expect(WRAPPER.children()).to.have.length(0);
     });
 });
+
+describe('test rendering a flip', function (){
+    var item = {
+        coming_soon: false, // eslint-disable-line camelcase
+        game_id: 0, // eslint-disable-line camelcase
+        title: 'test game',
+        description: 'a mock game to test flip'
+    };
+
+    it('renders a flip', function () {
+        const WRAPPER = shallow(<MockFlipWrapper item={item}/>);
+        expect(WRAPPER.instance()).to.be.instanceOf(MockFlipWrapper);
+    });
+
+    it('check flip elements', function () {
+        const WRAPPER = shallow(<MockFlipWrapper item={item}/>);
+        expect(WRAPPER.children()).to.have.length(1);
+        expect(WRAPPER.find('.item')).to.have.length(1);
+        expect(WRAPPER.find('.overlay')).to.have.length(1);
+        expect(WRAPPER.find('img')).to.have.length(1);
+    });
+});
+
