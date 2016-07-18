@@ -408,7 +408,8 @@ var hashCode = function (s){
 
 //Only report errors in production
 if (window.Rollbar && ~window.__cmwn.MODE.indexOf('prod')){ //eslint-disable-line no-undef
-    Rollbar.configure({reportLevel: 'error'}); //eslint-disable-line no-undef
+    Rollbar.configure({scrubFields: ['first_name', 'last_name', 'meta', 'email', 'birthdate'],
+        reportLevel: 'error'}); //eslint-disable-line no-undef
 }
 //Dynamic rollbar configuration for throttling. Static configuration happens in index.php
 //User configuration happens in Authorization.js (soon will be moved to actions.js)
