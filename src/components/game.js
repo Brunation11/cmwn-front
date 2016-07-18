@@ -10,8 +10,6 @@ import HttpManager from 'components/http_manager';
 import Toast from 'components/toast';
 import Log from 'components/log';
 
-import SkribbleMocks from 'routes/users/mock_skribble_data';
-
 import 'components/game.scss';
 
 const EVENT_PREFIX = '_e_';
@@ -69,13 +67,13 @@ var Game = React.createClass({
     componentWillUnmount: function () {
         this.clearEvent();
     },
-    submitFlip: function (flip) {
+    submitFlip: function (flipId) {
         if (!this.props.flipUrl) {
             return;
         }
-        HttpManager.POST({url: this.props.flipUrl}, {'flip_id': flip}).catch(err => {
+        HttpManager.POST({url: this.props.flipUrl}, {'flip_id': flipId}).catch(err => {
             Toast.error(BAD_FLIP);
-            Log.log('Server refused flip update', err, flip);
+            Log.log('Server refused flip update', err, flipId);
         });
     },
     /*
@@ -83,10 +81,17 @@ var Game = React.createClass({
      * there is an event defined in addition to the submission behavior
      */
     [EVENT_PREFIX + 'Flipped']: function (e) {
-        this.submitFlip(e.gameData.id);
+        var flipId = e.gameData.id || e.gameData.game || e.gameData.flip;
+        // TODO MPR 7/14/16: .game and .flip can be removed once all games are in React
+        this.setState({flipId});
+        this.submitFlip(flipId);
+        ga('set', 'dimension5', flipId);
     },
     [EVENT_PREFIX + 'Flip']: function (e) {
-        this.submitFlip(e.gameData.id);
+        var flipId = e.gameData.id || e.gameData.game || e.gameData.flip;
+        this.setState({flipId});
+        this.submitFlip(flipId);
+        ga('set', 'dimension5', flipId);
     },
     [EVENT_PREFIX + 'Save']: function (e) {
         var version = 1;
@@ -95,6 +100,7 @@ var Game = React.createClass({
             return;
         }
         version = e.gameData.version || version;
+        ga('set', 'metric1', e.gameData.currentScreenIndex);
         HttpManager.POST(this.props.saveUrl.replace('{game_id}', e.gameData.game),
             {data: e.gameData, version});
     },
@@ -103,6 +109,7 @@ var Game = React.createClass({
     },
     [EVENT_PREFIX + 'Init']: function (e) {
         e.respond(this.props.gameState);
+        ga('set', 'dimension4', e.gameData.id || e.gameData.game || e.gameData.flip);
     },
     /* end of default events */
     gameEventHandler: function (e) {
@@ -114,10 +121,6 @@ var Game = React.createClass({
                 this.props['on' + _.capitalize(e.name)](...arguments);
             }
         }
-        if (e && e.respond != null) {
-            SkribbleMocks(e);
-        }
-
     },
     setEvent: function () {
         window.addEventListener('game-event', this.gameEventHandler);
