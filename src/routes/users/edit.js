@@ -242,6 +242,7 @@ export class EditProfile extends React.Component {
             <Form ref="formRef">
                 <Input
                     type="text"
+                    id="username"
                     value={this.state.username}
                     placeholder="Username"
                     label="Username:"
@@ -265,6 +266,7 @@ export class EditProfile extends React.Component {
                 />
                 <Input
                     type="textarea"
+                    id="email"
                     value={this.state.email}
                     placeholder="Email"
                     label="Email"
@@ -282,6 +284,7 @@ export class EditProfile extends React.Component {
                 />
                 <Input
                     type="text"
+                    id="first-name"
                     value={this.state.first_name}
                     placeholder="first name"
                     label="First Name:"
@@ -299,6 +302,7 @@ export class EditProfile extends React.Component {
                 />
                 <Input
                     type="text"
+                    id="last-name"
                     value={this.state.last_name}
                     placeholder="last name"
                     label="Last Name:"
@@ -360,7 +364,7 @@ export class EditProfile extends React.Component {
                 {this.renderSchoolInformation()}
                 */}
                 <Button className="user-metadata-btn" disabled={this.state.isStudent}
-                    onClick={this.submitData.bind(this)}> Save </Button>
+                    onClick={this.submitData.bind(this)} id="save-btn"> Save </Button>
             </Form>
         );
     }

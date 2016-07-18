@@ -2,10 +2,10 @@ var login = require("../login");
 var data = require('../../test_data.js');
 var USER = data.USER;
 var PASSWD = data.PASS;
-var STUDENT_USER;
-var STUDENT_PASSWD;
-// TODO: ask chuck to setup mock student
+var STUDENT_USER = data.STUDENT_USER;
+var STUDENT_PASS = data.STUDENT_PASS;
 
+// Be aware that trying to run all of these tests at once does not always work
 var checkAnotherProfileContents = function (url) {
     browser.url(url);
     browser.waitForExist('.panel');
@@ -73,42 +73,40 @@ describe('tests viewing another adult profile as teacher', function () {
 });
 
 describe('tests viewing own profile as teacher', function () {
-    it('should check the elements on profile page', function () {
+    beforeEach(function () {
         login.login(USER, PASSWD);
         browser.waitForExist('#navMenu');
+    });
+
+    it('should check the elements on profile page', function () {
         viewOwnProfileConents();
     });
 
     it('should display modal when clicking a flip', function () {
-        login.login(USER, PASSWD);
-        browser.waitForExist('#navMenu');
         checkModalOpen();
     });
 
     it('should close modal using close link', function () {
-        login.login(USER, PASSWD);
-        browser.waitForExist('#navMenu');
         checkModalClose();
     });
 });
 
-/*
+
 describe('tests viewing own profile as student', function () {
-    it('should check the elements on profile page', function () {
-        login.login(STUDENT_USER, STUDENT_PASSWD);
+    beforeEach(function () {
+        login.login(STUDENT_USER, STUDENT_PASS);
         browser.waitForExist('#navMenu');
+    });
+
+    it('should check the elements on profile page', function () {
         viewOwnProfileConents();
     });
 
     it('should display modal when clicking a flip', function () {
-        login.login(STUDENT_USER, STUDENT_PASSWD);
-        browser.waitForExist('#navMenu');
         checkModalOpen();
     });
 
     it('should close modal using close link', function () {
-        login.login(STUDENT_USER, STUDENT_PASSWD);
-        browser.waitForExist('#navMenu');
         checkModalClose();
     });
-});*/
+});
