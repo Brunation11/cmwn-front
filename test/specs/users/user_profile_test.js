@@ -110,3 +110,21 @@ describe('tests viewing own profile as student', function () {
         checkModalClose();
     });
 });
+
+describe('adult viewing unassociated student\'s profile', function () {
+    it('should render 403', function () {
+        login.login(USER, PASSWD);
+        browser.waitForExist('#navMenu');
+        browser.url('/profile/81d58d4e-2844-11e6-a284-2dd9dce0dc3f/');
+        browser.waitForExist('#triggerederror.error403');
+    });
+});
+
+describe('student viewing unassociated student\'s profile', function () {
+    it('should render 403', function () {
+        login.login(USER, PASSWD);
+        browser.waitForExist('#navMenu');
+        browser.url('/profile/81d58d4e-2844-11e6-a284-2dd9dce0dc3f/');
+        browser.waitForExist('#triggerederror.error403');
+    });
+});

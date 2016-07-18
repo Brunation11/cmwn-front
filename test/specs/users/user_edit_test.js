@@ -7,6 +7,8 @@ var PASSWD = data.PASS;
 var STUDENT_USER = data.STUDENT_USER;
 var STUDENT_PASSWD = data.STUDENT_PASS;
 
+// Be aware that trying to run all of these tests at once does not always work
+
 var checkEditContent = function() {
     browser.waitForExist('.profile-image');
     expect(browser.isVisible('.profile-pic')).to.be.ok;
@@ -179,25 +181,18 @@ describe('teacher editing own profile', function () {
     });*/
 });
 
-/*
+
+// Won't work bc permissions are buggy right now; ticket CORE-1043 will fix.
 describe('teacher editing own student\'s profile', function () {
     beforeEach(function () {
         login.login(USER, PASSWD);
         browser.waitForExist('#navMenu');
-        browser.url('/profile/edit');
+        browser.url('/profile/97443a7e-2806-11e6-9c3e-a5b7dc3d064c/edit');
     });
 
+/*
     it('has the correct content', function () {
         checkEditContent();
-    });
-
-    it('updates username', function () {
-        var curUsername;
-        browser.waitForExist('#username');
-        curUsername = browser.getValue('#username');
-        expect(browser.getHTML('.username.regular-text a', false)).to.equal(curUsername);
-        changeUsername('testing_username');
-        changeUsername(curUsername);
     });
 
     it('updates first name', function () {
@@ -225,8 +220,9 @@ describe('teacher editing own student\'s profile', function () {
     it('updates birthday', function () {
         checkBirthday();
     });
-});*/
-/*
+*/
+});
+
 describe('teacher editing unassociated student\'s profile', function () {
     it('renders 403', function () {
         login.login(USER, PASSWD);
@@ -236,30 +232,38 @@ describe('teacher editing unassociated student\'s profile', function () {
     });
 });
 
-
 describe('teacher editing another adults\'s profile', function () {
     it('renders 403', function () {
         login.login(USER, PASSWD);
         browser.waitForExist('#navMenu');
-        browser.url('/profile/81d58d4e-2844-11e6-a284-2dd9dce0dc3f/edit');
-        browser.waitForExist('#triggerederror.error403');
+        browser.url('/profile/c53f9ebc-276d-11e6-9fc0-e238f8ec1f6c/edit');
+        //TODO: Check redirect after CORE-1044 fixed. LB 06/18/16
     });
 });
 
-describe('student editing another student\'s profile', function () {
+describe('student editing their teacher\'s profile', function () {
     it('renders 403', function () {
         login.login(STUDENT_USER, STUDENT_PASSWD);
         browser.waitForExist('#navMenu');
         browser.url('/profile/c53f9ebc-276d-11e6-9fc0-e238f8ec1f6c/edit');
-        browser.waitForExist('#triggerederror.error403');
+        //TODO: Check redirect after CORE-1044 fixed. LB 06/18/16
     });
 });
 
-describe('student editing another student\'s profile', function () {
+describe('student editing their student friend\'s profile', function () {
+    it('renders 403', function () {
+        login.login(STUDENT_USER, STUDENT_PASSWD);
+        browser.waitForExist('#navMenu');
+        browser.url('/profile/97443a7e-2806-11e6-9c3e-a5b7dc3d064c/edit');
+        //TODO: Check redirect after CORE-1044 fixed. LB 06/18/16
+    });
+});
+
+describe('student editing an unassociated student\'s profile', function () {
     it('renders 403', function () {
         login.login(STUDENT_USER, STUDENT_PASSWD);
         browser.waitForExist('#navMenu');
         browser.url('/profile/81d58d4e-2844-11e6-a284-2dd9dce0dc3f/edit');
         browser.waitForExist('#triggerederror.error403');
     });
-});*/
+});

@@ -182,7 +182,7 @@ var Game = React.createClass({
                         onClick={() => this.dispatchPlatformEvent('toggle-demo-mode')}>{DEMO_MODE}
                     </Button>
                 </div>
-               ) ;
+               );
     }
 });
 

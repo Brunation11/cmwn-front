@@ -104,16 +104,20 @@ export class ProfileView extends React.Component {
 mapStateToProps = state => {
     var data = {};
     var loading = true;
+    var currentUser = {};
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
     }
+    if (state.currentUser) {
+        currentUser = state.currentUser;
+    }
     return {
         data,
-        loading
+        loading,
+        currentUser
     };
 };
 
 Page = connect(mapStateToProps)(ProfileView);
 export default Page;
-
