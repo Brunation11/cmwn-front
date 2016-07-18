@@ -26,7 +26,7 @@ class Logger {
     write(verb, label, color) {
         return function () {
             var state = Util.scrubPIIFromStore(Store.getState());
-            var additionalData = {};
+            var additionalData = {extraMessages: ''};
             if (GLOBALS.MODE.toLowerCase() === 'local' ||
                 GLOBALS.MODE.toLowerCase() === 'dev' ||
                 GLOBALS.MODE.toLowerCase() === 'development') {
