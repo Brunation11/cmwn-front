@@ -410,7 +410,17 @@ gulp.task('unit', function () {
     process.env.NODE_ENV = 'production';
     process.env.BABEL_ENV = 'production';
     var tests = gulp.src(['src/**/*.test.js'], {read: false})
-         .pipe(mocha({require: ['./src/testdom.js'], reporter: 'min'}));
+         .pipe(mocha({
+             require: ['./src/testdom.js'],
+             timeout: 2000,
+             reporter: 'min'
+         }))
+         .once('error', () => {
+             process.exit(1);
+         })
+         .once('end', () => {
+             process.exit();
+         });
     tests.on('error', function (err) {
         console.log('SOMETHING HAPPENED:' + err);
     });
