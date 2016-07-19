@@ -89,9 +89,7 @@ describe('teacher at unassociated student\'s view', function () {
 
 describe('teacher at friend adults\'s view', function () {
     it('redirects to profile', function () {
-        login.login(USER, PASSWD);
-        browser.waitForExist('#navMenu');
-        navigateToView('adult-tab')
+        navigateToView('adult-tab');
         //TODO: Check redirect after CORE-1044 fixed. LB 06/18/16
     });
 });

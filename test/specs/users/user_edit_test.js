@@ -223,6 +223,8 @@ describe('teacher editing own student\'s profile', function () {
 */
 });
 
+//TODO: student edit own profile
+
 describe('teacher editing unassociated student\'s profile', function () {
     it('renders 403', function () {
         login.login(USER, PASSWD);
