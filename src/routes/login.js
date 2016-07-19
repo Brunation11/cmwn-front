@@ -3,13 +3,11 @@ import _ from 'lodash';
 import {Modal, Button, Input, Tabs, Tab} from 'react-bootstrap';
 import { connect } from 'react-redux';
 
-import Util from 'components/util';
 import Toast from 'components/toast';
 import Log from 'components/log';
 import History from 'components/history';
 import HttpManager from 'components/http_manager';
 import Store from 'components/store';
-import Actions from 'components/actions';
 import GLOBALS from 'components/globals';
 
 import Layout from 'layouts/one_col';
@@ -48,16 +46,17 @@ const SIGNUP = (<span>
 var Component = React.createClass({
     getInitialState: function () {
         return {
+            loginOnNextPropChange: false,
             _token: '',
             key: 1
         };
     },
     componentDidMount: function () {
         this.getToken();
-        window.document.addEventListener('keydown', this.login);
+        window.document.addEventListener('keydown', this.attemptLogin);
     },
     componentWillUnmount: function () {
-        window.document.removeEventListener('keydown', this.login);
+        window.document.removeEventListener('keydown', this.attemptLogin);
     },
     handleSelect: function (index) {
         this.setState({key: index});
@@ -68,8 +67,46 @@ var Component = React.createClass({
     getToken: function () {
     },
     login: function (e) {
-        var req;
         var dataUrl;
+        var req;
+        dataUrl = this.state.overrideLogin || this.props.currentUser._links.login.href;
+        req = HttpManager.POST({
+            url: dataUrl,
+        }, {
+            'username': this.refs.login.getValue(),
+            'password': this.refs.password.getValue()
+        });
+        req.then(res => {
+            if (res.response && res.response.status && res.response.detail &&
+                res.response.status === 401 && res.response.detail.toLowerCase() === 'reset_password'
+            ) {
+                History.push('/change-password');
+                return;
+            }
+            if (res.status < 300 && res.status >= 200) {
+                Log.info(e, 'User login success');
+                History.push('/profile');
+            } else {
+                Toast.error(ERRORS.LOGIN + (res.response && res.response.data &&
+                    res.response.data.message ? ' Message: ' + res.response.data.message : ''));
+                Log.log(res, 'Invalid login.', req);
+            }
+        }).catch(res => {
+            if (
+                res.response &&
+                res.response.status &&
+                res.response.detail &&
+                res.response.status === 401 &&
+                res.response.detail.toLowerCase() === 'reset_password'
+            ) {
+                History.push('/change-password');
+                return;
+            }
+            Toast.error(ERRORS.LOGIN + (res.detail ? ' Message: ' + res.detail : ''));
+            Log.log(e, 'Invalid login');
+        });
+    },
+    attemptLogin: function (e) {
         var logout;
         var logoutUrl;
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
@@ -79,65 +116,30 @@ var Component = React.createClass({
                     History.push('/profile');
                 }
             }
-            if (this.props.loading || !_.has(this, 'props.data._links.login.href')) {
+            if (!_.has(this, 'props.currentUser._links.login.href')) {
                 //essentially, if you are trying to login as someone else, we assume
                 //that you are not them and want to log you out.
                 //also yes, I am cheating the logout url here.
                 logoutUrl = GLOBALS.API_URL + 'logout';
                 if (_.has(this, 'props.currentUser._links.logout.href')) {
-                    logoutUrl = this.props.currentUser._links.login.href;
+                    logoutUrl = this.props.currentUser._links.logout.href;
                 }
 
                 logout = HttpManager.GET({url: logoutUrl, handleErrors: false});
                 logout.then(() => {
-                    Store.dispatch({
-                        type: 'combo',
-                        types: ['LOADER_START', 'LOADER_SUCCESS', 'LOADER_ERROR'],
-                        sequence: true,
-                        payload: [
-                            Actions.PAGE_LOADING,
-                            Actions.AUTHORIZE_APP
-                        ]
-                    });
-                });
-            } else {
-                dataUrl = this.props.currentUser._links.login.href;
-                Util.logout();
-                req = HttpManager.POST({
-                    url: dataUrl,
-                }, {
-                    'username': this.refs.login.getValue(),
-                    'password': this.refs.password.getValue()
-                });
-                req.then(res => {
-                    if (res.response && res.response.status && res.response.detail &&
-                        res.response.status === 401 && res.response.detail.toLowerCase() === 'reset_password'
-                    ) {
-                        History.push('/change-password');
-                        return;
-                    }
-                    if (res.status < 300 && res.status >= 200) {
-                        Log.info(e, 'User login success');
-                        History.push('/profile');
+                    if (_.has(this, 'props.currentUser._links.login.href')) {
+                        this.login(...arguments);
                     } else {
-                        Toast.error(ERRORS.LOGIN + (res.response && res.response.data &&
-                            res.response.data.message ? ' Message: ' + res.response.data.message : ''));
-                        Log.log(res, 'Invalid login.', req);
+                        HttpManager.GET({url: GLOBALS.API_URL})
+                            .then(server =>
+                                this.setState({overrideLogin: server.response._links.login.href}, () =>
+                                    this.login(...arguments)));
                     }
-                }).catch(res => {
-                    if (
-                        res.response &&
-                        res.response.status &&
-                        res.response.detail &&
-                        res.response.status === 401 &&
-                        res.response.detail.toLowerCase() === 'reset_password'
-                    ) {
-                        History.push('/change-password');
-                        return;
-                    }
-                    Toast.error(ERRORS.LOGIN + (res.detail ? ' Message: ' + res.detail : ''));
-                    Log.log(e, 'Invalid login');
                 });
+            } else if (this.props.loading) {
+                this.setState({loginOnNextPropChange: e});
+            } else {
+                this.login(...arguments);
             }
         }
     },
@@ -177,7 +179,11 @@ var Component = React.createClass({
                             <Input ref="login" type="text" id="email" name="email" label={LABELS.LOGIN} />
                             <Input ref="password" type="password" id="password" name="password"
                                 label={LABELS.PASSWORD} />
-                            <Button id="login-button" onKeyPress={this.login} onClick={this.login}>
+                            <Button
+                                id="login-button"
+                                onKeyPress={this.attemptLogin}
+                                onClick={this.attemptLogin}
+                            >
                                 {LABELS.SUBMIT}
                             </Button>
                         </form>
@@ -210,13 +216,18 @@ var Component = React.createClass({
 
 var mapStateToProps = state => {
     var data = {};
+    var currentUser = {};
     var loading = true;
-    if (state.currentUser) {
+    if (state.page && state.page.data) {
         loading = state.page.loading;
-        data = state.currentUser;
+        data = state.page.data;
+    }
+    if (state.currentUser) {
+        currentUser = state.currentUser;
     }
     return {
         data,
+        currentUser,
         loading
     };
 };
