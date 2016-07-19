@@ -80,7 +80,8 @@ var Paginator = React.createClass({
                     Math.max(1, self.state.currentPage - 1), self.props.pagePaginator)}>{value}</Button>);
             } else if (value === '>') {
                 return (<Button key={value} onClick={self.selectPage.bind(self,
-                    Math.min(self.state.pageCount, self.state.currentPage + 1), self.props.pagePaginator)}>{value}</Button>);
+                    Math.min(self.state.pageCount, self.state.currentPage + 1),
+                        self.props.pagePaginator)}>{value}</Button>);
             } else if (value === '...') {
                 return (<Button key={value} disabled={true}>{value}</Button>);
             } else {
