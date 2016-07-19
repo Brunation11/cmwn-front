@@ -26,14 +26,14 @@ describe('<Page />', function () {
     });
 });
 
-describe('<ChangePassword />', function () {    
+describe('<ChangePassword />', function () {
     describe('Checks changepass page', function () {
+        var changePass = <ChangePassword currentUser={studentDataA} data={studentDataA} loading={false}/>;
+        const WRAPPER = shallow(changePass);
+        
         describe('ChangePassword Smoke Tests', function () {
             changePassSmoke();
         });
-        
-        var changePass = <ChangePassword currentUser={studentDataA} data={studentDataA} loading={false}/>;
-        const WRAPPER = shallow(changePass);
 
         it('renders the component', function () {
             expect(WRAPPER.instance()).to.be.instanceOf(ChangePassword);

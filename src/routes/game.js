@@ -19,21 +19,21 @@ export class GamePage extends React.Component {
             isStudent: true,
         };
     }
-    
+
     componentDidMount() {
         this.resolveRole(this.props);
         this.setState({
             gameId: this.props.params.game,
         });
     }
-    
+
     componentWillReceiveProps(nextProps) {
         this.resolveRole(nextProps);
-         this.setState({
+        this.setState({
             gameId: this.props.params.game,
         });
     }
-    
+
     resolveRole(props) {
         // remember we actually want current user here, not the user whose
         // profile we are looking at
@@ -49,7 +49,7 @@ export class GamePage extends React.Component {
             });
         }
     }
-    
+
     render() {
         return (
             <Layout className={PAGE_UNIQUE_IDENTIFIER}>

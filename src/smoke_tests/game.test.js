@@ -5,8 +5,6 @@ import { mount } from 'enzyme';
 import { GamePage } from 'routes/game';
 import Layout from 'layouts/one_col';
 import Game from 'components/game';
-import GLOBALS from 'components/globals';
-import Detector from 'components/browser_detector';
 
 import studentDataA from 'mocks/users/student_data_a';
 import teacherData from 'mocks/users/teacher_data';
@@ -26,8 +24,7 @@ export default function () {
             const WRAPPER = mount(game);
             expect(WRAPPER.children()).to.have.length(2);
             expect(WRAPPER.find('Layout')).to.have.length(1);
-            expect(WRAPPER.find('div')).to.have.length(4);
-            expect(WRAPPER.find('Modal')).to.have.length(6);
+            expect(WRAPPER.find('Game')).to.have.length(1);
         });
 
         it('has the correct layout contents', function () {
@@ -40,37 +37,55 @@ export default function () {
             expect(LAYOUT.find('Footer')).to.have.length(1);
         });
 
-        it('shows the modal', function () {
+        it('has the correct game elements', function () {
             var game = <GamePage data={studentDataA} loading={false}
                 currentUser={studentDataA} params={{game: 'be-bright'}}/>;
             const WRAPPER = mount(game);
-            expect(Detector.isMobileOrTablet()).to.be.false;
-            expect(Detector.isPortrait()).to.be.false;
-            expect(WRAPPER.state('gameOn')).to.be.true;
-            expect(WRAPPER.state('gameUrl')).to.equal(GLOBALS.GAME_URL + 'be-bright/index.html');
+            const GAME = WRAPPER.find('Game');
+            expect(GAME.find('div')).to.have.length(1);
+            expect(GAME.find('iframe')).to.have.length(1);
+            expect(GAME.find('Button')).to.have.length(2);
+            expect(GAME.find('Glyphicon')).to.have.length(1);
         });
 
-        it('tests that teacher is not a child', function () {
+        it('tests that the gameId is correct', function () {
+            var game = <GamePage data={teacherData} loading={false}
+                currentUser={teacherData} params={{game: 'be-bright'}}/>;
+            const WRAPPER = mount(game);
+            expect(WRAPPER.state('gameId')).to.equal('be-bright');
+        });
+
+        it('tests that teacher is not a student', function () {
             var game = <GamePage data={teacherData} loading={false}
                 currentUser={teacherData} params={{game: 'be-bright'}}/>;
             const WRAPPER = mount(game);
             expect(WRAPPER.state('isStudent')).to.be.false;
         });
 
-        it('tests that student is a child', function () {
+        it('tests that child is a student', function () {
             var game = <GamePage data={studentDataA} loading={false}
                 currentUser={studentDataA} params={{game: 'be-bright'}}/>;
             const WRAPPER = mount(game);
             expect(WRAPPER.state('isStudent')).to.be.true;
         });
 
-        it('tests that state will update', function () {
+        it('tests that state will update for current user type', function () {
             var game = <GamePage data={studentDataA} loading={false}
                 currentUser={studentDataA} params={{game: 'be-bright'}}/>;
             const WRAPPER = mount(game);
             expect(WRAPPER.state('isStudent')).to.be.true;
             WRAPPER.setProps({currentUser: teacherData});
             expect(WRAPPER.state('isStudent')).to.be.false;
+        });
+
+        it('tests that state will update for gameId', function () {
+            var game = <GamePage data={studentDataA} loading={false}
+                currentUser={studentDataA} params={{game: 'be-bright'}}/>;
+            const WRAPPER = mount(game);
+            expect(WRAPPER.state('gameId')).to.equal('be-bright');
+            WRAPPER.setProps({params: {game: 'happy-fish-face'}});
+            WRAPPER.update();
+            expect(WRAPPER.state('gameId')).to.be.equal('happy-fish-face');
         });
     });
 }

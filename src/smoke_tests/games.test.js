@@ -7,7 +7,8 @@ import Layout from 'layouts/two_col';
 
 import studentDataA from 'mocks/users/student_data_a';
 
-// TODO: File needs to be be fully implemented & refactored to use mounting (GenerateDataSource). WL 07/15/16. 
+// TODO: File needs to be be fully implemented & refactored to use
+// mounting (GenerateDataSource). WL 07/15/16.
 
 export default function () {
     describe('Checks <GamesPage /> using mount', function () {

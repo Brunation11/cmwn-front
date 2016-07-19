@@ -25,7 +25,7 @@ export default function () {
             expect(WRAPPER.find('Layout')).to.have.length(1);
             expect(WRAPPER.find('ChangePassword')).to.have.length(1);
         });
-        
+
         it('has the correct layout contents', function () {
             const LAYOUT = WRAPPER.find('Layout');
             expect(LAYOUT.children()).to.have.length(2);

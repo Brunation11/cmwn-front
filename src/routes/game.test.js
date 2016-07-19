@@ -24,16 +24,7 @@ describe('<GamePage />', function () {
         it('has the correct elements', function () {
             expect(WRAPPER.children()).to.have.length(1);
             expect(WRAPPER.find('Layout')).to.have.length(1);
-            expect(WRAPPER.find('Modal')).to.have.length(1);
             expect(WRAPPER.find('Game')).to.have.length(1);
-            expect(WRAPPER.find('a')).to.have.length(1);
-        });
-    
-        it('hides the modal', function() {
-            WRAPPER.setState({'gameOn': true});
-            expect(WRAPPER.state('gameOn')).to.be.true;
-            WRAPPER.find('.full-width').simulate('hide');
-            expect(WRAPPER.state('gameOn')).to.be.false;
         });
     });
 });
