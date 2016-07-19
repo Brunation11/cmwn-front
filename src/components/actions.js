@@ -73,8 +73,8 @@ Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
                         username: server.response.username}}});
                     ga('set', 'userId', server.response.user_id);
                     ga('set', 'dimension1', server.response.type);
-                    ga('set', 'dimension2',
-                        (new Date(Date.now()).getFullYear()) - (Moment(server.response.birthdate).year()));
+                    ga('set', 'dimension2', (new Date(Date.now()).getFullYear()) -
+                            (Moment(server.response.birthdate).year()));
                     ga('set', 'dimension3', server.response.gender);
 
                     if (server.response.user_id == null) {
@@ -267,7 +267,7 @@ Actions = Actions.set(ACTION_CONSTANTS.CHANGE_COMPONENT_ROW_COUNT, function
 Actions = Actions.set(ACTION_CONSTANTS.GET_NEXT_COMPONENT_PAGE, function
     (state, endpointIdentifier, componentName, pageNum) {
     var endpoint = Util.modifyTemplatedQueryParams(
-        state.components[endpointIdentifier + '-' + componentName]._links.find, {
+        state.components[endpointIdentifier + '-' + componentName]._links.find.href, {
             page: pageNum,
             'per_page': state.components[endpointIdentifier + '-' + componentName].page_size
         }
@@ -288,7 +288,7 @@ Actions = Actions.set(ACTION_CONSTANTS.GET_NEXT_COMPONENT_PAGE, function
 Actions = Actions.set(ACTION_CONSTANTS.CHANGE_COMPONENT_ROW_COUNT, function
     (state, endpointIdentifier, componentName, rowCount) {
     var endpoint = Util.modifyTemplatedQueryParams(
-        state.components[endpointIdentifier + '-' + componentName]._links.find, {
+        state.components[endpointIdentifier + '-' + componentName]._links.find.href, {
             page: state.components[endpointIdentifier + '-' + componentName].page,
             'per_page': rowCount
         }
