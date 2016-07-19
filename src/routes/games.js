@@ -94,14 +94,14 @@ export class GamesPage extends React.Component {
             return (
                 <div>
                     {BROWSER_NOT_SUPPORTED}
-                    <p><a onClick={() => this.setState({gameOn: false})} >(close)</a></p>
+                    <p><a onClick={this.setState.bind(this, {gameOn: false})} >(close)</a></p>
                 </div>
             );
         }
         return (
             <div>
                 <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl}
-                    onExit={() => this.setState({gameOn: false})}/>
+                    onExit={this.setState.bind(this, {gameOn: false})}/>
                     <a onClick={this.hideModal.bind(this)} className="modal-close">(close)</a>
             </div>
         );

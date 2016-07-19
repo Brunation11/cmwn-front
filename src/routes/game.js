@@ -82,7 +82,7 @@ export class GamePage extends React.Component {
                 <Modal
                     className="full-width"
                     show={this.state.gameOn}
-                    onHide={this.hideModal}
+                    onHide={this.setState.bind(this, { gameOn: false })}
                     keyboard={false}
                     backdrop="static"
                 >
@@ -91,7 +91,7 @@ export class GamePage extends React.Component {
                             ref="gameRef"
                             isTeacher={!this.state.isStudent}
                             url={this.state.gameUrl}
-                            onExit={this.hideModal}
+                            onExit={this.hideModal.bind(this)}
                         />
                         <a onClick={this.hideModal.bind(this)} className="modal-close">(close)</a>
                     </Modal.Body>
