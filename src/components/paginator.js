@@ -5,6 +5,7 @@ import _ from 'lodash';
 
 import GLOBALS from 'components/globals';
 import Actions from 'components/actions';
+import ACTION_CONSTANTS from 'components/action_constants';
 import Store from 'components/store';
 
 import 'components/paginator.scss';
@@ -55,9 +56,9 @@ var Paginator = React.createClass({
     selectPage: function (pageNum, isPagePaginator) {
         this.props.onPageChange(pageNum);
         if (isPagePaginator) {
-            Actions.GET_NEXT_PAGE_PAGE(Store.getState(), pageNum);
+            Actions.dispatch.GET_NEXT_PAGE_PAGE(Store.getState(), pageNum);
         } else {
-            Actions.GET_NEXT_COMPONENT_PAGE(Store.getState(),
+            Actions.dispatch.GET_NEXT_COMPONENT_PAGE(Store.getState(),
                 this.props.endpointIdentifier, this.props.componentName, pageNum);
         }
         this.setState({currentPage: pageNum});
@@ -65,9 +66,9 @@ var Paginator = React.createClass({
     selectRowCount: function (e, count, isPagePaginator = this.props.pagePaginator) {
         this.props.onRowCountChange(count);
         if (isPagePaginator) {
-            Actions.CHANGE_PAGE_ROW_COUNT(Store.getState(), count);
+            Actions.dispatch.CHANGE_PAGE_ROW_COUNT(Store.getState(), count);
         } else {
-            Actions.CHANGE_COMPONENT_ROW_COUNT(Store.getState(),
+            Actions.dispatch[ACTION_CONSTANTS.CHANGE_COMPONENT_ROW_COUNT](Store.getState(),
                 this.props.endpointIdentifier, this.props.componentName, count);
         }
         this.setState({rowCount: count});
@@ -79,8 +80,13 @@ var Paginator = React.createClass({
                 return (<Button key={value} onClick={self.selectPage.bind(self,
                     Math.max(1, self.state.currentPage - 1), self.props.pagePaginator)}>{value}</Button>);
             } else if (value === '>') {
-                return (<Button key={value} onClick={self.selectPage.bind(self,
-                    Math.min(self.state.pageCount, self.state.currentPage + 1), self.props.pagePaginator)}>{value}</Button>);
+                return (
+                    <Button key={value} onClick={self.selectPage.bind(self,
+                        Math.min(self.state.pageCount, self.state.currentPage + 1), self.props.pagePaginator)}
+                    >
+                        {value}
+                    </Button>
+                );
             } else if (value === '...') {
                 return (<Button key={value} disabled={true}>{value}</Button>);
             } else {
