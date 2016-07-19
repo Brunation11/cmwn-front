@@ -1,13 +1,9 @@
 import React from 'react';
-import _ from 'lodash';
-import {Modal} from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import Game from 'components/game';
 import History from 'components/history';
 import GLOBALS from 'components/globals';
-import Store from 'components/store';
-import Detector from 'components/browser_detector';
 
 import Layout from 'layouts/one_col';
 
@@ -17,93 +13,54 @@ var mapStateToProps;
 var Page;
 
 export class GamePage extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.state = {
-            gameUrl: GLOBALS.GAME_URL + this.props.params.game + '/index.html',
             isStudent: true,
-            gameOn: false,
-            PAGE_UNIQUE_IDENTIFIER: this.props.params.game
         };
     }
-
+    
     componentDidMount() {
-        var boundModal;
         this.resolveRole(this.props);
-        boundModal = this.showModal.bind(this, GLOBALS.GAME_URL + this.props.params.game + '/index.html');
-        boundModal();
+        this.setState({
+            gameId: this.props.params.game,
+        });
     }
-
+    
     componentWillReceiveProps(nextProps) {
         this.resolveRole(nextProps);
+         this.setState({
+            gameId: this.props.params.game,
+        });
     }
     
-    showModal(gameUrl) {
-        var urlParts;
-        if (Detector.isMobileOrTablet() || Detector.isPortrait()) {
-            urlParts = gameUrl.split('/');
-            urlParts.pop(); //discard index.html
-            History.push(`/game/${_.last(urlParts)}`);
-        }
-        this.setState({gameOn: true, gameUrl});
-    }
-    
-    hideModal() {
-        this.setState({gameOn: false});
-        this.refs.gameRef.dispatchPlatformEvent('quit');
-        History.push('/profile');
-    }
-
     resolveRole(props) {
-        var newState = {};
-        if (props.currentUser && props.currentUser.type !== 'CHILD') {
-            newState.isStudent = false;
+        // remember we actually want current user here, not the user whose
+        // profile we are looking at
+        if (props.currentUser &&
+            props.currentUser.type &&
+            props.currentUser.type !== 'CHILD') {
+            this.setState({
+                isStudent: false
+            });
         } else {
-            newState.isStudent = true;
+            this.setState({
+                isStudent: true
+            });
         }
-        this.setState(newState);
     }
     
-    renderGame() {
-        if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe10())) {
-            return (
+    render() {
+        return (
+            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <Game
                     ref="gameRef"
                     isTeacher={!this.state.isStudent}
-                    url={this.state.gameUrl}
-                    onExit={() =>
-                        History.push('/profile')
+                    url={`${GLOBALS.GAME_URL}${this.props.params.game}/index.html`}
+                    currentUser={this.props.currentUser}
+                    onExit={() => History.push('/profile')
                     }
                 />
-            );
-        }
-        return (
-            <div>
-                <Modal
-                    className="full-width"
-                    show={this.state.gameOn}
-                    onHide={this.setState.bind(this, { gameOn: false })}
-                    keyboard={false}
-                    backdrop="static"
-                >
-                    <Modal.Body>
-                        <Game
-                            ref="gameRef"
-                            isTeacher={!this.state.isStudent}
-                            url={this.state.gameUrl}
-                            onExit={this.hideModal.bind(this)}
-                        />
-                        <a onClick={this.hideModal.bind(this)} className="modal-close">(close)</a>
-                    </Modal.Body>
-                </Modal>
-            </div>
-        );
-    }
-
-    render() {
-        return (
-            <Layout className={this.state.PAGE_UNIQUE_IDENTIFIER}>
-                {this.renderGame()}
             </Layout>
         );
     }

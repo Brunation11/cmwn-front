@@ -38,9 +38,10 @@ var Component = React.createClass({
             <div id={this.props.navMenuId} className={'sidebar ' + (this.props.menuIsOpen ? 'open' : '')}>
                 {this.renderWelcome()}
                 <a onClick={this.attemptNavigate} >
-                    <ProfileImage user_id={this.props.currentUser.user_id}/>
+                    <ProfileImage data={this.props.currentUser} currentUser={this.props.currentUser} />
                 </a>
-                <SiteNav />
+                <SiteNav currentUser={this.props.currentUser}
+                    data={this.props.currentUser._links.asMutable()} />
                 {''/*<FriendList />*/}
             </div>
         );
