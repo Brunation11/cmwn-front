@@ -7,7 +7,6 @@
         text-decoration: none;
         color: $cmwn-blue;
         font-family: $cmwn-jade-font;
-        font-size: 1.7rem;
     }
 
     .welcome {
@@ -15,5 +14,13 @@
         color: $copy-medium-gray;
         font-size: .8rem;
         font-weight: bold;
-   }
+    }
+}
+
+.regular-text {
+    font-size: 1.7rem;
+}
+
+.smaller-text {
+    font-size: 1.4rem;
 }

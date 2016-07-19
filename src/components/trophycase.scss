@@ -5,7 +5,6 @@
     .flip-list {
         margin-top: -40%;
         width: 100%;
-        overflow-y: scroll;
 
         .single-flip {
             display: inline-block;
@@ -103,7 +102,7 @@
     //   display: inline-block;
     //   vertical-align: middle;
     //   transform: translateZ(0);
-    //   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    //   box-shadow: 0 0 1px $cmwn-trans;
     //   backface-visibility: hidden;
     //   animation-name: pulse;;
     //   animation-duration: .5s;
@@ -129,7 +128,7 @@
     //   display: inline-block;
     //   vertical-align: middle;
     //   transform: translateZ(0);
-    //   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    //   box-shadow: 0 0 1px $cmwn-trans;
     //   backface-visibility: hidden;
     // }
 
@@ -145,7 +144,7 @@
     //   display: inline-block;
     //   vertical-align: middle;
     //   transform: translateZ(0);
-    //   box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    //   box-shadow: 0 0 1px $cmwn-trans;
     //   backface-visibility: hidden;
     //   position: relative;
     //   transition-duration: 0.3s;
@@ -163,12 +162,13 @@
     //   height: 10px;
     //   width: 90%;
     //   opacity: 0;
-    //   background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0) 80%);
+    //   background: radial-gradient(ellipse at center, $cmwn-trans-medium-gray, $cmwn-other-trans);
     //   transition-duration: 0.5s;
     //   transition-property: transform, opacity;
     //   opacity: 1;
     //   transform: translateY(5px);
     // }
+
 
   // .flip {
   //   border: none;
@@ -179,5 +179,3 @@
   //   transform: perspective(500px) rotateY(0) scale(1);
   // }
 }
-
-

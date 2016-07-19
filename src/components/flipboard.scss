@@ -108,6 +108,7 @@ $overlay-color: #fff;
             &:focus,
             &:active {
                 opacity: 1;
+                overflow: hidden;
             }
 
             .relwrap {

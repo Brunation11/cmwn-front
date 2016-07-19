@@ -49,7 +49,7 @@
         "no-new-wrappers": "error",
         "no-with": "error",
         "radix": "error",
-        "vars-on-top": "error",
+        "vars-on-top": ["error", "except-super"],
         "wrap-iife": ["error", "any"],
         "no-shadow": "error",
         "array-bracket-spacing": ["error", "never"],
@@ -71,7 +71,7 @@
         "no-const-assign": "error",
         "no-dupe-class-members": "error",
         "no-this-before-super": "error",
-        "no-unused-vars": ["error", {"vars": "all", "args": "after-used"}],
+        "no-unused-vars": ["error", {"vars": "all", "args": "after-used", "varsIgnorePattern": "[rR]eact"}],
         "no-multiple-empty-lines": "off",
         "one-var": ["error", "never"],
         "operator-linebreak": ["error", "after"],
@@ -86,7 +86,9 @@
         "browser": true
     },
     "globals": {
-        "grecaptcha": false
+        "__cmwn": true,
+        "grecaptcha": false,
+        "ga": true
     },
     "extends": "eslint:recommended",
     "rulePaths": ["eslint-rules"]
