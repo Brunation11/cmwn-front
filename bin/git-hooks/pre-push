@@ -21,8 +21,13 @@ if [ $? != 0 ]; then
     echo "build failed"
     cat testlint.log 2>/dev/null
     cat configlint.log 2>/dev/null
-    cat scsslint.log 2>/dev/null
+    ./pretty_print_scss_log.js
     cat jslint.log 2>/dev/null
     exit 157
 fi
+
+echo "" > testlint.log
+echo "" > configlint.log
+echo "" > jslint.log
+echo "" > scsslint.json
 

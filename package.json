@@ -17,6 +17,7 @@
     "babel-polyfill": "^6.0.16",
     "classnames": "^2.2.0",
     "fbjs": "^0.7.2",
+    "gulp-scss-lint-stylish2": "^2.0.2",
     "history": "^2.0.0",
     "humane-js": "^3.2.2",
     "immutable": "^3.7.5",
