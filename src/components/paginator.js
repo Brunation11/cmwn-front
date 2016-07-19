@@ -77,10 +77,10 @@ var Paginator = React.createClass({
         return _.map(_getButtonPattern(self.state.currentPage, self.state.pageCount), value => {
             if (value === '<') {
                 return (<Button key={value} onClick={self.selectPage.bind(self,
-                    Math.floor(1, self.state.currentPage - 1), self.props.pagePaginator)}>{value}</Button>);
+                    Math.max(1, self.state.currentPage - 1), self.props.pagePaginator)}>{value}</Button>);
             } else if (value === '>') {
                 return (<Button key={value} onClick={self.selectPage.bind(self,
-                    Math.ceil(self.state.pageCount, self.state.currentPage + 1), self.props.pagePaginator)}>{value}</Button>);
+                    Math.min(self.state.pageCount, self.state.currentPage + 1), self.props.pagePaginator)}>{value}</Button>);
             } else if (value === '...') {
                 return (<Button key={value} disabled={true}>{value}</Button>);
             } else {
