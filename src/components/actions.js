@@ -73,7 +73,8 @@ Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
                         username: server.response.username}}});
                     ga('set', 'userId', server.response.user_id);
                     ga('set', 'dimension1', server.response.type);
-                    ga('set', 'dimension2', (new Date(Date.now()).getFullYear()) - (Moment(server.response.birthdate).year()));
+                    ga('set', 'dimension2',
+                        (new Date(Date.now()).getFullYear()) - (Moment(server.response.birthdate).year()));
                     ga('set', 'dimension3', server.response.gender);
 
                     if (server.response.user_id == null) {
