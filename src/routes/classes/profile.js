@@ -61,14 +61,6 @@ export class Profile extends React.Component {
         }
         this.setState(newState);
     }
-    renderFlipsEarned(item) {
-        if (item && item.roles && item.roles.data && !~item.roles.data.indexOf('Student')) {
-            return null;
-        }
-        return (
-            <p className="user-flips" key={Shortid.generate()}>0 Flips Earned</p>
-        );
-    }
     renderAdminLink() {
         if (!Util.decodePermissions(this.props.data.scope).update) {
             return null;
@@ -96,12 +88,11 @@ export class Profile extends React.Component {
                     <img src={image}></img>
                     <p className="linkText" >{item.username}</p>
                 </Link>
-                {this.renderFlipsEarned(item)}
             </div>
         );
     }
     renderClassInfo() {
-        if (this.state.group_id == null || !Util.decodePermissions(this.state.scope).update) {
+        if (this.state.group_id == null) {
             return null;
         }
         return (
