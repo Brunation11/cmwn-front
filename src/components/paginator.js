@@ -46,7 +46,13 @@ var Paginator = React.createClass({
             pageCount: this.props.pageCount || 1
         };
     },
-    selectPage: function (pageNum, isPagePaginator = this.props.pagePaginator) {
+    componentWillReceiveProps: function (nextProps) {
+        var rowCount = nextProps.rowCount || this.props.rowCount;
+        var currentPage = nextProps.currentPage || this.props.currentPage;
+        var pageCount = nextProps.pageCount || this.props.pageCount;
+        this.setState({rowCount, currentPage, pageCount});
+    },
+    selectPage: function (pageNum, isPagePaginator) {
         this.props.onPageChange(pageNum);
         if (isPagePaginator) {
             Actions.GET_NEXT_PAGE_PAGE(Store.getState(), pageNum);
@@ -54,6 +60,7 @@ var Paginator = React.createClass({
             Actions.GET_NEXT_COMPONENT_PAGE(Store.getState(),
                 this.props.endpointIdentifier, this.props.componentName, pageNum);
         }
+        this.setState({currentPage: pageNum});
     },
     selectRowCount: function (e, count, isPagePaginator = this.props.pagePaginator) {
         this.props.onRowCountChange(count);
@@ -63,19 +70,22 @@ var Paginator = React.createClass({
             Actions.CHANGE_COMPONENT_ROW_COUNT(Store.getState(),
                 this.props.endpointIdentifier, this.props.componentName, count);
         }
+        this.setState({rowCount: count});
     },
     renderPageSelectors: function () {
-        return _.map(_getButtonPattern(this.state.currentPage, this.state.pageCount), value => {
+        var self = this;
+        return _.map(_getButtonPattern(self.state.currentPage, self.state.pageCount), value => {
             if (value === '<') {
-                return (<Button key={value} onClick={this.selectPage.bind(this,
-                    Math.floor(1, this.state.currentPage - 1))}>{value}</Button>);
+                return (<Button key={value} onClick={self.selectPage.bind(self,
+                    Math.floor(1, self.state.currentPage - 1), self.props.pagePaginator)}>{value}</Button>);
             } else if (value === '>') {
-                return (<Button key={value} onClick={this.selectPage.bind(this,
-                    Math.ceil(this.state.pageCount, this.state.currentPage + 1))}>{value}</Button>);
+                return (<Button key={value} onClick={self.selectPage.bind(self,
+                    Math.ceil(self.state.pageCount, self.state.currentPage + 1), self.props.pagePaginator)}>{value}</Button>);
             } else if (value === '...') {
                 return (<Button key={value} disabled={true}>{value}</Button>);
             } else {
-                return (<Button key={value} onClick={this.selectPage.bind(this, value)}>{value}</Button>);
+                return (<Button key={value} onClick={self.selectPage.bind(self, value,
+                    self.props.pagePaginator)}>{value}</Button>);
             }
         });
     },
