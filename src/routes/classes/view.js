@@ -14,8 +14,9 @@ import Util from 'components/util';
 import GenerateDataSource from 'components/datasource';
 
 const PAGE_UNIQUE_IDENTIFIER = 'classProfile';
+const GROUP_USER_DATASOURCE_IDENTIFIER = 'group_users';
 
-const USER_SOURCE = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
+const USER_SOURCE = GenerateDataSource(GROUP_USER_DATASOURCE_IDENTIFIER, PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     TITLE: 'Class Administrative Dashboard: ',
@@ -76,8 +77,18 @@ export class View extends React.Component{
         return <Link to={'/school/' + this.state.parent_id} id="return-to-school">{BREADCRUMBS}</Link>;
     }
     render() {
+        var rowCount = 100;
+        var currentPage = 1;
+        var pageCount = 1;
         if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
             return null;
+        }
+        //pagination defaults
+        if (this.props.components[`${GROUP_USER_DATASOURCE_IDENTIFIER}-${PAGE_UNIQUE_IDENTIFIER}`] != null) {
+            debugger;
+            rowCount=this.props.components[`${GROUP_USER_DATASOURCE_IDENTIFIER}-${PAGE_UNIQUE_IDENTIFIER}`].page_size
+            pageCount=this.props.components[`${GROUP_USER_DATASOURCE_IDENTIFIER}-${PAGE_UNIQUE_IDENTIFIER}`].page_count
+            currentPage=this.props.components[`${GROUP_USER_DATASOURCE_IDENTIFIER}-${PAGE_UNIQUE_IDENTIFIER}`].page
         }
         return (
             <Layout>
@@ -116,7 +127,13 @@ export class View extends React.Component{
                             return user;
                         });
                     }}>
-                        <Paginator >
+                        <Paginator
+                            endpointIdentifier={GROUP_USER_DATASOURCE_IDENTIFIER}
+                            componentName={PAGE_UNIQUE_IDENTIFIER}
+                            rowCount={rowCount}
+                            pageCount={pageCount}
+                            currentPage={currentPage}
+                        >
                             <Table className="admin">
                                 <Column dataKey="title"
                                     renderHeader="Name"
@@ -156,6 +173,7 @@ mapStateToProps = state => {
     var data = {title: ''};
     var currentUser = {};
     var loading = true;
+    var components = {};
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
@@ -163,10 +181,15 @@ mapStateToProps = state => {
             currentUser = state.currentUser;
         }
     }
+    //TODO MPR, 8/19/16: pull specific components
+    if (state.components != null) {
+        components = state.components;
+    }
     return {
         data,
         loading,
-        currentUser
+        currentUser,
+        components
     };
 };
 

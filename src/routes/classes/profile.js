@@ -96,12 +96,11 @@ export class Profile extends React.Component {
                     <img src={image}></img>
                     <p className="linkText" >{item.username}</p>
                 </Link>
-                {this.renderFlipsEarned(item)}
             </div>
         );
     }
     renderClassInfo() {
-        if (this.state.group_id == null || !Util.decodePermissions(this.state.scope).update) {
+        if (this.state.group_id == null) {
             return null;
         }
         return (
