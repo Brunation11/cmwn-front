@@ -10,18 +10,20 @@ class FlipBoard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: _.map(this.props.data == null ? null : this.props.data, this.props.transform)
+            data: _.map((this.props.data === null ||
+                this.props.data === []) ? null : this.props.data, this.props.transform)
         };
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            data: _.map(nextProps.data == null ? null : nextProps.data, this.props.transform)
+            data: _.map((nextProps.data === null ||
+                nextProps.data === []) ? null : nextProps.data, this.props.transform)
         });
     }
 
     render() {
-        if (!this.props.data) {
+        if (this.state.data == null) {
             return this.props.renderNoData();
         }
         return (
