@@ -75,12 +75,14 @@ export class Suggested extends React.Component{
         );
     }
     renderFlip(item){
+        var history = History;
+        var self = this;
         return (
             <div className="flip">
                 <div className="item">
                     <span className="overlay">
                         <div className="relwrap"><div className="abswrap">
-                            <Button onClick={this.addFriend.bind(this, item)} className={ClassNames(
+                            <Button onClick={self.addFriend.bind(self, item)} className={ClassNames(
                                     'green standard',
                                     {hidden: item.relationship === 'Pending' ||
                                     item.relationship === 'requested'}
@@ -88,7 +90,7 @@ export class Suggested extends React.Component{
                                 {ADD_FRIEND}
                             </Button>
                             <Button
-                                onClick={this.addFriend.bind(this, item)}
+                                onClick={self.addFriend.bind(self, item)}
                                 className={ClassNames(
                                     'blue standard',
                                     {hidden: item.relationship !== 'Pending'}
@@ -101,7 +103,7 @@ export class Suggested extends React.Component{
                             )}>
                                 {REQUESTED}
                             </Button>
-                            <Button className="purple standard" onClick={History.push.bind(null,
+                            <Button className="purple standard" onClick={history.push.bind(null,
                                 '/profile/' + item.suggest_id)}>
                                 {PROFILE}
                             </Button>
@@ -110,18 +112,19 @@ export class Suggested extends React.Component{
                     <img src={item.image}></img>
                 </div>
                 <p className="link-text" >{item.username}</p>
-                {''/*this.renderFlipsEarned(item)*/}
+                {''/*self.renderFlipsEarned(item)*/}
             </div>
         );
     }
     render() {
-        if (this.props.data == null) {
-            return this.renderNoData();
+        var self = this;
+        if (self.props.data == null) {
+            return self.renderNoData();
         }
         return (
            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <form>
-                    <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.SUGGESTED} data={this.props.data}
+                    <FlipBoard renderFlip={self.renderFlip.bind(self)} header={HEADINGS.SUGGESTED} data={self.props.data}
                         transform={data => {
                             var image;
                             if (!_.has(data, '_embedded.image')) {
