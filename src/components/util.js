@@ -107,17 +107,17 @@ var Util = {
             return;
         }
         switch (state.pageLoadingStage.currentStage) {
-        case GLOBALS.PAGE_LOAD_STATE.COMPONENT: // This always needs to come after page load
-            Store.dispatch({
-                type: 'combo',
-                types: ['COMPONENT_LOADER_START', 'LOADER_SUCCESS', 'LOADER_ERROR'],
-                sequence: true,
-                payload: [
-                    Actions.COMPONENT_REQUESTED.bind(null, {endpointIdentifier, componentName} ),
-                    Actions.COMPONENT_DATA.bind(null, endpointIdentifier, componentName)
-                ]
-            });
-            break;
+            case GLOBALS.PAGE_LOAD_STATE.COMPONENT: // This always needs to come after page load
+                Store.dispatch({
+                    type: 'combo',
+                    types: ['COMPONENT_LOADER_START', 'LOADER_SUCCESS', 'LOADER_ERROR'],
+                    sequence: true,
+                    payload: [
+                        Actions.COMPONENT_REQUESTED.bind(null, {endpointIdentifier, componentName} ),
+                        Actions.COMPONENT_DATA.bind(null, endpointIdentifier, componentName)
+                    ]
+                });
+                break;
         }
     },
     decodePermissions(val) {
