@@ -79,9 +79,9 @@ export class ProfileView extends React.Component {
             return null;
         }
         return (
-           <Layout className="edit-student">
+            <Layout className="edit-student">
                 <Panel header={HEADINGS.EDIT_TITLE + this.state.first_name + ' ' + this.state.last_name}
-                    className="standard edit-profile">
+                       className="standard edit-profile">
                     <div className="left">
                         <ProfileImage
                             data={this.props.data}
@@ -90,7 +90,7 @@ export class ProfileView extends React.Component {
                         />
                         <p><a onClick={this.suspendAccount.bind(this)}>{SUSPEND}</a></p>
                         <EditLink base="/user" uuid={this.state.user_id}
-                            canUpdate={Util.decodePermissions(this.state.scope).update} />
+                                  canUpdate={Util.decodePermissions(this.state.scope).update}/>
                     </div>
                     <div className="right">
                         <h2>{this.state.username}</h2>
