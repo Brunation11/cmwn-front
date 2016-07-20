@@ -1,56 +1,52 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import Store from 'components/store';
 import { expect } from 'chai';
 import { mount } from 'enzyme';
+import ProviderWrapper from 'smoke_tests/provider_wrapper';
 
 import { SchoolEdit } from 'routes/schools/edit';
+import { BulkUpload } from 'routes/schools/edit';
 import { PAGE_UNIQUE_IDENTIFIER } from 'routes/schools/edit';
 
 import schoolStudentData from 'mocks/schools/school_student_data';
 import schoolTeacherData from 'mocks/schools/school_teacher_data';
 import schoolPrincipalData from 'mocks/schools/school_principal_data';
 
-// need this while components still reference store
-class ProviderWrapper extends React.Component {
-    render() {
-        return (
-            <Provider store={Store}>
-                <SchoolEdit data={this.props.data} loading={false} />
-            </Provider>
-        );
-    }
-}
-
 var createWrapper = function (data) {
-    const WRAPPER = mount(<ProviderWrapper data={data} />);
-    if(WRAPPER.find('SchoolEdit').children().length === 0) {
-        return null;
-    }
-    expect(WRAPPER.find('SchoolEdit').hasClass(PAGE_UNIQUE_IDENTIFIER)).to.equal(true);
+    var edit = <SchoolEdit data={data} loading={false} />;
+    const WRAPPER = mount(<ProviderWrapper route={edit} />);
     return WRAPPER;
 };
 
-var checkSchoolEdit = function (WRAPPER) {
+var createUploadWrapper = function (data) {
+    var upload = <BulkUpload data={data} />;
+    const UPLOAD_WRAPPER = mount(<ProviderWrapper route={upload} />);
+    return UPLOAD_WRAPPER;
+};
+
+var checkTeacher = function (WRAPPER, UPLOAD_WRAPPER) {
+    expect(WRAPPER.find(`.${PAGE_UNIQUE_IDENTIFIER}`)).to.have.length(1);
     expect(WRAPPER.find('Panel')).to.have.length(1);
     expect(WRAPPER.find('Link')).to.have.length(1);
     expect(WRAPPER.find('Input')).to.have.length(2);
     expect(WRAPPER.find('Button')).to.have.length(1);
-};
-
-var checkNoImport = function (WRAPPER, UPLOAD_WRAPPER) {
     expect(WRAPPER.contains('BulkUpload')).to.equal(false);
-    expect(UPLOAD_WRAPPER.type()).to.equal(null);
+    expect(UPLOAD_WRAPPER.find('BulkUpload').children()).to.have.length(0);
 };
 
-var checkForImport = function (WRAPPER) {
+var checkSuperUser = function (WRAPPER, UPLOAD_WRAPPER) {
+    expect(WRAPPER.find(`.${PAGE_UNIQUE_IDENTIFIER}`)).to.have.length(1);
+    expect(WRAPPER.find('Panel')).to.have.length(2);
+    expect(WRAPPER.find('Link')).to.have.length(1);
+    expect(WRAPPER.find('Input')).to.have.length(4);
+    expect(WRAPPER.find('Button')).to.have.length(2);
     expect(WRAPPER.find('BulkUpload')).to.have.length(1);
-    expect(UPLOAD_WRAPPER.instance()).to.be.instanceof(BulkUpload);
+
+    expect(UPLOAD_WRAPPER.find('BulkUpload')).to.have.length(1);
     expect(UPLOAD_WRAPPER.find('Panel')).to.have.length(1);
     expect(UPLOAD_WRAPPER.find('[name="dummyframe"]')).to.have.length(1);
     expect(UPLOAD_WRAPPER.find('[type="hidden"]')).to.have.length(4);
     expect(UPLOAD_WRAPPER.find('Form')).to.have.length(1);
-    expect(UPLOAD_WRAPPER.find('Input')).to.have.length(3);
+    expect(UPLOAD_WRAPPER.find('Input')).to.have.length(2);
     expect(UPLOAD_WRAPPER.find('Button')).to.have.length(1);
 };
 
@@ -58,31 +54,27 @@ var editSmokeTests = function () {
     describe('when given no data', function () {
         const WRAPPER = createWrapper(null);
         it('should return null', function () {
-            expect(WRAPPER).to.equal(null);
+            expect(WRAPPER.find('SchoolView').children()).to.have.length(0);
         });
     });
     describe('when viewed by a student', function () {
         const WRAPPER = createWrapper(schoolStudentData);
         it('should return null', function () {
-            expect(WRAPPER).to.equal(null);
+            expect(WRAPPER.find('SchoolView').children()).to.have.length(0);
         });
     });
     describe('when viewed by a teacher', function () {
         const WRAPPER = createWrapper(schoolTeacherData);
-        const UPLOAD_WRAPPER = createWrapper(schoolTeacherData);
-        it('should load the school title and description edit', function () {
-            checkSchoolEdit(WRAPPER);
-        });
-        it('should not load the school import form', function () {
-            checkNoImport(WRAPPER, UPLOAD_WRAPPER);
+        const UPLOAD_WRAPPER = createUploadWrapper(schoolTeacherData);
+        it('should load only the school title and description edit', function () {
+            checkTeacher(WRAPPER, UPLOAD_WRAPPER);
         });
     });
-    describe('when viewed by a superuserpage', function () {
+    describe('when viewed by a superuser', function () {
         const WRAPPER = createWrapper(schoolPrincipalData);
-        const UPLOAD_WRAPPER = createWrapper(schoolPrincipalData);
+        const UPLOAD_WRAPPER = createUploadWrapper(schoolPrincipalData);
         it('should load all school edit features', function () {
-            checkSchoolEdit(WRAPPER);
-            checkForImport(WRAPPER, UPLOADWRAPPER);
+            checkSuperUser(WRAPPER, UPLOAD_WRAPPER);
         });
     });
 };

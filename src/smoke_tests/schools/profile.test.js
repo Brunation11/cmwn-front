@@ -1,8 +1,7 @@
 import React from 'react';
-import { Provider } from 'react-redux';
-import Store from 'components/store';
 import { expect } from 'chai';
 import { mount } from 'enzyme';
+import ProviderWrapper from 'smoke_tests/provider_wrapper.js';
 
 import { SchoolProfile } from 'routes/schools/profile';
 import { PAGE_UNIQUE_IDENTIFIER } from 'routes/schools/profile';
@@ -11,30 +10,17 @@ import schoolStudentData from 'mocks/schools/school_student_data';
 import schoolTeacherData from 'mocks/schools/school_teacher_data';
 import schoolPrincipalData from 'mocks/schools/school_principal_data';
 
-// need this while components still reference store
-class ProviderWrapper extends React.Component {
-    render() {
-        return (
-            <Provider store={Store}>
-                <SchoolProfile data={this.props.data} loading={false} />
-            </Provider>
-        );
-    }
-}
-
 var createWrapper = function (data) {
-    const WRAPPER = mount(<ProviderWrapper data={data} />);
-    if(WRAPPER.find('SchoolProfile').children().length === 0) {
-        return null;
-    }
-    expect(WRAPPER.find('SchoolProfile').hasClass(PAGE_UNIQUE_IDENTIFIER)).to.equal(true);
+    var profile = <SchoolProfile data={data} loading={false} />;
+    const WRAPPER = mount(<ProviderWrapper route={profile} />);
     return WRAPPER;
 };
 
 var checkBasicComponents = function (WRAPPER) {
+    expect(WRAPPER.find(`.${PAGE_UNIQUE_IDENTIFIER}`)).to.have.length(1);
     expect(WRAPPER.find('Panel')).to.have.length(1);
     expect(WRAPPER.find('.right')).to.have.length(1);
-    expect(WRAPPER.find('.school-districts')).to.have.length(1);
+    expect(WRAPPER.find('.school-district')).to.have.length(1);
     expect(WRAPPER.find('FlipBoard')).to.have.length(1);
 };
 
@@ -51,7 +37,7 @@ var profileSmokeTests = function () {
     describe('when given no data', function () {
         const WRAPPER = createWrapper(null);
         it('should return null', function () {
-            expect(WRAPPER).to.equal(null);
+            expect(WRAPPER.find('SchoolView').children()).to.have.length(0);
         });
     });
     describe('when viewed by a student', function () {
