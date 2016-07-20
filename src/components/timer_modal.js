@@ -18,8 +18,11 @@ class TimerModal extends React.Component {
         super(props);
         this.state = {
             timeRemaining: this.getTimeRemaining(),
-            showModal: true
+            showModal: false,
+            n: 0
         };
+        this.logout = this.logout.bind(this);
+        this.resetTimer = this.resetTimer.bind(this);
     }
 
     getTimeRemaining() {
@@ -32,16 +35,15 @@ class TimerModal extends React.Component {
         this.timeUpdate = window.setInterval(function () {
             var time = self.getTimeRemaining();
             if (time <= 0 && self.props.currentUser.user_id) {
-                //self.logout();
-            } else {
-                self.setState({timeRemaining: time});
+                    //self.logout();
+            } else if (time <= TIMEOUT_WARNING) {
+                self.setState({timeRemaining: time, showModal: true});
             }
         }, 1000);
     }
 
     componentWillUnmount() {
         window.clearInterval(this.timeUpdate);
-        window.clearTimeout(this.resetConfirm);
     }
 
     logout() {
@@ -50,16 +52,10 @@ class TimerModal extends React.Component {
     }
 
     resetTimer() {
-        var self = this;
         this.setState({showModal: false});
         HttpManager.GET({
             url: (GLOBALS.API_URL),
             handleErrors: false
-        }).then(() => {
-            // delay to make sure time resets before showing modal
-            this.resetConfirm = window.setTimeout(() => {
-                self.setState({showModal: true});
-            }, 3000);
         });
     }
 
@@ -74,16 +70,14 @@ class TimerModal extends React.Component {
             <Modal
                 id="timer-modal"
                 className="timer-modal"
-                show={this.props.currentUser.user_id && this.state.showModal &&
-                    this.state.timeRemaining < TIMEOUT_WARNING}
-                onHide={this.resetTimer.bind(this)}>
+                show={this.props.currentUser.user_id && this.state.showModal}
+                onHide={this.resetTimer}>
 
                 <Modal.Body>
                     <img className="text-uhoh" src={TEXT_UHOH}></img>
                     <span className="text-inactive">
-                        You've been
-                        <span className="underline inactive"> inactive </span>
-                        and will be logged out in{' '}
+                        You've been <span className="underline inactive">inactive</span> and will be{' '}
+                        <span className="inline-block">logged out in</span>{' '}
                         <span className="underline seconds">60 seconds </span>
                     </span>
                     <Row>
@@ -97,11 +91,12 @@ class TimerModal extends React.Component {
                             </div>
                         </Col>
                         <Col xs={12} sm={6}>
-                            <Button onClick={this.resetTimer.bind(this)}>
-                                KEEP ME LOGGED IN... I WANT TO KEEP CHANGING THE WORLD!
+                            <Button onClick={this.resetTimer}>
+                                KEEP ME LOGGED IN... I WANT TO KEEP{' '}
+                                    <span className="inline-block">CHANGING THE WORLD!</span>
                             </Button>
-                            <Button onClick={this.logout.bind(this)}>
-                                I'M DONE FOR NOW, BUT I'LL BE BACK!
+                            <Button onClick={this.logout}>
+                                I'M DONE FOR NOW, BUT <span className="inline-block">I'LL BE BACK!</span>
                             </Button>
                         </Col>
                     </Row>
