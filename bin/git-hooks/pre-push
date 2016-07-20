@@ -20,47 +20,47 @@ do
     echo $local_sha
     echo $current_sha1
 
-    if [ "$local_sha" != $z40 ] && [ "$local_sha" != "$current_sha1" ]; then
-        git checkout $local_sha
+    #if [ "$local_sha" != $z40 ] && [ "$local_sha" != "$current_sha1" ]; then
+    git checkout $local_sha
 
-            bash $PWD/bin/setup-docker.sh $target_docker_name
-            if [ $? != 0 ]
-            then
-                >&2 echo "[post-merge] no $target_docker_name docker-machine running"
-                exit 1
-            fi
-
-            echo "[post-merge] connecting to containers"
-            eval $(docker-machine env $target_docker_name)
-
-            echo "[pre-push] Running lint"
-            docker-compose run -T --rm node gulp lint --color >> push.log 2>&1
-
-            if [ $? != 0 ]; then
-                echo "build failed linting"
-                cat testlint.log 2>/dev/null
-                cat configlint.log 2>/dev/null
-                ./pretty_print_scss_log.js
-                cat jslint.log 2>/dev/null
-                exit 157
-            fi
-
-            echo "[pre-push] Running Unit Tests"
-            docker-compose run --rm node gulp unit --color >> push_test.log 2>&1
-
-            if [ $? != 0 ]; then
-                echo "build failed unit tests"
-                cat push_test.log
-                exit 157
-            fi
-
-            echo "" > testlint.log
-            echo "" > configlint.log
-            echo "" > jslint.log
-            echo "" > scsslint.json
-            echo "" > push_test.log
-
-        git checkout $current_branch
+    bash $PWD/bin/setup-docker.sh $target_docker_name
+    if [ $? != 0 ]
+    then
+        >&2 echo "[post-merge] no $target_docker_name docker-machine running"
+        exit 1
     fi
+
+    echo "[post-merge] connecting to containers"
+    eval $(docker-machine env $target_docker_name)
+
+    echo "[pre-push] Running lint"
+    docker-compose run -T --rm node gulp lint --color >> push.log 2>&1
+
+    if [ $? != 0 ]; then
+        echo "build failed linting"
+        cat testlint.log 2>/dev/null
+        cat configlint.log 2>/dev/null
+        ./pretty_print_scss_log.js
+        cat jslint.log 2>/dev/null
+        exit 157
+    fi
+
+    echo "[pre-push] Running Unit Tests"
+    docker-compose run --rm node gulp unit --color >> push_test.log 2>&1
+
+    if [ $? != 0 ]; then
+        echo "build failed unit tests"
+        cat push_test.log
+        exit 157
+    fi
+
+    echo "" > testlint.log
+    echo "" > configlint.log
+    echo "" > jslint.log
+    echo "" > scsslint.json
+    echo "" > push_test.log
+
+    git checkout $current_branch
+    #fi
 done
 exit 666
