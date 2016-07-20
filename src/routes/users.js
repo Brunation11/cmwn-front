@@ -4,6 +4,7 @@ import {Panel, Tabs, Tab, Button} from 'react-bootstrap';
 import {Link} from 'react-router';
 import Shortid from 'shortid';
 import { connect } from 'react-redux';
+import Moment from 'moment';
 
 import Store from 'components/store';
 import {Table, Column} from 'components/table';
@@ -49,7 +50,7 @@ var Component = React.createClass({
             </div>
         );
     },
-    renderUserTable: function (data) {
+    renderUserTable: function (data, type) {
         var cols = [
             <Column dataKey="user_id" renderHeader="Name" renderCell={(id, row) => {
                 return (
@@ -58,9 +59,12 @@ var Component = React.createClass({
             }}></Column>,
             <Column dataKey="username"></Column>,
             <Column dataKey="gender"></Column>,
-            <Column dataKey="birthdate"></Column>
+            <Column dataKey="birthdate" renderCell={(cellData) => {
+                var formattedDate = cellData ? Moment(cellData).format('MM-DD-YYYY') : cellData;
+                return formattedDate;
+            }}></Column>
         ];
-        if (data.length && data[0].email != null) {
+        if (data.length && data[0].email != null && type === 'adults') {
             cols.push(
                 <Column dataKey="email" />
             );
@@ -95,7 +99,7 @@ var Component = React.createClass({
         if (children && children.length) {
             tabs.push(
                 <Tab eventKey={tabIndex} title={'Students'}>
-                    {this.renderUserTable(children)}
+                    {this.renderUserTable(children, 'children')}
                 </Tab>
             );
             tabIndex++;
@@ -103,7 +107,7 @@ var Component = React.createClass({
         if (adults && adults.length) {
             tabs.push(
                 <Tab className="admin" eventKey={tabIndex} title={'Adults'}>
-                    {this.renderUserTable(adults)} </Tab>
+                    {this.renderUserTable(adults, 'adults')} </Tab>
             );
             tabIndex++;
         }

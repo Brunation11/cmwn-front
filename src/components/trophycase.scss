@@ -5,7 +5,7 @@
     .flip-list {
         margin-top: -40%;
         width: 100%;
-        overflow-x: auto;
+        overflow-x: scroll;
 
         .single-flip {
             display: inline-block;
@@ -170,12 +170,12 @@
     //   transform: translateY(5px);
     // }
 
-    // .flip {
-    //   border: none;
-    //   transform: perspective(500px) rotateY(90deg) scale(0.9);
-    // }
+  // .flip {
+  //   border: none;
+  //   transform: perspective(500px) rotateY(90deg) scale(0.9);
+  // }
 
-    // .flip:hover {
-    //   transform: perspective(500px) rotateY(0) scale(1);
-    // }
+  // .flip:hover {
+  //   transform: perspective(500px) rotateY(0) scale(1);
+  // }
 }
