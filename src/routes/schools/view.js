@@ -109,8 +109,10 @@ export class SchoolView extends React.Component {
                             Return to school profile
                         </a>
                     </p>
-                   <Paragraph className="school-district">
-                       <p pre={`${HEADINGS.DISTRICTS}: `}>{this.renderDistricts()}</p>
+                   <Paragraph>
+                       <p className="school-district" pre={`${HEADINGS.DISTRICTS}: `}>
+                           {this.renderDistricts()}
+                       </p>
                        <p pre={`${HEADINGS.DESCRIPTION}: `}>{this.props.data.description}</p>
                    </Paragraph>
                 </Panel>
@@ -120,7 +122,7 @@ export class SchoolView extends React.Component {
                         <Table className="school-classes">
                             <Column dataKey="title"
                                 renderCell={(data, row) => (
-                                    <Link to={`/class/${row.group_id}`} className="school-class-link">
+                                    <Link to={`/class/${row.group_id}`}>
                                         {_.startCase(data)}
                                     </Link>
                                 )}
@@ -128,14 +130,14 @@ export class SchoolView extends React.Component {
                             <Column dataKey="description" />
                             <Column dataKey="title" renderHeader={HEADINGS.ADMIN}
                                 renderCell={(data, row) => (
-                                    <Link to={`/class/${row.group_id}/view`} className="school-class-view">
+                                    <Link to={`/class/${row.group_id}/view`}>
                                         {HEADINGS.ADMIN}
                                     </Link>
                                 )}
                             />
                             <Column dataKey="title" renderHeader={HEADINGS.EDIT}
                                 renderCell={(data, row) => (
-                                    <Link to={`/class/${row.group_id}/edit`} className="school-class-edit">
+                                    <Link to={`/class/${row.group_id}/edit`}>
                                         {HEADINGS.EDIT}
                                     </Link>
                                 )}
@@ -149,7 +151,7 @@ export class SchoolView extends React.Component {
                         <Table className="school-users">
                             <Column dataKey="first_name" renderHeader="Name"
                                 renderCell={(data, row) => (
-                                    <Link to={`/user/${row.user_id}`} className="school-user-link">
+                                    <Link to={`/user/${row.user_id}`}>
                                         {row.first_name + ' ' + row.last_name}
                                     </Link>
                                 )}
@@ -157,14 +159,14 @@ export class SchoolView extends React.Component {
                             <Column dataKey="username" />
                             <Column dataKey="title" renderHeader="Admin View"
                                 renderCell={(data, row) => (
-                                    <Link to={`/user/${row.user_id}/view`} className="school-user-view">
+                                    <Link to={`/user/${row.user_id}/view`}>
                                         Admin View
                                     </Link>
                                 )}
                             />
                             <Column dataKey="title" renderHeader="Edit"
                                 renderCell={(data, row) => (
-                                    <Link to={`/user/${row.user_id}/edit`} className="school-user-edit">
+                                    <Link to={`/user/${row.user_id}/edit`}>
                                         Edit
                                     </Link>
                                 )}

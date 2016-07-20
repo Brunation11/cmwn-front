@@ -14,15 +14,12 @@ import viewSmokeTests from 'smoke_tests/schools/view.test';
 var createWrapper = function (data) {
     var view = <SchoolView data={data} loading={false}/>;
     const WRAPPER = shallow(view);
-    if(WRAPPER.type() == null) {
-        return null;
-    }
-    expect(WRAPPER.instance()).to.be.instanceOf(SchoolView);
-    expect(WRAPPER.hasClass(PAGE_UNIQUE_IDENTIFIER)).to.equal(true);
     return WRAPPER;
 };
 
 var checkAdminContent = function (WRAPPER) {
+    expect(WRAPPER.instance()).to.be.instanceOf(SchoolView);
+    expect(WRAPPER.hasClass(PAGE_UNIQUE_IDENTIFIER)).to.equal(true);
     expect(WRAPPER.children()).to.have.length(3);
     expect(WRAPPER.find('Panel')).to.have.length(3);
     expect(WRAPPER.find('.school-district')).to.have.length(1);
@@ -44,24 +41,24 @@ describe('school view unit tests', function () {
     describe('when given no data', function () {
         const WRAPPER = createWrapper(null);
         it('should render null', function () {
-            expect(WRAPPER).to.equal(null);
+            expect(WRAPPER.type()).to.equal(null);
         });
     });
     describe('when viewed by a student', function () {
         const WRAPPER = createWrapper(schoolStudentData);
         it('should render null', function () {
-            expect(WRAPPER).to.equal(null);
+            expect(WRAPPER.type()).to.equal(null);
         });
     });
     describe('when viewed by a teacher', function () {
+        const WRAPPER = createWrapper(schoolTeacherData);
         it('should render a school view page', function () {
-            const WRAPPER = createWrapper(schoolTeacherData);
             checkAdminContent(WRAPPER);
         });
     });
     describe('when viewed by a superuser', function () {
+        const WRAPPER = createWrapper(schoolPrincipalData);
         it('should render a school view page', function () {
-            const WRAPPER = createWrapper(schoolPrincipalData);
             checkAdminContent(WRAPPER);
             checkSuperUserContent(WRAPPER);
         });
