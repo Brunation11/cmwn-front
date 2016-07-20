@@ -1,4 +1,6 @@
 import React from 'react';
+import { Provider } from 'react-redux';
+import Store from 'components/store';
 import { expect } from 'chai';
 import { mount } from 'enzyme';
 
@@ -9,14 +11,23 @@ import schoolStudentData from 'mocks/schools/school_student_data';
 import schoolTeacherData from 'mocks/schools/school_teacher_data';
 import schoolPrincipalData from 'mocks/schools/school_principal_data';
 
+// need this while components still reference store
+class ProviderWrapper extends React.Component {
+    render() {
+        return (
+            <Provider store={Store}>
+                <SchoolProfile data={this.props.data} loading={false} />
+            </Provider>
+        );
+    }
+}
+
 var createWrapper = function (data) {
-    var profile = <SchoolProfile data={data} loading={false} />;
-    const WRAPPER = mount(profile);
-    if(WRAPPER.children().length === 0) {
+    const WRAPPER = mount(<ProviderWrapper data={data} />);
+    if(WRAPPER.find('SchoolProfile').children().length === 0) {
         return null;
     }
-    expect(WRAPPER.instance()).to.be.instanceof(SchoolProfile);
-    expect(WRAPPER.hasClass(PAGE_UNIQUE_IDENTIFIER)).to.equal(true);
+    expect(WRAPPER.find('SchoolProfile').hasClass(PAGE_UNIQUE_IDENTIFIER)).to.equal(true);
     return WRAPPER;
 };
 
