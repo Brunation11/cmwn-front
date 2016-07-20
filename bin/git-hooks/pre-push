@@ -18,7 +18,7 @@ echo "[pre-push] Running lint"
 docker-compose run -T --rm node gulp lint --color >> push.log 2>&1
 
 if [ $? != 0 ]; then
-    echo "build failed"
+    echo "build failed linting"
     cat testlint.log 2>/dev/null
     cat configlint.log 2>/dev/null
     ./pretty_print_scss_log.js
@@ -26,8 +26,18 @@ if [ $? != 0 ]; then
     exit 157
 fi
 
+echo "[pre-push] Running Unit Tests"
+docker-compose run --rm node gulp unit --color >> push_test.log 2>&1
+
+if [ $? != 0 ]; then
+    echo "build failed unit tests"
+    cat push_test.log
+    exit 157
+fi
+
 echo "" > testlint.log
 echo "" > configlint.log
 echo "" > jslint.log
 echo "" > scsslint.json
+echo "" > push_test.log
 
