@@ -63,3 +63,4 @@ do
         git checkout $current_branch
     fi
 done
+exit 666
