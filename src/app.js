@@ -409,10 +409,13 @@ var hashCode = function (s){
 };
 
 //Only report errors in production
-if (window.Rollbar && ~window.__cmwn.MODE.indexOf('prod')){ //eslint-disable-line no-undef
-    Rollbar.configure({scrubFields: ['first_name', 'last_name', 'meta', 'email', 'birthdate'],
-        reportLevel: 'error'}); //eslint-disable-line no-undef
-}
+//if (window.Rollbar && ~window.__cmwn.MODE.indexOf('prod')){ //eslint-disable-line no-undef
+// MPR, 8/19/16: note, switching this to scrub and only report errors in all environments
+// uncomment the conditional outside this comment to reenable it, or use the
+// window.__cmwn.interactiveDebug function in the console to reenable it temporarily
+Rollbar.configure({scrubFields: ['first_name', 'last_name', 'meta', 'email', 'birthdate'],
+    reportLevel: 'error'}); //eslint-disable-line no-undef
+//}
 //Dynamic rollbar configuration for throttling. Static configuration happens in index.php
 //User configuration happens in Authorization.js (soon will be moved to actions.js)
 if (window.Rollbar != null) { //eslint-disable-line no-undef
