@@ -58,6 +58,7 @@ var authReducer = (currentUser = Immutable(storedUserProperties), action) => {
                 _links: currentUser_._links,
                 token: currentUser_.token
             });
+            currentUser_ = Immutable(nextUser);
             return Immutable(nextUser);
         }.bind(null, currentUser),
         [ACTION_CONSTANTS.UPDATE_USERNAME]: function (currentUser_, username) {

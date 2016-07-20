@@ -11,12 +11,12 @@ import EditLink from 'components/edit_link';
 import DeleteLink from 'components/delete_link';
 import Text from 'components/nullable_text';
 import Util from 'components/util';
-import Store from 'components/store';
 import GenerateDataSource from 'components/datasource';
 
 const PAGE_UNIQUE_IDENTIFIER = 'classProfile';
+const GROUP_USER_DATASOURCE_IDENTIFIER = 'group_users';
 
-const USER_SOURCE = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
+const USER_SOURCE = GenerateDataSource(GROUP_USER_DATASOURCE_IDENTIFIER, PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     TITLE: 'Class Administrative Dashboard: ',
@@ -28,17 +28,21 @@ const HEADINGS = {
 
 const BREADCRUMBS = 'Return to school profile';
 
-var Component = React.createClass({
-    getInitialState: function () {
-        return {scope: 7};
-    },
-    componentDidMount: function () {
+var mapStateToProps;
+var Page;
+
+export class View extends React.Component{
+    constructor() {
+        super();
+        this.state = {scope: 0};
+    }
+    componentDidMount() {
         this.setState(this.props.data);
-    },
-    componentWillReceiveProps: function (nextProps) {
+    }
+    componentWillReceiveProps(nextProps) {
         this.setState(nextProps.data);
-    },
-    renderSchools: function () {
+    }
+    renderSchools() {
         var links = _.map(this.props.data.schools, school => {
             return (
                 <Link to={`school/${school.uuid}`}>
@@ -50,9 +54,8 @@ var Component = React.createClass({
             return null;
         }
         return <span>{`${HEADINGS.CLASSES}: `}{links}</span>;
-    },
-    renderImport: function () {
-        var state = Store.getState();
+    }
+    renderImport() {
         if (this.state == null || this.state._links == null || this.state._links.import == null) {
         //if (!state.currentUser || !state.currentUser._embedded ||
         //    !state.currentUser._embedded.groups || !state.currentUser._embedded.groups.length ||
@@ -63,23 +66,39 @@ var Component = React.createClass({
         }
         return (
                 <Button className="standard green" onClick={ () => {
-                    History.push('/schools/' + state.currentUser._embedded.groups[0].group_id + '/edit');
+                    History.push('/schools/' + this.props.currentUser._embedded.groups[0].group_id + '/edit');
                 }} >Import Spreadsheet</Button>
                 );
-    },
-    renderBreadcrumb: function () {
+    }
+    renderBreadcrumb() {
         if (!this.state || this.state.parent_id == null) {
             return null;
         }
         return <Link to={'/school/' + this.state.parent_id} id="return-to-school">{BREADCRUMBS}</Link>;
-    },
-    render: function () {
+    }
+    render() {
+        var rowCount = 100;
+        var currentPage = 1;
+        var pageCount = 1;
         if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
+        //pagination defaults
+        if (this.props.components[`${GROUP_USER_DATASOURCE_IDENTIFIER}-${PAGE_UNIQUE_IDENTIFIER}`] != null) {
+            rowCount =
+                this.props.components[`${GROUP_USER_DATASOURCE_IDENTIFIER}-${PAGE_UNIQUE_IDENTIFIER}`]
+                    .page_size;
+            pageCount =
+                this.props.components[`${GROUP_USER_DATASOURCE_IDENTIFIER}-${PAGE_UNIQUE_IDENTIFIER}`]
+                    .page_count;
+            currentPage =
+                this.props.components[`${GROUP_USER_DATASOURCE_IDENTIFIER}-${PAGE_UNIQUE_IDENTIFIER}`]
+                    .page;
+        }
+        debugger;
         return (
             <Layout>
-                <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard">
+                <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard" id="panel-1">
                     <p className="right" id="editButton">
                         <EditLink className="purple" base="/class" id={this.state.group_id}
                             scope={this.state.scope} text="Edit this class" />
@@ -88,7 +107,7 @@ var Component = React.createClass({
                             scope={this.state.scope} text="Delete this class" />
                     </p>
                     {this.renderBreadcrumb()}
-                    <p>
+                    <p id="class-profile">
                         <Link to={`/class/${this.props.data.group_id}/profile`} id="return-to-class">
                             Return to class profile
                         </Link>
@@ -102,7 +121,7 @@ var Component = React.createClass({
                         <p></p>
                     </Text>
                 </Panel>
-                <Panel header="Students" className="standard">
+                <Panel header="Students" className="standard" id="panel-2">
                     <div className="clear">
                         <span className="buttons-right">
                             {this.renderImport()}
@@ -114,7 +133,13 @@ var Component = React.createClass({
                             return user;
                         });
                     }}>
-                        <Paginator >
+                        <Paginator
+                            endpointIdentifier={GROUP_USER_DATASOURCE_IDENTIFIER}
+                            componentName={PAGE_UNIQUE_IDENTIFIER}
+                            rowCount={rowCount}
+                            pageCount={pageCount}
+                            currentPage={currentPage}
+                        >
                             <Table className="admin">
                                 <Column dataKey="title"
                                     renderHeader="Name"
@@ -148,21 +173,32 @@ var Component = React.createClass({
 
         );
     }
-});
+}
 
-var mapStateToProps = state => {
+mapStateToProps = state => {
     var data = {title: ''};
+    var currentUser = {};
     var loading = true;
+    var components = {};
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
+        if (state.currentUser != null){
+            currentUser = state.currentUser;
+        }
+    }
+    //TODO MPR, 8/19/16: pull specific components
+    if (state.components != null) {
+        components = state.components;
     }
     return {
         data,
-        loading
+        loading,
+        currentUser,
+        components
     };
 };
 
-var Page = connect(mapStateToProps)(Component);
+Page = connect(mapStateToProps)(View);
 export default Page;
 

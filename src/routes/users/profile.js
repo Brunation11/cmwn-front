@@ -11,7 +11,6 @@ import Detector from 'components/browser_detector';
 import ProfileImage from 'components/profile_image';
 import FlipBoard from 'components/flipboard';
 import Game from 'components/game';
-import EventManager from 'components/event_manager';
 import Trophycase from 'components/trophycase';
 import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
@@ -89,10 +88,6 @@ export class Profile extends React.Component {
     }
 
     componentDidMount() {
-        EventManager.listen('userChanged', () => {
-            this.resolveRole(this.props);
-            this.forceUpdate();
-        });
         this.resolveRole(this.props);
         if (QueryString.parse(window.location.search).message === 'updated') {
             Toast.success(PASS_UPDATED);
@@ -122,13 +117,16 @@ export class Profile extends React.Component {
     }
 
     showModal(gameUrl) {
-        var urlParts;
+        var urlParts = gameUrl.split('/');
+        urlParts.pop(); // discard index.html
         if (Detector.isMobileOrTablet() || Detector.isPortrait()) {
-            urlParts = gameUrl.split('/');
-            urlParts.pop(); // discard index.html
             History.push(`/game/${_.last(urlParts)}`);
         }
-        this.setState({gameOn: true, gameUrl});
+        this.setState({
+            gameOn: true,
+            gameUrl,
+            game: _.last(urlParts),
+        });
     }
 
     hideModal() {
@@ -137,8 +135,6 @@ export class Profile extends React.Component {
     }
 
     renderGame() {
-        var flipUrl = this.state._links && this.state._links.user_flip ?
-            this.state._links.user_flip.href : null;
         if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe10())) {
             return (
                 <div>
@@ -148,16 +144,16 @@ export class Profile extends React.Component {
             );
         }
         return (
-            <div>
+            <div className="modal-game">
                 <Game
                     ref="gameRef"
                     isTeacher={!this.state.isStudent}
                     url={this.state.gameUrl}
-                    flipUrl={flipUrl}
                     onExit={this.setState.bind(this, {gameOn: false})}
-                    saveUrl={this.props.currentUser._links.save_game.href}
+                    game={this.state.game}
+                    currentUser={this.props.currentUser}
                 />
-                    <a onClick={this.hideModal.bind(this)} className="modal-close">(close)</a>
+                <a onClick={this.hideModal.bind(this)} className="modal-close">(close)</a>
             </div>
         );
     }
@@ -170,7 +166,7 @@ export class Profile extends React.Component {
             onClick = _.noop;
             playText = COMING_SOON;
         } else {
-            onClick = this.showModal.bind(this, GLOBALS.GAME_URL + item.game_id + '/index.html');
+            onClick = this.showModal.bind(this, `${GLOBALS.GAME_URL}${item.game_id}/index.html`);
             playText = PLAY;
         }
         return (
@@ -183,7 +179,7 @@ export class Profile extends React.Component {
                             <span className="play">{playText}</span>
                         </span>
                         <div className={ClassNames('coming-soon', { hidden: !item.coming_soon})} />
-                        <object data={GLOBALS.GAME_URL + item.game_id + '/thumb.jpg'} type="image/png" >
+                        <object data={`${GLOBALS.GAME_URL}${item.game_id}/thumb.jpg`} type="image/png" >
                             <img src={FlipBgDefault}></img>
                         </object>
                     </div>
@@ -225,7 +221,11 @@ export class Profile extends React.Component {
                 <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
                     <div className="left">
                         <div className="frame">
-                            <ProfileImage user_id={this.state.user_id} link-below={true}/>
+                            <ProfileImage
+                                data={this.props.data}
+                                currentUser={this.props.currentUser}
+                                link-below={true}
+                             />
                         </div>
                     </div>
                     <div className="right">
@@ -264,12 +264,11 @@ export class Profile extends React.Component {
 
     render() {
         var profile;
-        if (this.state.username == null) {
+        if (this.state.user_id == null || this.props.currentUser.user_id == null) {
             return null;
         }
-        profile = (this.state.user_id === this.props.currentUser.user_id) ?
-            this.renderCurrentUserProfile : this.renderUserProfile;
-
+        profile = this.state.user_id === this.props.currentUser.user_id ?
+        this.renderCurrentUserProfile : this.renderUserProfile;
         return (
            <Layout className={PAGE_UNIQUE_IDENTIFIER} navMenuId="navMenu">
                {profile.apply(this)}
@@ -297,3 +296,4 @@ mapStateToProps = state => {
 Page = connect(mapStateToProps)(Profile);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
+
