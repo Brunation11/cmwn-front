@@ -114,6 +114,10 @@ h3 {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     overflow-x: hidden;
 
+    .cmwn-font {
+        font-family: $cmwn-jade-font;
+    }
+
     .sweater,
     .global-header {
         // scss-lint:disable ColorVariable

@@ -39,6 +39,7 @@ var Component = React.createClass({
         var id = item.user_id != null ? item.user_id : item.friend_id;
         e.stopPropagation();
         e.preventDefault();
+        ga('set', 'dimension7', 'send');
         HttpManager.POST({url: state.currentUser._links.friend.href}, {
             'friend_id': id
         }).then(() => {
@@ -54,6 +55,7 @@ var Component = React.createClass({
         var id = item.user_id != null ? item.user_id : item.friend_id;
         e.stopPropagation();
         e.preventDefault();
+        ga('set', 'dimension7', 'recieved');
         HttpManager.POST({url: state.currentUser._links.friend.href}, {
             'friend_id': id
         }).then(() => {
@@ -71,13 +73,21 @@ var Component = React.createClass({
     },
 
     renderFlip: function (item){
-        return (
-            <PopOver
-                element={item}
-                type="user"
-                body={this.renderUserFlip(item)}
-            />
-        );
+        if (item.embedded && item.embedded.flips) {
+            return (
+                <PopOver
+                    element={item}
+                    type="user"
+                    trigger="click"
+                >
+                    {this.renderUserFlip(item)}
+                </PopOver>
+            );
+        } else {
+            return (
+                this.renderUserFlip(item)
+            );
+        }
     },
     renderUserFlip: function (item) {
         return (
@@ -115,7 +125,9 @@ var Component = React.createClass({
                     <Paginator rowCount={this.props.rowCount} currentPage={this.props.currentPage}
                         pageCount={this.props.pageCount} data={this.props.data} pagePaginator={true}>
                        <FlipBoard
-                           renderFlip={this.renderUserFlip}
+                            // add conditional to check if user has flips
+                            // render either renderflip or renderuserflip
+                           renderFlip={this.renderFlip}
                            header={HEADINGS.FRIENDS}
                            transform={data => {
                                var image;
@@ -167,5 +179,4 @@ var mapStateToProps = state => {
 var Page = connect(mapStateToProps)(Component);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
-
 
