@@ -193,4 +193,3 @@ var mapStateToProps = state => {
 
 var Page = connect(mapStateToProps)(Component);
 export default Page;
-

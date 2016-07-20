@@ -5,16 +5,12 @@ import ClassNames from 'classnames';
 import SiteNav from 'components/site_nav';
 //import FriendList from 'components/friend_list';
 import ProfileImage from 'components/profile_image';
-import History from 'components/history';
 
 import 'components/sidebar.scss';
 
 const WELCOME = 'Welcome';
 
 var Component = React.createClass({
-    attemptNavigate: function () {
-        History.push('/profile');
-    },
     renderWelcome: function () {
         return (
             <div>
@@ -37,9 +33,7 @@ var Component = React.createClass({
         return (
             <div id={this.props.navMenuId} className={'sidebar ' + (this.props.menuIsOpen ? 'open' : '')}>
                 {this.renderWelcome()}
-                <a onClick={this.attemptNavigate} >
-                    <ProfileImage data={this.props.currentUser} currentUser={this.props.currentUser} />
-                </a>
+                <ProfileImage data={this.props.currentUser} currentUser={this.props.currentUser} />
                 <SiteNav currentUser={this.props.currentUser}
                     data={this.props.currentUser._links.asMutable()} />
                 {''/*<FriendList />*/}
