@@ -17,6 +17,9 @@ while read local_ref local_sha remote_ref remote_sha
 do
     current_sha1=$(git rev-parse HEAD)
     current_branch=$(git rev-parse --abbrev-ref HEAD)
+    echo $local_sha
+    echo $current_sha1
+
     if [ "$local_sha" != $z40 ] && [ "$local_sha" != "$current_sha1" ]; then
         git checkout $local_sha
 
