@@ -29,6 +29,34 @@ if (!$https && $proxy !== 'https') {
                 font-family: "CMWNJadeRegular";
                 src: url("/fonts/cmwn.woff") format("woff");
             }
+            @font-face{
+                font-family: "Source Sans Pro";
+                font-weight: 200;
+                font-style: normal;
+                font-stretch: normal;
+                src: url("/fonts/source_sans_pro/SourceSansPro-ExtraLight.otf.woff") format("woff");
+            }
+            @font-face{
+                font-family: "Source Sans Pro";
+                font-weight: 400;
+                font-style: normal;
+                font-stretch: normal;
+                src: url("/fonts/source_sans_pro/SourceSansPro-ExtraLight.otf.woff") format("woff");
+            }
+            @font-face{
+                font-family: "Source Sans Pro";
+                font-weight: 300;
+                font-style: normal;
+                font-stretch: normal;
+                src: url("/fonts/source_sans_pro/SourceSansPro-Light.otf.woff") format("woff");
+            }
+            @font-face{
+                font-family: "Source Sans Pro";
+                font-weight: 700;
+                font-style: normal;
+                font-stretch: normal;
+                src: url("/fonts/source_sans_pro/SourceSansPro-Bold.otf.woff") format("woff");
+            }
         </style>
         <!-- inject:reset -->
         <!-- endinject -->

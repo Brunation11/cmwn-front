@@ -20,6 +20,13 @@ html {
     src: url('/fonts/cmwn.woff') format('woff');
 }
 
+@font-face {
+    font-family: 'SourceSansPro';
+    src: url('/fonts/source_sans_pro/SourceSansPro-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body {
 
     @media (max-width: $device-max-break) {
