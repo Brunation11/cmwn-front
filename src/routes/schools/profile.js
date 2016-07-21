@@ -1,5 +1,4 @@
 import React from 'react';
-import _ from 'lodash';
 import QueryString from 'query-string';
 import { connect } from 'react-redux';
 import {Link} from 'react-router';

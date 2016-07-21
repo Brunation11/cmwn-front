@@ -14,6 +14,9 @@ const TITLE = 'MY SCHOOLS';
 const NO_SCHOOLS = 'Sorry, none of your schools currently have a profile.' +
     ' Please check back again in a little while.';
 
+var mapStateToProps;
+var Page;
+
 export class Schools extends React.Component {
     renderFlip(item) {
         return (
@@ -40,7 +43,7 @@ export class Schools extends React.Component {
     }
 }
 
-var mapStateToProps = state => {
+mapStateToProps = state => {
     var data = [];
     var loading = true;
     if (state.page && state.page.data && state.page.data._embedded && state.page.data._embedded.group) {
@@ -53,7 +56,7 @@ var mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(Schools);
+Page = connect(mapStateToProps)(Schools);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
 

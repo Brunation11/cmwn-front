@@ -1,5 +1,4 @@
 import React from 'react';
-import {Link} from 'react-router';
 import {ButtonToolbar, OverlayTrigger, Popover} from 'react-bootstrap';
 import Shortid from 'shortid';
 import Moment from 'moment';

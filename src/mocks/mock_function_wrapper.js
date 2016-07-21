@@ -2,7 +2,7 @@ import React from 'react';
 
 class MockFunctionWrapper extends React.Component {
     constructor() {
-        super()
+        super();
     }
 
     render() {
