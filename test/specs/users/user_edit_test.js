@@ -159,10 +159,10 @@ describe('teacher editing own profile', function () {
         browser.waitForExist('#navMenu');
         browser.url('/profile/edit');
     });
-/*
+
     it('has the correct content', function () {
         checkEditContent();
-    });*/
+    });
 
     it('updates username', function () {
         browser.waitForExist('#username');
@@ -189,7 +189,7 @@ describe('teacher editing own profile', function () {
         changeLastName('testing_last_name');
         changeLastName(curName);
     });
-/*
+
     it('updates birthday', function () {
         checkBirthday();
     });
@@ -204,7 +204,7 @@ describe('teacher editing own profile', function () {
 
     it('fails for mismatched passwords', function () {
        tryErrorPass('business1', 'business3', PASSWD);
-    });*/
+    });
 
     // This test will fail currently; ticket CORE-931; do not run bc will change password
     /*it('fails for too short password', function () {
@@ -263,7 +263,7 @@ describe('teacher editing own student\'s profile', function () {
         //TODO: test resetting when back end set up for testing. LB 07/21/16
     });
 });
-/*
+
 describe('student editing own profile', function () {
     beforeEach(function () {
         login.login(STUDENT_USER, STUDENT_PASSWD);
@@ -367,7 +367,6 @@ describe('student editing own profile', function () {
        //TODO: test updating username when backend set up for testing
     });
 
-
     it('fails for too short password', function () {
         tryErrorPass('busy1', 'busy1', STUDENT_PASSWD);
     });
@@ -384,8 +383,7 @@ describe('student editing own profile', function () {
     /*it('fails for too short password', function () {
      tryErrorPass('business31', 'business31', STUDENT_PASSWD + STUDENT_PASSWD);
      });*/
-//});
-/*
+});
 
 describe('teacher editing unassociated student\'s profile', function () {
     it('renders 403', function () {
@@ -430,4 +428,3 @@ describe('student editing an unassociated student\'s profile', function () {
         browser.waitForExist('#triggerederror.error403');
     });
 });
-*/
