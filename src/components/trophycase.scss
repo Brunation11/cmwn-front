@@ -5,6 +5,7 @@
     .flip-list {
         margin-top: -40%;
         width: 100%;
+        overflow-x: scroll;
 
         .single-flip {
             display: inline-block;

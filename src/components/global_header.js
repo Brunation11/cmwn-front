@@ -21,11 +21,6 @@ var GlobalHeader = React.createClass({
             logoLink: '/'
         };
     },
-    componentDidMount: function () {
-        EventManager.listen('userChanged', () => {
-            this.forceUpdate();
-        });
-    },
     toggleMenu: function () {
         var isOpen = EventManager.get('menuIsOpen');
         EventManager.update('menuIsOpen', !isOpen);

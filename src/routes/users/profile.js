@@ -11,7 +11,6 @@ import Detector from 'components/browser_detector';
 import ProfileImage from 'components/profile_image';
 import FlipBoard from 'components/flipboard';
 import Game from 'components/game';
-import EventManager from 'components/event_manager';
 import Trophycase from 'components/trophycase';
 import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
@@ -89,10 +88,6 @@ export class Profile extends React.Component {
     }
 
     componentDidMount() {
-        EventManager.listen('userChanged', () => {
-            this.resolveRole(this.props);
-            this.forceUpdate();
-        });
         this.resolveRole(this.props);
         if (QueryString.parse(window.location.search).message === 'updated') {
             Toast.success(PASS_UPDATED);
