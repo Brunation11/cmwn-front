@@ -30,7 +30,7 @@ describe('<ChangePassword />', function () {
     describe('Checks changepass page', function () {
         var changePass = <ChangePassword currentUser={studentDataA} data={studentDataA} loading={false}/>;
         const WRAPPER = shallow(changePass);
-        
+
         describe('ChangePassword Smoke Tests', function () {
             changePassSmoke();
         });
@@ -68,6 +68,14 @@ describe('<ChangePassword />', function () {
 
         it('password is empty', function () {
             expect(isPassValid('')).to.equal(false);
+        });
+
+        it('password is null', function () {
+            expect(isPassValid(null)).to.equal(false);
+        });
+
+        it('password is undefined', function () {
+            expect(isPassValid(undefined)).to.equal(false); 
         });
 
         it('password is not a string', function () {

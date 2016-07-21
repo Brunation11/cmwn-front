@@ -28,6 +28,9 @@ var mapStateToProps;
 var OtherPage;
 
 export var isPassValid = function (password) {
+    if (password === null || typeof (password) === 'undefined') {
+        return false;
+    }
     return password.length >= 8 && ~password.search(/[0-9]+/);
 };
 
