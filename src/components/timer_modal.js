@@ -8,8 +8,8 @@ import 'components/timer_modal.scss';
 
 import TEXT_UHOH from 'media/timer/text-uhoh.png';
 
-const TIMEOUT_WAIT = 25000;
-const TIMEOUT_WARNING = 15000;
+const TIMEOUT_WAIT = 600000;
+const TIMEOUT_WARNING = 60000;
 
 
 class TimerModal extends React.Component {
@@ -19,7 +19,6 @@ class TimerModal extends React.Component {
         this.state = {
             timeRemaining: this.getTimeRemaining(),
             showModal: false,
-            n: 0
         };
         this.logout = this.logout.bind(this);
         this.resetTimer = this.resetTimer.bind(this);
@@ -35,8 +34,8 @@ class TimerModal extends React.Component {
         this.timeUpdate = window.setInterval(function () {
             var time = self.getTimeRemaining();
             if (time <= 0 && self.props.currentUser.user_id) {
-                    //self.logout();
-            } else if (time <= TIMEOUT_WARNING) {
+                self.logout();
+            } else if (time <= TIMEOUT_WARNING && self.props.currentUser.user_id) {
                 self.setState({timeRemaining: time, showModal: true});
             }
         }, 1000);
@@ -48,7 +47,7 @@ class TimerModal extends React.Component {
 
     logout() {
         History.push('/logout');
-        self.setState({showModal: false});
+        this.setState({showModal: false});
     }
 
     resetTimer() {
@@ -76,9 +75,10 @@ class TimerModal extends React.Component {
                 <Modal.Body>
                     <img className="text-uhoh" src={TEXT_UHOH}></img>
                     <span className="text-inactive">
+                        {/* wrap parts of text in inline-block to ensure words stay on same line */}
                         You've been <span className="underline inactive">inactive</span> and will be{' '}
-                        <span className="inline-block">logged out in</span>{' '}
-                        <span className="underline seconds">60 seconds </span>
+                        <span className="inline-block">logged out</span> <span className="inline-block">
+                        in <span className="underline seconds">60 seconds </span></span>
                     </span>
                     <Row>
                         <Col xs={12} sm={6}>
