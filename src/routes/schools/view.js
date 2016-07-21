@@ -70,15 +70,6 @@ export class SchoolView extends React.Component {
         );
     }
 
-    renderAdminLink() {
-        if (this.props.data.scope > 6) {
-            return null;
-        }
-        return (
-            <p><a href={`/school/${this.props.data.group_id}/view`}>{TEXT.ADMIN}</a></p>
-        );
-    }
-
     renderImport() {
         if (this.state == null || this.state._links.import == null) {
             return null;
