@@ -377,13 +377,15 @@ export class EditProfile extends React.Component {
         return (
             <div className="user-metadata">
                 <p>Username:</p>
-                <p className="standard field">{this.state.username}</p>
+                <p className="standard field" id="username">{this.state.username}</p>
                 <p>First Name:</p>
-                <p className="standard field">{this.state.first_name}</p>
+                <p className="standard field" id="first_name">{this.state.first_name}</p>
                 <p>Last Name:</p>
-                <p className="standard field">{this.state.last_name}</p>
+                <p className="standard field" id="last_name">{this.state.last_name}</p>
                 <p>Birthday:</p>
-                <p className="standard field">{Moment((day + month + year)).format('MMMM Do, YYYY')}</p>
+                <p className="standard field" id="birthday">
+                    {Moment((day + month + year)).format('MMMM Do, YYYY')}
+                </p>
             </div>
         );
     }

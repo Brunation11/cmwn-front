@@ -13,7 +13,7 @@ exports.config = {
     // directory is where your package.json resides, so `wdio` will be called from there.
     //
     specs: [
-        './test/specs/users/user_view_test.js'
+        './test/specs/users/user_edit_test.js'
     ],
     // You can add a suite to define sets of tests to be called togehter as a group
     // These suites can be called individually by running "wdio --suite someFeature"

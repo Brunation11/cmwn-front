@@ -90,7 +90,7 @@ describe('teacher at unassociated student\'s view', function () {
 describe('teacher at friend adults\'s view', function () {
     it('redirects to profile', function () {
         navigateToView('adult-tab');
-        //TODO: Check redirect after CORE-1044 fixed. LB 06/18/16
+        //TODO: Check redirect after CORE-1044 fixed. LB 07/18/16
     });
 });
 
@@ -99,7 +99,7 @@ describe('student at his teacher\'s view', function () {
         login.login(STUDENT_USER, STUDENT_PASSWD);
         browser.waitForExist('#navMenu');
         browser.url('/user/c53f9ebc-276d-11e6-9fc0-e238f8ec1f6c/view');
-        //TODO: Check redirect after CORE-1044 fixed. LB 06/18/16
+        //TODO: Check redirect after CORE-1044 fixed. LB 07/18/16
     });
 });
 
@@ -108,7 +108,7 @@ describe('student at his student friend\'s view', function () {
         login.login(STUDENT_USER, STUDENT_PASSWD);
         browser.waitForExist('#navMenu');
         browser.url('/user/97443a7e-2806-11e6-9c3e-a5b7dc3d064c/view');
-        //TODO: Check redirect after CORE-1044 fixed. LB 06/18/16
+        //TODO: Check redirect after CORE-1044 fixed. LB 07/18/16
     });
 });
 
