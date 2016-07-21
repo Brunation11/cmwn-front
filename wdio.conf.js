@@ -2,7 +2,6 @@ var e2eReport = require('./e2e_report.js');
 var hostIP;
 
 exports.config = {
-
     //
     // ==================
     // Specify Test Files
