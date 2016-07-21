@@ -30,6 +30,8 @@ const FRIEND_PROBLEM = 'There was a problem adding your friend. Please try again
 const PROFILE = 'View Profile';
 const REQUESTED = 'Accept Request';
 const PENDING = 'Request Sent';
+const NO_FRIENDS = ``;
+        
 
 const PAGE_UNIQUE_IDENTIFIER = 'friends-page';
 
@@ -119,36 +121,49 @@ var Component = React.createClass({
         );
     },
     render: function () {
-        return (
-           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
-                <form>
-                    <Paginator rowCount={this.props.rowCount} currentPage={this.props.currentPage}
-                        pageCount={this.props.pageCount} data={this.props.data} pagePaginator={true}>
-                       <FlipBoard
-                            // add conditional to check if user has flips
-                            // render either renderflip or renderuserflip
-                           renderFlip={this.renderFlip}
-                           header={HEADINGS.FRIENDS}
-                           transform={data => {
-                               var image;
-                               if (!_.has(data, '_embedded.image')) {
-                                   image = DefaultProfile;
+        var content = (
+            <form>
+                <Paginator rowCount={this.props.rowCount} currentPage={this.props.currentPage}
+                    pageCount={this.props.pageCount} data={this.props.data} pagePaginator={true}>
+                   <FlipBoard
+                        // add conditional to check if user has flips
+                        // render either renderflip or renderuserflip
+                       renderFlip={this.renderFlip}
+                       header={HEADINGS.FRIENDS}
+                       transform={data => {
+                           var image;
+                           if (!_.has(data, '_embedded.image')) {
+                               image = DefaultProfile;
+                           } else {
+                               if (data._embedded.image.url != null) {
+                                   image = data._embedded.image.url;
                                } else {
-                                   if (data._embedded.image.url != null) {
-                                       image = data._embedded.image.url;
-                                   } else {
-                                       image = data.images.data[0].url;
-                                   }
+                                   image = data.images.data[0].url;
                                }
+                           }
 
-                               data = data.set('image', image);
+                           data = data.set('image', image);
 
-                               return data;
-                           }}
-                       />
-                   </Paginator>
-                </form>
-           </Layout>
+                           return data;
+                       }}
+                   />
+               </Paginator>
+            </form>
+        );
+        Log.log('****************************************');
+        Log.log(this.props.data);
+        if(this.props.data.length === 0) {
+            content = (
+                <h2 className="placeholder">
+                    Looks like you haven't added any friends yet. Let's go{' '}
+                    <Link to='/friends/suggested'>find some!</Link>
+                </h2>
+            );
+        }
+        return (
+            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+                {content}
+            </Layout>
         );
     }
 });
