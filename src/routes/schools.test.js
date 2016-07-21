@@ -11,7 +11,7 @@ import schoolStudentData from 'mocks/schools/school_student_data';
 import schoolTeacherData from 'mocks/schools/school_teacher_data';
 import schoolPrincipalData from 'mocks/schools/school_principal_data';
 
-//import profileSmokeTests from 'smoke_tests/schools.test'
+import schoolsSmokeTests from 'smoke_tests/schools/schools.test'
 
 var createWrapper = function (data) {
     var schools = <Schools data={data} loading={false} />;
@@ -31,10 +31,11 @@ var createFlipWrapper= function (data) {
     
 
 var checkContents = function (WRAPPER, FLIPWRAPPER) {
-    expect(WRAPPER.instance()).to.be.instanceOf(Schools);
+    expect(WRAPPER.instance()).to.be.instanceof(Schools);
     expect(WRAPPER.hasClass(PAGE_UNIQUE_IDENTIFIER)).to.equal(true);
     expect(WRAPPER.find('Layout')).to.have.length(1);
     expect(WRAPPER.find('Flipboard')).to.have.length(1);
+    expect(FLIPWRAPPER.instance()).to.be.instanceof(MockFunctionWrapper);
     expect(FLIPWRAPPER.find('.flip')).to.have.length(1);
     expect(FLIPWRAPPER.find('a')).to.have.length(1);
     expect(FLIPWRAPPER.find('img')).to.have.length(1);
@@ -42,6 +43,9 @@ var checkContents = function (WRAPPER, FLIPWRAPPER) {
 };
 
 describe('schools route test', function () {
+    describe('smoke tests', function () {
+        schoolsSmokeTests();
+    });
     describe('when viewed by a student', function () {
         it('should display a list of schools', function () {
             const WRAPPER = createWrapper(schoolStudentData);
