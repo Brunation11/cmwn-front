@@ -18,7 +18,7 @@ var createWrapper = function (data) {
 
 var checkBasicComponents = function (WRAPPER) {
     expect(WRAPPER.find(`.${PAGE_UNIQUE_IDENTIFIER}`)).to.have.length(1);
-    expect(WRAPPER.find('Panel')).to.have.length(1);
+    expect(WRAPPER.find('Panel')).to.have.length(2);
     expect(WRAPPER.find('.right')).to.have.length(1);
     expect(WRAPPER.find('.school-district')).to.have.length(1);
     expect(WRAPPER.find('FlipBoard')).to.have.length(1);

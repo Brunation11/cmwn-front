@@ -22,7 +22,7 @@ var checkContents = function (WRAPPER, data) {
     expect(WRAPPER.find('Layout')).to.have.length(1);
     expect(WRAPPER.find('Flipboard')).to.have.length(1);
     var schools = 0;
-    for(int i = 0; i < data._embedded.groups.length; i++) {
+    for(var i = 0; i < data._embedded.groups.length; i++) {
         if(data._embedded.groups[i].type === 'school') {
             schools++;
         }

@@ -14,7 +14,7 @@ const TITLE = 'MY SCHOOLS';
 const NO_SCHOOLS = 'Sorry, none of your schools currently have a profile.' +
     ' Please check back again in a little while.';
 
-class Schools extends React.Components {
+export class Schools extends React.Component {
     renderFlip(item) {
         return (
             <div className="flip" key={Shortid.generate()}>

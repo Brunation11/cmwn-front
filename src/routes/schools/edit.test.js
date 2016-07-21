@@ -26,6 +26,7 @@ var createWrapper = function (data) {
 var checkSchoolEditContent = function (WRAPPER) {
     expect(WRAPPER.instance()).to.be.instanceOf(SchoolEdit);
     expect(WRAPPER.hasClass(PAGE_UNIQUE_IDENTIFIER)).to.equal(true);
+    expect(WRAPPER.find('Layout')).to.have.length(1);
     expect(WRAPPER.find('Panel')).to.have.length(1);
     expect(WRAPPER.find('Input')).to.have.length(2);
     expect(WRAPPER.find('Button')).to.have.length(1);
@@ -37,8 +38,10 @@ var checkSchoolEditContent = function (WRAPPER) {
 var checkSchoolImportContent = function (WRAPPER, UPLOAD_WRAPPER) {
     expect(WRAPPER.find('BulkUpload')).to.have.length(1);
     expect(UPLOAD_WRAPPER.instance()).to.be.instanceof(BulkUpload);
-    expect(WRAPPER.find('Panel')).to.have.length(1);
+    expect(UPLOAD_WRAPPER.find('Panel')).to.have.length(1);
+    expect(UPLOAD_WRAPPER.find('iframe')).to.have.length(1);
     expect(UPLOAD_WRAPPER.find('Form')).to.have.length(1);
+    expect(UPLOAD_WRAPPER.find('input')).to.have.length(4);
     expect(UPLOAD_WRAPPER.find('Input')).to.have.length(4);
     expect(UPLOAD_WRAPPER.find('Button')).to.have.length(1);
 };
@@ -59,6 +62,7 @@ var tryImport = function(UPLOAD_WRAPPER, student, teacher, tos, file) {
     });
     // TODO: find a way to simulate a file upload (i.e. change input value) 7/20/16 AIM
     //if (file) {
+    //    these didn't work, but keeping here for reference
     //    UPLOAD_WRAPPER.find('[accept=".xlsx"]').render().attr('value', 'example.xlsx');
     //    UPLOAD_WRAPPER.find('[accept=".xlsx"]').simulate('change',
     //        { target: { value: 'example.xlsx' }

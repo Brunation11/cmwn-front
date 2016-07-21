@@ -20,11 +20,14 @@ var createWrapper = function (data) {
 
 var checkAdminContents = function (WRAPPER) {
     expect(WRAPPER.find(`.${PAGE_UNIQUE_IDENTIFIER}`)).to.have.length(1);
+    expect(WRAPPER.find('Layout')).to.have.length(1);
     expect(WRAPPER.find('Panel')).to.have.length(3);
-    expect(WRAPPER.find('.right')).to.have.length(1);
+    expect(WRAPPER.find('#buttons')).to.have.length(1);
     expect(WRAPPER.find('#school-return-profile')).to.have.length(1)
     expect(WRAPPER.find('.school-district')).to.have.length(1);
+    expect(WRAPPER.find('.school-district').find('Link')).to.have.length(1);
     expect(WRAPPER.find('#school-view-classes')).to.have.length(1);
+    expect(WRAPPER.find('#school-view-users')).to.have.length(1);
     // TODO: figure out how to test for components wrapped in generateDataSource 7/20/16 AIM
     //expect(WRAPPER.find('.school-classes')).to.have.length(1);
     //expect(WRAPPER.find('.school-users')).to.have.length(1);

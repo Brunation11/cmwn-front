@@ -19,22 +19,27 @@ var createWrapper = function (data) {
     return WRAPPER;
 };
 
-var checkAllUserContent = function (WRAPPER) {
+var checkAllUserContent = function (WRAPPER, data) {
     expect(WRAPPER.instance()).to.be.instanceOf(SchoolProfile);
     expect(WRAPPER.hasClass(PAGE_UNIQUE_IDENTIFIER)).to.equal(true);
     expect(WRAPPER.children()).to.have.length(2);
+    expect(WRAPPER.find('Layout')).to.have.length(1);
     expect(WRAPPER.find('Panel')).to.have.length(1);
     expect(WRAPPER.find('.right')).to.have.length(1);
     expect(WRAPPER.find('.school-district')).to.have.length(1);
+    expect(WRAPPER.find('FlipBoard')).to.have.length(1);
     const CLASS_ITEM = {
-        group_id: '9ee15bf2-0288-11e6-8b6b-0800274f2cef', //eslint-disable-line camelcase
-        title: 'Ginas Class A'
+        group_id: data.group_id, //eslint-disable-line camelcase
+        title: data.title
     };
     const MOCK_CLASS = shallow(<MockFunctionWrapper item={CLASS_ITEM}
         render={SchoolProfile.prototype.renderFlip}/>);
     expect(MOCK_CLASS.instance()).to.be.instanceOf(MockFunctionWrapper);
     expect(MOCK_CLASS.children()).to.have.length(1);
     expect(MOCK_CLASS.find('.flip')).to.have.length(1);
+    expect(MOCK_CLASS.find('Link')).to.have.length(1);
+    expect(MOCK_CLASS.find('img')).to.have.length(1);
+    expect(MOCK_CLASS.find('p')).to.have.length(1);
 };
 
 var checkAdminContent = function (WRAPPER) {
@@ -47,7 +52,7 @@ var checkSuperUserContent = function (WRAPPER, data) {
     IMPORT_LINK.setState(data); // need state set to get a non-null result
     IMPORT_LINK.update();
     expect(IMPORT_LINK.instance()).to.be.instanceof(MockFunctionWrapper);
-    expect(IMPORT_LINK.find('EditLink')).to.have.length(1);
+    expect(IMPORT_LINK.find('.green')).to.have.length(1);
 };
    
 describe('school profile unit tests', function () {
@@ -60,20 +65,20 @@ describe('school profile unit tests', function () {
     describe('when viewed by a student', function () {
         const WRAPPER = createWrapper(schoolStudentData);
         it('should render a school profile with student permissions', function () {
-            checkAllUserContent(WRAPPER);
+            checkAllUserContent(WRAPPER, schoolStudentData);
         });
     });
     describe('when viewed by a teacher', function () {
         const WRAPPER = createWrapper(schoolTeacherData);
         it('should render a school profile with teacher permissions', function () {
-            checkAllUserContent(WRAPPER);
+            checkAllUserContent(WRAPPER, schoolTeacherData);
             checkAdminContent(WRAPPER);
         }); 
     });
     describe('when viewed by a superuser', function () {
         const WRAPPER = createWrapper(schoolPrincipalData);
         it('should render a school profile with superuser permissions', function () {
-            checkAllUserContent(WRAPPER);
+            checkAllUserContent(WRAPPER, schoolTeacherData);
             checkAdminContent(WRAPPER);
             checkSuperUserContent(WRAPPER, schoolPrincipalData);
         });

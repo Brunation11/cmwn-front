@@ -25,6 +25,7 @@ var createUploadWrapper = function (data) {
 
 var checkTeacher = function (WRAPPER, UPLOAD_WRAPPER) {
     expect(WRAPPER.find(`.${PAGE_UNIQUE_IDENTIFIER}`)).to.have.length(1);
+    expect(WRAPPER.find('Layout')).to.have.length(1);
     expect(WRAPPER.find('Panel')).to.have.length(1);
     expect(WRAPPER.find('Link')).to.have.length(1);
     expect(WRAPPER.find('Input')).to.have.length(2);
@@ -35,18 +36,27 @@ var checkTeacher = function (WRAPPER, UPLOAD_WRAPPER) {
 
 var checkSuperUser = function (WRAPPER, UPLOAD_WRAPPER) {
     expect(WRAPPER.find(`.${PAGE_UNIQUE_IDENTIFIER}`)).to.have.length(1);
+    expect(WRAPPER.find('Layout')).to.have.length(1);
     expect(WRAPPER.find('Panel')).to.have.length(2);
     expect(WRAPPER.find('Link')).to.have.length(1);
     expect(WRAPPER.find('Input')).to.have.length(4);
+    expect(WRAPPER.find('ValidatedInput')).to.have.length(2);
     expect(WRAPPER.find('Button')).to.have.length(2);
     expect(WRAPPER.find('BulkUpload')).to.have.length(1);
+    expect(WRAPPER.find('iframe')).to.have.length(1);
+    expect(WRAPPER.find('Form')).to.have.length(1);
+    expect(WRAPPER.find('[type="hidden"]')).to.have.length(4);
+    expect(WRAPPER.find('Static')).to.have.length(1);
 
     expect(UPLOAD_WRAPPER.find('BulkUpload')).to.have.length(1);
     expect(UPLOAD_WRAPPER.find('Panel')).to.have.length(1);
-    expect(UPLOAD_WRAPPER.find('[name="dummyframe"]')).to.have.length(1);
-    expect(UPLOAD_WRAPPER.find('[type="hidden"]')).to.have.length(4);
+    expect(UPLOAD_WRAPPER.find('iframe')).to.have.length(1);
     expect(UPLOAD_WRAPPER.find('Form')).to.have.length(1);
+    expect(UPLOAD_WRAPPER.find('[type="hidden"]')).to.have.length(4);
+    expect(UPLOAD_WRAPPER.find('Static')).to.have.length(1);
     expect(UPLOAD_WRAPPER.find('Input')).to.have.length(2);
+    expect(UPLOAD_WRAPPER.find('ValidatedInput')).to.have.length(2);
+    expect(UPLOAD_WRAPPER.find('Static')).to.have.length(1);
     expect(UPLOAD_WRAPPER.find('Button')).to.have.length(1);
 };
 

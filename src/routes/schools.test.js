@@ -7,9 +7,9 @@ import { PAGE_UNIQUE_IDENTIFIER } from 'routes/schools';
 
 import MockFunctionWrapper from 'mocks/mock_function_wrapper';
 
-import schoolStudentData from 'mocks/schools/school_student_data';
-import schoolTeacherData from 'mocks/schools/school_teacher_data';
-import schoolPrincipalData from 'mocks/schools/school_principal_data';
+import studentDataA from 'mocks/users/student_data_a';
+import teacherData from 'mocks/users/teacher_data';
+import principalData from 'mocks/users/principal_data';
 
 import schoolsSmokeTests from 'smoke_tests/schools/schools.test'
 
@@ -19,10 +19,10 @@ var createWrapper = function (data) {
     return WRAPPER;
 };
 
-var createFlipWrapper= function (data) {
+var createFlipWrapper= function (group_id, title) {
     const ITEM = {
-        group_id: data.group_id,
-        title: data.title
+        group_id,
+        title
     };
     var flip = <MockFunctionWrapper item={ITEM} render={Schools.prototype.renderFlip} />
     const FLIPWRAPPER = shallow(flip);
@@ -48,22 +48,25 @@ describe('schools route test', function () {
     });
     describe('when viewed by a student', function () {
         it('should display a list of schools', function () {
-            const WRAPPER = createWrapper(schoolStudentData);
-            const FLIPWRAPPER = createFlipWrapper(schoolStudentData);
+            const WRAPPER = createWrapper(studentDataA);
+            var school = studentDataA._embedded.groups[1];
+            const FLIPWRAPPER = createFlipWrapper(school.group_id, school.title);
             checkContents(WRAPPER, FLIPWRAPPER);
         });
     });
     describe('when viewed by a teacher', function () {
         it('should display a list of schools', function () {
-            const WRAPPER = createWrapper(schoolTeacherData);
-            const FLIPWRAPPER = createFlipWrapper(schoolTeacherData);
+            const WRAPPER = createWrapper(teacherData);
+            var school = teacherData._embedded.groups[1];
+            const FLIPWRAPPER = createFlipWrapper(school.group_id, school.title);
             checkContents(WRAPPER, FLIPWRAPPER);
         });
     });
     describe('when viewed by a super user', function () {
         it('should display a list of schools', function () {
-            const WRAPPER = createWrapper(schoolPrincipalData);
-            const FLIPWRAPPER = createFlipWrapper(schoolPrincipalData);
+            const WRAPPER = createWrapper(principalData);
+            var school = principalData._embedded.groups[2];
+            const FLIPWRAPPER = createFlipWrapper(school.group_id, school.title);
             checkContents(WRAPPER, FLIPWRAPPER);
         });
     });
