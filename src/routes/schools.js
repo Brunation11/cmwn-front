@@ -7,13 +7,15 @@ import FlipBoard from 'components/flipboard';
 
 import DefaultProfile from 'media/icon_school_blue.png';
 
+const PAGE_UNIQUE_IDENTIFIER = 'schools';
+
 const TITLE = 'MY SCHOOLS';
 
 const NO_SCHOOLS = 'Sorry, none of your schools currently have a profile.' +
     ' Please check back again in a little while.';
 
-var Component = React.createClass({
-    renderFlip: function (item){
+class Schools extends React.Components {
+    renderFlip(item) {
         return (
             <div className="flip" key={Shortid.generate()}>
                 <a href={`/school/${item.group_id}`}>
@@ -22,10 +24,11 @@ var Component = React.createClass({
                 </a>
             </div>
         );
-    },
-    render: function () {
+    }
+
+    render() {
         return (
-            <Layout>
+            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <FlipBoard
                     data={this.props.data}
                     header={TITLE}
@@ -35,7 +38,7 @@ var Component = React.createClass({
             </Layout>
         );
     }
-});
+}
 
 var mapStateToProps = state => {
     var data = [];
@@ -50,6 +53,7 @@ var mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(Component);
+var Page = connect(mapStateToProps)(Schools);
+Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
 
