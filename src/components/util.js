@@ -122,16 +122,20 @@ var Util = {
     },
     decodePermissions(val) {
         var perms = {
-            create: true, update: true, delete: true
+            create: false, update: false, delete: false
         };
         var pad = '0000';
         var bits;
-        if (val !== -1) {
+        if (val === -1) {
+            perms = {
+                create: true, update: true, delete: true
+            };
+        } else if (val > 0 && val < 8) {
             bits = (val >>> 0).toString(2);
             bits = pad.substring(0, pad.length - bits.length) + bits;
             perms = {
-                create: !!+bits.slice(-3),
-                update: !!+bits.slice(-2),
+                create: !!+bits.slice(-3, -2),
+                update: !!+bits.slice(-2, -1),
                 delete: !!+bits.slice(-1)
             };
         }
