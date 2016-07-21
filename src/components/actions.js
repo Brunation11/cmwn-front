@@ -71,11 +71,11 @@ Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
                     //configure trackers to logged in user
                     Rollbar.configure({payload: {person: {id: server.response.user_id, //eslint-disable-line no-undef, max-len
                         username: server.response.username}}});
-                    ('set', 'userId', server.response.user_id);
-                    ('set', 'dimension1', server.response.type);
-                    ('set', 'dimension2',
+                    ga('set', 'userId', server.response.user_id);
+                    ga('set', 'dimension1', server.response.type);
+                    ga('set', 'dimension2',
                         (new Date(Date.now()).getFullYear()) - (Moment(server.response.birthdate).year()));
-                    ('set', 'dimension3', server.response.gender);
+                    ga('set', 'dimension3', server.response.gender);
 
                     if (server.response.user_id == null) {
                         Errors.handle401();
@@ -267,7 +267,7 @@ Actions = Actions.set(ACTION_CONSTANTS.CHANGE_COMPONENT_ROW_COUNT, function
 Actions = Actions.set(ACTION_CONSTANTS.GET_NEXT_COMPONENT_PAGE, function
     (state, endpointIdentifier, componentName, pageNum) {
     var endpoint = Util.modifyTemplatedQueryParams(
-        state.components[endpointIdentifier + '-' + componentName]._links.find, {
+        state.components[endpointIdentifier + '-' + componentName]._links.find.href, {
             page: pageNum,
             'per_page': state.components[endpointIdentifier + '-' + componentName].page_size
         }
@@ -288,7 +288,7 @@ Actions = Actions.set(ACTION_CONSTANTS.GET_NEXT_COMPONENT_PAGE, function
 Actions = Actions.set(ACTION_CONSTANTS.CHANGE_COMPONENT_ROW_COUNT, function
     (state, endpointIdentifier, componentName, rowCount) {
     var endpoint = Util.modifyTemplatedQueryParams(
-        state.components[endpointIdentifier + '-' + componentName]._links.find, {
+        state.components[endpointIdentifier + '-' + componentName]._links.find.href, {
             page: state.components[endpointIdentifier + '-' + componentName].page,
             'per_page': rowCount
         }
