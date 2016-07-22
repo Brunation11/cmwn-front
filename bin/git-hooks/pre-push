@@ -15,10 +15,8 @@ while read local_ref local_sha remote_ref remote_sha
 do
     current_sha1=$(git rev-parse HEAD)
     current_branch=$(git rev-parse --abbrev-ref HEAD)
-    echo $local_sha
-    echo $current_sha1
 
-    git checkout $local_sha
+    git checkout $local_sha > /dev/null
 
     bash $PWD/bin/setup-docker.sh $target_docker_name
     if [ $? != 0 ]
