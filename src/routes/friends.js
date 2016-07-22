@@ -29,15 +29,13 @@ const FRIEND_PROBLEM = 'There was a problem adding your friend. Please try again
 const PROFILE = 'View Profile';
 const REQUESTED = 'Accept Request';
 const PENDING = 'Request Sent';
-const NO_FRIENDS = ``;
-        
 
 const PAGE_UNIQUE_IDENTIFIER = 'friends-page';
 
 var mapStateToProps;
 var Page;
 
-class Friends extends React.Components {
+class Friends extends React.Component {
     
     componentDidMount() {
         this.setState(this.props.data);
