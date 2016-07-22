@@ -21,11 +21,6 @@ var GlobalHeader = React.createClass({
             logoLink: '/'
         };
     },
-    componentDidMount: function () {
-        EventManager.listen('userChanged', () => {
-            this.forceUpdate();
-        });
-    },
     toggleMenu: function () {
         var isOpen = EventManager.get('menuIsOpen');
         EventManager.update('menuIsOpen', !isOpen);
@@ -48,7 +43,7 @@ var GlobalHeader = React.createClass({
             return null;
         }
         return (
-            <div className="logout"><a href="/logout" onClick={this.logout}>
+            <div className="logout"><a href="/logout" onClick={this.logout} id="logout-button">
                 <img src={LOGOUT_URL} alt={LOGOUT} />{LOGOUT}
             </a></div>
         );

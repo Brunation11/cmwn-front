@@ -1,25 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import ClassNames from 'classnames';
 
 import SiteNav from 'components/site_nav';
 //import FriendList from 'components/friend_list';
 import ProfileImage from 'components/profile_image';
-import History from 'components/history';
 
 import 'components/sidebar.scss';
 
 const WELCOME = 'Welcome';
 
 var Component = React.createClass({
-    attemptNavigate: function () {
-        History.push('/profile');
-    },
     renderWelcome: function () {
         return (
             <div>
                 <p className="welcome">{WELCOME}</p>
-                <p className="username">
-                    <a onClick={this.attemptNavigate} >
+                <p className={ClassNames('username',
+                    {'smaller-text': this.props.currentUser.username.length >= 25,
+                    'regular-text': this.props.currentUser.username.length < 25})}>
+                    <a onClick={this.attemptNavigate}>
                         {this.props.currentUser.username}
                     </a>
                 </p>
@@ -34,10 +33,9 @@ var Component = React.createClass({
         return (
             <div id={this.props.navMenuId} className={'sidebar ' + (this.props.menuIsOpen ? 'open' : '')}>
                 {this.renderWelcome()}
-                <a onClick={this.attemptNavigate} >
-                    <ProfileImage user_id={this.props.currentUser.user_id}/>
-                </a>
-                <SiteNav />
+                <ProfileImage data={this.props.currentUser} currentUser={this.props.currentUser} />
+                <SiteNav currentUser={this.props.currentUser}
+                    data={this.props.currentUser._links.asMutable()} />
                 {''/*<FriendList />*/}
             </div>
         );

@@ -13,7 +13,6 @@ import Util from 'components/util';
 import History from 'components/history';
 import GenerateDataSource from 'components/datasource';
 import Text from 'components/nullable_text';
-import Store from 'components/store';
 import {Table, Column} from 'components/table';
 
 const DISTRICT_CREATED = 'Disctrict created successfully';
@@ -36,23 +35,29 @@ const SCHOOL_SOURCE = GenerateDataSource('group_school', PAGE_UNIQUE_IDENTIFIER)
 const CLASS_SOURCE = GenerateDataSource('group_class', PAGE_UNIQUE_IDENTIFIER);
 const USER_SOURCE = GenerateDataSource('org_users', PAGE_UNIQUE_IDENTIFIER);
 
-var Component = React.createClass({
-    componentDidMount: function () {
+var mapStateToProps;
+var Page;
+
+export class ViewDistrict extends React.Component{
+    constructor(){
+        super();
+    }
+
+    componentDidMount() {
         if (QueryString.parse(location.search).message === 'created') {
             Toast.success(DISTRICT_CREATED);
         }
-    },
-    render: function () {
-        var state = Store.getState();
+    }
+    render() {
         var code = this.props.data.meta == null ? null : this.props.data.meta.code;
         var systemId = this.props.data.meta == null ? null : this.props.data.meta.system_id;
-        var showHelpers = state.currentUser.type === 'ADULT';
+        var showHelpers = this.props.currentUser.type === 'ADULT';
         if (this.props.data.org_id == null) {
             return null;
         }
         return (
             <Layout>
-                <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard">
+                <Panel id="panel-1" header={HEADINGS.TITLE + this.props.data.title} className="standard">
                     <p className="right" >
                         <EditLink className="purple" text="Edit District" base="/district"
                             uuid={this.props.data.org_id}
@@ -72,7 +77,8 @@ var Component = React.createClass({
                         <p></p>
                     </Text>
                 </Panel>
-                <Panel header={HEADINGS.SCHOOLS} className={ClassNames('standard', {hidden: !showHelpers})}>
+                <Panel id="panel-2" header={HEADINGS.SCHOOLS} className=
+                        {ClassNames('standard', {hidden: !showHelpers})}>
                     <a onClick={() => History.push('/schools')}>View All Your Schools</a>
                     <SCHOOL_SOURCE>
                         <Table className="admin">
@@ -101,7 +107,8 @@ var Component = React.createClass({
                         </Table>
                     </SCHOOL_SOURCE>
                 </Panel>
-                <Panel header={HEADINGS.CLASSES} className={ClassNames('standard', {hidden: !showHelpers})}>
+                <Panel id="panel-3" header={HEADINGS.CLASSES} className=
+                        {ClassNames('standard', {hidden: !showHelpers})}>
                     <a onClick={() => History.push('/classes')}>View All Your Classes</a>
                     <CLASS_SOURCE>
                         <Table className="admin">
@@ -130,7 +137,8 @@ var Component = React.createClass({
                         </Table>
                     </CLASS_SOURCE>
                 </Panel>
-                <Panel header={HEADINGS.USERS} className={ClassNames('standard', {hidden: !showHelpers})}>
+                <Panel id="panel-4" header={HEADINGS.USERS} className=
+                        {ClassNames('standard', {hidden: !showHelpers})}>
                     <a onClick={() => History.push('/users')}>View All Your Users</a>
                     <USER_SOURCE>
                         <Table className="admin">
@@ -162,21 +170,26 @@ var Component = React.createClass({
            </Layout>
         );
     }
-});
+}
 
-var mapStateToProps = state => {
+mapStateToProps = state => {
     var data = {};
+    var currentUser = {}; // eslint-disable-line no-unused-vars
     var loading = true;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
     }
+    if (state.currentUser != null){
+        currentUser = state.currentUser;
+    }
     return {
         data,
-        loading
+        loading,
+        currentUser
     };
 };
 
-var Page = connect(mapStateToProps)(Component);
+Page = connect(mapStateToProps)(ViewDistrict);
 export default Page;
 
