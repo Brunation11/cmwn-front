@@ -1,9 +1,9 @@
 import React from 'react';
 import _ from 'lodash';
 import ClassNames from 'classnames';
-import {Link} from 'react-router';
+import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import {Button} from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import Shortid from 'shortid';
 
 import PopOver from 'components/popover';
@@ -30,23 +30,10 @@ const FRIEND_PROBLEM = 'There was a problem adding your friend. Please try again
 const PROFILE = 'View Profile';
 const REQUESTED = 'Accept Request';
 const PENDING = 'Request Sent';
-const NO_FRIENDS = ``;
-        
 
 const PAGE_UNIQUE_IDENTIFIER = 'friends-page';
 
-class Friends extends React.Components {
-    
-    componentDidMount() {
-        this.setState(this.props.data);
-        this.resolveRole(this.props);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState(nextProps.data);
-        this.resolveRole(nextProps);
-    }
-
+class Friends extends React.Component {
     addFriend(item, e) {
         var id = item.user_id != null ? item.user_id : item.friend_id;
         e.stopPropagation();
@@ -94,12 +81,12 @@ class Friends extends React.Components {
                     type="user"
                     trigger="click"
                 >
-                    {this.renderUserFlip(item)}
+                    {this.renderUserFlip.call(this, item)}
                 </PopOver>
             );
         } else {
             return (
-                this.renderUserFlip(item)
+                this.renderUserFlip.call(this, item)
             );
         }
     }
@@ -155,7 +142,7 @@ class Friends extends React.Components {
                    <FlipBoard
                         // add conditional to check if user has flips
                         // render either renderflip or renderuserflip
-                       renderFlip={this.renderFlip}
+                       renderFlip={this.renderFlip.bind(this)}
                        header={HEADINGS.FRIENDS}
                        transform={data => {
                            var image;
@@ -213,7 +200,7 @@ var mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(Component);
+var Page = connect(mapStateToProps)(Friends);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
 
