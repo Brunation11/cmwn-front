@@ -36,39 +36,37 @@ var Component = React.createClass({
     addFriend: function (item, e) {
         var state = Store.getState();
         var id = item.user_id != null ? item.user_id : item.friend_id;
+        var postBody = { 'friend_id': id };
         e.stopPropagation();
         e.preventDefault();
-        ('set', 'dimension7', 'send');
-        HttpManager.POST({url: state.currentUser._links.friend.href}, {
-            'friend_id': id
-        }).then(() => {
+        ga('set', 'dimension7', 'send');
+        HttpManager.POST({url: state.currentUser._links.friend.href}, postBody).then(() => {
             this.refs.fetcher.getData().then(() => {
                 Toast.success(FRIEND_ADDED + item.username);
                 this.forceUpdate();
             });
             Actions.dispatch.START_RELOAD_PAGE(Store.getState());
-        }).catch(this.friendErr);
+        }).catch(this.friendErr.bind(null, postBody));
     },
     acceptRequest: function (item, e) {
         var state = Store.getState();
         var id = item.user_id != null ? item.user_id : item.friend_id;
+        var postBody = { 'friend_id': id };
         e.stopPropagation();
         e.preventDefault();
-        ('set', 'dimension7', 'recieved');
-        HttpManager.POST({url: state.currentUser._links.friend.href}, {
-            'friend_id': id
-        }).then(() => {
+        ga('set', 'dimension7', 'recieved');
+        HttpManager.POST({url: state.currentUser._links.friend.href}, postBody).then(() => {
             Toast.success(FRIEND_ADDED + item.username);
             Actions.dispatch.START_RELOAD_PAGE(Store.getState());
-        }).catch(this.friendErr);
+        }).catch(this.friendErr.bind(null, postBody));
     },
     doNothing: function (e) {
         e.stopPropagation();
         e.preventDefault();
     },
-    friendErr: function (e) {
+    friendErr: function (body, e) {
         Toast.error(FRIEND_PROBLEM);
-        Log.error(e, 'Friend request failed');
+        Log.error(e, 'Friend request failed', body);
     },
 
     renderFlip: function (item){
