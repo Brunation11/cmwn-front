@@ -81,30 +81,62 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
 
     var events;
 
+    /*
+     * default events. These will always fire regardless of whether or not
+     * there is an event defined in addition to the submission behavior
+     */
     const DEFAULT_EVENTS = {
         flipped: function (e) {
-            submitFlip(e.gameData.id || e.gameData.game || e.GameData.game);
+            var flipId = e.gameData.id || e.gameData.game || e.gameData.flip;
+            // TODO MPR 7/14/16: .game and .flip can be removed once all games are in React
+            submitFlip(flipId);
+            ga('set', 'dimension5', flipId);
         },
         flip: function (e) {
-            submitFlip(e.gameData.id || e.gameData.game || e.GameData.game);
+            var flipId = e.gameData.id || e.gameData.game || e.gameData.flip;
+            // TODO MPR 7/14/16: .game and .flip can be removed once all games are in React
+            submitFlip(flipId);
+            ga('set', 'dimension5', flipId);
         },
         save: function (e) {
-            var version = e.gameData.version || 1;
+            var version = 1;
             if (_links.save_game == null) {
                 Log.error('Something went wrong. No game save url was provided. Game data will not be saved');
                 return;
             }
-            HttpManager.POST(_links.save_game.href.replace('{game_id}', gameId),
-                {data: e.gameData, version});
+            version = e.gameData.version || version;
+            ga('set', 'metric1', e.gameData.currentScreenIndex);
+            HttpManager.POST(
+                _links.save_game.href.replace('{game_id}', gameId),
+                {data: e.gameData, version}
+            );
         },
         exit: function () {
             exitCallback({fullscreenFallback: false});
         },
-        init: function () {
+        init: function (e) {
+            ga('set', 'dimension4', e.gameData.id || e.gameData.game || e.gameData.flip);
+            e.respond(this.props.gameState);
+            HttpManager.GET( _links.save_game.href.replace('{game_id}', gameId))
+                .then(server => e.respond(server.response))
+                .catch(err => Log.error('failed to get game data for ' + gameId, err));
         },
-        getData: function () {
+        getData: function (e) {
+            HttpManager.GET( _links.save_game.href.replace('{game_id}', gameId))
+                .then(server => e.respond(server.response))
+                .catch(err => Log.error('failed to get game data for ' + gameId, err));
         },
-        setData: function () {
+        setData: function (e) {
+            var version = 1;
+            if (_links.save_game == null) {
+                Log.error('Something went wrong. No game save url was provided. Game data will not be saved');
+                return;
+            }
+            version = e.gameData.version || version;
+            HttpManager.POST(
+                _links.save_game.href.replace('{game_id}', gameId),
+                {data: e.gameData, version}
+            );
         },
         getMedia: function (e) {
             var respond = e.respond;
@@ -126,11 +158,11 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
             if (!e.gameData.friend_id) return;
             HttpManager.GET(_links.user.href + '/' + e.gameData.friend_id)
                 .then(server => {
-                    var friend = server.response
+                    var friend = server.response;
                     friend._embedded = friend._embedded || {};
                     friend._embedded.image = friend._embedded.image || {};
                     friend._embedded.image.url = friend._embedded.image.url || DefaultProfile;
-                    e.respond({user: friends});
+                    e.respond({user: friend});
                 })
                 .catch(err => Log.error(err));
         },
@@ -151,9 +183,9 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
 
     events = DEFAULT_EVENTS;
     switch (gameId) {
-    case 'skribble':
-        events = _.defaults(Skribble({_links}), events);
-        break;
+        case 'skribble':
+            events = _.defaults(Skribble({_links}), events);
+            break;
     }
 
     return _.reduce(events, (a, v, k) => {

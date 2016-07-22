@@ -61,27 +61,18 @@ var Game = React.createClass({
     },
     componentDidMount: function () {
         var frame = ReactDOM.findDOMNode(this.refs.gameRef);
-        var callApi = _.debounce(function () {
-            HttpManager.GET({
-                url: (GLOBALS.API_URL),
-                handleErrors: false
-            });
-        }, 5000);
-
-        this.setState({
-            currentGame: this.props.game,
-            eventHandler: getEventsForGame(
-                EVENT_PREFIX,
-                this.props.game,
-                this.props.currentUser._links,
-                this.onExit
-            )
-        });
+        var callApi;
 
         if (!frame) {
             return;
         }
 
+        callApi = _.debounce(function () {
+            HttpManager.GET({
+                url: (GLOBALS.API_URL),
+                handleErrors: false
+            });
+        }, 5000);
         frame.addEventListener('load', function () {
             frame.contentWindow.addEventListener('click', callApi, false);
         }, false);
