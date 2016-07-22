@@ -9,25 +9,31 @@ import Layout from 'layouts/one_col';
 
 const PAGE_UNIQUE_IDENTIFIER = 'single-game';
 
-var GamePage = React.createClass({
-    getInitialState: function () {
-        return {
-            isStudent: true
+var mapStateToProps;
+var Page;
+
+export class GamePage extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            isStudent: true,
         };
-    },
-    componentDidMount: function () {
+    }
+    componentDidMount() {
         this.resolveRole(this.props);
         this.setState({
             gameId: this.props.params.game,
         });
-    },
-    componentWillReceiveProps: function (nextProps) {
+    }
+
+    componentWillReceiveProps(nextProps) {
         this.resolveRole(nextProps);
         this.setState({
             gameId: this.props.params.game,
         });
-    },
-    resolveRole: function (props) {
+    }
+
+    resolveRole(props) {
         // remember we actually want current user here, not the user whose
         // profile we are looking at
         if (props.currentUser &&
@@ -41,8 +47,9 @@ var GamePage = React.createClass({
                 isStudent: true
             });
         }
-    },
-    render: function () {
+    }
+
+    render() {
         return (
             <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <Game
@@ -56,15 +63,17 @@ var GamePage = React.createClass({
             </Layout>
         );
     }
-});
+}
 
-var mapStateToProps = state => {
+mapStateToProps = state => {
     var data = {};
     var loading = true;
     var currentUser = {};
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
+    }
+    if (state.currentUser != null) {
         currentUser = state.currentUser;
     }
     return {
@@ -74,7 +83,6 @@ var mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(GamePage); //eslint-disable-line no-undef
+Page = connect(mapStateToProps)(GamePage);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
-
