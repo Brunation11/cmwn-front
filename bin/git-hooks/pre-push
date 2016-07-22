@@ -22,11 +22,11 @@ do
     bash $PWD/bin/setup-docker.sh $target_docker_name
     if [ $? != 0 ]
     then
-        >&2 echo "[91m[post-push] failed: no $target_docker_name docker-machine running[0m"
+        >&2 echo "[91m[pre-push] failed: no $target_docker_name docker-machine running[0m"
         exit 1
     fi
 
-    echo "[post-push] connecting to containers"
+    echo "[pre-push] connecting to containers"
     eval $(docker-machine env $target_docker_name)
 
     echo "[pre-push] Running lint"
@@ -57,5 +57,5 @@ do
     echo "" > push_test.log
 
     git checkout $current_branch
-    echo "[0m[pre-push] success: build passed[0m"
+    echo "[31m[pre-push] success: build passed[0m"
 done
