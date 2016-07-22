@@ -2,7 +2,6 @@
 /**
  * App.js
  * # Production Application Entrypoint
-..............................................................................................................
 .........................................................................,....................................
 ..,,,,,,,,,,,,,,,,,,,,,,,...............................................,,,...................................
 :::~~~~:777.,:,,,,,==~~~~~::::,,,...............................,..,,,,,,,,,,,,,.,............................
@@ -252,7 +251,6 @@ var mapStateToProps = state => {
     };
 };
 
-
 var App = connect(mapStateToProps)(AppComponent);
 
 /** Default route. Currently does nothing except display a 404, as this loading indicates no route found**/
@@ -275,7 +273,6 @@ var routes = {
         { path: '*', component: Landing},
     ]),
 };
-
 
 //█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
 //█  2. Page Lifecycle Definition
@@ -347,9 +344,8 @@ var progressivePageLoad = function () {
             });
             break;
         //components load after page, and are invoked through on the page, via a Datasource component
-        //calling Util.attemptGetComponentData
-        //additional cases should be added here. Be sure to update the globals file with new states.
-        //They must be sequential, and
+        //calling Util.attemptGetComponentData additional cases should be added here. Be sure to update
+        //the globals file with new states. They must be sequential, and
         //should always occur on every page load, so as not to block one another.
         //Make sure final is always last, naturally
         case GLOBALS.PAGE_LOAD_STATE.FINAL:
