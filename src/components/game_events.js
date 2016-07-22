@@ -122,6 +122,18 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
                     .catch(err => Log.error(err));
             }
         },
+        getFriend: function (e) {
+            if (!e.gameData.friend_id) return;
+            HttpManager.GET(_links.user.href + '/' + e.gameData.friend_id)
+                .then(server => {
+                    var friend = server.response
+                    friend._embedded = friend._embedded || {};
+                    friend._embedded.image = friend._embedded.image || {};
+                    friend._embedded.image.url = friend._embedded.image.url || DefaultProfile;
+                    e.respond({user: friends});
+                })
+                .catch(err => Log.error(err));
+        },
         getFriends: function (e) {
             HttpManager.GET(_links.friend.href)
                 .then(server => {
