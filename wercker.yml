@@ -4,21 +4,25 @@ build:
   steps:
     - script:
       name: Install packages
-      code: |
-       if [ -f "$WERCKER_CACHE_DIR/nm_cache.tar" ]; then
-          debug "Extracting npm tar"
-          tar xf $WERCKER_CACHE_DIR/nm_cache.tar
-       fi
-       npm prune && npm install && tar cf $WERCKER_CACHE_DIR/nm_cache.tar node_modules
+      code: npm prune && npm install && tar cf $WERCKER_CACHE_DIR/nm_cache.tar node_modules
+    - script:
+      name: more dumb 1
+      code: npm update
     - script:
       name: +1 dump step of dumbness with keen
       code: npm rebuild node-sass
     - script:
+      name: more dumb 2
+      code: npm rebuild imagemin-optipng
+    - script:
       name: Linter
       code: gulp lint
-#    - script:
-#      name: Build packages
-#      code: gulp build --production
+    - script:
+      name: Unit Tests
+      code: gulp unit
+    - script:
+      name: Build packages
+      code: gulp build --production
   after-steps:
     - slack-notifier:
       url: $SLACK_URL

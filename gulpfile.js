@@ -19,7 +19,7 @@ var execSync = require('child_process').execSync;
 var spawn = require('child_process').spawn;
 var eslint = require('gulp-eslint');
 var scsslint = require('gulp-scss-lint');
-var scssLintStylish = require('gulp-scss-lint-stylish');
+var stylish = require('gulp-scss-lint-stylish2');
 var fs = require('fs');
 var eslintConfigJs = JSON.parse(fs.readFileSync('./.eslintrc'));
 var eslintConfigTest = JSON.parse(fs.readFileSync('./.eslintrc_test'));
@@ -376,6 +376,7 @@ gulp.task('lint-js', function () {
         // eslint.format() outputs the lint results to the console.
         // Alternatively use eslint.formatEach() (see Docs).
         .pipe(eslint.format())
+        .pipe(eslint.format('stylish', fs.createWriteStream('jslint.log')))
         // To have the process exit with an error code (1) on
         // lint error, return the stream and pipe to failAfterError last.
         .pipe(eslint.failAfterError());
@@ -384,20 +385,24 @@ gulp.task('lint-test', function () {
     return gulp.src(['src/**/*.test.js'])
         .pipe(eslint(_.defaultsDeep(eslintConfigTest, eslintConfigJs)))
         .pipe(eslint.format())
+        .pipe(eslint.format('stylish', fs.createWriteStream('testlint.log')))
         .pipe(eslint.failAfterError());
 });
 gulp.task('lint-config', function () {
     return gulp.src(['gulpfile.js', 'webpack.config.dev.js', 'webpack.config.prod.js'])
         .pipe(eslint(_.defaultsDeep(eslintConfigConfig, eslintConfigJs)))
         .pipe(eslint.format())
+        .pipe(eslint.format('stylish', fs.createWriteStream('configlint.log')))
         .pipe(eslint.failAfterError());
 });
 gulp.task('lint-scss', function () {
+    var reporter = stylish();
     return gulp.src(['src/**/*.scss'])
         .pipe(scsslint({
-            'reporterOutput': 'scssReport.json', // file output
-            customReport: scssLintStylish
+            customReport: reporter.issues,
+            reporterOutput: 'scsslint.json'
         }))
+        .pipe(reporter.printSummary)
         .pipe(scsslint.failReporter());
 });
 
@@ -405,7 +410,17 @@ gulp.task('unit', function () {
     process.env.NODE_ENV = 'production';
     process.env.BABEL_ENV = 'production';
     var tests = gulp.src(['src/**/*.test.js'], {read: false})
-         .pipe(mocha({require: ['./src/testdom.js'], reporter: 'min'}));
+         .pipe(mocha({
+             require: ['./src/testdom.js'],
+             timeout: 2000,
+             reporter: 'min'
+         }))
+         .once('error', () => {
+             process.exit(1);
+         })
+         .once('end', () => {
+             process.exit();
+         });
     tests.on('error', function (err) {
         console.log('SOMETHING HAPPENED:' + err);
     });

@@ -30,4 +30,6 @@ coverage/**/*
 lib
 lib/**/*
 .nyc_output
+tar-*
 scssReport.json
+scsslint.json
