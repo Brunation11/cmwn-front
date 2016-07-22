@@ -95,7 +95,6 @@ export class View extends React.Component{
                 this.props.components[`${GROUP_USER_DATASOURCE_IDENTIFIER}-${PAGE_UNIQUE_IDENTIFIER}`]
                     .page;
         }
-        debugger;
         return (
             <Layout>
                 <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard" id="panel-1">
