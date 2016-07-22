@@ -7,7 +7,7 @@ target_docker_name="front"
 git update-index -q --refresh
 git diff-index --quiet HEAD .
 if [ $? != 0 ]; then
-    echo "[91m[pre-push] branch is dirty. Please stash or commit your changes so the pre-push check can run[0m"
+    echo "[91m[pre-push] failed: branch is dirty. Please stash or commit your changes so the pre-push check can run[0m"
     exit 157
 fi
 
@@ -16,23 +16,24 @@ do
     current_sha1=$(git rev-parse HEAD)
     current_branch=$(git rev-parse --abbrev-ref HEAD)
 
-    git checkout $local_sha > /dev/null
+    git checkout $local_sha -q
+    echo "[pre-push] checking out $local_sha"
 
     bash $PWD/bin/setup-docker.sh $target_docker_name
     if [ $? != 0 ]
     then
-        >&2 echo "[post-merge] no $target_docker_name docker-machine running"
+        >&2 echo "[91m[post-push] failed: no $target_docker_name docker-machine running[0m"
         exit 1
     fi
 
-    echo "[post-merge] connecting to containers"
+    echo "[post-push] connecting to containers"
     eval $(docker-machine env $target_docker_name)
 
     echo "[pre-push] Running lint"
     docker-compose run -T --rm node gulp lint --color >> push.log 2>&1
 
     if [ $? != 0 ]; then
-        echo "build failed linting"
+        echo "[91m[pre-push] failed: build failed linting[0m"
         cat testlint.log 2>/dev/null
         cat configlint.log 2>/dev/null
         ./pretty_print_scss_log.js
@@ -44,7 +45,7 @@ do
     docker-compose run --rm node gulp unit --color >> push_test.log 2>&1
 
     if [ $? != 0 ]; then
-        echo "build failed unit tests"
+        echo "[91m[pre-push]build failed unit tests[0m"
         cat push_test.log
         exit 157
     fi
@@ -56,4 +57,5 @@ do
     echo "" > push_test.log
 
     git checkout $current_branch
+    echo "[0m[pre-push] success: build passed[0m"
 done
