@@ -96,29 +96,39 @@ class Friends extends React.Component {
     renderUserFlip(item) {
         return (
             <div className="flip" key={Shortid.generate()}>
-                <Link to={`/profile/${item.user_id == null ? item.friend_id : item.user_id}`}
-                    className="friend-link">
-                    <div className="item">
-                        <span className="overlay">
-                            <div className="relwrap friend"><div className="abswrap prompts">
-                                <span className={ClassNames('pending-prompt', {
-                                    faded: item.friend_status !== 'PENDING'})
-                                }>
+                <div className="item">
+                    <span className="overlay">
+                        <div className="relwrap">
+                            <div className="abswrap prompts">
+                                <span className={ClassNames(
+                                    'pending-prompt', {
+                                        disabled: item.friend_status !== 'PENDING'
+                                    }
+                                )}>
                                     {PENDING}
                                 </span>
-                                <Button onClick={this.acceptRequest.bind(this, item)} className={ClassNames(
-                                    'blue standard',
-                                    {faded: item.friend_status !== 'NEEDS_YOUR_ACCEPTANCE'}
-                                )}>
+                                <Button
+                                    onClick={this.acceptRequest.bind(this, item)}
+                                    className={ClassNames(
+                                        'blue standard', {
+                                            disabled: item.friend_status !== 'NEEDS_YOUR_ACCEPTANCE'
+                                        }
+                                    )}
+                                >
                                     {REQUESTED}
                                 </Button>
-                                <Button className="purple standard">{PROFILE}</Button>
-                            </div></div>
-                        </span>
-                        <img src={item.image}></img>
-                    </div>
-                    <p className="link-text" >{item.username}</p>
-                </Link>
+                                <a
+                                    href={`/profile/${item.user_id == null ? item.friend_id : item.user_id}`}
+                                    className="btn purple standard"
+                                >
+                                    {PROFILE}
+                                </a>
+                            </div>
+                        </div>
+                    </span>
+                    <img src={item.image}></img>
+                </div>
+                <p className="link-text" >{item.username}</p>
             </div>
         );
     }

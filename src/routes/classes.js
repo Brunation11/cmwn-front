@@ -85,13 +85,8 @@ var Component = React.createClass({
         );
     },
     render: function () {
-        var view;
-        var state = Store.getState();
-        if (state.currentUser.type === 'CHILD') {
-            view = this.renderChildView;
-        } else {
-            view = this.renderAdminView;
-        }
+        var view = (this.props.currentUser && this.props.currentUser.type === 'CHILD') ?
+            this.renderChildView : this.renderAdminView;
         return (
             <Layout className="user-list">
                 {view()}
@@ -103,13 +98,15 @@ var Component = React.createClass({
 var mapStateToProps = state => {
     var data = [];
     var loading = true;
+    var currentUser = state.currentUser;
     if (state.page && state.page.data && state.page.data._embedded && state.page.data._embedded.group) {
         loading = state.page.loading;
         data = state.page.data._embedded.group;
     }
     return {
         data,
-        loading
+        loading,
+        currentUser
     };
 };
 
