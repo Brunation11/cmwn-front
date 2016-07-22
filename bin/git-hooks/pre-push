@@ -23,6 +23,7 @@ do
     if [ $? != 0 ]
     then
         >&2 echo "[91m[pre-push] failed: no $target_docker_name docker-machine running[0m"
+        git checkout $current_branch
         exit 1
     fi
 
@@ -38,6 +39,7 @@ do
         cat configlint.log 2>/dev/null
         ./pretty_print_scss_log.js
         cat jslint.log 2>/dev/null
+        git checkout $current_branch
         exit 157
     fi
 
@@ -47,6 +49,7 @@ do
     if [ $? != 0 ]; then
         echo "[91m[pre-push]build failed unit tests[0m"
         cat push_test.log
+        git checkout $current_branch
         exit 157
     fi
 
