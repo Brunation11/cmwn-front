@@ -13,7 +13,6 @@ import FlipBoard from 'components/flipboard';
 import Toast from 'components/toast';
 import Paginator from 'components/paginator';
 import Actions from 'components/actions';
-import Store from 'components/store';
 
 import Layout from 'layouts/two_col';
 
@@ -32,6 +31,9 @@ const REQUESTED = 'Accept Request';
 const PENDING = 'Request Sent';
 
 const PAGE_UNIQUE_IDENTIFIER = 'friends-page';
+
+var mapStateToProps;
+var Page;
 
 class Friends extends React.Component {
     addFriend(item, e) {
@@ -125,7 +127,7 @@ class Friends extends React.Component {
         const NO_FRIENDS = (
                 <h2 className="placeholder">
                     Looks like you haven't added any friends yet. Let's go{' '}
-                    <Link to='/friends/suggested'>find some!</Link>
+                    <Link to="/friends/suggested">find some!</Link>
                 </h2>
         );
         if (this.props.data.length === 0) {
@@ -172,7 +174,7 @@ class Friends extends React.Component {
     }
 }
 
-var mapStateToProps = state => {
+mapStateToProps = state => {
     var data = {};
     var loading = true;
     var rowCount = 1;
@@ -200,7 +202,7 @@ var mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(Friends);
+Page = connect(mapStateToProps)(Friends);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
 
