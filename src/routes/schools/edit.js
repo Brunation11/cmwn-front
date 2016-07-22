@@ -201,7 +201,13 @@ var BulkUpload = React.createClass({
         }
         return (
           <Panel header={HEADINGS.UPLOAD} className="standard">
-            <iframe className="hidden" width="0" height="0" border="0" name="dummyframe" id="dummyframe"></iframe>
+            <iframe
+                className="hidden"
+                width="0" height="0"
+                border="0"
+                name="dummyframe"
+                id="dummyframe">
+            </iframe>
             <Form ref="formRef" method="post" target="dummyframe" encType="multipart/form-data"
                 action={this.props.url} id="import-form" onSubmit={e => {
                     try {
