@@ -126,11 +126,11 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
             if (!e.gameData.friend_id) return;
             HttpManager.GET(_links.user.href + '/' + e.gameData.friend_id)
                 .then(server => {
-                    var friend = server.response
+                    var friend = server.response;
                     friend._embedded = friend._embedded || {};
                     friend._embedded.image = friend._embedded.image || {};
                     friend._embedded.image.url = friend._embedded.image.url || DefaultProfile;
-                    e.respond({user: friends});
+                    e.respond({user: friend});
                 })
                 .catch(err => Log.error(err));
         },
@@ -151,9 +151,9 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
 
     events = DEFAULT_EVENTS;
     switch (gameId) {
-    case 'skribble':
-        events = _.defaults(Skribble({_links}), events);
-        break;
+        case 'skribble':
+            events = _.defaults(Skribble({_links}), events);
+            break;
     }
 
     return _.reduce(events, (a, v, k) => {
