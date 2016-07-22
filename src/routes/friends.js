@@ -146,7 +146,7 @@ class Friends extends React.Component {
         const NO_FRIENDS = (
                 <h2 className="placeholder">
                     Looks like you haven't added any friends yet. Let's go{' '}
-                    <Link to='/friends/suggested'>find some!</Link>
+                    <Link to="/friends/suggested">find some!</Link>
                 </h2>
         );
         if (this.props.data.length === 0) {
