@@ -57,5 +57,5 @@ do
     echo "" > push_test.log
 
     git checkout $current_branch
-    echo "[31m[pre-push] success: build passed[0m"
+    echo "[92m[pre-push] success: build passed[0m"
 done
