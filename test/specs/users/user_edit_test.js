@@ -26,10 +26,10 @@ var checkEditContent = function() {
     expect(browser.getHTML('.edit-profile .panel-heading', false)).to.have.length.above(0);
     expect(browser.isVisible('.edit-student')).to.be.ok;
     expect(browser.isVisible('.edit-profile')).to.be.ok;
-    expect(browser.isVisible('#username')).to.be.ok;
-    expect(browser.isVisible('#email')).to.be.ok;
-    expect(browser.isVisible('#first-name')).to.be.ok;
-    expect(browser.isVisible('#last-name')).to.be.ok;
+    expect(browser.isVisible('#edit-username')).to.be.ok;
+    expect(browser.isVisible('#edit-email')).to.be.ok;
+    expect(browser.isVisible('#edit-first-name')).to.be.ok;
+    expect(browser.isVisible('#edit-last-name')).to.be.ok;
     expect(browser.isVisible('#save-btn')).to.be.ok;
 
     // date dropdown content
@@ -55,8 +55,8 @@ var checkStaticEditContents = function () {
     browser.waitForExist('.panel');
     expect(browser.getHTML('.panel-heading', false)).to.have.length.above(0);
     expect(browser.isVisible('#username')).to.be.ok;
-    expect(browser.isVisible('#first_name')).to.be.ok;
-    expect(browser.isVisible('#last_name')).to.be.ok;
+    expect(browser.isVisible('#first-name')).to.be.ok;
+    expect(browser.isVisible('#last-name')).to.be.ok;
     expect(browser.isVisible('#birthday')).to.be.ok;
 
     browser.waitForExist('.profile-image');
@@ -65,41 +65,41 @@ var checkStaticEditContents = function () {
 
 
 var changeUsername = function (newUsername) {
-    browser.waitForExist('#username');
-    browser.setValue('#username', newUsername);
-    expect(browser.getValue('#username')).to.equal(newUsername);
+    browser.waitForExist('#edit-username');
+    browser.setValue('#edit-username', newUsername);
+    expect(browser.getValue('#edit-username')).to.equal(newUsername);
     browser.click('#save-btn');
     browser.refresh();
-    browser.waitForExist('#username');
-    expect(browser.getValue('#username')).to.equal(newUsername);
+    browser.waitForExist('#edit-username');
+    expect(browser.getValue('#edit-username')).to.equal(newUsername);
     expect(browser.getHTML('.username.regular-text a', false)).to.equal(newUsername);
 };
 
 var changeFirstName = function (newName) {
     var header;
-    browser.waitForExist('#first-name');
-    browser.setValue('#first-name', newName);
-    expect(browser.getValue('#first-name')).to.equal(newName);
-    header = `Edit User: ${newName} ${browser.getValue('#last-name')}`;
+    browser.waitForExist('#edit-first-name');
+    browser.setValue('#edit-first-name', newName);
+    expect(browser.getValue('#edit-first-name')).to.equal(newName);
+    header = `Edit User: ${newName} ${browser.getValue('#edit-last-name')}`;
     expect(browser.getHTML('.edit-profile .panel-heading', false)).to.equal(header);
     browser.click('#save-btn');
     browser.refresh();
-    browser.waitForExist('#first-name');
-    expect(browser.getValue('#first-name')).to.equal(newName);
+    browser.waitForExist('#edit-first-name');
+    expect(browser.getValue('#edit-first-name')).to.equal(newName);
     expect(browser.getHTML('.edit-profile .panel-heading', false)).to.equal(header);
 };
 
 var changeLastName = function (newName) {
     var header;
-    browser.waitForExist('#last-name');
-    browser.setValue('#last-name', newName);
-    expect(browser.getValue('#last-name')).to.equal(newName);
-    header = `Edit User: ${browser.getValue('#first-name')} ${newName}`;
+    browser.waitForExist('#edit-last-name');
+    browser.setValue('#edit-last-name', newName);
+    expect(browser.getValue('#edit-last-name')).to.equal(newName);
+    header = `Edit User: ${browser.getValue('#edit-first-name')} ${newName}`;
     expect(browser.getHTML('.edit-profile .panel-heading', false)).to.equal(header);
     browser.click('#save-btn');
     browser.refresh();
-    browser.waitForExist('#last-name');
-    expect(browser.getValue('#last-name')).to.equal(newName);
+    browser.waitForExist('#edit-last-name');
+    expect(browser.getValue('#edit-last-name')).to.equal(newName);
     expect(browser.getHTML('.edit-profile .panel-heading', false)).to.equal(header);
 };
 
@@ -165,26 +165,26 @@ describe('teacher editing own profile', function () {
     });
 
     it('updates username', function () {
-        browser.waitForExist('#username');
-        var curUsername = browser.getValue('#username');
+        browser.waitForExist('#edit-username');
+        var curUsername = browser.getValue('#edit-username');
         expect(browser.getHTML('.username.regular-text a', false)).to.equal(curUsername);
         changeUsername('testing_username');
         changeUsername(curUsername);
     });
 
     it('updates first name', function () {
-        browser.waitForExist('#first-name');
-        var curName = browser.getValue('#first-name');
-        var header = `Edit User: ${curName} ${browser.getValue('#last-name')}`;
+        browser.waitForExist('#edit-first-name');
+        var curName = browser.getValue('#edit-first-name');
+        var header = `Edit User: ${curName} ${browser.getValue('#edit-last-name')}`;
         expect(browser.getHTML('.edit-profile .panel-heading', false)).to.equal(header);
         changeFirstName('testing_first_name');
         changeFirstName(curName);
     });
 
     it('updates last name', function () {
-        browser.waitForExist('#last-name');
-        var curName = browser.getValue('#last-name');
-        var header = `Edit User: ${browser.getValue('#first-name')} ${curName}`;
+        browser.waitForExist('#edit-last-name');
+        var curName = browser.getValue('#edit-last-name');
+        var header = `Edit User: ${browser.getValue('#edit-first-name')} ${curName}`;
         expect(browser.getHTML('.edit-profile .panel-heading', false)).to.equal(header);
         changeLastName('testing_last_name');
         changeLastName(curName);
@@ -221,28 +221,24 @@ describe('teacher editing own student\'s profile', function () {
         navigateToEdit('student-tab');
     });
 
-/*
+    /*
     it('has the correct content', function () {
         checkEditContent();
     });
 
     it('updates first name', function () {
-        var curName;
-        var header;
-        browser.waitForExist('#first-name');
-        curName = browser.getValue('#first-name');
-        header = `Edit User: ${curName} ${browser.getValue('#last-name')}`;
+        browser.waitForExist('#edit-first-name');
+        var curName = browser.getValue('#edit-first-name');
+        var header = `Edit User: ${curName} ${browser.getValue('#edit-last-name')}`;
         expect(browser.getHTML('.edit-profile .panel-heading', false)).to.equal(header);
         changeFirstName('testing_first_name');
         changeFirstName(curName);
     });
 
     it('updates last name', function () {
-        var curName;
-        var header;
-        browser.waitForExist('#last-name');
-        curName = browser.getValue('#last-name');
-        header = `Edit User: ${browser.getValue('#first-name')} ${curName}`;
+        browser.waitForExist('#edit-last-name');
+        var curName = browser.getValue('#edit-last-name');
+        var header = `Edit User: ${browser.getValue('#edit-first-name')} ${curName}`;
         expect(browser.getHTML('.edit-profile .panel-heading', false)).to.equal(header);
         changeLastName('testing_last_name');
         changeLastName(curName);
@@ -250,7 +246,8 @@ describe('teacher editing own student\'s profile', function () {
 
     it('updates birthday', function () {
         checkBirthday();
-    });*/
+    });
+     */
 
     it('fails for bad reset code', function () {
         browser.waitForExist('#reset-code');

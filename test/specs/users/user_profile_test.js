@@ -20,8 +20,8 @@ var checkAnotherProfileContents = function () {
     browser.waitForExist('.panel');
     expect(browser.getHTML('.panel-heading', false)).to.have.length.above(0);
     expect(browser.isVisible('#username')).to.be.ok;
-    expect(browser.isVisible('#first_name')).to.be.ok;
-    expect(browser.isVisible('#last_name')).to.be.ok;
+    expect(browser.isVisible('#first-name')).to.be.ok;
+    expect(browser.isVisible('#last-name')).to.be.ok;
     expect(browser.isVisible('#birthday')).to.be.ok;
 
     browser.waitForExist('.profile-image');

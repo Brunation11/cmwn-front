@@ -234,9 +234,9 @@ export class Profile extends React.Component {
                             <p>Username:</p>
                             <p className="standard field" id="username">{this.state.username}</p>
                             <p>First Name:</p>
-                            <p className="standard field" id="first_name">{this.state.first_name}</p>
+                            <p className="standard field" id="first-name">{this.state.first_name}</p>
                             <p>Last Name:</p>
-                            <p className="standard field" id="last_name">{this.state.last_name}</p>
+                            <p className="standard field" id="last-name">{this.state.last_name}</p>
                             <p>Birthday:</p>
                             <p className="standard field" id="birthday">
                                 {Moment(ISODate).format('MM-DD-YYYY')}
