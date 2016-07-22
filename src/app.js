@@ -2,7 +2,6 @@
 /**
  * App.js
  * # Production Application Entrypoint
-..............................................................................................................
 .........................................................................,....................................
 ..,,,,,,,,,,,,,,,,,,,,,,,...............................................,,,...................................
 :::~~~~:777.,:,,,,,==~~~~~::::,,,...............................,..,,,,,,,,,,,,,.,............................
@@ -252,7 +251,6 @@ var mapStateToProps = state => {
     };
 };
 
-
 var App = connect(mapStateToProps)(AppComponent);
 
 /** Default route. Currently does nothing except display a 404, as this loading indicates no route found**/
@@ -275,7 +273,6 @@ var routes = {
         { path: '*', component: Landing},
     ]),
 };
-
 
 //█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
 //█  2. Page Lifecycle Definition
@@ -347,9 +344,8 @@ var progressivePageLoad = function () {
             });
             break;
         //components load after page, and are invoked through on the page, via a Datasource component
-        //calling Util.attemptGetComponentData
-        //additional cases should be added here. Be sure to update the globals file with new states.
-        //They must be sequential, and
+        //calling Util.attemptGetComponentData additional cases should be added here. Be sure to update
+        //the globals file with new states. They must be sequential, and
         //should always occur on every page load, so as not to block one another.
         //Make sure final is always last, naturally
         case GLOBALS.PAGE_LOAD_STATE.FINAL:
@@ -418,9 +414,13 @@ var hashCode = function (s){
 };
 
 //Only report errors in production
-if (window.Rollbar && ~window.__cmwn.MODE.indexOf('prod')){ //eslint-disable-line no-undef
-    Rollbar.configure({reportLevel: 'error'}); //eslint-disable-line no-undef
-}
+//if (window.Rollbar && ~window.__cmwn.MODE.indexOf('prod')){ //eslint-disable-line no-undef
+// MPR, 8/19/16: note, switching this to scrub and only report errors in all environments
+// uncomment the conditional outside this comment to reenable it, or use the
+// window.__cmwn.interactiveDebug function in the console to reenable it temporarily
+Rollbar.configure({scrubFields: ['first_name', 'last_name', 'meta', 'email', 'birthdate'],
+    reportLevel: 'error'}); //eslint-disable-line no-undef
+//}
 //Dynamic rollbar configuration for throttling. Static configuration happens in index.php
 //User configuration happens in Authorization.js (soon will be moved to actions.js)
 if (window.Rollbar != null) { //eslint-disable-line no-undef
