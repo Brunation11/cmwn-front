@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 
 import classData from 'mocks/users/class_data';
 import { EditClass } from 'routes/classes/edit';
-//import { CreateStudent } from 'routes/classes/edit';
+import { CreateStudent } from 'routes/classes/edit';
 
 var checkEditClass = function (wrapper) {
     expect(wrapper.find('Layout')).to.have.length(1);
