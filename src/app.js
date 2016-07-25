@@ -134,6 +134,7 @@ import Store from 'components/store';
 import Util from 'components/util';
 import DevTools from 'components/devtools';
 import Actions from 'components/actions';
+import TimerModal from 'components/timer_modal';
 
 import Errors from 'components/errors';
 import Home from 'routes/home';
@@ -223,6 +224,7 @@ var AppComponent = React.createClass({
         return (
             <div>
                 {Errors.renderErrors()}
+                <TimerModal currentUser={this.props.currentUser}></TimerModal>
                 <GlobalHeader logoLink={this.state.logoLink} currentUser={this.props.currentUser} />
                 <div className="sweater">
                     {this.props.children}

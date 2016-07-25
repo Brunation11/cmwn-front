@@ -170,7 +170,7 @@ var Game = React.createClass({
                     'game',
                     {fullscreen: this.state.fullscreenFallback}
                 )}>
-                    <iframe ref="gameRef" src={this.props.url} allowtransparency="true" />
+                    <iframe ref="gameRef" src={this.props.url} allowTransparency="true" />
                     <Button className="purple standard" onClick={this.makeFullScreen}>
                         <Glyphicon glyph="fullscreen" /> {FULLSCREEN}
                     </Button>
