@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import React from 'react';
 import _ from 'lodash';
 import {Button, Input, Panel} from 'react-bootstrap';
@@ -40,6 +41,45 @@ const INVALID_SUBMISSION = 'Invalid submission. Please update fields highlighted
 const BAD_UPDATE = 'There was a problem updating your profile. Please try again later.';
 const USER_REMOVED = 'User deleted. You will now be redirected.';
 const CONFIRM_DELETE = 'Are you sure you want to delete this user? This action cannot be undone.';
+
+var decodeEditingPermissions = function (isStudent) {
+    var canEdit = false;
+    var perms = {
+        username: {
+            canView: true,
+            canEdit: false
+        },
+        firstName: {
+            canView: true,
+            canEdit: false
+        },
+        lastName: {
+            canView: true,
+            canEdit: false
+        },
+        email: {
+            canView: false,
+            canEdit: false
+        },
+        birthday: {
+            canView: true,
+            canEdit: false
+        },
+        gender: {
+            canView: false,
+            canEdit: false
+        }
+    };
+    if (!isStudent) {
+        perms.username.canEdit = true;
+        perms.firstName.canEdit = true;
+        perms.lastName.canEdit = true;
+        perms.birthday.canEdit = true;
+    }
+    canEdit = _.reduce(Object.keys(perms), (overall, k) => { return overall || perms[k].canEdit; }, false);
+    perms.canEdit = canEdit;
+    return perms;
+};
 
 export class EditProfile extends React.Component {
     constructor(props) {
@@ -237,157 +277,194 @@ export class EditProfile extends React.Component {
         );
     }
 
-    renderAdult() {
+    renderStaticUsername() {
         return (
-            <Form ref="formRef">
-                <Input
-                    type="text"
-                    value={this.state.username}
-                    placeholder="Username"
-                    label="Username:"
-                    ref="usernameInput"
-                    validate={[
-                        Validate.max.bind(null, 25),
-                        Validate.regex.bind(null, /^[a-zA-Z0-9_-]+$/),
-                    ]}
-                    name="usernameInput"
-                    validationEvent="onBlur"
+            <span className="user-metadata">
+                <p>Username:</p>
+                <p className="standard field">{this.state.username}</p>
+            </span>
+        );
+    }
+
+    renderEditableUsername() {
+        return (
+            <Input
+                type="text"
+                value={this.state.username}
+                placeholder="Username"
+                label="Username:"
+                ref="usernameInput"
+                validate={[
+                    Validate.max.bind(null, 25),
+                    Validate.regex.bind(null, /^[a-zA-Z0-9_-]+$/),
+                ]}
+                name="usernameInput"
+                validationEvent="onBlur"
                 disabled={this.props.currentUser.user_id !== this.state.user_id}
-                    hasFeedback
-                    onChange={
-                        e => {
-                            this.setState({
-                                username: e.target.value
-                            });
-                            return true;
-                        }
-                    } //eslint-disable-line camelcase
-                />
-                <Input
-                    type="textarea"
-                    value={this.state.email}
-                    placeholder="Email"
-                    label="Email"
-                    ref="emailInput"
-                    validate="required"
-                    name="emailInput"
-                    validationEvent="onBlur"
-                    disabled
-                    hasFeedback
-                    onChange={
-                        e => this.setState({
-                            email: e.target.value
-                        })
-                    } //eslint-disable-line camelcase
-                />
-                <Input
-                    type="text"
-                    value={this.state.first_name}
-                    placeholder="first name"
-                    label="First Name:"
-                    validate="required"
-                    ref="firstnameInput"
-                    name="firstnameInput"
-                    validationEvent="onBlur"
-                    hasFeedback
-                    disabled={this.state.isStudent}
-                    onChange={
-                        e => this.setState({
-                            first_name: e.target.value //eslint-disable-line camelcase
-                        })
+                hasFeedback
+                onChange={
+                    e => {
+                        this.setState({
+                            username: e.target.value
+                        });
+                        return true;
                     }
-                />
-                <Input
-                    type="text"
-                    value={this.state.last_name}
-                    placeholder="last name"
-                    label="Last Name:"
-                    validate="required"
-                    ref="lastnameInput"
-                    name="lastnameInput"
-                    hasFeedback
-                    onChange={
+                } //eslint-disable-line camelcase
+            />
+        );
+    }
+
+    renderStaticFirstName() {
+        return (
+            <span className="user-metadata">
+                <p>First Name:</p>
+                <p className="standard field">{this.state.first_name}</p>
+            </span>
+        );
+    }
+
+    renderEditableFirstName() {
+        return (
+            <Input
+                type="text"
+                value={this.state.first_name}
+                placeholder="first name"
+                label="First Name:"
+                validate="required"
+                ref="firstnameInput"
+                name="firstnameInput"
+                validationEvent="onBlur"
+                hasFeedback
+                disabled={this.state.isStudent}
+                onChange={
+                    e => this.setState({
+                        first_name: e.target.value //eslint-disable-line camelcase
+                    })
+                }
+            />
+        );
+    }
+
+    renderStaticLastName() {
+        return (
+            <span className="user-metadata">
+                <p>Last Name:</p>
+                <p className="standard field">{this.state.last_name}</p>
+            </span>
+        );
+    }
+
+    renderEditableLastName() {
+        return (
+            <Input
+                type="text"
+                value={this.state.last_name}
+                placeholder="last name"
+                label="Last Name:"
+                validate="required"
+                ref="lastnameInput"
+                name="lastnameInput"
+                hasFeedback
+                onChange={
                         e => this.setState({
                             last_name: e.target.value //eslint-disable-line camelcase
                         })
                     }
-                    // disabled={this.state.isStudent}
-                />
-                <DropdownDatepicker
-                    ref="dropdownDatepicker"
-                    disabled={this.state.isStudent}
-                    value={this.state.dob}
-                    hasFeedback
-                    onChange={
-                        date => {
-                            this.setState({
-                                dob: date,
-                                birthdate: Date.parse(date)
-                            });
-                        }
-                    }
-                />
-                {/*
-                <Input
-                    type="select"
-                    value={this.state.gender}
-                    placeholder="Gender"
-                    label="Gender"
-                    validate="required"
-                    ref="genderInput"
-                    name="genderInput"
-                    onChange={e => this.setState({gender: e.target.value})}
-                >
-                        <option value="" >Select gender</option>
-                        <option value="female">Female</option>
-                        <option value="male">Male</option>
-                        <option value="other">Other</option>
-                </Input>
-                <Input
-                    type="email"
-                    value={this.state.email}
-                    placeholder="email"
-                    label="email"
-                    validate="required,email"
-                    ref="emailInput"
-                    name="emailInput"
-                    onChange={e => this.setState({email: e.target.value})}
-                />
-                <h3>Parent or Guardian</h3>
-                {this.renderParentFields()}
-                <p><a onClick={this.addParent}>+ Add parent or guardian</a></p>
-                <h3>School Information</h3>
-                {this.renderSchoolInformation()}
-                */}
-                <Button className="user-metadata-btn" disabled={this.state.isStudent}
-                    onClick={this.submitData.bind(this)}> Save </Button>
-            </Form>
+                // disabled={this.state.isStudent}
+            />
         );
     }
 
-    renderChild() {
+    renderStaticBirthday() {
         var day = Moment(this.state.dob).date();
         var month = Moment(this.state.dob).month() + 1;
         var year = Moment(this.state.dob).year();
 
         return (
-            <div className="user-metadata">
-                <p>Username:</p>
-                <p className="standard field">{this.state.username}</p>
-                <p>First Name:</p>
-                <p className="standard field">{this.state.first_name}</p>
-                <p>Last Name:</p>
-                <p className="standard field">{this.state.last_name}</p>
+            <span className="user-metadata">
                 <p>Birthday:</p>
                 <p className="standard field">{Moment((day + month + year)).format('MMMM Do, YYYY')}</p>
-            </div>
+            </span>
         );
     }
 
-    render() {
-        var userType = (this.state.isStudent || this.props.data.type === 'CHILD') ?
-            this.renderChild : this.renderAdult;
+    renderEditableBirthday() {
+        return (
+            <DropdownDatepicker
+                ref="dropdownDatepicker"
+                disabled={this.state.isStudent}
+                value={this.state.dob}
+                hasFeedback
+                onChange={
+                    date => {
+                        this.setState({
+                            dob: date,
+                            birthdate: Date.parse(date)
+                        });
+                    }
+                }
+            />
+        );
+    }
 
+    renderParentInfo() {
+        return (
+            <span>
+                <h3>Parent or Guardian</h3>
+                {this.renderParentFields()}
+                <p><a onClick={this.addParent}>+ Add parent or guardian</a></p>
+                <h3>School Information</h3>
+                {this.renderSchoolInformation()}
+            </span>
+        );
+    }
+
+    renderEditableGender() {
+        return (
+            <Input
+                type="select"
+                value={this.state.gender}
+                placeholder="Gender"
+                label="Gender"
+                validate="required"
+                ref="genderInput"
+                name="genderInput"
+                onChange={e => this.setState({gender: e.target.value})}
+            >
+                <option value="">Select gender</option>
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+                <option value="other">Other</option>
+            </Input>
+        );
+    }
+
+    renderUserFields() {
+        var perms = decodeEditingPermissions(this.state.isStudent);
+
+        return (
+            <Form ref="formRef">
+                {perms.username.canEdit ? this.renderEditableUsername() : null}
+                {!perms.username.canEdit && perms.username.canView ? this.renderStaticUsername() : null}
+                {perms.email.canView ? this.renderEmail() : null}
+                {perms.firstName.canEdit ? this.renderEditableFirstName() : null}
+                {!perms.firstName.canEdit && perms.firstName.canView ? this.renderStaticFirstName() : null}
+                {perms.lastName.canEdit ? this.renderEditableLastName() : null}
+                {!perms.lastName.canEdit && perms.lastName.canView ? this.renderStaticLastName() : null}
+                {perms.birthday.canEdit ? this.renderEditableBirthday() : null}
+                {!perms.birthday.canEdit && perms.birthday.canView ? this.renderStaticBirthday() : null}
+
+                {perms.canEdit ?
+                    <Button className="user-metadata-btn"
+                        onClick={this.submitData.bind(this)}> Save </Button> :
+                    null
+                }
+            </Form>
+        );
+    }
+
+
+    render() {
         if (this.props.data == null || this.props.data.user_id == null ||
             !Util.decodePermissions(this.props.data.scope).update) {
             return null;
@@ -409,7 +486,7 @@ export class EditProfile extends React.Component {
                         </p>
                     </div>
                     <div className="right">
-                        {userType.call(this)}
+                        {this.renderUserFields()}
                     </div>
                 </Panel>
                 <UpdateUsername
