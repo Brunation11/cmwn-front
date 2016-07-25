@@ -121,7 +121,7 @@ export class SchoolProfile extends React.Component {
                    {this.props.data.description}
                </Panel>
                <CLASS_SOURCE>
-                   <FlipBoard renderFlip={this.renderFlip.bind(this)} header={HEADINGS.MY_CLASSES} />
+                   <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.MY_CLASSES} />
                </CLASS_SOURCE>
            </Layout>
         );
