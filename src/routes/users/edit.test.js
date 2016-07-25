@@ -3,6 +3,7 @@ import {expect} from 'chai';
 import {shallow} from 'enzyme';
 
 import {EditProfile} from 'routes/users/edit';
+import {decodeEditingPermissions} from 'routes/users/edit';
 import editSmoke from 'smoke_tests/users/edit.test.js';
 
 import teacherData from 'mocks/users/teacher_data';
@@ -19,7 +20,7 @@ var checkEditEls = function (wrapper) {
 
 var checkAdultEls = function (wrapper) {
     expect(wrapper.find('Form')).to.have.length(1);
-    expect(wrapper.find('Input')).to.have.length(4);
+    expect(wrapper.find('Input')).to.have.length(3);
 };
 
 var checkEditFields = function (data, currentUser) {
@@ -133,4 +134,48 @@ describe('Edit Profile Unit Tests', function () {
         });
     });
 
+    describe('decoding permissions method', function () {
+        it('has correct viewing permissions for a student', function () {
+            var perms = decodeEditingPermissions(true);
+            expect(perms.username.canView).to.be.true;
+            expect(perms.firstName.canView).to.be.true;
+            expect(perms.lastName.canView).to.be.true;
+            expect(perms.birthday.canView).to.be.true;
+            expect(perms.email.canView).to.be.false;
+            expect(perms.gender.canView).to.be.false;
+        });
+
+        it('has correct editing permissions for a student', function () {
+            var perms = decodeEditingPermissions(true);
+            expect(perms.username.canEdit).to.be.false;
+            expect(perms.firstName.canEdit).to.be.false;
+            expect(perms.lastName.canEdit).to.be.false;
+            expect(perms.birthday.canEdit).to.be.false;
+            expect(perms.email.canEdit).to.be.false;
+            expect(perms.gender.canEdit).to.be.false;
+            expect(perms.canEdit).to.be.false;
+        });
+
+        it('has correct viewing permissions for an adult', function () {
+            var perms = decodeEditingPermissions(false);
+            expect(perms.username.canView).to.be.true;
+            expect(perms.firstName.canView).to.be.true;
+            expect(perms.lastName.canView).to.be.true;
+            expect(perms.birthday.canView).to.be.true;
+            expect(perms.email.canView).to.be.false;
+            expect(perms.gender.canView).to.be.false;
+        });
+
+        it('has correct editing permissions for an adult', function () {
+            var perms = decodeEditingPermissions(false);
+            expect(perms.username.canEdit).to.be.true;
+            expect(perms.firstName.canEdit).to.be.true;
+            expect(perms.lastName.canEdit).to.be.true;
+            expect(perms.birthday.canEdit).to.be.true;
+            expect(perms.email.canEdit).to.be.false;
+            expect(perms.gender.canEdit).to.be.false;
+            expect(perms.canEdit).to.be.true;
+        });
+
+    });
 });

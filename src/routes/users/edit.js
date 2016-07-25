@@ -42,7 +42,7 @@ const BAD_UPDATE = 'There was a problem updating your profile. Please try again 
 const USER_REMOVED = 'User deleted. You will now be redirected.';
 const CONFIRM_DELETE = 'Are you sure you want to delete this user? This action cannot be undone.';
 
-var decodeEditingPermissions = function (isStudent) {
+export var decodeEditingPermissions = function (isStudent) {
     var canEdit = false;
     var perms = {
         username: {
@@ -76,6 +76,7 @@ var decodeEditingPermissions = function (isStudent) {
         perms.lastName.canEdit = true;
         perms.birthday.canEdit = true;
     }
+    // check if any fields are editable
     canEdit = _.reduce(Object.keys(perms), (overall, k) => { return overall || perms[k].canEdit; }, false);
     perms.canEdit = canEdit;
     return perms;
@@ -309,7 +310,7 @@ export class EditProfile extends React.Component {
                         });
                         return true;
                     }
-                } //eslint-disable-line camelcase
+                }
             />
         );
     }
@@ -518,6 +519,8 @@ mapStateToProps = state => {
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
+    }
+    if (currentUser != null) {
         currentUser = state.currentUser;
     }
     return {
