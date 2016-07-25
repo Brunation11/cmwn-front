@@ -65,6 +65,9 @@ class TimerModal extends React.Component {
     }
 
     render() {
+        if (!this.props.currentUser.user_id) {
+            return null;
+        }
         return (
             <Modal
                 id="timer-modal"
