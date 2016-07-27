@@ -242,6 +242,7 @@ export class EditProfile extends React.Component {
             <Form ref="formRef">
                 <Input
                     type="text"
+                    id="edit-username"
                     value={this.state.username}
                     placeholder="Username"
                     label="Username:"
@@ -265,6 +266,7 @@ export class EditProfile extends React.Component {
                 />
                 <Input
                     type="textarea"
+                    id="edit-email"
                     value={this.state.email}
                     placeholder="Email"
                     label="Email"
@@ -282,6 +284,7 @@ export class EditProfile extends React.Component {
                 />
                 <Input
                     type="text"
+                    id="edit-first-name"
                     value={this.state.first_name}
                     placeholder="first name"
                     label="First Name:"
@@ -299,6 +302,7 @@ export class EditProfile extends React.Component {
                 />
                 <Input
                     type="text"
+                    id="edit-last-name"
                     value={this.state.last_name}
                     placeholder="last name"
                     label="Last Name:"
@@ -360,7 +364,7 @@ export class EditProfile extends React.Component {
                 {this.renderSchoolInformation()}
                 */}
                 <Button className="user-metadata-btn" disabled={this.state.isStudent}
-                    onClick={this.submitData.bind(this)}> Save </Button>
+                    onClick={this.submitData.bind(this)} id="save-btn"> Save </Button>
             </Form>
         );
     }
@@ -373,13 +377,15 @@ export class EditProfile extends React.Component {
         return (
             <div className="user-metadata">
                 <p>Username:</p>
-                <p className="standard field">{this.state.username}</p>
+                <p className="standard field" id="username">{this.state.username}</p>
                 <p>First Name:</p>
-                <p className="standard field">{this.state.first_name}</p>
+                <p className="standard field" id="first-name">{this.state.first_name}</p>
                 <p>Last Name:</p>
-                <p className="standard field">{this.state.last_name}</p>
+                <p className="standard field" id="last-name">{this.state.last_name}</p>
                 <p>Birthday:</p>
-                <p className="standard field">{Moment((day + month + year)).format('MMMM Do, YYYY')}</p>
+                <p className="standard field" id="birthday">
+                    {Moment((day + month + year)).format('MMMM Do, YYYY')}
+                </p>
             </div>
         );
     }
