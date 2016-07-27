@@ -15,7 +15,7 @@ $overlay-color: #fff;
             padding: $standard;
             text-align: center;
         }
-
+        // nth-child styles for games tile
         div:nth-child(8n + 1),
         div:nth-child(8n) {
             .overlay {
