@@ -116,7 +116,6 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
         },
         init: function (e) {
             ga('set', 'dimension4', e.gameData.id || e.gameData.game || e.gameData.flip);
-            e.respond(this.props.gameState);
             HttpManager.GET( _links.save_game.href.replace('{game_id}', gameId))
                 .then(server => e.respond(server.response))
                 .catch(err => Log.error('failed to get game data for ' + gameId, err));
