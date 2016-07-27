@@ -11,6 +11,8 @@ import Layout from 'layouts/one_col';
 
 const PAGE_UNIQUE_IDENTIFIER = 'single-game';
 
+const OVERLAY_MSG = 'Please turn this game into landscape mode to continue.';
+
 var mapStateToProps;
 var Page;
 
@@ -60,7 +62,7 @@ export class GamePage extends React.Component {
                     {fullscreen: React.findDOMNode(this.refs.gameRef).isFullScreen()}
                 )}>
                     <span><p>
-                        For the best viewing experience, please turn your device to landscape orientation.
+                        {OVERLAY_MSG}
                     </p></span>
                     <p><a onClick={() => this.setState({gameOn: false})} >(close)</a></p>
                 </div>
