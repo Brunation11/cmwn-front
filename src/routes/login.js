@@ -12,6 +12,8 @@ import GLOBALS from 'components/globals';
 
 import Layout from 'layouts/one_col';
 
+import 'routes/login.scss';
+
 const LABELS = {
     LOGIN: 'Email | Username',
     PASSWORD: 'Password',

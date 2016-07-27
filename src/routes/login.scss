@@ -1,0 +1,7 @@
+@import 'variables';
+
+#login-form {
+	@media (min-width: $standard) and (max-width: $iphone2g-4s-max-width) {
+	    margin: 0 1em;
+	}
+}
