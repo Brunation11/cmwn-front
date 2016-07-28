@@ -16,7 +16,8 @@ const LABELS = {
     LOGIN: 'Email | Username',
     PASSWORD: 'Password',
     SUBMIT: 'SUBMIT',
-    RESET: 'Reset Password'
+    RESET: 'Reset Password',
+    FORGOT: 'Email'
 };
 
 const ERRORS = {
@@ -202,7 +203,7 @@ var Component = React.createClass({
                         <br />
                         <form method="POST" >
                             <input type="hidden" name="_token" value={this.state._token} />
-                            <Input ref="reset" type="text" name="email" label={LABELS.LOGIN} />
+                            <Input ref="reset" type="text" name="email" label={LABELS.FORGOT} />
                             <Button onKeyPress={this.forgotPass} onClick={this.forgotPass}>
                                 {LABELS.RESET}
                             </Button>

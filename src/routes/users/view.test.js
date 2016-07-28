@@ -6,6 +6,7 @@ import { ProfileView } from 'routes/users/view';
 import viewSmoke from 'smoke_tests/users/view.test.js';
 
 import studentDataB from 'mocks/users/student_data_b';
+import teacherData from 'mocks/users/teacher_data';
 
 describe('Profile View Smoke Tests', function () {
     viewSmoke();
@@ -15,7 +16,7 @@ describe('Profile View Unit Tests', function () {
     //TODO: testing for suspend account when test mode for HttpManager set up. LB 06/22/16
 
     describe('Viewing student with permission', function () {
-        var view = <ProfileView data={studentDataB} loading={false} />;
+        var view = <ProfileView data={studentDataB} currentUser={teacherData} loading={false} />;
         const WRAPPER = shallow(view);
 
         it('renders the profile view', function () {

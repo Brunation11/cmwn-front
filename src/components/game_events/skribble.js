@@ -6,7 +6,7 @@ import Log from 'components/log';
 var unboundEvents = {
     getData: function (options, e) {
         var type = e.gameData.status;
-        var url = options._links.self.href + '/skribble?' + (type ? 'type=' + type : '');
+        var url = options._links.self.href + '/skribble?' + (type ? 'status=' + type : '');
         HttpManager.GET(url)
             .then(server => e.respond(server.response._embedded))
             .catch(err => Log.error(err));

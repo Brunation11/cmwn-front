@@ -46,6 +46,21 @@ class Logger {
                         break;
                     case 'object':
                         additionalData = _.defaults(additionalData, arg);
+                        additionalData = _.reduce(additionalData, (a, v, k) => {
+                            if (v === window || _.isFunction(v)) {
+                                return a;
+                            }
+                            if (v instanceof window.HTMLElement) {
+                                a[k] = `${v.tagName}:${v.id}[${v.className}]`;
+                            }
+                            try {
+                                JSON.stringify(v);
+                            } catch(e) {
+                                return a;
+                            }
+                            a[k] = v;
+                            return a;
+                        }, {});
                 }
             });
 
