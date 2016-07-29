@@ -25,6 +25,9 @@ var unboundEvents = {
         var url = options._links.self.href + '/skribble';
         var skramble = e.gameData.skribble.skramble;
         var skribbleData = e.gameData.skribble;
+        if (skribbleData.status === 'COMPLETE') {
+            return; //do not modify complete skribbles
+        }
         skribbleData.items = _.map(skribbleData.items, item => {
             item.type = item.asset_type;
             return item;
