@@ -4,7 +4,7 @@ import Layout from 'layouts/one_col';
 
 import 'routes/terms.scss';
 
-const PAGE_UNIQUE_IDENTIFIER = 'terms';
+export const PAGE_UNIQUE_IDENTIFIER = 'terms-page';
 
 export class TermsPage extends React.Component {
     render() {
