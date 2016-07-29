@@ -8,9 +8,8 @@ import EventManager from 'components/event_manager';
 //import LOGO_URL from 'media/logo.png';
 import LOGO_URL from 'media/header-logo.png';
 import LOGO_HEADER from 'media/header-header.png';
-import LOGOUT_URL from 'media/pt_logout_on.png';
 
-const LOGOUT = 'logout';
+const LOGOUT = 'LOGOUT';
 const CURRENT_USER_IS = 'You are logged in as ';
 const MENU = 'Menu';
 
@@ -24,6 +23,10 @@ var GlobalHeader = React.createClass({
     toggleMenu: function () {
         var isOpen = EventManager.get('menuIsOpen');
         EventManager.update('menuIsOpen', !isOpen);
+        this.setState({menuToggled: true});
+    },
+    logOut: function () {
+        window.location.href = '/logout';
     },
     renderLoggedInUser: function () {
         if (this.props.currentUser.uuid != null && this.props.currentUser.uuid !== 'null') {
@@ -43,9 +46,9 @@ var GlobalHeader = React.createClass({
             return null;
         }
         return (
-            <div className="logout"><a href="/logout" onClick={this.logout} id="logout-button">
-                <img src={LOGOUT_URL} alt={LOGOUT} />{LOGOUT}
-            </a></div>
+            <Button className="btn standard purple logout" onClick={this.logOut}>
+                {LOGOUT}
+            </Button>
         );
     },
     render: function () {
