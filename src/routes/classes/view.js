@@ -85,10 +85,12 @@ export class View extends React.Component{
         }
         //pagination defaults
         if (this.props.components[`${GROUP_USER_DATASOURCE_IDENTIFIER}-${PAGE_UNIQUE_IDENTIFIER}`] != null) {
-            rowCount = this.props.components[`${GROUP_USER_DATASOURCE_IDENTIFIER}-${PAGE_UNIQUE_IDENTIFIER}`]
-                .page_size;
-            pageCount = this.props.components[`${GROUP_USER_DATASOURCE_IDENTIFIER}-${PAGE_UNIQUE_IDENTIFIER}`]
-                .page_count;
+            rowCount =
+                this.props.components[`${GROUP_USER_DATASOURCE_IDENTIFIER}-${PAGE_UNIQUE_IDENTIFIER}`]
+                    .page_size;
+            pageCount =
+                this.props.components[`${GROUP_USER_DATASOURCE_IDENTIFIER}-${PAGE_UNIQUE_IDENTIFIER}`]
+                    .page_count;
             currentPage =
                 this.props.components[`${GROUP_USER_DATASOURCE_IDENTIFIER}-${PAGE_UNIQUE_IDENTIFIER}`]
                     .page;
