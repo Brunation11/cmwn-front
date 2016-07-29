@@ -23,7 +23,6 @@ var GlobalHeader = React.createClass({
     toggleMenu: function () {
         var isOpen = EventManager.get('menuIsOpen');
         EventManager.update('menuIsOpen', !isOpen);
-        this.setState({menuToggled: true});
     },
     logOut: function () {
         window.location.href = '/logout';
