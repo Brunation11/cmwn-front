@@ -133,7 +133,7 @@
                 }
 
                 @media (min-width: $device-portrait-break) and (max-width: 590px) { // sizes reflect natural breakpoints in layout
-                    font-size: 1.25rem;
+                    font-size: 1rem;
                 }
 
                 @media (min-width: 590px) and (max-width: $device-max-break) { // sizes reflect natural breakpoints in layout
