@@ -37,16 +37,6 @@ var Page;
 
 class Friends extends React.Component {
 
-    componentDidMount() {
-        this.setState(this.props.data);
-        this.resolveRole(this.props);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this.setState(nextProps.data);
-        this.resolveRole(nextProps);
-    }
-
     addFriend(item, e) {
         var id = item.user_id != null ? item.user_id : item.friend_id;
         var postBody = { 'friend_id': id };
