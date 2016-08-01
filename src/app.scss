@@ -345,6 +345,20 @@ h3 {
 
     }
 
+    .logout {
+        position: absolute;
+        top: 0;
+        float: right;
+        width: 9%;
+        height: 30%;
+        color: $cmwn-white;
+        font-size: 1.1em;
+    }
+
+    .logout:hover {
+        color: $cmwn-blue;
+    }
+
     .menu {
         display: none;
         z-index: $z-nav + 1;
