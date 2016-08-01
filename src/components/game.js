@@ -9,6 +9,7 @@ import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
 import Toast from 'components/toast';
 import Log from 'components/log';
+import Detector from 'components/browser_detector';
 
 import 'components/game.scss';
 
@@ -65,6 +66,7 @@ var Game = React.createClass({
         frame.addEventListener('load', function () {
             frame.contentWindow.addEventListener('click', callApi, false);
         }, false);
+        this.checkForPortrait();
     },
     componentWillUnmount: function () {
         this.clearEvent();
@@ -128,6 +130,7 @@ var Game = React.createClass({
         window.addEventListener('game-event', this.gameEventHandler);
         window.addEventListener('platform-event', this.gameEventHandler);
         window.addEventListener('keydown', this.listenForEsc);
+        window.addEventListener('resize', this.checkForPortrait);
     },
     clearEvent: function () {
         window.removeEventListener('game-event', this.gameEventHandler);
@@ -150,13 +153,24 @@ var Game = React.createClass({
     makeFullScreen: function () {
         var self = this;
         if (Screenfull.enabled) {
-            if (!this.props.isPortrait) {
+            if (!this.state.isPortrait) {
                 Screenfull.request(ReactDOM.findDOMNode(self.refs.gameRef));
             } else {
                 Screenfull.request(ReactDOM.findDOMNode(self.refs.overlay));
             }
         } else {
             self.setState({fullscreenFallback: true});
+        }
+    },
+    checkForPortrait: function () {
+        if (Detector.isMobileOrTablet() && Detector.isPortrait()) {
+            this.setState({
+                isPortrait: true
+            });
+        } else {
+             this.setState({
+                isPortrait: false
+            });
         }
     },
     toggleDemoButton: function () {
@@ -174,11 +188,11 @@ var Game = React.createClass({
             <div ref="wrapRef" className={ClassNames(
                 'game', {'fullscreen': this.state.fullscreenFallback}
             )}>
-                <div ref="overlay" className={ClassNames('overlay', {'portrait': this.props.isPortrait})}>
+                <div ref="overlay" className={ClassNames('overlay', {'portrait': this.state.isPortrait})}>
                     {PORTRAIT_TEXT}
                 </div>
                 <iframe ref="gameRef" src={this.props.url} allowtransparency="true"
-                    className={ClassNames({'portrait': this.props.isPortrait})}/>
+                    className={ClassNames({'portrait': this.state.isPortrait})}/>
                 <Button className="purple standard full-screen-btn" onClick={this.makeFullScreen}>
                     <Glyphicon glyph="fullscreen" /> {FULLSCREEN}
                 </Button>

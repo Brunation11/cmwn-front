@@ -5,7 +5,6 @@ import ClassNames from 'classnames';
 import Game from 'components/game';
 import History from 'components/history';
 import GLOBALS from 'components/globals';
-import Detector from 'components/browser_detector';
 import Log from 'components/log';
 
 import Layout from 'layouts/one_col';
@@ -24,8 +23,6 @@ export class GamePage extends React.Component {
     }
 
     componentDidMount() {
-        this.checkForPortrait();
-        window.addEventListener('resize', this.checkForPortrait.bind(this));
         this.resolveRole(this.props);
         this.setState({
             gameId: this.props.params.game,
@@ -51,18 +48,6 @@ export class GamePage extends React.Component {
         } else {
             this.setState({
                 isStudent: true
-            });
-        }
-    }
-
-    checkForPortrait() {
-        if (Detector.isMobileOrTablet() && Detector.isPortrait()) {
-            this.setState({
-                isPortrait: true
-            });
-        } else {
-             this.setState({
-                isPortrait: false
             });
         }
     }
