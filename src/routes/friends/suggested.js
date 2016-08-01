@@ -35,7 +35,6 @@ const PROFILE = 'View Profile';
 
 var mapStateToProps;
 var Page;
-var addError = false; // global for adding a friend
 
 export class Suggested extends React.Component{
     constructor(){
