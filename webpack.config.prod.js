@@ -69,7 +69,7 @@ module.exports = {
             test: /\.(jpe?g|png|gif|svg)$/i,
             loaders: [
                 'file?hash=sha512&digest=hex&name=[hash].[ext]',
-                'img?optimizationLevel=7'
+                'img?-minimize'
             ]
         }, {
             test: /\.woff$/,
