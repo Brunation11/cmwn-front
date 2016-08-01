@@ -135,6 +135,7 @@ var Game = React.createClass({
     clearEvent: function () {
         window.removeEventListener('game-event', this.gameEventHandler);
         window.removeEventListener('keydown', this.listenForEsc);
+        window.removeEventListener('resize', this.checkForPortrait);
     },
     listenForEsc: function (e) {
         var self = this;
@@ -153,25 +154,17 @@ var Game = React.createClass({
     makeFullScreen: function () {
         var self = this;
         if (Screenfull.enabled) {
-            if (!this.state.isPortrait) {
                 Screenfull.request(ReactDOM.findDOMNode(self.refs.gameRef));
-            } else {
                 Screenfull.request(ReactDOM.findDOMNode(self.refs.overlay));
-            }
         } else {
             self.setState({fullscreenFallback: true});
         }
     },
     checkForPortrait: function () {
-        if (Detector.isMobileOrTablet() && Detector.isPortrait()) {
-            this.setState({
-                isPortrait: true
-            });
-        } else {
-             this.setState({
-                isPortrait: false
-            });
-        }
+        var isPortrait = (Detector.isMobileOrTablet() && Detector.isPortrait());
+        this.setState({
+            isPortrait
+        });
     },
     toggleDemoButton: function () {
         if (this.state.demo){
@@ -188,18 +181,24 @@ var Game = React.createClass({
             <div ref="wrapRef" className={ClassNames(
                 'game', {'fullscreen': this.state.fullscreenFallback}
             )}>
-                <div ref="overlay" className={ClassNames('overlay', {'portrait': this.state.isPortrait})}>
+                <div ref="overlay" className={ClassNames('overlay',
+                    {'portrait': this.state.isPortrait},
+                    {'fullscreen': Screenfull.isFullscreen}
+                )}>
                     {PORTRAIT_TEXT}
                 </div>
                 <iframe ref="gameRef" src={this.props.url} allowtransparency="true"
                     className={ClassNames({'portrait': this.state.isPortrait})}/>
-                <Button className="purple standard full-screen-btn" onClick={this.makeFullScreen}>
+                <Button onClick={this.makeFullScreen}
+                    className={ClassNames('purple', 'standard', 'full-screen-btn',
+                        {hidden: this.state.isPortrait}
+                    )}>
                     <Glyphicon glyph="fullscreen" /> {FULLSCREEN}
                 </Button>
                 <Button className={ClassNames('standard',
                         {'purple': !this.state.demo},
                         {'green': this.state.demo},
-                        {hidden: !this.props.isTeacher}
+                        {hidden: !this.props.isTeacher || this.state.isPortrait}
                     )}
                     onClick={() => this.dispatchPlatformEvent('toggle-demo-mode')}>{DEMO_MODE}
                 </Button>
