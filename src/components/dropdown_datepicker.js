@@ -108,6 +108,7 @@ class Page extends React.Component {
                 <br />
                 <Input
                     className="birthday-input"
+                    id="month-input"
                     type="select"
                     value={this.state.month}
                     placeholder="Month"
@@ -122,6 +123,7 @@ class Page extends React.Component {
                 >{this.renderMonthOptions()}</Input>
                 <Input
                     className="birthday-input"
+                    id="day-input"
                     type="select"
                     value={this.state.day}
                     placeholder="Day"
@@ -136,6 +138,7 @@ class Page extends React.Component {
                 >{this.renderDayOptions()}</Input>
                 <Input
                     className="birthday-input"
+                    id="year-input"
                     type="select"
                     value={this.state.year}
                     placeholder="Year"
