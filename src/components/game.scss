@@ -47,18 +47,18 @@
     }
 
     .overlay.portrait {
+        @include responsive-size-portrait();
         display: inline-block;
+        z-index: $z-over-game;
+        background-color: $cmwn-blue-dark;
         padding: $standard;
+        color: $cmwn-white;
         font-family: $cmwn-jade-font;
         font-size: $game-overlay-text;
-        color: $cmwn-white;
-        background-color: $cmwn-blue-dark;
-        z-index: $z-over-game;
-        @include responsive-size-portrait();
 
         &.fullscreen {
-            padding-top: 40%;
             @include responsive-size-portrait-fullscreen();
+            padding-top: 40%;
         }
     }
 

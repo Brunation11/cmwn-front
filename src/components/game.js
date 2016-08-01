@@ -154,8 +154,8 @@ var Game = React.createClass({
     makeFullScreen: function () {
         var self = this;
         if (Screenfull.enabled) {
-                Screenfull.request(ReactDOM.findDOMNode(self.refs.gameRef));
-                Screenfull.request(ReactDOM.findDOMNode(self.refs.overlay));
+            Screenfull.request(ReactDOM.findDOMNode(self.refs.gameRef));
+            Screenfull.request(ReactDOM.findDOMNode(self.refs.overlay));
         } else {
             self.setState({fullscreenFallback: true});
         }

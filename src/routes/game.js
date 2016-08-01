@@ -1,11 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import ClassNames from 'classnames';
 
 import Game from 'components/game';
 import History from 'components/history';
 import GLOBALS from 'components/globals';
-import Log from 'components/log';
 
 import Layout from 'layouts/one_col';
 
