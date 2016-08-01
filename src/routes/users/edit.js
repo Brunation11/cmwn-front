@@ -532,3 +532,4 @@ mapStateToProps = state => {
 
 Page = connect(mapStateToProps)(EditProfile);
 export default Page;
+
