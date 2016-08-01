@@ -172,7 +172,7 @@ var Component = React.createClass({
         }
     },
     stripSpaces: function () {
-        var newLogin = this.refs.login.getValue().replace(/\s/g, "");
+        var newLogin = this.refs.login.getValue().replace(/\s/g, '');
         return newLogin;
     },
     render: function () {
