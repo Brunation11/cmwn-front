@@ -18,6 +18,7 @@ const FULLSCREEN = 'Full Screen';
 const DEMO_MODE = 'Demo Mode';
 
 const BAD_FLIP = 'There was a problem registering your earned flip. Please try again in a little while';
+const PORTRAIT_TEXT = 'Please turn this game into landscape mode to continue.';
 
 /**
  * Game wrapper iframe component.
@@ -170,10 +171,13 @@ var Game = React.createClass({
         }
         return (
             <div ref="wrapRef" className={ClassNames(
-                'game',
-                {fullscreen: this.state.fullscreenFallback}
+                'game', {'fullscreen': this.state.fullscreenFallback}
             )}>
-                <iframe ref="gameRef" src={this.props.url} allowtransparency="true" />
+                <div className={ClassNames('overlay', {'portrait': this.props.isPortrait})}>
+                    {PORTRAIT_TEXT}
+                </div>
+                <iframe ref="gameRef" src={this.props.url} allowtransparency="true"
+                    className={ClassNames({'portrait': this.props.isPortrait})}/>
                 <Button className="purple standard full-screen-btn" onClick={this.makeFullScreen}>
                     <Glyphicon glyph="fullscreen" /> {FULLSCREEN}
                 </Button>

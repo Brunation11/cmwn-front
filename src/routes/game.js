@@ -6,12 +6,11 @@ import Game from 'components/game';
 import History from 'components/history';
 import GLOBALS from 'components/globals';
 import Detector from 'components/browser_detector';
+import Log from 'components/log';
 
 import Layout from 'layouts/one_col';
 
 const PAGE_UNIQUE_IDENTIFIER = 'single-game';
-
-const OVERLAY_MSG = 'Please turn this game into landscape mode to continue.';
 
 var mapStateToProps;
 var Page;
@@ -25,6 +24,8 @@ export class GamePage extends React.Component {
     }
 
     componentDidMount() {
+        this.checkForPortrait();
+        window.addEventListener('resize', this.checkForPortrait.bind(this));
         this.resolveRole(this.props);
         this.setState({
             gameId: this.props.params.game,
@@ -54,34 +55,28 @@ export class GamePage extends React.Component {
         }
     }
 
-    renderOverlay() {
+    checkForPortrait() {
         if (Detector.isMobileOrTablet() && Detector.isPortrait()) {
-            return (
-                <div className={ClassNames(
-                    'portrait-overlay',
-                    {fullscreen: React.findDOMNode(this.refs.gameRef).isFullScreen()}
-                )}>
-                    <span><p>
-                        {OVERLAY_MSG}
-                    </p></span>
-                    <p><a onClick={() => this.setState({gameOn: false})} >(close)</a></p>
-                </div>
-            )
+            this.setState({
+                isPortrait: true
+            });
+        } else {
+             this.setState({
+                isPortrait: false
+            });
         }
-        return null;
     }
 
     render() {
         return (
             <Layout className={PAGE_UNIQUE_IDENTIFIER}>
-                {this.renderOverlay.bind(this)}
                 <Game
                     ref="gameRef"
                     isTeacher={!this.state.isStudent}
                     url={`${GLOBALS.GAME_URL}${this.props.params.game}/index.html`}
                     currentUser={this.props.currentUser}
-                    onExit={() => History.push('/profile')
-                    }
+                    onExit={() => History.push('/profile')}
+                    isPortrait={this.state.isPortrait}
                 />
             </Layout>
         );
