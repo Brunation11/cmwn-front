@@ -36,7 +36,7 @@ var mapStateToProps;
 var Page;
 
 class Friends extends React.Component {
-    
+
     componentDidMount() {
         this.setState(this.props.data);
         this.resolveRole(this.props);

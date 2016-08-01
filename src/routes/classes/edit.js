@@ -87,11 +87,7 @@ export class EditClass extends React.Component {
     }
 }
 
-<<<<<<< f5403d769fa71967a2c7234c4080c8bc57e8174a
 mapStateToProps = state => {
-=======
-var mapStateToProps = state => {
->>>>>>> move create student component into its own file. remove unused modules and const. add current user to map state to props
     var data = {title: ''};
     var loading = true;
     var currentUser = state.currentUser;
