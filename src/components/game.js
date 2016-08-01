@@ -150,13 +150,14 @@ var Game = React.createClass({
     makeFullScreen: function () {
         var self = this;
         if (Screenfull.enabled) {
-            Screenfull.request(ReactDOM.findDOMNode(self.refs.gameRef));
+            if (!this.props.isPortrait) {
+                Screenfull.request(ReactDOM.findDOMNode(self.refs.gameRef));
+            } else {
+                Screenfull.request(ReactDOM.findDOMNode(self.refs.overlay));
+            }
         } else {
             self.setState({fullscreenFallback: true});
         }
-    },
-    isFullScreen: function () {
-        return this.state.fullscreenFallback;
     },
     toggleDemoButton: function () {
         if (this.state.demo){
@@ -173,7 +174,7 @@ var Game = React.createClass({
             <div ref="wrapRef" className={ClassNames(
                 'game', {'fullscreen': this.state.fullscreenFallback}
             )}>
-                <div className={ClassNames('overlay', {'portrait': this.props.isPortrait})}>
+                <div ref="overlay" className={ClassNames('overlay', {'portrait': this.props.isPortrait})}>
                     {PORTRAIT_TEXT}
                 </div>
                 <iframe ref="gameRef" src={this.props.url} allowtransparency="true"
