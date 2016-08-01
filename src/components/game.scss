@@ -13,7 +13,7 @@
     // scss-lint:enable all
 }
 
-@mixin responsive-size-portrait-fullscreen() {
+@mixin fullscreen-size-portrait() {
     // scss-lint:disable all
     position: fixed;
     width: $game-fullscreen-width-portrait-ie; // ie-fallback
@@ -25,6 +25,13 @@
     height: $game-fullscreen-height-portrait;
     max-height: $game-fullscreen-height-portrait;
     // scss-lint:enable all
+}
+
+@mixin true-fullscreen() {
+    height: $fullscreen-height;
+    max-height: $fullscreen-height;
+    width: $fullscreen-width;
+    max-width: $fullscreen-width;
 }
 
 .game {
@@ -57,8 +64,8 @@
         font-size: $game-overlay-text;
 
         &.fullscreen {
-            @include responsive-size-portrait-fullscreen();
-            padding-top: 40%;
+            @include true-fullscreen();
+            padding-top: 50%;
         }
     }
 
@@ -81,11 +88,11 @@
         height: 105vh;
 
         iframe {
-            @include responsive-size-portrait-fullscreen();
+            @include fullscreen-size-portrait();
         }
 
         .overlay.portrait {
-            @include responsive-size-portrait-fullscreen();
+            @include true-fullscreen();
         }
 
         button {

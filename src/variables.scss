@@ -86,6 +86,9 @@ $game-responsive-height-landscape-ie: 50vw;
 $game-fullscreen-width-landscape-ie: 100vw;
 $game-fullscreen-height-landscape-ie: calc(100vw * 0.5625);
 
+$fullscreen-height: 100vh;
+$fullscreen-width: 100vw;
+
 $iphone2g-4s-min-width: 320px;
 $iphone2g-4s-max-width: 480px;
 $game-fullscreen-height-landscape-iphone2g-4s: calc(85vmax * .5625);
