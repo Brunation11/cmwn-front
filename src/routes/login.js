@@ -70,11 +70,12 @@ var Component = React.createClass({
     login: function (e) {
         var dataUrl;
         var req;
+        var user = this.stripSpaces();
         dataUrl = this.state.overrideLogin || this.props.currentUser._links.login.href;
         req = HttpManager.POST({
             url: dataUrl,
         }, {
-            'username': this.refs.login.getValue(),
+            'username': user,
             'password': this.refs.password.getValue()
         });
         req.then(res => {
@@ -108,12 +109,13 @@ var Component = React.createClass({
         });
     },
     attemptLogin: function (e) {
+        var user = this.stripSpaces();
         var logout;
         var logoutUrl;
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
             if (this.props.data._links && this.props.data._links.login == null) {
-                if (this.refs.login.getValue() === this.props.data.username ||
-                    this.refs.login.getValue() === this.props.data.email) {
+                if (user === this.props.data.username ||
+                    user === this.props.data.email) {
                     History.push('/profile');
                 }
             }
@@ -168,6 +170,10 @@ var Component = React.createClass({
                 Log.log(err);
             });
         }
+    },
+    stripSpaces: function () {
+        var newLogin = this.refs.login.getValue().replace(/\s/g, "");
+        return newLogin;
     },
     render: function () {
         return (
