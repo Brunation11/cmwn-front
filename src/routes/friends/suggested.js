@@ -27,6 +27,7 @@ const HEADINGS = {
     SUGGESTED: 'Suggested Friends'
 };
 const FRIEND_PROBLEM = 'There was a problem adding your friend. Please try again in a little while.';
+const REQUEST_SENT = 'Your friend request has been sent!';
 const ADD_FRIEND = 'Add Friend';
 const REQUESTED = 'Request Sent';
 const ACCEPT = 'Accept';
@@ -47,11 +48,11 @@ export class Suggested extends React.Component{
         HttpManager.POST({url: this.props.currentUser._links.friend.href}, {
             'friend_id': id
         }).then(() => {
+            Toast.success(REQUEST_SENT);
             Actions.dispatch.START_RELOAD_PAGE(Store.getState());
-        }).catch(this.friendErr);
-    }
-    friendErr() {
-        Toast.error(FRIEND_PROBLEM);
+        }).catch(() => {
+            Toast.error(FRIEND_PROBLEM);
+        });
     }
     renderNoData(data) {
         if (data == null) {
