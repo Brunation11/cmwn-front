@@ -24,7 +24,6 @@ docker-compose.yml
 front.sh
 stop_front.sh
 errorShots
-docker-compose.yml
 coverage
 coverage/**/*
 lib
