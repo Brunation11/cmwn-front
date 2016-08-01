@@ -49,15 +49,11 @@ export class Suggested extends React.Component{
         HttpManager.POST({url: this.props.currentUser._links.friend.href}, {
             'friend_id': id
         }).then(() => {
-            Actions.dispatch.START_RELOAD_PAGE(Store.getState());
-        }).catch(this.friendErr);
-        if (!addError)
             Toast.success(REQUEST_SENT);
-        else {addError = false;}
-    }
-    friendErr() {
-        Toast.error(FRIEND_PROBLEM);
-        addError = true;
+            Actions.dispatch.START_RELOAD_PAGE(Store.getState());
+        }).catch(() => {
+            Toast.error(FRIEND_PROBLEM);
+        });
     }
     renderNoData(data) {
         if (data == null) {
