@@ -20,6 +20,13 @@ html {
     src: url('/fonts/cmwn.woff') format('woff');
 }
 
+@font-face {
+    font-family: 'SourceSansPro';
+    src: url('/fonts/source_sans_pro/SourceSansPro-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body {
 
     @media (max-width: $device-max-break) {
@@ -168,7 +175,7 @@ h3 {
         display: none;
         margin: $standard / 2 0;
         border-radius: 4px;
-        background: $rule-medium-gray;
+        background: $rule-light-gray;
         padding: $standard / 2 $standard;
         font-size: 12px;
 
@@ -214,6 +221,14 @@ h3 {
                 text-decoration: none;
                 color: $cmwn-blue;
                 font-weight: bold;
+            }
+        }
+
+        .active-menu {
+            background: $cmwn-blue;
+
+            a {
+                color: $cmwn-white;
             }
         }
     }
@@ -337,6 +352,20 @@ h3 {
         }
 
 
+    }
+
+    .logout {
+        position: absolute;
+        top: 0;
+        float: right;
+        width: 9%;
+        height: 30%;
+        color: $cmwn-white;
+        font-size: 1.1em;
+    }
+
+    .logout:hover {
+        color: $cmwn-blue;
     }
 
     .menu {

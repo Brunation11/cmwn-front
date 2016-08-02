@@ -12,7 +12,7 @@ import Util from 'components/util';
 import Paragraph from 'components/conditional_paragraph';
 import GenerateDataSource from 'components/datasource';
 
-const PAGE_UNIQUE_IDENTIFIER = 'district-view';
+export const PAGE_UNIQUE_IDENTIFIER = 'school-view';
 
 const CLASS_SOURCE = GenerateDataSource('group_class', PAGE_UNIQUE_IDENTIFIER);
 const USER_SOURCE = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
@@ -24,74 +24,76 @@ const HEADINGS = {
     CREATED: 'Created',
     DISTRICTS: 'Districts',
     CLASSES: 'Classes in School',
-    USERS: 'Users in School'
+    USERS: 'Users in School',
+    ADMIN: 'Admin View',
+    EDIT: 'Edit'
 };
 
-const ADMIN_TEXT = 'Teacher Dashboard';
+const TEXT = {
+    ADMIN: 'Teacher Dashboard',
+    IMPORT: 'Import Spreadsheets',
+    EDIT: 'Edit this school',
+    DELETE: 'Delete this school',
+};
 
-var Component = React.createClass({
-    getInitialState: function () {
-        return {
+var mapStateToProps;
+var Page;
+
+export class SchoolView extends React.Component {
+    constructor() {
+        super();
+        this.state = {
             school: [],
             districts: [],
             classes: [],
             users: [],
             scope: 7
         };
-    },
-    componentWillMount: function () {
+    }
+
+    componentWillMount() {
         this.setState(this.props.data);
-    },
-    componentWillReceiveProps: function (newProps) {
+    }
+
+    componentWillReceiveProps(newProps) {
         this.setState(newProps.data);
-    },
-    renderDistricts: function () {
-        var links;
-        if (!this.state || this.state._embedded == null) {
-            return null;
-        }
-        links = _.map(this.state._embedded.organizations, district => {
-            if (district.type !== 'district') {
-                return null;
-            }
-            return (
-                <Link to={`/districts/${district.id}`} className="school-district-link">
-                    {district.title}
-                </Link>
-            );
-        });
-        return links;
-    },
-    renderAdminLink: function () {
-        if (this.props.data.scope > 6) {
+    }
+
+    renderDistricts() {
+        if (!this.state || !this.state.organization) {
             return null;
         }
         return (
-            <p><a href={`/school/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
+            <Link to={`/districts/${this.state.organization.org_id}`}>
+                {this.state.organization.title}
+            </Link>
         );
-    },
-    renderImport: function () {
+    }
+
+    renderImport() {
         if (this.state == null || this.state._links.import == null) {
             return null;
         }
         return (
             <EditLink className="green" base="/school" id={this.state.group_id} scope={this.state.scope}
-                text="Import Spreadsheets"/>
+                text={TEXT.IMPORT}/>
         );
-    },
-    render: function () {
-        if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
+    }
+
+    render() {
+        if (this.props.data == null || this.props.data.group_id == null ||
+            !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
         return (
-            <Layout>
+            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard">
                     <p className="right" id="buttons">
                         <EditLink className="purple" base="/school" id={this.state.group_id}
-                            scope={this.state.scope} text="Edit this school"/>
+                            scope={this.state.scope} text={TEXT.EDIT}/>
                         {this.renderImport()}
                         <DeleteLink className="purple" base="/school" id={this.state.group_id}
-                            scope={this.state.scope} text="Delete this school" />
+                            scope={this.state.scope} text={TEXT.DELETE} />
                     </p>
                     <p>
                         <a href={`/school/${this.props.data.group_id}/profile`} id="school-return-profile">
@@ -99,33 +101,35 @@ var Component = React.createClass({
                         </a>
                     </p>
                    <Paragraph>
-                       <p pre={`${HEADINGS.DISTRICTS}: `} id="school-districts">{this.renderDistricts()}</p>
+                       <p className="school-district" pre={`${HEADINGS.DISTRICTS}: `}>
+                           {this.renderDistricts()}
+                       </p>
                        <p pre={`${HEADINGS.DESCRIPTION}: `}>{this.props.data.description}</p>
                    </Paragraph>
                 </Panel>
                 <Panel header={HEADINGS.CLASSES} className="standard">
                     <Link to={'/classes'} id="school-view-classes">View All Your Classes</Link>
                     <CLASS_SOURCE>
-                        <Table>
+                        <Table className="school-classes">
                             <Column dataKey="title"
                                 renderCell={(data, row) => (
-                                    <Link to={`/class/${row.group_id}`} className="school-class-link">
+                                    <Link to={`/class/${row.group_id}`}>
                                         {_.startCase(data)}
                                     </Link>
                                 )}
                             />
                             <Column dataKey="description" />
-                            <Column dataKey="title" renderHeader="Admin View"
+                            <Column dataKey="title" renderHeader={HEADINGS.ADMIN}
                                 renderCell={(data, row) => (
-                                    <Link to={`/class/${row.group_id}/view`} className="school-class-view">
-                                        Admin View
+                                    <Link to={`/class/${row.group_id}/view`}>
+                                        {HEADINGS.ADMIN}
                                     </Link>
                                 )}
                             />
-                            <Column dataKey="title" renderHeader="Edit"
+                            <Column dataKey="title" renderHeader={HEADINGS.EDIT}
                                 renderCell={(data, row) => (
-                                    <Link to={`/class/${row.group_id}/edit`} className="school-class-edit">
-                                        Edit
+                                    <Link to={`/class/${row.group_id}/edit`}>
+                                        {HEADINGS.EDIT}
                                     </Link>
                                 )}
                             />
@@ -135,10 +139,10 @@ var Component = React.createClass({
                 <Panel header={HEADINGS.USERS} className="standard">
                     <Link to={'/users'} id="school-view-users">View All Your Users</Link>
                     <USER_SOURCE>
-                        <Table>
+                        <Table className="school-users">
                             <Column dataKey="first_name" renderHeader="Name"
                                 renderCell={(data, row) => (
-                                    <Link to={`/user/${row.user_id}`} className="school-user-link">
+                                    <Link to={`/user/${row.user_id}`}>
                                         {row.first_name + ' ' + row.last_name}
                                     </Link>
                                 )}
@@ -146,14 +150,14 @@ var Component = React.createClass({
                             <Column dataKey="username" />
                             <Column dataKey="title" renderHeader="Admin View"
                                 renderCell={(data, row) => (
-                                    <Link to={`/user/${row.user_id}/view`} className="school-user-view">
+                                    <Link to={`/user/${row.user_id}/view`}>
                                         Admin View
                                     </Link>
                                 )}
                             />
                             <Column dataKey="title" renderHeader="Edit"
                                 renderCell={(data, row) => (
-                                    <Link to={`/user/${row.user_id}/edit`} className="school-user-edit">
+                                    <Link to={`/user/${row.user_id}/edit`}>
                                         Edit
                                     </Link>
                                 )}
@@ -164,9 +168,9 @@ var Component = React.createClass({
            </Layout>
         );
     }
-});
+}
 
-var mapStateToProps = state => {
+mapStateToProps = state => {
     var data = {};
     var loading = true;
     if (state.page && state.page.data != null) {
@@ -179,6 +183,7 @@ var mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(Component);
+Page = connect(mapStateToProps)(SchoolView);
+Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
 

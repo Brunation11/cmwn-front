@@ -34,7 +34,7 @@ const FLIP_SOURCE = GenerateDataSource('user_flip', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     ACTION: 'Profile',
-    ARCADE: 'Take Action'
+    ARCADE: 'Activities'
 };
 const PLAY = 'Play Now!';
 const COMING_SOON = 'Coming Soon!';
