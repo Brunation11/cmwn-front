@@ -23,7 +23,7 @@ var checkAdminContents = function (WRAPPER) {
     expect(WRAPPER.find('Layout')).to.have.length(1);
     expect(WRAPPER.find('Panel')).to.have.length(3);
     expect(WRAPPER.find('#buttons')).to.have.length(1);
-    expect(WRAPPER.find('#school-return-profile')).to.have.length(1)
+    expect(WRAPPER.find('#school-return-profile')).to.have.length(1);
     expect(WRAPPER.find('.school-district')).to.have.length(1);
     expect(WRAPPER.find('.school-district').find('Link')).to.have.length(1);
     expect(WRAPPER.find('#school-view-classes')).to.have.length(1);
