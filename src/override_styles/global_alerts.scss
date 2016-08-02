@@ -1,0 +1,67 @@
+@import 'variables';
+
+.swal2-container {
+    // scss-lint:disable all
+    div.swal2-overlay[style] {
+        display: none !important;
+    }
+
+    .global-alert {
+        top: 0 !important;
+        left: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
+        position: relative;
+        border-radius: 0;
+        padding: 20px 0 !important;
+        box-shadow: inset 0 -20px 20px -20px #232323;
+        font-family: $cmwn-jade-font;
+        font-size: .75rem;
+        text-transform: uppercase;
+
+        a {
+            text-decoration: underline;
+        }
+    }
+    // scss-lint:enable all
+
+    .warning,
+    .notice,
+    .success {
+        .swal2-content,
+        a {
+            color: $cmwn-white;
+        }
+    }
+
+    // scss-lint:disable all
+    .warning {
+        background: $cmwn-red !important;
+    }
+
+    .notice {
+        background: $cmwn-blue !important;
+    }
+
+    .success {
+        background: $cmwn-green !important;
+    }
+    // scss-lint:enable all
+
+    .scroll-left {
+        .swal2-content {
+            transform: translateX(100%);
+            animation: scroll-left 15s linear infinite;
+        }
+
+        @keyframes scroll-left {
+            0% {
+                transform: translateX(100%);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+    }
+}

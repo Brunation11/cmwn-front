@@ -32,3 +32,5 @@ lib/**/*
 tar-*
 scssReport.json
 scsslint.json
+/tar-*
+*.tar
