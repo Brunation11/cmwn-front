@@ -1,0 +1,67 @@
+version: '2'
+services:
+  php:
+    container_name: cmwn_front_php
+    build: ./docker/php
+    environment:
+      APP_API_URL: "https://api-local.changemyworldnow.com/"
+      APP_GAME_URL: "https://games-local.changemyworldnow.com/"
+      APP_MODE: "local"
+    volumes:
+      - ./:/var/www/
+  node:
+    container_name: cmwn_front_node
+    build: ./docker/node
+    environment:
+      DOCKER_HOST_IP: "192.168.99.100"
+    volumes:
+      - ./:/var/www/
+
+  nginx:
+    container_name: local.changemyworldnow.com
+    hostname: "local"
+    domainname: "changemyworldnow.com"
+    build: ./docker/nginx
+    ports:
+      - "443:443"
+    volumes:
+      - ./:/var/www/
+    links:
+      - php
+
+  selenium_hub:
+    container_name: selenium_hub
+    image: selenium/hub:2.53.0
+    environment:
+      GRID_TIMEOUT: 180000
+      GRID_BROWSER_TIMEOUT: 180000
+      GRID_CLEAN_UP_CYCLE: 180000
+    ports:
+      - "4444:4444"
+    links:
+      - "nginx:local.chagemyworldnow.com"
+
+  selenium_chrome:
+    image: selenium/node-chrome:2.53.0
+    environment:
+      HUB_PORT_4444_TCP_ADDR: "hub"
+      DBUS_SESSION_BUS_ADDRESS: "/dev/null"
+    ports:
+      - 5900
+    volumes:
+      - /dev/shm:/dev/shm
+    links:
+      - "nginx:local.chagemyworldnow.com"
+      - selenium_hub:hub
+    privileged: true
+
+  selenium_firefox:
+    image: selenium/node-firefox:2.53.0
+    environment:
+      HUB_PORT_4444_TCP_ADDR: "hub"
+    ports:
+      - 5900
+    links:
+      - "nginx:local.chagemyworldnow.com"
+      - nginx
+      - selenium_hub:hub

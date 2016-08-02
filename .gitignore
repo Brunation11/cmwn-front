@@ -24,7 +24,6 @@ docker-compose.yml
 front.sh
 stop_front.sh
 errorShots
-docker-compose.yml
 coverage
 coverage/**/*
 lib
@@ -33,3 +32,5 @@ lib/**/*
 tar-*
 scssReport.json
 scsslint.json
+/tar-*
+*.tar

@@ -19,7 +19,6 @@ export class GamePage extends React.Component {
             isStudent: true,
         };
     }
-
     componentDidMount() {
         this.resolveRole(this.props);
         this.setState({

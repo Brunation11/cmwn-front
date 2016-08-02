@@ -18,6 +18,8 @@ import DefaultProfile from 'media/profile_tranparent.png';
 
 const TITLE = 'My Friends and Network'; /** @TODO MPR, 12/3/15: May need to swap this based on user type */
 
+const NO_NETWORK = 'Sorry, you currently do not have any friends in your network.';
+
 const HEADINGS = {
     MANAGE: 'Manage Users'
 };
@@ -98,7 +100,7 @@ var Component = React.createClass({
         children = children || [];
         if (children && children.length) {
             tabs.push(
-                <Tab eventKey={tabIndex} title={'Students'}>
+                <Tab id="student-tab" eventKey={tabIndex} title={'Students'}>
                     {this.renderUserTable(children, 'children')}
                 </Tab>
             );
@@ -106,18 +108,13 @@ var Component = React.createClass({
         }
         if (adults && adults.length) {
             tabs.push(
-                <Tab className="admin" eventKey={tabIndex} title={'Adults'}>
+                <Tab id="adult-tab" className="admin" eventKey={tabIndex} title={'Adults'}>
                     {this.renderUserTable(adults, 'adults')} </Tab>
             );
             tabIndex++;
         }
         return (
             <Panel header={HEADINGS.MANAGE} className="standard" >
-                <div className="clear">
-                    <span className="buttons-right">
-                        {this.renderImport()}
-                    </span>
-                </div>
                 <Tabs className="tabs standard" activeKey={this.state.key} onSelect={this.handleSelect} >
                     {tabs}
                 </Tabs>
@@ -132,6 +129,13 @@ var Component = React.createClass({
     render: function () {
         var view;
         var state = Store.getState();
+        if (this.props.data.length === 0) {
+            return (
+                <Layout>
+                    <h2 className="placeholder">{NO_NETWORK}</h2>
+                </Layout>
+            );
+        }
         if (state.currentUser.type === 'CHILD') {
             view = this.renderChildView;
         } else {

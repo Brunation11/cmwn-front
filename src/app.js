@@ -2,8 +2,6 @@
 /**
  * App.js
  * # Production Application Entrypoint
-..............................................................................................................
-..............................................................................................................
 .........................................................................,....................................
 ..,,,,,,,,,,,,,,,,,,,,,,,...............................................,,,...................................
 :::~~~~:777.,:,,,,,==~~~~~::::,,,...............................,..,,,,,,,,,,,,,.,............................
@@ -51,10 +49,6 @@ II?+I,,,,,,,,,,,,,,,,:,,,::::++=~~::,,,......................,,.,,.,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,::::::::,,,,,::::::::::~~~~~~=~~=====+++++=~=+=+?????????II?IIIII:,7I:~,...................
 ,,,,,,,,,,,,,,,,,,,,:::::::,:,:::::,:,~::::~~~~~~~~=~=~=+=+~+~~=+=++?++????????+?I??~:+?:=,...................
 ,,,,,,,,,,,,,,,,,,,,,,,:,:,:,::::::::,::::::~~~~~=~:~~===+~~~==++++==+?????????I????~~:I:=:...................
-.,,,,,,,,,,,,,,,,,,,,,,,,,::::::::::::::::~:~~~~~~~:=~=====~~~==+++?++????+???+??+?==7I:,=:,..................
-,.,.,.,,,,,,,,,,,,,,,:,,,::::::::::::::::::::~~~~~~~~====~=+=~~==+++++??????????+=+~~?=:I::,..................
-.....,,,,,,,,,,,,,,,,,,,,,:,:::,::::::::::::::~~~~~~~==~~===+==+=++++~+????????+++==~=?I?::,..................
-....,,,.,,,,,,,,,,,,,,,,,:,:,,,,::::::::::::::~~~~~~~=~=====+==+++++++????+=??=??==~+~+?+:~,..................
  * ## Structure of this file:
  * This file contains the bare minimum components to bootstrap the application: the react application wrapper
  * component, the router, and the redux process for a single page load. There are also some additional helper
@@ -134,7 +128,10 @@ import Store from 'components/store';
 import Util from 'components/util';
 import DevTools from 'components/devtools';
 import Actions from 'components/actions';
+import TimerModal from 'components/timer_modal';
 
+import GlobalAlert from 'components/global_alert';
+import Detector from 'components/browser_detector';
 import Errors from 'components/errors';
 import Home from 'routes/home';
 
@@ -143,6 +140,8 @@ import 'overrides.scss';
 //import 'app.scss';
 
 import 'media/logo.png';
+
+const BROWSER_NOT_SUPPORTED = 'For the best viewing experience we recommend the desktop version in Chrome.<br />If you don\'t have chrome, <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">download it for free here</a>.'; //eslint-disable-line max-len
 
 //htaccess should take care of it but if somehow it does not, this should overkill the issue
 if (window.location.protocol !== 'https:') {
@@ -211,10 +210,16 @@ var AppComponent = React.createClass({
     globalUpdate: function () {
         this.forceUpdate();
     },
+    globalAlert: function () {
+        if (!window.navigator.standalone && (Detector.isIe9() || Detector.isIe10())) {
+            GlobalAlert({text: BROWSER_NOT_SUPPORTED, type: 'warning', animate: 'scroll-left'});
+        }
+    },
     render: function () {
         if (this.isHome()) {
             return (
                 <div>
+                    {this.globalAlert()}
                     <Home />
                     {renderDevTool()}
                 </div>
@@ -222,7 +227,9 @@ var AppComponent = React.createClass({
         }
         return (
             <div>
+                {this.globalAlert()}
                 {Errors.renderErrors()}
+                <TimerModal currentUser={this.props.currentUser}></TimerModal>
                 <GlobalHeader logoLink={this.state.logoLink} currentUser={this.props.currentUser} />
                 <div className="sweater">
                     {this.props.children}
@@ -242,7 +249,6 @@ var mapStateToProps = state => {
         currentUser
     };
 };
-
 
 var App = connect(mapStateToProps)(AppComponent);
 
@@ -266,7 +272,6 @@ var routes = {
         { path: '*', component: Landing},
     ]),
 };
-
 
 //█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
 //█  2. Page Lifecycle Definition
@@ -338,9 +343,8 @@ var progressivePageLoad = function () {
             });
             break;
         //components load after page, and are invoked through on the page, via a Datasource component
-        //calling Util.attemptGetComponentData
-        //additional cases should be added here. Be sure to update the globals file with new states.
-        //They must be sequential, and
+        //calling Util.attemptGetComponentData additional cases should be added here. Be sure to update
+        //the globals file with new states. They must be sequential, and
         //should always occur on every page load, so as not to block one another.
         //Make sure final is always last, naturally
         case GLOBALS.PAGE_LOAD_STATE.FINAL:
@@ -440,7 +444,6 @@ window.__cmwn.interactiveDebug = function () {
     window.debugging = true;
     Rollbar.configure({reportLevel: 'info'}); //eslint-disable-line
 };
-
 
 //█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
 //█  6. Application Bootstrap
