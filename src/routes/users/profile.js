@@ -179,6 +179,7 @@ export class Profile extends React.Component {
                             <span className="play">{playText}</span>
                         </span>
                         <div className={ClassNames('coming-soon', { hidden: !item.coming_soon})} />
+                        <div className={ClassNames('desktop-only', { hidden: !item.meta.desktop})} />
                         <object data={`${GLOBALS.GAME_URL}${item.game_id}/thumb.jpg`} type="image/png" >
                             <img src={FlipBgDefault}></img>
                         </object>
