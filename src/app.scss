@@ -146,6 +146,7 @@ h3 {
         margin-left: auto;
         padding: $standard;
         max-width: $monitor-max-break;
+        min-height: $sweater-height;
 
         .content,
         .sidebar {
