@@ -49,10 +49,6 @@ II?+I,,,,,,,,,,,,,,,,:,,,::::++=~~::,,,......................,,.,,.,,,,,,,,,,,,,
 ,,,,,,,,,,,,,,,,,,,::::::::,,,,,::::::::::~~~~~~=~~=====+++++=~=+=+?????????II?IIIII:,7I:~,...................
 ,,,,,,,,,,,,,,,,,,,,:::::::,:,:::::,:,~::::~~~~~~~~=~=~=+=+~+~~=+=++?++????????+?I??~:+?:=,...................
 ,,,,,,,,,,,,,,,,,,,,,,,:,:,:,::::::::,::::::~~~~~=~:~~===+~~~==++++==+?????????I????~~:I:=:...................
-.,,,,,,,,,,,,,,,,,,,,,,,,,::::::::::::::::~:~~~~~~~:=~=====~~~==+++?++????+???+??+?==7I:,=:,..................
-,.,.,.,,,,,,,,,,,,,,,:,,,::::::::::::::::::::~~~~~~~~====~=+=~~==+++++??????????+=+~~?=:I::,..................
-.....,,,,,,,,,,,,,,,,,,,,,:,:::,::::::::::::::~~~~~~~==~~===+==+=++++~+????????+++==~=?I?::,..................
-....,,,.,,,,,,,,,,,,,,,,,:,:,,,,::::::::::::::~~~~~~~=~=====+==+++++++????+=??=??==~+~+?+:~,..................
  * ## Structure of this file:
  * This file contains the bare minimum components to bootstrap the application: the react application wrapper
  * component, the router, and the redux process for a single page load. There are also some additional helper
@@ -132,6 +128,8 @@ import Store from 'components/store';
 import Util from 'components/util';
 import DevTools from 'components/devtools';
 import Actions from 'components/actions';
+import TimerModal from 'components/timer_modal';
+
 import GlobalAlert from 'components/global_alert';
 import Detector from 'components/browser_detector';
 import Errors from 'components/errors';
@@ -231,6 +229,7 @@ var AppComponent = React.createClass({
             <div>
                 {this.globalAlert()}
                 {Errors.renderErrors()}
+                <TimerModal currentUser={this.props.currentUser}></TimerModal>
                 <GlobalHeader logoLink={this.state.logoLink} currentUser={this.props.currentUser} />
                 <div className="sweater">
                     {this.props.children}

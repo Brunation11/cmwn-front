@@ -8,6 +8,7 @@
 
     .panel-body {
         display: flex;
+        margin-bottom: -1em;
         justify-content: space-between;
         flex-wrap: wrap;
 
@@ -75,7 +76,6 @@
     }
 
     .user-metadata {
-        padding: 1rem;
         color: $cmwn-blue;
         font-size: 1rem;
 
