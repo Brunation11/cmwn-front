@@ -69,6 +69,7 @@ var resolveFinalMediaState = function (segments, result, parentItem = {}) {
 };
 
 export default function (eventPrefix, gameId, _links, exitCallback) {
+    var origin = window.location.origin;
     var submitFlip = function (flip) {
         if (!_links.flip.href) {
             return;
@@ -115,8 +116,7 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
             exitCallback({fullscreenFallback: false});
         },
         init: function (e) {
-            ga('set', 'dimension4', e.gameData.id || e.gameData.game || e.gameData.flip);
-            e.respond(this.props.gameState);
+            ga('set', 'dimension4', gameId || e.gameData.id || e.gameData.game || e.gameData.flip);
             HttpManager.GET( _links.save_game.href.replace('{game_id}', gameId))
                 .then(server => e.respond(server.response))
                 .catch(err => Log.error('failed to get game data for ' + gameId, err));
@@ -161,7 +161,8 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
                     var friend = server.response;
                     friend._embedded = friend._embedded || {};
                     friend._embedded.image = friend._embedded.image || {};
-                    friend._embedded.image.url = friend._embedded.image.url || DefaultProfile;
+                    friend._embedded.image.url =
+                        friend._embedded.image.url || origin + DefaultProfile;
                     e.respond({user: friend});
                 })
                 .catch(err => Log.error(err));
@@ -172,7 +173,8 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
                     var friends = _.map(server.response._embedded.friend, friend => {
                         friend._embedded = friend._embedded || {};
                         friend._embedded.image = friend._embedded.image || {};
-                        friend._embedded.image.url = friend._embedded.image.url || DefaultProfile;
+                        friend._embedded.image.url =
+                            friend._embedded.image.url || origin + DefaultProfile;
                         return friend;
                     });
                     e.respond({user: friends});
