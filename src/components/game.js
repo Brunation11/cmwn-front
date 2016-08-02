@@ -85,7 +85,6 @@ var Game = React.createClass({
             frame.contentWindow.addEventListener('click', callApi, false);
         }, false);
     },
-    /* end of default events */
     onExit: function (nextState) {
         this.setState(nextState);
     },

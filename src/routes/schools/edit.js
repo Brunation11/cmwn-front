@@ -12,9 +12,10 @@ import Toast from 'components/toast';
 import Form from 'components/form';
 import Util from 'components/util';
 import History from 'components/history';
-import Store from 'components/store';
 
 import Layout from 'layouts/two_col';
+
+export const PAGE_UNIQUE_IDENTIFIER = 'school-edit';
 
 const HEADINGS = {
     EDIT_TITLE: 'Edit School: ',
@@ -22,22 +23,56 @@ const HEADINGS = {
     CREATE_CLASS: 'Create a Class in this School'
 };
 
-const LABELS = {
-    SUBMIT: 'Submit'
+const REFS = {
+    TITLE: 'titleInput',
+    DESCRIPT: 'descriptionInput',
+    FORM: 'formRef',
+    CODE: 'codeInput',
+    FILE_INPUT: 'fileInput',
+    TEACHER_INPUT: 'teacherInput',
+    STUDENT_INPUT: 'studentInput',
+    TOS_INPUT: 'tosInput'
 };
 
-const BAD_UPDATE = 'There was a problem updating your profile. Please try again later.';
+const LABELS = {
+    SUBMIT: 'Submit',
+    TITLE: 'Title',
+    DESCRIPT: 'Description',
+    CLASS_NAME: 'Class Name',
+    CLASS_CODE: 'Class Code',
+    UPLOAD: 'Upload Spreadsheet',
+    TEACHER_CODE: 'Teacher Access Code',
+    STUDENT_CODE: 'Student Access Code',
+    ACCEPT: 'I accept the terms and conditions.'
+};
 
-const ERRORS = {
-    BAD_UPDATE: 'Could not create school. Please try again later.',
-    INVALID_SUBMISSION: 'Invalid submission. Please update fields highlighted in red and submit again'
+export const ERRORS = {
+    BAD_UPDATE: 'There was a problem updating your profile. Please try again later.',
+    COULDNT_CREATE: 'Could not create school. Please try again later.',
+    INVALID_SUBMISSION: 'Invalid submission. Please update fields highlighted in red and submit again',
+    NOT_FILLED: 'Please fill out all required fields',
+    NO_AGREE: 'You must agree to the terms to submit import.',
+    SAME_CODES: 'Teacher and Student access codes must be different',
+    PASSW_REQ: 'Passwords must be a minimum of 8 characters and contain a number.',
+    NO_FILE: 'Please select an XLSX file to import.'
+};
+
+export const SUCCESS = {
+    IMPORT: 'Import submitted for processing. You will recieve an email once processing is complete.',
+    SCHOOL_UPDATE: 'School Updated'
+};
+
+const LOG = {
+    REFUSE_DIST: 'Server refused district update',
+    REFUSE_CLASS: 'Server refused class create'
 };
 
 const TERMS_COPY = (
     <span>
         By checking the box below, you agree that you have read, understand and accept the{' '}
             <a href="/terms" target="_blank">Change My World Now Terms and Conditions</a>.
-    </span>);
+    </span>
+);
 
 var checkPerms = function (data) {
     if (data && data.scope && !Util.decodePermissions(data.scope).update) {
@@ -49,23 +84,30 @@ var isPassValid = function (password) {
     return password.length >= 8 && ~password.search(/[0-9]+/);
 };
 
-var Component = React.createClass({
-    getInitialState: function () {
-        return {
+var mapStateToProps;
+var Page;
+
+export class SchoolEdit extends React.Component {
+    constructor() {
+        super();
+        this.state = {
             code: '',
             title: '',
             description: ''
         };
-    },
-    componentWillMount: function () {
+    }
+
+    componentWillMount() {
         checkPerms(this.props.data);
         this.setState(this.props.data);
-    },
-    componentWillReceiveProps: function (newProps) {
+    }
+
+    componentWillReceiveProps(newProps) {
         checkPerms(this.props.data);
         this.setState(newProps.data);
-    },
-    submitData: function () {
+    }
+
+    submitData() {
         var postData = {
             title: this.state.title,
             group_id: this.props.data.group_id, //eslint-disable-line camelcase
@@ -73,59 +115,73 @@ var Component = React.createClass({
             description: this.state.description
         };
         HttpManager.PUT({url: this.props.data._links.self.href}, postData).then(() => {
-            Toast.success('School Updated');
+            Toast.success(SUCCESS.SCHOOL_UPDATE);
         }).catch(err => {
-            Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
-            Log.log('Server refused district update', err, postData);
+            Toast.error(ERRORS.BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
+            Log.log(LOG.REFUSE_DIST, err, postData);
         });
-    },
-    render: function () {
-        if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
+    }
+
+    render() {
+        if (this.props.data == null || this.props.data.group_id == null ||
+            !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
+        const SCHOOL_EDIT = (
+            <Panel header={HEADINGS.EDIT_TITLE + this.props.data.title} className="standard">
+                <Link to={'/school/' + this.props.data.group_id + '/view'} id="school-return-dash">
+                    Return to School Dashboard
+                </Link>
+                <br />
+                <Input
+                    type="text"
+                    value={this.state.title}
+                    placeholder={LABELS.TITLE}
+                    label={LABELS.TITLE}
+                    bsStyle={Validate.min(3, this.state.title)}
+                    hasFeedback
+                    ref={REFS.TITLE}
+                    id="school-edit-name"
+                    onChange={() => this.setState({title: this.refs.titleInput.getValue()})}
+                />
+                <Input
+                    type="textarea"
+                    value={this.state.description}
+                    placeholder={LABELS.DESCRIPT}
+                    label={LABELS.DESCRIPT}
+                    ref={REFS.DESCRIPT}
+                    id="school-edit-description"
+                    onChange={() => this.setState({description: this.refs.descriptionInput.getValue()})}
+                />
+                <Button onClick={this.submitData.bind(this)} > Save </Button>
+            </Panel>
+        );
+        if (this.props.data._links.import == null) {
+            return (
+                <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+                    {SCHOOL_EDIT}
+                </Layout>
+            );
+        }
         return (
-            <Layout>
-                <Panel header={HEADINGS.EDIT_TITLE + this.props.data.title} className="standard">
-                    <Link to={'/school/' + this.props.data.group_id + '/view'} id="school-return-dash">
-                        Return to School Dashboard
-                    </Link>
-                    <br />
-                    <Input
-                        type="text"
-                        value={this.state.title}
-                        placeholder="title"
-                        label="Title"
-                        bsStyle={Validate.min(3, this.state.title)}
-                        hasFeedback
-                        ref="titleInput"
-                        id="school-edit-name"
-                        onChange={() => this.setState({title: this.refs.titleInput.getValue()})}
-                    />
-                    <Input
-                        type="textarea"
-                        value={this.state.description}
-                        placeholder="description"
-                        label="Description"
-                        ref="descriptionInput"
-                        id="school-edit-desc"
-                        onChange={() => this.setState({description: this.refs.descriptionInput.getValue()})}
-                    />
-                    <Button onClick={this.submitData} id="school-edit-submit"> Save </Button>
-                </Panel>
+           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+                {SCHOOL_EDIT}
                 {''/*<CreateClass data={this.props.data} />*/}
-                <BulkUpload url={this.props.data._links.import.href} />
-            </Layout>
+                <BulkUpload data={this.props.data} url={this.props.data._links.import.href} />
+           </Layout>
          );
     }
-});
+}
 
-var CreateClass = React.createClass({ //eslint-disable-line no-unused-vars
-    getInitialState: function () {
-        return {
+export class CreateClass extends React.Component { //eslint-disable-line no-unused-vars
+    constructor() {
+        super();
+        this.state = {
             title: ''
         };
-    },
-    submitData: function () {
+    }
+
+    submitData() {
         var postData = {
             title: this.state.title,
             parent_id: this.props.data.group_id, //eslint-disable-line camelcase
@@ -145,121 +201,119 @@ var CreateClass = React.createClass({ //eslint-disable-line no-unused-vars
                     History.push(`/class/${res.response.group_id}?message=created`);
                 }
             }).catch(err => {
-                Toast.error(ERRORS.BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
-                Log.log('Server refused class create', err, postData);
+                Toast.error(ERRORS.COULDNT_CREATE + (err.message ? ' Message: ' + err.message : ''));
+                Log.log(LOG.REFUSE_CLASS, err, postData);
             });
         } else {
             Toast.error(ERRORS.INVALID_SUBMISSION);
         }
-    },
-    render: function () {
+    }
+
+    render() {
         return (
         <Panel header={HEADINGS.CREATE_CLASS} className="standard">
-            <Form ref="formRef">
+            <Form ref={REFS.FORM}>
                 <Input
                     type="text"
                     value={this.state.title}
-                    placeholder="Class Name"
-                    label="Class Name"
+                    placeholder={LABELS.CLASS_NAME}
+                    label={LABELS.CLASS_NAME}
                     validate="required"
-                    ref="titleInput"
-                    name="titleInput"
-                    onChange={e => this.setState({title: e.target.value})} //eslint-disable-line camelcase
+                    ref={REFS.TITLE}
+                    name={REFS.TITLE}
+                    onChange={e => this.setState({title: e.target.value})}
                 />
                 <Input
                     type="text"
                     value={this.state.code}
-                    placeholder="Class Code"
-                    label="Class Code"
+                    placeholder={LABELS.CLASS_CODE}
+                    label={LABELS.CLASS_CODE}
                     validate="required"
-                    ref="codeInput"
-                    name="codeInput"
-                    onChange={e => this.setState({code: e.target.value})} //eslint-disable-line camelcase
+                    ref={REFS.CODE}
+                    name={REFS.CODE}
+                    onChange={e => this.setState({code: e.target.value})}
                 />
-                <Button onClick={this.submitData}> Create </Button>
+                <Button onClick={this.submitData.bind(this)}> Create </Button>
             </Form>
         </Panel>
         );
     }
-});
+}
 
-var BulkUpload = React.createClass({
-    getInitialState: function () {
-        return {
+export class BulkUpload extends React.Component {
+    constructor() {
+        super();
+        this.state = {
             studentCode: '',
             teacherCode: '',
             tos: false
         };
-    },
-    render: function () {
-        var state = Store.getState();
-        if (this.props.url == null) {
-            return null;
+    }
+
+    checkForm(e) {
+        var result = SUCCESS.IMPORT;
+        try {
+            if (!this.refs.formRef.isValid()) {
+                e.preventDefault();
+                result = ERRORS.NOT_FILLED;
+                Toast.error(result);
+            } else if (this.state.tos === false) {
+                e.preventDefault();
+                result = ERRORS.NO_AGREE;
+                Toast.error(result);
+            } else if (this.state.teacherCode === this.state.studentCode) {
+                e.preventDefault();
+                result = ERRORS.SAME_CODES;
+                Toast.error(result);
+            } else if (!isPassValid(this.state.teacherCode) || !isPassValid(this.state.studentCode)) {
+                e.preventDefault();
+                result = ERRORS.PASSW_REQ;
+                Toast.error(result);
+            } else if (!this.refs.fileInput.getValue()) {
+                e.preventDefault();
+                result = ERRORS.NO_FILE;
+                Toast.error(result);
+            }
+        } catch(err) {
+            e.preventDefault();
         }
-        if (state.page.data == null || state.page.data._links.import == null) {
+        Toast.success(result);
+        window.setTimeout(() => {
+            this.setState({
+                studentCode: '',
+                teacherCode: '',
+                tos: false
+            });
+            ReactDOM.findDOMNode(this.refs.fileInput).value = '';
+            ReactDOM.findDOMNode(this.refs.fileInput).type = '';
+            ReactDOM.findDOMNode(this.refs.fileInput).type = 'file';
+            ReactDOM.findDOMNode(this.refs.formRef).reset();
+        }, 0);
+        return result;
+    }
+
+    render() {
+        if (this.props.data == null || this.props.data._links.import == null) {
             return null;
         }
         return (
-          <Panel header={HEADINGS.UPLOAD} className="standard">
+          <Panel header={HEADINGS.UPLOAD} className="school-import standard">
             <iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe"></iframe>
-            <Form ref="formRef" method="post" target="dummyframe" encType="multipart/form-data"
-                action={this.props.url} id="import-form" onSubmit={e => {
-                    try {
-                        if (!this.refs.formRef.isValid()) {
-                            e.preventDefault();
-                            Toast.error('Please fill out all required fields');
-                            return false;
-                        } else if (this.state.tos === false) {
-                            e.preventDefault();
-                            Toast.error('You must agree to the terms to submit import.');
-                            return false;
-                        } else if (this.state.teacherCode === this.state.studentCode) {
-                            e.preventDefault();
-                            Toast.error('Teacher and Student access codes must be different');
-                            return false;
-                        } else if (!isPassValid(this.state.teacherCode) ||
-                            !isPassValid(this.state.studentCode)
-                        ) {
-                            e.preventDefault();
-                            Toast.error('Passwords must be a minimum of 8 characters and contain a number.');
-                            return false;
-                        } else if (!this.refs.fileInput.getValue()) {
-                            e.preventDefault();
-                            Toast.error('Please select an XLSX file to import.');
-                            return false;
-                        }
-                    } catch(err) {
-                        e.preventDefault();
-                        return false;
-                    }
-                    Toast.success('Import submitted for processing. You will recieve an email' +
-                        'once processing is complete.');
-                    window.setTimeout(() => {
-                        this.setState({
-                            studentCode: '',
-                            teacherCode: '',
-                            tos: false
-                        });
-                        ReactDOM.findDOMNode(this.refs.fileInput).value = '';
-                        ReactDOM.findDOMNode(this.refs.fileInput).type = '';
-                        ReactDOM.findDOMNode(this.refs.fileInput).type = 'file';
-                        ReactDOM.findDOMNode(this.refs.formRef).reset();
-                    }, 0);
-                }}
-            >
+            <Form ref={REFS.FORM} method="post" target="dummyframe" encType="multipart/form-data"
+                action={this.props.url} onSubmit={e => this.checkForm(e)}>
                 <input type="hidden" name="_token" value={HttpManager.token} />
                 <input type="hidden" name="type" value="Nyc\DoeImporter" />
                 <input type="hidden" name="organization" value={this.props.organization_id} />
                 <input type="hidden" name="organization_id" value={this.props.organization_id} />
-                <Input ref="fileInput" accept=".xlsx" type="file" name="file" chars="40"
-                    label="Upload Spreadsheet"/>
+                <Input ref={REFS.FILE_INPUT} accept=".xlsx" type="file" name="file" chars="40"
+                    label={LABELS.UPLOAD}/>
                 <Input
                     type="text"
                     value={this.state.teacherCode}
-                    placeholder="Teacher Access Code"
-                    label="Teacher Access Code"
+                    placeholder={LABELS.TEACHER_CODE}
+                    label={LABELS.TEACHER_CODE}
                     validate="required"
-                    ref="teacherInput"
+                    ref={REFS.TEACHER_INPUT}
                     name="teacher_code"
                     id="teacher-code"
                     onChange={e => this.setState({teacherCode: e.target.value})}
@@ -267,10 +321,10 @@ var BulkUpload = React.createClass({
                 <Input
                     type="text"
                     value={this.state.studentCode}
-                    placeholder="Student Access Code"
-                    label="Student Access Code"
+                    placeholder={LABELS.STUDENT_CODE}
+                    label={LABELS.STUDENT_CODE}
                     validate="required"
-                    ref="studentInput"
+                    ref={REFS.STUDENT_INPUT}
                     name="student_code"
                     id="student-code"
                     onChange={e => this.setState({studentCode: e.target.value})}
@@ -279,8 +333,8 @@ var BulkUpload = React.createClass({
                 <Input
                     type="checkbox"
                     checked={this.state.tos}
-                    ref="tosInput"
-                    label="I accept the terms and conditions."
+                    ref={REFS.TOS_INPUT}
+                    label={LABELS.ACCEPT}
                     name="tos"
                     id="import-terms-check"
                     onChange={e => this.setState({tos: e.target.checked})}
@@ -291,9 +345,9 @@ var BulkUpload = React.createClass({
           </Panel>
         );
     }
-});
+}
 
-var mapStateToProps = state => {
+mapStateToProps = state => {
     var data = {title: ''};
     var loading = true;
     if (state.page && state.page.data != null) {
@@ -306,6 +360,7 @@ var mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(Component);
+Page = connect(mapStateToProps)(SchoolEdit);
+Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
 
