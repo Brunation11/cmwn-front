@@ -11,24 +11,26 @@ import teacherData from 'mocks/users/teacher_data';
 import principalData from 'mocks/users/principal_data';
 
 var createWrapper = function (data) {
-    var schools = <Schools data={data} loading={false} />;
-    const WRAPPER = mount(schools);
+    var school = <SchoolProfile data={data} loading={false} />;
+    var provider = <ProviderWrapper route={school} />;
+    const WRAPPER = mount(provider);
     return WRAPPER;
 };
 
 var checkContents = function (WRAPPER, data) {
-    expect(WRAPPER.instance()).to.be.instanceOf(Schools);
+    var schools = 0;
+    var i;
+    expect(WRAPPER.instance()).to.be.instanceOf(SchoolProfile);
     expect(WRAPPER.hasClass(PAGE_UNIQUE_IDENTIFIER)).to.equal(true);
     expect(WRAPPER.find('Layout')).to.have.length(1);
     expect(WRAPPER.find('Flipboard')).to.have.length(1);
-    var schools = 0;
-    for(var i = 0; i < data._embedded.groups.length; i++) {
-        if(data._embedded.groups[i].type === 'school') {
+    for (i = 0; i < data._embedded.groups.length; i++) {
+        if (data._embedded.groups[i].type === 'school') {
             schools++;
         }
     }
     expect(WRAPPER.find('.flip')).to.have.length(schools);
-    expect(WRAPPER.find('a')).to.have.length(school);
+    expect(WRAPPER.find('a')).to.have.length(schools);
     expect(WRAPPER.find('img')).to.have.length(schools);
     expect(WRAPPER.find('p')).to.have.length(schools);
 };

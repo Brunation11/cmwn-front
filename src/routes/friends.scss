@@ -1,7 +1,6 @@
 @import 'variables';
 
 .friends-page {
-
     .overlay {
         text-align: center;
     }
@@ -17,13 +16,14 @@
 
 
         &.nohover,
-        &.nohover:hover {
+        &.nohover:hover,
+        &.nohover:focus {
             background-color: $cmwn-blue;
         }
     }
 
-    .faded {
-        opacity: 0;
+    .disabled {
+        display: none;
     }
 
     .prompts {
