@@ -7,6 +7,7 @@ import QueryString from 'query-string';
 import { connect } from 'react-redux';
 import Moment from 'moment';
 
+import Util from 'components/util';
 import Detector from 'components/browser_detector';
 import ProfileImage from 'components/profile_image';
 import FlipBoard from 'components/flipboard';
@@ -38,6 +39,7 @@ const HEADINGS = {
 };
 const PLAY = 'Play Now!';
 const COMING_SOON = 'Coming Soon!';
+const DESKTOP_ONLY = 'Log on with a Desktop computer to play!';
 const CLASSES = 'Classes';
 
 const BROWSER_NOT_SUPPORTED = (
@@ -161,10 +163,14 @@ export class Profile extends React.Component {
     renderFlip(item) {
         var onClick;
         var playText;
+        var meta = item.meta || {};
 
         if (item.coming_soon) {
             onClick = _.noop;
             playText = COMING_SOON;
+        } else if (meta.desktop && Util.isMobileOrTablet()) {
+            onClick = _.noop;
+            playText = DESKTOP_ONLY;
         } else {
             onClick = this.showModal.bind(this, `${GLOBALS.GAME_URL}${item.game_id}/index.html`);
             playText = PLAY;
@@ -179,7 +185,7 @@ export class Profile extends React.Component {
                             <span className="play">{playText}</span>
                         </span>
                         <div className={ClassNames('coming-soon', { hidden: !item.coming_soon})} />
-                        <div className={ClassNames('desktop-only', { hidden: !item.meta.desktop})} />
+                        <div className={ClassNames('desktop-only', { hidden: !meta.desktop})} />
                         <object data={`${GLOBALS.GAME_URL}${item.game_id}/thumb.jpg`} type="image/png" >
                             <img src={FlipBgDefault}></img>
                         </object>
