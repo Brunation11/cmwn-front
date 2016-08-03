@@ -70,7 +70,7 @@ var Component = React.createClass({
     login: function (e) {
         var dataUrl;
         var req;
-        var user = this.stripSpaces();
+        var user = this.getUsernameWithoutSpaces();
         dataUrl = this.state.overrideLogin || this.props.currentUser._links.login.href;
         req = HttpManager.POST({
             url: dataUrl,
@@ -109,7 +109,7 @@ var Component = React.createClass({
         });
     },
     attemptLogin: function (e) {
-        var user = this.stripSpaces();
+        var user = this.getUsernameWithoutSpaces();
         var logout;
         var logoutUrl;
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
@@ -171,7 +171,7 @@ var Component = React.createClass({
             });
         }
     },
-    stripSpaces: function () {
+    getUsernameWithoutSpaces: function () {
         var newLogin = this.refs.login.getValue().replace(/\s/g, "");
         return newLogin;
     },
