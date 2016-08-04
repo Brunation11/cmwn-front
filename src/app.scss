@@ -175,7 +175,7 @@ h3 {
         display: none;
         margin: $standard / 2 0;
         border-radius: 4px;
-        background: $rule-medium-gray;
+        background: $rule-light-gray;
         padding: $standard / 2 $standard;
         font-size: 12px;
 
@@ -221,6 +221,14 @@ h3 {
                 text-decoration: none;
                 color: $cmwn-blue;
                 font-weight: bold;
+            }
+        }
+
+        .active-menu {
+            background: $cmwn-blue;
+
+            a {
+                color: $cmwn-white;
             }
         }
     }
