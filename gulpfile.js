@@ -265,7 +265,7 @@ var buildAndCopyStaticResources = function () {
 
     var packageJson = gulp.src('./package.json').pipe(gulp.dest('./build'));
 
-    var fonts = gulp.src('./src/media/fonts/*.*').pipe(gulp.dest('./build/fonts'));
+    var fonts = gulp.src('./src/media/fonts/**/*.*').pipe(gulp.dest('./build/fonts'));
 
     var reset = gulp.src('./src/reset.css').pipe(gulp.dest('./build'));
 
