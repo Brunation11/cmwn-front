@@ -127,7 +127,8 @@ var UpdateUsername = React.createClass({
                         <Glyphicon glyph="repeat" /> {BUTTONS.GET}
                     </Button>
                     <br />
-                    <Button className="green username-btn username-picker" onClick={this.setChildUsername}>
+                    <Button className="green username-btn username-picker" id="cur-choice-btn"
+                        onClick={this.setChildUsername}>
                         {BUTTONS.CONFIRM}
                         <br />
                         <span className="username username-picker">
@@ -135,7 +136,8 @@ var UpdateUsername = React.createClass({
                         </span>
                     </Button>
                     <br />
-                    <Button className="green username-btn username-picker" onClick={this.resetLast}>
+                    <Button className="green username-btn username-picker" id="last-choice-btn"
+                            onClick={this.resetLast}>
                         {BUTTONS.PREVIOUS}
                         <br />
                         <span className="username username-picker">
@@ -143,7 +145,8 @@ var UpdateUsername = React.createClass({
                         </span>
                     </Button>
                     <br />
-                    <Button className="green username-btn username-picker" onClick={this.resetOriginal}>
+                    <Button className="green username-btn username-picker" id="original-choice-btn"
+                        onClick={this.resetOriginal}>
                         {BUTTONS.ORIGINAL}
                         <br />
                         <span className="username username-picker">

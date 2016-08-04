@@ -9,7 +9,7 @@ const HEADINGS = {
     UPDATE_CODE: 'Reset code for user',
 };
 const ERRORS = {
-    BAD_PASS: 'Sorry, there was a problem updating your password.',
+    BAD_CODE: 'Sorry, there was a problem resetting your code.',
 };
 
 class CodeChange extends React.Component {
@@ -29,8 +29,8 @@ class CodeChange extends React.Component {
             Toast.success.bind(this,
                 'Code Reset for user. They will need to update their password on next login.')
         ).catch(err => {
-            Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
-            Toast.error(ERRORS.BAD_PASS);
+            Log.warn('Update code failed.' + (err.message ? ' Message: ' + err.message : ''), err);
+            Toast.error(ERRORS.BAD_CODE);
         });
     }
 
@@ -44,6 +44,7 @@ class CodeChange extends React.Component {
                     <Input
                         type="text"
                         value={this.state.code}
+                        id="reset-code"
                         placeholder="code"
                         label="Reset Code"
                         validate="required"
@@ -51,7 +52,7 @@ class CodeChange extends React.Component {
                         name="currentInput"
                         onChange={e => this.setState({code: e.target.value})}
                     />
-                    <Button onClick={this.submit.bind(this)}>Reset Code</Button>
+                    <Button onClick={this.submit.bind(this)} id="reset-code-btn">Reset Code</Button>
             </form></Panel>
         );
     }
