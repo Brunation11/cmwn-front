@@ -7,7 +7,6 @@ import QueryString from 'query-string';
 import { connect } from 'react-redux';
 import Moment from 'moment';
 
-import Util from 'components/util';
 import Detector from 'components/browser_detector';
 import ProfileImage from 'components/profile_image';
 import FlipBoard from 'components/flipboard';
@@ -15,7 +14,6 @@ import Game from 'components/game';
 import Trophycase from 'components/trophycase';
 import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
-// import Util from 'components/util';
 import History from 'components/history';
 import GenerateDataSource from 'components/datasource';
 
@@ -168,7 +166,7 @@ export class Profile extends React.Component {
         if (item.coming_soon) {
             onClick = _.noop;
             playText = COMING_SOON;
-        } else if (meta.desktop && Util.isMobileOrTablet()) {
+        } else if (meta.desktop && Detector.isMobileOrTablet()) {
             onClick = _.noop;
             playText = DESKTOP_ONLY;
         } else {
