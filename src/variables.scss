@@ -6,6 +6,7 @@
 
 $cmwn-jade-font: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
 $helvetica: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$source-sans-pro: "Source Sans Pro", Helvetica, Arial, sans-serif;
 //*************************colors************************
 
 $cmwn-blue: #2cc4f4;
@@ -36,6 +37,11 @@ $cmwn-medium-green: rgba(71, 183, 44, .9);
 $cmwn-medium-purple: rgba(120, 81, 147, .9);
 $cmwn-off-white: #eee;
 $cmwn-dark-gray: #333;
+$cmwn-light-blue: #8cdffd;
+$cmwn-slight-lighter-blue: #0280ae;
+$cmwn-dark-blue: #00719a;
+$cmwn-light-purple: #c380ff;
+$cmwn-lighter-purple: #d5a4ff;
 
 //************************measures**********************
 //page
@@ -61,6 +67,7 @@ $max-base-font-size: 18px;
 $z-nav: 500;
 $z-override: 1100;
 $z-bootstrap: 1000;
+$sweater-height: 717px;
 
 $game-responsive-width-portrait: calc(50vmin * 1.77);
 $game-responsive-height-portrait: 50vmin;
@@ -72,9 +79,9 @@ $game-responsive-height-portrait-ie: 50vm;
 $game-fullscreen-width-portrait-ie: 100vm;
 $game-fullscreen-height-portrait-ie: calc(100vm * 0.5625);
 
-$game-responsive-width-landscape: calc(50vmax * 1.77);
+$game-responsive-width-landscape: calc(90vw);
 $game-responsive-width-max: 100%; // max out at 985px (max width of sweater)
-$game-responsive-height-landscape: 50vmax;
+$game-responsive-height-landscape: 50.62vw;
 $game-responsive-height-max: 554px; // preserve 9:16 ratio of max sweater width (985px)
 $game-fullscreen-width-landscape: 100vmax;
 $game-fullscreen-height-landscape: calc(100vmax * .5625);
