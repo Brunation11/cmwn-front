@@ -1,4 +1,4 @@
-@import 'variables';
+@import '../../variables';
 
 .profile {
 
@@ -122,33 +122,58 @@
             overflow: scroll;
 
             .text {
-                font-size: .75rem;
+                font-size: 1rem;
 
-                @media (min-width: $device-portrait-break) and (max-width: 590px) {
+                @media (max-width: 370px) { // sizes reflect natural breakpoints in layout
+                    font-size: .75rem;
+                }
+
+                @media(min-width: 370px) and (max-width: $device-portrait-break) { // sizes reflect natural breakpoints in layout
                     font-size: 1rem;
                 }
 
-                @media (min-width: 590px) and (max-width: $device-max-break) {
-                    font-size: .65rem;
+                @media (min-width: $device-portrait-break) and (max-width: 590px) { // sizes reflect natural breakpoints in layout
+                    font-size: 1rem;
                 }
 
-                @media (min-width: $device-max-break) and (max-width: $monitor-max-break) {
+                @media (min-width: 590px) and (max-width: $device-max-break) { // sizes reflect natural breakpoints in layout
+                    font-size: .75rem;
+                }
+
+                @media (min-width: $device-max-break + 1) and (max-width: $device-max-break + 50) { // sizes reflect natural breakpoints in layout
+                    font-size: .4rem;
+                }
+
+                @media (min-width: $device-max-break + 50) and (max-width: $device-max-break + 150) { // sizes reflect natural breakpoints in layout
+                    font-size: .6rem;
+                }
+
+                @media (min-width: $device-max-break + 150) and (max-width: $device-max-break + 200) { // sizes reflect natural breakpoints in layout
                     font-size: .7rem;
                 }
 
-                @media (min-width: $monitor-max-break) and (max-width: $ultrawide-min-break) {
-                    font-size: 1rem;
+                @media (min-width: $device-max-break + 200) and (max-width: $device-max-break + 250) { // sizes reflect natural breakpoints in layout
+                    font-size: .9rem;
                 }
             }
         }
 
-        .coming-soon {
+        .coming-soon,
+        .desktop-only {
             position: absolute;
             top: 0;
             right: 0;
             bottom: 0;
             left: 0;
+        }
+
+        .coming-soon {
             background: url('../../media/coming-soon.png') no-repeat right top;
+        }
+
+        .desktop-only {
+            background: url('../../media/desktop-only.png') no-repeat 100% 100%;
+            background-size: 25%;
         }
     }
 }
