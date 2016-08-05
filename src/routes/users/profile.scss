@@ -1,4 +1,4 @@
-@import 'variables';
+@import '../../variables';
 
 .profile {
 
@@ -158,13 +158,22 @@
             }
         }
 
-        .coming-soon {
+        .coming-soon,
+        .desktop-only {
             position: absolute;
             top: 0;
             right: 0;
             bottom: 0;
             left: 0;
+        }
+
+        .coming-soon {
             background: url('../../media/coming-soon.png') no-repeat right top;
+        }
+
+        .desktop-only {
+            background: url('../../media/desktop-only.png') no-repeat 100% 100%;
+            background-size: 25%;
         }
     }
 }
