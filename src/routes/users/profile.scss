@@ -122,22 +122,38 @@
             overflow: scroll;
 
             .text {
-                font-size: .75rem;
+                font-size: 1rem;
 
-                @media (min-width: $device-portrait-break) and (max-width: 590px) {
+                @media (max-width: 370px) { // sizes reflect natural breakpoints in layout
+                    font-size: .75rem;
+                }
+
+                @media(min-width: 370px) and (max-width: $device-portrait-break) { // sizes reflect natural breakpoints in layout
                     font-size: 1rem;
                 }
 
-                @media (min-width: 590px) and (max-width: $device-max-break) {
-                    font-size: .65rem;
-                }
-
-                @media (min-width: $device-max-break) and (max-width: $monitor-max-break) {
-                    font-size: .3rem;
-                }
-
-                @media (min-width: $monitor-max-break) and (max-width: $ultrawide-min-break) {
+                @media (min-width: $device-portrait-break) and (max-width: 590px) { // sizes reflect natural breakpoints in layout
                     font-size: 1rem;
+                }
+
+                @media (min-width: 590px) and (max-width: $device-max-break) { // sizes reflect natural breakpoints in layout
+                    font-size: .75rem;
+                }
+
+                @media (min-width: $device-max-break + 1) and (max-width: $device-max-break + 50) { // sizes reflect natural breakpoints in layout
+                    font-size: .4rem;
+                }
+
+                @media (min-width: $device-max-break + 50) and (max-width: $device-max-break + 150) { // sizes reflect natural breakpoints in layout
+                    font-size: .6rem;
+                }
+
+                @media (min-width: $device-max-break + 150) and (max-width: $device-max-break + 200) { // sizes reflect natural breakpoints in layout
+                    font-size: .7rem;
+                }
+
+                @media (min-width: $device-max-break + 200) and (max-width: $device-max-break + 250) { // sizes reflect natural breakpoints in layout
+                    font-size: .9rem;
                 }
             }
         }
