@@ -1,6 +1,6 @@
 {
   "name": "cmwn-platorm-frontend",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "description": "ChangeMyWorldNow Platform Frontend (React)",
   "main": "index.html",
   "scripts": {
@@ -85,6 +85,8 @@
     "gulp-mocha": "git+https://github.com/sindresorhus/gulp-mocha.git",
     "gulp-scss-lint": "^0.4.0",
     "gulp-scss-lint-stylish": "^1.0.1",
+    "gulp-scss-lint-stylish2": "^2.0.2",
+    "gulp-scsslint": "0.0.5",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-sri": "^0.3.0",
     "gulp-util": "^3.0.7",
