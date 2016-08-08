@@ -100,7 +100,7 @@ var Component = React.createClass({
         children = children || [];
         if (children && children.length) {
             tabs.push(
-                <Tab eventKey={tabIndex} title={'Students'}>
+                <Tab id="student-tab" eventKey={tabIndex} title={'Students'}>
                     {this.renderUserTable(children, 'children')}
                 </Tab>
             );
@@ -108,7 +108,7 @@ var Component = React.createClass({
         }
         if (adults && adults.length) {
             tabs.push(
-                <Tab className="admin" eventKey={tabIndex} title={'Adults'}>
+                <Tab id="adult-tab" className="admin" eventKey={tabIndex} title={'Adults'}>
                     {this.renderUserTable(adults, 'adults')} </Tab>
             );
             tabIndex++;

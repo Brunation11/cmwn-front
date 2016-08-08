@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 var classData = {
     'group_id': '9ee15bf2-0288-11e6-8b6b-0800274f2cef',
     'organization_id': '9ee13654-0288-11e6-a70a-0800274f2cef',

@@ -356,7 +356,7 @@ export default function (e) {
                 },
                 inbox: [
                     {
-                        id: 1,
+                        'skribble_id': 1,
                         unread: true,
                         timestamp: 1465413082450,
                         user: {
@@ -367,7 +367,7 @@ export default function (e) {
                         }
                     },
                     {
-                        id: 2,
+                        'skribble_id': 2,
                         unread: false,
                         timestamp: 1465413082450,
                         user: {
@@ -380,7 +380,7 @@ export default function (e) {
                 ],
                 outbox: [
                     {
-                        id: 3,
+                        'skribble_id': 3,
                         sent: true,
                         timestamp: 1465413082450,
                         user: {
@@ -391,7 +391,7 @@ export default function (e) {
                         }
                     },
                     {
-                        id: 4,
+                        'skribble_id': 4,
                         sent: true,
                         timestamp: 1465413082450,
                         user: {
@@ -404,7 +404,7 @@ export default function (e) {
                 ],
                 saved: [
                     {
-                        id: 5,
+                        'skribble_id': 5,
                         thumbnail: 'media/tempthumb.png',
                         timestamp: 1465413082450,
                         background: null,
@@ -445,7 +445,7 @@ export default function (e) {
                         messages: [],
                     },
                     {
-                        id: 6,
+                        'skribble_id': 6,
                         thumbnail: 'media/tempthumb.png',
                         timestamp: 1465413082450,
                         background: {
@@ -553,7 +553,7 @@ export default function (e) {
                         ],
                     },
                     {
-                        id: 7,
+                        'skribble_id': 7,
                         thumbnail: 'media/tempthumb.png',
                         timestamp: 1465413082450,
                         background: {

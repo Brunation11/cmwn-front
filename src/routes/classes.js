@@ -70,11 +70,6 @@ var Component = React.createClass({
     renderAdminView: function () {
         return (
             <Panel header={HEADINGS.MANAGE} className="standard" >
-                <div className="clear">
-                    <span className="buttons-right">
-                        {this.renderImport()}
-                    </span>
-                </div>
                 {this.renderClassTable(this.props.data)}
             </Panel>
         );
