@@ -6,23 +6,18 @@
 }
 
 iframe {
-    // scss-lint:disable all
     width: $game-responsive-width;
-    height: $game-responsive-height;
     max-width: $game-responsive-width-max;
+    height: $game-responsive-height;
     max-height: $game-responsive-height-max;
-    // scss-lint:enable all
 }
 
 
-.modal-game iframe,
-iframe:-webkit-full-screen {
-    // scss-lint:disable all
-    width: $game-responsive-width !important;
-    height: $game-responsive-height !important;
-    max-width: $game-responsive-width !important;
-    max-height: $game-responsive-height !important;
-    // scss-lint:enable all
+.modal-game iframe {
+    width: $game-responsive-width;
+    max-width: $game-responsive-width;
+    height: $game-responsive-height;
+    max-height: $game-responsive-height;
 }
 
 button {
@@ -44,13 +39,11 @@ button {
     height: 105vh;
 
     iframe {
-        // scss-lint:disable all
         position: fixed;
         width: $game-fullscreen-width;
-        height: $game-fullscreen-height;
         max-width: $game-fullscreen-width;
+        height: $game-fullscreen-height;
         max-height: $game-fullscreen-height;
-        // scss-lint:enable all
     }
 
     button {
