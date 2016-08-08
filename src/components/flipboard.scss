@@ -70,6 +70,7 @@ $overlay-color: #fff;
                 width: 100%;
                 max-width: $max-flip-size;
                 max-height: 236px;
+                overflow: hidden;
             }
         }
 
@@ -130,7 +131,6 @@ $overlay-color: #fff;
             &:focus,
             &:active {
                 opacity: 1;
-                overflow: hidden;
             }
 
             .relwrap {
