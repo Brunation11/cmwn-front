@@ -7,6 +7,7 @@ services:
       APP_API_URL: "https://api-local.changemyworldnow.com/"
       APP_GAME_URL: "https://games-dev.changemyworldnow.com/"
       APP_MODE: "local"
+      APP_CLOUDINARY_CLOUD_NAME: "cmwnstage"
     volumes:
       - ./:/var/www/
   node:
