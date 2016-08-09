@@ -127,6 +127,7 @@ var Game = React.createClass({
         window.addEventListener('game-event', this.gameEventHandler);
         window.addEventListener('platform-event', this.gameEventHandler);
         window.addEventListener('keydown', this.listenForEsc);
+
     },
     clearEvent: function () {
         window.removeEventListener('game-event', this.gameEventHandler);
@@ -135,8 +136,11 @@ var Game = React.createClass({
     listenForEsc: function (e) {
         var self = this;
         if (e.keyCode === 27 || e.charCode === 27) {
-            self.setState({fullscreenFallback: false});
             Screenfull.exit();
+            self.setState({
+                fullscreenFallback: false,
+                screenfull: false
+            });
         }
     },
     dispatchPlatformEvent(name, data) {
@@ -150,6 +154,7 @@ var Game = React.createClass({
         var self = this;
         if (Screenfull.enabled) {
             Screenfull.request(ReactDOM.findDOMNode(self.refs.wrapRef));
+            self.setState({screenfull: true});
         } else {
             self.setState({fullscreenFallback: true});
         }
@@ -166,11 +171,14 @@ var Game = React.createClass({
             return null;
         }
         return (
-                <div ref="wrapRef" className={ClassNames(
-                    'game',
-                    {fullscreen: this.state.fullscreenFallback}
-                )}>
-                    <iframe ref="gameRef" src={this.props.url} allowtransparency="true" />
+                <div className="wrapper">
+                    <div ref="wrapRef" className={ClassNames(
+                        'game',
+                        {fullscreen: this.state.fullscreenFallback,
+                         screenfull: this.state.screenfull}
+                    )}>
+                        <iframe ref="gameRef" src={this.props.url} allowtransparency="true" />
+                    </div>
                     <Button className="purple standard" onClick={this.makeFullScreen}>
                         <Glyphicon glyph="fullscreen" /> {FULLSCREEN}
                     </Button>
@@ -182,7 +190,7 @@ var Game = React.createClass({
                         onClick={() => this.dispatchPlatformEvent('toggle-demo-mode')}>{DEMO_MODE}
                     </Button>
                 </div>
-               ) ;
+                ) ;
     }
 });
 

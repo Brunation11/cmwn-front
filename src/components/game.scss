@@ -1,8 +1,14 @@
 @import 'variables';
 
+.wrapper {
+    margin-bottom: 50px;
+}
+
 .game {
-    padding-bottom: 35px;
+    padding-bottom: 10px;
     text-align: center;
+    width: 100%;
+    height: 90%;
 }
 
 iframe {
@@ -12,12 +18,15 @@ iframe {
     max-height: $game-responsive-height-max;
 }
 
-
 .modal-game iframe {
-    width: $game-responsive-width;
-    max-width: $game-responsive-width;
+    width: $game-fullscreen-width;
+    max-width: $game-responsive-width-max;
     height: $game-responsive-height;
-    max-height: $game-responsive-height;
+    max-height: $game-fullscreen-height;
+}
+
+.screenfull iframe  {
+    height: $game-fullscreen-height;
 }
 
 button {

@@ -63,12 +63,12 @@ $z-override: 1100;
 $z-bootstrap: 1000;
 $sweater-height: 717px;
 
-$game-responsive-width: 90vw;
-$game-responsive-height: 50.625vw;
+$game-responsive-width: 92vw;
+$game-responsive-height: 51.75vw;
 $game-fullscreen-width: 100vw;
 $game-fullscreen-height: 56.25vw;
-$game-responsive-width-max: 100%; // max out at 985px (max width of sweater)
-$game-responsive-height-max: 554px; // preserve 9:16 ratio of max sweater width (985px)
+$game-responsive-width-max: 100%; // max out at 955px (max width of sweater minus padding)
+$game-responsive-height-max: 538px; // preserve 9:16 ratio of max sweater width (985px)
 
 $iphone2g-4s-min-width: 320px;
 $iphone2g-4s-max-width: 480px;
