@@ -356,12 +356,15 @@ h3 {
 
     .logout {
         position: absolute;
-        top: 0;
-        float: right;
+        top: 5px;
         width: 9%;
         height: 30%;
         color: $cmwn-white;
         font-size: 1.1em;
+
+        &.btn {
+            box-shadow: none;
+        }
     }
 
     .logout:hover {
