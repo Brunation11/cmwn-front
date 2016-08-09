@@ -59,7 +59,7 @@ export var Image = React.createClass({
             }
             /* eslint-disable camelcase*/
             Cloudinary.instance.openUploadWidget({
-                cloud_name: 'changemyworldnow',
+                cloud_name: 'cmwnstage',
                 upload_preset: 'public-profile-image',
                 multiple: false,
                 resource_type: 'image',
