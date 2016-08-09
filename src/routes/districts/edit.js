@@ -111,7 +111,7 @@ export class CreateSchool extends React.Component{
         };
         if (this.refs.formRef.isValid()) {
             HttpManager.POST({
-                url: this.props.data._links.group_school.href
+                url: this.props.data._links.group.href || this.props.data._links.group_school.href
                 //url: GLOBALS.API_URL + 'group'
             }, postData).then(res => {
                 if (res.response && res.response.group_id) {
