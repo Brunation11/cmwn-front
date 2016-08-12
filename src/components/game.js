@@ -86,13 +86,13 @@ var Game = React.createClass({
         // TODO MPR 7/14/16: .game and .flip can be removed once all games are in React
         this.setState({flipId});
         this.submitFlip(flipId);
-        ('set', 'dimension5', flipId);
+        ga('set', 'dimension5', flipId);
     },
     [EVENT_PREFIX + 'Flip']: function (e) {
         var flipId = e.gameData.id || e.gameData.game || e.gameData.flip;
         this.setState({flipId});
         this.submitFlip(flipId);
-        ('set', 'dimension5', flipId);
+        ga('set', 'dimension5', flipId);
     },
     [EVENT_PREFIX + 'Save']: function (e) {
         var version = 1;
@@ -101,7 +101,7 @@ var Game = React.createClass({
             return;
         }
         version = e.gameData.version || version;
-        ('set', 'metric1', e.gameData.currentScreenIndex);
+        ga('set', 'metric1', e.gameData.currentScreenIndex);
         HttpManager.POST(this.props.saveUrl.replace('{game_id}', e.gameData.game),
             {data: e.gameData, version});
     },
@@ -110,7 +110,7 @@ var Game = React.createClass({
     },
     [EVENT_PREFIX + 'Init']: function (e) {
         e.respond(this.props.gameState);
-        ('set', 'dimension4', e.gameData.id || e.gameData.game || e.gameData.flip);
+        ga('set', 'dimension4', e.gameData.id || e.gameData.game || e.gameData.flip);
     },
     /* end of default events */
     gameEventHandler: function (e) {
