@@ -1,19 +1,8 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
-import _ from 'lodash';
-import QueryString from 'query-string';
-import {Link} from 'react-router';
-import {Panel} from 'react-bootstrap';
 import { connect } from 'react-redux';
-
-import Layout from 'layouts/two_col';
 import Shortid from 'shortid';
-import Toast from 'components/toast';
 import FlipBoard from 'components/flipboard';
-import EditLink from 'components/edit_link';
-import Util from 'components/util';
 import GenerateDataSource from 'components/datasource';
-
-import DefaultProfile from 'media/profile_tranparent.png';
 
 import 'routes/classes/user_cards.scss';
 
