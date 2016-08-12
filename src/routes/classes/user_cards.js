@@ -47,11 +47,19 @@ export class UserCards extends React.Component {
     renderFlip(item){
         return (
             <div className="card" key={Shortid.generate()}>
-                <div className="heading-container-1"><span className="heading"><strong>{COPY.HEADING_1}</strong></span></div>
-                <div className="user-info-container-1"><span className="user-info">{`${item.first_name} ${item.last_name}`}</span></div>
+                <div className="heading-container-1">
+                    <span className="heading"><strong>{COPY.HEADING_1}</strong></span>
+                </div>
+                <div className="user-info-container-1">
+                    <span className="user-info">{`${item.first_name} ${item.last_name}`}</span>
+                </div>
                 <h1 className="site-link">{COPY.SITELINK}</h1>
-                <div className="heading-container-2"><span className="heading"><strong>{COPY.HEADING_2}</strong></span></div>
-                <div className="user-info-container-2"><span className="user-info">{item.username}</span></div>
+                <div className="heading-container-2">
+                    <span className="heading"><strong>{COPY.HEADING_2}</strong></span>
+                </div>
+                <div className="user-info-container-2">
+                    <span className="user-info">{item.username}</span>
+                </div>
                 <p className="disclaimer">{COPY.DISCLAIMER}</p>
             </div>
         );

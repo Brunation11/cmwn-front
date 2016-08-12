@@ -1,7 +1,6 @@
 import React from 'react';
 import {Button} from 'react-bootstrap';
 
-import Util from 'components/util';
 import History from 'components/history';
 
 const GENERATE = 'Generate User Cards';
