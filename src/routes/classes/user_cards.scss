@@ -64,8 +64,8 @@
 }
 
 @media only screen and (min-device-width: $device-max-break) and (max-device-width: $monitor-max-break) {
-  .user-cards {
-      .card {
+    .user-cards {
+        .card {
             width: 50%;
             height: 200px;
 
@@ -82,7 +82,9 @@
             }
 
             .site-link {
+                // scss-lint:disable all
                 font-size: 1.25rem !important;
+                // scss-lint:enable all
             }
 
             .disclaimer {
@@ -111,7 +113,9 @@
             }
 
             .site-link {
+                // scss-lint:disable all
                 font-size: 1.75rem !important;
+                // scss-lint:enable all
             }
 
             .disclaimer {
@@ -140,7 +144,9 @@
             }
 
             .site-link {
+                // scss-lint:disable all
                 font-size: 1.1rem !important;
+                // scss-lint:enable all
             }
 
             .disclaimer {
@@ -180,7 +186,7 @@
         }
 
         .disclaimer {
-            font-size: .50rem;
+            font-size: .5rem;
         }
     }
 }
