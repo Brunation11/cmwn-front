@@ -27,28 +27,34 @@ const HEADINGS = {
     SUGGESTED: 'Suggested Friends'
 };
 const FRIEND_PROBLEM = 'There was a problem adding your friend. Please try again in a little while.';
+const REQUEST_SENT = 'Your friend request has been sent!';
 const ADD_FRIEND = 'Add Friend';
 const REQUESTED = 'Request Sent';
 const ACCEPT = 'Accept';
 const PROFILE = 'View Profile';
 
-var Component = React.createClass({
-    addFriend: function (item, e) {
-        var state = Store.getState();
+var mapStateToProps;
+var Page;
+
+export class Suggested extends React.Component{
+    constructor(){
+        super();
+    }
+    addFriend(item, e) {
         var id = item.user_id != null ? item.user_id : item.suggest_id;
         e.stopPropagation();
         e.preventDefault();
-        ('set', 'dimension7', 'sent');
-        HttpManager.POST({url: state.currentUser._links.friend.href}, {
+        ga('set', 'dimension7', 'sent');
+        HttpManager.POST({url: this.props.currentUser._links.friend.href}, {
             'friend_id': id
         }).then(() => {
+            Toast.success(REQUEST_SENT);
             Actions.dispatch.START_RELOAD_PAGE(Store.getState());
-        }).catch(this.friendErr);
-    },
-    friendErr: function () {
-        Toast.error(FRIEND_PROBLEM);
-    },
-    renderNoData: function (data) {
+        }).catch(() => {
+            Toast.error(FRIEND_PROBLEM);
+        });
+    }
+    renderNoData(data) {
         if (data == null) {
             //render nothing before a request has been made
             return null;
@@ -60,22 +66,24 @@ var Component = React.createClass({
                 <p><a onClick={History.goBack}>Back</a></p>
             </Panel>
         );
-    },
-    renderFlipsEarned: function (item) {
+    }
+    renderFlipsEarned(item) {
         if (item.roles && item.roles.data && !~item.roles.data.indexOf('Student')) {
             return null;
         }
         return (
             <p className="user-flips">{item.flips.data.length} Flips Earned</p>
         );
-    },
-    renderFlip: function (item){
+    }
+    renderFlip(item){
+        var history = History;
+        var self = this;
         return (
             <div className="flip">
                 <div className="item">
                     <span className="overlay">
                         <div className="relwrap"><div className="abswrap">
-                            <Button onClick={this.addFriend.bind(this, item)} className={ClassNames(
+                            <Button onClick={self.addFriend.bind(self, item)} className={ClassNames(
                                     'green standard',
                                     {hidden: item.relationship === 'Pending' ||
                                     item.relationship === 'requested'}
@@ -83,7 +91,7 @@ var Component = React.createClass({
                                 {ADD_FRIEND}
                             </Button>
                             <Button
-                                onClick={this.addFriend.bind(this, item)}
+                                onClick={self.addFriend.bind(self, item)}
                                 className={ClassNames(
                                     'blue standard',
                                     {hidden: item.relationship !== 'Pending'}
@@ -96,7 +104,7 @@ var Component = React.createClass({
                             )}>
                                 {REQUESTED}
                             </Button>
-                            <Button className="purple standard" onClick={History.push.bind(null,
+                            <Button className="purple standard" onClick={history.push.bind(null,
                                 '/profile/' + item.suggest_id)}>
                                 {PROFILE}
                             </Button>
@@ -105,18 +113,22 @@ var Component = React.createClass({
                     <img src={item.image}></img>
                 </div>
                 <p className="link-text" >{item.username}</p>
-                {''/*this.renderFlipsEarned(item)*/}
+                {''/*self.renderFlipsEarned(item)*/}
             </div>
         );
-    },
-    render: function () {
-        if (this.props.data == null) {
-            return this.renderNoData();
+    }
+    render() {
+        var self = this;
+        if (self.props.data == null) {
+            return self.renderNoData();
         }
         return (
            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <form>
-                    <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.SUGGESTED} data={this.props.data}
+                    <FlipBoard
+                        renderFlip={self.renderFlip.bind(self)}
+                        header={HEADINGS.SUGGESTED}
+                        data={self.props.data}
                         transform={data => {
                             var image;
                             if (!_.has(data, '_embedded.image')) {
@@ -138,23 +150,28 @@ var Component = React.createClass({
            </Layout>
         );
     }
-});
+}
 
-var mapStateToProps = state => {
+mapStateToProps = state => {
     var data = [];
+    var currentUser = {};
     var loading = true;
     if (state.page && state.page.data != null && state.page.data._embedded &&
         state.page.data._embedded.suggest) {
         loading = state.page.loading;
         data = state.page.data._embedded.suggest;
     }
+    if (state.currentUser != null){
+        currentUser = state.currentUser;
+    }
     return {
         data,
-        loading
+        loading,
+        currentUser
     };
 };
 
-var Page = connect(mapStateToProps)(Component);
+Page = connect(mapStateToProps)(Suggested);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
 

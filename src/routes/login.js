@@ -1,13 +1,14 @@
 import React from 'react';
+import _ from 'lodash';
 import {Modal, Button, Input, Tabs, Tab} from 'react-bootstrap';
 import { connect } from 'react-redux';
 
-import Util from 'components/util';
 import Toast from 'components/toast';
 import Log from 'components/log';
 import History from 'components/history';
 import HttpManager from 'components/http_manager';
 import Store from 'components/store';
+import GLOBALS from 'components/globals';
 
 import Layout from 'layouts/one_col';
 
@@ -15,7 +16,8 @@ const LABELS = {
     LOGIN: 'Email | Username',
     PASSWORD: 'Password',
     SUBMIT: 'SUBMIT',
-    RESET: 'Reset Password'
+    RESET: 'Reset Password',
+    FORGOT: 'Email'
 };
 
 const ERRORS = {
@@ -45,16 +47,17 @@ const SIGNUP = (<span>
 var Component = React.createClass({
     getInitialState: function () {
         return {
+            loginOnNextPropChange: false,
             _token: '',
             key: 1
         };
     },
     componentDidMount: function () {
         this.getToken();
-        window.document.addEventListener('keydown', this.login);
+        window.document.addEventListener('keydown', this.attemptLogin);
     },
     componentWillUnmount: function () {
-        window.document.removeEventListener('keydown', this.login);
+        window.document.removeEventListener('keydown', this.attemptLogin);
     },
     handleSelect: function (index) {
         this.setState({key: index});
@@ -65,50 +68,82 @@ var Component = React.createClass({
     getToken: function () {
     },
     login: function (e) {
-        var req;
         var dataUrl;
+        var req;
+        var user = this.getUsernameWithoutSpaces();
+        dataUrl = this.state.overrideLogin || this.props.currentUser._links.login.href;
+        req = HttpManager.POST({
+            url: dataUrl,
+        }, {
+            'username': user,
+            'password': this.refs.password.getValue()
+        });
+        req.then(res => {
+            if (res.response && res.response.status && res.response.detail &&
+                res.response.status === 401 && res.response.detail.toLowerCase() === 'reset_password'
+            ) {
+                History.push('/change-password');
+                return;
+            }
+            if (res.status < 300 && res.status >= 200) {
+                Log.info(e, 'User login success');
+                History.push('/profile');
+            } else {
+                Toast.error(ERRORS.LOGIN + (res.response && res.response.data &&
+                    res.response.data.message ? ' Message: ' + res.response.data.message : ''));
+                Log.log(res, 'Invalid login.', req);
+            }
+        }).catch(res => {
+            if (
+                res.response &&
+                res.response.status &&
+                res.response.detail &&
+                res.response.status === 401 &&
+                res.response.detail.toLowerCase() === 'reset_password'
+            ) {
+                History.push('/change-password');
+                return;
+            }
+            Toast.error(ERRORS.LOGIN + (res.detail ? ' Message: ' + res.detail : ''));
+            Log.log(e, 'Invalid login');
+        });
+    },
+    attemptLogin: function (e) {
+        var user = this.getUsernameWithoutSpaces();
+        var logout;
+        var logoutUrl;
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
             if (this.props.data._links && this.props.data._links.login == null) {
-                if (this.refs.login.getValue() === this.props.data.username ||
-                    this.refs.login.getValue() === this.props.data.email) {
+                if (user === this.props.data.username ||
+                    user === this.props.data.email) {
                     History.push('/profile');
-                } else {
-                    //but why
-                    History.push('/logout');
                 }
             }
-            dataUrl = this.props.data._links.login.href;
-            Util.logout();
-            req = HttpManager.POST({
-                url: dataUrl,
-            }, {
-                'username': this.refs.login.getValue(),
-                'password': this.refs.password.getValue()
-            });
-            req.then(res => {
-                if (res.response && res.response.status && res.response.detail &&
-                    res.response.status === 401 && res.response.detail.toLowerCase() === 'reset_password'
-                ) {
-                    History.push('/change-password');
-                    return;
+            if (!_.has(this, 'props.currentUser._links.login.href')) {
+                //essentially, if you are trying to login as someone else, we assume
+                //that you are not them and want to log you out.
+                //also yes, I am cheating the logout url here.
+                logoutUrl = GLOBALS.API_URL + 'logout';
+                if (_.has(this, 'props.currentUser._links.logout.href')) {
+                    logoutUrl = this.props.currentUser._links.logout.href;
                 }
-                if (res.status < 300 && res.status >= 200) {
-                    Log.info(e, 'User login success');
-                    History.push('/profile');
-                } else {
-                    Toast.error(ERRORS.LOGIN + (res.response && res.response.data &&
-                        res.response.data.message ? ' Message: ' + res.response.data.message : ''));
-                    Log.log(res, 'Invalid login.', req);
-                }
-            }).catch(res => {
-                if (res.response && res.response.status && res.response.detail &&
-                    res.response.status === 401 && res.response.detail.toLowerCase() === 'reset_password') {
-                    History.push('/change-password');
-                    return;
-                }
-                Toast.error(ERRORS.LOGIN + (res.detail ? ' Message: ' + res.detail : ''));
-                Log.log(e, 'Invalid login');
-            });
+
+                logout = HttpManager.GET({url: logoutUrl, handleErrors: false});
+                logout.then(() => {
+                    if (_.has(this, 'props.currentUser._links.login.href')) {
+                        this.login(...arguments);
+                    } else {
+                        HttpManager.GET({url: GLOBALS.API_URL})
+                            .then(server =>
+                                this.setState({overrideLogin: server.response._links.login.href}, () =>
+                                    this.login(...arguments)));
+                    }
+                });
+            } else if (this.props.loading) {
+                this.setState({loginOnNextPropChange: e});
+            } else {
+                this.login(...arguments);
+            }
         }
     },
     forgotPass: function (e) {
@@ -136,6 +171,10 @@ var Component = React.createClass({
             });
         }
     },
+    getUsernameWithoutSpaces: function () {
+        var newLogin = this.refs.login.getValue().replace(/\s/g, '');
+        return newLogin;
+    },
     render: function () {
         return (
            <Layout>
@@ -147,7 +186,11 @@ var Component = React.createClass({
                             <Input ref="login" type="text" id="email" name="email" label={LABELS.LOGIN} />
                             <Input ref="password" type="password" id="password" name="password"
                                 label={LABELS.PASSWORD} />
-                            <Button id="login-button" onKeyPress={this.login} onClick={this.login}>
+                            <Button
+                                id="login-button"
+                                onKeyPress={this.attemptLogin}
+                                onClick={this.attemptLogin}
+                            >
                                 {LABELS.SUBMIT}
                             </Button>
                         </form>
@@ -166,7 +209,7 @@ var Component = React.createClass({
                         <br />
                         <form method="POST" >
                             <input type="hidden" name="_token" value={this.state._token} />
-                            <Input ref="reset" type="text" name="email" label={LABELS.LOGIN} />
+                            <Input ref="reset" type="text" name="email" label={LABELS.FORGOT} />
                             <Button onKeyPress={this.forgotPass} onClick={this.forgotPass}>
                                 {LABELS.RESET}
                             </Button>
@@ -180,17 +223,21 @@ var Component = React.createClass({
 
 var mapStateToProps = state => {
     var data = {};
+    var currentUser = {};
     var loading = true;
-    if (state.currentUser) {
+    if (state.page && state.page.data) {
         loading = state.page.loading;
-        data = state.currentUser;
+        data = state.page.data;
+    }
+    if (state.currentUser) {
+        currentUser = state.currentUser;
     }
     return {
         data,
+        currentUser,
         loading
     };
 };
 
 var Page = connect(mapStateToProps)(Component);
 export default Page;
-

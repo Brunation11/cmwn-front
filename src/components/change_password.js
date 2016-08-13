@@ -9,7 +9,7 @@ const HEADINGS = {
     PASSWORD: 'Update Password'
 };
 
-const ERRORS = {
+export const ERRORS = {
     BAD_PASS: 'Sorry, there was a problem updating your password.',
     NO_MATCH: 'Those passwords do not appear to match. Please try again.',
     TOO_SHORT: 'Passwords must contain at least 8 characters, including one number',

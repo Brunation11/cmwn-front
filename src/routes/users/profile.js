@@ -11,11 +11,9 @@ import Detector from 'components/browser_detector';
 import ProfileImage from 'components/profile_image';
 import FlipBoard from 'components/flipboard';
 import Game from 'components/game';
-import EventManager from 'components/event_manager';
 import Trophycase from 'components/trophycase';
 import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
-// import Util from 'components/util';
 import History from 'components/history';
 import GenerateDataSource from 'components/datasource';
 
@@ -39,6 +37,7 @@ const HEADINGS = {
 };
 const PLAY = 'Play Now!';
 const COMING_SOON = 'Coming Soon!';
+const DESKTOP_ONLY = 'Log on with a Desktop computer to play!';
 const CLASSES = 'Classes';
 
 const BROWSER_NOT_SUPPORTED = (
@@ -89,10 +88,6 @@ export class Profile extends React.Component {
     }
 
     componentDidMount() {
-        EventManager.listen('userChanged', () => {
-            this.resolveRole(this.props);
-            this.forceUpdate();
-        });
         this.resolveRole(this.props);
         if (QueryString.parse(window.location.search).message === 'updated') {
             Toast.success(PASS_UPDATED);
@@ -158,7 +153,7 @@ export class Profile extends React.Component {
                     game={this.state.game}
                     currentUser={this.props.currentUser}
                 />
-                <a onClick={this.hideModal.bind(this)} className="modal-close">(close)</a>
+                <a id="close-modal" onClick={this.hideModal.bind(this)} className="modal-close">(close)</a>
             </div>
         );
     }
@@ -166,16 +161,20 @@ export class Profile extends React.Component {
     renderFlip(item) {
         var onClick;
         var playText;
+        var meta = item.meta || {};
 
         if (item.coming_soon) {
             onClick = _.noop;
             playText = COMING_SOON;
+        } else if (meta.desktop && Detector.isMobileOrTablet()) {
+            onClick = _.noop;
+            playText = DESKTOP_ONLY;
         } else {
             onClick = this.showModal.bind(this, `${GLOBALS.GAME_URL}${item.game_id}/index.html`);
             playText = PLAY;
         }
         return (
-            <div className="flip fill" key={Shortid.generate()}>
+            <div className="flip fill" id={item.game_id} key={Shortid.generate()}>
                 <a onClick={onClick.bind(this)} >
                     <div className="item">
                         <span className="overlay">
@@ -184,6 +183,7 @@ export class Profile extends React.Component {
                             <span className="play">{playText}</span>
                         </span>
                         <div className={ClassNames('coming-soon', { hidden: !item.coming_soon})} />
+                        <div className={ClassNames('desktop-only', { hidden: !meta.desktop})} />
                         <object data={`${GLOBALS.GAME_URL}${item.game_id}/thumb.jpg`} type="image/png" >
                             <img src={FlipBgDefault}></img>
                         </object>
@@ -202,6 +202,7 @@ export class Profile extends React.Component {
                <FlipBoard
                    renderFlip={this.renderFlip.bind(this)}
                    header={HEADINGS.ARCADE}
+                   id="game-flip-board"
                />
            </GAME_WRAPPER>
         );
@@ -236,13 +237,15 @@ export class Profile extends React.Component {
                     <div className="right">
                         <div className="user-metadata">
                             <p>Username:</p>
-                            <p className="standard field">{this.state.username}</p>
+                            <p className="standard field" id="username">{this.state.username}</p>
                             <p>First Name:</p>
-                            <p className="standard field">{this.state.first_name}</p>
+                            <p className="standard field" id="first-name">{this.state.first_name}</p>
                             <p>Last Name:</p>
-                            <p className="standard field">{this.state.last_name}</p>
+                            <p className="standard field" id="last-name">{this.state.last_name}</p>
                             <p>Birthday:</p>
-                            <p className="standard field">{Moment(ISODate).format('MM-DD-YYYY')}</p>
+                            <p className="standard field" id="birthday">
+                                {Moment(ISODate).format('MM-DD-YYYY')}
+                            </p>
                         </div>
                     </div>
                 </Panel>
@@ -254,7 +257,7 @@ export class Profile extends React.Component {
         return (
             <div>
                 <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal.bind(this)}
-                    keyboard={false} backdrop="static">
+                    keyboard={false} backdrop="static" id="game-modal">
                     <Modal.Body>
                         {this.renderGame()}
                     </Modal.Body>

@@ -1,4 +1,5 @@
 build.zip
+scsslint.json
 docker-compose.yml
 .vagrant
 node_modules
@@ -24,10 +25,13 @@ docker-compose.yml
 front.sh
 stop_front.sh
 errorShots
-docker-compose.yml
 coverage
 coverage/**/*
 lib
 lib/**/*
 .nyc_output
+tar-*
 scssReport.json
+scsslint.json
+/tar-*
+*.tar
