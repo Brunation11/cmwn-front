@@ -2,11 +2,13 @@
 
 .flip-popover {
     .popover-title {
-        background: linear-gradient($cmwn-white, $cmwn-light-gray);
         border-bottom: 1px solid $cmwn-medium-gray;
+        background: linear-gradient($cmwn-white, $cmwn-light-gray);
     }
 
+    // scss-lint:disable all
     h3.popover-title {
+    // scss-lint:enable all
         font-size: 1.2rem;
 
         .title-meta {
