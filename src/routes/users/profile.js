@@ -247,25 +247,36 @@ export class Profile extends React.Component {
                             </div>
                         </div>
                     </Panel>
+                    <FLIP_SOURCE>
+                        <Trophycase
+                            className={ClassNames({
+                                hidden: !this.state.isStudent
+                            })}
+                            userData={this.props.data}
+                        />
+                    </FLIP_SOURCE>
                 </div>
             );
         }
         return (
             <div>
                 <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
-                    <div className="center">
-                        <div className="frame">
-                            <ProfileImage
-                                data={this.props.data}
-                                currentUser={this.props.currentUser}
-                                link-below={true}
-                             />
-                        </div>
+                    <div className="frame non-friend">
+                        <ProfileImage
+                            data={this.props.data}
+                            currentUser={this.props.currentUser}
+                            link-below={true}
+                         />
                     </div>
-                   <FLIP_SOURCE>
-                       <Trophycase className={ClassNames({hidden: !this.state.isStudent})} />
-                    </FLIP_SOURCE>
                 </Panel>
+                <FLIP_SOURCE>
+                    <Trophycase
+                        className={ClassNames({
+                            hidden: !this.state.isStudent
+                        })}
+                        userData={this.props.data}
+                    />
+                </FLIP_SOURCE>
             </div>
         );
     }
