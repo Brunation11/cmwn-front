@@ -59,8 +59,8 @@ export var Image = React.createClass({
             }
             /* eslint-disable camelcase*/
             Cloudinary.instance.openUploadWidget({
-                cloud_name: 'changemyworldnow',
-                upload_preset: 'public-profile-image',
+                cloud_name: GLOBALS.CLOUDINARY_CLOUD_NAME || 'changemyworldnow',
+                upload_preset: GLOBALS.CLOUDINARY_UPLOAD_PRESET || 'public-profile-image',
                 multiple: false,
                 resource_type: 'image',
                 cropping: 'server',
