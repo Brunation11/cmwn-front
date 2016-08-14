@@ -8,7 +8,6 @@ import History from 'components/history';
 import Form from 'components/form';
 import Log from 'components/log';
 import Toast from 'components/toast';
-import GLOBALS from 'components/globals';
 import Util from 'components/util';
 
 import Layout from 'layouts/two_col';
@@ -112,8 +111,8 @@ export class CreateSchool extends React.Component{
         };
         if (this.refs.formRef.isValid()) {
             HttpManager.POST({
-                //url: this.props.data._links.orgs
-                url: GLOBALS.API_URL + 'group'
+                url: this.props.data._links.group.href || this.props.data._links.group_school.href
+                //url: GLOBALS.API_URL + 'group'
             }, postData).then(res => {
                 if (res.response && res.response.group_id) {
                     History.replace(`/school/${res.response.group_id}?message=created`);
