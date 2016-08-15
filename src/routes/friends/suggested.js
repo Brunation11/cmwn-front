@@ -2,6 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import {Panel, Button} from 'react-bootstrap';
+import Shortid from 'shortid';
 
 import FlipBoard from 'components/flipboard';
 import Toast from 'components/toast';
@@ -75,11 +76,28 @@ export class Suggested extends React.Component{
             <p className="user-flips">{item.flips.data.length} Flips Earned</p>
         );
     }
-    renderFlip(item){
+    renderFlip(item) {
+        if (item.embedded && item.embedded.flips) {
+            return (
+                <PopOver
+                    element={item}
+                    type="user"
+                    trigger="click"
+                >
+                    {this.renderUserFlip.call(this, item)}
+                </PopOver>
+            );
+        } else {
+            return (
+                this.renderUserFlip.call(this, item)
+            );
+        }
+    }
+    renderUserFlip(item) {
         var history = History;
         var self = this;
         return (
-            <div className="flip">
+            <div className="flip" key={Shortid.generate()}>
                 <div className="item">
                     <span className="overlay">
                         <div className="relwrap"><div className="abswrap">
@@ -118,17 +136,16 @@ export class Suggested extends React.Component{
         );
     }
     render() {
-        var self = this;
-        if (self.props.data == null) {
-            return self.renderNoData();
+        if (this.props.data == null) {
+            return this.renderNoData();
         }
         return (
            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <form>
                     <FlipBoard
-                        renderFlip={self.renderFlip.bind(self)}
+                        renderFlip={this.renderFlip.bind(this)}
                         header={HEADINGS.SUGGESTED}
-                        data={self.props.data}
+                        data={this.props.data}
                         transform={data => {
                             var image;
                             if (!_.has(data, '_embedded.image')) {
