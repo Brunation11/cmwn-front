@@ -2,6 +2,7 @@ import React from 'react';
 import {ButtonToolbar, OverlayTrigger, Popover} from 'react-bootstrap';
 import Shortid from 'shortid';
 import Moment from 'moment';
+import _ from 'lodash';
 
 import 'components/popover.scss';
 import GLOBALS from 'components/globals';
@@ -24,67 +25,73 @@ var PopOver = React.createClass({
         });
     },
     renderFlip: function () {
-        var state = this.state;
         return (
             <ButtonToolbar>
                 <OverlayTrigger
-                    trigger={state.trigger}
+                    trigger={this.state.trigger}
                     rootClose
-                    placement={state.placement}
+                    placement={this.state.placement}
                     overlay={
                         <Popover
                             id={Shortid.generate()}
                             title={
-                                state.element.title +
+                                this.state.element.title +
                                 '  |  earned: ' +
-                                Moment(state.element.earned).format('MMM Do YYYY')
+                                Moment(this.state.element.earned).format('MMM Do YYYY')
                             }
                         >
-                            {state.element.description}
+                            {this.state.element.description}
                         </Popover>}>
-                        <img src={`/flips/${state.element.flip_id}-earned.gif`} />
+                        <img src={`/flips/${this.state.element.flip_id}-earned.gif`} />
                 </OverlayTrigger>
             </ButtonToolbar>
         );
     },
     getUserFlips: function () {
-        var state = this.state;
-        // get users flips and set to state
         HttpManager.GET({
-            url: (`${GLOBALS.API_URL}user/${state.element.friend_id}/flip`),
+            url: (`${GLOBALS.API_URL}user/${this.state.element.friend_id}/flip`),
             handleErrors: false
         })
         .then(res => {
-            this.setState({flips: res.response});
+            this.setState({flips: res.response._embedded.flip_user});
+        });
+    },
+    renderUserFlips: function () {
+        return _.map(this.state.flips, (flip) => {
+            return (
+                <img className="hover-flips" key={Shortid.generate()} src={`/flips/${flip.flip_id}-earned.gif`} />
+            )
         });
     },
     renderUser: function () {
-        var state = this.state;
-        return (
-            <ButtonToolbar>
-                <OverlayTrigger
-                    trigger={state.trigger}
-                    rootClose placement={state.placement}
-                    overlay={(
-                        <Popover
-                            id="popover"
-                            title={`Earned: ${state.flips.length}`}
-                        >
-                            {state.flips}
-                        </Popover>
-                    )}
-                >
-                    {this.props.children}
-                </OverlayTrigger>
-            </ButtonToolbar>
-        );
+        if (this.state.element.friend_id) this.getUserFlips();
+        if (this.state.flips) {
+            return (
+                <ButtonToolbar>
+                    <OverlayTrigger
+                        trigger={this.state.trigger}
+                        rootClose placement={this.state.placement}
+                        overlay={(
+                            <Popover
+                                id={Shortid.generate()}
+                                className="user-popover"
+                                title={`Earned: ${this.state.flips.length}`}
+                            >
+                                {this.renderUserFlips()}
+                            </Popover>
+                        )}
+                    >
+                        {this.props.children}
+                    </OverlayTrigger>
+                </ButtonToolbar>
+            );
+        }
     },
     render: function () {
-        var state = this.state;
         var popover;
-        if (state.type === 'flip') {
+        if (this.state.type === 'flip') {
             popover = this.renderFlip();
-        } else if (state.type === 'user') {
+        } else if (this.state.type === 'user') {
             popover = this.renderUser();
         }
 
