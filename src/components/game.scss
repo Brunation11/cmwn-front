@@ -5,13 +5,42 @@
     text-align: center;
 }
 
+.overlay {
+    display: none;
+
+    &.portrait {
+        width: $game-responsive-width;
+        max-width: $game-responsive-width-max;
+        height: $game-responsive-height;
+        max-height: $game-responsive-height-max;
+        display: inline-block;
+        z-index: $z-over-game;
+        background-color: $cmwn-blue-dark;
+        padding: $standard;
+        color: $cmwn-white;
+        font-family: $cmwn-jade-font;
+        font-size: $game-overlay-text;
+    
+        &.fullscreen {
+            height: $fullscreen-height;
+            max-height: $fullscreen-height;
+            width: $fullscreen-width;
+            max-width: $fullscreen-width;
+            padding-top: 50%;
+        }
+    }
+}
+
 iframe {
     width: $game-responsive-width;
     max-width: $game-responsive-width-max;
     height: $game-responsive-height;
     max-height: $game-responsive-height-max;
-}
 
+    &.portrait {
+        display: none;
+    }
+}
 
 .modal-game iframe {
     width: $game-responsive-width;
@@ -44,6 +73,13 @@ button {
         max-width: $game-fullscreen-width;
         height: $game-fullscreen-height;
         max-height: $game-fullscreen-height;
+    }
+
+    .overlay.portrait {
+        height: $fullscreen-height;
+        max-height: $fullscreen-height;
+        width: $fullscreen-width;
+        max-width: $fullscreen-width;
     }
 
     button {

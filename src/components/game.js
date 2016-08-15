@@ -8,6 +8,7 @@ import {Button, Glyphicon} from 'react-bootstrap';
 import getEventsForGame from 'components/game_events';
 import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
+import Detector from 'components/browser_detector';
 
 import 'components/game.scss';
 
@@ -15,6 +16,8 @@ const EVENT_PREFIX = '_e_';
 
 const FULLSCREEN = 'Full Screen';
 const DEMO_MODE = 'Demo Mode';
+
+const PORTRAIT_TEXT = 'Please turn this game into landscape mode to continue.';
 
 /**
  * Game wrapper iframe component.
@@ -84,6 +87,7 @@ var Game = React.createClass({
         frame.addEventListener('load', function () {
             frame.contentWindow.addEventListener('click', callApi, false);
         }, false);
+        this.checkForPortrait();
     },
     onExit: function (nextState) {
         this.setState(nextState);
@@ -105,10 +109,12 @@ var Game = React.createClass({
         window.addEventListener('game-event', this.gameEventHandler);
         window.addEventListener('platform-event', this.gameEventHandler);
         window.addEventListener('keydown', this.listenForEsc);
+        window.addEventListener('resize', this.checkForPortrait);
     },
     clearEvent: function () {
         window.removeEventListener('game-event', this.gameEventHandler);
         window.removeEventListener('keydown', this.listenForEsc);
+        window.removeEventListener('resize', this.checkForPortrait);
     },
     listenForEsc: function (e) {
         var self = this;
@@ -127,10 +133,17 @@ var Game = React.createClass({
     makeFullScreen: function () {
         var self = this;
         if (Screenfull.enabled) {
-            Screenfull.request(ReactDOM.findDOMNode(self.refs.wrapRef));
+            Screenfull.request(ReactDOM.findDOMNode(self.refs.gameRef));
+            Screenfull.request(ReactDOM.findDOMNode(self.refs.overlay));
         } else {
             self.setState({fullscreenFallback: true});
         }
+    },
+    checkForPortrait: function () {
+        var isPortrait = (Detector.isMobileOrTablet() && Detector.isPortrait());
+        this.setState({
+            isPortrait
+        });
     },
     toggleDemoButton: function () {
         if (this.state.demo){
@@ -144,23 +157,32 @@ var Game = React.createClass({
             return null;
         }
         return (
-                <div ref="wrapRef" className={ClassNames(
-                    'game',
-                    {fullscreen: this.state.fullscreenFallback}
+            <div ref="wrapRef" className={ClassNames(
+                'game', {'fullscreen': this.state.fullscreenFallback}
+            )}>
+                <div ref="overlay" className={ClassNames('overlay',
+                    {'portrait': this.state.isPortrait},
+                    {'fullscreen': Screenfull.isFullscreen}
                 )}>
-                    <iframe ref="gameRef" src={this.props.url} allowtransparency="true" />
-                    <Button className="purple standard full-screen-btn" onClick={this.makeFullScreen}>
-                        <Glyphicon glyph="fullscreen" /> {FULLSCREEN}
-                    </Button>
-                    <Button className={ClassNames('standard',
-                            {'purple': !this.state.demo},
-                            {'green': this.state.demo},
-                            {hidden: !this.props.isTeacher}
-                        )}
-                        onClick={() => this.dispatchPlatformEvent('toggle-demo-mode')}>{DEMO_MODE}
-                    </Button>
+                    {PORTRAIT_TEXT}
                 </div>
-               );
+                <iframe ref="gameRef" src={this.props.url} allowtransparency="true"
+                    className={ClassNames({'portrait': this.state.isPortrait})}/>
+                <Button onClick={this.makeFullScreen}
+                    className={ClassNames('purple', 'standard', 'full-screen-btn',
+                        {hidden: this.state.isPortrait}
+                    )}>
+                    <Glyphicon glyph="fullscreen" /> {FULLSCREEN}
+                </Button>
+                <Button className={ClassNames('standard',
+                        {'purple': !this.state.demo},
+                        {'green': this.state.demo},
+                        {hidden: !this.props.isTeacher || this.state.isPortrait}
+                    )}
+                    onClick={() => this.dispatchPlatformEvent('toggle-demo-mode')}>{DEMO_MODE}
+                </Button>
+            </div>
+        );
     }
 });
 
