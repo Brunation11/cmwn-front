@@ -10,6 +10,7 @@ var Util = {
     setPageTitle: function (text) {
         var titleElem = document.getElementsByTagName('title')[0];
         var title = document.createTextNode(text);
+        if (!_.isString(text)) text = 'Change My World Now';
         if (titleElem == null) {
             titleElem = document.createElement('title');
             document.getElementsByTagName('head')[0].appendChild(titleElem);
@@ -136,9 +137,17 @@ var Util = {
     formatString() {
         var args = Array.prototype.slice.call(arguments);
         var templateString = args.shift();
+        var extraneousArgs = false;
+        if (!_.isString(templateString)) throw 'First argument must be a string.';
         _.each(args, (arg, k) => {
+            if (!~templateString.indexOf('{' + k + '}')) extraneousArgs = true;
             templateString = templateString.replace('{' + k + '}', arg);
         });
+        if (~templateString.search(/{[0-9]+}/)) throw 'String has unmatched template variables.';
+        if (extraneousArgs) {
+            Log.warn('Extraneous arguments have been passed to format string and therefore ' +
+                'have not been include in the template string.');
+        }
         return templateString;
     },
     modifyTemplatedQueryParams(template, params){
