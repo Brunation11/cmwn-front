@@ -59,7 +59,36 @@ var Game = React.createClass({
             )
         });
     },
+    componentDidMount: function () {
+        var frame = ReactDOM.findDOMNode(this.refs.gameRef);
+        var callApi;
+
+        if (!frame) {
+            return;
+        }
+
+        callApi = _.debounce(function () {
+            HttpManager.GET({
+                url: (GLOBALS.API_URL),
+                handleErrors: false
+            });
+        }, 5000);
+        frame.addEventListener('load', function () {
+            frame.contentWindow.addEventListener('click', callApi, false);
+        }, false);
+    },
     componentWillReceiveProps: function (nextProps) {
+        var frame = ReactDOM.findDOMNode(this.refs.gameRef);
+        var callApi = _.debounce(function () {
+            HttpManager.GET({
+                url: (GLOBALS.API_URL),
+                handleErrors: false
+            });
+        }, 10000);
+        frame.addEventListener('load', function () {
+            frame.contentWindow.addEventListener('click', callApi, false);
+        }, false);
+
         this.setState({
             currentGame: nextProps.game,
             eventHandler: getEventsForGame(
@@ -72,18 +101,6 @@ var Game = React.createClass({
     },
     componentWillUnmount: function () {
         this.clearEvent();
-    },
-    componentDidMount: function () {
-        var frame = ReactDOM.findDOMNode(this.refs.gameRef);
-        var callApi = _.debounce(function () {
-            HttpManager.GET({
-                url: (GLOBALS.API_URL),
-                handleErrors: false
-            });
-        }, 5000);
-        frame.addEventListener('load', function () {
-            frame.contentWindow.addEventListener('click', callApi, false);
-        }, false);
     },
     onExit: function (nextState) {
         this.setState(nextState);
