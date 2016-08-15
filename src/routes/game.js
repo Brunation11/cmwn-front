@@ -19,7 +19,6 @@ export class GamePage extends React.Component {
             isStudent: true,
         };
     }
-
     componentDidMount() {
         this.resolveRole(this.props);
         this.setState({
@@ -55,6 +54,7 @@ export class GamePage extends React.Component {
             <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <Game
                     ref="gameRef"
+                    game={this.props.params.game}
                     isTeacher={!this.state.isStudent}
                     url={`${GLOBALS.GAME_URL}${this.props.params.game}/index.html`}
                     currentUser={this.props.currentUser}
