@@ -8,6 +8,7 @@ import EventManager from 'components/event_manager';
 
 var Util = {
     setPageTitle: function (text) {
+        if (!_.isString(text)) text = 'Change My World Now';
         var titleElem = document.getElementsByTagName('title')[0];
         var title = document.createTextNode(text);
         if (titleElem == null) {
@@ -136,9 +137,15 @@ var Util = {
     formatString() {
         var args = Array.prototype.slice.call(arguments);
         var templateString = args.shift();
+        if (!_.isString(templateString)) throw 'First argument must be a string.';
+        var extraneousArgs = false;
         _.each(args, (arg, k) => {
+            if (!~templateString.indexOf('{' + k + '}')) extraneousArgs = true;
             templateString = templateString.replace('{' + k + '}', arg);
         });
+        if (~templateString.search(/{[0-9]+}/)) throw 'String has unmatched template variables.';
+        if (extraneousArgs) Log.warn('Extraneous arguments have been passed to format string and therefore ' +
+            'have not been include in the template string.');
         return templateString;
     },
     modifyTemplatedQueryParams(template, params){
