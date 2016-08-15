@@ -42,7 +42,9 @@ var PopOver = React.createClass({
                         >
                             {this.state.element.description}
                         </Popover>}>
-                        <img src={`/flips/${this.state.element.flip_id}-earned.gif`} />
+                        <img
+                            src={`/flips/${this.state.element.flip_id}-earned.gif`}
+                        />
                 </OverlayTrigger>
             </ButtonToolbar>
         );
@@ -59,8 +61,12 @@ var PopOver = React.createClass({
     renderUserFlips: function () {
         return _.map(this.state.flips, (flip) => {
             return (
-                <img className="hover-flips" key={Shortid.generate()} src={`/flips/${flip.flip_id}-earned.gif`} />
-            )
+                <img
+                    className="hover-flips"
+                    key={Shortid.generate()}
+                    src={`/flips/${flip.flip_id}-earned.gif`}
+                />
+            );
         });
     },
     renderUser: function () {
