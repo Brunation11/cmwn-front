@@ -14,7 +14,7 @@ export class TermsPage extends React.Component {
            </Layout>
         );
     }
-});
+}
 
 const BULLET = String.fromCharCode(8226);
 
