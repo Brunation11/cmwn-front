@@ -8,9 +8,11 @@ import EventManager from 'components/event_manager';
 
 var Util = {
     setPageTitle: function (text) {
-        var titleElem = document.getElementsByTagName('title')[0];
-        var title = document.createTextNode(text);
+        var titleElem;
+        var title;
         if (!_.isString(text)) text = 'Change My World Now';
+        titleElem = document.getElementsByTagName('title')[0];
+        title = document.createTextNode(text);
         if (titleElem == null) {
             titleElem = document.createElement('title');
             document.getElementsByTagName('head')[0].appendChild(titleElem);
