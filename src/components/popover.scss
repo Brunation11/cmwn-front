@@ -26,16 +26,16 @@
 
 .user-popover {
     width: 100vw;
-    height: 25vw;
     max-width: 300px;
+    height: 25vw;
     max-height: 130px;
 
     .popover-content {
         img {
-            width: 33%;
             position: absolute;
             bottom: 5%;
             margin: auto;
+            width: 33%;
         }
     }
 }
