@@ -8,8 +8,6 @@ import GLOBALS from 'components/globals';
 
 import Skribble from 'components/game_events/skribble';
 
-import DefaultProfile from 'media/profile_tranparent.png';
-
 const BAD_FLIP = 'There was a problem registering your earned flip. Please try again in a little while';
 
 const CACH_BASE_KEY = '__base';
@@ -162,7 +160,7 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
                     friend._embedded = friend._embedded || {};
                     friend._embedded.image = friend._embedded.image || {};
                     friend._embedded.image.url =
-                        friend._embedded.image.url || origin + DefaultProfile;
+                        friend._embedded.image.url || origin + GLOBALS.DEFAULT_PROFILE;
                     e.respond({user: friend});
                 })
                 .catch(err => Log.error(err));
@@ -174,7 +172,7 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
                         friend._embedded = friend._embedded || {};
                         friend._embedded.image = friend._embedded.image || {};
                         friend._embedded.image.url =
-                            friend._embedded.image.url || origin + DefaultProfile;
+                            friend._embedded.image.url || origin + GLOBALS.DEFAULT_PROFILE;
                         return friend;
                     });
                     e.respond({user: friends});
