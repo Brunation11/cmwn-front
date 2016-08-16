@@ -59,7 +59,6 @@ export class GamePage extends React.Component {
                     url={`${GLOBALS.GAME_URL}${this.props.params.game}/index.html`}
                     currentUser={this.props.currentUser}
                     onExit={() => History.push('/profile')}
-                    game={this.props.params.game}
                 />
             </Layout>
         );
