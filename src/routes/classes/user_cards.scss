@@ -6,10 +6,10 @@
 
 .user-cards {
     .card {
+        display: inline-block;
         visibility: visible;
         border: 1px dashed $cmwn-black;
         width: 50%;
-        display: inline-block;
         vertical-align: top;
 
         div {
