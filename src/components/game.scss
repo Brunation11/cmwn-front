@@ -3,127 +3,128 @@
 .game {
     padding-bottom: 35px;
     text-align: center;
-}
 
-.overlay {
-    display: none;
 
-    &.portrait {
+    .overlay {
+        display: none;
+
+        &.portrait {
+            width: $game-responsive-width;
+            max-width: $game-responsive-width-max;
+            height: $game-responsive-height;
+            max-height: $game-responsive-height-max;
+            display: inline-block;
+            z-index: $z-over-game;
+            background-color: $cmwn-blue-dark;
+            padding: $standard;
+            color: $cmwn-white;
+            font-family: $cmwn-jade-font;
+            font-size: $game-overlay-text;
+        
+            &.fullscreen {
+                height: $fullscreen-height;
+                max-height: $fullscreen-height;
+                width: $fullscreen-width;
+                max-width: $fullscreen-width;
+                padding-top: 50%;
+            }
+        }
+    }
+
+    iframe {
         width: $game-responsive-width;
         max-width: $game-responsive-width-max;
         height: $game-responsive-height;
         max-height: $game-responsive-height-max;
+
+        &.portrait {
+            display: none;
+        }
+    }
+
+    .modal-game iframe {
+        width: $game-responsive-width;
+        max-width: $game-responsive-width;
+        height: $game-responsive-height;
+        max-height: $game-responsive-height;
+    }
+
+    button {
         display: inline-block;
-        z-index: $z-over-game;
-        background-color: $cmwn-blue-dark;
-        padding: $standard;
-        color: $cmwn-white;
-        font-family: $cmwn-jade-font;
-        font-size: $game-overlay-text;
-    
-        &.fullscreen {
+        bottom: $standard;
+        float: left;
+        margin-right: $standard;
+    }
+
+    .fullscreen {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: $z-override;
+        background: $cmwn-black;
+        width: 105vw;
+        height: 105vh;
+
+        iframe {
+            position: fixed;
+            width: $game-fullscreen-width;
+            max-width: $game-fullscreen-width;
+            height: $game-fullscreen-height;
+            max-height: $game-fullscreen-height;
+        }
+
+        .overlay.portrait {
             height: $fullscreen-height;
             max-height: $fullscreen-height;
             width: $fullscreen-width;
             max-width: $fullscreen-width;
-            padding-top: 50%;
+        }
+
+        button {
+            display: none;
         }
     }
-}
 
-iframe {
-    width: $game-responsive-width;
-    max-width: $game-responsive-width-max;
-    height: $game-responsive-height;
-    max-height: $game-responsive-height-max;
+    @media (orientation: landscape) {
+        button {
+            z-index: $z-bootstrap;
+        }
 
-    &.portrait {
-        display: none;
-    }
-}
-
-.modal-game iframe {
-    width: $game-responsive-width;
-    max-width: $game-responsive-width;
-    height: $game-responsive-height;
-    max-height: $game-responsive-height;
-}
-
-button {
-    display: inline-block;
-    bottom: $standard;
-    float: left;
-    margin-right: $standard;
-}
-
-.fullscreen {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: $z-override;
-    background: $cmwn-black;
-    width: 105vw;
-    height: 105vh;
-
-    iframe {
-        position: fixed;
-        width: $game-fullscreen-width;
-        max-width: $game-fullscreen-width;
-        height: $game-fullscreen-height;
-        max-height: $game-fullscreen-height;
-    }
-
-    .overlay.portrait {
-        height: $fullscreen-height;
-        max-height: $fullscreen-height;
-        width: $fullscreen-width;
-        max-width: $fullscreen-width;
-    }
-
-    button {
-        display: none;
-    }
-}
-
-@media (orientation: landscape) {
-    button {
-        z-index: $z-bootstrap;
-    }
-
-    @media only screen and (min-device-width: $iphone2g-4s-min-width) and (max-device-width: $iphone2g-4s-max-width) {
-        .fullscreen {
-            iframe {
-                height: $game-fullscreen-height-landscape-iphone2g-4s;
-                max-height: $game-fullscreen-height-landscape-iphone2g-4s;
+        @media only screen and (min-device-width: $iphone2g-4s-min-width) and (max-device-width: $iphone2g-4s-max-width) {
+            .fullscreen {
+                iframe {
+                    height: $game-fullscreen-height-landscape-iphone2g-4s;
+                    max-height: $game-fullscreen-height-landscape-iphone2g-4s;
+                }
             }
         }
-    }
 
-    @media only screen and (min-device-width: $iphone5-min-width) and (max-device-width: $iphone5-max-width) {
-        .fullscreen {
-            iframe {
-                height: $game-fullscreen-height-landscape-iphone5;
-                max-height: $game-fullscreen-height-landscape-iphone5;
+        @media only screen and (min-device-width: $iphone5-min-width) and (max-device-width: $iphone5-max-width) {
+            .fullscreen {
+                iframe {
+                    height: $game-fullscreen-height-landscape-iphone5;
+                    max-height: $game-fullscreen-height-landscape-iphone5;
+                }
             }
         }
-    }
 
-    @media only screen and (min-device-width: $iphone6-min-width) and (max-device-width: $iphone6-max-width) {
-        .fullscreen {
-            iframe {
-                height: $game-fullscreen-height-landscape-iphone6;
-                max-height: $game-fullscreen-height-landscape-iphone6;
+        @media only screen and (min-device-width: $iphone6-min-width) and (max-device-width: $iphone6-max-width) {
+            .fullscreen {
+                iframe {
+                    height: $game-fullscreen-height-landscape-iphone6;
+                    max-height: $game-fullscreen-height-landscape-iphone6;
+                }
             }
         }
-    }
 
-    @media only screen and (min-device-width: $iphone6plus-min-width) and (max-device-width: $iphone6plus-max-width) {
-        .fullscreen {
-            iframe {
-                height: $game-fullscreen-height-landscape-iphone6plus;
-                max-height: $game-fullscreen-height-landscape-iphone6plus;
+        @media only screen and (min-device-width: $iphone6plus-min-width) and (max-device-width: $iphone6plus-max-width) {
+            .fullscreen {
+                iframe {
+                    height: $game-fullscreen-height-landscape-iphone6plus;
+                    max-height: $game-fullscreen-height-landscape-iphone6plus;
+                }
             }
         }
     }
