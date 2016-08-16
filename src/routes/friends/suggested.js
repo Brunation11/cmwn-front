@@ -105,7 +105,8 @@ export class Suggested extends React.Component{
                                 <Button
                                     onClick={self.addFriend.bind(self, item)}
                                     className={ClassNames('green standard', {
-                                        hidden: item.relationship === 'Pending' || item.relationship === 'requested'
+                                        hidden: item.relationship === 'Pending' ||
+                                                item.relationship === 'requested'
                                     })}
                                  >
                                     {ADD_FRIEND}
@@ -127,7 +128,7 @@ export class Suggested extends React.Component{
                                 </Button>
                                 <Button
                                     className="purple standard"
-                                    onClick={history.push.bind(null,'/profile/' + item.suggest_id)}
+                                    onClick={history.push.bind(null, '/profile/' + item.suggest_id)}
                                 >
                                     {PROFILE}
                                 </Button>

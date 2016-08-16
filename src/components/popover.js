@@ -9,8 +9,8 @@ import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
 
 const COPY = {
-    NOFLIPS: "It Looks like this user hasn't earned any flips."
-}
+    NOFLIPS: 'It Looks like this user hasn\'t earned any flips.'
+};
 
 var PopOver = React.createClass({
     getInitialState: function () {
@@ -54,8 +54,9 @@ var PopOver = React.createClass({
         );
     },
     getUserFlips: function () {
+        var userID = this.state.element.friend_id || this.state.element.suggest_id;
         HttpManager.GET({
-            url: (`${GLOBALS.API_URL}user/${this.state.element.friend_id || this.state.element.suggest_id}/flip`),
+            url: (`${GLOBALS.API_URL}user/${userID}/flip`),
             handleErrors: false
         })
         .then(res => {
@@ -76,7 +77,7 @@ var PopOver = React.createClass({
         } else {
             return (
                <p>{COPY.NOFLIPS}</p>
-            )
+            );
         }
     },
     renderUser: function () {
