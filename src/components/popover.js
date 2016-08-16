@@ -8,6 +8,10 @@ import 'components/popover.scss';
 import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
 
+const COPY = {
+    NOFLIPS: "It Looks like this user hasn't earned any flips."
+}
+
 var PopOver = React.createClass({
     getInitialState: function () {
         return {
@@ -51,7 +55,7 @@ var PopOver = React.createClass({
     },
     getUserFlips: function () {
         HttpManager.GET({
-            url: (`${GLOBALS.API_URL}user/${this.state.element.friend_id}/flip`),
+            url: (`${GLOBALS.API_URL}user/${this.state.element.friend_id || this.state.element.suggest_id}/flip`),
             handleErrors: false
         })
         .then(res => {
@@ -59,18 +63,24 @@ var PopOver = React.createClass({
         });
     },
     renderUserFlips: function () {
-        return _.map(this.state.flips, (flip) => {
+        if (this.state.flips.length) {
+            return _.map(this.state.flips, (flip) => {
+                return (
+                    <img
+                        className="hover-flips"
+                        key={Shortid.generate()}
+                        src={`/flips/${flip.flip_id}-earned.gif`}
+                    />
+                );
+            });
+        } else {
             return (
-                <img
-                    className="hover-flips"
-                    key={Shortid.generate()}
-                    src={`/flips/${flip.flip_id}-earned.gif`}
-                />
-            );
-        });
+               <p>{COPY.NOFLIPS}</p>
+            )
+        }
     },
     renderUser: function () {
-        if (this.state.element.friend_id) this.getUserFlips();
+        if (this.state.element.friend_id || this.state.element.suggest_id) this.getUserFlips();
         if (this.state.flips) {
             return (
                 <ButtonToolbar>
