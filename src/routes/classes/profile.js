@@ -38,7 +38,8 @@ export class Profile extends React.Component {
     constructor() {
         super();
         this.state = {
-            isStudent: true
+            isStudent: true,
+            title: ''
         };
     }
     componentDidMount() {
@@ -115,7 +116,7 @@ export class Profile extends React.Component {
                {this.renderClassInfo()}
                <USER_SOURCE>
                    <FlipBoard renderFlip={this.renderFlip} header={
-                     HEADINGS.CLASS + this.props.data.title
+                     HEADINGS.CLASS + this.state.title
                    } />
                </USER_SOURCE>
            </Layout>
