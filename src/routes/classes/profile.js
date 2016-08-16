@@ -93,7 +93,7 @@ export class Profile extends React.Component {
         );
     }
     renderClassInfo() {
-        if (this.state.group_id == null) {
+        if (this.state.group_id == null || this.props.currentUser.type.toLowerCase() === 'child') {
             return null;
         }
         return (
