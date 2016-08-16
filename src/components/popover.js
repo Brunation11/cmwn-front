@@ -40,10 +40,10 @@ var PopOver = React.createClass({
                             className="flip-popover"
                             id={Shortid.generate()}
                             title={[
-                                state.element.title,
+                                this.state.element.title,
                                 <br />,
                                 <span className="title-meta">
-                                    {`earned: ${Moment(state.element.earned).format('MMM Do YYYY')}`}
+                                    {`earned: ${Moment(this.state.element.earned).format('MMM Do YYYY')}`}
                                 </span>
                             ]}
                         >
