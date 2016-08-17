@@ -124,7 +124,7 @@ export class Home extends React.Component {
                 <Carousel>
                     <CarouselItem>
                         <img className="bg" src={SOURCES.SLIDEBG[0]}/>
-                        <div className="content-group centered sweater">
+                        <div className="content-group centered">
                             <div>
                                 <h2>{COPY.SLIDES[0].HEADING}</h2>
                                 <Button className="purple" id="video-btn"
@@ -136,13 +136,13 @@ export class Home extends React.Component {
                     </CarouselItem>
                     <CarouselItem>
                         <img className="bg" src={SOURCES.SLIDEBG[1]}/>
-                        <div className="content-group centered sweater">
+                        <div className="content-group centered">
                             <h2>{COPY.SLIDES[1].HEADING}</h2>
                         </div>
                     </CarouselItem>
                     <CarouselItem>
                         <img className="bg" src={SOURCES.SLIDEBG[2]}/>
-                        <div className="content-group centered sweater">
+                        <div className="content-group centered">
                             <h2>{COPY.SLIDES[2].HEADING}</h2>
                         </div>
                     </CarouselItem>

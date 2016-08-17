@@ -188,7 +188,8 @@
 
             .content-group {
                 position: absolute;
-                top: 40px;
+                top: 0;
+                bottom: 0;
                 margin: 0;
                 box-shadow: none;
                 background-color: transparent;
@@ -214,8 +215,6 @@
             }
 
             .centered {
-                bottom: 0;
-
                 // scss-lint:disable SelectorDepth, NestingDepth
 
                 > h2 {
@@ -223,7 +222,7 @@
                 }
 
                 > * {
-                    //display: inline-block;
+                    display: inline-block;
                     vertical-align: middle;
                 }
 
