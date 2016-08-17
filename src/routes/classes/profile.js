@@ -108,16 +108,17 @@ export class Profile extends React.Component {
         );
     }
     render() {
-        if (this.props.data == null || this.state == null) {
+        if (!this.props.data || !this.state) {
             return null;
         }
         return (
            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                {this.renderClassInfo()}
                <USER_SOURCE>
-                   <FlipBoard renderFlip={this.renderFlip} header={
-                     HEADINGS.CLASS + this.state.title
-                   } />
+                    <FlipBoard
+                        renderFlip={this.renderFlip}
+                        header={`${HEADINGS.CLASS} ${this.props.data.title ? this.props.data.title : ''}`}
+                    />
                </USER_SOURCE>
            </Layout>
         );
