@@ -69,15 +69,17 @@ $z-override: 1100;
 $z-bootstrap: 1000;
 $sweater-height: 717px;
 
-$game-responsive-width-portrait: 90vw;
-$game-responsive-height-portrait: 50.62vw;
-$game-fullscreen-width-portrait: 100vw;
-$game-fullscreen-height-portrait: 56.25vw;
+$game-responsive-width-portrait: calc(50vmin * 1.77);
+$game-responsive-height-portrait: 50vmin;
+$game-fullscreen-width-portrait: 100vmin;
+$game-fullscreen-height-portrait: calc(100vmin * .5625);
 
 $game-responsive-width-landscape: 90vw;
 $game-responsive-width-max: 100%; // max out at 985px (max width of sweater)
 $game-responsive-height-landscape: 50.62vw;
 $game-responsive-height-max: 554px; // preserve 9:16 ratio of max sweater width (985px)
+$game-fullscreen-width-landscape: 100vmax;
+$game-fullscreen-height-landscape: calc(100vmax * .5625);
 
 $fullscreen-height: 100vh;
 $fullscreen-width: 100vw;
