@@ -1,3 +1,5 @@
+@import 'variables';
+
 .class-profile {
 
     .flip {
@@ -5,6 +7,12 @@
         img {
             width: 172px;
             max-width: 172px;
+            background-color: $cmwn-purple;
+            transition: background-color 2s;
+
+            &:hover {
+                background-color: $cmwn-blue;
+            }
         }
     }
 }

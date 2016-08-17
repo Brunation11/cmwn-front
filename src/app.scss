@@ -236,6 +236,12 @@ h3 {
     .profile-pic {
         @include no-text($profile-width, $profile-width);
         background-size: cover;
+        background-color: $cmwn-purple;
+        transition: background-color 2s;
+        
+        &:hover {
+            background-color: $cmwn-blue;
+        }
     }
 
     .global-header {

@@ -1,4 +1,10 @@
+@import '../../variables';
+
 .suggested-friends {
+    .flipboard .panel-body .flip div span.overlay {
+        background: transparent;
+    }
+
     td img {
         width: 200px;
         max-width: 200px;
@@ -9,8 +15,12 @@
     }
 
     .btn.standard {
-        margin: 5px 0;
         width: 100%;
+        box-shadow: none;
+        margin: 0;
+        border-radius: 0;
+        bottom: 0;
+        position: relative;
     }
 
     .hidden {
@@ -21,6 +31,21 @@
 
         img {
             max-width: 200px;
+            background-color: $cmwn-purple;
+            transition: background-color 2s;
+        }
+
+        .overlay:hover + img {
+            background-color: $cmwn-blue;
+        }
+
+        .overlay {
+            padding: 0;
+
+            .abswrap {
+                display: flex;
+                flex-direction: column;
+            }
         }
     }
 }
