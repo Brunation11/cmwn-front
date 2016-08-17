@@ -1,9 +1,11 @@
-@import '../../variables';
+@import 'variables';
 
 .suggested-friends {
+    //scss-lint:disable all
     .flipboard .panel-body .flip div span.overlay {
         background: transparent;
     }
+    //scss-lint:enable all
 
     td img {
         width: 200px;
@@ -15,12 +17,12 @@
     }
 
     .btn.standard {
-        width: 100%;
-        box-shadow: none;
+        position: relative;
+        bottom: 0;
         margin: 0;
         border-radius: 0;
-        bottom: 0;
-        position: relative;
+        box-shadow: none;
+        width: 100%;
     }
 
     .hidden {
@@ -30,9 +32,9 @@
     .flip {
 
         img {
-            max-width: 200px;
-            background-color: $cmwn-purple;
             transition: background-color 2s;
+            background-color: $cmwn-purple;
+            max-width: 200px;
         }
 
         .overlay:hover + img {
