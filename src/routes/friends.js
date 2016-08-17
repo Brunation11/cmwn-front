@@ -13,10 +13,9 @@ import FlipBoard from 'components/flipboard';
 import Toast from 'components/toast';
 import Paginator from 'components/paginator';
 import Actions from 'components/actions';
+import GLOBALS from 'components/globals';
 
 import Layout from 'layouts/two_col';
-
-import DefaultProfile from 'media/profile_tranparent.png';
 
 import 'routes/friends.scss';
 
@@ -36,6 +35,7 @@ var mapStateToProps;
 var Page;
 
 class Friends extends React.Component {
+
     addFriend(item, e) {
         var id = item.user_id != null ? item.user_id : item.friend_id;
         var postBody = { 'friend_id': id };
@@ -157,7 +157,7 @@ class Friends extends React.Component {
                        transform={data => {
                            var image;
                            if (!_.has(data, '_embedded.image')) {
-                               image = DefaultProfile;
+                               image = GLOBALS.DEFAULT_PROFILE;
                            } else {
                                if (data._embedded.image.url != null) {
                                    image = data._embedded.image.url;

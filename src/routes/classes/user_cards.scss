@@ -1,0 +1,192 @@
+@import 'variables';
+
+.flipboard .panel-body > * {
+    text-align: left;
+}
+
+.user-cards {
+    .card {
+        visibility: visible;
+        border: 1px dashed $cmwn-black;
+        width: 50%;
+        height: 275px;
+
+        div {
+            display: inline-block;
+            margin: 15px 0;
+        }
+
+        .heading-container-1 {
+            width: 25%;
+        }
+
+        .heading-container-2 {
+            width: 32%;
+        }
+
+        [class^="user-info-container"] {
+            border-bottom: 1px solid $cmwn-black;
+            text-align: center;
+        }
+
+        .user-info-container-1 {
+            width: 75%;
+        }
+
+        .user-info-container-2 {
+            width: 68%;
+        }
+
+        .heading {
+            font-size: 1.5rem;
+        }
+
+        .user-info {
+            font-size: 2rem;
+        }
+
+        .site-link {
+            text-align: center;
+        }
+
+        .disclaimer {
+            margin: 10px;
+            text-align: center;
+            font-size: .75rem;
+        }
+    }
+
+    .print {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+@media only screen and (min-device-width: $device-max-break) and (max-device-width: $monitor-max-break) {
+    .user-cards {
+        .card {
+            width: 50%;
+            height: 200px;
+
+            div {
+                margin: 5px 0;
+            }
+
+            .heading {
+                font-size: 1rem;
+            }
+
+            .user-info {
+                font-size: 1.5rem;
+            }
+
+            .site-link {
+                // scss-lint:disable all
+                font-size: 1.25rem !important;
+                // scss-lint:enable all
+            }
+
+            .disclaimer {
+                font-size: .5rem;
+            }
+        }
+    }
+}
+
+@media only screen and (min-device-width: $device-portrait-break) and (max-device-width: $device-max-break) {
+    .user-cards {
+        .card {
+            width: 100%;
+            height: 240px;
+
+            div {
+                margin: 10px 0;
+            }
+
+            .heading {
+                font-size: 1.5rem;
+            }
+
+            .user-info {
+                font-size: 1.75rem;
+            }
+
+            .site-link {
+                // scss-lint:disable all
+                font-size: 1.75rem !important;
+                // scss-lint:enable all
+            }
+
+            .disclaimer {
+                font-size: .7rem;
+            }
+        }
+    }
+}
+
+@media only screen and (min-device-width: 0) and (max-device-width: $device-portrait-break) {
+    .user-cards {
+        .card {
+            width: 100%;
+            height: 190px;
+
+            div {
+                margin: 5px 0;
+            }
+
+            .heading {
+                font-size: 1rem;
+            }
+
+            .user-info {
+                font-size: 1.5rem;
+            }
+
+            .site-link {
+                // scss-lint:disable all
+                font-size: 1.1rem !important;
+                // scss-lint:enable all
+            }
+
+            .disclaimer {
+                font-size: .45rem;
+            }
+        }
+    }
+}
+
+@media print {
+    @page {
+        size: landscape;
+        margin: .5cm;
+    }
+
+    .global-header,
+    .panel-heading,
+    .print {
+        display: none;
+    }
+
+    .card {
+        div {
+            margin: 25px 0;
+        }
+
+        .heading {
+            font-size: 1.25rem;
+        }
+
+        .user-info {
+            font-size: 1.75rem;
+        }
+
+        .site-link {
+            font-size: 1.5rem;
+        }
+
+        .disclaimer {
+            font-size: .5rem;
+        }
+    }
+}

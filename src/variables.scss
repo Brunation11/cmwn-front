@@ -61,33 +61,26 @@ $min-base-font-size: 12px;
 $device-font-size: 2vmax;
 $base-font-size: 15px;
 $max-base-font-size: 18px;
+$game-overlay-text: 40px;
 //z-index scopes (note that bootstrap styles start at 1000)
 $z-nav: 500;
+$z-over-game: 1200;
 $z-override: 1100;
 $z-bootstrap: 1000;
 $sweater-height: 717px;
 
-$game-responsive-width-portrait: calc(50vmin * 1.77);
-$game-responsive-height-portrait: 50vmin;
-$game-fullscreen-width-portrait: 100vmin;
-$game-fullscreen-height-portrait: calc(100vmin * .5625);
-// ie fallback
-$game-responsive-width-portrait-ie: calc(50vm * 1.77);
-$game-responsive-height-portrait-ie: 50vm;
-$game-fullscreen-width-portrait-ie: 100vm;
-$game-fullscreen-height-portrait-ie: calc(100vm * 0.5625);
+$game-responsive-width-portrait: 90vw;
+$game-responsive-height-portrait: 50.62vw;
+$game-fullscreen-width-portrait: 100vw;
+$game-fullscreen-height-portrait: 56.25vw;
 
-$game-responsive-width-landscape: calc(50vw * 1.77);
+$game-responsive-width-landscape: 90vw;
 $game-responsive-width-max: 100%; // max out at 985px (max width of sweater)
-$game-responsive-height-landscape: 50vw;
+$game-responsive-height-landscape: 50.62vw;
 $game-responsive-height-max: 554px; // preserve 9:16 ratio of max sweater width (985px)
-$game-fullscreen-width-landscape: 100vmax;
-$game-fullscreen-height-landscape: calc(100vmax * .5625);
-// ie fallback
-$game-responsive-width-landscape-ie: calc(50vw * 1.77);
-$game-responsive-height-landscape-ie: 50vw;
-$game-fullscreen-width-landscape-ie: 100vw;
-$game-fullscreen-height-landscape-ie: calc(100vw * 0.5625);
+
+$fullscreen-height: 100vh;
+$fullscreen-width: 100vw;
 
 $iphone2g-4s-min-width: 320px;
 $iphone2g-4s-max-width: 480px;
