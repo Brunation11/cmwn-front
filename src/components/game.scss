@@ -1,4 +1,4 @@
-@import 'variables';
+@import '../variables';
 
 .game {
     padding-bottom: 35px;
@@ -9,24 +9,24 @@
     display: none;
 
     &.portrait {
-        width: $game-responsive-width;
-        max-width: $game-responsive-width-max;
-        height: $game-responsive-height;
-        max-height: $game-responsive-height-max;
         display: inline-block;
         z-index: $z-over-game;
         background-color: $cmwn-blue-dark;
         padding: $standard;
+        width: $game-responsive-width;
+        max-width: $game-responsive-width-max;
+        height: $game-responsive-height;
+        max-height: $game-responsive-height-max;
         color: $cmwn-white;
         font-family: $cmwn-jade-font;
         font-size: $game-overlay-text;
-    
+
         &.fullscreen {
-            height: $fullscreen-height;
-            max-height: $fullscreen-height;
+            padding-top: 50%;
             width: $fullscreen-width;
             max-width: $fullscreen-width;
-            padding-top: 50%;
+            height: $fullscreen-height;
+            max-height: $fullscreen-height;
         }
     }
 }
@@ -76,10 +76,10 @@ button {
     }
 
     .overlay.portrait {
-        height: $fullscreen-height;
-        max-height: $fullscreen-height;
         width: $fullscreen-width;
         max-width: $fullscreen-width;
+        height: $fullscreen-height;
+        max-height: $fullscreen-height;
     }
 
     button {
