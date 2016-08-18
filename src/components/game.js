@@ -65,7 +65,6 @@ var Game = React.createClass({
     componentDidMount: function () {
         var frame = ReactDOM.findDOMNode(this.refs.gameRef);
         var callApi;
-
         if (!frame) {
             return;
         }
@@ -136,8 +135,10 @@ var Game = React.createClass({
     listenForEsc: function (e) {
         var self = this;
         if (e.keyCode === 27 || e.charCode === 27) {
-            self.setState({fullscreenFallback: false});
             Screenfull.exit();
+            self.setState({
+                fullscreenFallback: false,
+            });
         }
     },
     dispatchPlatformEvent(name, data) {
@@ -174,29 +175,46 @@ var Game = React.createClass({
             return null;
         }
         return (
-            <div ref="wrapRef" className={ClassNames(
-                'game', {'fullscreen': this.state.fullscreenFallback}
-            )}>
-                <div ref="overlay" className={ClassNames('overlay',
-                    {'portrait': this.state.isPortrait},
-                    {'fullscreen': Screenfull.isFullscreen}
+            <div className="wrapper">
+                <div ref="wrapRef" className={ClassNames(
+                    'game',
+                    {fullscreen: this.state.fullscreenFallback}
                 )}>
-                    {PORTRAIT_TEXT}
+                    <div
+                        ref="overlay"
+                        className={ClassNames('overlay', {
+                            portrait: this.state.isPortrait,
+                            fullscreen: Screenfull.isFullscreen
+                        })}
+                    >
+                        <p>{PORTRAIT_TEXT}</p>
+                    </div>
+                    <iframe
+                        ref="gameRef"
+                        className={ClassNames('game-frame', {
+                            portrait: this.state.isPortrait
+                        })}
+                        src={this.props.url}
+                        allowTransparency="true"
+                    />
                 </div>
-                <iframe ref="gameRef" src={this.props.url} allowtransparency="true"
-                    className={ClassNames({'portrait': this.state.isPortrait})}/>
-                <Button onClick={this.makeFullScreen}
-                    className={ClassNames('purple', 'standard', 'full-screen-btn',
-                        {hidden: this.state.isPortrait}
-                    )}>
+                <Button
+                    onClick={this.makeFullScreen}
+                    className={ClassNames('purple', 'standard', 'full-screen-btn', {
+                        hidden: this.state.isPortrait
+                    })}
+                >
                     <Glyphicon glyph="fullscreen" /> {FULLSCREEN}
                 </Button>
-                <Button className={ClassNames('standard',
+                <Button
+                    className={ClassNames('standard',
                         {'purple': !this.state.demo},
                         {'green': this.state.demo},
-                        {hidden: !this.props.isTeacher || this.state.isPortrait}
+                        {hidden: !this.props.isTeacher}
                     )}
-                    onClick={() => this.dispatchPlatformEvent('toggle-demo-mode')}>{DEMO_MODE}
+                    onClick={() => this.dispatchPlatformEvent('toggle-demo-mode')}
+                >
+                    {DEMO_MODE}
                 </Button>
             </div>
         );
