@@ -1,129 +1,106 @@
 @import 'variables';
 
-.game {
-    padding-bottom: 35px;
-    text-align: center;
-}
+.wrapper {
+    margin-bottom: 50px;
 
-.overlay {
-    display: none;
+    .game {
+        position: relative;
+        padding-bottom: 56.25%;
+        width: 100vw;
+        max-width: 100%;
+        text-align: center;
 
-    &.portrait {
-        width: $game-responsive-width;
-        max-width: $game-responsive-width-max;
-        height: $game-responsive-height;
-        max-height: $game-responsive-height-max;
-        display: inline-block;
-        z-index: $z-over-game;
-        background-color: $cmwn-blue-dark;
-        padding: $standard;
-        color: $cmwn-white;
-        font-family: $cmwn-jade-font;
-        font-size: $game-overlay-text;
-    
+        .overlay {
+            display: none;
+            position: absolute;
+            top: 0%;
+            right: 0%;
+            bottom: 0%;
+            left: 0%;
+            z-index: $z-over-game;
+            background-color: $cmwn-blue-dark;
+            padding: $standard;
+            width: 100%;
+            max-width: 100%;
+            height: 100%;
+            max-height: 100%;
+            color: $cmwn-white;
+            font-family: $cmwn-jade-font;
+            font-size: $game-overlay-text;
+
+            p {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+            &.portrait {
+                display: inline-block;
+
+                // scss-lint:disable SelectorDepth, NestingDepth
+                &.fullscreen {
+                    position: fixed;
+                    padding-top: 50%;
+                    width: 100vw;
+                    height: 100vh;
+                }
+                // scss-lint:enable SelectorDepth, NestingDepth
+            }
+        }
+
+        .game-frame {
+            position: absolute;
+            top: 0%;
+            right: 0%;
+            bottom: 0%;
+            left: 0%;
+            width: 100%;
+            max-width: 100%;
+            height: 100%;
+            max-height: 100%;
+
+            &.portrait {
+                display: none;
+            }
+        }
+
+        ~ button {
+            display: inline-block;
+            bottom: $standard;
+            float: left;
+            margin-top: $standard;
+            margin-right: $standard;
+        }
+
         &.fullscreen {
-            height: $fullscreen-height;
-            max-height: $fullscreen-height;
-            width: $fullscreen-width;
-            max-width: $fullscreen-width;
-            padding-top: 50%;
-        }
-    }
-}
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: $z-override;
+            margin-bottom: 0;
+            background: $cmwn-black;
+            padding-bottom: 0;
+            width: 100vw;
+            height: 100vh;
 
-iframe {
-    width: $game-responsive-width;
-    max-width: $game-responsive-width-max;
-    height: $game-responsive-height;
-    max-height: $game-responsive-height-max;
-
-    &.portrait {
-        display: none;
-    }
-}
-
-.modal-game iframe {
-    width: $game-responsive-width;
-    max-width: $game-responsive-width;
-    height: $game-responsive-height;
-    max-height: $game-responsive-height;
-}
-
-button {
-    display: inline-block;
-    bottom: $standard;
-    float: left;
-    margin-right: $standard;
-}
-
-.fullscreen {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: $z-override;
-    background: $cmwn-black;
-    width: 105vw;
-    height: 105vh;
-
-    iframe {
-        position: fixed;
-        width: $game-fullscreen-width;
-        max-width: $game-fullscreen-width;
-        height: $game-fullscreen-height;
-        max-height: $game-fullscreen-height;
-    }
-
-    .overlay.portrait {
-        height: $fullscreen-height;
-        max-height: $fullscreen-height;
-        width: $fullscreen-width;
-        max-width: $fullscreen-width;
-    }
-
-    button {
-        display: none;
-    }
-}
-
-@media (orientation: landscape) {
-    button {
-        z-index: $z-bootstrap;
-    }
-
-    @media only screen and (min-device-width: $iphone2g-4s-min-width) and (max-device-width: $iphone2g-4s-max-width) {
-        .fullscreen {
-            iframe {
-                height: $game-fullscreen-height-landscape-iphone2g-4s;
-                max-height: $game-fullscreen-height-landscape-iphone2g-4s;
+            .game-frame {
+                top: 50%;
+                transform: translateY(-50%);
+                width: 100vw;
+                height: 56.25vw;
             }
-        }
-    }
 
-    @media only screen and (min-device-width: $iphone5-min-width) and (max-device-width: $iphone5-max-width) {
-        .fullscreen {
-            iframe {
-                height: $game-fullscreen-height-landscape-iphone5;
-                max-height: $game-fullscreen-height-landscape-iphone5;
+            .overlay.portrait {
+                width: 100vw;
+                max-width: 100vw;
+                height: 56.25vw;
+                max-height: 56.25vw;
             }
-        }
-    }
 
-    @media only screen and (min-device-width: $iphone6-min-width) and (max-device-width: $iphone6-max-width) {
-        .fullscreen {
-            iframe {
-                height: $game-fullscreen-height-landscape-iphone6;
-                max-height: $game-fullscreen-height-landscape-iphone6;
-            }
-        }
-    }
-
-    @media only screen and (min-device-width: $iphone6plus-min-width) and (max-device-width: $iphone6plus-max-width) {
-        .fullscreen {
-            iframe {
-                height: $game-fullscreen-height-landscape-iphone6plus;
-                max-height: $game-fullscreen-height-landscape-iphone6plus;
+            ~ button {
+                display: none;
             }
         }
     }
