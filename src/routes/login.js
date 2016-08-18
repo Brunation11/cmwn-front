@@ -12,6 +12,8 @@ import GLOBALS from 'components/globals';
 
 import Layout from 'layouts/one_col';
 
+import 'routes/login.scss';
+
 const LABELS = {
     LOGIN: 'Email | Username',
     PASSWORD: 'Password',
@@ -181,7 +183,7 @@ var Component = React.createClass({
                 <Tabs activeKey={this.state.key} onSelect={this.handleSelect} >
                     <Tab eventKey={1} title={'Login'}>
                         <br />
-                        <form method="POST" id="login-form" >
+                        <form method="POST" className="login-form" id="login-form" >
                             <input type="hidden" name="_token" value={this.state._token} />
                             <Input ref="login" type="text" id="email" name="email" label={LABELS.LOGIN} />
                             <Input ref="password" type="password" id="password" name="password"
