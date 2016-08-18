@@ -61,22 +61,17 @@ $min-base-font-size: 12px;
 $device-font-size: 2vmax;
 $base-font-size: 15px;
 $max-base-font-size: 18px;
+$game-overlay-text: 30px;
 //z-index scopes (note that bootstrap styles start at 1000)
 $z-nav: 500;
+$z-over-game: 1200;
 $z-override: 1100;
 $z-bootstrap: 1000;
 $sweater-height: 717px;
 
-$game-responsive-width: 90vw;
-$game-responsive-height: 50.625vw;
-$game-fullscreen-width: 100vw;
-$game-fullscreen-height: 56.25vw;
-$game-responsive-width-max: 100%; // max out at 985px (max width of sweater)
-$game-responsive-height-max: 554px; // preserve 9:16 ratio of max sweater width (985px)
-
 $iphone2g-4s-min-width: 320px;
 $iphone2g-4s-max-width: 480px;
-$game-fullscreen-height-landscape-iphone2g-4s: calc(85vmax * .5625);
+$game-fullscreen-height-landscape-iphone2g-4s: calc(85vw * .5625);
 
 $iphone5-min-width: 320px;
 $iphone5-max-width: 568px;
