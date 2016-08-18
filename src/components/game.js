@@ -5,10 +5,10 @@ import ClassNames from 'classnames';
 import _ from 'lodash';
 import {Button, Glyphicon} from 'react-bootstrap';
 
+import getEventsForGame from 'components/game_events';
 import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
-import Toast from 'components/toast';
-import Log from 'components/log';
+import Detector from 'components/browser_detector';
 
 import 'components/game.scss';
 
@@ -17,7 +17,7 @@ const EVENT_PREFIX = '_e_';
 const FULLSCREEN = 'Full Screen';
 const DEMO_MODE = 'Demo Mode';
 
-const BAD_FLIP = 'There was a problem registering your earned flip. Please try again in a little while';
+const PORTRAIT_TEXT = 'Please turn this game into landscape mode to continue.';
 
 /**
  * Game wrapper iframe component.
@@ -52,6 +52,29 @@ var Game = React.createClass({
     },
     componentWillMount: function () {
         this.setEvent();
+        this.setState({
+            currentGame: this.props.game,
+            eventHandler: getEventsForGame(
+                EVENT_PREFIX,
+                this.props.game,
+                this.props.currentUser._links,
+                this.onExit
+            )
+        });
+    },
+    componentWillReceiveProps: function (nextProps) {
+        this.setState({
+            currentGame: nextProps.game,
+            eventHandler: getEventsForGame(
+                EVENT_PREFIX,
+                nextProps.game,
+                nextProps.currentUser._links,
+                this.onExit
+            )
+        });
+    },
+    componentWillUnmount: function () {
+        this.clearEvent();
     },
     componentDidMount: function () {
         var frame = ReactDOM.findDOMNode(this.refs.gameRef);
@@ -64,62 +87,21 @@ var Game = React.createClass({
         frame.addEventListener('load', function () {
             frame.contentWindow.addEventListener('click', callApi, false);
         }, false);
+        this.checkForPortrait();
     },
-    componentWillUnmount: function () {
-        this.clearEvent();
+    onExit: function (nextState) {
+        this.setState(nextState);
     },
-    submitFlip: function (flip) {
-        if (!this.props.flipUrl) {
-            return;
-        }
-        HttpManager.POST({url: this.props.flipUrl}, {'flip_id': flip}).catch(err => {
-            Toast.error(BAD_FLIP);
-            Log.log('Server refused flip update', err, flip);
-        });
-    },
-    /*
-     * default events. These will always fire regardless of whether or not
-     * there is an event defined in addition to the submission behavior
-     */
-    [EVENT_PREFIX + 'Flipped']: function (e) {
-        var flipId = e.gameData.id || e.gameData.game || e.gameData.flip;
-        // TODO MPR 7/14/16: .game and .flip can be removed once all games are in React
-        this.setState({flipId});
-        this.submitFlip(flipId);
-        ('set', 'dimension5', flipId);
-    },
-    [EVENT_PREFIX + 'Flip']: function (e) {
-        var flipId = e.gameData.id || e.gameData.game || e.gameData.flip;
-        this.setState({flipId});
-        this.submitFlip(flipId);
-        ('set', 'dimension5', flipId);
-    },
-    [EVENT_PREFIX + 'Save']: function (e) {
-        var version = 1;
-        if (this.props.saveUrl == null) {
-            Log.error('Something went wrong. No game save url was provided. Game data will not be saved');
-            return;
-        }
-        version = e.gameData.version || version;
-        ('set', 'metric1', e.gameData.currentScreenIndex);
-        HttpManager.POST(this.props.saveUrl.replace('{game_id}', e.gameData.game),
-            {data: e.gameData, version});
-    },
-    [EVENT_PREFIX + 'Exit']: function () {
-        this.setState({fullscreenFallback: false});
-    },
-    [EVENT_PREFIX + 'Init']: function (e) {
-        e.respond(this.props.gameState);
-        ('set', 'dimension4', e.gameData.id || e.gameData.game || e.gameData.flip);
-    },
-    /* end of default events */
     gameEventHandler: function (e) {
         if (e.name != null) {
-            if (_.isFunction(this[EVENT_PREFIX + _.capitalize(e.name)])) {
-                this[EVENT_PREFIX + _.capitalize(e.name)](...arguments);
+            if (_.isFunction(this[EVENT_PREFIX + _.upperFirst(e.name)])) {
+                this[EVENT_PREFIX + _.upperFirst(e.name)](...arguments);
             }
-            if (_.isFunction(this.props['on' + _.capitalize(e.name)])) {
-                this.props['on' + _.capitalize(e.name)](...arguments);
+            if (_.isFunction(this.state.eventHandler[EVENT_PREFIX + _.upperFirst(e.name)])) {
+                this.state.eventHandler[EVENT_PREFIX + _.upperFirst(e.name)](...arguments);
+            }
+            if (_.isFunction(this.props['on' + _.upperFirst(e.name)])) {
+                this.props['on' + _.upperFirst(e.name)](...arguments);
             }
         }
     },
@@ -127,11 +109,12 @@ var Game = React.createClass({
         window.addEventListener('game-event', this.gameEventHandler);
         window.addEventListener('platform-event', this.gameEventHandler);
         window.addEventListener('keydown', this.listenForEsc);
-
+        window.addEventListener('resize', this.checkForPortrait);
     },
     clearEvent: function () {
         window.removeEventListener('game-event', this.gameEventHandler);
         window.removeEventListener('keydown', this.listenForEsc);
+        window.removeEventListener('resize', this.checkForPortrait);
     },
     listenForEsc: function (e) {
         var self = this;
@@ -152,10 +135,17 @@ var Game = React.createClass({
     makeFullScreen: function () {
         var self = this;
         if (Screenfull.enabled) {
-            Screenfull.request(ReactDOM.findDOMNode(self.refs.wrapRef));
+            Screenfull.request(ReactDOM.findDOMNode(self.refs.gameRef));
+            Screenfull.request(ReactDOM.findDOMNode(self.refs.overlay));
         } else {
             self.setState({fullscreenFallback: true});
         }
+    },
+    checkForPortrait: function () {
+        var isPortrait = (Detector.isMobileOrTablet() && Detector.isPortrait());
+        this.setState({
+            isPortrait
+        });
     },
     toggleDemoButton: function () {
         if (this.state.demo){
@@ -169,30 +159,49 @@ var Game = React.createClass({
             return null;
         }
         return (
-                <div className="wrapper">
-                    <div ref="wrapRef" className={ClassNames(
-                        'game',
-                        {fullscreen: this.state.fullscreenFallback}
-                    )}>
-                        <iframe
-                            ref="gameRef"
-                            className="game-frame"
-                            src={this.props.url}
-                            allowTransparency="true"
-                        />
+            <div className="wrapper">
+                <div ref="wrapRef" className={ClassNames(
+                    'game',
+                    {fullscreen: this.state.fullscreenFallback}
+                )}>
+                    <div
+                        ref="overlay"
+                        className={ClassNames('overlay', {
+                            portrait: this.state.isPortrait,
+                            fullscreen: Screenfull.isFullscreen
+                        })}
+                    >
+                        <p>{PORTRAIT_TEXT}</p>
                     </div>
-                    <Button className="purple standard" onClick={this.makeFullScreen}>
-                        <Glyphicon glyph="fullscreen" /> {FULLSCREEN}
-                    </Button>
-                    <Button className={ClassNames('standard',
-                            {'purple': !this.state.demo},
-                            {'green': this.state.demo},
-                            {hidden: !this.props.isTeacher}
-                        )}
-                        onClick={() => this.dispatchPlatformEvent('toggle-demo-mode')}>{DEMO_MODE}
-                    </Button>
+                    <iframe
+                        ref="gameRef"
+                        className={ClassNames('game-frame', {
+                            portrait: this.state.isPortrait
+                        })}
+                        src={this.props.url}
+                        allowTransparency="true"
+                    />
                 </div>
-                ) ;
+                <Button
+                    onClick={this.makeFullScreen}
+                    className={ClassNames('purple', 'standard', 'full-screen-btn', {
+                        hidden: this.state.isPortrait
+                    })}
+                >
+                    <Glyphicon glyph="fullscreen" /> {FULLSCREEN}
+                </Button>
+                <Button
+                    className={ClassNames('standard',
+                        {'purple': !this.state.demo},
+                        {'green': this.state.demo},
+                        {hidden: !this.props.isTeacher}
+                    )}
+                    onClick={() => this.dispatchPlatformEvent('toggle-demo-mode')}
+                >
+                    {DEMO_MODE}
+                </Button>
+            </div>
+        );
     }
 });
 

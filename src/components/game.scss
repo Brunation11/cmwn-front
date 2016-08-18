@@ -10,6 +10,42 @@
         max-width: 100%;
         text-align: center;
 
+        .overlay {
+            display: none;
+            position: absolute;
+            top: 0%;
+            right: 0%;
+            bottom: 0%;
+            left: 0%;
+            width: 100%;
+            max-width: 100%;
+            height: 100%;
+            max-height: 100%;
+            z-index: $z-over-game;
+            padding: $standard;
+            background-color: $cmwn-blue-dark;
+            color: $cmwn-white;
+            font-family: $cmwn-jade-font;
+            font-size: $game-overlay-text;
+
+            p {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+            &.portrait {
+                display: inline-block;
+
+                &.fullscreen {
+                    padding-top: 50%;
+                    position: fixed;
+                    width: 100vw;
+                    height: 100vh;
+                }
+            }
+        }
+
         .game-frame {
             position: absolute;
             top: 0%;
@@ -20,6 +56,10 @@
             max-width: 100%;
             height: 100%;
             max-height: 100%;
+
+            &.portrait {
+                display: none;
+            }
         }
 
         ~ button {
@@ -48,6 +88,13 @@
                 transform: translateY(-50%);
                 width: 100vw;
                 height: 56.25vw;
+            }
+
+            .overlay.portrait {
+                height: 56.25vw;;
+                max-height: 56.25vw;;
+                width: 100vw;
+                max-width: 100vw;
             }
 
             ~ button {

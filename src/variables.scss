@@ -6,6 +6,7 @@
 
 $cmwn-jade-font: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
 $helvetica: "Helvetica Neue", Helvetica, Arial, sans-serif;
+$source-sans-pro: "Source Sans Pro", Helvetica, Arial, sans-serif;
 //*************************colors************************
 
 $cmwn-blue: #2cc4f4;
@@ -36,6 +37,11 @@ $cmwn-medium-green: rgba(71, 183, 44, .9);
 $cmwn-medium-purple: rgba(120, 81, 147, .9);
 $cmwn-off-white: #eee;
 $cmwn-dark-gray: #333;
+$cmwn-light-blue: #8cdffd;
+$cmwn-slight-lighter-blue: #0280ae;
+$cmwn-dark-blue: #00719a;
+$cmwn-light-purple: #c380ff;
+$cmwn-lighter-purple: #d5a4ff;
 
 //************************measures**********************
 //page
@@ -57,8 +63,10 @@ $min-base-font-size: 12px;
 $device-font-size: 2vmax;
 $base-font-size: 15px;
 $max-base-font-size: 18px;
+$game-overlay-text: 30px;
 //z-index scopes (note that bootstrap styles start at 1000)
 $z-nav: 500;
+$z-over-game: 1200;
 $z-override: 1100;
 $z-bootstrap: 1000;
 $sweater-height: 717px;
