@@ -139,7 +139,6 @@ var Game = React.createClass({
             Screenfull.exit();
             self.setState({
                 fullscreenFallback: false,
-                screenfull: false
             });
         }
     },
@@ -154,7 +153,6 @@ var Game = React.createClass({
         var self = this;
         if (Screenfull.enabled) {
             Screenfull.request(ReactDOM.findDOMNode(self.refs.wrapRef));
-            self.setState({screenfull: true});
         } else {
             self.setState({fullscreenFallback: true});
         }
@@ -174,10 +172,9 @@ var Game = React.createClass({
                 <div className="wrapper">
                     <div ref="wrapRef" className={ClassNames(
                         'game',
-                        {fullscreen: this.state.fullscreenFallback,
-                         screenfull: this.state.screenfull}
+                        {fullscreen: this.state.fullscreenFallback}
                     )}>
-                        <iframe ref="gameRef" src={this.props.url} allowtransparency="true" />
+                        <iframe ref="gameRef" className="game-frame" src={this.props.url} allowtransparency="true" />
                     </div>
                     <Button className="purple standard" onClick={this.makeFullScreen}>
                         <Glyphicon glyph="fullscreen" /> {FULLSCREEN}
