@@ -59,8 +59,8 @@ export var Image = React.createClass({
             }
             /* eslint-disable camelcase*/
             Cloudinary.instance.openUploadWidget({
-                cloud_name: 'changemyworldnow',
-                upload_preset: 'public-profile-image',
+                cloud_name: GLOBALS.CLOUDINARY_CLOUD_NAME || 'changemyworldnow',
+                upload_preset: GLOBALS.CLOUDINARY_UPLOAD_PRESET || 'public-profile-image',
                 multiple: false,
                 resource_type: 'image',
                 cropping: 'server',
@@ -75,7 +75,7 @@ export var Image = React.createClass({
                 }
                 self.setState({profileImage: result[0].secure_url});
                 self.setState({isModerated: false});
-                ga('set', 'dimension6', 1);
+                ('set', 'dimension6', 1);
                 HttpManager.POST({url: this.props.data._links.user_image.href}, {
                     url: result[0].secure_url,
                     image_id: result[0].public_id

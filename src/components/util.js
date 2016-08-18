@@ -163,6 +163,32 @@ var Util = {
             }
         });
         return url;
+    },
+    scrubPIIFromStore(store) {
+        /* eslint-disable camelcase */
+        var state = {};
+        if (store && store.currentUser) {
+            state.currentUser = store.currentUser.asMutable();
+            state.currentUser.meta = {};
+            state.currentUser.first_name = 'Dana Katherine';
+            state.currentUser.last_name = 'Scully';
+            state.currentUser.email = 'dana@fbi.gov';
+            state.currentUser.gender = 'female';
+            state.currentUser.birthdate = '1964-02-23 00:00:00';
+        }
+        if (store && store.page && store.page.data && store.page.data.user_id) {
+            state.page = {};
+            state.page.data = store.page.data.asMutable();
+            state.page.data.meta = {};
+            state.page.data.first_name = 'Fox William';
+            state.page.data.last_name = 'Mulder';
+            state.page.data.email = 'fox@fbi.gov';
+            state.page.data.gender = 'male';
+            state.page.data.birthdate = '1961-08-13 00:00:00';
+        }
+        /* eslint-enable camelcase */
+        state = _.defaults(state, store);
+        return state;
     }
 };
 
