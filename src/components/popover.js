@@ -70,7 +70,7 @@ var PopOver = React.createClass({
             }
         }).catch(e => {
             Log.error(e, 'Flips could not be extracted from user');
-        })
+        });
     },
     renderUserFlips: function () {
         if (this.state.flips.length) {
