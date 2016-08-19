@@ -5,9 +5,9 @@ import ClassNames from 'classnames';
 import _ from 'lodash';
 import {Button, Glyphicon} from 'react-bootstrap';
 
+import getEventsForGame from 'components/game_events';
+import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
-import Toast from 'components/toast';
-import Log from 'components/log';
 
 import 'components/game.scss';
 
@@ -15,8 +15,6 @@ const EVENT_PREFIX = '_e_';
 
 const FULLSCREEN = 'Full Screen';
 const DEMO_MODE = 'Demo Mode';
-
-const BAD_FLIP = 'There was a problem registering your earned flip. Please try again in a little while';
 
 /**
  * Game wrapper iframe component.
@@ -45,50 +43,61 @@ var Game = React.createClass({
     },
     getInitialState: function () {
         return {
-            fullscreenFallback: false
+            fullscreenFallback: false,
+            demo: false
         };
     },
     componentWillMount: function () {
         this.setEvent();
+        this.setState({
+            currentGame: this.props.game,
+            eventHandler: getEventsForGame(
+                EVENT_PREFIX,
+                this.props.game,
+                this.props.currentUser._links,
+                this.onExit
+            )
+        });
+    },
+    componentWillReceiveProps: function (nextProps) {
+        this.setState({
+            currentGame: nextProps.game,
+            eventHandler: getEventsForGame(
+                EVENT_PREFIX,
+                nextProps.game,
+                nextProps.currentUser._links,
+                this.onExit
+            )
+        });
     },
     componentWillUnmount: function () {
         this.clearEvent();
     },
-    submitFlip: function (flip) {
-        if (!this.props.flipUrl) {
-            return;
-        }
-        HttpManager.POST({url: this.props.flipUrl}, {'flip_id': flip}).catch(err => {
-            Toast.error(BAD_FLIP);
-            Log.log('Server refused flip update', err, flip);
-        });
+    componentDidMount: function () {
+        var frame = ReactDOM.findDOMNode(this.refs.gameRef);
+        var callApi = _.debounce(function () {
+            HttpManager.GET({
+                url: (GLOBALS.API_URL),
+                handleErrors: false
+            });
+        }, 5000);
+        frame.addEventListener('load', function () {
+            frame.contentWindow.addEventListener('click', callApi, false);
+        }, false);
     },
-    /**
-     * default events. These will always fire regardless of whether or not
-     * there is an event defined in addition to the submission behavior
-     */
-    [EVENT_PREFIX + 'Flipped']: function (e) {
-        this.submitFlip(e.gameData.id);
+    onExit: function (nextState) {
+        this.setState(nextState);
     },
-    [EVENT_PREFIX + 'Flip']: function (e) {
-        this.submitFlip(e.gameData.id);
-    },
-    [EVENT_PREFIX + 'Save']: function () {
-    },
-    [EVENT_PREFIX + 'Exit']: function () {
-        this.setState({fullscreenFallback: false});
-    },
-    [EVENT_PREFIX + 'Init']: function (e) {
-        e.respond(this.props.gameState);
-    },
-    /** end of default events */
     gameEventHandler: function (e) {
         if (e.name != null) {
-            if (_.isFunction(this[EVENT_PREFIX + _.capitalize(e.name)])) {
-                this[EVENT_PREFIX + _.capitalize(e.name)](...arguments);
+            if (_.isFunction(this[EVENT_PREFIX + _.upperFirst(e.name)])) {
+                this[EVENT_PREFIX + _.upperFirst(e.name)](...arguments);
             }
-            if (_.isFunction(this.props['on' + _.capitalize(e.name)])) {
-                this.props['on' + _.capitalize(e.name)](...arguments);
+            if (_.isFunction(this.state.eventHandler[EVENT_PREFIX + _.upperFirst(e.name)])) {
+                this.state.eventHandler[EVENT_PREFIX + _.upperFirst(e.name)](...arguments);
+            }
+            if (_.isFunction(this.props['on' + _.upperFirst(e.name)])) {
+                this.props['on' + _.upperFirst(e.name)](...arguments);
             }
         }
     },
@@ -111,6 +120,7 @@ var Game = React.createClass({
     dispatchPlatformEvent(name, data) {
         /** TODO: MPR, 1/15/16: Polyfill event */
         var event = new Event('platform-event', {bubbles: true, cancelable: false});
+        this.toggleDemoButton();
         _.defaults(event, {type: 'platform-event', name, data});
         ReactDOM.findDOMNode(this.refs.gameRef).contentWindow.dispatchEvent(event);
     },
@@ -122,17 +132,35 @@ var Game = React.createClass({
             self.setState({fullscreenFallback: true});
         }
     },
+    toggleDemoButton: function () {
+        if (this.state.demo){
+            this.setState({demo: false});
+        } else {
+            this.setState({demo: true});
+        }
+    },
     render: function () {
         if (this.props.url == null) {
             return null;
         }
         return (
-                <div ref="wrapRef" className={ClassNames('game', {fullscreen: this.state.fullscreenFallback})}>
-                <iframe ref="gameRef" src={this.props.url} allowtransparency="true" />
-                <Button className="purple standard" onClick={this.makeFullScreen}><Glyphicon glyph="fullscreen" /> {FULLSCREEN}</Button>
-                <Button className={ClassNames('green standard', {hidden: !this.props.isTeacher})} onClick={() => this.dispatchPlatformEvent('toggle-demo-mode')}>{DEMO_MODE}</Button>
+                <div ref="wrapRef" className={ClassNames(
+                    'game',
+                    {fullscreen: this.state.fullscreenFallback}
+                )}>
+                    <iframe ref="gameRef" src={this.props.url} allowtransparency="true" />
+                    <Button className="purple standard full-screen-btn" onClick={this.makeFullScreen}>
+                        <Glyphicon glyph="fullscreen" /> {FULLSCREEN}
+                    </Button>
+                    <Button className={ClassNames('standard',
+                            {'purple': !this.state.demo},
+                            {'green': this.state.demo},
+                            {hidden: !this.props.isTeacher}
+                        )}
+                        onClick={() => this.dispatchPlatformEvent('toggle-demo-mode')}>{DEMO_MODE}
+                    </Button>
                 </div>
-               ) ;
+               );
     }
 });
 

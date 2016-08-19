@@ -1,8 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
 import _ from 'lodash';
-import Immutable from 'seamless-immutable';
-import { connect } from 'react-redux';
 
 import PublicRoutes from 'public_routes';
 import PrivateRoutes from 'private_routes';
@@ -14,6 +12,10 @@ var addHardcodedEntries = function (menuItems) {
     menuItems.push({url: '/logout', label: 'Logout'});
     return menuItems;
 };
+
+const IGNORED_ROUTES_FOR_CHILDREN = [
+    'Friends and Network'
+];
 
 var buildMenuRoutes = function (links) {
     var allRoutes = PublicRoutes.concat(PrivateRoutes);
@@ -38,7 +40,9 @@ var buildMenuRoutes = function (links) {
                     //This _probably_ wont be a problem...
                     a = route;
                     a.params = {};
-                } else if (route.endpoint !== '/' && !~route.endpoint.indexOf(':') && ~link.href.indexOf(route.endpoint)) {
+                } else if (route.endpoint !== '/' && !~route.endpoint.indexOf(':') &&
+                        ~link.href.indexOf(route.endpoint)
+                    ) {
                     //nondynamic is also fairly easy, as urls cannot contain colonks
                     a = route;
                     a.params = {};
@@ -47,14 +51,16 @@ var buildMenuRoutes = function (links) {
                     params = Util.matchPathAndExtractParams(route.endpoint, link.href);
                     if (Object.keys(params).length) {
                         route.params = params;
-                        a = route; //MPR: ok i admit the typechange is strange here but i like it better than starting at null
+                        a = route; //MPR: ok i admit the typechange is strange here
+                                    //but i like it better than starting at null
                     }
                 }
             }
             return a;
         }, false);
         if (matchedRoute) {
-            url = Util.replacePathPlaceholdersFromParamObject(matchedRoute.path, matchedRoute.params).split('(')[0];
+            url = Util.replacePathPlaceholdersFromParamObject(matchedRoute.path,
+                matchedRoute.params).split('(')[0];
             link = link.set('url', url.indexOf('/') === 0 ? url : '/' + url);
             a.push(link);
         }
@@ -62,7 +68,7 @@ var buildMenuRoutes = function (links) {
     }, []);
 };
 
-var Component = React.createClass({
+var SiteNav = React.createClass({
     renderNavItems: function () {
         var menuItems = buildMenuRoutes(this.props.data);
 //        var menuItems = _.reduce(this.props.data, (a, i, k) => {
@@ -75,8 +81,14 @@ var Component = React.createClass({
 //            }
 //            return a;
 //        }, []);
+        //manually hidden items for children
+        menuItems = _.filter(menuItems, item => this.props.currentUser.type !== 'CHILD' || (
+            this.props.currentUser.type === 'CHILD' &&
+            !~IGNORED_ROUTES_FOR_CHILDREN.indexOf(item.label))
+        );
         menuItems = addHardcodedEntries(menuItems);
-        return _.map(menuItems, item => (<li key={`(${item.label})-${item.url}`}><Link to={item.url}>{item.label}</Link></li>));
+        return _.map(menuItems, item =>
+            (<li key={`(${item.label})-${item.url}`}><Link to={item.url}>{item.label}</Link></li>));
     },
     render: function () {
         return (
@@ -88,17 +100,6 @@ var Component = React.createClass({
         );
     }
 });
-
-const mapStateToProps = state => {
-    var data = [];
-    state.currentUser;
-    if (state.currentUser && state.currentUser._links) {
-        data = state.currentUser._links.asMutable();
-    }
-    return { currentUser: state.currentUser, data: Immutable(data) };
-};
-
-var SiteNav = connect(mapStateToProps)(Component);
 
 export default SiteNav;
 

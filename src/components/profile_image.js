@@ -1,14 +1,13 @@
 import React from 'react';
 import {ButtonToolbar, OverlayTrigger, Popover} from 'react-bootstrap';
 import Classnames from 'classnames';
-import { connect } from 'react-redux';
 
 import Cloudinary from 'components/cloudinary';
 import Toast from 'components/toast';
 import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
 import Log from 'components/log';
-import Store from 'components/store';
+import History from 'components/history';
 
 import 'components/profile_image.scss';
 
@@ -16,10 +15,13 @@ const PIC_ALT = 'Profile Picture';
 const UPLOAD_ERROR = 'There was a problem uploading your image. Please refresh the page and try again.';
 const MODERATION = 'Your image has been submitted for moderation and should appear shortly.';
 const PENDINGHEADER = 'Woah there World Changer!';
-const PENDING = ' We\'re reviewing your image and it should appear shortly. Other users will continue to see your last approved image until we\'ve reviewed this one. To continue uploading a new image click ';
-const NO_IMAGE = 'Looks like there was a problem displaying this users profile. Please refresh the page to try again.';
+const PENDING = ' We\'re reviewing your image and it should appear shortly. ' +
+                'Other users will continue to see your last approved image until we\'ve reviewed this one.' +
+                'To continue uploading a new image click ';
+const NO_IMAGE = 'Looks like there was a problem displaying this users profile. ' +
+                'Please refresh the page to try again.';
 
-var Component = React.createClass({
+export var Image = React.createClass({
     getInitialState: function () {
         return {
             profileImage: GLOBALS.DEFAULT_PROFILE,
@@ -27,15 +29,12 @@ var Component = React.createClass({
         };
     },
     componentDidMount: function () {
-        var state = Store.getState();
-        if (this.props.user_id === state.currentUser.user_id) {
-            if (this.props.currentUser._embedded.image) {
-                this.setState({profileImage: this.props.currentUser._embedded.image.url});
-                this.setState({isModerated: this.props.currentUser._embedded.image.is_moderated});
-            }
+        if (this.props.data._embedded.image) {
+            this.setState({profileImage: this.props.data._embedded.image.url});
+            this.setState({isModerated: this.props.data._embedded.image.is_moderated});
         } else {
             HttpManager.GET({
-                url: (GLOBALS.API_URL + 'user/' + this.props.user_id + '/image'),
+                url: (this.props.data._links.user_image.href),
                 handleErrors: false
             })
             .then(res => {
@@ -60,7 +59,7 @@ var Component = React.createClass({
             }
             /* eslint-disable camelcase*/
             Cloudinary.instance.openUploadWidget({
-                cloud_name: 'changemyworldnow',
+                cloud_name: GLOBALS.CLOUDINARY_CLOUD_NAME || 'changemyworldnow',
                 upload_preset: 'public-profile-image',
                 multiple: false,
                 resource_type: 'image',
@@ -76,7 +75,8 @@ var Component = React.createClass({
                 }
                 self.setState({profileImage: result[0].secure_url});
                 self.setState({isModerated: false});
-                HttpManager.POST({url: this.props.data.user_image.href}, {
+                ('set', 'dimension6', 1);
+                HttpManager.POST({url: this.props.data._links.user_image.href}, {
                     url: result[0].secure_url,
                     image_id: result[0].public_id
                 }).then(() => {
@@ -89,10 +89,17 @@ var Component = React.createClass({
             /* eslint-enable camelcase */
         });
     },
+    attemptNavigate: function () {
+        if (this.props.data.user_id === this.props.currentUser.user_id ||
+            (this.props.data && this.props.data.user_id === this.props.currentUser.user_id)) {
+            History.push('/profile');
+        }
+    },
     renderImage: function (url) {
         var style = {'backgroundImage': `url(${url})`};
         return (
              <div
+                onClick={this.attemptNavigate}
                 className="profile-pic"
                 alt={PIC_ALT}
                 style={style}
@@ -102,6 +109,10 @@ var Component = React.createClass({
         );
     },
     renderUploadButton: function () {
+        if (this.props.data.user_id !== this.props.currentUser.user_id ||
+            (this.props.data && this.props.data.user_id !== this.props.currentUser.user_id)) {
+            return null;
+        }
         if ((this.state.profileImage === GLOBALS.DEFAULT_PROFILE) || this.state.isModerated) {
             return (
                 <button className="upload" onClick={this.startUpload}>Upload Image</button>
@@ -127,9 +138,9 @@ var Component = React.createClass({
         }
     },
     render: function () {
-        if (this.props.user_id == null) {
-            return null;
-        }
+        // if (!this.props.currentUser || !this.props.user) {
+            // return null;
+        // }
         return (
             <div className={Classnames('profile-image', {'link-below': this.props['link-below']})} >
                 {this.renderImage(this.state.profileImage)}
@@ -138,17 +149,6 @@ var Component = React.createClass({
         );
     }
 });
-
-const mapStateToProps = state => {
-    var data = [];
-    state.currentUser;
-    if (state.currentUser && state.currentUser._links) {
-        data = state.currentUser._links;
-    }
-    return { currentUser: state.currentUser, data };
-};
-
-var Image = connect(mapStateToProps)(Component);
 
 export default Image;
 

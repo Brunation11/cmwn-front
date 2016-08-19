@@ -32,14 +32,6 @@ var Util = {
         item[key] = value;
         return value;
     },
-    /** from http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript */
-    uuid: function () {
-        Log.info('uuid deprecated. Use ShortId');
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);//eslint-disable-line eqeqeq
-            return v.toString(16);
-        });
-    },
     setPageTitle: function (text) {
         var titleElem = document.getElementsByTagName('title')[0];
         var title = document.createTextNode(text);
@@ -57,7 +49,8 @@ var Util = {
         var routeArray;
         var pathArray;
         var params = {};
-        var routePart, pathPart;
+        var routePart;
+        var pathPart;
         route = route.toLowerCase().replace('(', '').replace(')', '');
         path = path.toLowerCase();
         if (route.slice(-1) === '/') {
@@ -109,35 +102,40 @@ var Util = {
         return path.slice(0, -1);
     },
     attemptComponentLoad(state, endpointIdentifier, componentName) {
-        if (state.pageLoadingStage.lastCompletedStage !== GLOBALS.PAGE_LOAD_STATE.COMPONENT || state.components[endpointIdentifier + '-' + componentName].requested) {
+        if (state.pageLoadingStage.lastCompletedStage !== GLOBALS.PAGE_LOAD_STATE.COMPONENT ||
+            state.components[endpointIdentifier + '-' + componentName].requested) {
             return;
         }
         switch (state.pageLoadingStage.currentStage) {
-        case GLOBALS.PAGE_LOAD_STATE.COMPONENT: // This always needs to come after page load
-            Store.dispatch({
-                type: 'combo',
-                types: ['COMPONENT_LOADER_START', 'LOADER_SUCCESS', 'LOADER_ERROR'],
-                sequence: true,
-                payload: [
-                    Actions.COMPONENT_REQUESTED.bind(null, {endpointIdentifier, componentName} ),
-                    Actions.COMPONENT_DATA.bind(null, endpointIdentifier, componentName)
-                ]
-            });
-            break;
+            case GLOBALS.PAGE_LOAD_STATE.COMPONENT: // This always needs to come after page load
+                Store.dispatch({
+                    type: 'combo',
+                    types: ['COMPONENT_LOADER_START', 'LOADER_SUCCESS', 'LOADER_ERROR'],
+                    sequence: true,
+                    payload: [
+                        Actions.COMPONENT_REQUESTED.bind(null, {endpointIdentifier, componentName} ),
+                        Actions.COMPONENT_DATA.bind(null, endpointIdentifier, componentName)
+                    ]
+                });
+                break;
         }
     },
     decodePermissions(val) {
         var perms = {
-            create: true, update: true, delete: true
+            create: false, update: false, delete: false
         };
         var pad = '0000';
         var bits;
-        if (val !== -1) {
+        if (val === -1) {
+            perms = {
+                create: true, update: true, delete: true
+            };
+        } else if (val > 0 && val < 8) {
             bits = (val >>> 0).toString(2);
             bits = pad.substring(0, pad.length - bits.length) + bits;
             perms = {
-                create: !!+bits.slice(-3),
-                update: !!+bits.slice(-2),
+                create: !!+bits.slice(-3, -2),
+                update: !!+bits.slice(-2, -1),
                 delete: !!+bits.slice(-1)
             };
         }
@@ -169,7 +167,8 @@ var Util = {
             getUser = HttpManager.GET({url: Store.getState().currentUser._links.me.href});
             return getUser.then(res => {
                 /* @TODO MPR, 3/7/16: This should move to errors.js */
-                if (res && res.status === 401 && res.response && res.response.error && res.response.error.detail === 'RESET_PASSWORD') {
+                if (res && res.status === 401 && res.response &&
+                    res.response.error && res.response.error.detail === 'RESET_PASSWORD') {
                     if (~window.location.href.indexOf('change-password')) {
                         return Promise.resolve();
                     }
@@ -199,6 +198,32 @@ var Util = {
             }
         });
         return url;
+    },
+    scrubPIIFromStore(store) {
+        /* eslint-disable camelcase */
+        var state = {};
+        if (store && store.currentUser) {
+            state.currentUser = store.currentUser.asMutable();
+            state.currentUser.meta = {};
+            state.currentUser.first_name = 'Dana Katherine';
+            state.currentUser.last_name = 'Scully';
+            state.currentUser.email = 'dana@fbi.gov';
+            state.currentUser.gender = 'female';
+            state.currentUser.birthdate = '1964-02-23 00:00:00';
+        }
+        if (store && store.page && store.page.data && store.page.data.user_id) {
+            state.page = {};
+            state.page.data = store.page.data.asMutable();
+            state.page.data.meta = {};
+            state.page.data.first_name = 'Fox William';
+            state.page.data.last_name = 'Mulder';
+            state.page.data.email = 'fox@fbi.gov';
+            state.page.data.gender = 'male';
+            state.page.data.birthdate = '1961-08-13 00:00:00';
+        }
+        /* eslint-enable camelcase */
+        state = _.defaults(state, store);
+        return state;
     }
 };
 

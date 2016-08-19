@@ -11,13 +11,10 @@ import Detector from 'components/browser_detector';
 import ProfileImage from 'components/profile_image';
 import FlipBoard from 'components/flipboard';
 import Game from 'components/game';
-import EventManager from 'components/event_manager';
 import Trophycase from 'components/trophycase';
 import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
-//import Util from 'components/util';
 import History from 'components/history';
-import Store from 'components/store';
 import GenerateDataSource from 'components/datasource';
 
 import Layout from 'layouts/two_col';
@@ -26,10 +23,13 @@ import FlipBgDefault from 'media/flip-placeholder-white.png';
 
 import 'routes/users/profile.scss';
 
+var mapStateToProps;
+var Page;
+
 const PAGE_UNIQUE_IDENTIFIER = 'profile';
 
-const GameWrapper = GenerateDataSource('games', PAGE_UNIQUE_IDENTIFIER);
-const FlipSource = GenerateDataSource('user_flip', PAGE_UNIQUE_IDENTIFIER);
+const GAME_WRAPPER = GenerateDataSource('games', PAGE_UNIQUE_IDENTIFIER);
+const FLIP_SOURCE = GenerateDataSource('user_flip', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     ACTION: 'Profile',
@@ -37,26 +37,58 @@ const HEADINGS = {
 };
 const PLAY = 'Play Now!';
 const COMING_SOON = 'Coming Soon!';
+const DESKTOP_ONLY = 'Log on with a Desktop computer to play!';
 const CLASSES = 'Classes';
 
-const BROWSER_NOT_SUPPORTED = <span><p>For the best viewing experience we recommend the desktop version in Chrome</p><p>If you don't have chrome, <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">download it for free here</a>.</p></span>;
-const PASS_UPDATED = '<p>You have successfully updated your password.<br />Be sure to remember for next time!</p>';
+const BROWSER_NOT_SUPPORTED = (
+    <span>
+        <p>For the best viewing experience we recommend the desktop version in Chrome</p>
+        <p>If you don't have chrome,{' '}
+            <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">
+                download it for free here
+            </a>.
+        </p>
+    </span>);
 
-var Profile = React.createClass({
-    getInitialState: function () {
-        var state = _.defaults({
+const PASS_UPDATED = '<p>You have successfully updated your password.' +
+    '<br />Be sure to remember for next time!</p>';
+
+export var dataTransform = function (data) {
+    var array = data;
+    var currentIndex;
+    var temporaryValue;
+    var randomIndex;
+    if (array == null) {
+        array = [];
+    } else if (!_.isArray(array)) {
+        return [];
+    }
+    currentIndex = array.length;
+     // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+    return _.filter(array, v => !v.coming_soon).concat(_.filter(array, v => v.coming_soon));
+};
+
+export class Profile extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = _.defaults({
             gameOn: false,
             gameId: -1
         }, _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {},
         {classes: {data: []}});
-        return state;
-    },
-    componentDidMount: function () {
-        EventManager.listen('userChanged', () => {
-            this.resolveRole();
-            this.forceUpdate();
-        });
-        this.resolveRole();
+    }
+
+    componentDidMount() {
+        this.resolveRole(this.props);
         if (QueryString.parse(window.location.search).message === 'updated') {
             Toast.success(PASS_UPDATED);
         }
@@ -64,64 +96,86 @@ var Profile = React.createClass({
         if (this.props.data) {
             this.setState(this.props.data);
         }
-    },
-    componentWillReceiveProps: function (nextProps) {
-        this.resolveRole();
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.resolveRole(nextProps);
         this.setState(nextProps.data);
-    },
-    resolveRole: function () {
+    }
+
+    resolveRole(props) {
         var newState = {};
-        var state = Store.getState();
-        //remember we actually want current user here, not the user whose profile we are looking at
-        if (state.currentUser && state.currentUser.type !== 'CHILD') {
+        // remember we actually want current user here, not the user whose
+        // profile we are looking at
+        if (props.currentUser && props.currentUser.type &&
+            props.currentUser.type !== 'CHILD') {
             newState.isStudent = false;
         } else {
             newState.isStudent = true;
         }
         this.setState(newState);
-    },
-    showModal: function (gameUrl) {
-        var urlParts;
+    }
+
+    showModal(gameUrl) {
+        var urlParts = gameUrl.split('/');
+        urlParts.pop(); // discard index.html
         if (Detector.isMobileOrTablet() || Detector.isPortrait()) {
-            urlParts = gameUrl.split('/');
-            urlParts.pop(); //discard index.html
             History.push(`/game/${_.last(urlParts)}`);
         }
-        this.setState({gameOn: true, gameUrl});
-    },
-    hideModal: function () {
+        this.setState({
+            gameOn: true,
+            gameUrl,
+            game: _.last(urlParts),
+        });
+    }
+
+    hideModal() {
         this.setState({gameOn: false});
         this.refs.gameRef.dispatchPlatformEvent('quit');
-    },
-    renderGame: function () {
-        var flipUrl = this.state._links.user_flip ? this.state._links.user_flip.href : null;
+    }
+
+    renderGame() {
         if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe10())) {
             return (
                 <div>
                     {BROWSER_NOT_SUPPORTED}
-                    <p><a onClick={() => this.setState({gameOn: false})} >(close)</a></p>
+                    <p><a onClick={this.setState.bind(this, {gameOn: false})} >(close)</a></p>
                 </div>
             );
         }
         return (
-            <div>
-                <Game ref="gameRef" isTeacher={!this.state.isStudent} url={this.state.gameUrl} flipUrl={flipUrl} onExit={() => this.setState({gameOn: false})}/>
-                    <a onClick={this.hideModal} className="modal-close">(close)</a>
+            <div className="modal-game">
+                <Game
+                    ref="gameRef"
+                    isTeacher={!this.state.isStudent}
+                    url={this.state.gameUrl}
+                    onExit={this.setState.bind(this, {gameOn: false})}
+                    game={this.state.game}
+                    currentUser={this.props.currentUser}
+                />
+                <a id="close-modal" onClick={this.hideModal.bind(this)} className="modal-close">(close)</a>
             </div>
         );
-    },
-    renderFlip: function (item){
-        var onClick, playText;
+    }
+
+    renderFlip(item) {
+        var onClick;
+        var playText;
+        var meta = item.meta || {};
+
         if (item.coming_soon) {
             onClick = _.noop;
             playText = COMING_SOON;
+        } else if (meta.desktop && Detector.isMobileOrTablet()) {
+            onClick = _.noop;
+            playText = DESKTOP_ONLY;
         } else {
-            onClick = this.showModal.bind(this, GLOBALS.GAME_URL + item.game_id + '/index.html');
+            onClick = this.showModal.bind(this, `${GLOBALS.GAME_URL}${item.game_id}/index.html`);
             playText = PLAY;
         }
         return (
-            <div className="flip fill" key={Shortid.generate()}>
-                <a onClick={onClick} >
+            <div className="flip fill" id={item.game_id} key={Shortid.generate()}>
+                <a onClick={onClick.bind(this)} >
                     <div className="item">
                         <span className="overlay">
                             <span className="heading">{item.title}</span>
@@ -129,49 +183,32 @@ var Profile = React.createClass({
                             <span className="play">{playText}</span>
                         </span>
                         <div className={ClassNames('coming-soon', { hidden: !item.coming_soon})} />
-                        <object data={GLOBALS.GAME_URL + item.game_id + '/thumb.jpg'} type="image/png" >
+                        <div className={ClassNames('desktop-only', { hidden: !meta.desktop})} />
+                        <object data={`${GLOBALS.GAME_URL}${item.game_id}/thumb.jpg`} type="image/png" >
                             <img src={FlipBgDefault}></img>
                         </object>
                     </div>
                 </a>
             </div>
         );
-    },
-    renderGameList: function () {
-        var state = Store.getState();
-        if (this.state._links == null || state.currentUser.user_id !== this.state.user_id) {
+    }
+
+    renderGameList() {
+        if (this.state._links == null || this.props.currentUser.user_id !== this.state.user_id) {
             return null;
         }
         return (
-           <GameWrapper transform={data => {
-               var array = data;
-               var currentIndex, temporaryValue, randomIndex;
-               if (array == null) {
-                   array = [];
-               } else if (!_.isArray(array)) {
-                   return [];
-               }
-               currentIndex = array.length;
-                // While there remain elements to shuffle...
-               while (0 !== currentIndex) {
-                   // Pick a remaining element...
-                   randomIndex = Math.floor(Math.random() * currentIndex);
-                   currentIndex -= 1;
-                   // And swap it with the current element.
-                   temporaryValue = array[currentIndex];
-                   array[currentIndex] = array[randomIndex];
-                   array[randomIndex] = temporaryValue;
-               }
-               return _.filter(array, v => !v.coming_soon).concat(_.filter(array, v => v.coming_soon));
-           }}>
+           <GAME_WRAPPER transform={dataTransform}>
                <FlipBoard
-                   renderFlip={this.renderFlip}
+                   renderFlip={this.renderFlip.bind(this)}
                    header={HEADINGS.ARCADE}
+                   id="game-flip-board"
                />
-           </GameWrapper>
+           </GAME_WRAPPER>
         );
-    },
-    renderClassList: function () {
+    }
+
+    renderClassList() {
         if (!this.state || !this.state._embedded || !this.state._embedded.group_class) {
             return null;
         }
@@ -181,78 +218,90 @@ var Profile = React.createClass({
                 {_.map(this.state._embedded.group_class, item => item.title).join(', ')}
             </p>
         );
-    },
-    renderUserProfile: function () {
-        var day = Moment(this.state.birthdate).date(),
-            month = Moment(this.state.birthdate).month() + 1,
-            year = Moment(this.state.birthdate).year();
+    }
+
+    renderUserProfile() {
+        var ISODate = (new Date(this.state.birthdate)).toISOString();
         return (
             <div>
                 <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
                     <div className="left">
                         <div className="frame">
-                            <ProfileImage user_id={this.state.user_id} link-below={true}/>
+                            <ProfileImage
+                                data={this.props.data}
+                                currentUser={this.props.currentUser}
+                                link-below={true}
+                             />
                         </div>
                     </div>
                     <div className="right">
                         <div className="user-metadata">
                             <p>Username:</p>
-                            <p className="standard field">{this.state.username}</p>
+                            <p className="standard field" id="username">{this.state.username}</p>
                             <p>First Name:</p>
-                            <p className="standard field">{this.state.first_name}</p>
+                            <p className="standard field" id="first-name">{this.state.first_name}</p>
                             <p>Last Name:</p>
-                            <p className="standard field">{this.state.last_name}</p>
+                            <p className="standard field" id="last-name">{this.state.last_name}</p>
                             <p>Birthday:</p>
-                            <p className="standard field">{Moment(`${month} ${day}, ${year}`).format('MM-DD-YYYY')}</p>
+                            <p className="standard field" id="birthday">
+                                {Moment(ISODate).format('MM-DD-YYYY')}
+                            </p>
                         </div>
                     </div>
                 </Panel>
             </div>
         );
-    },
-    renderCurrentUserProfile: function () {
+    }
+
+    renderCurrentUserProfile() {
         return (
             <div>
-                <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal} keyboard={false} backdrop="static">
+                <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal.bind(this)}
+                    keyboard={false} backdrop="static" id="game-modal">
                     <Modal.Body>
                         {this.renderGame()}
                     </Modal.Body>
                 </Modal>
-                <FlipSource>
+                <FLIP_SOURCE>
                    <Trophycase className={ClassNames({hidden: !this.state.isStudent})} />
-                </FlipSource>
+                </FLIP_SOURCE>
                 {this.renderGameList()}
             </div>
         );
-    },
-    render: function () {
-        var state = Store.getState();
-        if (this.state.username == null) {
+    }
+
+    render() {
+        var profile;
+        if (this.state.user_id == null || this.props.currentUser.user_id == null) {
             return null;
         }
-        var profile = (this.state.user_id === state.currentUser.user_id) ? this.renderCurrentUserProfile : this.renderUserProfile;
+        profile = this.state.user_id === this.props.currentUser.user_id ?
+        this.renderCurrentUserProfile : this.renderUserProfile;
         return (
-           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
-               {profile()}
+           <Layout className={PAGE_UNIQUE_IDENTIFIER} navMenuId="navMenu">
+               {profile.apply(this)}
            </Layout>
         );
     }
-});
+}
 
-const mapStateToProps = state => {
+mapStateToProps = state => {
     var data = {};
     var loading = true;
+    var currentUser = {};
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
+        currentUser = state.currentUser;
     }
     return {
         data,
-        loading
+        loading,
+        currentUser
     };
 };
 
-var Page = connect(mapStateToProps)(Profile);
+Page = connect(mapStateToProps)(Profile);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
 

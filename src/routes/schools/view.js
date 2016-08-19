@@ -10,13 +10,12 @@ import DeleteLink from 'components/delete_link';
 import {Table, Column} from 'components/table';
 import Util from 'components/util';
 import Paragraph from 'components/conditional_paragraph';
-import History from 'components/history';
 import GenerateDataSource from 'components/datasource';
 
-const PAGE_UNIQUE_IDENTIFIER = 'district-view';
+export const PAGE_UNIQUE_IDENTIFIER = 'school-view';
 
-const ClassSource = GenerateDataSource('group_class', PAGE_UNIQUE_IDENTIFIER);
-const UserSource = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
+const CLASS_SOURCE = GenerateDataSource('group_class', PAGE_UNIQUE_IDENTIFIER);
+const USER_SOURCE = GenerateDataSource('group_users', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     TITLE: 'School Administrative Dashboard: ',
@@ -25,131 +24,153 @@ const HEADINGS = {
     CREATED: 'Created',
     DISTRICTS: 'Districts',
     CLASSES: 'Classes in School',
-    USERS: 'Users in School'
+    USERS: 'Users in School',
+    ADMIN: 'Admin View',
+    EDIT: 'Edit'
 };
 
-const ADMIN_TEXT = 'Teacher Dashboard';
+const TEXT = {
+    ADMIN: 'Teacher Dashboard',
+    IMPORT: 'Import Spreadsheets',
+    EDIT: 'Edit this school',
+    DELETE: 'Delete this school',
+};
 
-var Component = React.createClass({
-    getInitialState: function () {
-        return {
+var mapStateToProps;
+var Page;
+
+export class SchoolView extends React.Component {
+    constructor() {
+        super();
+        this.state = {
             school: [],
             districts: [],
             classes: [],
             users: [],
             scope: 7
         };
-    },
-    componentWillMount: function () {
+    }
+
+    componentWillMount() {
         this.setState(this.props.data);
-    },
-    componentWillReceiveProps: function (newProps) {
+    }
+
+    componentWillReceiveProps(newProps) {
         this.setState(newProps.data);
-    },
-    renderDistricts: function () {
-        if (!this.state || this.state._embedded == null) {
-            return null;
-        }
-        var links = _.map(this.state._embedded.organizations, district => {
-            if (district.type !== 'district') {
-                return null;
-            }
-            return (
-                <Link to={`/districts/${district.id}`}>
-                    {district.title}
-                </Link>
-            );
-        });
-        return links;
-    },
-    renderAdminLink: function () {
-        if (this.props.data.scope > 6) {
+    }
+
+    renderDistricts() {
+        if (!this.state || !this.state.organization) {
             return null;
         }
         return (
-            <p><a href={`/school/${this.props.data.group_id}/view`}>{ADMIN_TEXT}</a></p>
+            <Link to={`/districts/${this.state.organization.org_id}`}>
+                {this.state.organization.title}
+            </Link>
         );
-    },
-    renderImport: function () {
+    }
+
+    renderImport() {
         if (this.state == null || this.state._links.import == null) {
             return null;
         }
         return (
-            <EditLink className="green" base="/school" id={this.state.group_id} scope={this.state.scope} text="Import Spreadsheets"/>
+            <EditLink className="green" base="/school" id={this.state.group_id} scope={this.state.scope}
+                text={TEXT.IMPORT}/>
         );
-    },
-    render: function () {
-        if (this.props.data.group_id == null || !Util.decodePermissions(this.props.data.scope).update) {
+    }
+
+    render() {
+        if (this.props.data == null || this.props.data.group_id == null ||
+            !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
         return (
-            <Layout>
+            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard">
-                    <p className="right" >
-                        <EditLink className="purple" base="/school" id={this.state.group_id} scope={this.state.scope} text="Edit this school"/>
+                    <p className="right" id="buttons">
+                        <EditLink className="purple" base="/school" id={this.state.group_id}
+                            scope={this.state.scope} text={TEXT.EDIT}/>
                         {this.renderImport()}
-                        <DeleteLink className="purple" base="/school" id={this.state.group_id} scope={this.state.scope} text="Delete this school" />
+                        <DeleteLink className="purple" base="/school" id={this.state.group_id}
+                            scope={this.state.scope} text={TEXT.DELETE} />
                     </p>
                     <p>
-                        <a href={`/school/${this.props.data.group_id}/profile`}>Return to school profile</a>
+                        <a href={`/school/${this.props.data.group_id}/profile`} id="school-return-profile">
+                            Return to school profile
+                        </a>
                     </p>
                    <Paragraph>
-                       <p pre={`${HEADINGS.DISTRICTS}: `}>{this.renderDistricts()}</p>
+                       <p className="school-district" pre={`${HEADINGS.DISTRICTS}: `}>
+                           {this.renderDistricts()}
+                       </p>
                        <p pre={`${HEADINGS.DESCRIPTION}: `}>{this.props.data.description}</p>
                    </Paragraph>
                 </Panel>
                 <Panel header={HEADINGS.CLASSES} className="standard">
-                    <a onClick={() => History.push('/classes')}>View All Your Classes</a>
-                    <ClassSource>
-                        <Table>
+                    <Link to={'/classes'} id="school-view-classes">View All Your Classes</Link>
+                    <CLASS_SOURCE>
+                        <Table className="school-classes">
                             <Column dataKey="title"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/class/' + row.group_id)}>{_.startCase(data)}</a>
+                                    <Link to={`/class/${row.group_id}`}>
+                                        {_.startCase(data)}
+                                    </Link>
                                 )}
                             />
                             <Column dataKey="description" />
-                            <Column dataKey="title" renderHeader="Admin View"
+                            <Column dataKey="title" renderHeader={HEADINGS.ADMIN}
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/class/' + row.group_id + '/view')}>Admin View</a>
+                                    <Link to={`/class/${row.group_id}/view`}>
+                                        {HEADINGS.ADMIN}
+                                    </Link>
                                 )}
                             />
-                            <Column dataKey="title" renderHeader="Edit"
+                            <Column dataKey="title" renderHeader={HEADINGS.EDIT}
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/class/' + row.group_id + '/edit')}>Edit</a>
+                                    <Link to={`/class/${row.group_id}/edit`}>
+                                        {HEADINGS.EDIT}
+                                    </Link>
                                 )}
                             />
                         </Table>
-                    </ClassSource>
+                    </CLASS_SOURCE>
                 </Panel>
                 <Panel header={HEADINGS.USERS} className="standard">
-                    <a onClick={() => History.push('/users')}>View All Your Users</a>
-                    <UserSource>
-                        <Table>
+                    <Link to={'/users'} id="school-view-users">View All Your Users</Link>
+                    <USER_SOURCE>
+                        <Table className="school-users">
                             <Column dataKey="first_name" renderHeader="Name"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/user/' + row.user_id)}>{row.first_name + ' ' + row.last_name}</a>
+                                    <Link to={`/user/${row.user_id}`}>
+                                        {row.first_name + ' ' + row.last_name}
+                                    </Link>
                                 )}
                             />
                             <Column dataKey="username" />
                             <Column dataKey="title" renderHeader="Admin View"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/user/' + row.user_id + '/view')}>Admin View</a>
+                                    <Link to={`/user/${row.user_id}/view`}>
+                                        Admin View
+                                    </Link>
                                 )}
                             />
                             <Column dataKey="title" renderHeader="Edit"
                                 renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/user/' + row.user_id + '/edit')}>Edit</a>
+                                    <Link to={`/user/${row.user_id}/edit`}>
+                                        Edit
+                                    </Link>
                                 )}
                             />
                         </Table>
-                    </UserSource>
+                    </USER_SOURCE>
                 </Panel>
            </Layout>
         );
     }
-});
+}
 
-const mapStateToProps = state => {
+mapStateToProps = state => {
     var data = {};
     var loading = true;
     if (state.page && state.page.data != null) {
@@ -162,6 +183,7 @@ const mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(Component);
+Page = connect(mapStateToProps)(SchoolView);
+Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
 
