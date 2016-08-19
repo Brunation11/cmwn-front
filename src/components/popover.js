@@ -7,6 +7,7 @@ import _ from 'lodash';
 import 'components/popover.scss';
 import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
+import Log from 'components/log';
 
 const COPY = {
     NOFLIPS: 'It Looks like this user hasn\'t earned any flips.'
@@ -27,6 +28,10 @@ var PopOver = React.createClass({
             placement: this.props.placement || this.state.placement,
             type: this.props.type
         });
+        this._mounted = true;
+    },
+    componentWillUnmount: function () {
+        this._mounted = false;
     },
     renderFlip: function () {
         return (
@@ -60,8 +65,12 @@ var PopOver = React.createClass({
             handleErrors: false
         })
         .then(res => {
-            this.setState({flips: res.response._embedded.flip_user});
-        });
+            if (res.response._embedded) {
+                this.setState({flips: res.response._embedded.flip_user});
+            }
+        }).catch(e => {
+            Log.error(e, 'Flips could not be extracted from user');
+        })
     },
     renderUserFlips: function () {
         if (this.state.flips.length) {
@@ -106,15 +115,12 @@ var PopOver = React.createClass({
     },
     render: function () {
         var popover;
-        if (this.state.type === 'flip') {
-            popover = this.renderFlip();
-        } else if (this.state.type === 'user') {
-            popover = this.renderUser();
-        }
-
+        if (!this._mounted) return null;
+        if (this.state.type === 'flip') popover = this.renderFlip;
+        if (this.state.type === 'user') popover = this.renderUser;
         return (
             <div>
-                {popover}
+                {popover()}
             </div>
         );
     }

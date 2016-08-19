@@ -31,6 +31,14 @@
     max-height: 130px;
 
     .popover-content {
+        white-space: nowrap;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        top: 0;
+
         p {
             position: absolute;
             top: 50%;
@@ -41,9 +49,8 @@
         }
 
         img {
-            position: absolute;
-            bottom: 5%;
             margin: auto;
+            margin-top: -18%;
             width: 33%;
         }
     }
