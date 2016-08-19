@@ -45,6 +45,7 @@ export class UserCards extends React.Component {
         this.setState(newState);
     }
     renderFlip(item){
+        if (item.type === 'ADULT') return;
         return (
             <div className="card" key={Shortid.generate()}>
                 <div className="heading-container-1">

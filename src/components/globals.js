@@ -7,7 +7,7 @@
  */
 import _ from 'lodash';
 
-import DefaultProfile from 'media/profile_tranparent.png';
+import DefaultProfile from 'media/profile_transparent.png';
 
 const GLOBALS = _.defaults(window.__cmwn, {
     API_URL: 'https://api.changemyworldnow.com/',
