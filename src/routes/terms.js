@@ -9,7 +9,7 @@ export const PAGE_UNIQUE_IDENTIFIER = 'terms-page';
 export class TermsPage extends React.Component {
     render() {
         return (
-           <Layout>
+           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                {TERMS}
            </Layout>
         );
@@ -341,3 +341,4 @@ const TERMS = (
 </div>
 );
 
+export default TermsPage;

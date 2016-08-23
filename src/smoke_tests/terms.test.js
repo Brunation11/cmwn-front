@@ -2,15 +2,14 @@ import React from 'react';
 import { expect } from 'chai';
 import { mount } from 'enzyme';
 
-import { TermsPage } from 'routes/terms';
-import { PAGE_UNIQUE_IDENTIFIER } from 'routes/terms';
+import { TermsPage, PAGE_UNIQUE_IDENTIFIER} from 'routes/terms';
 
 var termsSmokeTest = function () {
+    console.log('***************************' + PAGE_UNIQUE_IDENTIFIER);
     it('should load the terms page', function () {
         const WRAPPER = mount(<TermsPage />);
         expect(WRAPPER.instance()).to.be.instanceof(TermsPage);
         expect(WRAPPER.find(`.${PAGE_UNIQUE_IDENTIFIER}`)).to.have.length(1);
-        expect(WRAPPER.find('.terms')).to.have.length(1);
         for(var i = 0; i < 25; i++) {
             var ft = '.ft' + i;
             var length = 1;
