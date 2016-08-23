@@ -195,12 +195,11 @@ h3 {
     }
 
     .sidebar {
-        // scss-lint:disable all
         padding: $standard / 2;
+        max-width: 200px;
         order: 1;
         flex-grow: 0;
         flex-shrink: 0;
-        // scss-lint:enable all
 
         nav {
 
