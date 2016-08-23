@@ -10,6 +10,7 @@ import Util from 'components/util';
 var addHardcodedEntries = function (menuItems) {
     menuItems.unshift({url: '/profile', label: 'Activities'});
     menuItems.push({url: '/profile/edit', label: 'Edit My Profile'});
+    menuItems.push({url: '/help', label: 'Help'});
     menuItems.push({url: '/logout', label: 'Logout'});
     return menuItems;
 };
