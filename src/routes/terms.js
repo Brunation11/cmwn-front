@@ -4,15 +4,17 @@ import Layout from 'layouts/one_col';
 
 import 'routes/terms.scss';
 
-var Page = React.createClass({
-    render: function () {
+export const PAGE_UNIQUE_IDENTIFIER = 'terms-page';
+
+export class TermsPage extends React.Component {
+    render() {
         return (
-           <Layout>
+           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                {TERMS}
            </Layout>
         );
     }
-});
+}
 
 const BULLET = String.fromCharCode(8226);
 
@@ -338,5 +340,5 @@ const TERMS = (
   </div>
 </div>
 );
-export default Page;
 
+export default TermsPage;

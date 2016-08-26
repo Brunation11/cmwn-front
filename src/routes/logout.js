@@ -9,7 +9,7 @@ import Util from 'components/util';
 
 import 'routes/logout.scss';
 
-const PAGE_UNIQUE_IDENTIFIER = 'logout-page';
+export const PAGE_UNIQUE_IDENTIFIER = 'logout-page';
 
 const LOADER_OPTIONS = {
     lines: 5,
@@ -53,10 +53,11 @@ export class LogoutPage extends React.Component {
             window.location.href = '/login';
         });
     }
+
     render() {
         return (
-           <Layout>
-                <div className={PAGE_UNIQUE_IDENTIFIER}>
+           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+                <div>
                     <Loader loaded={false} options={LOADER_OPTIONS} className="spinner" />Logging out...
                 </div>
            </Layout>
