@@ -1,5 +1,23 @@
 @import 'variables';
 
+.flip-popover {
+    .popover-title {
+        border-bottom: 1px solid $cmwn-medium-gray;
+        background: linear-gradient($cmwn-white, $cmwn-light-gray);
+    }
+
+    // scss-lint:disable all
+    h3.popover-title {
+    // scss-lint:enable all
+        font-size: 1.2rem;
+
+        .title-meta {
+            font-size: .9rem;
+            font-weight: normal;
+        }
+    }
+}
+
 .user-flip {
     border: 1px solid $cmwn-blue;
     max-height: 200px;
