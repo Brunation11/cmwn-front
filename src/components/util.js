@@ -5,36 +5,14 @@ import Store from 'components/store';
 import Log from 'components/log';
 import GLOBALS from 'components/globals';
 import EventManager from 'components/event_manager';
-import HttpManager from 'components/http_manager';
 
 var Util = {
-    /**
-     *  Takes in a nested json object and extracts properties from its data
-     *  Expects nested data to have the following properties:
-     *  'data' properties will exist at any level at whih an entity can exists
-     *  e.g. classes.data.users.data
-     *  'data' will arbitrarily be an array or object
-     *  @param {object} target - the target json data
-     *  @param {string} key - the property to extract
-     *  @param {*} [notFoundValue=null] - value to be returned if key does not exist
-     *  @returns {*} - generally returns an array of one or more entities, or if the
-     *  property does not exist, returns notFoundValue
-     */
-    normalize: function (target, key, notFoundValue) {
-        var retVal = _.get(target, 'data', target);
-        retVal = _.get(retVal, key, retVal);
-        retVal = _.get(retVal, 'data', retVal);
-        retVal = retVal === target.data || retVal === target ? notFoundValue : retVal;
-        retVal = _.isArray(retVal) ? retVal : [retVal];
-        return retVal;
-    },
-    addAttr: function (item, key, value) {
-        item[key] = value;
-        return value;
-    },
     setPageTitle: function (text) {
-        var titleElem = document.getElementsByTagName('title')[0];
-        var title = document.createTextNode(text);
+        var titleElem;
+        var title;
+        if (!_.isString(text)) text = 'Change My World Now';
+        titleElem = document.getElementsByTagName('title')[0];
+        title = document.createTextNode(text);
         if (titleElem == null) {
             titleElem = document.createElement('title');
             document.getElementsByTagName('head')[0].appendChild(titleElem);
@@ -45,12 +23,15 @@ var Util = {
         titleElem.appendChild(title);
     },
     /* logic pulled from the react-router source with the non-basic route types removed*/
-    matchPathAndExtractParams(route = '', path = '') {
+    matchPathAndExtractParams(route, path) {
         var routeArray;
         var pathArray;
         var params = {};
         var routePart;
         var pathPart;
+        if (!_.isString(route) || !_.isString(path)) {
+            return false;
+        }
         route = route.toLowerCase().replace('(', '').replace(')', '');
         path = path.toLowerCase();
         if (route.slice(-1) === '/') {
@@ -84,16 +65,20 @@ var Util = {
         return params;
     },
     replacePathPlaceholdersFromParamObject(route, params) {
-        var routeArray = route.split('/');
+        var routeArray;
         var routePart;
         var path = '';
+        if (!_.isString(route)) {
+            throw 'Path could not be constructed; Expected route to be a string.';
+        }
+        routeArray = route.split('/');
         while (routeArray.length) {
             routePart = routeArray.shift();
             if (routePart === '') {
                 continue;
             } else if (!~routePart.indexOf(':')) {
                 path += routePart + '/';
-            } else if (routePart.slice(1) in params) {
+            } else if (_.isObjectLike(params) && routePart.slice(1) in params) {
                 path += params[routePart.slice(1)] + '/';
             } else {
                 throw 'Path could not be constructed; Expected parameter was not passed.';
@@ -154,38 +139,18 @@ var Util = {
     formatString() {
         var args = Array.prototype.slice.call(arguments);
         var templateString = args.shift();
+        var extraneousArgs = false;
+        if (!_.isString(templateString)) throw 'First argument must be a string.';
         _.each(args, (arg, k) => {
+            if (!~templateString.indexOf('{' + k + '}')) extraneousArgs = true;
             templateString = templateString.replace('{' + k + '}', arg);
         });
-        return templateString;
-    },
-    reloadUser(newUser) {
-        var getUser;
-        if (newUser != null) {
-            return this.storeUser(newUser);
-        } else {
-            getUser = HttpManager.GET({url: Store.getState().currentUser._links.me.href});
-            return getUser.then(res => {
-                /* @TODO MPR, 3/7/16: This should move to errors.js */
-                if (res && res.status === 401 && res.response &&
-                    res.response.error && res.response.error.detail === 'RESET_PASSWORD') {
-                    if (~window.location.href.indexOf('change-password')) {
-                        return Promise.resolve();
-                    }
-                    window.location.href = '/change-password';
-                    return Promise.resolve();
-                }
-                return this.storeUser(res.response);
-            }).catch(e => {
-                Log.log(e, 'Error encountered during authorization check. Logging out.');
-                //user is not logged in.
-                this.logout();
-                if (window.location.pathname !== '/login' && window.location.pathname !== '/login/') {
-                    History.push('/login');
-                    this._resolve();
-                }
-            });
+        if (~templateString.search(/{[0-9]+}/)) throw 'String has unmatched template variables.';
+        if (extraneousArgs) {
+            Log.warn('Extraneous arguments have been passed to format string and therefore ' +
+                'have not been include in the template string.');
         }
+        return templateString;
     },
     modifyTemplatedQueryParams(template, params){
         //this approach assumes all template params are in the query string

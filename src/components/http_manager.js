@@ -127,7 +127,7 @@ var _makeRequest = function (verb, requests){
                 xhr.onerror = _.noop;
                 //timeout handles issue where ie9 will fail requests instantaneously on blocked thread
                 setTimeout(function () {
-                    if (verb.toLowerCase() === 'get') {
+                    if (verb.toLowerCase() === 'get' || verb.toLowerCase() === 'delete') {
                         xhr.send();
                     } else if (!isIe9) {
                         xhr.send(req.body);

@@ -8,6 +8,7 @@ services:
       APP_GAME_URL: "https://games-dev.changemyworldnow.com/"
       APP_MODE: "local"
       APP_CLOUDINARY_CLOUD_NAME: "cmwnstage"
+      APP_CLOUDINARY_UPLOAD_PRESET: "qa-profile-image"
     volumes:
       - ./:/var/www/
   node:
