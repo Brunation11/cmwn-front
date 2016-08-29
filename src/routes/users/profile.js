@@ -253,7 +253,6 @@ export class Profile extends React.Component {
                             className={ClassNames({
                                 hidden: !this.state.isStudent
                             })}
-                            userData={this.props.data}
                         />
                     </FLIP_SOURCE>
                 </div>
@@ -275,7 +274,6 @@ export class Profile extends React.Component {
                         className={ClassNames({
                             hidden: !this.state.isStudent
                         })}
-                        userData={this.props.data}
                     />
                 </FLIP_SOURCE>
             </div>
