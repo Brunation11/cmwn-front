@@ -4,7 +4,6 @@ import {Panel} from 'react-bootstrap';
 import {Link} from 'react-router';
 import Shortid from 'shortid';
 
-import HttpManager from 'components/http_manager';
 import PopOver from 'components/popover';
 
 import 'components/trophycase.scss';
@@ -24,25 +23,10 @@ var Trophycase = React.createClass({
         };
     },
     componentDidMount: function () {
-        if (this.props.data) {
-            this.setState({flips: this.props.data});
-        } else {
-            if (this.props.userData) this.getUserFlips();
-        }
+        if (this.props.data) this.setState({flips: this.props.data});
     },
     componentWillReceiveProps: function (nextProps) {
-        if (nextProps.data && nextProps.data) {
-            this.setState({flips: nextProps.data});
-        }
-    },
-    getUserFlips: function () {
-        HttpManager.GET({
-            url: (this.props.userData._links.user_flip.href),
-            handleErrors: false
-        })
-        .then(res => {
-            this.setState({flips: res.response._embedded.flip_user});
-        });
+        if (nextProps.data && nextProps.data) this.setState({flips: nextProps.data});
     },
     renderPartial: function (items) {
         return (
@@ -106,4 +90,3 @@ var Trophycase = React.createClass({
 });
 
 export default Trophycase;
-
