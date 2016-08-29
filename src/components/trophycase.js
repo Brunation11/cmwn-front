@@ -4,7 +4,6 @@ import {Panel} from 'react-bootstrap';
 import {Link} from 'react-router';
 import Shortid from 'shortid';
 
-import HttpManager from 'components/http_manager';
 import PopOver from 'components/popover';
 
 import 'components/trophycase.scss';
