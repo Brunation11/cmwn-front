@@ -8,6 +8,7 @@ import Layout from 'layouts/two_col';
 import {Table, Column} from 'components/table';
 import Paginator from 'components/paginator';
 import EditLink from 'components/edit_link';
+import GeneratorLink from 'components/generator_link';
 import DeleteLink from 'components/delete_link';
 import Text from 'components/nullable_text';
 import Util from 'components/util';
@@ -103,6 +104,8 @@ export class View extends React.Component{
                     <p className="right" id="editButton">
                         <EditLink className="purple" base="/class" id={this.state.group_id}
                             scope={this.state.scope} text="Edit this class" />
+                        <GeneratorLink className="purple" base="/class" id={this.state.group_id}
+                            scope={this.state.scope} />
                         {this.renderImport()}
                         <DeleteLink className="purple" base="/class" id={this.state.group_id}
                             scope={this.state.scope} text="Delete this class" />
