@@ -28,7 +28,7 @@ var PopOver = React.createClass({
             placement: this.props.placement || this.state.placement,
             type: this.props.type
         });
-        if (this.props.type === 'user') this.getUserFlips()
+        if (this.props.type === 'user') this.getUserFlips();
         this._mounted = true;
     },
     componentWillUnmount: function () {
