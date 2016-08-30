@@ -151,7 +151,7 @@ export class View extends React.Component{
                                     )}
                                 />
                                 <Column dataKey="username" renderCell={(data) => {
-                                    return data.replace(/([@-_])/g, "$1 ");
+                                    return data.replace(/([@-_])/g, '$1 ');
                                 }} />
                                 <Column dataKey="role" renderHeader="User Type" renderCell={(data) => {
                                     return data;
