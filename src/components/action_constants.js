@@ -45,6 +45,8 @@ const ACTIONS = [
     'NO_USER_AUTHORIZED',
     'DESTROY_CURRENT_USER',
     'UPDATE_USERNAME',
+    'MOCK_AUTH',
+    'MOCK_PAGE',
 ];
 
 export default _.reduce(ACTIONS, (a, i) => _.defaults(a, {[i]: i}), {});

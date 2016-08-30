@@ -1,9 +1,13 @@
 .paginator {
     margin: 0;
-    padding: 0;
     border: 0;
+    padding: 0;
 
     .panel-body {
         padding: 0;
+    }
+
+    footer {
+        margin-top: 15px;
     }
 }

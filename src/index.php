@@ -29,13 +29,40 @@ if (!$https && $proxy !== 'https') {
                 font-family: "CMWNJadeRegular";
                 src: url("/fonts/cmwn.woff") format("woff");
             }
+            @font-face{
+                font-family: "Source Sans Pro";
+                font-weight: 200;
+                font-style: normal;
+                font-stretch: normal;
+                src: url("/fonts/source_sans_pro/SourceSansPro-ExtraLight.otf.woff") format("woff");
+            }
+            @font-face{
+                font-family: "Source Sans Pro";
+                font-weight: 400;
+                font-style: normal;
+                font-stretch: normal;
+                src: url("/fonts/source_sans_pro/SourceSansPro-ExtraLight.otf.woff") format("woff");
+            }
+            @font-face{
+                font-family: "Source Sans Pro";
+                font-weight: 300;
+                font-style: normal;
+                font-stretch: normal;
+                src: url("/fonts/source_sans_pro/SourceSansPro-Light.otf.woff") format("woff");
+            }
+            @font-face{
+                font-family: "Source Sans Pro";
+                font-weight: 700;
+                font-style: normal;
+                font-stretch: normal;
+                src: url("/fonts/source_sans_pro/SourceSansPro-Bold.otf.woff") format("woff");
+            }
         </style>
         <!-- inject:reset -->
         <!-- endinject -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/humane-js/3.2.2/themes/flatty.min.css" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/sweetalert2/3.2.3/sweetalert2.min.css" crossorigin="anonymous">
-
         <!-- inject:style -->
         <!-- endinject -->
         <!--[if IE]>
@@ -165,6 +192,8 @@ if (!$https && $proxy !== 'https') {
           ga('create', 'UA-26000499-1', 'auto');
           ga('require', 'linkid');
           ga('require', 'displayfeatures');
+          ga('set', 'anonymizeIp', true);
+          ga('set', 'forceSSL', true);
           ga('send', 'pageview');
 
         </script>

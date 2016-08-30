@@ -13,14 +13,17 @@ import Log from 'components/log';
 
 const APP_COOKIE_NAME = 'cmwn_token';
 
+var HttpManager;
+
 /**
  * Bundles requests into an array of request objects
- * @param {array|string|object} requests - arrays will have makeRequestObj on each of their items, strings will be set to the url of a new request object.
+ * @param {array|string|object} requests - arrays will have makeRequestObj
+ * on each of their items, strings will be set to the url of a new request object.
+ * @param {string|object} [body] - request info. Should be a properly formatted JSON
+ * or query string
  * @param {object} [headers] - the headers to be sent with requests. If you need
  * each to have different headers, configure the .headers property of individual
  * request objects
- * @param {string|object} [body] - request info. Should be a properly formatted JSON
- * or query string
  * @returns {array|object} - returns an array when an array is passed in, otherwise a request object
  */
 var _makeRequestObj = function (requests, body = '', headers = {}) {
@@ -65,7 +68,8 @@ var _makeRequest = function (verb, requests){
         var abort;
         var promise = new Promise((res, rej) => {
             var xhr = new XMLHttpRequest();
-            var url, body;
+            var url;
+            var body;
             abort = () => { //Promise constructor does not expose `this`, must attach outside
                 xhr.abort();
                 res(null);
@@ -123,7 +127,7 @@ var _makeRequest = function (verb, requests){
                 xhr.onerror = _.noop;
                 //timeout handles issue where ie9 will fail requests instantaneously on blocked thread
                 setTimeout(function () {
-                    if (verb.toLowerCase() === 'get') {
+                    if (verb.toLowerCase() === 'get' || verb.toLowerCase() === 'delete') {
                         xhr.send();
                     } else if (!isIe9) {
                         xhr.send(req.body);
@@ -155,17 +159,22 @@ class _HttpManager {
         if (csrf != null && csrf !== 'null' && csrf !== 'undefined') {
             this.setToken(csrf);
         }
+        this.lastTime = new Date();
     }
     GET(request, body, headers){
+        this.lastTime = new Date();
         return _getRequestPromise.call(this, 'GET', request, body, headers);
     }
     POST(request, body, headers){
+        this.lastTime = new Date();
         return _getRequestPromise.call(this, 'POST', request, body, headers);
     }
     PUT(request, body, headers){
+        this.lastTime = new Date();
         return _getRequestPromise.call(this, 'PUT', request, body, headers);
     }
     DELETE(request, body, headers){
+        this.lastTime = new Date();
         return _getRequestPromise.call(this, 'DELETE', request, body, headers);
     }
     setToken(_token) {
@@ -177,7 +186,7 @@ class _HttpManager {
     }
 }
 
-var HttpManager = new _HttpManager();
+HttpManager = new _HttpManager();
 
 export default HttpManager;
 

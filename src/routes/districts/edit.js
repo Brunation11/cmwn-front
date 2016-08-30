@@ -8,7 +8,6 @@ import History from 'components/history';
 import Form from 'components/form';
 import Log from 'components/log';
 import Toast from 'components/toast';
-import GLOBALS from 'components/globals';
 import Util from 'components/util';
 
 import Layout from 'layouts/two_col';
@@ -27,22 +26,26 @@ const BAD_UPDATE = 'There was a problem updating your profile. Please try again 
 
 const PAGE_UNIQUE_IDENTIFIER = 'district-edit';
 
-var Component = React.createClass({
-    getInitialState: function () {
-        return {
-            id: this.props.id || this.props.params.id,
+var mapStateToProps;
+var Page;
+
+export class EditDistrict extends React.Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            id: props.id || props.params.id,
             code: '',
             title: '',
             description: ''
         };
-    },
-    componentDidMount: function () {
+    }
+    componentDidMount() {
         this.setState(this.props.data);
-    },
-    componentWillReceiveProps: function (newProps) {
+    }
+    componentWillReceiveProps(newProps) {
         this.setState(newProps.data);
-    },
-    submitData: function () {
+    }
+    submitData() {
         var postData = {
             title: this.state.title,
             description: this.state.description
@@ -53,8 +56,8 @@ var Component = React.createClass({
             Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
             Log.log('Server refused district update', err, postData);
         });
-    },
-    render: function () {
+    }
+    render() {
         if (this.props.data == null || !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
@@ -87,15 +90,16 @@ var Component = React.createClass({
            </Layout>
          );
     }
-});
+}
 
-var CreateSchool = React.createClass({
-    getInitialState: function () {
-        return {
+export class CreateSchool extends React.Component{
+    constructor() {
+        super();
+        this.state = {
             title: ''
         };
-    },
-    submitData: function () {
+    }
+    submitData() {
         var postData = {
             title: this.state.title,
             organization_id: this.props.districtId, //eslint-disable-line camelcase
@@ -107,8 +111,8 @@ var CreateSchool = React.createClass({
         };
         if (this.refs.formRef.isValid()) {
             HttpManager.POST({
-                //url: this.props.data._links.orgs
-                url: GLOBALS.API_URL + 'group'
+                url: this.props.data._links.group.href || this.props.data._links.group_school.href
+                //url: GLOBALS.API_URL + 'group'
             }, postData).then(res => {
                 if (res.response && res.response.group_id) {
                     History.replace(`/school/${res.response.group_id}?message=created`);
@@ -120,8 +124,8 @@ var CreateSchool = React.createClass({
         } else {
             Toast.error(ERRORS.INVALID_SUBMISSION);
         }
-    },
-    render: function () {
+    }
+    render() {
         return (
         <Panel header={HEADINGS.CREATE_SCHOOL} className="standard">
             <Form ref="formRef">
@@ -145,14 +149,14 @@ var CreateSchool = React.createClass({
                     name="codeInput"
                     onChange={e => this.setState({code: e.target.value})} //eslint-disable-line camelcase
                 />
-                <Button onClick={this.submitData}> Create </Button>
+                <Button onClick={this.submitData.bind(this)}> Create </Button>
             </Form>
         </Panel>
         );
     }
-});
+}
 
-const mapStateToProps = state => {
+mapStateToProps = state => {
     var data = {title: ''};
     var loading = true;
     if (state.page && state.page.data != null) {
@@ -165,7 +169,7 @@ const mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(Component);
+Page = connect(mapStateToProps)(EditDistrict);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
 

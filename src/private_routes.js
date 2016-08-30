@@ -13,6 +13,7 @@ import Classes from 'routes/classes';
 import ClassView from 'routes/classes/view';
 import ClassEdit from 'routes/classes/edit';
 import ClassProfile from 'routes/classes/profile';
+import UserCards from 'routes/classes/user_cards';
 import Friends from 'routes/friends';
 import SuggestedFriends from 'routes/friends/suggested';
 import Profile from 'routes/users/profile';
@@ -41,11 +42,14 @@ var routes = [
     { path: 'game/:game(/)', title: 'Games', endpoint: '$$self', component: Game},
     { path: 'profile/edit(/)', title: 'Edit Profile', endpoint: '$$self', component: StudentEdit },
     { path: 'profile/:id/edit(/)', title: 'Edit Profile', endpoint: '/user/:id', component: StudentEdit },
+    { path: 'profile/view(/)', title: 'User Admin', endpoint: '$$self', component: UserAdmin },
+    { path: 'profile/:id/view(/)', title: 'User Admin', endpoint: '/user/:id', component: UserAdmin },
     { path: 'users(/)', title: 'Users', endpoint: '$$user', component: Users },
-    { path: 'user/:id/view(/)', title: 'User Admin', endpoint: '/user/:id', component: UserAdmin },
     { path: 'user(/)', onEnter: redirect('/profile')},
     { path: 'user/:id(/)', onEnter: redirect('/profile/:id')},
     { path: 'users/:id(/)', onEnter: redirect('/profile/:id')},
+    { path: 'user/:id/view(/)', onEnter: redirect('/profile/:id/view') },
+    { path: 'users/:id/view(/)', onEnter: redirect('/profile/:id/view') },
     { path: 'user/:id/edit(/)', onEnter: redirect('/profile/:id/edit')},
     { path: 'users/:id/edit(/)', onEnter: redirect('/profile/:id/edit')},
     { path: 'student/:id(/)', title: 'Profile', endpoint: 'user/:id', component: Profile},
@@ -74,15 +78,17 @@ var routes = [
     { path: 'classes(/)', title: 'Classes', endpoint: '/group?type=class', component: Classes},
     { path: 'class(/)', onEnter: redirect('/classes')},
     { path: 'class/:id(/)', title: 'Classes', endpoint: '/group/:id', component: ClassProfile},
-    { path: 'classes/:id(/)', onEnter: redirect('/group/:id')},
+    { path: 'classes/:id(/)', onEnter: redirect('/class/:id')},
     { path: 'class/:id/view(/)', title: 'Classes', endpoint: '/group/:id', component: ClassView},
+    { path: 'class/:id/cards(/)', title: 'User Cards', endpoint: '/group/:id', component: UserCards},
     { path: 'classes/:id/view(/)', onEnter: redirect('/class/:id/view')},
     { path: 'class/:id/edit(/)', title: 'Edit Classes', endpoint: '/group/:id', component: ClassEdit},
     { path: 'classes/:id/edit(/)', onEnter: redirect('/class/:id/edit')},
     { path: 'class/:id/profile(/)', title: 'Classes', endpoint: '/group/:id', component: ClassProfile},
     { path: 'classes/:id/profile(/)', onEnter: redirect('/class/:id/profile')},
     { path: 'friends(/)', title: 'Friends', endpoint: '$$friend', component: Friends},
-    { path: 'friends/suggested(/)', title: 'Suggested Friends', endpoint: '$$suggested_friends', component: SuggestedFriends},
+    { path: 'friends/suggested(/)', title: 'Suggested Friends', endpoint: '$$suggested_friends',
+        component: SuggestedFriends},
     { path: 'suggestedfriends(/)', onEnter: redirect('/friends/suggested')}
 ];
 

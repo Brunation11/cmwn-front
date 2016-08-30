@@ -23,9 +23,11 @@
         }
     }
 
-    .warning, .notice, .success {
+    .warning,
+    .notice,
+    .success {
         .swal2-content, a {
-            color: #fff;
+            color: $cmwn-white;
         }
     }
 
@@ -51,6 +53,7 @@
             0%   {
                 transform: translateX(100%);
             }
+
             100% {
                 transform: translateX(-100%);
             }

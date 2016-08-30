@@ -1,4 +1,6 @@
 build.zip
+scsslint.json
+docker-compose.yml
 .vagrant
 node_modules
 build
@@ -18,4 +20,18 @@ _steps
 _projects
 .wercker
 wercker.env
-
+scssReport.json
+docker-compose.yml
+front.sh
+stop_front.sh
+errorShots
+coverage
+coverage/**/*
+lib
+lib/**/*
+.nyc_output
+tar-*
+scssReport.json
+scsslint.json
+/tar-*
+*.tar

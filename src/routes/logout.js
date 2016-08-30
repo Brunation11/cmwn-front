@@ -9,7 +9,9 @@ import Util from 'components/util';
 
 import 'routes/logout.scss';
 
-var loaderOptions = {
+export const PAGE_UNIQUE_IDENTIFIER = 'logout-page';
+
+const LOADER_OPTIONS = {
     lines: 5,
     length: 20,
     width: 2,
@@ -28,33 +30,41 @@ var loaderOptions = {
     scale: 1.00
 };
 
-var Page = React.createClass({
-    componentDidMount: function () {
+const LOG = {
+    INIT: 'User logout initiated',
+    SUCCESS: 'Session successfully terminated.',
+    FAILURE: 'User logout "failed", proceeding.'
+};
+
+export class LogoutPage extends React.Component {
+    componentDidMount() {
         var logout = HttpManager.GET({url: GLOBALS.API_URL + 'logout', handleErrors: false});
-        Log.info('User logout initiated');
+        Log.info(LOG.INIT);
         Util.logout();
         logout.then(() => {
-            Log.info('Session successfully terminated.');
+            Log.info(LOG.SUCCESS);
             Util.logout();
             delete window.__USER_UNAUTHORIZED;
             window.location.href = '/login';
         }).catch(e => {
-            Log.warn(e, 'User logout "failed", proceeding.');
+            Log.warn(e, LOG.FAILURE);
             Util.logout();
             delete window.__USER_UNAUTHORIZED;
             window.location.href = '/login';
         });
-    },
-    render: function () {
+    }
+
+    render() {
         return (
-           <Layout>
-                <div className="logout-page">
-                    <Loader loaded={false} options={loaderOptions} className="spinner" />Logging out...
+           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+                <div>
+                    <Loader loaded={false} options={LOADER_OPTIONS} className="spinner" />Logging out...
                 </div>
            </Layout>
         );
     }
-});
+}
 
-export default Page;
+LogoutPage._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
+export default LogoutPage;
 

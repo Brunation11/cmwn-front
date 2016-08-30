@@ -1,24 +1,25 @@
 box:
-  id: node:6-wheezy
+  id: cmwn/front-node:6-wheezy
 build:
   steps:
     - script:
       name: Install packages
-      code: |
-       if [ -f "$WERCKER_CACHE_DIR/nm_cache.tar" ]; then
-          debug "Extracting npm tar"
-          tar xf $WERCKER_CACHE_DIR/nm_cache.tar
-       fi
-       npm prune && npm install && tar cf $WERCKER_CACHE_DIR/nm_cache.tar node_modules
+      code: npm prune && npm install && tar cf $WERCKER_CACHE_DIR/nm_cache.tar node_modules
     - script:
-      name: Install Global packages
-      code: npm install -g eslint eslint-plugin-react eslint-plugin-babel babel-eslint gulp
-    - script:
-      name: Linter
-      code: eslint src
+      name: more dumb 1
+      code: npm update
     - script:
       name: +1 dump step of dumbness with keen
       code: npm rebuild node-sass
+    - script:
+      name: more dumb 2
+      code: npm rebuild imagemin-optipng
+    - script:
+      name: Linter
+      code: gulp lint
+    - script:
+      name: Unit Tests
+      code: gulp unit
     - script:
       name: Build packages
       code: gulp build --production

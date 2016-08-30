@@ -3,7 +3,11 @@
         "node": true
     },
     "globals": {
+        "__cmwn": true,
         "process": false,
         "require": false
+    },
+    "rules": {
+        "vars-on-top": "off"
     }
 }
