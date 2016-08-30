@@ -13,6 +13,8 @@ import Text from 'components/nullable_text';
 import Util from 'components/util';
 import GenerateDataSource from 'components/datasource';
 
+import 'routes/classes/view.scss';
+
 const PAGE_UNIQUE_IDENTIFIER = 'classProfile';
 const GROUP_USER_DATASOURCE_IDENTIFIER = 'group_users';
 
@@ -148,10 +150,12 @@ export class View extends React.Component{
                                         </Link>
                                     )}
                                 />
-                                <Column dataKey="username" />
+                                <Column dataKey="username" renderCell={(data) => {
+                                    return data.replace(/([@-_])/g, "$1 ");
+                                }} />
                                 <Column dataKey="role" renderHeader="User Type" renderCell={(data) => {
                                     return data;
-                                }}></Column>
+                                }} />
                                 <Column dataKey="active" renderHeader="Active User" renderCell={ (data) => {
                                     return data !== false ? 'Active' : 'Inactive';
                                 }} />
