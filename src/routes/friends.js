@@ -36,6 +36,7 @@ var mapStateToProps;
 var Page;
 
 class Friends extends React.Component {
+
     addFriend(item, e) {
         var id = item.user_id != null ? item.user_id : item.friend_id;
         var postBody = { 'friend_id': id };
