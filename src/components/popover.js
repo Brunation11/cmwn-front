@@ -28,6 +28,7 @@ var PopOver = React.createClass({
             placement: this.props.placement || this.state.placement,
             type: this.props.type
         });
+        if (this.props.type === 'user') this.getUserFlips()
         this._mounted = true;
     },
     componentWillUnmount: function () {
@@ -59,7 +60,7 @@ var PopOver = React.createClass({
         );
     },
     getUserFlips: function () {
-        var userID = this.state.element.friend_id || this.state.element.suggest_id;
+        var userID = this.props.element.friend_id || this.props.element.suggest_id;
         HttpManager.GET({
             url: (`${GLOBALS.API_URL}user/${userID}/flip`),
             handleErrors: false
@@ -90,7 +91,6 @@ var PopOver = React.createClass({
         }
     },
     renderUser: function () {
-        if (this.state.element.friend_id || this.state.element.suggest_id) this.getUserFlips();
         if (this.state.flips) {
             return (
                 <ButtonToolbar>
