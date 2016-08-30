@@ -8,10 +8,13 @@ import Layout from 'layouts/two_col';
 import {Table, Column} from 'components/table';
 import Paginator from 'components/paginator';
 import EditLink from 'components/edit_link';
+import GeneratorLink from 'components/generator_link';
 import DeleteLink from 'components/delete_link';
 import Text from 'components/nullable_text';
 import Util from 'components/util';
 import GenerateDataSource from 'components/datasource';
+
+import 'routes/classes/view.scss';
 
 const PAGE_UNIQUE_IDENTIFIER = 'classProfile';
 const GROUP_USER_DATASOURCE_IDENTIFIER = 'group_users';
@@ -101,6 +104,8 @@ export class View extends React.Component{
                     <p className="right" id="editButton">
                         <EditLink className="purple" base="/class" id={this.state.group_id}
                             scope={this.state.scope} text="Edit this class" />
+                        <GeneratorLink className="purple" base="/class" id={this.state.group_id}
+                            scope={this.state.scope} />
                         {this.renderImport()}
                         <DeleteLink className="purple" base="/class" id={this.state.group_id}
                             scope={this.state.scope} text="Delete this class" />
@@ -148,10 +153,12 @@ export class View extends React.Component{
                                         </Link>
                                     )}
                                 />
-                                <Column dataKey="username" />
+                                <Column dataKey="username" renderCell={(data) => {
+                                    return data.replace(/([@-_])/g, '$1 ');
+                                }} />
                                 <Column dataKey="role" renderHeader="User Type" renderCell={(data) => {
                                     return data;
-                                }}></Column>
+                                }} />
                                 <Column dataKey="active" renderHeader="Active User" renderCell={ (data) => {
                                     return data !== false ? 'Active' : 'Inactive';
                                 }} />
