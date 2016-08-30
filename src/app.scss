@@ -175,7 +175,7 @@ h3 {
         display: none;
         margin: $standard / 2 0;
         border-radius: 4px;
-        background: $rule-medium-gray;
+        background: $rule-light-gray;
         padding: $standard / 2 $standard;
         font-size: 12px;
 
@@ -195,12 +195,11 @@ h3 {
     }
 
     .sidebar {
-        // scss-lint:disable all
         padding: $standard / 2;
+        max-width: 200px;
         order: 1;
         flex-grow: 0;
         flex-shrink: 0;
-        // scss-lint:enable all
 
         nav {
 
@@ -223,11 +222,25 @@ h3 {
                 font-weight: bold;
             }
         }
+
+        .active-menu {
+            background: $cmwn-blue;
+
+            a {
+                color: $cmwn-white;
+            }
+        }
     }
 
     .profile-pic {
         @include no-text($profile-width, $profile-width);
+        transition: background-color 2s;
+        background-color: $cmwn-purple;
         background-size: cover;
+
+        &:hover {
+            background-color: $cmwn-blue;
+        }
     }
 
     .global-header {

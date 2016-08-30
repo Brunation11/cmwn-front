@@ -35,8 +35,7 @@ var checkAnotherProfileContent = function (data, currentUser) {
     const WRAPPER = shallow(profile);
     expect(WRAPPER.children()).to.have.length(1);
     expect(WRAPPER.find('Panel')).to.have.length(1);
-    expect(WRAPPER.find('.frame')).to.have.length(1);
-    expect(WRAPPER.find('.user-metadata').children()).to.have.length(8);
+    expect(WRAPPER.find('Trophycase')).to.have.length(1);
 };
 
 describe('Profile Smoke Tests', function () {

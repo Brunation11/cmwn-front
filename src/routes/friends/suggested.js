@@ -12,12 +12,11 @@ import HttpManager from 'components/http_manager';
 import Actions from 'components/actions';
 import Store from 'components/store';
 import PopOver from 'components/popover';
+import GLOBALS from 'components/globals';
 
 import Layout from 'layouts/two_col';
 
 import 'routes/friends/suggested.scss';
-
-import DefaultProfile from 'media/profile_tranparent.png';
 
 const PAGE_UNIQUE_IDENTIFIER = 'suggested-friends';
 
@@ -156,7 +155,7 @@ export class Suggested extends React.Component{
                         transform={data => {
                             var image;
                             if (!_.has(data, '_embedded.image')) {
-                                image = DefaultProfile;
+                                image = GLOBALS.DEFAULT_PROFILE;
                             } else {
                                 if (data._embedded.image.url != null) {
                                     image = data._embedded.image.url;

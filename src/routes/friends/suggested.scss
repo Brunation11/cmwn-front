@@ -1,4 +1,12 @@
+@import 'variables';
+
 .suggested-friends {
+    //scss-lint:disable all
+    .flipboard .panel-body .flip div span.overlay {
+        background: transparent;
+    }
+    //scss-lint:enable all
+
     td img {
         width: 200px;
         max-width: 200px;
@@ -9,7 +17,11 @@
     }
 
     .btn.standard {
-        margin: 5px 0;
+        position: relative;
+        bottom: 0;
+        margin: 0;
+        border-radius: 0;
+        box-shadow: none;
         width: 100%;
     }
 
@@ -20,7 +32,22 @@
     .flip {
 
         img {
+            transition: background-color 2s;
+            background-color: $cmwn-purple;
             max-width: 200px;
+        }
+
+        .overlay:hover + img {
+            background-color: $cmwn-blue;
+        }
+
+        .overlay {
+            padding: 0;
+
+            .abswrap {
+                display: flex;
+                flex-direction: column;
+            }
         }
     }
 }
