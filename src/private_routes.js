@@ -13,6 +13,7 @@ import Classes from 'routes/classes';
 import ClassView from 'routes/classes/view';
 import ClassEdit from 'routes/classes/edit';
 import ClassProfile from 'routes/classes/profile';
+import UserCards from 'routes/classes/user_cards';
 import Friends from 'routes/friends';
 import SuggestedFriends from 'routes/friends/suggested';
 import Profile from 'routes/users/profile';
@@ -79,6 +80,7 @@ var routes = [
     { path: 'class/:id(/)', title: 'Classes', endpoint: '/group/:id', component: ClassProfile},
     { path: 'classes/:id(/)', onEnter: redirect('/class/:id')},
     { path: 'class/:id/view(/)', title: 'Classes', endpoint: '/group/:id', component: ClassView},
+    { path: 'class/:id/cards(/)', title: 'User Cards', endpoint: '/group/:id', component: UserCards},
     { path: 'classes/:id/view(/)', onEnter: redirect('/class/:id/view')},
     { path: 'class/:id/edit(/)', title: 'Edit Classes', endpoint: '/group/:id', component: ClassEdit},
     { path: 'classes/:id/edit(/)', onEnter: redirect('/class/:id/edit')},
