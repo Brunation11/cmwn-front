@@ -144,7 +144,7 @@ var Game = React.createClass({
             });
         }
     },
-    resizeFrame: function() {
+    resizeFrame: function () {
         var frame = ReactDOM.findDOMNode(this.refs.gameRef);
         if (frame) {
             frame.contentWindow.innerWidth = ReactDOM.findDOMNode(this.refs.wrapRef).offsetWidth;
@@ -152,7 +152,7 @@ var Game = React.createClass({
         }
         this.dispatchPlatformEvent('resize');
     },
-    dispatchPlatformEvent: function(name, data) {
+    dispatchPlatformEvent: function (name, data) {
         /** TODO: MPR, 1/15/16: Polyfill event */
         var frame = ReactDOM.findDOMNode(this.refs.gameRef);
         var event = new Event('platform-event', {bubbles: true, cancelable: false});
