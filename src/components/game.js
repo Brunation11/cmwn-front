@@ -19,6 +19,8 @@ const DEMO_MODE = 'Demo Mode';
 
 const PORTRAIT_TEXT = 'Please turn this game into landscape mode to continue.';
 
+const COMPONENT_IDENTIFIER = 'game';
+
 /**
  * Game wrapper iframe component.
  * Listens for 'game-event'
@@ -62,7 +64,37 @@ var Game = React.createClass({
             )
         });
     },
+    componentDidMount: function () {
+        var frame = ReactDOM.findDOMNode(this.refs.gameRef);
+        var callApi;
+
+        if (!frame) {
+            return;
+        }
+
+        callApi = _.debounce(function () {
+            HttpManager.GET({
+                url: (GLOBALS.API_URL),
+                handleErrors: false
+            });
+        }, 5000);
+        frame.addEventListener('load', function () {
+            frame.contentWindow.addEventListener('click', callApi, false);
+        }, false);
+        this.checkForPortrait();
+    },
     componentWillReceiveProps: function (nextProps) {
+        var frame = ReactDOM.findDOMNode(this.refs.gameRef);
+        var callApi = _.debounce(function () {
+            HttpManager.GET({
+                url: (GLOBALS.API_URL),
+                handleErrors: false
+            });
+        }, 10000);
+        frame.addEventListener('load', function () {
+            frame.contentWindow.addEventListener('click', callApi, false);
+        }, false);
+
         this.setState({
             currentGame: nextProps.game,
             eventHandler: getEventsForGame(
@@ -75,19 +107,6 @@ var Game = React.createClass({
     },
     componentWillUnmount: function () {
         this.clearEvent();
-    },
-    componentDidMount: function () {
-        var frame = ReactDOM.findDOMNode(this.refs.gameRef);
-        var callApi = _.debounce(function () {
-            HttpManager.GET({
-                url: (GLOBALS.API_URL),
-                handleErrors: false
-            });
-        }, 5000);
-        frame.addEventListener('load', function () {
-            frame.contentWindow.addEventListener('click', callApi, false);
-        }, false);
-        this.checkForPortrait();
     },
     onExit: function (nextState) {
         this.setState(nextState);
@@ -110,76 +129,97 @@ var Game = React.createClass({
         window.addEventListener('platform-event', this.gameEventHandler);
         window.addEventListener('keydown', this.listenForEsc);
         window.addEventListener('resize', this.checkForPortrait);
+        window.addEventListener('orientationchange', this.resizeFrame);
     },
     clearEvent: function () {
         window.removeEventListener('game-event', this.gameEventHandler);
         window.removeEventListener('keydown', this.listenForEsc);
         window.removeEventListener('resize', this.checkForPortrait);
+        window.addEventListener('orientationchange', this.resizeFrame);
     },
     listenForEsc: function (e) {
         var self = this;
         if (e.keyCode === 27 || e.charCode === 27) {
-            self.setState({fullscreenFallback: false});
             Screenfull.exit();
+            self.setState({
+                fullscreenFallback: false,
+            });
         }
     },
-    dispatchPlatformEvent(name, data) {
+    resizeFrame: function () {
+        var frame = ReactDOM.findDOMNode(this.refs.gameRef);
+        if (frame) {
+            frame.contentWindow.innerWidth = ReactDOM.findDOMNode(this.refs.wrapRef).offsetWidth;
+            frame.contentWindow.innerHeight = ReactDOM.findDOMNode(this.refs.wrapRef).offsetHeight;
+        }
+        this.dispatchPlatformEvent('resize');
+    },
+    dispatchPlatformEvent: function (name, data) {
         /** TODO: MPR, 1/15/16: Polyfill event */
+        var frame = ReactDOM.findDOMNode(this.refs.gameRef);
         var event = new Event('platform-event', {bubbles: true, cancelable: false});
         this.toggleDemoButton();
         _.defaults(event, {type: 'platform-event', name, data});
-        ReactDOM.findDOMNode(this.refs.gameRef).contentWindow.dispatchEvent(event);
+        if (frame) frame.contentWindow.dispatchEvent(event);
     },
     makeFullScreen: function () {
-        var self = this;
         if (Screenfull.enabled) {
-            Screenfull.request(ReactDOM.findDOMNode(self.refs.gameRef));
-            Screenfull.request(ReactDOM.findDOMNode(self.refs.overlay));
+            Screenfull.request(ReactDOM.findDOMNode(this.refs.wrapRef));
         } else {
-            self.setState({fullscreenFallback: true});
+            this.setState({fullscreenFallback: true});
+            this.resizeFrame();
         }
     },
     checkForPortrait: function () {
         var isPortrait = (Detector.isMobileOrTablet() && Detector.isPortrait());
-        this.setState({
-            isPortrait
-        });
+        this.setState({isPortrait});
     },
     toggleDemoButton: function () {
-        if (this.state.demo){
-            this.setState({demo: false});
-        } else {
-            this.setState({demo: true});
-        }
+        this.state.demo ? this.setState({demo: false}) : this.setState({demo: true});
     },
     render: function () {
-        if (this.props.url == null) {
-            return null;
-        }
+        if (this.props.url == null) return null;
         return (
-            <div ref="wrapRef" className={ClassNames(
-                'game', {'fullscreen': this.state.fullscreenFallback}
-            )}>
-                <div ref="overlay" className={ClassNames('overlay',
-                    {'portrait': this.state.isPortrait},
-                    {'fullscreen': Screenfull.isFullscreen}
+            <div className={COMPONENT_IDENTIFIER}>
+                <div ref="wrapRef" className={ClassNames(
+                    'game-frame-wrapper',
+                    {fullscreen: this.state.fullscreenFallback}
                 )}>
-                    {PORTRAIT_TEXT}
+                    <div
+                        ref="overlay"
+                        className={ClassNames('overlay', {
+                            portrait: this.state.isPortrait,
+                            fullscreen: Screenfull.isFullscreen
+                        })}
+                    >
+                        <p>{PORTRAIT_TEXT}</p>
+                    </div>
+                    <iframe
+                        ref="gameRef"
+                        className={ClassNames('game-frame', {
+                            portrait: this.state.isPortrait
+                        })}
+                        src={this.props.url}
+                        allowTransparency="true"
+                    />
                 </div>
-                <iframe ref="gameRef" src={this.props.url} allowtransparency="true"
-                    className={ClassNames({'portrait': this.state.isPortrait})}/>
-                <Button onClick={this.makeFullScreen}
-                    className={ClassNames('purple', 'standard', 'full-screen-btn',
-                        {hidden: this.state.isPortrait}
-                    )}>
+                <Button
+                    onClick={this.makeFullScreen}
+                    className={ClassNames('purple', 'standard', 'full-screen-btn', {
+                        hidden: this.state.isPortrait
+                    })}
+                >
                     <Glyphicon glyph="fullscreen" /> {FULLSCREEN}
                 </Button>
-                <Button className={ClassNames('standard',
+                <Button
+                    className={ClassNames('standard',
                         {'purple': !this.state.demo},
                         {'green': this.state.demo},
-                        {hidden: !this.props.isTeacher || this.state.isPortrait}
+                        {hidden: !this.props.isTeacher}
                     )}
-                    onClick={() => this.dispatchPlatformEvent('toggle-demo-mode')}>{DEMO_MODE}
+                    onClick={() => this.dispatchPlatformEvent('toggle-demo-mode')}
+                >
+                    {DEMO_MODE}
                 </Button>
             </div>
         );

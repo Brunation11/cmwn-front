@@ -33,7 +33,7 @@ const FLIP_SOURCE = GenerateDataSource('user_flip', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     ACTION: 'Profile',
-    ARCADE: 'Take Action'
+    ARCADE: 'Activities'
 };
 const PLAY = 'Play Now!';
 const COMING_SOON = 'Coming Soon!';
@@ -256,8 +256,14 @@ export class Profile extends React.Component {
     renderCurrentUserProfile() {
         return (
             <div>
-                <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal.bind(this)}
-                    keyboard={false} backdrop="static" id="game-modal">
+                <Modal
+                    className="full-width game-modal"
+                    show={this.state.gameOn}
+                    onHide={this.hideModal.bind(this)}
+                    keyboard={false}
+                    backdrop="static"
+                    id="game-modal"
+                >
                     <Modal.Body>
                         {this.renderGame()}
                     </Modal.Body>

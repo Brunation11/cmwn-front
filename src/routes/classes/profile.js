@@ -108,7 +108,7 @@ export class Profile extends React.Component {
         );
     }
     render() {
-        if (this.props.data == null || this.state == null) {
+        if (!this.props.data || !this.state) {
             return null;
         }
         return (

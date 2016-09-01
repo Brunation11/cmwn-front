@@ -33,12 +33,15 @@ var PopOver = React.createClass({
                     placement={state.placement}
                     overlay={
                         <Popover
+                            className="flip-popover"
                             id={Shortid.generate()}
-                            title={
-                                state.element.title +
-                                '  |  earned: ' +
-                                Moment(state.element.earned).format('MMM Do YYYY')
-                            }
+                            title={[
+                                state.element.title,
+                                <br />,
+                                <span className="title-meta">
+                                    {`earned: ${Moment(state.element.earned).format('MMM Do YYYY')}`}
+                                </span>
+                            ]}
                         >
                             {state.element.description}
                         </Popover>}>

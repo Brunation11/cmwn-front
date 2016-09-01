@@ -38,23 +38,6 @@ var checkUpdatingUser = function (wrapper) {
     lastName.simulate('change', {target: {value: 'LastName'}});
     expect(wrapper.state('last')).to.equal('LastName');
 };
-
-describe('<CreateStudent />', function () { // eslint-disable-line no-undef
-    var createStudent = <CreateStudent />;
-    const WRAPPER = shallow(createStudent);
-
-    it('ckecks that CreateStudent component is rendered correctly', () => { // eslint-disable-line no-undef
-        expect(WRAPPER.instance()).to.be.instanceOf(CreateStudent);
-    });
-
-    it('checks that the elements are present', () => { // eslint-disable-line no-undef
-        checkCreateStudent(WRAPPER);
-    });
-
-    it('checks that user info gets updated', () => { // eslint-disable-line no-undef
-        checkUpdatingUser(WRAPPER);
-    });
-});
 */
 describe('<EditClass />', function () { // eslint-disable-line no-undef
     var editClass = <EditClass data={classData}/>;
@@ -73,3 +56,22 @@ describe('<EditClass />', function () { // eslint-disable-line no-undef
     });
 });
 
+/*
+describe('<CreateStudent />', function () { // eslint-disable-line no-undef
+    var createStudent = <CreateStudent />;
+    expect(CreateStudent).to.be.ok;
+    const WRAPPER = shallow(createStudent);
+
+    it('ckecks that CreateStudent component is rendered correctly', () => { // eslint-disable-line no-undef
+        expect(WRAPPER.instance()).to.be.instanceOf(CreateStudent);
+    });
+
+    it('checks that the elements are present', () => { // eslint-disable-line no-undef
+        checkCreateStudent(WRAPPER);
+    });
+
+    it('checks that user info gets updated', () => { // eslint-disable-line no-undef
+        checkUpdatingUser(WRAPPER);
+    });
+});
+*/
