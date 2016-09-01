@@ -51,6 +51,7 @@ var Trophycase = React.createClass({
                             element={item}
                             placement="bottom"
                             type="flip"
+                            trigger="click"
                         />
                     </div>
                 ))}
