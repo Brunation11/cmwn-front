@@ -39,7 +39,7 @@ var PopOver = React.createClass({
                                 state.element.title,
                                 <br />,
                                 <span className="title-meta">
-                                    {`earned: ${Moment(state.element.earned).format('MMM Do YYYY')}`}
+                                    {`Earned: ${Moment(state.element.earned).format('MMM Do YYYY')}`}
                                 </span>
                             ]}
                         >
