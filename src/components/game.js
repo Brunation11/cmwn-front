@@ -127,11 +127,13 @@ var Game = React.createClass({
         window.addEventListener('platform-event', this.gameEventHandler);
         window.addEventListener('keydown', this.listenForEsc);
         window.addEventListener('resize', this.checkForPortrait);
+        window.addEventListener('orientationchange', this.resizeFrame);
     },
     clearEvent: function () {
         window.removeEventListener('game-event', this.gameEventHandler);
         window.removeEventListener('keydown', this.listenForEsc);
         window.removeEventListener('resize', this.checkForPortrait);
+        window.addEventListener('orientationchange', this.resizeFrame);
     },
     listenForEsc: function (e) {
         var self = this;
@@ -142,39 +144,39 @@ var Game = React.createClass({
             });
         }
     },
-    dispatchPlatformEvent(name, data) {
+    resizeFrame: function () {
+        var frame = ReactDOM.findDOMNode(this.refs.gameRef);
+        if (frame) {
+            frame.contentWindow.innerWidth = ReactDOM.findDOMNode(this.refs.wrapRef).offsetWidth;
+            frame.contentWindow.innerHeight = ReactDOM.findDOMNode(this.refs.wrapRef).offsetHeight;
+        }
+        this.dispatchPlatformEvent('resize');
+    },
+    dispatchPlatformEvent: function (name, data) {
         /** TODO: MPR, 1/15/16: Polyfill event */
+        var frame = ReactDOM.findDOMNode(this.refs.gameRef);
         var event = new Event('platform-event', {bubbles: true, cancelable: false});
         this.toggleDemoButton();
         _.defaults(event, {type: 'platform-event', name, data});
-        ReactDOM.findDOMNode(this.refs.gameRef).contentWindow.dispatchEvent(event);
+        if (frame) frame.contentWindow.dispatchEvent(event);
     },
     makeFullScreen: function () {
-        var self = this;
         if (Screenfull.enabled) {
-            Screenfull.request(ReactDOM.findDOMNode(self.refs.gameRef));
-            Screenfull.request(ReactDOM.findDOMNode(self.refs.overlay));
+            Screenfull.request(ReactDOM.findDOMNode(this.refs.wrapRef));
         } else {
-            self.setState({fullscreenFallback: true});
+            this.setState({fullscreenFallback: true});
+            this.resizeFrame();
         }
     },
     checkForPortrait: function () {
         var isPortrait = (Detector.isMobileOrTablet() && Detector.isPortrait());
-        this.setState({
-            isPortrait
-        });
+        this.setState({isPortrait});
     },
     toggleDemoButton: function () {
-        if (this.state.demo){
-            this.setState({demo: false});
-        } else {
-            this.setState({demo: true});
-        }
+        this.state.demo ? this.setState({demo: false}) : this.setState({demo: true});
     },
     render: function () {
-        if (this.props.url == null) {
-            return null;
-        }
+        if (this.props.url == null) return null;
         return (
             <div className="wrapper">
                 <div ref="wrapRef" className={ClassNames(
