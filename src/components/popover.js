@@ -26,20 +26,20 @@ var PopOver = React.createClass({
     renderFlip: function () {
         var state = this.state;
         return (
-            <ButtonToolbar>
+            <ButtonToolbar id={Shortid.generate()}>
                 <OverlayTrigger
                     trigger={state.trigger}
                     rootClose
                     placement={state.placement}
                     overlay={
                         <Popover
-                            className="flip-popover"
                             id={Shortid.generate()}
+                            className="flip-popover"
                             title={[
                                 state.element.title,
                                 <br />,
                                 <span className="title-meta">
-                                    {`earned: ${Moment(state.element.earned).format('MMM Do YYYY')}`}
+                                    {`Earned: ${Moment(state.element.earned).format('MMM Do YYYY')}`}
                                 </span>
                             ]}
                         >
@@ -64,13 +64,14 @@ var PopOver = React.createClass({
     renderUser: function () {
         var state = this.state;
         return (
-            <ButtonToolbar>
+            <ButtonToolbar id={Shortid.generate()}>
                 <OverlayTrigger
                     trigger={state.trigger}
-                    rootClose placement={state.placement}
+                    rootClose
+                    placement={state.placement}
                     overlay={(
                         <Popover
-                            id="popover"
+                            id={Shortid.generate()}
                             title={`Earned: ${state.flips.length}`}
                         >
                             {state.flips}
