@@ -59,7 +59,7 @@ var UpdateUsername = React.createClass({
         self.setStyleOnClick();
         setTimeout(function () {
             self.setState({loading: false});
-        }, 1000);
+        }, 1500);
     },
     setStyleOnClick: function () {
         this.setState({tooltipsOpen: true});
