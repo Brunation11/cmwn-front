@@ -1,5 +1,49 @@
 @import '../variables';
 
+.loading {
+    animation: fadeIn;
+    position: fixed;
+    background: $cmwn-black;
+    opacity: .1;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 2;
+
+    .loader {
+      font-size: 10px;
+      position: absolute;
+      z-index: 1;
+      top: 50%;
+      left: 50%;
+
+      text-indent: -9999em;
+      border-top: 1.1em solid $cmwn-white;
+      border-right: 1.1em solid $cmwn-white;
+      border-bottom: 1.1em solid $cmwn-white;
+      border-left: 1.1em solid;
+      transform: translateZ(0);
+      animation: load8 1.1s infinite linear;
+    }
+
+    .loader,
+    .loader:after {
+      border-radius: 50%;
+      width: 10em;
+      height: 10em;
+      top: 46%;
+      left: 46%;
+      position: absolute;
+    }
+
+    @keyframes load8 {
+      0% {transform: rotate(0deg);}
+      100% {transform: rotate(360deg);}
+    }
+}
+
+
 .change-username {
     .left {
         margin-bottom: 2rem;
@@ -30,7 +74,7 @@
             position: absolute;
             top: 4rem;
             left: -$standard;
-            transform: rotate(-45deg);
+            transform: rotate(-50deg);
             border-bottom: 25px solid transparent;
             border-left: 33px solid $cmwn-blue;
             box-shadow: -6px -1px 10px -4px $cmwn-gray;
@@ -48,7 +92,7 @@
         width: 100%;
         height: 150px;
         overflow: hidden;
-      }
+    }
 
     input,
     label {
@@ -232,4 +276,3 @@
         //* move the element down by 5px (it will stay in place because it's attached to the element that also moves up 5px) */
     }
 }
-
