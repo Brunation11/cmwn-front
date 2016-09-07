@@ -1,0 +1,99 @@
+@import 'variables';
+
+.flipcase {
+    padding: 0 $standard;
+    width: 100%;
+
+    .header {
+        display: none;
+        width: 100%;
+        position: absolute;
+    }
+
+    .single-flip {
+        display: inline-block;
+        width: 50%;
+        height: 160px;
+        // margin-top: -30%;
+        z-index: 1;
+        position: relative;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+    }
+
+    @media (max-width: $device-portrait-break) {
+        .single-flip {
+            width: 33%;
+            height: 210px;
+        }
+    }
+
+    @media (min-width: $device-portrait-break) and (max-width: $device-portrait-break + ($device-max-break - $device-portrait-break) / 2) {
+        .single-flip {
+            width: 33%;
+            height: 190px;
+        }
+    }
+
+    @media (min-width: $device-portrait-break + ($device-max-break - $device-portrait-break) / 2) and (max-width: $device-max-break) {
+        .single-flip {
+            width: 33%;
+            height: 250px;
+        }
+    }
+
+    @media (min-width: $device-max-break) and (max-width: $monitor-max-break) {
+        .single-flip {
+            width: 25%;
+            height: 210px;
+        }
+    }
+
+    @media (min-width: $monitor-max-break) and (max-width: $ultrawide-min-break * 2) {
+        .single-flip {
+            width: 20%;
+            height: 170px;
+
+            img {
+                max-width: 150px;
+            }
+        }
+    }
+
+    a {
+        display: inline-block;
+        position: relative;
+    }
+
+    .partial {
+        display: inline-block;
+        position: absolute;
+        left: 0;
+        background: $cmwn-white;
+        overflow: hidden;
+    }
+
+    &.trophycase {
+        white-space: nowrap;
+        overflow-x: auto;
+    }
+
+    &.header {
+        .header {
+            display: inline-block;
+            font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
+            font-size: 1.25rem;
+
+            strong {
+                font-size: 2rem;
+                color: $cmwn-purple;
+            }
+        }
+    }
+}
