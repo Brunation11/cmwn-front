@@ -10,6 +10,8 @@ import History from 'components/history';
 import HttpManager from 'components/http_manager';
 import Actions from 'components/actions';
 import Store from 'components/store';
+import UserPopover from 'components/popovers/user_popover';
+import GLOBALS from 'components/globals';
 
 import Layout from 'layouts/two_col';
 
@@ -67,15 +69,17 @@ export class Suggested extends React.Component{
             </Panel>
         );
     }
-    renderFlipsEarned(item) {
-        if (item.roles && item.roles.data && !~item.roles.data.indexOf('Student')) {
-            return null;
-        }
+    renderFlip(item) {
         return (
-            <p className="user-flips">{item.flips.data.length} Flips Earned</p>
+            <UserPopover
+                element={item}
+                trigger="click"
+            >
+                {this.renderUserFlip.call(this, item)}
+            </UserPopover>
         );
     }
-    renderFlip(item){
+    renderUserFlip(item) {
         var history = History;
         var self = this;
         return (
@@ -113,7 +117,6 @@ export class Suggested extends React.Component{
                     <img src={item.image}></img>
                 </div>
                 <p className="link-text" >{item.username}</p>
-                {''/*self.renderFlipsEarned(item)*/}
             </div>
         );
     }
