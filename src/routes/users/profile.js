@@ -11,7 +11,7 @@ import Detector from 'components/browser_detector';
 import ProfileImage from 'components/profile_image';
 import FlipBoard from 'components/flipboard';
 import Game from 'components/game';
-import Trophycase from 'components/trophycase';
+import Flipcase from 'components/flipcase';
 import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
 import History from 'components/history';
@@ -33,8 +33,10 @@ const FLIP_SOURCE = GenerateDataSource('user_flip', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     ACTION: 'Profile',
-    ARCADE: 'Activities'
+    ARCADE: 'Activities',
+    TROPHYCASE: 'Trophycase'
 };
+
 const PLAY = 'Play Now!';
 const COMING_SOON = 'Coming Soon!';
 const DESKTOP_ONLY = 'Log on with a Desktop computer to play!';
@@ -249,6 +251,18 @@ export class Profile extends React.Component {
                         </div>
                     </div>
                 </Panel>
+                <Panel className="standard" header={HEADINGS.TROPHYCASE}>
+                    <FLIP_SOURCE>
+                       <Flipcase
+                            classNames={ClassNames({
+                                hidden: !this.state.isStudent
+                            })}
+                            type="trophycase"
+                            header={true}
+                            render="earned"
+                        />
+                    </FLIP_SOURCE>
+                </Panel>
             </div>
         );
     }
@@ -262,9 +276,18 @@ export class Profile extends React.Component {
                         {this.renderGame()}
                     </Modal.Body>
                 </Modal>
-                <FLIP_SOURCE>
-                   <Trophycase className={ClassNames({hidden: !this.state.isStudent})} />
-                </FLIP_SOURCE>
+                <Panel className="standard" header={HEADINGS.TROPHYCASE}>
+                    <FLIP_SOURCE>
+                       <Flipcase
+                            classNames={ClassNames({
+                                hidden: !this.state.isStudent
+                            })}
+                            type="trophycase"
+                            header={true}
+                            render="earned"
+                        />
+                    </FLIP_SOURCE>
+                </Panel>
                 {this.renderGameList()}
             </div>
         );
