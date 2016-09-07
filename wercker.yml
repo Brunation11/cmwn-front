@@ -50,7 +50,7 @@ release:
         git config --global user.email hal-9000@changemyworldnow.com
         git config --global user.name "wercker"
         git fetch $GIT_REMOTE
-        git add composer.json CHANGELOG.md
+        git add $PACKAGE_FILE CHANGELOG.md
         git commit -m 'Version bump [ci skip]'
         git push -f $GIT_REMOTE $WERCKER_GIT_BRANCH
     - s3sync:
