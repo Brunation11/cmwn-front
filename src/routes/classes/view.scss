@@ -1,0 +1,23 @@
+@import 'variables';
+
+.datatable thead tr {
+    font-size: 120%;
+}
+
+@media (min-width: $device-max-break) and (max-width: 700px) { //arbitrary values relevant to elements natural break points
+    .datatable thead tr {
+        font-size: 80%;
+    }
+}
+
+@media (min-width: 700px) and (max-width: 720px) { //arbitrary values relevant to elements natural break points
+    .datatable thead tr {
+        font-size: 90%;
+    }
+}
+
+@media (min-width: 720px) and (max-width: 765px) { //arbitrary values relevant to elements natural break points
+    .datatable thead tr {
+        font-size: 100%;
+    }
+}
