@@ -1,0 +1,61 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import {Panel} from 'react-bootstrap';
+
+import Layout from 'layouts/two_col';
+import Flipcase from 'components/flipcase';
+import GenerateDataSource from 'components/datasource';
+
+var mapStateToProps;
+var Page;
+
+const PAGE_UNIQUE_IDENTIFIER = 'flips';
+
+const FLIPS_SOURCE = GenerateDataSource('flip', PAGE_UNIQUE_IDENTIFIER);
+const USER_FLIPS_SOURCE = GenerateDataSource('user_flip', PAGE_UNIQUE_IDENTIFIER);
+
+const HEADER = 'FLIP CASE';
+
+class Flips extends React.Component {
+    constructor() {
+        super();
+    }
+
+    render() {
+        if (!this.props.data || !this.props.data._embedded || !this.props.data._embedded.flip) return null;
+
+        return (
+            <Layout className={PAGE_UNIQUE_IDENTIFIER} navMenuId="navMenu">
+                <Panel className="standard" header={HEADER}>
+                    <USER_FLIPS_SOURCE>
+                        <Flipcase
+                            header={true}
+                            render="all"
+                            allFlips={this.props.data._embedded.flip}
+                        />
+                    </USER_FLIPS_SOURCE>
+                </Panel>
+            </Layout>
+        );
+    }
+}
+
+mapStateToProps = state => {
+    var data = {};
+    var loading = true;
+    var currentUser = {};
+    if (state.page && state.page.data != null) {
+        loading = state.page.loading;
+        data = state.page.data;
+        currentUser = state.currentUser;
+    }
+    return {
+        data,
+        loading,
+        currentUser
+    };
+};
+
+Page = connect(mapStateToProps)(Flips);
+Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
+export default Page;
