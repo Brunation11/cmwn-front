@@ -22,6 +22,7 @@ import UserAdmin from 'routes/users/view';
 import Game from 'routes/game';
 import Games from 'routes/games';
 import ChangePassword from 'routes/change_password';
+import Flips from 'routes/users/flips';
 
 var redirect = function (path) {
     return function (nextState, transition) {
@@ -52,6 +53,8 @@ var routes = [
     { path: 'users/:id/view(/)', onEnter: redirect('/profile/:id/view') },
     { path: 'user/:id/edit(/)', onEnter: redirect('/profile/:id/edit')},
     { path: 'users/:id/edit(/)', onEnter: redirect('/profile/:id/edit')},
+    { path: '/trophycase(/)', title: 'Flips', endpoint: '/flip', component: Flips},
+    // { path: '/trophycase(/)', title: 'Earned Flips', endpoint: '/user/:id/flip', component: Flips},
     { path: 'student/:id(/)', title: 'Profile', endpoint: 'user/:id', component: Profile},
     { path: 'profile/:id(/)', title: 'Profile', endpoint: 'user/:id', component: Profile},
     { path: 'student/edit(/)', title: 'Edit Student', endpoint: '$$me', component: StudentEdit },
