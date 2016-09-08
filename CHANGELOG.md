@@ -1,24 +1,7 @@
 Version - 0.3.11
 ----
 
-- 634a9b4: Updated wercker to use PACKAGE_FILE for name
-- ce93700: Fixed version in wercker
-- 2aa3902: accessiblity tab highlighing on buttons
-- 07524c4: Updated aws-sync to perserve artifacts no in this folder
-- a5a0067: do not show game save 404 as errors
-- cff12c0: Adding deploy steps to wercker Updated to Wercker file to build correctly
-- 20280ae: add click trigger to flip popover
-- 6463da5: wrap long lines in data tables, CORE-1069
-- 778bcb5: refactor popover functions and add unique ids
-- b4f0a11: capitalize title
-- dc6db3e: linter
-- fbc015e: refactor style rules to properly center iframe and overlay in standard, fullscreen, portrait, and landscape
-- 9fb1a66: update set event and clear event functions to listen for orientation change. add resize frame function to set inner width and height of iframe to its parent size. update dispatch platform event function to invoke resize event to game frame. refactor make full screen function to call screenful on wrapper instead of iframe
-- 39a88fd: linter
-- aa716f2: add new override style for humane-flatty alerts. add new override style sheet to main overrides file
-- f3a83f7: linter
-- b90cd48: add class view stylesheet to control resizing for table header
-- 24f9c0c: refactor table username column to insert natural break points at specific characters
+
 
 Version - 0.0.0
 ---------------
