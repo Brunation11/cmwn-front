@@ -251,12 +251,14 @@ export class Profile extends React.Component {
                         </div>
                     </div>
                 </Panel>
-                <Panel className="standard" header={HEADINGS.TROPHYCASE}>
+                <Panel
+                    header={HEADINGS.TROPHYCASE}
+                    className={ClassNames('standard', {
+                        hidden: !this.state.isStudent
+                    })}
+                >
                     <FLIP_SOURCE>
                        <Flipcase
-                            classNames={ClassNames({
-                                hidden: !this.state.isStudent
-                            })}
                             type="trophycase"
                             header={true}
                             render="earned"
@@ -276,12 +278,14 @@ export class Profile extends React.Component {
                         {this.renderGame()}
                     </Modal.Body>
                 </Modal>
-                <Panel className="standard" header={HEADINGS.TROPHYCASE}>
+                <Panel
+                    header={HEADINGS.TROPHYCASE}
+                    className={ClassNames('standard', {
+                        hidden: !this.state.isStudent
+                    })}
+                >
                     <FLIP_SOURCE>
                        <Flipcase
-                            classNames={ClassNames({
-                                hidden: !this.state.isStudent
-                            })}
                             type="trophycase"
                             header={true}
                             render="earned"
