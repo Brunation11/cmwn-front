@@ -59,7 +59,7 @@ var UpdateUsername = React.createClass({
                     loading: false
                 });
             }, 500);
-        }
+        };
 
         self.setState({loading: true});
 
@@ -70,7 +70,7 @@ var UpdateUsername = React.createClass({
             });
             resetLoading();
         }).catch(err => {  // eslint-disable-line
-            resetLoading()
+            resetLoading();
         });
 
         self.setStyleOnClick();
