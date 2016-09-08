@@ -25,17 +25,18 @@ var renderErrors = function () {
 };
 
 var show403 = function (url) {
+    var redirect;
     var currentUser = {};
     if (Store != null && Store.getState != null) {
         currentUser = Store.getState().currentUser.without(['first_name', 'middle_name', 'last_name']);
     }
-    //var redirect = window.setTimeout(function () {
-        //History.replace('/profile');
-        //window.location.reload();
-    //}, 5000);
-    //History.listenBefore(() => {
-    //    window.clearTimeout(redirect);
-    //});
+    redirect = window.setTimeout(function () {
+        History.replace('/profile');
+        window.location.reload();
+    }, 5000);
+    History.listenBefore(() => {
+        window.clearTimeout(redirect);
+    });
     _errors.push(
         <div id="triggerederror" className="error403"><a href="/profile"> </a></div>
     );
