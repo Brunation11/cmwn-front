@@ -26,7 +26,7 @@ var checkOwnProfileContent = function (data, currentUser) {
     expect(WRAPPER.children()).to.have.length(1);
     expect(WRAPPER.children('div')).to.have.length(1);
     expect(WRAPPER.find('Modal')).to.have.length(1);
-    expect(WRAPPER.find('Trophycase')).to.have.length(1);
+    expect(WRAPPER.find('Panel')).to.have.length(1);
     expect(WRAPPER.find('FlipBoard')).to.have.length(1);
 };
 
@@ -34,7 +34,7 @@ var checkAnotherProfileContent = function (data, currentUser) {
     var profile = <Profile data={data} loading={false} currentUser={currentUser}/>;
     const WRAPPER = shallow(profile);
     expect(WRAPPER.children()).to.have.length(1);
-    expect(WRAPPER.find('Panel')).to.have.length(1);
+    expect(WRAPPER.find('Panel')).to.have.length(2);
     expect(WRAPPER.find('.frame')).to.have.length(1);
     expect(WRAPPER.find('.user-metadata').children()).to.have.length(8);
 };
