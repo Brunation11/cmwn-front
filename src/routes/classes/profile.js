@@ -12,8 +12,7 @@ import FlipBoard from 'components/flipboard';
 import EditLink from 'components/edit_link';
 import Util from 'components/util';
 import GenerateDataSource from 'components/datasource';
-
-import DefaultProfile from 'media/profile_tranparent.png';
+import GLOBALS from 'components/globals';
 
 import 'routes/classes/profile.scss';
 
@@ -38,7 +37,8 @@ export class Profile extends React.Component {
     constructor() {
         super();
         this.state = {
-            isStudent: true
+            isStudent: true,
+            title: ''
         };
     }
     componentDidMount() {
@@ -74,7 +74,7 @@ export class Profile extends React.Component {
     renderFlip(item){
         var image;
         if (!_.has(item, '_embedded.image')) {
-            image = DefaultProfile;
+            image = GLOBALS.DEFAULT_PROFILE;
         } else {
             if (item._embedded.image.url != null) {
                 image = item._embedded.image.url;
@@ -92,7 +92,8 @@ export class Profile extends React.Component {
         );
     }
     renderClassInfo() {
-        if (this.state.group_id == null) {
+        if (this.state.group_id == null ||
+                (this.props.currentUser && this.props.currentUser.type.toLowerCase() === 'child')) {
             return null;
         }
         return (
@@ -114,10 +115,9 @@ export class Profile extends React.Component {
            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                {this.renderClassInfo()}
                <USER_SOURCE>
-                    <FlipBoard
-                        renderFlip={this.renderFlip}
-                        header={`${HEADINGS.CLASS} ${this.props.data.title ? this.props.data.title : ''}`}
-                    />
+                   <FlipBoard renderFlip={this.renderFlip} header={
+                     HEADINGS.CLASS + this.state.title
+                   } />
                </USER_SOURCE>
            </Layout>
         );

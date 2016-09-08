@@ -129,7 +129,6 @@ import Util from 'components/util';
 import DevTools from 'components/devtools';
 import Actions from 'components/actions';
 import TimerModal from 'components/timer_modal';
-
 import GlobalAlert from 'components/global_alert';
 import Detector from 'components/browser_detector';
 import Errors from 'components/errors';
