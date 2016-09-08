@@ -11,8 +11,7 @@ var Page;
 
 const PAGE_UNIQUE_IDENTIFIER = 'flips';
 
-const FLIPS_SOURCE = GenerateDataSource('flip', PAGE_UNIQUE_IDENTIFIER);
-const USER_FLIPS_SOURCE = GenerateDataSource('user_flip', PAGE_UNIQUE_IDENTIFIER);
+const FLIP_SOURCE = GenerateDataSource('user_flip', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADER = 'FLIP CASE';
 
@@ -27,13 +26,13 @@ class Flips extends React.Component {
         return (
             <Layout className={PAGE_UNIQUE_IDENTIFIER} navMenuId="navMenu">
                 <Panel className="standard" header={HEADER}>
-                    <USER_FLIPS_SOURCE>
+                    <FLIP_SOURCE>
                         <Flipcase
                             header={true}
                             render="all"
                             allFlips={this.props.data._embedded.flip}
                         />
-                    </USER_FLIPS_SOURCE>
+                    </FLIP_SOURCE>
                 </Panel>
             </Layout>
         );

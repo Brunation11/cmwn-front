@@ -1,7 +1,6 @@
 import React from 'react';
 import {ButtonToolbar, OverlayTrigger, Popover} from 'react-bootstrap';
 import Shortid from 'shortid';
-import Moment from 'moment';
 import _ from 'lodash';
 
 import GLOBALS from 'components/globals';
@@ -16,7 +15,7 @@ const COPY = {
 };
 
 export default class UserPopover extends React.Component {
-    constructor () {
+    constructor() {
         super();
 
         this.state = {
@@ -26,7 +25,7 @@ export default class UserPopover extends React.Component {
         };
     }
 
-    componentDidMount () {
+    componentDidMount() {
         this.setState({
             element: this.props.element,
             trigger: this.props.trigger || this.state.trigger,
@@ -39,11 +38,11 @@ export default class UserPopover extends React.Component {
         this._mounted = true;
     }
 
-    componentWillUnmount () {
+    componentWillUnmount() {
         this._mounted = false;
     }
 
-    getUserFlips () {
+    getUserFlips() {
         var userID = this.props.element.friend_id || this.props.element.suggest_id;
         HttpManager.GET({
             url: (`${GLOBALS.API_URL}user/${userID}/flip`),
@@ -58,7 +57,7 @@ export default class UserPopover extends React.Component {
         });
     }
 
-    renderUserFlips () {
+    renderUserFlips() {
         if (this.state.flips.length) {
             return _.map(this.state.flips, (flip) => {
                 return (
@@ -76,7 +75,7 @@ export default class UserPopover extends React.Component {
         }
     }
 
-    render () {
+    render() {
         if (!this._mounted || !this.state.flips) {
             return null;
         }

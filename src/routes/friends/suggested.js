@@ -11,7 +11,6 @@ import HttpManager from 'components/http_manager';
 import Actions from 'components/actions';
 import Store from 'components/store';
 import UserPopover from 'components/popovers/user_popover';
-import GLOBALS from 'components/globals';
 
 import Layout from 'layouts/two_col';
 

@@ -7,7 +7,7 @@ import ClassNames from 'classnames';
 import 'components/popovers/popover.scss';
 
 export default class FlipPopover extends React.Component {
-    constructor () {
+    constructor() {
         super();
 
         this.state = {
@@ -18,7 +18,7 @@ export default class FlipPopover extends React.Component {
         };
     }
 
-    componentDidMount () {
+    componentDidMount() {
         this.setState({
             element: this.props.element,
             earnedOn: this.props.element.earned || this.props.earnedOn,
@@ -30,17 +30,17 @@ export default class FlipPopover extends React.Component {
         this._mounted = true;
     }
 
-    componentWillUnmount () {
+    componentWillUnmount() {
         this._mounted = false;
     }
 
-    render () {
+    render() {
         if (!this._mounted) {
             return null;
         }
 
         return (
-            <div className={ClassNames("single-flip", {hidden: this.state.error})}>
+            <div className={ClassNames('single-flip', {hidden: this.state.error})}>
                 <ButtonToolbar id={Shortid.generate()}>
                     <OverlayTrigger
                         trigger={this.state.trigger}
@@ -53,7 +53,11 @@ export default class FlipPopover extends React.Component {
                                 title={[
                                     this.state.element.title,
                                     <br />,
-                                    <span className={ClassNames("title-meta", {hidden: !this.state.earnedOn})}>
+                                    <span className={ClassNames(
+                                        'title-meta', {
+                                            hidden: !this.state.earnedOn
+                                        }
+                                    )}>
                                         {`Earned: ${Moment(this.state.earnedOn).format('MMM Do YYYY')}`}
                                     </span>
                                 ]}
@@ -62,7 +66,9 @@ export default class FlipPopover extends React.Component {
                             </Popover>}>
                             <img
                                 src={`/flips/${this.state.element.flip_id}-${this.state.status}.gif`}
-                                onError={() => {this.setState({error: true})}}
+                                onError={ () => {
+                                    this.setState({error: true});
+                                } }
                             />
                     </OverlayTrigger>
                 </ButtonToolbar>

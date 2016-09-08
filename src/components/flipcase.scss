@@ -6,24 +6,23 @@
 
     .header {
         display: none;
-        width: 100%;
         position: absolute;
+        width: 100%;
     }
 
     .single-flip {
         display: inline-block;
+        position: relative;
+        z-index: 1;
         width: 50%;
         height: 160px;
-        // margin-top: -30%;
-        z-index: 1;
-        position: relative;
         overflow: hidden;
 
         img {
-            width: 100%;
             position: absolute;
             bottom: 0;
             left: 0;
+            width: 100%;
         }
     }
 
@@ -91,8 +90,8 @@
             font-size: 1.25rem;
 
             strong {
-                font-size: 2rem;
                 color: $cmwn-purple;
+                font-size: 2rem;
             }
         }
     }
