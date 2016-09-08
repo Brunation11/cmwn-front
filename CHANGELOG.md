@@ -1,3 +1,10 @@
+Version - 0.3.12
+----
+
+- 7130400: merge ditto
+- a236f51: Version bump [ci skip]
+- 53b2ee6: Version bump [ci skip]
+
 Version - 0.3.11
 ----
 
