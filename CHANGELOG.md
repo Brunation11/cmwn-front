@@ -1,3 +1,8 @@
+Version - 0.3.12
+----
+
+- 78945d8: linter
+
 Version - 0.3.11
 ----
 
