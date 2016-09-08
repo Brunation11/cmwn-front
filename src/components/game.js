@@ -19,6 +19,8 @@ const DEMO_MODE = 'Demo Mode';
 
 const PORTRAIT_TEXT = 'Please turn this game into landscape mode to continue.';
 
+const COMPONENT_IDENTIFIER = 'game';
+
 /**
  * Game wrapper iframe component.
  * Listens for 'game-event'
@@ -177,9 +179,9 @@ var Game = React.createClass({
     render: function () {
         if (this.props.url == null) return null;
         return (
-            <div className="wrapper">
+            <div className={COMPONENT_IDENTIFIER}>
                 <div ref="wrapRef" className={ClassNames(
-                    'game',
+                    'game-frame-wrapper',
                     {fullscreen: this.state.fullscreenFallback}
                 )}>
                     <div

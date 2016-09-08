@@ -117,7 +117,7 @@ export class Profile extends React.Component {
                <USER_SOURCE>
                     <FlipBoard
                         renderFlip={this.renderFlip}
-                        header={`${HEADINGS.CLASS} ${this.props.data.title ? this.props.data.title : ''}`}
+                        header={`${HEADINGS.CLASS} ${this.state.title}`}
                     />
                </USER_SOURCE>
            </Layout>

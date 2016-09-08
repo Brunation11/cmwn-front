@@ -5,6 +5,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var autoprefixer = require('autoprefixer');
+
 module.exports = {
     devtool: 'source-map',
     resolve: {

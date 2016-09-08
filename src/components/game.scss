@@ -1,11 +1,9 @@
 @import 'variables';
 
-@import 'variables';
-
-.wrapper {
+.game {
     margin-bottom: 50px;
 
-    .game {
+    .game-frame-wrapper {
         position: relative;
         padding-bottom: 56.22%;
         width: 100vw;

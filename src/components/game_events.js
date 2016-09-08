@@ -117,12 +117,26 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
             ga('set', 'dimension4', gameId || e.gameData.id || e.gameData.game || e.gameData.flip);
             HttpManager.GET( _links.save_game.href.replace('{game_id}', gameId))
                 .then(server => e.respond(server.response.data))
-                .catch(err => Log.error('failed to get game data for ' + gameId, err));
+                .catch(err => {
+                    var message = 'failed to get game data for ' + gameId;
+                    if (err.status === 404) {
+                        Log.info(message, err);
+                    } else {
+                        Log.error(message, err);
+                    }
+                });
         },
         getData: function (e) {
             HttpManager.GET( _links.save_game.href.replace('{game_id}', gameId))
                 .then(server => e.respond(server.response))
-                .catch(err => Log.error('failed to get game data for ' + gameId, err));
+                .catch(err => {
+                    var message = 'failed to get game data for ' + gameId;
+                    if (err.status === 404) {
+                        Log.info(message, err);
+                    } else {
+                        Log.error(message, err);
+                    }
+                });
         },
         setData: function (e) {
             var version = 1;
