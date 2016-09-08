@@ -15,14 +15,13 @@ const FLIP_SOURCE = GenerateDataSource('user_flip', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADER = 'FLIP CASE';
 
-class Flips extends React.Component {
+export class FlipWall extends React.Component {
     constructor() {
         super();
     }
 
     render() {
         if (!this.props.data || !this.props.data._embedded || !this.props.data._embedded.flip) return null;
-
         return (
             <Layout className={PAGE_UNIQUE_IDENTIFIER} navMenuId="navMenu">
                 <Panel className="standard" header={HEADER}>
@@ -55,6 +54,6 @@ mapStateToProps = state => {
     };
 };
 
-Page = connect(mapStateToProps)(Flips);
+Page = connect(mapStateToProps)(FlipWall);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
