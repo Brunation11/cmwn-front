@@ -5,6 +5,7 @@ import {Link} from 'react-router';
 import Shortid from 'shortid';
 
 import PopOver from 'components/popover';
+
 import 'components/trophycase.scss';
 
 import DISABLED_FLIP from 'media/flip-disabled.png';
@@ -22,14 +23,10 @@ var Trophycase = React.createClass({
         };
     },
     componentDidMount: function () {
-        if (this.props.data && this.props.data) {
-            this.setState({flips: this.props.data});
-        }
+        if (this.props.data) this.setState({flips: this.props.data});
     },
     componentWillReceiveProps: function (nextProps) {
-        if (nextProps.data && nextProps.data) {
-            this.setState({flips: nextProps.data});
-        }
+        if (nextProps.data && nextProps.data) this.setState({flips: nextProps.data});
     },
     renderPartial: function (items) {
         return (
@@ -94,4 +91,3 @@ var Trophycase = React.createClass({
 });
 
 export default Trophycase;
-
