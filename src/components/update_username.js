@@ -52,14 +52,28 @@ var UpdateUsername = React.createClass({
     },
     reloadChildUsername: function () {
         var self = this;
+
+        var resetLoading = function () {
+            setTimeout(function () {
+                self.setState({
+                    loading: false
+                });
+            }, 500);
+        };
+
         self.setState({loading: true});
+
         HttpManager.GET({url: `${GLOBALS.API_URL}user-name`}).then(server => {
-            self.setState({last: self.state.option, option: server.response.user_name});
-        }).catch(err => {}); // eslint-disable-line
+            self.setState({
+                last: self.state.option,
+                option: server.response.user_name
+            });
+            resetLoading();
+        }).catch(err => {  // eslint-disable-line
+            resetLoading();
+        });
+
         self.setStyleOnClick();
-        setTimeout(function () {
-            self.setState({loading: false});
-        }, 1500);
     },
     setStyleOnClick: function () {
         this.setState({tooltipsOpen: true});
@@ -120,11 +134,10 @@ var UpdateUsername = React.createClass({
     renderChild: function () {
         return (
            <div className="update-username-container">
-                <div className={'animated', ClassNames({
-                    loading: this.state.loading,
+                <div className={ClassNames('animated loading', {
                     hidden: !this.state.loading
                 })}>
-                    <div className={"loader"} />
+                    <div className="loader" />
                 </div>
                 <div className="left">
                     <Button
