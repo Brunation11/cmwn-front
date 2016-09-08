@@ -31,6 +31,11 @@
         td {
             white-space: pre;
             //border-left: $cmwn-white solid 1px;
+            //scss-lint:disable all
+            word-wrap: break-word;
+            word-break: break-all;
+            word-break: break-word;
+            //scss-lint:enable all
         }
     }
 
@@ -44,6 +49,11 @@
         td {
             border-right: 2px solid $cmwn-white;
             border-left: 2px solid $cmwn-white;
+            //scss-lint:disable all
+            word-wrap: break-word;
+            word-break: break-all;
+            word-break: break-word;
+            //scss-lint:enable all
         }
 
         &:nth-child(even) {

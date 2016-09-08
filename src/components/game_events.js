@@ -8,8 +8,6 @@ import GLOBALS from 'components/globals';
 
 import Skribble from 'components/game_events/skribble';
 
-import DefaultProfile from 'media/profile_tranparent.png';
-
 const BAD_FLIP = 'There was a problem registering your earned flip. Please try again in a little while';
 
 const CACH_BASE_KEY = '__base';
@@ -119,12 +117,26 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
             ga('set', 'dimension4', gameId || e.gameData.id || e.gameData.game || e.gameData.flip);
             HttpManager.GET( _links.save_game.href.replace('{game_id}', gameId))
                 .then(server => e.respond(server.response.data))
-                .catch(err => Log.error('failed to get game data for ' + gameId, err));
+                .catch(err => {
+                    var message = 'failed to get game data for ' + gameId;
+                    if (err.status === 404) {
+                        Log.info(message, err);
+                    } else {
+                        Log.error(message, err);
+                    }
+                });
         },
         getData: function (e) {
             HttpManager.GET( _links.save_game.href.replace('{game_id}', gameId))
                 .then(server => e.respond(server.response))
-                .catch(err => Log.error('failed to get game data for ' + gameId, err));
+                .catch(err => {
+                    var message = 'failed to get game data for ' + gameId;
+                    if (err.status === 404) {
+                        Log.info(message, err);
+                    } else {
+                        Log.error(message, err);
+                    }
+                });
         },
         setData: function (e) {
             var version = 1;
@@ -162,7 +174,7 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
                     friend._embedded = friend._embedded || {};
                     friend._embedded.image = friend._embedded.image || {};
                     friend._embedded.image.url =
-                        friend._embedded.image.url || origin + DefaultProfile;
+                        friend._embedded.image.url || origin + GLOBALS.DEFAULT_PROFILE;
                     e.respond({user: friend});
                 })
                 .catch(err => Log.error(err));
@@ -174,7 +186,7 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
                         friend._embedded = friend._embedded || {};
                         friend._embedded.image = friend._embedded.image || {};
                         friend._embedded.image.url =
-                            friend._embedded.image.url || origin + DefaultProfile;
+                            friend._embedded.image.url || origin + GLOBALS.DEFAULT_PROFILE;
                         return friend;
                     });
                     e.respond({user: friends});

@@ -11,10 +11,9 @@ import {Table, Column} from 'components/table';
 import FlipBoard from 'components/flipboard';
 //import HttpManager from 'components/http_manager';
 import Layout from 'layouts/two_col';
+import GLOBALS from 'components/globals';
 
 import 'routes/users.scss';
-
-import DefaultProfile from 'media/profile_tranparent.png';
 
 const TITLE = 'My Friends and Network'; /** @TODO MPR, 12/3/15: May need to swap this based on user type */
 
@@ -36,7 +35,7 @@ var Component = React.createClass({
     renderFlip: function (item){
         var image;
         if (!_.has(item, '_embedded.image')) {
-            image = DefaultProfile;
+            image = GLOBALS.DEFAULT_PROFILE;
         } else {
             if (item._embedded.image.url != null) {
                 image = item._embedded.image.url;
