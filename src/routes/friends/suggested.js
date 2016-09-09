@@ -11,7 +11,7 @@ import History from 'components/history';
 import HttpManager from 'components/http_manager';
 import Actions from 'components/actions';
 import Store from 'components/store';
-import PopOver from 'components/popover';
+import UserPopover from 'components/popovers/user_popover';
 import GLOBALS from 'components/globals';
 
 import Layout from 'layouts/two_col';
@@ -71,24 +71,14 @@ export class Suggested extends React.Component{
         );
     }
 
-    renderFlipsEarned(item) {
-        if (item.roles && item.roles.data && !~item.roles.data.indexOf('Student')) {
-            return null;
-        }
-        return (
-            <p className="user-flips">{item.flips.data.length} Flips Earned</p>
-        );
-    }
-
     renderFlip(item) {
         return (
-            <PopOver
+            <UserPopover
                 element={item}
-                type="user"
                 trigger="click"
             >
                 {this.renderUserFlip.call(this, item)}
-            </PopOver>
+            </UserPopover>
         );
     }
 

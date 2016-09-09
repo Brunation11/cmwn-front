@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap';
 import Shortid from 'shortid';
 
-import PopOver from 'components/popover';
+import UserPopover from 'components/popovers/user_popover';
 import Log from 'components/log';
 import HttpManager from 'components/http_manager';
 import FlipBoard from 'components/flipboard';
@@ -75,13 +75,12 @@ class Friends extends React.Component {
 
     renderFlip(item) {
         return (
-            <PopOver
+            <UserPopover
                 element={item}
-                type="user"
                 trigger="click"
             >
                 {this.renderUserFlip.call(this, item)}
-            </PopOver>
+            </UserPopover>
         );
     }
 
