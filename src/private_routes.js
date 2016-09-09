@@ -91,7 +91,7 @@ var routes = [
     { path: 'friends/suggested(/)', title: 'Suggested Friends', endpoint: '$$suggested_friends',
         component: SuggestedFriends},
     { path: 'suggestedfriends(/)', onEnter: redirect('/friends/suggested')},
-    { path: '/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed}
+    { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed}
 ];
 
 routes = _.map(routes, i => {
