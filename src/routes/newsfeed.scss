@@ -40,6 +40,10 @@
                         position: absolute;
                         bottom: 0;
                         margin: 0;
+
+                        &.error {
+                            content: url(../media/profile_transparent.png);
+                        }
                     }
                 }
             }
@@ -55,6 +59,10 @@
             width: 50%;
             margin: 0 0 $standard 0;
             left: 25%;
+
+            &.error {
+                content: url(../media/flip-placeholder-white.png);
+            }
         }
 
         @media (min-width: $profile-width) and (max-width: $device-portrait-break) {
