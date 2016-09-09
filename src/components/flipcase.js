@@ -10,7 +10,7 @@ const COPY = {
     HEADER: 'Your Earned Flips: '
 };
 
-export default class FlipCase extends React.Component {
+export default class Flipcase extends React.Component {
     constructor() {
         super();
 
