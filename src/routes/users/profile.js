@@ -224,31 +224,58 @@ export class Profile extends React.Component {
 
     renderUserProfile() {
         var ISODate = (new Date(this.state.birthdate)).toISOString();
+        if (this.state.friend_status === 'FRIEND') {
+            return (
+                <div>
+                    <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
+                        <div className="left">
+                            <div className="frame">
+                                <ProfileImage
+                                    data={this.props.data}
+                                    currentUser={this.props.currentUser}
+                                    link-below={true}
+                                 />
+                            </div>
+                        </div>
+                        <div className="right">
+                            <div className="user-metadata">
+                                <p>Username:</p>
+                                <p className="standard field">{this.state.username}</p>
+                                <p>First Name:</p>
+                                <p className="standard field">{this.state.first_name}</p>
+                                <p>Last Name:</p>
+                                <p className="standard field">{this.state.last_name}</p>
+                                <p>Birthday:</p>
+                                <p className="standard field">{Moment(ISODate).format('MM-DD-YYYY')}</p>
+                            </div>
+                        </div>
+                    </Panel>
+                    <Panel
+                        header={HEADINGS.TROPHYCASE}
+                        className={ClassNames('standard', {
+                            hidden: !this.state.isStudent
+                        })}
+                    >
+                        <FLIP_SOURCE>
+                           <Flipcase
+                                type="trophycase"
+                                header={true}
+                                render="earned"
+                            />
+                        </FLIP_SOURCE>
+                    </Panel>
+                </div>
+            );
+        }
         return (
             <div>
                 <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
-                    <div className="left">
-                        <div className="frame">
-                            <ProfileImage
-                                data={this.props.data}
-                                currentUser={this.props.currentUser}
-                                link-below={true}
-                             />
-                        </div>
-                    </div>
-                    <div className="right">
-                        <div className="user-metadata">
-                            <p>Username:</p>
-                            <p className="standard field" id="username">{this.state.username}</p>
-                            <p>First Name:</p>
-                            <p className="standard field" id="first-name">{this.state.first_name}</p>
-                            <p>Last Name:</p>
-                            <p className="standard field" id="last-name">{this.state.last_name}</p>
-                            <p>Birthday:</p>
-                            <p className="standard field" id="birthday">
-                                {Moment(ISODate).format('MM-DD-YYYY')}
-                            </p>
-                        </div>
+                    <div className="frame non-friend">
+                        <ProfileImage
+                            data={this.props.data}
+                            currentUser={this.props.currentUser}
+                            link-below={true}
+                        />
                     </div>
                 </Panel>
                 <Panel
@@ -272,8 +299,14 @@ export class Profile extends React.Component {
     renderCurrentUserProfile() {
         return (
             <div>
-                <Modal className="full-width" show={this.state.gameOn} onHide={this.hideModal.bind(this)}
-                    keyboard={false} backdrop="static" id="game-modal">
+                <Modal
+                    className="full-width game-modal"
+                    show={this.state.gameOn}
+                    onHide={this.hideModal.bind(this)}
+                    keyboard={false}
+                    backdrop="static"
+                    id="game-modal"
+                >
                     <Modal.Body>
                         {this.renderGame()}
                     </Modal.Body>

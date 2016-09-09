@@ -2,10 +2,16 @@ import React from 'react';
 import {ButtonToolbar, OverlayTrigger, Popover} from 'react-bootstrap';
 import Shortid from 'shortid';
 import Moment from 'moment';
+import _ from 'lodash';
 
 import 'components/popover.scss';
 import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
+import Log from 'components/log';
+
+const COPY = {
+    NOFLIPS: 'It Looks like this user hasn\'t earned any flips.'
+};
 
 var PopOver = React.createClass({
     getInitialState: function () {
@@ -22,78 +28,103 @@ var PopOver = React.createClass({
             placement: this.props.placement || this.state.placement,
             type: this.props.type
         });
+        if (this.props.type === 'user') this.getUserFlips();
+        this._mounted = true;
+    },
+    componentWillUnmount: function () {
+        this._mounted = false;
     },
     renderFlip: function () {
-        var state = this.state;
         return (
-            <ButtonToolbar>
+            <ButtonToolbar id={Shortid.generate()}>
                 <OverlayTrigger
-                    trigger={state.trigger}
+                    trigger={this.state.trigger}
                     rootClose
-                    placement={state.placement}
+                    placement={this.state.placement}
                     overlay={
                         <Popover
-                            className="flip-popover"
                             id={Shortid.generate()}
+                            className="flip-popover"
                             title={[
-                                state.element.title,
+                                this.state.element.title,
                                 <br />,
                                 <span className="title-meta">
-                                    {`earned: ${Moment(state.element.earned).format('MMM Do YYYY')}`}
+                                    {`Earned: ${Moment(this.state.element.earned).format('MMM Do YYYY')}`}
                                 </span>
                             ]}
                         >
-                            {state.element.description}
+                            {this.state.element.description}
                         </Popover>}>
-                        <img src={`/flips/${state.element.flip_id}-earned.gif`} />
+                        <img
+                            src={`/flips/${this.state.element.flip_id}-earned.gif`}
+                        />
                 </OverlayTrigger>
             </ButtonToolbar>
         );
     },
     getUserFlips: function () {
-        var state = this.state;
-        // get users flips and set to state
+        var userID = this.props.element.friend_id || this.props.element.suggest_id;
         HttpManager.GET({
-            url: (`${GLOBALS.API_URL}user/${state.element.friend_id}/flip`),
+            url: (`${GLOBALS.API_URL}user/${userID}/flip`),
             handleErrors: false
         })
         .then(res => {
-            this.setState({flips: res.response});
+            if (res.response._embedded) {
+                this.setState({flips: res.response._embedded.flip_user});
+            }
+        }).catch(e => {
+            Log.error(e, 'Flips could not be extracted from user');
         });
     },
+    renderUserFlips: function () {
+        if (this.state.flips.length) {
+            return _.map(this.state.flips, (flip) => {
+                return (
+                    <img
+                        className="hover-flips"
+                        key={Shortid.generate()}
+                        src={`/flips/${flip.flip_id}-earned.gif`}
+                    />
+                );
+            });
+        } else {
+            return (
+               <p>{COPY.NOFLIPS}</p>
+            );
+        }
+    },
     renderUser: function () {
-        var state = this.state;
-        return (
-            <ButtonToolbar>
-                <OverlayTrigger
-                    trigger={state.trigger}
-                    rootClose placement={state.placement}
-                    overlay={(
-                        <Popover
-                            id="popover"
-                            title={`Earned: ${state.flips.length}`}
-                        >
-                            {state.flips}
-                        </Popover>
-                    )}
-                >
-                    {this.props.children}
-                </OverlayTrigger>
-            </ButtonToolbar>
-        );
+        if (this.state.flips) {
+            return (
+                <ButtonToolbar id={Shortid.generate()}>
+                    <OverlayTrigger
+                        trigger={this.state.trigger}
+                        rootClose
+                        placement={this.state.placement}
+                        overlay={(
+                            <Popover
+                                id={Shortid.generate()}
+                                className="user-popover"
+                                title={`Earned: ${this.state.flips.length}`}
+                            >
+                                {this.renderUserFlips()}
+                            </Popover>
+                        )}
+                    >
+                        {this.props.children}
+                    </OverlayTrigger>
+                </ButtonToolbar>
+            );
+        }
     },
     render: function () {
-        var state = this.state;
         var popover;
-        if (state.type === 'flip') {
-            popover = this.renderFlip();
-        } else if (state.type === 'user') {
-            popover = this.renderUser();
-        }
-
+        if (!this._mounted) return null;
+        if (this.state.type === 'flip') popover = this.renderFlip;
+        if (this.state.type === 'user') popover = this.renderUser;
         return (
             <div>
-                {popover}
+                {popover()}
             </div>
         );
     }

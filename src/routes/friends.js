@@ -13,10 +13,9 @@ import FlipBoard from 'components/flipboard';
 import Toast from 'components/toast';
 import Paginator from 'components/paginator';
 import Actions from 'components/actions';
+import GLOBALS from 'components/globals';
 
 import Layout from 'layouts/two_col';
-
-import DefaultProfile from 'media/profile_tranparent.png';
 
 import 'routes/friends.scss';
 
@@ -143,7 +142,7 @@ class Friends extends React.Component {
             <form>
                 <Paginator rowCount={this.props.rowCount} currentPage={this.props.currentPage}
                     pageCount={this.props.pageCount} data={this.props.data} pagePaginator={true}>
-                   <FlipBoard
+                    <FlipBoard
                        // add conditional to check if user has flips
                        // render either renderflip or renderuserflip
                        renderFlip={this.renderFlip.bind(this)}
@@ -151,7 +150,7 @@ class Friends extends React.Component {
                        transform={data => {
                            var image;
                            if (!_.has(data, '_embedded.image')) {
-                               image = DefaultProfile;
+                               image = GLOBALS.DEFAULT_PROFILE;
                            } else {
                                if (data._embedded.image.url != null) {
                                    image = data._embedded.image.url;
@@ -164,7 +163,7 @@ class Friends extends React.Component {
 
                            return data;
                        }}
-                   />
+                    />
                </Paginator>
             </form>
         );
