@@ -1,3 +1,12 @@
+Version - 0.3.14
+----
+
+- 19c862b: linter
+- c96a0d7: add initial testing, test data, and smoke test file for newsfeed
+- 7c71703: remove default from export declaration on class. remove on error props for images
+- 6d8aa6f: update style rules, refactor for linter
+- dd5554a: Version bump [ci skip]
+
 Version - 0.3.13
 ----
 
