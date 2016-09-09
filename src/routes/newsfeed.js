@@ -9,9 +9,6 @@ import GLOBALS from 'components/globals';
 import Layout from 'layouts/two_col';
 import Game from 'components/game';
 
-import FlipBgDefault from 'media/flip-placeholder-white.png';
-import AvatarDefault from 'media/profile_transparent.png';
-
 import 'routes/newsfeed.scss';
 
 var mapStateToProps;
@@ -32,7 +29,7 @@ const COPY = {
     )
 };
 
-export default class Feed extends React.Component {
+export class Feed extends React.Component {
     constructor() {
         super();
 
@@ -109,7 +106,7 @@ export default class Feed extends React.Component {
         if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe10())) {
             return (
                 <div>
-                    {BROWSER_NOT_SUPPORTED}
+                    {COPY.BROWSER_NOT_SUPPORTED}
                     <p><a onClick={this.setState.bind(this, {gameOn: false})} >(close)</a></p>
                 </div>
             );
@@ -144,10 +141,6 @@ export default class Feed extends React.Component {
                             <div className="avatar">
                                 <img
                                     src={avatar}
-                                    onError={() => {
-                                        this.onError = null;
-                                        this.src = AvatarDefault;
-                                    }}
                                 />
                             </div>
                             <span className="name">
@@ -161,10 +154,6 @@ export default class Feed extends React.Component {
                     <img
                         className="banner"
                         src={thumbnail}
-                        onError={() => {
-                            this.onError = null;
-                            this.src = FlipBgDefault;
-                        }}
                     />
                 </a>
             </div>
