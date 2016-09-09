@@ -3,14 +3,14 @@
 .newsfeed {
 
     .panel-body {
+        background-color: $cmwn-off-white;
         padding: 0;
-        background-color: #FBFBFB;
     }
 
     .feed-item {
         margin: $standard;
-        background-color: $cmwn-white;
         box-shadow: 5px 5px 8px -8px $cmwn-medium-gray;
+        background-color: $cmwn-white;
 
         a:hover {
             text-decoration: none;
@@ -18,83 +18,72 @@
 
         .content {
             padding-bottom: 0;
+        }
 
-            .author {
-                .name {
-                    font-family: $cmwn-jade-font;
-                    font-size: 1.75rem;
-                    color: $cmwn-blue;
-                    margin-top: 35px;
-                    position: absolute;
-                }
-
-                .avatar {
-                    width: 120px;
-                    height: 100px;
-                    overflow: hidden;
-                    position: relative;
-                    display: inline-block;
-
-                    img {
-                        width: 100%;
-                        position: absolute;
-                        bottom: 0;
-                        margin: 0;
-
-                        &.error {
-                            content: url(../media/profile_transparent.png);
-                        }
-                    }
-                }
+        .author {
+            .name {
+                position: absolute;
+                margin-top: 35px;
+                color: $cmwn-blue;
+                font-family: $cmwn-jade-font;
+                font-size: 1.75rem;
             }
+        }
 
-            .meta {
-                padding: 0 $standard;
-                font-size: 16px;
+        .avatar {
+            display: inline-block;
+            position: relative;
+            width: 120px;
+            height: 100px;
+            overflow: hidden;
+
+            img {
+                position: absolute;
+                bottom: 0;
+                margin: 0;
+                width: 100%;
             }
+        }
+
+
+        .meta {
+            padding: 0 $standard;
+            font-size: 16px;
         }
 
         .banner {
             position: relative;
-            width: 50%;
-            margin: 0 0 $standard 0;
             left: 25%;
-
-            &.error {
-                content: url(../media/flip-placeholder-white.png);
-            }
+            margin: 0 0 $standard;
+            width: 50%;
         }
 
         @media (min-width: $profile-width) and (max-width: $device-portrait-break) {
-            .content {
-                .author {
-                    .name {
-                        font-size: 1.25rem;
-                        margin-top: 30px;
-                    }
+            .name {
+                margin-top: 30px;
+                font-size: 1.25rem;
+            }
 
-                    .avatar {
-                        width: 100px;
-                        height: 80px;
-                    }
-                }
+            .avatar {
+                width: 100px;
+                height: 80px;
+            }
 
-                .meta {
-                    padding: 0 $standard;
-                    font-size: 12px;
-                }
+            .meta {
+                padding: 0 $standard;
+                font-size: 12px;
             }
 
             .banner {
-                width: 100%;
                 left: 0;
+                width: 100%;
             }
         }
 
         @media (min-width: $device-portrait-break) and (max-width: $monitor-max-break) {
             .banner {
-                width: 70%;
                 left: 15%;
+                width: 70%;
             }
         }
     }
