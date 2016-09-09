@@ -19,6 +19,7 @@ var checkFlipWallContent = function (data, currentUser) {
     const WRAPPER = shallow(flipWall);
     expect(WRAPPER.children()).to.have.length(1);
     expect(WRAPPER.find('Panel')).to.have.length(1);
+    expect(WRAPPER.find('Flipcase')).to.have.length(1);
 };
 
 describe('Flip Wall Smoke Tests', function () {
