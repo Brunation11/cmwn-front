@@ -1,3 +1,9 @@
+Version - 0.3.15
+----
+
+- 6e72f47: remove unused component and styles
+- bd813d3: Version bump [ci skip]
+
 Version - 0.3.14
 ----
 
