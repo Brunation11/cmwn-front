@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import {Modal, Button, Input, Tabs, Tab} from 'react-bootstrap';
+import {Modal, Button, Input, Tabs, Tab, Radio} from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import Toast from 'components/toast';
@@ -20,7 +20,10 @@ const LABELS = {
     LOGIN: 'USERNAME',
     PASSWORD: 'PASSWORD',
     RESET: 'Reset Password',
-    FORGOT: 'Email'
+    FORGOT: 'USERNAME',
+    USER_TYPE: 'ARE YOU A',
+    TEACHER: 'TEACHER',
+    STUDENT: 'STUDENT'
 };
 
 const FORGOT_PASSWORD = 'I forgot my password';
@@ -51,13 +54,15 @@ const SIGNUP = (<span>
         '%0D%0ASchool Phone:%0D%0ACity/State:\'>here</a> to contact us.'}}>
     </p>
 </span>);
+
 var Component = React.createClass({
     getInitialState: function () {
         return {
             loginOnNextPropChange: false,
             _token: '',
             background: _.sample(['bkg-1', 'bkg-2']),
-            active: 'login'
+            currentPage: 'login',
+            selectedOption: 'student'
         };
     },
     componentDidMount: function () {
@@ -67,8 +72,13 @@ var Component = React.createClass({
     componentWillUnmount: function () {
         window.document.removeEventListener('keydown', this.attemptLogin);
     },
-    handleSelect: function () {
-        this.state.active === 'login' ? this.setState({active: 'forgot-password'}) : this.setState({active: 'forgot-password'});
+    handlePageSelect: function () {
+        this.state.currentPage === 'login' ? this.setState({currentPage: 'forgot-password'}) : this.setState({currentPage: 'login'});
+    },
+    handleOptionSelect: function (e) {
+        this.setState({
+            selectedOption: e.target.value
+        });
     },
     displaySignupModal: function () {
         this.setState({signupOpen: true});
@@ -117,6 +127,7 @@ var Component = React.createClass({
         });
     },
     attemptLogin: function (e) {
+        if (this.state.currentPage === 'forgot-password') return;
         var user = this.getUsernameWithoutSpaces();
         var logout;
         var logoutUrl;
@@ -155,28 +166,34 @@ var Component = React.createClass({
         }
     },
     forgotPass: function (e) {
-        var req;
-        var state = Store.getState();
-        if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
-            //I know it might seem strange to track "currentUser", but even
-            //unauthenticated visitors have a session and are allowed to take
-            //a handful of actions, like forgot.
-            req = HttpManager.POST({
-                url: state.currentUser._links.forgot.href,
-            }, {
-                'email': this.refs.reset.getValue(),
-            });
-            req.then(res => {
-                if (res.status < 300 && res.status >= 200) {
-                    Toast.success('Password reset successful. Please check your email for the next step.');
-                } else {
-                    Toast.error(ERRORS.LOGIN + (res.response && res.response.data &&
-                        res.response.data.message ? ' Message: ' + res.response.data.message : ''));
-                    Log.log(res, 'Password reset failure', req);
-                }
-            }).catch(err => {
-                Log.log(err);
-            });
+        if (this.state.currentPage === 'login') return;
+        if (this.state.selectedOption === 'student') {
+            this.setState({currentPage: 'confirm-student'});
+        } else {
+            var req;
+            var state = Store.getState();
+            if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
+                //I know it might seem strange to track "currentUser", but even
+                //unauthenticated visitors have a session and are allowed to take
+                //a handful of actions, like forgot.
+                req = HttpManager.POST({
+                    url: state.currentUser._links.forgot.href,
+                }, {
+                    'email': this.refs.reset.getValue(),
+                });
+                req.then(res => {
+                    if (res.status < 300 && res.status >= 200) {
+                        this.setState({currentPage: 'confirm-teacher'});
+                        Toast.success('Password reset successful. Please check your email for the next step.');
+                    } else {
+                        Toast.error(ERRORS.LOGIN + (res.response && res.response.data &&
+                            res.response.data.message ? ' Message: ' + res.response.data.message : ''));
+                        Log.log(res, 'Password reset failure', req);
+                    }
+                }).catch(err => {
+                    Log.log(err);
+                });
+            }
         }
     },
     getUsernameWithoutSpaces: function () {
@@ -194,7 +211,7 @@ var Component = React.createClass({
                             <Input ref="login" type="text" id="username" name="username" label={LABELS.LOGIN} placeholder="FUN-RABBIT003" />
                             <Input ref="password" type="password" id="password" name="password" label={LABELS.PASSWORD} placeholder="PA********" />
                             <Button id="login-button" onKeyPress={this.attemptLogin} onClick={this.attemptLogin} />
-                            <a className="forgot-password-link" onClick={this.handleSelect}>{FORGOT_PASSWORD}</a>
+                            <a className="forgot-password-link" onClick={this.handlePageSelect}>{FORGOT_PASSWORD}</a>
                             <span className="signup-prompt">
                                 <h2>{SIGNUP_PROMPT.HEADER}</h2>
                                 <p>{SIGNUP_PROMPT.COPY_1} <a onClick={this.displaySignupModal}>{SIGNUP_PROMPT.LINK}</a> {SIGNUP_PROMPT.COPY_2}</p>
@@ -213,23 +230,64 @@ var Component = React.createClass({
     },
     renderForgotPassword: function () {
         return(
-            <div className={`forgot-password-container ${this.state.background}`}>
-                <form method="POST" >
-                    <input type="hidden" name="_token" value={this.state._token} />
-                    <Input ref="reset" type="text" name="email" label={LABELS.FORGOT} />
-                    <Button onKeyPress={this.forgotPass} onClick={this.forgotPass}>
-                        {LABELS.RESET}
-                    </Button>
-                </form>
+            <div className={`forgot-password-tab ${this.state.background}`}>
+                <div className="forgot-password-container">
+                    <div className="forgot-password-content">
+                        <span className="header"></span>
+                        <form method="POST" className="forgot-password-form">
+                            <input type="hidden" name="_token" value={this.state._token} />
+                            <Input ref="reset" type="text" id="username" name="username" label={LABELS.FORGOT} placeholder="FUN-RABBIT003" />
+                            <p className="option-label">{LABELS.USER_TYPE}</p>
+                            <Input ref="student" type="radio" name="student" value='student' label={LABELS.STUDENT} checked={this.state.selectedOption === 'student'} onChange={this.handleOptionSelect} />
+                            <Input ref="teacher" type="radio" name="teacher" value='teacher' label={LABELS.TEACHER} checked={this.state.selectedOption === 'teacher'} onChange={this.handleOptionSelect} />
+                            <Button id="forgot-password-button" onKeyPress={this.forgotPass} onClick={this.forgotPass} />
+                            <span className="signup-prompt">
+                                <h2>{SIGNUP_PROMPT.HEADER}</h2>
+                                <p>{SIGNUP_PROMPT.COPY_1} <a onClick={this.displaySignupModal}>{SIGNUP_PROMPT.LINK}</a> {SIGNUP_PROMPT.COPY_2}</p>
+                                <a className="mobile" onClick={this.displaySignupModal}>{SIGNUP_PROMPT.MOBILE_LINK}</a>
+                            </span>
+                        </form>
+                    </div>
+                    <Modal show={this.state.signupOpen} onHide={() => this.setState({signupOpen: false})}>
+                        <Modal.Body>
+                            {SIGNUP}
+                        </Modal.Body>
+                    </Modal>
+                </div>
+            </div>
+        );
+    },
+    renderConfirmTeacher: function () {
+        return (
+            <div className="teacher-confirm-password-reset-container bkg-3">
+                <Button id="close-screen-button" onClick={this.handlePageSelect} />
+                <a id="open-email-button" href="mailto: " />
+            </div>
+        );
+    },
+    renderConfirmStudent: function () {
+        return (
+            <div className="student-confirm-password-reset-container bkg-4">
+                <Button id="close-screen-button" onClick={this.handlePageSelect} />
             </div>
         );
     },
     render: function () {
-        console.log(this);
-        var panel = this.state.active === 'login' ? this.renderLogin : this.renderForgotPassword;
+        var page;
+
+        if (this.state.currentPage === 'forgot-password') {
+            page = this.renderForgotPassword;
+        } else if (this.state.currentPage === 'confirm-teacher') {
+            page = this.renderConfirmTeacher;
+        } else if (this.state.currentPage === 'confirm-student') {
+            page = this.renderConfirmStudent;
+        } else {
+            page = this.renderLogin;
+        }
+
         return (
            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
-                {panel()}
+                {page()}
            </Layout>
         );
     }
