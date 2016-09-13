@@ -14,23 +14,28 @@ import Layout from 'layouts/one_col';
 
 import 'routes/login.scss';
 
+const PAGE_UNIQUE_IDENTIFIER = 'login';
+
 const LABELS = {
-    LOGIN: 'Email | Username',
-    PASSWORD: 'Password',
-    SUBMIT: 'SUBMIT',
+    LOGIN: 'USERNAME',
+    PASSWORD: 'PASSWORD',
     RESET: 'Reset Password',
     FORGOT: 'Email'
 };
+
+const FORGOT_PASSWORD = 'I forgot my password';
 
 const ERRORS = {
     LOGIN: 'Sorry, that wasn\'t quite right. Please try again.'
 };
 
-const MESSAGE_START = 'Don\'t have a login yet?  Contact your school to get started with Change ' +
- 'My World Now and ';
-const MESSAGE_LINK = 'submit a request';
-const MESSAGE_END = ' for us to contact your school!';
-
+const SIGNUP_PROMPT = {
+    HEADER: 'Don\'t have a login yet?',
+    COPY_1: 'Contact your school to get started with Change My World Now and',
+    COPY_2: 'for us to contact your school!',
+    LINK: 'SUBMIT A REQUEST',
+    MOBILE_LINK: ' CLICK HERE'
+};
 
 const SIGNUP = (<span>
     <p>We are so excited about your interest to work with us!</p>
@@ -51,7 +56,8 @@ var Component = React.createClass({
         return {
             loginOnNextPropChange: false,
             _token: '',
-            key: 1
+            background: _.sample(['bkg-1', 'bkg-2']),
+            active: 'login'
         };
     },
     componentDidMount: function () {
@@ -61,8 +67,8 @@ var Component = React.createClass({
     componentWillUnmount: function () {
         window.document.removeEventListener('keydown', this.attemptLogin);
     },
-    handleSelect: function (index) {
-        this.setState({key: index});
+    handleSelect: function () {
+        this.state.active === 'login' ? this.setState({active: 'forgot-password'}) : this.setState({active: 'forgot-password'});
     },
     displaySignupModal: function () {
         this.setState({signupOpen: true});
@@ -177,47 +183,53 @@ var Component = React.createClass({
         var newLogin = this.refs.login.getValue().replace(/\s/g, '');
         return newLogin;
     },
-    render: function () {
+    renderLogin: function () {
         return (
-           <Layout>
-                <Tabs activeKey={this.state.key} onSelect={this.handleSelect} >
-                    <Tab eventKey={1} title={'Login'}>
-                        <br />
-                        <form method="POST" className="login-form" id="login-form" >
+            <div className={`login-tab ${this.state.background}`}>
+                <div className="login-container">
+                    <div className="login-content">
+                        <span className="header"></span>
+                        <form method="POST" className="login-form">
                             <input type="hidden" name="_token" value={this.state._token} />
-                            <Input ref="login" type="text" id="email" name="email" label={LABELS.LOGIN} />
-                            <Input ref="password" type="password" id="password" name="password"
-                                label={LABELS.PASSWORD} />
-                            <Button
-                                id="login-button"
-                                onKeyPress={this.attemptLogin}
-                                onClick={this.attemptLogin}
-                            >
-                                {LABELS.SUBMIT}
-                            </Button>
+                            <Input ref="login" type="text" id="username" name="username" label={LABELS.LOGIN} placeholder="FUN-RABBIT003" />
+                            <Input ref="password" type="password" id="password" name="password" label={LABELS.PASSWORD} placeholder="PA********" />
+                            <Button id="login-button" onKeyPress={this.attemptLogin} onClick={this.attemptLogin} />
+                            <a className="forgot-password-link" onClick={this.handleSelect}>{FORGOT_PASSWORD}</a>
+                            <span className="signup-prompt">
+                                <h2>{SIGNUP_PROMPT.HEADER}</h2>
+                                <p>{SIGNUP_PROMPT.COPY_1} <a onClick={this.displaySignupModal}>{SIGNUP_PROMPT.LINK}</a> {SIGNUP_PROMPT.COPY_2}</p>
+                                <a className="mobile" onClick={this.displaySignupModal}>{SIGNUP_PROMPT.MOBILE_LINK}</a>
+                            </span>
                         </form>
-                        <div><br /><p>
-                            {MESSAGE_START}
-                            <a onClick={this.displaySignupModal}>{MESSAGE_LINK}</a>
-                            {MESSAGE_END}
-                        </p></div>
-                        <Modal show={this.state.signupOpen} onHide={() => this.setState({signupOpen: false})}>
-                            <Modal.Body>
-                                {SIGNUP}
-                            </Modal.Body>
-                        </Modal>
-                    </Tab>
-                    <Tab eventKey={2} title={'Forgot Password'} >
-                        <br />
-                        <form method="POST" >
-                            <input type="hidden" name="_token" value={this.state._token} />
-                            <Input ref="reset" type="text" name="email" label={LABELS.FORGOT} />
-                            <Button onKeyPress={this.forgotPass} onClick={this.forgotPass}>
-                                {LABELS.RESET}
-                            </Button>
-                        </form>
-                    </Tab>
-                </Tabs>
+                    </div>
+                    <Modal show={this.state.signupOpen} onHide={() => this.setState({signupOpen: false})}>
+                        <Modal.Body>
+                            {SIGNUP}
+                        </Modal.Body>
+                    </Modal>
+                </div>
+            </div>
+        );
+    },
+    renderForgotPassword: function () {
+        return(
+            <div className={`forgot-password-container ${this.state.background}`}>
+                <form method="POST" >
+                    <input type="hidden" name="_token" value={this.state._token} />
+                    <Input ref="reset" type="text" name="email" label={LABELS.FORGOT} />
+                    <Button onKeyPress={this.forgotPass} onClick={this.forgotPass}>
+                        {LABELS.RESET}
+                    </Button>
+                </form>
+            </div>
+        );
+    },
+    render: function () {
+        console.log(this);
+        var panel = this.state.active === 'login' ? this.renderLogin : this.renderForgotPassword;
+        return (
+           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+                {panel()}
            </Layout>
         );
     }
@@ -242,4 +254,5 @@ var mapStateToProps = state => {
 };
 
 var Page = connect(mapStateToProps)(Component);
+Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
