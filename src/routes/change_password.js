@@ -98,7 +98,9 @@ export class ChangePassword extends React.Component {
                     //non-error response from update password indicates password already changed successfully
                     this.setState({currentPage: 'confirm-re-login'});
                 } else {
-                    Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
+                    Log.warn(
+                        'Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err
+                    );
                     Toast.error(ERRORS.BAD_PASS);
                 }
             });
@@ -120,8 +122,6 @@ export class ChangePassword extends React.Component {
     }
 
     renderPasswordReset() {
-        console.log('in render password reset');
-        console.log(this);
         return (
             <div>
                 <Panel header={HEADINGS.PASSWORD} className="standard">
@@ -157,7 +157,14 @@ export class ChangePassword extends React.Component {
     }
 
     render() {
-        var page = this.state.currentPage === 'confirm-re-login' ? this.renderConfirmReLogin : this.renderPasswordReset;
+        var page;
+
+        if (this.state.currentPage === 'confirm-re-login') {
+            page = this.renderConfirmReLogin;
+        } else {
+            this.renderPasswordReset;
+        }
+
         return page.call(this);
     }
 }
