@@ -51,6 +51,6 @@ var studentSchoolPage = {
     'page_count': 1,
     'page_size': 25,
     'total_items': 1
-}
+};
 
 export default studentSchoolPage;
