@@ -1,3 +1,10 @@
+Version - 0.3.17
+----
+
+- ce7a824: linter
+- 7fdaac9: adjust font size
+- dd60b72: Version bump [ci skip]
+
 Version - 0.3.16
 ----
 
