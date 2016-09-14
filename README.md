@@ -17,7 +17,7 @@ Installing
 To setup the site, just run 
 
 ```bash
-$ bin/install.sh
+$ bin/install.sh front
 ```
 
 Installing (Windows PowerShell)

@@ -7,7 +7,7 @@ var webpack = require('webpack');
 var autoprefixer = require('autoprefixer');
 
 module.exports = {
-    devtool: 'cheap-module-source-map',
+    devtool: 'cheap-source-map',
     resolve: {
         root: path.resolve('./src'),
         extensions: ['', '.js']
@@ -46,7 +46,7 @@ module.exports = {
             test: /\.(jpe?g|png|gif|svg)$/i,
             loaders: [
                 'file?hash=sha512&digest=hex&name=[hash].[ext]',
-                'img?optimizationLevel=7'
+                'img?-minimize&progressive=true'
             ]
         }, {
             test: /\.woff$/,

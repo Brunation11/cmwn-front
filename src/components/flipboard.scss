@@ -15,6 +15,29 @@ $overlay-color: #fff;
             padding: $standard;
             text-align: center;
         }
+        // nth-child styles for games tile
+        div:nth-child(8n + 1),
+        div:nth-child(8n) {
+            .overlay {
+                background-color: $cmwn-medium-green;
+            }
+        }
+
+        div:nth-child(8n + 2),
+        div:nth-child(8n + 3),
+        div:nth-child(8n + 6),
+        div:nth-child(8n + 7) {
+            .overlay {
+                background-color: $cmwn-medium-purple;
+            }
+        }
+
+        div:nth-child(8n + 4),
+        div:nth-child(8n + 5) {
+            .overlay {
+                background-color: $cmwn-medium-blue;
+            }
+        }
     }
 
     .flip {
@@ -47,6 +70,7 @@ $overlay-color: #fff;
                 width: 100%;
                 max-width: $max-flip-size;
                 max-height: 236px;
+                overflow: hidden;
             }
         }
 
@@ -97,16 +121,16 @@ $overlay-color: #fff;
             transition: opacity .5s;
             opacity: 0;
             margin: auto;
-            background: rgba($cmwn-blue, .6);
             padding: $standard;
             max-width: $flip-standard-size;
             overflow: hidden;
             text-align: left;
             color: $overlay-color;
 
-            &:hover {
+            &:hover,
+            &:focus,
+            &:active {
                 opacity: 1;
-                overflow: hidden;
             }
 
             .relwrap {
@@ -124,6 +148,7 @@ $overlay-color: #fff;
         p {
             margin: 5px auto 10px;
             max-width: 200px;
+            text-align: center;
         }
     }
 }

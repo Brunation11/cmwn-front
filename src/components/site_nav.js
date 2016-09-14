@@ -2,12 +2,13 @@ import React from 'react';
 import {Link} from 'react-router';
 import _ from 'lodash';
 
+import ClassNames from 'classnames';
 import PublicRoutes from 'public_routes';
 import PrivateRoutes from 'private_routes';
 import Util from 'components/util';
 
 var addHardcodedEntries = function (menuItems) {
-    menuItems.unshift({url: '/profile', label: 'Action Items'});
+    menuItems.unshift({url: '/profile', label: 'Activities'});
     menuItems.push({url: '/profile/edit', label: 'Edit My Profile'});
     menuItems.push({url: '/logout', label: 'Logout'});
     return menuItems;
@@ -71,6 +72,7 @@ var buildMenuRoutes = function (links) {
 var SiteNav = React.createClass({
     renderNavItems: function () {
         var menuItems = buildMenuRoutes(this.props.data);
+        var currentUrl;
 //        var menuItems = _.reduce(this.props.data, (a, i, k) => {
 //            if (i.label != null) {
 //                var link = ~k.indexOf('_') ? k.split('_')[1] : k;
@@ -87,8 +89,34 @@ var SiteNav = React.createClass({
             !~IGNORED_ROUTES_FOR_CHILDREN.indexOf(item.label))
         );
         menuItems = addHardcodedEntries(menuItems);
-        return _.map(menuItems, item =>
-            (<li key={`(${item.label})-${item.url}`}><Link to={item.url}>{item.label}</Link></li>));
+
+        if (sessionStorage == null) {
+            return null;
+        }
+
+        _.map(menuItems, item => {
+            currentUrl = window.location.href.replace(/^.*changemyworldnow.com/, '');
+            if (sessionStorage.activeItem === item.label) {
+                return;
+            } else if (currentUrl === item.url) {
+                sessionStorage.activeItem = item.label;
+            }
+        });
+
+        return _.map(menuItems, item => (
+            <li
+                className={ClassNames({
+                    'active-menu': sessionStorage.activeItem === item.label
+                })}
+                key={`(${item.label})-${item.url}`}
+            >
+                <Link
+                    to={item.url}
+                >
+                    {item.label}
+                </Link>
+            </li>
+        ));
     },
     render: function () {
         return (

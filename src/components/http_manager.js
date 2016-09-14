@@ -127,7 +127,7 @@ var _makeRequest = function (verb, requests){
                 xhr.onerror = _.noop;
                 //timeout handles issue where ie9 will fail requests instantaneously on blocked thread
                 setTimeout(function () {
-                    if (verb.toLowerCase() === 'get') {
+                    if (verb.toLowerCase() === 'get' || verb.toLowerCase() === 'delete') {
                         xhr.send();
                     } else if (!isIe9) {
                         xhr.send(req.body);
@@ -159,17 +159,22 @@ class _HttpManager {
         if (csrf != null && csrf !== 'null' && csrf !== 'undefined') {
             this.setToken(csrf);
         }
+        this.lastTime = new Date();
     }
     GET(request, body, headers){
+        this.lastTime = new Date();
         return _getRequestPromise.call(this, 'GET', request, body, headers);
     }
     POST(request, body, headers){
+        this.lastTime = new Date();
         return _getRequestPromise.call(this, 'POST', request, body, headers);
     }
     PUT(request, body, headers){
+        this.lastTime = new Date();
         return _getRequestPromise.call(this, 'PUT', request, body, headers);
     }
     DELETE(request, body, headers){
+        this.lastTime = new Date();
         return _getRequestPromise.call(this, 'DELETE', request, body, headers);
     }
     setToken(_token) {

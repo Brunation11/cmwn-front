@@ -10,12 +10,11 @@ import History from 'components/history';
 import HttpManager from 'components/http_manager';
 import Actions from 'components/actions';
 import Store from 'components/store';
+import GLOBALS from 'components/globals';
 
 import Layout from 'layouts/two_col';
 
 import 'routes/friends/suggested.scss';
-
-import DefaultProfile from 'media/profile_tranparent.png';
 
 const PAGE_UNIQUE_IDENTIFIER = 'suggested-friends';
 
@@ -27,6 +26,7 @@ const HEADINGS = {
     SUGGESTED: 'Suggested Friends'
 };
 const FRIEND_PROBLEM = 'There was a problem adding your friend. Please try again in a little while.';
+const REQUEST_SENT = 'Your friend request has been sent!';
 const ADD_FRIEND = 'Add Friend';
 const REQUESTED = 'Request Sent';
 const ACCEPT = 'Accept';
@@ -47,11 +47,11 @@ export class Suggested extends React.Component{
         HttpManager.POST({url: this.props.currentUser._links.friend.href}, {
             'friend_id': id
         }).then(() => {
+            Toast.success(REQUEST_SENT);
             Actions.dispatch.START_RELOAD_PAGE(Store.getState());
-        }).catch(this.friendErr);
-    }
-    friendErr() {
-        Toast.error(FRIEND_PROBLEM);
+        }).catch(() => {
+            Toast.error(FRIEND_PROBLEM);
+        });
     }
     renderNoData(data) {
         if (data == null) {
@@ -131,7 +131,7 @@ export class Suggested extends React.Component{
                         transform={data => {
                             var image;
                             if (!_.has(data, '_embedded.image')) {
-                                image = DefaultProfile;
+                                image = GLOBALS.DEFAULT_PROFILE;
                             } else {
                                 if (data._embedded.image.url != null) {
                                     image = data._embedded.image.url;

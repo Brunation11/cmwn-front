@@ -11,7 +11,7 @@ import studentData from 'mocks/schools/student_school_page';
 import teacherData from 'mocks/schools/teacher_school_page';
 import principalData from 'mocks/schools/principal_school_page';
 
-import schoolsSmokeTests from 'smoke_tests/schools/schools.test'
+import schoolsSmokeTests from 'smoke_tests/schools/schools.test';
 
 var createWrapper = function (data) {
     var schools = <Schools data={data} loading={false} />;
