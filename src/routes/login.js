@@ -239,6 +239,7 @@ var Component = React.createClass({
                                 placeholder="PA********"
                             />
                             <Button
+                                id="login-button"
                                 className="login-button"
                                 onKeyPress={this.attemptLogin}
                                 onClick={this.attemptLogin}
