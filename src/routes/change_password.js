@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 
 import HttpManager from 'components/http_manager';
@@ -9,6 +10,8 @@ import GLOBALS from 'components/globals';
 import {Panel, Button, Input} from 'react-bootstrap';
 
 import Layout from 'layouts/one_col';
+
+import 'routes/change_password.scss';
 
 const HEADINGS = {
     EDIT_TITLE: 'Info',
@@ -37,13 +40,13 @@ export var isPassValid = function (password) {
 export class Page extends React.Component {
     constructor() {
         super();
-        this.state = {};
+        this.state = {
+        };
     }
 
     render() {
         return (
            <Layout className="change-password">
-                {CHANGE_COPY}
                 <ChangePassword currentUser={this.props.currentUser}
                     data={this.props.data} loading={this.props.loading} />
            </Layout>
@@ -58,7 +61,9 @@ export class ChangePassword extends React.Component {
             current: '',
             new: '',
             confirm: '',
-            extraProps: {}
+            extraProps: {},
+            currentPage: 'update-password',
+            background: _.sample(['bkg-1', 'bkg-2'])
         };
     }
 
@@ -66,6 +71,10 @@ export class ChangePassword extends React.Component {
         if (this.props.currentUser.user_id != null) {
             window.location.href = '/logout';
         }
+    }
+
+    goToProfile() {
+        History.replace('/profile?message=updated');
     }
 
     submit() {
@@ -83,14 +92,15 @@ export class ChangePassword extends React.Component {
                 'password_confirmation': this.state.confirm
             });
             update.then(() => {
-                History.replace('/profile?message=updated');
+                this.setState({currentPage: 'confirm-re-login'});
             }).catch(err => {
                 if (err.status === 0) {
                     //non-error response from update password indicates password already changed successfully
-                    History.replace('/profile?message=updated');
+                    this.setState({currentPage: 'confirm-re-login'});
+                } else {
+                    Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
+                    Toast.error(ERRORS.BAD_PASS);
                 }
-                Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
-                Toast.error(ERRORS.BAD_PASS);
             });
         } else {
             this.setState({extraProps: {bsStyle: 'error'}});
@@ -99,50 +109,56 @@ export class ChangePassword extends React.Component {
         }
     }
 
-    render() {
+    renderConfirmReLogin() {
+        return (
+            <div className={`confirm-re-login ${this.state.background}`}>
+                <div className="confirm-re-login-container">
+                    <Button className="close-screen-button" onClick={this.goToProfile} />
+                </div>
+            </div>
+        );
+    }
+
+    renderPasswordReset() {
+        console.log('in render password reset');
+        console.log(this);
         return (
             <div>
                 <Panel header={HEADINGS.PASSWORD} className="standard">
+                    <p>{CHANGE_COPY}</p>
                     <form>
-    {''/*                <Input
-                        type="password"
-                        value={this.state.current}
-                        placeholder="********"
-                        label="Current Password"
-                        validate="required"
-                        ref="currentInput"
-                        name="currentInput"
-                        onChange={e => this.setState({current: e.target.value})}
-                    />
-    */}
-
-                    <Input
-                        type="password"
-                        value={this.state.new}
-                        placeholder="********"
-                        label="New Password"
-                        validate="required"
-                        ref="newInput"
-                        name="newInput"
-                        onChange={e => this.setState({new: e.target.value})}
-                        {...this.state.extraProps}
-                    />
-                    <Input
-                        type="password"
-                        value={this.state.confirm}
-                        placeholder="********"
-                        label="Confirm Password"
-                        validate="required"
-                        ref="confirmInput"
-                        name="confirmInput"
-                        onChange={e => this.setState({confirm: e.target.value})}
-                        {...this.state.extraProps}
-                    />
-                    <Button onClick={this.submit.bind(this)}>Update</Button>
+                        <Input
+                            type="password"
+                            value={this.state.new}
+                            placeholder="********"
+                            label="New Password"
+                            validate="required"
+                            ref="newInput"
+                            name="newInput"
+                            onChange={e => this.setState({new: e.target.value})}
+                            {...this.state.extraProps}
+                        />
+                        <Input
+                            type="password"
+                            value={this.state.confirm}
+                            placeholder="********"
+                            label="Confirm Password"
+                            validate="required"
+                            ref="confirmInput"
+                            name="confirmInput"
+                            onChange={e => this.setState({confirm: e.target.value})}
+                            {...this.state.extraProps}
+                        />
+                        <Button onClick={this.submit.bind(this)}>Update</Button>
                     </form>
                 </Panel>
             </div>
         );
+    }
+
+    render() {
+        var page = this.state.currentPage === 'confirm-re-login' ? this.renderConfirmReLogin : this.renderPasswordReset;
+        return page.call(this);
     }
 }
 
