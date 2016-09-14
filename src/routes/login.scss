@@ -1,53 +1,53 @@
 @import 'variables';
 
-#cmwn-app .login {
-/********************
-shared
-********************/
+#cmwn-app .login { // scss-lint:disable IdSelector
+//********************
+// shared
+//********************
     .login-tab,
     .forgot-password-tab,
     .teacher-confirm-password-reset-container,
     .student-confirm-password-reset-container {
-        width: 100%;
-        padding-bottom: 66.28%; //preserve aspect ration of background image
         position: absolute;
         left: 0;
+        padding-bottom: 66.28%; //preserve aspect ration of background image
+        width: 100%;
 
         &.bkg-1 {
-            background: url(../media/login/bkg-1.jpg);
-            background-size: contain;
+            background: url('../media/login/bkg-1.jpg');
             background-repeat: no-repeat;
+            background-size: contain;
         }
 
         &.bkg-2 {
-            background: url(../media/login/bkg-2.jpg);
-            background-size: contain;
+            background: url('../media/login/bkg-2.jpg');
             background-repeat: no-repeat;
+            background-size: contain;
         }
 
         &.bkg-3 {
-            background: url(../media/login/bkg-3.png);
-            background-size: contain;
+            background: url('../media/login/bkg-3.png');
             background-repeat: no-repeat;
+            background-size: contain;
         }
 
         &.bkg-4 {
-            background: url(../media/login/form-bkg.png);
-            background-size: 110%;
-            background-position: center;
+            background: url('../media/login/form-bkg.png');
             background-repeat: no-repeat;
+            background-position: center;
+            background-size: 110%;
 
             &:before {
-                content: "";
                 position: absolute;
                 top: 50%;
                 left: 50%;
                 transform: translateX(-50%) translateY(-50%);
+                background: url('../media/login/bkg-4.png');
+                background-repeat: no-repeat;
+                background-size: contain;
                 width: 90%;
                 height: 100%;
-                background: url(../media/login/bkg-4.png);
-                background-size: contain;
-                background-repeat: no-repeat;
+                content: '';
             }
         }
     }
@@ -55,647 +55,640 @@ shared
     .login-container,
     .forgot-password-container {
         position: absolute;
-        background: url(../media/login/form-bkg.png);
-        background-size: contain;
-        background-position: 0 11px;
-        background-repeat: no-repeat;
-        width: 70%;
-        padding-top: 48.48%;
-        left: 50%;
         top: 48%;
+        left: 50%;
         transform: translateX(-50%) translateY(-50%);
-
-        .login-content,
-        .forgot-password-content {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            padding: 3%;
-
-            .header {
-                position: absolute;
-                left: 5%;
-                top: 14%;
-            }
-        }
-
-        .login-form,
-        .forgot-password-form {
-            position: relative;
-            width: 50%;
-            margin: 12% 0 0 2%;
-
-            label {
-                color: $cmwn-white;
-                font-size: 1.5rem;
-                margin: 5px 0;
-            }
-
-            input {
-                background: none;
-                border: 3px dashed $cmwn-white;
-                height: 50px;
-                text-align: center;
-                color: $cmwn-white;
-                font-size: 1.75rem;
-            }
-
-            ::-webkit-input-placeholder {
-              color: $cmwn-white;
-            }
-
-            #login-button,
-            #forgot-password-button {
-                position: absolute;
-                background: url(../media/login/btn-submit.png);
-                background-size: contain;
-                background-repeat: no-repeat;
-                width: 58%;
-                padding-bottom: 26%;
-                border: none;
-                outline: none;
-                display: block;
-
-                &:hover,
-                &:focus,
-                &:active,
-                &:active:focus {
-                    background: url(../media/login/btn-submit-hover.png);
-                    background-size: contain;
-                    background-repeat: no-repeat;
-                    border: none;
-                    outline: none;
-                }
-            }
-
-            .signup-prompt {
-                position: absolute;
-                left: 64%;
-                color: $cmwn-white;
-                width: 130%;
-
-                h2 {
-                    font-size: 1.25rem;
-                    margin: 0;
-                }
-
-                p {
-                    font-weight: 200;
-                }
-
-                a,
-                a:hover,
-                a:focus {
-                    color: $cmwn-purple;
-                }
-
-                a.mobile {
-                    display: none;
-                }
-            }
-        }
+        background: url('../media/login/form-bkg.png');
+        background-repeat: no-repeat;
+        background-position: 0 11px;
+        background-size: contain;
+        padding-top: 48.48%;
+        width: 70%;
     }
 
-/********************
-login tab
-********************/
-    .login-container {
-        .login-content .header {
-            background: url(../media/login/login-header.png);
-            background-size: contain;
-            background-repeat: no-repeat;
-            width: 20%;
-            height: 12%;
+    .login-content,
+    .forgot-password-content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 3%;
+        width: 100%;
+
+        .header {
+            position: absolute;
             top: 14%;
-        }
-
-        .login-form {
-            .form-group {
-                margin: ($standard * 2) 0;
-            }
-
-            .forgot-password-link {
-                position: absolute;
-                left: 104%;
-                top: 82%;
-                width: 100%;
-                text-decoration: underline;
-                color: #fff;
-                font-size: 1.25rem;
-                font-style: italic;
-            }
-
-            .signup-prompt {
-                top: 128%;
-            }
-
-            #login-button {
-                top: 131%;
-            }
+            left: 5%;
         }
     }
 
-/********************
-forgot password tab
-********************/
-    .forgot-password-container {
-        .forgot-password-content .header {
-            background: url(../media/login/forgot-password-header.png);
-            background-size: contain;
+    .login-form,
+    .forgot-password-form {
+        position: relative;
+        margin: 12% 0 0 2%;
+        width: 50%;
+
+        label {
+            margin: 5px 0;
+            color: $cmwn-white;
+            font-size: 1.5rem;
+        }
+
+        input {
+            border: 3px dashed $cmwn-white;
+            background: none;
+            height: 50px;
+            text-align: center;
+            color: $cmwn-white;
+            font-size: 1.75rem;
+        }
+
+        ::-webkit-input-placeholder {
+            color: $cmwn-white;
+        }
+    }
+
+    .login-button,
+    .forgot-password-button {
+        display: block;
+        position: absolute;
+        outline: none;
+        border: 0;
+        background: url('../media/login/btn-submit.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        padding-bottom: 26%;
+        width: 58%;
+
+        &:hover,
+        &:focus,
+        &:active,
+        &:active:focus {
+            outline: none;
+            border: 0;
+            background: url('../media/login/btn-submit-hover.png');
             background-repeat: no-repeat;
-            width: 55%;
-            height: 15%;
-            top: 16%;
-        }
-
-        .forgot-password-form {
-            p.option-label {
-                color: $cmwn-white;
-                font-size: 1.5rem;
-                margin: 0 0 0 2%;
-            }
-
-            .signup-prompt {
-                top: 152%;
-            }
-
-            .form-group {
-                margin: ($standard * 2) 0 $standard 0;
-            }
-
-            .form-group:first-of-type:hover:before {
-                content: "";
-                position: absolute;
-                width: 100%;
-                height: 50%;
-                background: url(../media/login/hover-username.png);
-                background-size: contain;
-                background-repeat: no-repeat;
-                top: -25%;
-            }
-
-            .form-group:last-of-type:hover:before {
-                content: "";
-                position: absolute;
-                width: 100%;
-                height: 50%;
-                background: url(../media/login/hover-teacher.png);
-                background-size: contain;
-                background-repeat: no-repeat;
-                top: 30%;
-                left: 15%;
-            }
-
-            .form-group:not(:first-of-type),
-            .radio {
-                display: inline;
-                margin: 4px;
-                top: -15px;
-
-                span {
-                    position: relative;
-                    top: 13px;
-                }
-            }
-
-            #forgot-password-button {
-                top: 155%;
-            }
+            background-size: contain;
         }
     }
 
-/********************
-adult confirm password reset
-********************/
-    .teacher-confirm-password-reset-container {
-        #close-screen-button {
+    .signup-prompt {
+        position: absolute;
+        left: 64%;
+        width: 130%;
+        color: $cmwn-white;
+
+        h2 {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+
+        p {
+            font-weight: 200;
+        }
+
+        a,
+        a:hover,
+        a:focus {
+            color: $cmwn-purple;
+        }
+
+        .mobile {
+            display: none;
+        }
+    }
+
+    .global-footer { //override default border style
+        border: 0;
+    }
+
+//********************
+// login tab
+//********************
+    .login-content .header {
+        top: 14%;
+        background: url('../media/login/login-header.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        width: 20%;
+        height: 12%;
+    }
+
+    .login-form {
+        .form-group {
+            margin: ($standard * 2) 0;
+        }
+
+        .forgot-password-link {
             position: absolute;
-            right: 3%;
+            top: 82%;
+            left: 104%;
+            width: 100%;
+            text-decoration: underline;
+            color: $cmwn-white;
+            font-size: 1.25rem;
+            font-style: italic;
+        }
+
+        .signup-prompt {
+            top: 128%;
+        }
+
+        .login-button {
+            top: 131%;
+        }
+    }
+
+//********************
+// forgot password tab
+//********************
+    .forgot-password-content .header {
+        top: 16%;
+        background: url('../media/login/forgot-password-header.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        width: 55%;
+        height: 15%;
+    }
+
+    .forgot-password-form {
+        .option-label {
+            margin: 0 0 0 2%;
+            color: $cmwn-white;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin: ($standard * 2) 0 $standard;
+        }
+
+        .form-group:first-of-type:hover:before {
+            position: absolute;
+            top: -25%;
+            background: url('../media/login/hover-username.png');
+            background-repeat: no-repeat;
+            background-size: contain;
+            width: 100%;
+            height: 50%;
+            content: '';
+        }
+
+        .form-group:last-of-type:hover:before {
+            position: absolute;
+            top: 30%;
+            left: 15%;
+            background: url('../media/login/hover-teacher.png');
+            background-repeat: no-repeat;
+            background-size: contain;
+            width: 100%;
+            height: 50%;
+            content: '';
+        }
+
+        .form-group:not(:first-of-type),
+        .radio {
+            display: inline;
+            top: -15px;
+            margin: 4px;
+
+            // scss-lint:disable SelectorDepth, NestingDepth
+            span {
+                position: relative;
+                top: 13px;
+            }
+            // scss-lint:enable SelectorDepth, NestingDepth
+        }
+
+        .signup-prompt {
+            top: 152%;
+        }
+    }
+
+    .forgot-password-button {
+        top: 155%;
+    }
+
+//********************
+// adult confirm password reset
+//********************
+    .teacher-confirm-password-reset-container {
+        .close-screen-button {
+            position: absolute;
             top: 4%;
+            right: 3%;
+            outline: none;
+            border: 0;
+            background: url('../media/login/btn-closescreen.png');
+            background-repeat: no-repeat;
+            background-size: contain;
             width: 25%;
             height: 10%;
-            border: none;
-            outline: none;
-            background: url(../media/login/btn-closescreen.png);
-            background-size: contain;
-            background-repeat: no-repeat;
 
             &:hover,
             &:active,
             &:focus,
             &:active:focus {
-                background: url(../media/login/btn-closescreen-hover.png);
-                background-size: contain;
-                background-repeat: no-repeat;
-                border: none;
                 outline: none;
+                border: 0;
+                background: url('../media/login/btn-closescreen-hover.png');
+                background-repeat: no-repeat;
+                background-size: contain;
             }
         }
 
-        #open-email-button {
+        .open-email-button {
             position: absolute;
-            left: 6%;
             bottom: 12%;
+            left: 6%;
+            outline: none;
+            border: 0;
+            background: url('../media/login/btn-launchmail.png');
+            background-repeat: no-repeat;
+            background-size: contain;
             width: 25%;
             height: 11%;
-            border: none;
-            outline: none;
-            background: url(../media/login/btn-launchmail.png);
-            background-size: contain;
-            background-repeat: no-repeat;
 
             &:hover,
             &:active,
             &:focus,
             &:active:focus {
-                background: url(../media/login/btn-launchmail-hover.png);
-                background-size: contain;
-                background-repeat: no-repeat;
-                border: none;
                 outline: none;
+                border: 0;
+                background: url('../media/login/btn-launchmail-hover.png');
+                background-repeat: no-repeat;
+                background-size: contain;
             }
         }
     }
 
-/********************
-adult confirm password reset
-********************/
+//********************
+// adult confirm password reset
+//********************
     .student-confirm-password-reset-container {
-        #close-screen-button {
+        .close-screen-button {
             position: absolute;
-            left: 21%;
             top: 52%;
+            left: 21%;
+            outline: none;
+            border: 0;
+            background: url('../media/login/btn-ok.png');
+            background-repeat: no-repeat;
+            background-size: contain;
             width: 25%;
             height: 10%;
-            border: none;
-            outline: none;
-            background: url(../media/login/btn-ok.png);
-            background-size: contain;
-            background-repeat: no-repeat;
 
             &:hover,
             &:active,
             &:focus,
             &:active:focus {
-                background: url(../media/login/btn-ok-hover.png);
-                background-size: contain;
-                background-repeat: no-repeat;
-                border: none;
                 outline: none;
+                border: 0;
+                background: url('../media/login/btn-ok-hover.png');
+                background-repeat: no-repeat;
+                background-size: contain;
             }
         }
     }
 
 
     @media (min-width: $device-max-break + (($monitor-max-break - $device-max-break)/2)) and (max-width: $monitor-max-break) {
-/********************
-shared
-********************/
-        .login-container,
-        .forgot-password-container {
-            .login-form,
-            .forgot-password-form {
-                .signup-prompt {
-                    width: 117%;
+//********************
+// shared
+//********************
+        .signup-prompt {
+            width: 117%;
 
-                    h2 {
-                        font-size: 1.25rem;
-                    }
-
-                    p {
-                        font-size: .65rem;
-                    }
-                }
+            h2 {
+                font-size: 1.25rem;
             }
 
-/********************
-login tab
-********************/
-            .login-content {
-                .header {
-                    top: 12%;
-                }
+            p {
+                font-size: .65rem;
+            }
+        }
+
+//********************
+// login tab
+//********************
+        .login-content {
+            .header {
+                top: 12%;
+            }
+        }
+
+        .login-form {
+            .form-group {
+                margin: $standard 0;
             }
 
-            .login-form {
-                .form-group {
-                    margin: $standard 0;
-                }
-
-                #login-button {
-                    top: 118%;
-                }
-
-                .forgot-password-link {
-                    top: 81%;
-                }
-
-                .signup-prompt {
-                    top: 117%;
-                }
+            .login-button {
+                top: 118%;
             }
 
-/********************
-forgot password tab
-********************/
-            .forgot-password-form {
-                p.option-label {
-                    font-size: 1.25rem;
-                }
-
-                #forgot-password-button {
-                    top: 130%;
-                }
-
-                .signup-prompt {
-                    top: 129%;
-                }
-
-                .form-group:not(:first-of-type),
-                .radio {
-                    span {
-                        font-size: 1rem;
-                    }
-                }
+            .forgot-password-link {
+                top: 81%;
             }
+
+            .signup-prompt {
+                top: 117%;
+            }
+        }
+
+//********************
+// forgot password tab
+//********************
+        .forgot-password-form {
+            .option-label {
+                font-size: 1.25rem;
+            }
+
+            .forgot-password-button {
+                top: 130%;
+            }
+
+            .signup-prompt {
+                top: 129%;
+            }
+
+            // scss-lint:disable SelectorDepth, NestingDepth
+            .form-group:not(:first-of-type) span,
+            .radio span {
+                font-size: 1rem;
+            }
+            // scss-lint:enable SelectorDepth, NestingDepth
         }
     }
 
     @media (min-width: $device-max-break) and (max-width: $device-max-break + (($monitor-max-break - $device-max-break)/2)) {
-/********************
-shared
-********************/
-        .login-container,
-        .forgot-password-container {
-            .login-form,
-            .forgot-password-form {
-                margin: 13% 0 0 2%;
+//********************
+// shared
+//********************
+        .login-form,
+        .forgot-password-form {
+            margin: 13% 0 0 2%;
 
-                .form-group {
-                    margin: 0;
-                }
+            .form-group {
+                margin: 0;
+            }
 
-                label,
-                p.option-label {
+            label,
+            .option-label {
+                font-size: 1rem;
+            }
+
+            input {
+                height: 36px;
+                font-size: 1.25rem;
+            }
+
+            .forgot-password-link {
+                top: 79%;
+                font-size: .85rem;
+            }
+        }
+
+        .signup-prompt {
+            top: 125%;
+            width: 125%;
+
+            h2 {
+                font-size: 1.25rem;
+            }
+
+            p {
+                font-size: .65rem;
+            }
+        }
+
+        .forgot-password-button {
+            top: 131%;
+        }
+
+//********************
+// login tab
+//********************
+        .login-content {
+            .header {
+                top: 18%;
+                height: 15%;
+            }
+        }
+
+//********************
+// forgot password tab
+//********************
+        .forgot-password-content {
+            .header {
+                top: 14%;
+                height: 13%;
+            }
+        }
+
+        .forgot-password-form {
+            .form-group:not(:first-of-type),
+            .radio {
+                // scss-lint:disable SelectorDepth, NestingDepth
+                span {
                     font-size: 1rem;
                 }
-
-                input {
-                    height: 36px;
-                    font-size: 1.25rem;
-                }
-
-                .forgot-password-link {
-                    font-size: .85rem;
-                    top: 79%;
-                }
-
-                .signup-prompt {
-                    top: 125%;
-                    width: 125%;
-
-                    h2 {
-                        font-size: 1.25rem;
-                    }
-
-                    p {
-                        font-size: .65rem;
-                    }
-                }
-
-                #forgot-password-button {
-                    top: 131%;
-                }
+                // scss-lint:enable SelectorDepth, NestingDepth
             }
 
-/********************
-login tab
-********************/
-            .login-content {
-                .header {
-                    height: 15%;
-                    top: 18%;
-                }
-            }
-
-/********************
-forgot password tab
-********************/
-            .forgot-password-content {
-                .header {
-                    height: 13%;
-                    top: 14%;
-                }
-            }
-
-            .forgot-password-form {
-                .form-group:not(:first-of-type),
-                .radio {
-                    span {
-                        font-size: 1rem;
-                    }
-                }
-
-                p.option-label {
-                    margin-top: $standard;
-                }
+            .option-label {
+                margin-top: $standard;
             }
         }
     }
 
     @media (min-width: $device-portrait-break + (($device-max-break - $device-portrait-break)/2)) and (max-width: $device-max-break) {
-/********************
-shared
-********************/
-        .login-container,
-        .forgot-password-container {
-            .login-form,
-            .forgot-password-form {
-                margin: 13% 0 0 2%;
+//********************
+// shared
+//********************
+        .login-form,
+        .forgot-password-form {
+            margin: 13% 0 0 2%;
 
-                .form-group {
-                    margin: 0;
-                }
+            .form-group {
+                margin: 0;
+            }
 
-                label,
-                p.option-label {
-                    font-size: .85rem;
-                }
+            label,
+            .option-label {
+                font-size: .85rem;
+            }
 
-                input {
-                    height: 28px;
-                    font-size: 1rem;
-                    border: 2px dashed $cmwn-white;
-                }
+            input {
+                border: 2px dashed $cmwn-white;
+                height: 28px;
+                font-size: 1rem;
+            }
 
-                .forgot-password-link {
+            .forgot-password-link {
+                top: 81%;
+                font-size: .75rem;
+            }
+        }
+
+        .signup-prompt {
+            top: 127%;
+            width: 125%;
+
+            h2 {
+                font-size: .85rem;
+            }
+
+            p {
+                font-size: .5rem;
+            }
+        }
+
+        .forgot-password-button {
+            top: 124%;
+        }
+
+//********************
+// login tab
+//********************
+        .login-content {
+            .header {
+                top: 16%;
+            }
+        }
+
+//********************
+// forgot password tab
+//********************
+        .forgot-password-content {
+            .header {
+                top: 16%;
+                height: 13%;
+            }
+        }
+
+        .forgot-password-form {
+            .form-group:not(:first-of-type),
+            .radio {
+                // scss-lint:disable SelectorDepth, NestingDepth
+                span {
+                    top: 9px;
                     font-size: .75rem;
-                    top: 81%;
                 }
-
-                .signup-prompt {
-                    top: 127%;
-                    width: 125%;
-
-                    h2 {
-                        font-size: .85rem;
-                    }
-
-                    p {
-                        font-size: .5rem;
-                    }
-                }
-
-                #forgot-password-button {
-                    top: 124%;
-                }
+                // scss-lint:enable SelectorDepth, NestingDepth
             }
 
-/********************
-login tab
-********************/
-            .login-content {
-                .header {
-                    top: 16%;
-                }
+            .option-label {
+                margin-top: $standard;
             }
 
-/********************
-forgot password tab
-********************/
-            .forgot-password-content {
-                .header {
-                    height: 13%;
-                    top: 16%;
-                }
-            }
-
-            .forgot-password-form {
-                .form-group:not(:first-of-type),
-                .radio {
-                    span {
-                        font-size: .75rem;
-                        top: 9px;
-                    }
-                }
-
-                p.option-label {
-                    margin-top: $standard;
-                }
-
-                .signup-prompt {
-                    top: 120%;
-                }
+            .signup-prompt {
+                top: 120%;
             }
         }
     }
 
-    @media (min-width: $device-portrait-break) and (max-width: $device-portrait-break + (($device-max-break - $device-portrait-break)/2) ) {
-/********************
-shared
-********************/
-        .login-container,
-        .forgot-password-container {
-            .login-form,
-            .forgot-password-form {
-                margin: 13% 0 0 2%;
+    @media (min-width: $device-portrait-break) and (max-width: $device-portrait-break + (($device-max-break - $device-portrait-break)/2)) {
+//********************
+// shared
+//********************
+        .login-form,
+        .forgot-password-form {
+            margin: 13% 0 0 2%;
 
-                .form-group {
-                    margin: 0;
-                }
-
-                label,
-                p.option-label {
-                    font-size: .75rem;
-                }
-
-                input {
-                    height: 25px;
-                    font-size: .75rem;
-                    border: 2px dashed $cmwn-white;
-                }
-
-                #login-button {
-                    top: 120%;
-                }
-
-                .forgot-password-link {
-                    font-size: .65rem;
-                    top: 80%;
-                }
-
-                .signup-prompt {
-                    top: 122%;
-
-                    h2 {
-                        font-size: .8rem;
-                        display: inline;
-                    }
-
-                    p {
-                        display: none;
-                    }
-
-                    a.mobile {
-                        font-size: .5rem;
-                        display: inline-block;
-                        color: $cmwn-white;
-                    }
-                }
-
-                #forgot-password-button {
-                    top: 110%;
-                }
+            .form-group {
+                margin: 0;
             }
 
-/********************
-login tab
-********************/
-            .login-content {
-                .header {
-                    top: 16%;
-                }
+            label,
+            .option-label {
+                font-size: .75rem;
             }
 
-/********************
-forgot password tab
-********************/
-            .forgot-password-content {
-                .header {
-                    height: 13%;
-                    top: 16%;
-                }
+            input {
+                border: 2px dashed $cmwn-white;
+                height: 25px;
+                font-size: .75rem;
             }
 
-            .form-group:first-of-type:hover:before {
-                top: 10%;
+            .login-button {
+                top: 120%;
             }
 
-            .forgot-password-form {
-                .form-group:not(:first-of-type),
-                .radio {
-                    span {
-                        font-size: .45rem;
-                        top: 7px;
-                    }
-                }
+            .forgot-password-link {
+                top: 80%;
+                font-size: .65rem;
+            }
+        }
 
-                p.option-label {
-                    margin-top: $standard;
-                }
+        .signup-prompt {
+            top: 122%;
 
-                .signup-prompt {
-                    top: 111%;
+            h2 {
+                display: inline;
+                font-size: .8rem;
+            }
+
+            p {
+                display: none;
+            }
+
+            .mobile {
+                display: inline-block;
+                color: $cmwn-white;
+                font-size: .5rem;
+            }
+        }
+
+        .forgot-password-button {
+            top: 110%;
+        }
+
+//********************
+// login tab
+//********************
+        .login-content {
+            .header {
+                top: 16%;
+            }
+        }
+
+//********************
+// forgot password tab
+//********************
+        .forgot-password-content {
+            .header {
+                top: 16%;
+                height: 13%;
+            }
+        }
+
+        .form-group:first-of-type:hover:before {
+            top: 10%;
+        }
+
+        .forgot-password-form {
+            .form-group:not(:first-of-type),
+            .radio {
+                // scss-lint:disable SelectorDepth, NestingDepth
+                span {
+                    top: 7px;
+                    font-size: .45rem;
                 }
+                // scss-lint:enable SelectorDepth, NestingDepth
+            }
+
+            .option-label {
+                margin-top: $standard;
+            }
+
+            .signup-prompt {
+                top: 111%;
             }
         }
     }
 
     @media (max-width: $device-portrait-break) {
-/********************
-shared
-********************/
+//********************
+// shared
+//********************
         .login-tab,
         .forgot-password-tab {
             height: 90%;
@@ -708,130 +701,131 @@ shared
 
         .login-container,
         .forgot-password-container {
-            background: none;
-            left: 0;
             top: 0;
+            left: 0;
             transform: none;
+            background: none;
             padding-top: 0;
             width: 100%;
             height: 100%;
+        }
 
-            .login-content,
-            .forgot-password-content {
-                height: 100%;
-                padding: 5%;
+        .login-content,
+        .forgot-password-content {
+            padding: 5%;
+            height: 100%;
+        }
+
+        .login-form,
+        .forgot-password-form {
+            margin: 25% 0 0;
+            width: 100%;
+
+            .form-group {
+                margin: 0;
             }
 
-            .login-form,
-            .forgot-password-form {
-                margin: 25% 0 0 0;
-                width: 100%;
+            label {
+                font-size: 2rem;
+            }
 
-                .form-group {
-                    margin: 0;
+            input {
+                border: 2px dashed $cmwn-white;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+
+            .login-button {
+                top: 150%;
+                width: 75%;
+                height: 36%;
+            }
+
+            .forgot-password-link {
+                top: 108%;
+                left: 0;
+                font-size: 1.5rem;
+            }
+
+            .signup-prompt {
+                left: 0;
+                width: 100%;
+                // scss-lint:disable SelectorDepth, NestingDepth
+                h2 {
+                    display: inline;
+                    font-size: 1.5rem;
                 }
 
-                label {
+                p {
+                    display: none;
+                }
+
+                .mobile {
+                    display: inline;
+                    white-space: nowrap;
+                    color: $cmwn-white;
+                    font-size: 1rem;
+                }
+                // scss-lint:enable SelectorDepth, NestingDepth
+            }
+        }
+
+        .forgot-password-button {
+            top: 125%;
+            width: 75%;
+        }
+
+//********************
+// login tab
+//********************
+        .login-content .header {
+            top: 5%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+        }
+
+        .login-form .signup-prompt {
+            top: 200%;
+        }
+
+//********************
+// forgot password tab
+//********************
+        .forgot-password-content .header {
+            top: 7%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+        }
+
+        .forgot-password-form {
+            .form-group:last-of-type:hover:before {
+                top: 40%;
+                left: 0;
+            }
+
+            .form-group:not(:first-of-type),
+            .radio {
+                display: block;
+                text-align: center;
+                // scss-lint:disable SelectorDepth, NestingDepth
+                span {
+                    top: 7px;
                     font-size: 2rem;
                 }
-
-                input {
-                    height: 50px;
-                    font-size: 1.5rem;
-                    border: 2px dashed $cmwn-white;
-                }
-
-                #login-button {
-                    top: 150%;
-                    width: 75%;
-                    height: 36%;
-                }
-
-                .forgot-password-link {
-                    font-size: 1.5rem;
-                    top: 108%;
-                    left: 0;
-                }
-
-                .signup-prompt {
-                    top: 200%;
-                    left: 0;
-                    width: 100%;
-
-                    h2 {
-                        font-size: 1.5rem;
-                        display: inline;
-                    }
-
-                    p {
-                        display: none;
-                    }
-
-                    a.mobile {
-                        font-size: 1rem;
-                        display: inline;
-                        color: $cmwn-white;
-                        white-space: nowrap;
-                    }
-                }
-
-                #forgot-password-button {
-                    top: 125%;
-                    width: 75%;
-                }
+                // scss-lint:enable SelectorDepth, NestingDepth
             }
 
-/********************
-login tab
-********************/
-            .login-content .header {
-                top: 5%;
-                width: 50%;
-                left: 50%;
-                transform: translateX(-50%);
+            .option-label {
+                margin: $standard 0 0;
             }
 
-/********************
-forgot password tab
-********************/
-            .forgot-password-content .header {
-                top: 7%;
-                width: 90%;
-                left: 50%;
-                transform: translateX(-50%);
-            }
-
-            .forgot-password-form {
-                .form-group:last-of-type:hover:before {
-                    top: 40%;
-                    left: 0;
-                }
-
-                .form-group:not(:first-of-type),
-                .radio {
-                    display: block;
-                    text-align: center;
-
-                    span {
-                        font-size: 2rem;
-                        top: 7px;
-                    }
-                }
-
-                p.option-label {
-                    margin: $standard 0 0 0;
-                }
-
-                .signup-prompt {
-                    top: 155%;
-                }
+            .signup-prompt {
+                top: 160%;
             }
         }
     }
-}
-
-#cmwn-app .login .global-footer { //override default border style
-    border: none;
 }
 
 
