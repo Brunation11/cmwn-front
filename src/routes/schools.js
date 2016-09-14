@@ -7,7 +7,7 @@ import FlipBoard from 'components/flipboard';
 
 import DefaultProfile from 'media/icon_school_blue.png';
 
-const PAGE_UNIQUE_IDENTIFIER = 'schools';
+export const PAGE_UNIQUE_IDENTIFIER = 'schools';
 
 const TITLE = 'MY SCHOOLS';
 

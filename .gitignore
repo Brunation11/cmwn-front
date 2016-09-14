@@ -3,7 +3,6 @@ docker-compose.yml
 .vagrant
 node_modules
 build
-build.zip
 **/*.swp
 .DS_Store
 **/*.log
