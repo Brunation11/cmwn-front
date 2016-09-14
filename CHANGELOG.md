@@ -1,3 +1,24 @@
+Version - 0.3.16
+----
+
+- 516feec: linter
+- f726d29: refactor tests to match component changes
+- f242342: add id to login button
+- 03269be: linter
+- 0c99436: linter
+- d364a74: linter
+- 2834a42: add style sheet for change password route
+- e9bae13: refactor render function to create reset password function. add new confirm re-login function.
+- ca251ff: add new assets for confirm password reset
+- 441a873: linter
+- 77f0480: add style rules for forgot password, confirm teacher, and confirm student pages
+- 8840956: add confirm teacher and confirm student password reset screens. add reference to user type to state. add function for setting user type to state. refactor forgot password page
+- cef7302: add new assets for reset password
+- d641b9c: add responsive styles for login page
+- 58c73bc: refactor login component. remove tabs. add functions for rendering login and forgot password pages.
+- b2f86ca: add new login page assets
+- 3a40efe: Version bump [ci skip]
+
 Version - 0.3.15
 ----
 
