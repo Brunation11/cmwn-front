@@ -162,7 +162,7 @@ export class ChangePassword extends React.Component {
         if (this.state.currentPage === 'confirm-re-login') {
             page = this.renderConfirmReLogin;
         } else {
-            this.renderPasswordReset;
+            page = this.renderPasswordReset;
         }
 
         return page.call(this);
