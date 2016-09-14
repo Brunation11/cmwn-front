@@ -221,7 +221,7 @@
             margin: ($standard * 2) 0 $standard;
         }
 
-        .form-group::first-of-type:hover:before {
+        .form-group:first-of-type:hover::before {
             position: absolute;
             top: -25%;
             background: url('../media/login/hover-username.png');
@@ -232,7 +232,7 @@
             content: '';
         }
 
-        .form-group::last-of-type:hover:before {
+        .form-group:last-of-type:hover::before {
             position: absolute;
             top: 30%;
             left: 15%;
@@ -660,7 +660,7 @@
             }
         }
 
-        .form-group::first-of-type:hover:before {
+        .form-group:first-of-type:hover::before {
             top: 10%;
         }
 
@@ -800,7 +800,7 @@
         }
 
         .forgot-password-form {
-            .form-group::last-of-type:hover:before {
+            .form-group:last-of-type:hover::before {
                 top: 40%;
                 left: 0;
             }
