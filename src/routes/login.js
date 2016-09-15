@@ -34,8 +34,8 @@ const ERRORS = {
 
 const SIGNUP_PROMPT = {
     HEADER: 'Don\'t have a login yet?',
-    COPY_1: 'Contact your school to get started with Change My World Now and',
-    COPY_2: 'for us to contact your school!',
+    COPY_1: 'Contact your school to get started with Change My World Now and ',
+    COPY_2: ' for us to contact your school!',
     LINK: 'SUBMIT A REQUEST',
     MOBILE_LINK: ' CLICK HERE'
 };
@@ -252,8 +252,13 @@ var Component = React.createClass({
                             </a>
                             <span className="signup-prompt">
                                 <h2>{SIGNUP_PROMPT.HEADER}</h2>
-                                <p>{SIGNUP_PROMPT.COPY_1}
-                                    <a onClick={this.displaySignupModal}>{SIGNUP_PROMPT.LINK}</a>
+                                <p>
+                                    {SIGNUP_PROMPT.COPY_1}
+                                    <a
+                                        onClick={this.displaySignupModal}
+                                    >
+                                        <strong>{SIGNUP_PROMPT.LINK}</strong>
+                                    </a>
                                     {SIGNUP_PROMPT.COPY_2}
                                 </p>
                                 <a
@@ -316,8 +321,13 @@ var Component = React.createClass({
                             />
                             <span className="signup-prompt">
                                 <h2>{SIGNUP_PROMPT.HEADER}</h2>
-                                <p>{SIGNUP_PROMPT.COPY_1}
-                                    <a onClick={this.displaySignupModal}>{SIGNUP_PROMPT.LINK}</a>
+                                <p>
+                                    {SIGNUP_PROMPT.COPY_1}
+                                    <a
+                                        onClick={this.displaySignupModal}
+                                    >
+                                        <strong>{SIGNUP_PROMPT.LINK}</strong>
+                                    </a>
                                     {SIGNUP_PROMPT.COPY_2}
                                 </p>
                                 <a
