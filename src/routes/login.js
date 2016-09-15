@@ -252,8 +252,13 @@ var Component = React.createClass({
                             </a>
                             <span className="signup-prompt">
                                 <h2>{SIGNUP_PROMPT.HEADER}</h2>
-                                <p>{SIGNUP_PROMPT.COPY_1}
-                                    <a onClick={this.displaySignupModal}><strong>{SIGNUP_PROMPT.LINK}</strong></a>
+                                <p>
+                                    {SIGNUP_PROMPT.COPY_1}
+                                    <a
+                                        onClick={this.displaySignupModal}
+                                    >
+                                        <strong>{SIGNUP_PROMPT.LINK}</strong>
+                                    </a>
                                     {SIGNUP_PROMPT.COPY_2}
                                 </p>
                                 <a
@@ -316,8 +321,13 @@ var Component = React.createClass({
                             />
                             <span className="signup-prompt">
                                 <h2>{SIGNUP_PROMPT.HEADER}</h2>
-                                <p>{SIGNUP_PROMPT.COPY_1}
-                                    <a onClick={this.displaySignupModal}><strong>{SIGNUP_PROMPT.LINK}</strong></a>
+                                <p>
+                                    {SIGNUP_PROMPT.COPY_1}
+                                    <a
+                                        onClick={this.displaySignupModal}
+                                    >
+                                        <strong>{SIGNUP_PROMPT.LINK}</strong>
+                                    </a>
                                     {SIGNUP_PROMPT.COPY_2}
                                 </p>
                                 <a
