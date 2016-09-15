@@ -1,3 +1,10 @@
+Version - 0.3.18
+----
+
+- 584f049: linter
+- ff7f7e8: minor visual tweaks
+- f12cd44: Version bump [ci skip]
+
 Version - 0.3.17
 ----
 
