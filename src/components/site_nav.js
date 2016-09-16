@@ -50,7 +50,9 @@ var buildMenuRoutes = function (links) {
                     match.params = {};
                 } else {
                     //last chance. If we can extract parameters from the endpoint, its a match
-                    params = Util.matchPathAndExtractParams(route.endpoint, link.href.split('/').slice(3).join('/'));
+                    params = Util.matchPathAndExtractParams(
+                        route.endpoint, link.href.split('/').slice(3).join('/')
+                    );
                     if (Object.keys(params).length) {
                         route.params = params;
                         match = route; //MPR: ok i admit the typechange is strange here
