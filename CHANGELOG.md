@@ -1,3 +1,8 @@
+Version - 0.3.20
+----
+
+- fa7bc9f: Version bump [ci skip]
+
 Version - 0.3.19
 ----
 
