@@ -1,3 +1,12 @@
+Version - 0.3.19
+----
+
+- c2ff31f: linter
+- e41223a: refactor render function to check embedded data for flips as well as user flip
+- 340fef3: add route for viewing a users earned flips
+- d16a3fe: refactor build menu routes function to account for routes with similar enpoints
+- 6c328c3: Version bump [ci skip]
+
 Version - 0.3.18
 ----
 
