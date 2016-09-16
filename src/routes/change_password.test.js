@@ -19,7 +19,7 @@ describe('<Page />', function () {
         });
 
         it('has the correct elements', function () {
-            expect(WRAPPER.children()).to.have.length(2);
+            expect(WRAPPER.children()).to.have.length(1);
             expect(WRAPPER.find('Layout')).to.have.length(1);
             expect(WRAPPER.find('ChangePassword')).to.have.length(1);
         });
@@ -75,7 +75,7 @@ describe('<ChangePassword />', function () {
         });
 
         it('password is undefined', function () {
-            expect(isPassValid(undefined)).to.equal(false); 
+            expect(isPassValid(undefined)).to.equal(false);
         });
 
         it('password is not a string', function () {
