@@ -338,7 +338,11 @@ export class Profile extends React.Component {
         profile = this.state.user_id === this.props.currentUser.user_id ?
         this.renderCurrentUserProfile : this.renderUserProfile;
         return (
-           <Layout className={PAGE_UNIQUE_IDENTIFIER} navMenuId="navMenu">
+           <Layout
+               currentUser={this.props.currentUser}
+               className={PAGE_UNIQUE_IDENTIFIER}
+               navMenuId="navMenu"
+           >
                {profile.apply(this)}
            </Layout>
         );

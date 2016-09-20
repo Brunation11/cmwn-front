@@ -10,14 +10,12 @@ import 'components/sidebar.scss';
 
 const WELCOME = 'Welcome';
 
-var Component = React.createClass({
+var Sidebar = React.createClass({
     renderWelcome: function () {
         return (
             <div>
                 <p className="welcome">{WELCOME}</p>
-                <p className={ClassNames('username',
-                    {'smaller-text': this.props.currentUser.username.length >= 25,
-                    'regular-text': this.props.currentUser.username.length < 25})}>
+                <p className={ClassNames('username')}>
                     <a onClick={this.attemptNavigate}>
                         {this.props.currentUser.username}
                     </a>
@@ -41,17 +39,6 @@ var Component = React.createClass({
         );
     }
 });
-
-var mapStateToProps = state => {
-    var data = [];
-    state.currentUser;
-    if (state.currentUser && state.currentUser._links) {
-        data = state.currentUser._links;
-    }
-    return { currentUser: state.currentUser, data };
-};
-
-var Sidebar = connect(mapStateToProps)(Component);
 
 export default Sidebar;
 
