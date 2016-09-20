@@ -17,22 +17,29 @@ class Sidebar extends React.Component {
         this.state = {fontSize: 25};
     }
     componentDidMount() {
-        debugger;
-        if (ReactDOM.findDOMNode(this.refs[USERNAMEREF]).offsetHeight > 2 * this.state.fontSize) {
+        if (
+            this.state.fontSize >= 12 &&
+            ReactDOM.findDOMNode(this.refs[USERNAMEREF]).offsetHeight > 2 * this.state.fontSize
+        ) {
             this.setState({fontSize: this.state.fontSize - 1});
         }
 
     }
     componentWillUpdate(nextProps, nextState) {
-        debugger;
-        if (nextState.fontSize === this.state.fontSize && ReactDOM.findDOMNode(this.refs[USERNAMEREF]).offsetHeight > 2 * this.state.fontSize) {
+        if (
+            this.state.fontSize >= 12 &&
+            nextState.fontSize === this.state.fontSize &&
+            ReactDOM.findDOMNode(this.refs[USERNAMEREF]).offsetHeight > 2 * this.state.fontSize
+        ) {
             this.setState({fontSize: this.state.fontSize - 1});
         }
 
     }
     componentDidUpdate() {
-        debugger;
-        if (ReactDOM.findDOMNode(this.refs[USERNAMEREF]).offsetHeight > 2 * this.state.fontSize) {
+        if (
+            this.state.fontSize >= 12 &&
+            ReactDOM.findDOMNode(this.refs[USERNAMEREF]).offsetHeight > 2 * this.state.fontSize
+        ) {
             this.setState({fontSize: this.state.fontSize - 1});
         }
     }
