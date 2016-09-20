@@ -1,3 +1,8 @@
+Version - 0.3.14
+----
+
+- 8436cc0: bump version
+
 Version - 0.3.12
 ----
 
