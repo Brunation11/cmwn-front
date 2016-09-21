@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap';
 import Shortid from 'shortid';
 
-import PopOver from 'components/popover';
+import UserPopover from 'components/popovers/user_popover';
 import Log from 'components/log';
 import HttpManager from 'components/http_manager';
 import FlipBoard from 'components/flipboard';
@@ -74,21 +74,14 @@ class Friends extends React.Component {
     }
 
     renderFlip(item) {
-        if (item.embedded && item.embedded.flips) {
-            return (
-                <PopOver
-                    element={item}
-                    type="user"
-                    trigger="click"
-                >
-                    {this.renderUserFlip.call(this, item)}
-                </PopOver>
-            );
-        } else {
-            return (
-                this.renderUserFlip.call(this, item)
-            );
-        }
+        return (
+            <UserPopover
+                element={item}
+                trigger="click"
+            >
+                {this.renderUserFlip.call(this, item)}
+            </UserPopover>
+        );
     }
 
     renderUserFlip(item) {
@@ -149,7 +142,7 @@ class Friends extends React.Component {
             <form>
                 <Paginator rowCount={this.props.rowCount} currentPage={this.props.currentPage}
                     pageCount={this.props.pageCount} data={this.props.data} pagePaginator={true}>
-                   <FlipBoard
+                    <FlipBoard
                        // add conditional to check if user has flips
                        // render either renderflip or renderuserflip
                        renderFlip={this.renderFlip.bind(this)}
@@ -170,7 +163,7 @@ class Friends extends React.Component {
 
                            return data;
                        }}
-                   />
+                    />
                </Paginator>
             </form>
         );
