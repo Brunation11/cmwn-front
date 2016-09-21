@@ -24,9 +24,13 @@ var Layout = React.createClass({
                 <div className="content">
                     {this.props.children}
                 </div>
-                <Sidebar menuIsOpen={this.menuIsOpen}/>
+                <Sidebar
+                    currentUser={this.props.currentUser}
+                    menuIsOpen={this.state.menuIsOpen}
+                    navMenuId={this.props.navMenuId}
+                />
                 {this.props.rightPanel()}}
-                <Footer />
+                <Footer loggedIn={this.props.currentUser && this.props.currentUser.username != null} />
              </div>
         );
     }

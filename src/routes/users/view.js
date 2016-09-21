@@ -79,7 +79,7 @@ export class ProfileView extends React.Component {
             return null;
         }
         return (
-            <Layout className="edit-student">
+            <Layout currentUser={this.props.currentUser} className="edit-student">
                 <Panel header={HEADINGS.EDIT_TITLE + this.state.first_name + ' ' + this.state.last_name}
                        className="standard edit-profile">
                     <div className="left">
