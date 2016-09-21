@@ -164,7 +164,11 @@ export class Feed extends React.Component {
         if (!this.state.data) return null;
 
         return (
-            <Layout currentUser={this.props.currentUser} className={COPY.PAGE_UNIQUE_IDENTIFIER} navMenuId="navMenu">
+            <Layout
+                currentUser={this.props.currentUser}
+                className={COPY.PAGE_UNIQUE_IDENTIFIER}
+                navMenuId="navMenu"
+            >
                 <Modal
                     className="full-width game-modal"
                     show={this.state.gameOn}
