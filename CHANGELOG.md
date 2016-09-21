@@ -1,3 +1,9 @@
+Version - 0.3.15
+----
+
+- 7412902: Version bump [ci skip]
+- 8436cc0: bump version
+
 Version - 0.3.14
 ----
 
