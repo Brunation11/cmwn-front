@@ -1,3 +1,8 @@
+Version - 0.3.14
+----
+
+- 14a7c2f: Version bump [ci skip]
+
 Version - 0.3.13
 ----
 
