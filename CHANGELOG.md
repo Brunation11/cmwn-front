@@ -1,3 +1,8 @@
+Version - 0.3.15
+----
+
+- 686a68c: show no data when [] is suggested data
+
 Version - 0.3.14
 ----
 
