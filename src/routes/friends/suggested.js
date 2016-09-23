@@ -118,7 +118,7 @@ export class Suggested extends React.Component{
     }
     render() {
         var self = this;
-        if (self.props.data == null || self.props.data === []) {
+        if (self.props.data == null || !self.props.data.length ) {
             return self.renderNoData();
         }
         return (
