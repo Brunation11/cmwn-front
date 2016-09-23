@@ -184,7 +184,7 @@ export class Profile extends React.Component {
                         </span>
                         <div className={ClassNames('coming-soon', { hidden: !item.coming_soon})} />
                         <div className={ClassNames('desktop-only', { hidden: !meta.desktop})} />
-                        <object data={`${GLOBALS.GAME_URL}${item.game_id}/thumb.jpg`} type="image/png" >
+                        <object data={`${GLOBALS.GAME_URL}${item.game_id}/thumb.gif`} type="image/gif" >
                             <img src={FlipBgDefault}></img>
                         </object>
                     </div>
