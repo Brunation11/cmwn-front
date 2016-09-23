@@ -5,7 +5,7 @@ import Footer from 'components/footer';
 import EventManager from 'components/event_manager';
 
 var Layout = React.createClass({
-    getInitialProps: function () {
+    getDefaultProps: function () {
         return {
             rightPanel: this.props.rightPanel || (<div></div>)
         };
