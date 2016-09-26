@@ -1,3 +1,8 @@
+Version - 0.3.23
+----
+
+- 1f91540: Version bump [ci skip]
+
 Version - 0.3.22
 ----
 
