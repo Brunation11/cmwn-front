@@ -67,7 +67,6 @@ var Game = React.createClass({
     componentDidMount: function () {
         var frame = ReactDOM.findDOMNode(this.refs.gameRef);
         var callApi;
-
         if (!frame) {
             return;
         }
