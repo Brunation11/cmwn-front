@@ -30,7 +30,7 @@ export class Schools extends React.Component {
     }
 
 
-    checkData() {
+    renderData() {
         if (this.props.data === []) {
             return (
                 <h2 className="placeholder">{NO_SCHOOLS}</h2>
@@ -50,7 +50,7 @@ export class Schools extends React.Component {
     render() {
         return (
             <Layout className={PAGE_UNIQUE_IDENTIFIER}>
-                {this.checkData()}
+                {this.renderData()}
             </Layout>
         );
     }

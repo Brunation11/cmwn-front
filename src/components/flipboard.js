@@ -12,7 +12,8 @@ class FlipBoard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: []
+            data: _.map((this.props.data === null ||
+                this.props.data === []) ? null : this.props.data, this.props.transform)
         };
     }
 
@@ -21,7 +22,7 @@ class FlipBoard extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.data) {
+        if (!_.isEqual(this.props.data, nextProps.data)) {
             this.setState({
                 data: _.map(nextProps.data, this.props.transform)
             });
