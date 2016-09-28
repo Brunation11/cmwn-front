@@ -14,6 +14,7 @@ import Toast from 'components/toast';
 import Paginator from 'components/paginator';
 import Actions from 'components/actions';
 import GLOBALS from 'components/globals';
+import Flag from 'components/flag';
 
 import Layout from 'layouts/two_col';
 
@@ -75,12 +76,16 @@ class Friends extends React.Component {
 
     renderFlip(item) {
         return (
-            <UserPopover
-                element={item}
-                trigger="click"
+            <Flag
+                data={item}
             >
-                {this.renderUserFlip.call(this, item)}
-            </UserPopover>
+                <UserPopover
+                    element={item}
+                    trigger="click"
+                >
+                    {this.renderUserFlip.call(this, item)}
+                </UserPopover>
+            </Flag>
         );
     }
 

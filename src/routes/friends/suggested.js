@@ -13,6 +13,7 @@ import Actions from 'components/actions';
 import Store from 'components/store';
 import UserPopover from 'components/popovers/user_popover';
 import GLOBALS from 'components/globals';
+import Flag from 'components/flag';
 
 import Layout from 'layouts/two_col';
 
@@ -73,12 +74,16 @@ export class Suggested extends React.Component{
 
     renderFlip(item) {
         return (
-            <UserPopover
-                element={item}
-                trigger="click"
+            <Flag
+                data={item}
             >
-                {this.renderUserFlip.call(this, item)}
-            </UserPopover>
+                <UserPopover
+                    element={item}
+                    trigger="click"
+                >
+                    {this.renderUserFlip.call(this, item)}
+                </UserPopover>
+            </Flag>
         );
     }
 
