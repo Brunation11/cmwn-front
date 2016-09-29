@@ -5,6 +5,7 @@ docker-compose.yml
 node_modules
 build
 **/*.swp
+**/*.swo
 .DS_Store
 **/*.log
 bumpVersion.sh
