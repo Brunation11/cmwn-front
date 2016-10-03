@@ -1,3 +1,8 @@
+Version - 0.3.24
+----
+
+- a52c741: Version bump [ci skip]
+
 Version - 0.3.23
 ----
 
