@@ -11,33 +11,42 @@ export const PAGE_UNIQUE_IDENTIFIER = 'resource-center';
 const TITLE = 'RESOURCE CENTER';
 const CURRICULUM_LINKS = [
   {
-    display: 'Getting Your Class Started with Change My World Now'
+    label: 'Getting Your Class Started with Change My World Now',
+    href: '',
   },
 ];
 const STUDENT_ENGAGEMENT_LINKS = [
   {
-    display: 'Water Quest'
+    label: 'Water Quest',
+    href: '',
   },
   {
-    display: 'Flip Challenge'
+    label: 'Flip Challenge',
+    href: '',
   },
   {
-    display: 'Letter Challenge'
+    label: 'Letter Challenge',
+    href: '',
   },
   {
-    display: 'Skribble Challenge'
+    label: 'Skribble Challenge',
+    href: '',
   },
   {
-    display: 'Game Design Challenge'
+    label: 'Game Design Challenge',
+    href: '',
   },
   {
-    display: 'Safety First Word Search'
+    label: 'Safety First Word Search',
+    href: '',
   },
   {
-    display: 'Polar Bear Crossword Puzzle'
+    label: 'Polar Bear Crossword Puzzle',
+    href: '',
   },
   {
-    display: 'Drought Out Crossword Puzzle'
+    label: 'Drought Out Crossword Puzzle',
+    href: '',
   },
 ];
 
@@ -50,7 +59,7 @@ export class ResourceCenter extends React.Component {
       return links.map(link => {
         return (
           <li>
-            <a href="">{link.display}</a>
+            <a href={link.href}>{link.label}</a>
           </li>
         );
       });
