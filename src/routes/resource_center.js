@@ -4,6 +4,8 @@ import {Panel} from 'react-bootstrap';
 
 import Layout from 'layouts/two_col';
 
+import 'routes/resource_center.scss';
+
 export const PAGE_UNIQUE_IDENTIFIER = 'resource-center';
 
 const TITLE = 'RESOURCE CENTER';
