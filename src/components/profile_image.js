@@ -98,14 +98,7 @@ export var Image = React.createClass({
     renderImage: function (url) {
         var style = {'backgroundImage': `url(${url})`};
         return (
-             <div
-                onClick={this.attemptNavigate}
-                className="profile-pic"
-                alt={PIC_ALT}
-                style={style}
-            >
-                 {PIC_ALT}
-            </div>
+            <img className="profile-pic" onClick={this.attemptNavigate} alt={PIC_ALT} src={url} />
         );
     },
     renderUploadButton: function () {
