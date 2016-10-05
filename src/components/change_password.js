@@ -117,8 +117,8 @@ class ChangePassword extends React.Component {
                     <Input
                         type="radio"
                         ref="offensive"
-                        name="offensive"
-                        className="radio-offensive"
+                        name="toggle"
+                        className="toggle-characters"
                         label="Check to show password characters"
                         value="text"
                         checked={this.state.type === 'text'}
