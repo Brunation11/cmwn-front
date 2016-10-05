@@ -426,7 +426,7 @@ export class EditProfile extends React.Component {
         return (
             <Layout currentUser={this.props.currentUser} className="edit-student">
                 <Panel
-                    header={`HEADINGS.EDIT_TITLE ${this.state.first_name} ${this.state.last_name}`}
+                    header={`${HEADINGS.EDIT_TITLE} ${this.state.first_name} ${this.state.last_name}`}
                     className="standard edit-profile"
                 >
 
