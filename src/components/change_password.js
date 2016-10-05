@@ -27,8 +27,21 @@ class ChangePassword extends React.Component {
             current: '',
             new: '',
             confirm: '',
-            extraProps: {}
+            extraProps: {},
+            type: 'password'
         };
+    }
+
+    handleOptionSelect(e) {
+        if (this.state.type !== e.target.value) {
+            this.setState({
+                type: e.target.value
+            });
+        } else {
+            this.setState({
+                type: 'password'
+            })
+        }
     }
 
     submit() {
@@ -64,46 +77,56 @@ class ChangePassword extends React.Component {
             return null;
         }
         return (
-            <Panel header={HEADINGS.PASSWORD} className="standard">
-            <form>
-            <Input
-                id="old-pass"
-                type="password"
-                value={this.state.current}
-                placeholder="********"
-                label="Current Password"
-                validate="required"
-                ref="currentInput"
-                name="currentInput"
-                onChange={e => this.setState({current: e.target.value})}
-            />
-            <Input
-                id="new-pass"
-                type="password"
-                value={this.state.new}
-                placeholder="********"
-                label="New Password"
-                validate="required"
-                ref="newInput"
-                name="newInput"
-                onChange={e => this.setState({new: e.target.value})}
-                {...this.state.extraProps}
-            />
-            <Input
-                id="confirm-pass"
-                type="password"
-                value={this.state.confirm}
-                placeholder="********"
-                label="Confirm Password"
-                validate="required"
-                ref="confirmInput"
-                name="confirmInput"
-                onChange={e => this.setState({confirm: e.target.value})}
-                {...this.state.extraProps}
-            />
-            <Button onClick={this.submit.bind(this)} id="update-btn">Update</Button>
-            </form>
-        </Panel>
+            <Panel header={this.props.header ? HEADINGS.PASSWORD : ''} className="standard change-password">
+                <form>
+                    <Input
+                        id="old-pass"
+                        type={this.state.type}
+                        value={this.state.current}
+                        placeholder="PA******"
+                        label="Current Password"
+                        validate="required"
+                        ref="currentInput"
+                        name="currentInput"
+                        onChange={e => this.setState({current: e.target.value})}
+                    />
+                    <Input
+                        id="new-pass"
+                        type={this.state.type}
+                        value={this.state.new}
+                        placeholder="PA******"
+                        label="New Password"
+                        validate="required"
+                        ref="newInput"
+                        name="newInput"
+                        onChange={e => this.setState({new: e.target.value})}
+                        {...this.state.extraProps}
+                    />
+                    <Input
+                        id="confirm-pass"
+                        type={this.state.type}
+                        value={this.state.confirm}
+                        placeholder="PA******"
+                        label="Re-type Password"
+                        validate="required"
+                        ref="confirmInput"
+                        name="confirmInput"
+                        onChange={e => this.setState({confirm: e.target.value})}
+                        {...this.state.extraProps}
+                    />
+                    <Input
+                        type="radio"
+                        ref="offensive"
+                        name="offensive"
+                        className="radio-offensive"
+                        label="Check to show password characters"
+                        value="text"
+                        checked={this.state.type === 'text'}
+                        onChange={this.handleOptionSelect.bind(this)}
+                    />
+                    <Button className="update-password-btn" onClick={this.submit.bind(this)} id="update-btn">Update</Button>
+                </form>
+            </Panel>
         );
     }
 }
