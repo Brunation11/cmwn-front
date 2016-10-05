@@ -236,7 +236,9 @@ h3 {
         @include no-text($profile-width, $profile-width);
         transition: background-color 2s;
         background-color: $cmwn-purple;
-        background-size: cover;
+        width: 100%;
+        height: auto;
+        padding-left: 0;
 
         &:hover {
             background-color: $cmwn-blue;
