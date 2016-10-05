@@ -235,8 +235,32 @@ $halfway-break-2: 540px;
             width: 50%;
         }
 
-        .radio span {
-            font-size: 1rem;
+        .toggle-characters {
+            display: none;
+
+            &:checked ~ span:before {
+                background-color: $cmwn-dark-blue;
+            }
+        }
+
+        .radio {
+            span {
+                font-size: 1rem;
+                vertical-align: middle;
+
+                &:before {
+                    position: absolute;
+                    top: 50%;
+                    left: 0;
+                    transform: translateY(-50%);
+                    transition: border .25s linear;
+                    border: 1px dashed $cmwn-white;
+                    background-color: $cmwn-blue-light;
+                    width: $standard;
+                    height: $standard;
+                    content: '';
+                }
+            }
         }
 
         .update-password-btn {
@@ -289,7 +313,7 @@ $halfway-break-2: 540px;
             font-size: 1rem;
         }
 
-        .radio span {
+        .change-password .radio span {
             font-size: .75rem;
         }
     }
@@ -371,7 +395,7 @@ $halfway-break-2: 540px;
             }
         }
 
-        .radio span {
+        .change-password .radio span {
             font-size: .75rem;
         }
     }
@@ -485,7 +509,6 @@ $halfway-break-2: 540px;
                 font-size: .75rem;
             }
         }
-
     }
 }
 
