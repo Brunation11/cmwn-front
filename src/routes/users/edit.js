@@ -12,15 +12,15 @@ import Log from 'components/log';
 import Toast from 'components/toast';
 import Layout from 'layouts/two_col';
 import GLOBALS from 'components/globals';
-import Validate from 'components/validators';
+// import Validate from 'components/validators';
 import Util from 'components/util';
-import UpdateUsername from 'components/update_username';
+// import UpdateUsername from 'components/update_username';
 import ProfileImage from 'components/profile_image';
 import Form from 'components/form';
 import DropdownDatepicker from 'components/dropdown_datepicker';
 import ACTION_CONSTANTS from 'components/action_constants';
-import CodeChange from 'components/code_change';
-import ForgotPass from 'components/forgot_pass';
+// import CodeChange from 'components/code_change';
+// import ForgotPass from 'components/forgot_pass';
 import ChangePassword from 'components/change_password';
 
 
@@ -118,7 +118,6 @@ export class EditProfile extends React.Component {
     }
 
     resolveRole(props) {
-        var newState = {};
         if (props.currentUser && props.currentUser.type && props.currentUser.type !== 'CHILD') {
             this.setState({isStudent: false});
         } else {
@@ -176,7 +175,8 @@ export class EditProfile extends React.Component {
     //     }
     //     //note: This should only appear for adults, who have email addresses
     //     HttpManager.GET(this.props.data._links.forgot.href, {email: this.props.data.email}).then(
-    //         Toast.success.bind(this, 'Password Reset. This user will recieve an email with further instructions.')
+    //         Toast.success.bind(this,
+    //             'Password Reset. This user will recieve an email with further instructions.')
     //     ).catch(err => {
     //         Toast.error(`${ERRORS.BAD_RESET} ${err.message ? `Message: ${err.message}` : ''}`);
     //         Log.log('Server refused profile update', err);
@@ -340,7 +340,7 @@ export class EditProfile extends React.Component {
         return (
             <DropdownDatepicker
                 ref="dropdownDatepicker"
-                // disabled={!perms.birthday.canEdit}
+                disabled={!perms.birthday.canEdit}
                 value={this.state.dob}
                 hasFeedback
                 onChange={
@@ -380,7 +380,7 @@ export class EditProfile extends React.Component {
         );
     }
 
-    renderFormSubmit(perms) {
+    renderFormSubmit() {
         return (
             <Button className="update-user-metadata-btn" onClick={this.submit.bind(this)}>Save</Button>
         );
@@ -396,7 +396,7 @@ export class EditProfile extends React.Component {
                 <div className="username-container">
                     <Button
                         className="update-username-btn"
-                        // onClick={this.showModal.bind(this)}
+                        onClick={""}
                     >
                         CHANGE
                     </Button>
@@ -411,7 +411,7 @@ export class EditProfile extends React.Component {
                     {perms.lastName.canView ? this.renderLastName(perms) : null}
                     {perms.birthday.canView ? this.renderBirthday(perms) : null}
                 </Form>
-                {!perms.canEdit ? this.renderFormSubmit.call(this, perms) : null}
+                {perms.canEdit ? this.renderFormSubmit.call(this) : null}
             </div>
         );
     }

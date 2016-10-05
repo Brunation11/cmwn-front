@@ -40,7 +40,7 @@ class ChangePassword extends React.Component {
         } else {
             this.setState({
                 type: 'password'
-            })
+            });
         }
     }
 
@@ -124,7 +124,13 @@ class ChangePassword extends React.Component {
                         checked={this.state.type === 'text'}
                         onChange={this.handleOptionSelect.bind(this)}
                     />
-                    <Button className="update-password-btn" onClick={this.submit.bind(this)} id="update-btn">Update</Button>
+                    <Button
+                        id="update-btn"
+                        className="update-password-btn"
+                        onClick={this.submit.bind(this)}
+                    >
+                        Update
+                    </Button>
                 </form>
             </Panel>
         );

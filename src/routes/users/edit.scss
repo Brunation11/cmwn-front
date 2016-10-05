@@ -4,7 +4,7 @@
 $halfway-break-1: 826px;
 $halfway-break-2: 540px;
 
-#cmwn-app .edit-student {
+#cmwn-app .edit-student { // scss-lint:disable IdSelector
     .content,
     .panel {
         background: $cmwn-green;
@@ -45,7 +45,7 @@ $halfway-break-2: 540px;
         border: 1px solid $cmwn-white;
         width: 45%;
 
-        &:before {
+        &::before {
             position: absolute;
             top: 0;
             bottom: 0;
@@ -60,7 +60,7 @@ $halfway-break-2: 540px;
             border-radius: 2px;
             padding-bottom: 0;
 
-            &:before {
+            &::before {
                 position: absolute;
                 top: 50%;
                 right: -12%;
@@ -151,64 +151,62 @@ $halfway-break-2: 540px;
             border-bottom: 1px solid $cmwn-white;
             padding: $standard 0;
         }
+    }
 
-        .dropdown-datepicker {
-            .form-group {
-                display: inline-block;
-                position: relative;
+    .dropdown-datepicker .form-group {
+        display: inline-block;
+        position: relative;
 
-                &:after {
-                    position: absolute;
-                    top: 0;
-                    right: 4%;
-                    bottom: 0;
-                    background: url('../../media/edit_profile/dropdown_arrows.png');
-                    background-repeat: no-repeat;
-                    background-position: 1px 0;
-                    background-size: cover;
-                    max-width: 20px;
-                    height: 100%;
-                    content: '';
-                }
+        &::after {
+            position: absolute;
+            top: 0;
+            right: 4%;
+            bottom: 0;
+            background: url('../../media/edit_profile/dropdown_arrows.png');
+            background-repeat: no-repeat;
+            background-position: 1px 0;
+            background-size: cover;
+            max-width: 20px;
+            height: 100%;
+            content: '';
+        }
 
-                &:nth-of-type(1) {
-                    width: 40%;
+        &:nth-of-type(1) {
+            width: 40%;
 
-                    &:after {
-                        width: 14%;
-                    }
+            &::after {
+                width: 14%;
+            }
 
-                    .birthday-input {
-                        width: 80%;
-                    }
-                }
-
-                &:nth-of-type(2),
-                &:nth-of-type(3) {
-                    width: 30%;
-
-                    &:after {
-                        width: 19%;
-                    }
-
-                    .birthday-input {
-                        width: 75%;
-                    }
-                }
+            .birthday-input { // scss-lint:disable SelectorDepth
+                width: 80%;
             }
         }
 
-        .birthday-input {
-            -moz-appearance: none;
-            -webkit-appearance: none;
+        &:nth-of-type(2),
+        &:nth-of-type(3) {
+            width: 30%;
+
+            &::after {
+                width: 19%;
+            }
+
+            .birthday-input { // scss-lint:disable SelectorDepth
+                width: 75%;
+            }
         }
+    }
+
+    .birthday-input {
+        -moz-appearance: none;
+        -webkit-appearance: none;
     }
 
     .current-username-container {
         position: relative;
         clear: both;
-        font-family: $cmwn-jade-font;
         margin-bottom: $standard;
+        font-family: $cmwn-jade-font;
 
         h1 {
             margin: 0;
@@ -238,54 +236,52 @@ $halfway-break-2: 540px;
         .toggle-characters {
             display: none;
 
-            &:checked ~ span:before {
+            &:checked ~ span::before {
                 background-color: $cmwn-dark-blue;
             }
         }
+    }
 
-        .radio {
-            span {
-                font-size: 1rem;
-                vertical-align: middle;
+    .radio span {
+        vertical-align: middle;
+        font-size: 1rem;
 
-                &:before {
-                    position: absolute;
-                    top: 50%;
-                    left: 0;
-                    transform: translateY(-50%);
-                    transition: border .25s linear;
-                    border: 1px dashed $cmwn-white;
-                    background-color: $cmwn-blue-light;
-                    width: $standard;
-                    height: $standard;
-                    content: '';
-                }
-            }
-        }
-
-        .update-password-btn {
-            position: relative;
-            outline: 0;
-            border: 0;
-            background: url('../../media/edit_profile/btns.png');
-            background-position: 633px 398px;
-            width: 140px;
-            height: 44px;
-            color: transparent;
-        }
-
-        .update-password-btn:hover,
-        .update-password-btn:focus,
-        .update-password-btn:active,
-        .update-password-btn:active:focus {
-            outline: none;
-            border: 0;
-            background-position: 1115px 398px;
+        &::before {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            transition: border .25s linear;
+            border: 1px dashed $cmwn-white;
+            background-color: $cmwn-blue-light;
+            width: $standard;
+            height: $standard;
+            content: '';
         }
     }
 
+    .update-password-btn {
+        position: relative;
+        outline: 0;
+        border: 0;
+        background: url('../../media/edit_profile/btns.png');
+        background-position: 633px 398px;
+        width: 140px;
+        height: 44px;
+        color: transparent;
+    }
+
+    .update-password-btn:hover,
+    .update-password-btn:focus,
+    .update-password-btn:active,
+    .update-password-btn:active:focus {
+        outline: none;
+        border: 0;
+        background-position: 1115px 398px;
+    }
+
     @media (min-width: $halfway-break-1) and (max-width: $monitor-max-break) {
-        .left.profile-image-container .profile-image:before {
+        .left.profile-image-container .profile-image::before {
             right: -13%;
             left: -13%;
         }
@@ -313,7 +309,7 @@ $halfway-break-2: 540px;
             font-size: 1rem;
         }
 
-        .change-password .radio span {
+        .change-password span {
             font-size: .75rem;
         }
     }
@@ -329,7 +325,7 @@ $halfway-break-2: 540px;
             transform: translateX(-50%);
             width: 50%;
 
-            .profile-image:before {
+            .profile-image::before {
                 right: -15%;
                 left: -15%;
             }
@@ -376,7 +372,7 @@ $halfway-break-2: 540px;
             font-size: .75rem;
         }
 
-        .left.profile-image-container .profile-image:before {
+        .left.profile-image-container .profile-image::before {
             right: -13%;
             left: -13%;
         }
@@ -395,7 +391,7 @@ $halfway-break-2: 540px;
             }
         }
 
-        .change-password .radio span {
+        .change-password span {
             font-size: .75rem;
         }
     }
@@ -406,7 +402,7 @@ $halfway-break-2: 540px;
             transform: translateX(-50%);
             width: 50%;
 
-            .profile-image:before {
+            .profile-image::before {
                 right: -15%;
                 left: -15%;
             }
@@ -454,7 +450,7 @@ $halfway-break-2: 540px;
             transform: translateX(-50%);
             width: 75%;
 
-            .profile-image:before {
+            .profile-image::before {
                 right: -15%;
                 left: -15%;
             }
@@ -505,7 +501,7 @@ $halfway-break-2: 540px;
                 width: 100%;
             }
 
-            .radio span {
+            span {
                 font-size: .75rem;
             }
         }
