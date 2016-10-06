@@ -7,7 +7,7 @@ import Log from 'components/log';
 import History from 'components/history';
 import Toast from 'components/toast';
 import GLOBALS from 'components/globals';
-import {Panel, Button, Input} from 'react-bootstrap';
+import {Button, Input} from 'react-bootstrap';
 
 import Layout from 'layouts/one_col';
 
@@ -85,10 +85,6 @@ export class UpdatePassword extends React.Component {
     }
 
     submit() {
-        var update;
-
-        if (this.props.currentUser.user_id != null) window.location.href = '/logout';
-
         if (!isPassValid(this.refs.newPassword.getValue())) {
             this.setState({
                 extraProps: {
@@ -102,7 +98,7 @@ export class UpdatePassword extends React.Component {
             }, {
                 'password': this.refs.newPassword.getValue(),
                 'password_confirmation': this.refs.confirmPassword.getValue()
-            }).then(res => {
+            }).then(() => {
                 this.setState({
                     currentPage: 'confirm-re-login'
                 });
