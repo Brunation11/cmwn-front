@@ -149,7 +149,7 @@ export class GamesPage extends React.Component {
 
     render() {
         return (
-           <Layout className="games">
+           <Layout currentUser={this.props.currentUser} className="games">
                {this.renderGameList()}
            </Layout>
         );
@@ -159,12 +159,17 @@ export class GamesPage extends React.Component {
 mapStateToProps = state => {
     var data = {};
     var loading = true;
+    var currentUser;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
     }
+    if (state.currentUser != null){
+        currentUser = state.currentUser;
+    }
     return {
         data,
+        currentUser,
         loading
     };
 };
