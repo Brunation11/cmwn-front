@@ -36,22 +36,15 @@ const CHANGE_COPY = {
 var mapStateToProps;
 var Page;
 
-export var isPassValid = function (password) {
-    if (password === null || typeof (password) === 'undefined') {
-        return false;
-    }
-    return password.length >= 8 && ~password.search(/[0-9]+/);
-};
-
 export class UpdatePassword extends React.Component {
     constructor() {
         super();
-        this.state = {
+        this.state = _.defaults({
             type: 'password',
             extraProps: {},
             currentPage: 'update-password',
             background: _.sample(['bkg-1', 'bkg-2'])
-        };
+        });
     }
 
     componentDidMount() {
@@ -80,12 +73,17 @@ export class UpdatePassword extends React.Component {
         }
     }
 
+    isPassValid(password) {
+        if (password === null || typeof (password) === 'undefined') return false;
+        return password.length >= 8 && ~password.search(/[0-9]+/);
+    }
+
     goToProfile() {
         History.replace('/profile?message=updated');
     }
 
     submit() {
-        if (!isPassValid(this.refs.newPassword.getValue())) {
+        if (!this.isPassValid(this.refs.newPassword.getValue())) {
             this.setState({
                 extraProps: {
                     bsStyle: 'error'
