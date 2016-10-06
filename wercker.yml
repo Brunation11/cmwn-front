@@ -28,46 +28,88 @@ build:
       url: $SLACK_URL
 
 release:
+  box: python:2.7
   steps:
     - script:
-      name: Version bump, Changelog and prep
+      name: Preparing release
       code: |-
-        echo "Bumping version"
-        chmod ugo+x $PWD/bin/version_bump.sh $PWD/bin/changelog.sh
-        export VERSION="$($PWD/bin/version_bump.sh patch)"
-        echo "Bumped version to $VERSION"
-        echo "Creating changelog"
-        $PWD/bin/changelog.sh
-        echo "Created Change log"
+        export SHORT_HASH=$(git log -n 1 --abbrev-commit | head -n 1 | sed -e 's/^commit //')
+        export VERSION="$($PWD/bin/version_bump.sh --print-current)-$SHORT_HASH"
+        echo "$VERSION"
         mkdir -p artifact
         mv build.zip artifact/platform-front-$VERSION.zip
         ls -al artifact/platform-front-$VERSION.zip
         echo "Changed file name"
-    - script:
-      name: Commiting new version number
-      code: |-
-        git checkout $WERCKER_GIT_BRANCH
-        git config --global user.email hal-9000@changemyworldnow.com
-        git config --global user.name "wercker"
-        git fetch $GIT_REMOTE
-        git add $PACKAGE_FILE CHANGELOG.md
-        git commit -m 'Version bump [ci skip]'
-        git push -f $GIT_REMOTE $WERCKER_GIT_BRANCH
     - s3sync:
       name: Uploading package to Amazon S3
-      key-id: $AWS_KEY
-      key-secret: $AWS_SECRET
+      key-id: $AWS_ACCESS_KEY_ID
+      key-secret: $AWS_SECRET_ACCESS_KEY
       bucket-url: $AWS_BUCKET_URL
-      source-dir: artifact
+      source-dir: artifact/
       delete-removed: false
     - github-create-release:
       name: Creating release on github
       token: $MC_GITHUB_TOKEN
       tag: $VERSION
-      title: $VERSION
+      draft: true
     - github-upload-asset:
       name: Adding build artifact to tag
       token: $MC_GITHUB_TOKEN
       tag: $VERSION
       file: artifact/platform-front-$VERSION.zip
       filename: platform-front-$VERSION.zip
+
+draft-release:
+  box: python:2.7
+  steps:
+    - script:
+      name: Preparing release
+      code: |-
+        export SHORT_HASH=$(git log -n 1 --abbrev-commit | head -n 1 | sed -e 's/^commit //')
+        export VERSION="$($PWD/bin/version_bump.sh --print-current)-$SHORT_HASH"
+        echo "$VERSION"
+        mkdir -p artifact
+        mv build.zip artifact/platform-front-$VERSION.zip
+        ls -al artifact/platform-front-$VERSION.zip
+        echo "Changed file name"
+    - s3sync:
+      name: Uploading package to Amazon S3
+      key-id: $AWS_ACCESS_KEY_ID
+      key-secret: $AWS_SECRET_ACCESS_KEY
+      bucket-url: $AWS_BUCKET_URL
+      source-dir: artifact/
+      delete-removed: false
+    - github-create-release:
+      name: Creating release on github
+      token: $MC_GITHUB_TOKEN
+      tag: $VERSION
+      draft: true
+    - github-upload-asset:
+      name: Adding build artifact to tag
+      token: $MC_GITHUB_TOKEN
+      tag: $VERSION
+      file: artifact/platform-front-$VERSION.zip
+      filename: platform-front-$VERSION.zip
+
+deploy:
+  box: python:2.7
+  steps:
+    - script:
+      name: Preparing release
+      code: |-
+        export SHORT_HASH=$(git log -n 1 --abbrev-commit | head -n 1 | sed -e 's/^commit //')
+        $PWD/bin/version_bump.sh --print-current
+        export VERSION="$($PWD/bin/version_bump.sh --print-current)-$SHORT_HASH"
+    - script:
+      name: Installing pips
+      code: |-
+        pip install boto3
+        export DEPLOY='true'
+    - script:
+      name: Running deploy
+      code: |-
+        echo "Deploying $DEPLOY_APP_NAME @ $VERSION to $DEPLOY_ENV"
+        python bin/deploy.py $VERSION $DEPLOY_APP_NAME $DEPLOY_ENV -v
+  after-steps:
+    - slack-notifier:
+      url: $SLACK_URL
