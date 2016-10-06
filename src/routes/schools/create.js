@@ -56,7 +56,7 @@ export class SchoolCreate extends React.Component {
 
     render() {
         return (
-           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+           <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
                 <Form ref={REFS.FORM}>
                     <Input
                         type="text"
@@ -78,12 +78,17 @@ export class SchoolCreate extends React.Component {
 mapStateToProps = state => {
     var data = {title: ''};
     var loading = true;
+    var currentUser;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
     }
+    if (state.currentUser != null){
+        currentUser = state.currentUser;
+    }
     return {
         data,
+        currentUser,
         loading
     };
 };

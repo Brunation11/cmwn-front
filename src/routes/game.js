@@ -51,7 +51,7 @@ export class GamePage extends React.Component {
 
     render() {
         return (
-            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+            <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
                 <Game
                     ref="gameRef"
                     game={this.props.params.game}

@@ -25,7 +25,7 @@ export class District extends React.Component{
     }
     render() {
         return (
-            <Layout className="district-list">
+            <Layout currentUser={this.props.currentUser} className="district-list">
                 <Panel header={TITLE} className="standard" >
                     <div >
                         {this.renderCreateDistrict()}
