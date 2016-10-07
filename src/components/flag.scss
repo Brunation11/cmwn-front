@@ -25,7 +25,7 @@
         }
 
         .confirm {
-            margin: 4% 4% -2% 48%;
+            margin: 4% 4% -2% 0;
         }
 
         .cancel {
@@ -120,14 +120,13 @@
     .other .control-label span:before {
         background-color: $cmwn-white;
     }
-
 }
 
 @media (min-width: $device-portrait-break + (($device-max-break - $device-portrait-break)/2)) and (max-width: $device-max-break) {
     .flag-form-modal {
         .flag-form {
             .confirm {
-                margin: 5% 4% -2% 48%;
+                margin: 5% 4% -2% 0;
             }
 
             .cancel {
@@ -191,7 +190,7 @@
             margin: -5% 2% 2%;
 
             .confirm {
-                margin: 3% 4% -5% 48%;
+                margin: 3% 4% -5% 0;
             }
 
             .cancel {
@@ -240,6 +239,73 @@
             margin-top: 5px;
             margin-left: 38px;
             height: 80px;
+        }
+    }
+}
+
+@media (max-width: $device-portrait-break) {
+    .flag-form-modal {
+        .modal-body {
+            background-size: 300%;
+            background-position: center;
+        }
+
+        h1 {
+            font-size: 16px;
+        }
+
+        .radio-offensive,
+        .radio-inappropriate {
+            ~ span {
+                padding-left: 8%;
+                font-size: 12px;
+                vertical-align: middle;
+            }
+
+            ~ span:before {
+                top: 58%;
+                transform: translateY(-50%);
+                border: 1px dashed $cmwn-white;
+                width: 20px;
+                height: 20px;
+            }
+        }
+
+        .control-label {
+            padding-left: 14px;
+
+            span {
+                padding-left: 16%;
+                font-size: 12px;
+            }
+
+            span:before {
+                position: absolute;
+                top: 5%;
+                left: 0;
+                border: 1px dashed $cmwn-white;
+                width: 20px;
+                height: 20px;
+            }
+        }
+
+        .input-other {
+            margin-top: 5px;
+            margin-left: 0;
+            height: 100px;
+            width: 100%;
+            border: 1px dashed $cmwn-white;
+        }
+
+        .flag-form {
+            .confirm,
+            .cancel {
+                width: 30%;
+            }
+
+            .confirm {
+                margin: 4% 4% -2% 0%;
+            }
         }
     }
 }
