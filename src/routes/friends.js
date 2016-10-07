@@ -155,7 +155,7 @@ export class Friends extends React.Component {
     render() {
         if (this.props.data.length === 0) {
             return (
-                <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+                <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
                     {NO_FRIENDS}
                 </Layout>
             );

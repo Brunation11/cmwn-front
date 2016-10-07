@@ -51,7 +51,7 @@ export class CreateDistrict extends React.Component{
     }
     render() {
         return (
-           <Layout>
+           <Layout currentUser={this.props.currentUser}>
                 <Form ref="formRef">
                     <Input
                         type="text"
@@ -94,12 +94,17 @@ export class CreateDistrict extends React.Component{
 mapStateToProps = state => {
     var data = {};
     var loading = true;
+    var currentUser;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
     }
+    if (state.currentUser != null){
+        currentUser = state.currentUser;
+    }
     return {
         data,
+        currentUser,
         loading,
     };
 };

@@ -158,7 +158,7 @@ export class Suggested extends React.Component{
         }
 
         return (
-           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+           <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
                 <form>
                     <FlipBoard
                         renderFlip={this.renderCard.bind(this)}

@@ -112,7 +112,7 @@ export class Profile extends React.Component {
             return null;
         }
         return (
-           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+           <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
                {this.renderClassInfo()}
                <USER_SOURCE>
                     <FlipBoard
