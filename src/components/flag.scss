@@ -1,5 +1,11 @@
 @import 'variables';
 
+.flag-container {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+}
+
 .flag-form-modal {
     .modal-content {
         margin-top: 40%;
@@ -246,8 +252,8 @@
 @media (max-width: $device-portrait-break) {
     .flag-form-modal {
         .modal-body {
-            background-size: 300%;
             background-position: center;
+            background-size: 300%;
         }
 
         h1 {
@@ -258,8 +264,8 @@
         .radio-inappropriate {
             ~ span {
                 padding-left: 8%;
-                font-size: 12px;
                 vertical-align: middle;
+                font-size: 12px;
             }
 
             ~ span:before {
@@ -292,9 +298,9 @@
         .input-other {
             margin-top: 5px;
             margin-left: 0;
-            height: 100px;
-            width: 100%;
             border: 1px dashed $cmwn-white;
+            width: 100%;
+            height: 100px;
         }
 
         .flag-form {

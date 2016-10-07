@@ -123,7 +123,7 @@ export default class Flag extends React.Component {
     render() {
         if (!this.state.data) return null;
         return (
-            <div>
+            <div className="flag-container">
                 <Modal
                     className="flag-form-modal"
                     show={this.state.flagFormOpen}
@@ -136,7 +136,10 @@ export default class Flag extends React.Component {
                         {this.renderFlagForm()}
                     </Modal.Body>
                 </Modal>
-                <Button onClick={this.showModal.bind(this)}>FLAG</Button>
+                <Button
+                    className="flag-button"
+                    onClick={this.showModal.bind(this)}
+                />
                 {this.props.children}
             </div>
         );
