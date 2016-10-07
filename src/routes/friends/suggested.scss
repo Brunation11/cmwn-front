@@ -16,11 +16,20 @@
         .btn-toolbar {
             margin: 0;
         }
+
+        &:hover,
+        &:focus {
+            .flag-button {
+                opacity: 1;
+            }
+        }
     }
 
     .flag-button {
         position: absolute;
         right: 6%;
+        transition: opacity .5s ease-in-out;
+        opacity: 0;
         z-index: 1;
     }
 
