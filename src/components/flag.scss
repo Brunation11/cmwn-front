@@ -69,7 +69,7 @@
             font-size: 22px;
         }
 
-        ~ span:before {
+        ~ span::before {
             position: absolute;
             left: 0%;
             transition: border .25s linear;
@@ -93,7 +93,7 @@
             font-size: 22px;
         }
 
-        span:before {
+        span::before {
             position: absolute;
             left: 0;
             transition: border .25s linear;
@@ -121,9 +121,9 @@
     }
 
 
-    .offensive .radio-offensive ~ span:before,
-    .inappropriate .radio-inappropriate ~ span:before,
-    .other .control-label span:before {
+    .offensive .radio-offensive ~ span::before,
+    .inappropriate .radio-inappropriate ~ span::before,
+    .other .control-label span::before {
         background-color: $cmwn-white;
     }
 }
@@ -151,7 +151,7 @@
                 font-size: 17px;
             }
 
-            ~ span:before {
+            ~ span::before {
                 top: 10%;
                 border: 1px dashed $cmwn-white;
                 width: 25px;
@@ -167,7 +167,7 @@
                 font-size: 17px;
             }
 
-            span:before {
+            span::before {
                 position: absolute;
                 top: 2%;
                 left: 0;
@@ -215,7 +215,7 @@
                 font-size: 12px;
             }
 
-            ~ span:before {
+            ~ span::before {
                 top: 25%;
                 border: 1px dashed $cmwn-white;
                 width: 20px;
@@ -231,7 +231,7 @@
                 font-size: 12px;
             }
 
-            span:before {
+            span::before {
                 position: absolute;
                 top: 5%;
                 left: 0;
@@ -268,7 +268,7 @@
                 font-size: 12px;
             }
 
-            ~ span:before {
+            ~ span::before {
                 top: 58%;
                 transform: translateY(-50%);
                 border: 1px dashed $cmwn-white;
@@ -285,7 +285,7 @@
                 font-size: 12px;
             }
 
-            span:before {
+            span::before {
                 position: absolute;
                 top: 5%;
                 left: 0;
