@@ -125,24 +125,6 @@ export class Friends extends React.Component {
         );
     }
 
-    renderUserCard(item) {
-        return (
-            <div className="user-card" key={Shortid.generate()}>
-                <span className="overlay">
-                    <div className="prompts">
-                        {this.renderRequestStatus(item)}
-                        <br />
-                        {this.renderAcceptRequestButton(item)}
-                        <br />
-                        {this.renderViewProfileButton(item)}
-                    </div>
-                </span>
-                <img className="avatar" src={item.image}></img>
-                <p className="link-text" >{item.username}</p>
-            </div>
-        );
-    }
-
     renderCard(item) {
         return (
             <Flag
@@ -152,7 +134,19 @@ export class Friends extends React.Component {
                     element={item}
                     trigger="click"
                 >
-                    {this.renderUserCard.call(this, item)}
+                    <div className="user-card" key={Shortid.generate()}>
+                        <span className="overlay">
+                            <div className="prompts">
+                                {this.renderRequestStatus(item)}
+                                <br />
+                                {this.renderAcceptRequestButton(item)}
+                                <br />
+                                {this.renderViewProfileButton(item)}
+                            </div>
+                        </span>
+                        <img className="avatar" src={item.image}></img>
+                        <p className="link-text" >{item.username}</p>
+                    </div>
                 </UserPopover>
             </Flag>
         );
