@@ -1,52 +1,141 @@
 @import 'variables';
 
 .suggested-friends {
-    //scss-lint:disable all
-    .flipboard .panel-body .flip div span.overlay {
-        background: transparent;
-    }
-    //scss-lint:enable all
-
-    td img {
-        width: 200px;
-        max-width: 200px;
-    }
-
-    .overlay {
+    .placeholder {
         text-align: center;
     }
 
-    .btn.standard {
+    .flipboard .panel-body {
+        text-align: justify;
+    }
+
+    .flag-container {
+        display: inline-block;
+        width: 33.3%;
+
+        .btn-toolbar {
+            margin: 0;
+        }
+
+        &:hover,
+        &:focus {
+            .flag-button {
+                opacity: 1;
+            }
+        }
+    }
+
+    .flag-button {
+        position: absolute;
+        right: 6%;
+        transition: opacity .5s ease-in-out;
+        opacity: 0;
+        z-index: 1;
+    }
+
+    .user-card {
         position: relative;
-        bottom: 0;
-        margin: 0;
-        border-radius: 0;
-        box-shadow: none;
+        text-align: center;
+
+        &:hover,
+        &:focus {
+            .overlay {
+                opacity: 1;
+            }
+        }
+    }
+
+    .overlay {
+        position: absolute;
+        transition: opacity .5s ease-in-out;
+        opacity: 0;
+        width: 100%;
+        height: 90%;
+        text-align: center;
+    }
+
+    .prompts {
+        position: absolute;
+        bottom: 10%;
+        width: 100%;
+        white-space: pre-wrap;
+
+        .btn,
+        .request-status {
+            position: relative;
+            top: 30%;
+            float: left;
+            clear: both;
+            margin: 10% 0 0;
+        }
+
+        .btn {
+            left: 50%;
+            transform: translateX(-50%);
+            transition: opacity 1s ease-in-out;
+
+            &.nohover,
+            &.nohover:hover,
+            &.nohover:focus {
+                background-color: $cmwn-blue;
+            }
+        }
+
+        .request-status {
+            float: none;
+            text-transform: uppercase;
+            color: $cmwn-white;
+            font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
+            font-size: 18px;
+        }
+
+        .disabled {
+            display: none;
+        }
+    }
+
+
+    .avatar {
         width: 100%;
     }
 
-    .hidden {
-        visibility: hidden;
+    @media (min-width: 747px) and (max-width: 826px) {
+        .prompts {
+            .btn,
+            .request-status {
+                font-size: 15px;
+            }
+        }
     }
 
-    .flip {
-
-        img {
-            transition: background-color 2s;
-            background-color: $cmwn-purple;
-            max-width: 200px;
+    @media (min-width: 667px) and (max-width: 747px) {
+        .flag-container {
+            width: 50%;
         }
+    }
 
-        .overlay:hover + img {
-            background-color: $cmwn-blue;
+    @media (min-width: 414px) and (max-width: 667px) {
+        .prompts {
+            .btn,
+            .request-status {
+                font-size: 11px;
+            }
+        }
+    }
+
+    @media (max-width: 414px) {
+        .flag-container {
+            width: 50%;
         }
 
         .overlay {
-            padding: 0;
+            height: 89%;
+        }
 
-            .abswrap {
-                display: flex;
-                flex-direction: column;
+        .prompts {
+            .btn,
+            .request-status {
+                font-size: 12px;
             }
         }
     }
