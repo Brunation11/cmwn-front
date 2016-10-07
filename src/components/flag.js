@@ -17,7 +17,7 @@ const COPY = {
     INAPPROPRIATE: 'THE IMAGE USED WAS INAPPROPRIATE.',
     OTHER: 'I HAVE ANOTHER REASON:',
     LABEL: 'Why are you reporting this image?'
-}
+};
 
 export default class Flag extends React.Component {
     constructor() {
@@ -44,7 +44,7 @@ export default class Flag extends React.Component {
         }
     }
 
-    showModal(gameUrl) {
+    showModal() {
         this.setState({flagFormOpen: true});
     }
 
@@ -53,7 +53,6 @@ export default class Flag extends React.Component {
     }
 
     submitFlag() {
-        console.log('in submit flag', this);
         if (!this.state.reason) {
             return Toast.error('Looks like you haven\'t selected a reason for flagging this image');
         }
@@ -61,16 +60,16 @@ export default class Flag extends React.Component {
         HttpManager.POST({
             url: `${GLOBALS.API_URL}flag`,
             handleErrors: false
-        },{
+        }, {
             flaggee: this.state.data.friend_id,
             reason: this.state.reason,
             url: this.state.data.image
-        }).then (res => {
+        }).then (() => {
             Toast.success(COPY.SUCCESS);
         }).catch (e => {
             Toast.error(COPY.ERROR);
             Log.error(e, 'Unable to flag');
-        })
+        });
     }
 
     renderFlagForm() {
@@ -78,10 +77,12 @@ export default class Flag extends React.Component {
             <form
                 method="POST"
                 ref="flag-form"
-                className={ClassNames("flag-form", {
-                    offensive: this.state.reason == COPY.OFFENSIVE,
-                    inappropriate: this.state.reason == COPY.INAPPROPRIATE,
-                    other: this.state.reason !== "" && this.state.reason !== COPY.OFFENSIVE && this.state.reason !== COPY.INAPPROPRIATE
+                className={ClassNames('flag-form', {
+                    offensive: this.state.reason === COPY.OFFENSIVE,
+                    inappropriate: this.state.reason === COPY.INAPPROPRIATE,
+                    other: this.state.reason !== '' &&
+                    this.state.reason !== COPY.OFFENSIVE &&
+                    this.state.reason !== COPY.INAPPROPRIATE
                 })}
             >
                 <h1><strong>{COPY.LABEL}</strong></h1>
@@ -92,7 +93,7 @@ export default class Flag extends React.Component {
                     className="radio-inappropriate"
                     label={COPY.INAPPROPRIATE}
                     value={COPY.INAPPROPRIATE}
-                    checked={this.state.reason == COPY.INAPPROPRIATE}
+                    checked={this.state.reason === COPY.INAPPROPRIATE}
                     onChange={this.handleOptionSelect.bind(this)}
                 />
                 <Input
@@ -102,7 +103,7 @@ export default class Flag extends React.Component {
                     className="radio-offensive"
                     label={COPY.OFFENSIVE}
                     value={COPY.OFFENSIVE}
-                    checked={this.state.reason == COPY.OFFENSIVE}
+                    checked={this.state.reason === COPY.OFFENSIVE}
                     onChange={this.handleOptionSelect.bind(this)}
                 />
                 <Input
@@ -144,7 +145,7 @@ export default class Flag extends React.Component {
             </div>
         );
     }
-};
+}
 
 // endpoint requirements for what will be submitted = [flaggee user_id, reason, image_url]
 // keys for post = [flagger, flaggee, reason, url]

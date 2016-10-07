@@ -1,13 +1,12 @@
 import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import {Panel, Button} from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
 import Shortid from 'shortid';
 
 import FlipBoard from 'components/flipboard';
 import Toast from 'components/toast';
 import ClassNames from 'classnames';
-import History from 'components/history';
 import HttpManager from 'components/http_manager';
 import Actions from 'components/actions';
 import Store from 'components/store';
@@ -30,7 +29,11 @@ const REQUESTED = 'Request Sent';
 const ACCEPT = 'Accept';
 const PROFILE = 'View Profile';
 const NO_DATA = (
-    <h2 className="placeholder">You are already friends with everyone in your group.<br /> Great Work! <br /> Let's Take Action!</h2>
+    <h2 className="placeholder">
+        You are already friends with everyone in your group.<br />
+        Great Work! <br />
+        Let's Take Action!
+    </h2>
 );
 
 const PAGE_UNIQUE_IDENTIFIER = 'suggested-friends';

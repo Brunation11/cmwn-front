@@ -61,9 +61,9 @@ export class Friends extends React.Component {
                 this.forceUpdate();
             });
             Actions.dispatch.START_RELOAD_PAGE(this.props);
-        }).catch((e) => {
+        }).catch((err) => {
             Toast.error(FRIEND_PROBLEM);
-            Log.error(e, 'Friend request failed');
+            Log.error(err, 'Friend request failed');
         });
     }
 
@@ -79,9 +79,9 @@ export class Friends extends React.Component {
         }).then(() => {
             Toast.success(FRIEND_ADDED + item.username);
             Actions.dispatch.START_RELOAD_PAGE(this.props);
-        }).catch((e) => {
+        }).catch((err) => {
             Toast.error(FRIEND_PROBLEM);
-            Log.error(e, 'Friend request failed');
+            Log.error(err, 'Friend request failed');
         });
     }
 
