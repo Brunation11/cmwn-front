@@ -313,8 +313,7 @@ ___  ______  ______  ______  ______  ______  ______  ______  ______  ______  ___
 gulp.task('default', ['build', 'watch', 'development-server']);
 
 gulp.task('watch', function () {
-//    gulp.watch('src/**/*.js', ['test', 'lint', 'showBuildErrors']);
-    gulp.watch('src/**/*.js', ['lint', 'showBuildErrors']);
+    gulp.watch('src/**/*.js', ['test', 'lint', 'showBuildErrors']);
 });
 
 /** watches changes to the js and regenerates the index and sris accordingly */
