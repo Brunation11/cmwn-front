@@ -11,7 +11,7 @@ import Detector from 'components/browser_detector';
 import ProfileImage from 'components/profile_image';
 import FlipBoard from 'components/flipboard';
 import Game from 'components/game';
-import Trophycase from 'components/trophycase';
+import Flipcase from 'components/flipcase';
 import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
 import History from 'components/history';
@@ -33,8 +33,10 @@ const FLIP_SOURCE = GenerateDataSource('user_flip', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     ACTION: 'Profile',
-    ARCADE: 'Activities'
+    ARCADE: 'Activities',
+    TROPHYCASE: 'Trophycase'
 };
+
 const PLAY = 'Play Now!';
 const COMING_SOON = 'Coming Soon!';
 const DESKTOP_ONLY = 'Log on with a Desktop computer to play!';
@@ -222,32 +224,73 @@ export class Profile extends React.Component {
 
     renderUserProfile() {
         var ISODate = (new Date(this.state.birthdate)).toISOString();
+        if (this.state.friend_status === 'FRIEND') {
+            return (
+                <div>
+                    <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
+                        <div className="left">
+                            <div className="frame">
+                                <ProfileImage
+                                    data={this.props.data}
+                                    currentUser={this.props.currentUser}
+                                    link-below={true}
+                                 />
+                            </div>
+                        </div>
+                        <div className="right">
+                            <div className="user-metadata">
+                                <p>Username:</p>
+                                <p className="standard field">{this.state.username}</p>
+                                <p>First Name:</p>
+                                <p className="standard field">{this.state.first_name}</p>
+                                <p>Last Name:</p>
+                                <p className="standard field">{this.state.last_name}</p>
+                                <p>Birthday:</p>
+                                <p className="standard field">{Moment(ISODate).format('MM-DD-YYYY')}</p>
+                            </div>
+                        </div>
+                    </Panel>
+                    <Panel
+                        header={HEADINGS.TROPHYCASE}
+                        className={ClassNames('standard', {
+                            hidden: !this.state.isStudent
+                        })}
+                    >
+                        <FLIP_SOURCE>
+                           <Flipcase
+                                type="trophycase"
+                                header={true}
+                                render="earned"
+                            />
+                        </FLIP_SOURCE>
+                    </Panel>
+                </div>
+            );
+        }
         return (
             <div>
                 <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
-                    <div className="left">
-                        <div className="frame">
-                            <ProfileImage
-                                data={this.props.data}
-                                currentUser={this.props.currentUser}
-                                link-below={true}
-                             />
-                        </div>
+                    <div className="frame non-friend">
+                        <ProfileImage
+                            data={this.props.data}
+                            currentUser={this.props.currentUser}
+                            link-below={true}
+                        />
                     </div>
-                    <div className="right">
-                        <div className="user-metadata">
-                            <p>Username:</p>
-                            <p className="standard field" id="username">{this.state.username}</p>
-                            <p>First Name:</p>
-                            <p className="standard field" id="first-name">{this.state.first_name}</p>
-                            <p>Last Name:</p>
-                            <p className="standard field" id="last-name">{this.state.last_name}</p>
-                            <p>Birthday:</p>
-                            <p className="standard field" id="birthday">
-                                {Moment(ISODate).format('MM-DD-YYYY')}
-                            </p>
-                        </div>
-                    </div>
+                </Panel>
+                <Panel
+                    header={HEADINGS.TROPHYCASE}
+                    className={ClassNames('standard', {
+                        hidden: !this.state.isStudent
+                    })}
+                >
+                    <FLIP_SOURCE>
+                       <Flipcase
+                            type="trophycase"
+                            header={true}
+                            render="earned"
+                        />
+                    </FLIP_SOURCE>
                 </Panel>
             </div>
         );
@@ -268,9 +311,20 @@ export class Profile extends React.Component {
                         {this.renderGame()}
                     </Modal.Body>
                 </Modal>
-                <FLIP_SOURCE>
-                   <Trophycase className={ClassNames({hidden: !this.state.isStudent})} />
-                </FLIP_SOURCE>
+                <Panel
+                    header={HEADINGS.TROPHYCASE}
+                    className={ClassNames('standard', {
+                        hidden: !this.state.isStudent
+                    })}
+                >
+                    <FLIP_SOURCE>
+                       <Flipcase
+                            type="trophycase"
+                            header={true}
+                            render="earned"
+                        />
+                    </FLIP_SOURCE>
+                </Panel>
                 {this.renderGameList()}
             </div>
         );
@@ -284,7 +338,11 @@ export class Profile extends React.Component {
         profile = this.state.user_id === this.props.currentUser.user_id ?
         this.renderCurrentUserProfile : this.renderUserProfile;
         return (
-           <Layout className={PAGE_UNIQUE_IDENTIFIER} navMenuId="navMenu">
+           <Layout
+               currentUser={this.props.currentUser}
+               className={PAGE_UNIQUE_IDENTIFIER}
+               navMenuId="navMenu"
+           >
                {profile.apply(this)}
            </Layout>
         );
