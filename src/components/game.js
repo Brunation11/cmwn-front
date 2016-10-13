@@ -223,7 +223,7 @@ export class Game extends React.Component {
                     className={ClassNames('standard',
                         {'purple': !this.state.demo},
                         {'green': this.state.demo},
-                        {hidden: !this.props.isTeacher}
+                        {hidden: !this.props.isTeacher || this.props.game === 'skribble'}
                     )}
                     onClick={this.dispatchPlatformEvent.bind(this, 'toggle-demo-mode')}
                 >
