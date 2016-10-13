@@ -155,14 +155,22 @@ export class Friends extends React.Component {
     render() {
         if (this.props.data.length === 0) {
             return (
-                <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+                <Layout
+                    currentUser={this.props.currentUser}
+                    className={PAGE_UNIQUE_IDENTIFIER}
+                    navMenuId="navMenu"
+                >
                     {NO_FRIENDS}
                 </Layout>
             );
         }
 
         return (
-            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+            <Layout
+                currentUser={this.props.currentUser}
+                className={PAGE_UNIQUE_IDENTIFIER}
+                navMenuId="navMenu"
+            >
                 <form>
                     <Paginator
                         rowCount={this.props.rowCount}
