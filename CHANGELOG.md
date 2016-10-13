@@ -1,3 +1,8 @@
+Version - 0.3.12
+----
+
+- 6009a6c: updated alpha logo to beta
+
 Version - 0.3.11
 ----
 
