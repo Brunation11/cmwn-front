@@ -2,6 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import {Panel, Button} from 'react-bootstrap';
+import Shortid from 'shortid';
 
 import FlipBoard from 'components/flipboard';
 import Toast from 'components/toast';
@@ -10,6 +11,7 @@ import History from 'components/history';
 import HttpManager from 'components/http_manager';
 import Actions from 'components/actions';
 import Store from 'components/store';
+import UserPopover from 'components/popovers/user_popover';
 import GLOBALS from 'components/globals';
 
 import Layout from 'layouts/two_col';
@@ -39,6 +41,7 @@ export class Suggested extends React.Component{
     constructor(){
         super();
     }
+
     addFriend(item, e) {
         var id = item.user_id != null ? item.user_id : item.suggest_id;
         e.stopPropagation();
@@ -53,6 +56,7 @@ export class Suggested extends React.Component{
             Toast.error(FRIEND_PROBLEM);
         });
     }
+
     renderNoData(data) {
         if (data == null) {
             //render nothing before a request has been made
@@ -66,56 +70,67 @@ export class Suggested extends React.Component{
             </Panel>
         );
     }
-    renderFlipsEarned(item) {
-        if (item.roles && item.roles.data && !~item.roles.data.indexOf('Student')) {
-            return null;
-        }
+
+    renderFlip(item) {
         return (
-            <p className="user-flips">{item.flips.data.length} Flips Earned</p>
+            <UserPopover
+                element={item}
+                trigger="click"
+            >
+                {this.renderUserFlip.call(this, item)}
+            </UserPopover>
         );
     }
-    renderFlip(item){
+
+    renderUserFlip(item) {
         var history = History;
         var self = this;
         return (
-            <div className="flip">
+            <div className="flip" key={Shortid.generate()}>
                 <div className="item">
                     <span className="overlay">
-                        <div className="relwrap"><div className="abswrap">
-                            <Button onClick={self.addFriend.bind(self, item)} className={ClassNames(
-                                    'green standard',
-                                    {hidden: item.relationship === 'Pending' ||
-                                    item.relationship === 'requested'}
-                            )}>
-                                {ADD_FRIEND}
-                            </Button>
-                            <Button
-                                onClick={self.addFriend.bind(self, item)}
-                                className={ClassNames(
-                                    'blue standard',
-                                    {hidden: item.relationship !== 'Pending'}
-                            )}>
-                                {ACCEPT}
-                            </Button>
-                            <Button className={ClassNames(
-                                'blue standard',
-                                {hidden: item.relationship !== 'requested'}
-                            )}>
-                                {REQUESTED}
-                            </Button>
-                            <Button className="purple standard" onClick={history.push.bind(null,
-                                '/profile/' + item.suggest_id)}>
-                                {PROFILE}
-                            </Button>
-                        </div></div>
+                        <div className="relwrap">
+                            <div className="abswrap">
+                                <Button
+                                    onClick={self.addFriend.bind(self, item)}
+                                    className={ClassNames('green standard', {
+                                        hidden: item.relationship === 'Pending' ||
+                                                item.relationship === 'requested'
+                                    })}
+                                 >
+                                    {ADD_FRIEND}
+                                </Button>
+                                <Button
+                                    onClick={self.addFriend.bind(self, item)}
+                                    className={ClassNames('blue standard', {
+                                        hidden: item.relationship !== 'Pending'
+                                    })}
+                                >
+                                    {ACCEPT}
+                                </Button>
+                                <Button
+                                    className={ClassNames('blue standard', {
+                                        hidden: item.relationship !== 'requested'
+                                    })}
+                                >
+                                    {REQUESTED}
+                                </Button>
+                                <Button
+                                    className="purple standard"
+                                    onClick={history.push.bind(null, '/profile/' + item.suggest_id)}
+                                >
+                                    {PROFILE}
+                                </Button>
+                            </div>
+                        </div>
                     </span>
                     <img src={item.image}></img>
                 </div>
                 <p className="link-text" >{item.username}</p>
-                {''/*self.renderFlipsEarned(item)*/}
             </div>
         );
     }
+
     render() {
         var self = this;
         if (self.props.data == null || self.props.data === []) {
@@ -125,9 +140,9 @@ export class Suggested extends React.Component{
            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <form>
                     <FlipBoard
-                        renderFlip={self.renderFlip.bind(self)}
+                        renderFlip={this.renderFlip.bind(this)}
                         header={HEADINGS.SUGGESTED}
-                        data={self.props.data}
+                        data={this.props.data}
                         transform={data => {
                             var image;
                             if (!_.has(data, '_embedded.image')) {
