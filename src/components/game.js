@@ -220,7 +220,7 @@ export class Game extends React.Component {
                     <Glyphicon glyph="fullscreen" /> {FULLSCREEN}
                 </Button>
                 <Button
-                    className={ClassNames('standard',
+                    className={ClassNames('standard', 'demo-btn',
                         {'purple': !this.state.demo},
                         {'green': this.state.demo},
                         {hidden: !this.props.isTeacher || this.props.game === 'skribble'}
