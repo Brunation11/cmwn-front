@@ -41,7 +41,7 @@
         width: 35px;
         height: 50px;
 
-        &:after {
+        &::after {
             position: absolute;
             top: -100%;
             left: 50%;
@@ -64,7 +64,7 @@
             box-shadow: none;
             background-color: transparent;
 
-            &:after {
+            &::after {
                 opacity: 1;
             }
         }
