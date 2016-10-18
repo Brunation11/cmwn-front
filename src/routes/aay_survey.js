@@ -61,7 +61,6 @@ export class AAYView extends React.Component {
                     <Column dataKey="data" renderHeader={HEADINGS.DATA}
                         renderCell={(data, row) => {
                             var tempRow = {
-                                userId: row.user_id,
                                 username: this.userTableData[row.user_id],
                                 data: row.data
                             };

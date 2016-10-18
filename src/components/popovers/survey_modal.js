@@ -6,6 +6,7 @@ import 'components/popovers/survey_modal.scss';
 
 const HEADINGS = {
     'DATA': 'Survey Data',
+    'CLICK': 'click to view ',
     'NODATA': 'No data to display at this time',
     'SCREEN3': 'WHAT ARE YOU MOST PASSIONATE ABOUT?',
     'SCREEN4': 'WHAT WORLD ISSUES DO YOU MOST LIKELY WANT TO SOLVE?',
@@ -56,13 +57,13 @@ class SurveyModal extends React.Component {
         return (
             <div>
                 <a onClick={this.open}>
-                    {`click to view ${this.props.data.username}'s ${HEADINGS.DATA}`}
+                    {`${HEADINGS.CLICK}${this.props.data.username}'s ${HEADINGS.DATA}`}
                 </a>
                 <Modal show={this.state.showModal} onHide={this.close}>
                     <Panel className="standard">
                         <div className="heading">
-                            <a onClick={this.close} className="modal-close">X</a>
-                            <h1>{HEADINGS.DATA}</h1>
+                            <a onClick={this.close} className="modal-close" title="close">X</a>
+                            <h1>{`${HEADINGS.DATA} of ${this.props.data.username}`}</h1>
                         </div>
                         {_.map(this.props.data.data.data, function (value, key) {
 
