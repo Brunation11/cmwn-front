@@ -39,7 +39,6 @@ const HEADINGS = {
 const PLAY = 'Play Now!';
 const COMING_SOON = 'Coming Soon!';
 const DESKTOP_ONLY = 'Log on with a Desktop computer to play!';
-const CLASSES = 'Classes';
 
 const BROWSER_NOT_SUPPORTED = (
     <span>
@@ -240,8 +239,8 @@ export class Profile extends React.Component {
                     </div>
                     <div
                         className={ClassNames(
-                            "right",
-                            "user-fields",
+                            'right',
+                            'user-fields',
                             {
                                 hidden: this.state.friend_status !== 'FRIEND'
                             }

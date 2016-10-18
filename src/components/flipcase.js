@@ -7,10 +7,6 @@ import FlipPopover from 'components/popovers/flip_popover';
 
 import 'components/flipcase.scss';
 
-const COPY = {
-    NOFLIPS: 'It Looks like this user hasn\'t earned any flips.'
-};
-
 const HEADINGS = {
     POPOVER: 'Your Earned Flips: ',
     TROPHYCASE: 'Trophycase'
