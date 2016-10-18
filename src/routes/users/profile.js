@@ -210,9 +210,34 @@ export class Profile extends React.Component {
         );
     }
 
-    renderUserProfile() {
+    renderUserMetaData() {
         var ISODate = (new Date(this.state.birthdate)).toISOString();
 
+        if (this.state.friend_status !== 'FRIEND') return null;
+
+        return (
+            <div
+                className={ClassNames(
+                    'right',
+                    'user-fields',
+                    {
+                        hidden: this.state.friend_status !== 'FRIEND'
+                    }
+                )}
+            >
+                <p className="label">Username:</p>
+                <p className="standard field">{this.state.username}</p>
+                <p className="label">First Name:</p>
+                <p className="standard field">{this.state.first_name}</p>
+                <p className="label">Last Name:</p>
+                <p className="standard field">{this.state.last_name}</p>
+                <p className="label">Birthday:</p>
+                <p className="standard field">{Moment(ISODate).format('MM-DD-YYYY')}</p>
+            </div>
+        );
+    }
+
+    renderUserProfile() {
         return (
             <Layout
                 currentUser={this.props.currentUser}
@@ -237,24 +262,7 @@ export class Profile extends React.Component {
                             link-below={true}
                         />
                     </div>
-                    <div
-                        className={ClassNames(
-                            'right',
-                            'user-fields',
-                            {
-                                hidden: this.state.friend_status !== 'FRIEND'
-                            }
-                        )}
-                    >
-                        <p className="label">Username:</p>
-                        <p className="standard field">{this.state.username}</p>
-                        <p className="label">First Name:</p>
-                        <p className="standard field">{this.state.first_name}</p>
-                        <p className="label">Last Name:</p>
-                        <p className="standard field">{this.state.last_name}</p>
-                        <p className="label">Birthday:</p>
-                        <p className="standard field">{Moment(ISODate).format('MM-DD-YYYY')}</p>
-                    </div>
+                    {this.renderUserMetaData()}
                 </Panel>
                 <FLIP_SOURCE>
                    <Flipcase
