@@ -6,7 +6,6 @@ import Shortid from 'shortid';
 import { connect } from 'react-redux';
 import Moment from 'moment';
 
-import Store from 'components/store';
 import {Table, Column} from 'components/table';
 import FlipBoard from 'components/flipboard';
 import GLOBALS from 'components/globals';
@@ -83,17 +82,14 @@ var Component = React.createClass({
         );
     },
     renderImport: function () {
-        var state = Store.getState();
-        if (!state.currentUser || !state.currentUser._embedded || !state.currentUser._embedded.groups ||
-            !state.currentUser._embedded.groups.length ||
-            state.currentUser._embedded.groups[0]._links.import == null) {
-        //if (!state.currentUser || !state.currentUser._embedded || !state.currentUser._embedded.groups ||
-            //!state.currentUser._embedded.groups.length) {
+        var user = this.props.currentUser;
+        if (!user || !user._embedded || !user._embedded.groups || !user._embedded.groups.length ||
+            user._embedded.groups[0]._links.import == null) {
             return null;
         }
         return (
                 <Button className="standard purple" onClick={ () => {
-                    History.push('/schools/' + state.currentUser._embedded.groups[0].group_id + '/edit');
+                    History.push('/schools/' + user._embedded.groups[0].group_id + '/edit');
                 }} >Import Spreadsheet</Button>
                 );
     },
@@ -133,7 +129,6 @@ var Component = React.createClass({
     },
     render: function () {
         var view;
-        var state = Store.getState();
         if (this.props.data.length === 0) {
             return (
                 <Layout currentUser={this.props.currentUser}>
@@ -141,7 +136,7 @@ var Component = React.createClass({
                 </Layout>
             );
         }
-        if (state.currentUser.type === 'CHILD') {
+        if (this.props.currentUser.type === 'CHILD') {
             view = this.renderChildView;
         } else {
             view = this.renderAdminView;
@@ -160,13 +155,16 @@ var mapStateToProps = state => {
     var rowCount = 25;
     var currentPage = 1;
     var loading = true;
-    var currentUser;
+    var currentUser = {};
     if (state.page && state.page.data && state.page.data._embedded && state.page.data._embedded.user) {
         loading = state.page.loading;
         data = state.page.data._embedded.user;
         pageCount = state.page.data.page_count;
         rowCount = state.page.data.page_size;
         currentPage = state.page.data.page;
+    }
+    if (state.currentUser != null){
+        currentUser = state.currentUser;
     }
     if (state.currentUser != null){
         currentUser = state.currentUser;
