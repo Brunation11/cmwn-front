@@ -27,15 +27,44 @@
         .confirm,
         .cancel {
             position: relative;
+            outline: none;
+            border: 0;
             width: 24%;
+            height: 34px;
+
+            &:hover,
+            &:focus,
+            &:active {
+                outline: none;
+                border: 0;
+                box-shadow: none;
+            }
         }
 
         .confirm {
             margin: 4% 4% -2% 0;
+            background: url('https://media-staging.changemyworldnow.com/f/b49c70aefe76975c606d3207e80e8790');
+            background-repeat: no-repeat;
+            background-size: contain;
+
+            &:hover {
+                background: url('https://media-staging.changemyworldnow.com/f/b817397c67340b57820c3e220140ead6');
+                background-repeat: no-repeat;
+                background-size: contain;
+            }
         }
 
         .cancel {
             margin: 4% 0 -2%;
+            background: url('https://media-staging.changemyworldnow.com/f/28a0bfff5c46c4e4026ac06d8ad66888');
+            background-repeat: no-repeat;
+            background-size: contain;
+
+            &:hover {
+                background: url('https://media-staging.changemyworldnow.com/f/83444e08ebe7e27f4decc5a1b1706230');
+                background-repeat: no-repeat;
+                background-size: contain;
+            }
         }
     }
 
@@ -81,6 +110,19 @@
             content: '';
         }
 
+        ~ span::after {
+            position: absolute;
+            top: -25%;
+            left: 1%;
+            transition: border .25s linear;
+            opacity: 0;
+            background: url('https://media-staging.changemyworldnow.com/f/63a92d7c12894d238fa2ceaf0611886a');
+            background-repeat: no-repeat;
+            background-size: cover;
+            width: 30px;
+            height: 30px;
+            content: '';
+        }
     }
 
     .control-label {
@@ -104,6 +146,20 @@
             height: 30px;
             content: '';
         }
+
+        span::after {
+            position: absolute;
+            top: -5%;
+            left: 1.25%;
+            transition: border .25s linear;
+            opacity: 0;
+            background: url('https://media-staging.changemyworldnow.com/f/63a92d7c12894d238fa2ceaf0611886a');
+            background-repeat: no-repeat;
+            background-size: cover;
+            width: 30px;
+            height: 30px;
+            content: '';
+        }
     }
 
     .input-other {
@@ -114,6 +170,7 @@
         background-color: $cmwn-dark-blue;
         width: 55%;
         height: 100px;
+        color: $cmwn-white;
 
         &::-webkit-input-placeholder {
             color: $cmwn-white;
@@ -124,7 +181,13 @@
     .offensive .radio-offensive ~ span::before,
     .inappropriate .radio-inappropriate ~ span::before,
     .other .control-label span::before {
-        background-color: $cmwn-white;
+        background-color: $cmwn-dark-blue;
+    }
+
+    .offensive .radio-offensive ~ span::after,
+    .inappropriate .radio-inappropriate ~ span::after,
+    .other .control-label span::after {
+        opacity: 1;
     }
 }
 
@@ -157,6 +220,12 @@
                 width: 25px;
                 height: 25px;
             }
+
+            ~ span::after {
+                top: -18%;
+                width: 25px;
+                height: 25px;
+            }
         }
 
         .control-label {
@@ -172,6 +241,13 @@
                 top: 2%;
                 left: 0;
                 border: 1px dashed $cmwn-white;
+                width: 25px;
+                height: 25px;
+            }
+
+            span::after {
+                top: -4%;
+                left: 1%;
                 width: 25px;
                 height: 25px;
             }
@@ -221,6 +297,12 @@
                 width: 20px;
                 height: 20px;
             }
+
+            ~ span::after {
+                top: 1%;
+                width: 20px;
+                height: 20px;
+            }
         }
 
         .control-label {
@@ -236,6 +318,13 @@
                 top: 5%;
                 left: 0;
                 border: 1px dashed $cmwn-white;
+                width: 20px;
+                height: 20px;
+            }
+
+            span::after {
+                top: 0%;
+                left: 1%;
                 width: 20px;
                 height: 20px;
             }
@@ -275,6 +364,12 @@
                 width: 20px;
                 height: 20px;
             }
+
+            ~ span::after {
+                top: -5%;
+                width: 20px;
+                height: 20px;
+            }
         }
 
         .control-label {
@@ -290,6 +385,12 @@
                 top: 5%;
                 left: 0;
                 border: 1px dashed $cmwn-white;
+                width: 20px;
+                height: 20px;
+            }
+
+            span::after {
+                top: 0;
                 width: 20px;
                 height: 20px;
             }
