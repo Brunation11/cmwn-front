@@ -115,8 +115,8 @@ export default class Flag extends React.Component {
                     placeholder="Type your concern here."
                     onChange={this.handleOptionSelect.bind(this)}
                 />
-                <Button className="confirm" onClick={this.submitFlag.bind(this)}>Confirm</Button>
-                <Button className="cancel" onClick={this.hideModal.bind(this)}>Cancel</Button>
+                <Button className="confirm" onClick={this.submitFlag.bind(this)} />
+                <Button className="cancel" onClick={this.hideModal.bind(this)} />
             </form>
         );
     }

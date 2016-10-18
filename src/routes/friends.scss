@@ -19,7 +19,8 @@
 
         &:hover,
         &:focus {
-            .flag-button {
+            .flag-button,
+            .overlay {
                 opacity: 1;
             }
         }
@@ -31,18 +32,47 @@
         transition: opacity .5s ease-in-out;
         opacity: 0;
         z-index: 1;
+        outline: none;
+        border: 0;
+        background: url('https://media-staging.changemyworldnow.com/f/ec720b982eaf6e0d9772cc553db54b55');
+        background-color: transparent;
+        background-repeat: no-repeat;
+        background-size: contain;
+        width: 35px;
+        height: 50px;
+
+        &::after {
+            position: absolute;
+            top: -100%;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: opacity .25s ease-in-out;
+            opacity: 0;
+            background: url('https://media-staging.changemyworldnow.com/f/018ce6adb27b39dd12249a22ea4f26cd');
+            background-repeat: no-repeat;
+            background-size: contain;
+            width: 500%;
+            height: 100%;
+            content: '';
+        }
+
+        &:hover,
+        &:focus,
+        &:active {
+            outline: none;
+            border: 0;
+            box-shadow: none;
+            background-color: transparent;
+
+            &::after {
+                opacity: 1;
+            }
+        }
     }
 
     .user-card {
         position: relative;
         text-align: center;
-
-        &:hover,
-        &:focus {
-            .overlay {
-                opacity: 1;
-            }
-        }
     }
 
     .overlay {
