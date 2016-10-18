@@ -9,7 +9,6 @@ import Toast from 'components/toast';
 import ClassNames from 'classnames';
 import HttpManager from 'components/http_manager';
 import Actions from 'components/actions';
-import Store from 'components/store';
 import UserPopover from 'components/popovers/user_popover';
 import GLOBALS from 'components/globals';
 import Flag from 'components/flag';
@@ -50,7 +49,7 @@ export class Suggested extends React.Component{
             'friend_id': item.user_id != null ? item.user_id : item.suggest_id
         }).then(() => {
             Toast.success(REQUEST_SENT);
-            Actions.dispatch.START_RELOAD_PAGE(Store.getState());
+            Actions.dispatch.START_RELOAD_PAGE(this.props.state);
         }).catch(() => {
             Toast.error(FRIEND_PROBLEM);
         });
@@ -207,6 +206,7 @@ mapStateToProps = state => {
         currentUser = state.currentUser;
     }
     return {
+        state,
         data,
         loading,
         currentUser
