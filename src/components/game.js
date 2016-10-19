@@ -145,7 +145,6 @@ var Game = React.createClass({
     listenForEsc: function (e) {
         var self = this;
         if (e.keyCode === 27 || e.charCode === 27) {
-            console.log('yes');
             Screenfull.exit();
             self.setState({
                 isFullscreen: false,
