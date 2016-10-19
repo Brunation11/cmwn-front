@@ -10,13 +10,13 @@ export const PAGE_UNIQUE_IDENTIFIER = 'resource-center';
 
 const TITLE = 'RESOURCE CENTER';
 const MEDIA_URL = 'https://media-staging.changemyworldnow.com/f';
-const CURRICULUM_LINKS = [
+export const CURRICULUM_LINKS = [
     {
         label: 'Getting Your Class Started with Change My World Now',
         href: `${MEDIA_URL}/6d7975d31455308906053eef4263cfad`,
     },
 ];
-const STUDENT_ENGAGEMENT_LINKS = [
+export const STUDENT_ENGAGEMENT_LINKS = [
     {
         label: 'Water Quest',
         href: `${MEDIA_URL}/45902caa5636b7aa6685b55cf50d3db5`,
@@ -67,33 +67,42 @@ export class ResourceCenter extends React.Component {
     }
 
     render() {
-        return (
-            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
-                <Panel header={TITLE} className="standard">
-                    <h1>CURRICULUM</h1>
-                    <ul>
-                        {this.renderLinks(CURRICULUM_LINKS)}
-                    </ul>
-                    <h1>STUDENT ENGAGEMENT</h1>
-                    <ul>
-                        {this.renderLinks(STUDENT_ENGAGEMENT_LINKS)}
-                    </ul>
-                </Panel>
-            </Layout>
-        );
+        if (this.props.currentUser && this.props.currentUser.type === 'ADULT') {
+            return (
+                <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+                    <Panel header={TITLE} className="standard">
+                        <h1>CURRICULUM</h1>
+                        <ul>
+                            {this.renderLinks(CURRICULUM_LINKS)}
+                        </ul>
+                        <h1>STUDENT ENGAGEMENT</h1>
+                        <ul>
+                            {this.renderLinks(STUDENT_ENGAGEMENT_LINKS)}
+                        </ul>
+                    </Panel>
+                </Layout>
+            );
+        }
+
+        return null;
     }
 }
 
 mapStateToProps = state => {
     var data = [];
     var loading = true;
+    var currentUser = {};
     if (state.page && state.page.data && state.page.data._embedded && state.page.data._embedded.group) {
         loading = state.page.loading;
         data = state.page.data._embedded.group;
     }
+    if (state.currentUser) {
+        currentUser = state.currentUser;
+    }
     return {
         data,
         loading,
+        currentUser,
     };
 };
 
