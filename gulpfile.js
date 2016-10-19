@@ -53,6 +53,9 @@ if (args.development || args.prod) {
     mode = process.env.NODE_ENV;
 }
 
+if (!process.env.APP_MEDIA_URL) {
+    process.env.APP_MEDIA_URL = "https://media-staging.changemyworldnow.com/f/";
+}
 
 require.extensions['.css'] = _.noop;
 require.extensions['.scss'] = _.noop;
@@ -220,7 +223,34 @@ var zipTheBuild = function () {
       .pipe(gulp.dest('./'));
 };
 
+var jsonToScssVars = function (obj, indent) {
+    // Make object root properties into scss variables
+    var scss = "";
+    for (var key in obj) {
+        scss += "$" + key + ":" + JSON.stringify(obj[key], null, indent) + ";\n";
+    }
+
+    // Store string values (so they remain unaffected)
+    var storedStrings = [];
+    scss = scss.replace(/(["'])(?:(?=(\\?))\2.)*?\1/g, function (str) {
+        var id = "___JTS" + storedStrings.length;
+        storedStrings.push({id: id, value: str});
+        return id;
+    });
+
+    // Convert js lists and objects into scss lists and maps
+    scss = scss.replace(/[{\[]/g, "(").replace(/[}\]]/g, ")");
+
+    // Put string values back (now that we're done converting)
+    storedStrings.forEach(function (str) {
+        scss = scss.replace(str.id, str.value);
+    });
+
+    return scss;
+}
+
 var buildAndCopyStaticResources = function () {
+    var scss = encodeURIComponent(jsonToScssVars({"media-url": process.env.APP_MEDIA_URL}));
     var config = {
         resolve: {
             root: path.resolve('./src'),
@@ -241,7 +271,7 @@ var buildAndCopyStaticResources = function () {
                 }, {
                     test: /\.scss$/,
                     loader: ExtractTextPlugin.extract('style-loader',
-                        'css-loader!autoprefixer-loader!sass-loader')
+                        'css-loader!autoprefixer-loader!sass-loader!prepend?data=' + scss)
                 }, {
                     test: /\.(jpe?g|png|gif|svg)$/i,
                     loader: 'url-loader?limit=10000'
@@ -327,7 +357,7 @@ gulp.task('dev-server', ['development-server']);
 gulp.task('development-server', executeAsProcess('npm', ['start']));
 
 /*·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´JS Build Tasks`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·*/
-gulp.task('build', ['primary-style', 'webpack:build', 'index'], zipTheBuild);
+gulp.task('build', ['index'], zipTheBuild);
 /** Selects whether to rerun as dev or prod build task*/
 gulp.task('webpack:build', selectBuildMode);
 /** Convienience methods to run only the webpack portion of a build*/
