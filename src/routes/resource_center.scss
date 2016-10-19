@@ -5,10 +5,11 @@
 
   a {
     color: $cmwn-blue;
+    text-decoration: underline;
   }
 
   ul {
     font-weight: bold;
-    margin-bottom: $standard;
+    margin-bottom: $standard * 2;
   }
 }

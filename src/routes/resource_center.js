@@ -9,44 +9,45 @@ import 'routes/resource_center.scss';
 export const PAGE_UNIQUE_IDENTIFIER = 'resource-center';
 
 const TITLE = 'RESOURCE CENTER';
+const MEDIA_URL = 'https://media-staging.changemyworldnow.com/f';
 const CURRICULUM_LINKS = [
   {
     label: 'Getting Your Class Started with Change My World Now',
-    href: '',
+    href: `${MEDIA_URL}/6d7975d31455308906053eef4263cfad`,
   },
 ];
 const STUDENT_ENGAGEMENT_LINKS = [
   {
     label: 'Water Quest',
-    href: '',
+    href: `${MEDIA_URL}/45902caa5636b7aa6685b55cf50d3db5`,
   },
   {
     label: 'Flip Challenge',
-    href: '',
+    href: `${MEDIA_URL}/7d5a14053439e803ade8f04b8050bb34`,
   },
   {
     label: 'Letter Challenge',
-    href: '',
+    href: `${MEDIA_URL}/57b1bfa09153cd8370fad398d2cd76ea`,
   },
   {
     label: 'Skribble Challenge',
-    href: '',
+    href: `${MEDIA_URL}/ec8627b69d8d0ff5b64617f8dd6ef3a3`,
   },
   {
     label: 'Game Design Challenge',
-    href: '',
+    href: `${MEDIA_URL}/765d80bf72d20d391ba1f012b8154bcf`,
   },
   {
     label: 'Safety First Word Search',
-    href: '',
+    href: `${MEDIA_URL}/5d770f466747743c647ab80e3696761b`,
   },
   {
     label: 'Polar Bear Crossword Puzzle',
-    href: '',
+    href: `${MEDIA_URL}/ad1bd87d9db72371ce769e2a649bc73b`,
   },
   {
     label: 'Drought Out Crossword Puzzle',
-    href: '',
+    href: `${MEDIA_URL}/bafc471d2ef8a7d0a1931e69f87a7071`,
   },
 ];
 
