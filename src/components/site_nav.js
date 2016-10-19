@@ -78,9 +78,10 @@ var buildMenuRoutes = function (links) {
 
 var SiteNav = React.createClass({
     renderNavItems: function () {
-        var menuItems = buildMenuRoutes(this.props.data);
+        var currentUrl, menuItems;
+
+        menuItems = buildMenuRoutes(this.props.data);
         menuItems = addHardcodedEntries.call(this, menuItems);
-        var currentUrl;
         //manually hidden items for children
 
         menuItems = _.filter(menuItems, item => this.props.currentUser.type !== 'CHILD' || (
