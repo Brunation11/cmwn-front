@@ -53,6 +53,7 @@ if (args.development || args.prod) {
     mode = process.env.NODE_ENV;
 }
 
+// This also gets set in the web pack config files
 if (!process.env.APP_MEDIA_URL) {
     process.env.APP_MEDIA_URL = "https://media-staging.changemyworldnow.com/f/";
 }
