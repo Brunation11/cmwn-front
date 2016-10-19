@@ -8,8 +8,8 @@ import PrivateRoutes from 'private_routes';
 import Util from 'components/util';
 
 var addHardcodedEntries = function (menuItems) {
+    menuItems.unshift({url: '/play/skribble', label: 'Skribble'});
     menuItems.unshift({url: '/profile', label: 'Activities'});
-    menuItems.unshift({url: '/game/skribble', label: 'Skribble'});
 //    menuItems.push({url: `/user/${this.props.currentUser.user_id}/feed`, label: 'Feed'});
     menuItems.push({url: '/profile/edit', label: 'Edit My Profile'});
     menuItems.push({url: '/logout', label: 'Logout'});
