@@ -176,9 +176,7 @@ export class UpdatePassword extends React.Component {
                             id="submit-button"
                             className="submit-button"
                             onClick={this.submit.bind(this)}
-                        >
-                            UPDATE
-                        </Button>
+                        />
                     </div>
                 </div>
             </div>
