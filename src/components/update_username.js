@@ -2,11 +2,11 @@ import React from 'react';
 import {Panel, Button, Glyphicon} from 'react-bootstrap';
 import SweetAlert from 'sweetalert2';
 import ClassNames from 'classnames';
+import { connect } from 'react-redux';
 
 import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
 import Util from 'components/util';
-import Store from 'components/store';
 
 import 'components/update_username.scss';
 
@@ -34,6 +34,9 @@ const COPY = {
     NOTE: 'Click to select the name you want.',
     DISCLAIMER: 'Note: Once you change your username, you won\'t be able to go back to your original.'
 };
+
+var Page;
+var mapStateToProps;
 
 var UpdateUsername = React.createClass({
     getInitialState: function () {
@@ -95,7 +98,7 @@ var UpdateUsername = React.createClass({
         }).then(isConfirm => {
             if (isConfirm) {
                 HttpManager.POST({
-                    url: Store.getState().page.data._links.user_name.href
+                    url: this.props.data._links.user_name.href
                 }, {
                     user_name: this.state.option // eslint-disable-line
                 }).then(server => {
@@ -198,5 +201,19 @@ var UpdateUsername = React.createClass({
     }
 });
 
-export default UpdateUsername;
+mapStateToProps = state => {
+    var data = [];
+    var loading = true;
+    if (state.page && state.page.loading && state.page.data) {
+        loading = state.page.loading;
+        data = state.page.data;
+    }
+    return {
+        data,
+        loading,
+    };
+};
+
+var Page = connect(mapStateToProps)(UpdateUsername);
+export default Page;
 
