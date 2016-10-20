@@ -1,7 +1,18 @@
+Version - 0.3.24
+----
+
+- 61fac2f: removed non snorlax routes
+- fe98df2: Version bump [ci skip]
+- 6009a6c: updated alpha logo to beta
+
 Version - 0.3.23
 ----
 
 
+Version - 0.3.23
+----
+
+- 1f91540: Version bump [ci skip]
 
 Version - 0.3.22
 ----
@@ -12,17 +23,11 @@ Version - 0.3.22
 - fdb1cd4: Version bump [ci skip]
 - 14a7c2f: Version bump [ci skip]
 
-Version - 0.3.21
-----
-
-- 61fac2f: removed non snorlax routes
-- fe98df2: Version bump [ci skip]
-- 6009a6c: updated alpha logo to beta
 
 Version - 0.3.20
 ----
 
-- fa7bc9f: Version bump [ci skip]
+- a52c741: Version bump [ci skip]
 
 Version - 0.3.19
 ----
@@ -73,26 +78,49 @@ Version - 0.3.15
 
 - 6e72f47: remove unused component and styles
 - bd813d3: Version bump [ci skip]
-
-Version - 0.3.14
-----
-
-- 19c862b: linter
-- c96a0d7: add initial testing, test data, and smoke test file for newsfeed
-- 7c71703: remove default from export declaration on class. remove on error props for images
-- 6d8aa6f: update style rules, refactor for linter
-- dd5554a: Version bump [ci skip]
 =======
 - 7412902: Version bump [ci skip]
 - 8436cc0: bump version
 - 0a4f783: Version bump [ci skip]
 - 14a7c2f: Version bump [ci skip]
->>>>>>> feature/bugfixes-scyther-0.4.x
+- 19c862b: linter
+- c96a0d7: add initial testing, test data, and smoke test file for newsfeed
+- 7c71703: remove default from export declaration on class. remove on error props for images
+- 6d8aa6f: update style rules, refactor for linter
+- dd5554a: Version bump [ci skip]
+
+
+Version - 0.3.20
+----
+- 7412902: Version bump [ci skip]
+- 8436cc0: bump version
 
 Version - 0.3.15
 ----
+- 14a7c2f: Version bump [ci skip]
+- 19c862b: linter
+- c96a0d7: add initial testing, test data, and smoke test file for newsfeed
+- 7c71703: remove default from export declaration on class. remove on error props for images
+- 6d8aa6f: update style rules, refactor for linter
+- dd5554a: Version bump [ci skip]
+- 7412902: Version bump [ci skip]
+- 8436cc0: bump version
+- 0a4f783: Version bump [ci skip]
+- 14a7c2f: Version bump [ci skip]
 
-<<<<<<< HEAD
+Version - 0.3.14
+----
+
+- 8436cc0: bump version
+- e99cf48: add expect clause to test to check for flipcase
+- efe45f4: rename class
+- ae16532: remove commented test code
+- 6d3c8ae: Version bump [ci skip]
+- 78945d8: linter
+
+Version - 0.3.13
+----
+
 - efe45f4: rename class
 - ae16532: remove commented test code
 - 6d3c8ae: Version bump [ci skip]
@@ -114,7 +142,6 @@ Version - 0.3.12
 Version - 0.3.11
 ----
 - 53b2ee6: Version bump [ci skip]
-
 
 Version - 0.0.0
 ---------------

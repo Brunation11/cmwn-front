@@ -477,6 +477,8 @@ h3 {
 
         .menu {
             display: block;
+            position: fixed;
+            outline: none;
         }
 
         .logout {
@@ -512,21 +514,43 @@ h3 {
             right: -110%; //extra just to account for scrollbars
             bottom: 0;
             transition: right  1s ease-in-out;
-            z-index: $z-nav;
+            z-index: $z-override;
             border-bottom: ($standard * 4) solid $cmwn-white;
             background: $cmwn-white;
             padding: $standard;
             width: 100%;
+            max-width: 100%;
             height: 100vmax;
             overflow-y: scroll;
 
             &.open {
+                top: 63px;
                 right: 0;
+            }
+
+            &::before {
+                position: fixed;
+                top: 0;
+                right: 0;
+                left: 100%;
+                transition: left 1s ease-in-out;
+                background: transparent;
+                height: 63px;
+                color: $cmwn-white;
+                content: '  ';
+            }
+
+            &.open::before {
+                right: 60px;
+                left: 0;
+                transition: left 1s ease-in-out;
+                background: $cmwn-white;
             }
 
         }
 
         .flip.fill {
+            z-index: 0;
             max-width: 100%;
 
             img,

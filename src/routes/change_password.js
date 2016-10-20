@@ -7,75 +7,70 @@ import Log from 'components/log';
 import History from 'components/history';
 import Toast from 'components/toast';
 import GLOBALS from 'components/globals';
-import {Button, Input} from 'react-bootstrap';
+import {Panel, Button, Input} from 'react-bootstrap';
 
 import Layout from 'layouts/one_col';
 
 import 'routes/change_password.scss';
 
-const PAGE_UNIQUE_IDENTIFIER = 'change-password';
-
-const LABELS = {
-    NEW: 'NEW PASSWORD',
-    CONFIRM: 'CONFIRM PASSWORD',
-    TOGGLE: 'CHECK TO SHOW PASSWORD CHARACTERS'
+const HEADINGS = {
+    EDIT_TITLE: 'Info',
+    PASSWORD: 'Update Password'
 };
-
 const ERRORS = {
     BAD_PASS: 'Sorry, there was a problem updating your password.',
     TOO_SHORT: 'Passwords must contain at least 8 characters, including one number',
     NO_MATCH: 'Those passwords do not appear to match. Please try again.'
 };
+const CHANGE_COPY = `You are required to change your password before using ChangeMyWorldNow.com.
+        Please update your password using the form below to proceed.`;
 
-const CHANGE_COPY = {
-    PART_ONE: 'You are required to change your password before using ',
-    PART_TWO: 'ChangeMyWorldNow.com',
-    PART_THREE: 'Please update your password using the form below to proceed.'
-};
+const PAGE_UNIQUE_IDENTIFIER = 'change-pass';
 
 var mapStateToProps;
-var Page;
+var OtherPage;
 
-export class UpdatePassword extends React.Component {
+export var isPassValid = function (password) {
+    if (password === null || typeof (password) === 'undefined') {
+        return false;
+    }
+    return password.length >= 8 && ~password.search(/[0-9]+/);
+};
+
+export class Page extends React.Component {
     constructor() {
         super();
-        this.state = _.defaults({
-            type: 'password',
+        this.state = {
+        };
+    }
+
+    render() {
+        return (
+           <Layout className="change-password">
+                <ChangePassword currentUser={this.props.currentUser}
+                    data={this.props.data} loading={this.props.loading} />
+           </Layout>
+         );
+    }
+}
+
+export class ChangePassword extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            current: '',
+            new: '',
+            confirm: '',
             extraProps: {},
             currentPage: 'update-password',
             background: _.sample(['bkg-1', 'bkg-2'])
-        });
+        };
     }
 
     componentDidMount() {
-        if (this.props.currentUser && this.props.data && this.props.loading) {
-            this.setState({
-                currentUser: this.props.currentUser,
-                data: this.props.data,
-                loading: this.props.loading
-            });
-        }
-
         if (this.props.currentUser.user_id != null) {
             window.location.href = '/logout';
         }
-    }
-
-    handleOptionSelect(e) {
-        if (this.state.type !== e.target.value) {
-            this.setState({
-                type: e.target.value
-            });
-        } else {
-            this.setState({
-                type: 'password'
-            });
-        }
-    }
-
-    isPassValid(password) {
-        if (password === null || typeof (password) === 'undefined') return false;
-        return password.length >= 8 && ~password.search(/[0-9]+/);
     }
 
     goToProfile() {
@@ -83,37 +78,36 @@ export class UpdatePassword extends React.Component {
     }
 
     submit() {
-        if (!this.isPassValid(this.refs.newPassword.getValue())) {
-            this.setState({
-                extraProps: {
-                    bsStyle: 'error'
-                }
-            });
+        var update;
+        if (this.props.currentUser.user_id != null) {
+            window.location.href = '/logout';
+        }
+        if (!isPassValid(this.state.new)) {
+            this.setState({extraProps: {bsStyle: 'error'}});
             Toast.error(ERRORS.TOO_SHORT);
-        } else if (this.refs.confirmPassword.getValue() === this.refs.newPassword.getValue()) {
-            HttpManager.POST({
-                url: `${GLOBALS.API_URL}password`
-            }, {
-                'password': this.refs.newPassword.getValue(),
-                'password_confirmation': this.refs.confirmPassword.getValue()
-            }).then(() => {
-                this.setState({
-                    currentPage: 'confirm-re-login'
-                });
+        } else if (this.state.confirm === this.state.new) {
+            update = HttpManager.POST({url: `${GLOBALS.API_URL}password`}, {
+//                'current_password': this.state.current,
+                'password': this.state.new,
+                'password_confirmation': this.state.confirm
+            });
+            update.then(() => {
+                this.setState({currentPage: 'confirm-re-login'});
             }).catch(err => {
                 if (err.status === 0) {
-                    //non-error response indicates password already changed successfully
-                    this.setState({
-                        currentPage: 'confirm-re-login'
-                    });
+                    //non-error response from update password indicates password already changed successfully
+                    this.setState({currentPage: 'confirm-re-login'});
                 } else {
-                    Log.warn(`Update password failed. ${err.message ? `Message: ${err.message}` : ''}`, err);
+                    Log.warn(
+                        'Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err
+                    );
                     Toast.error(ERRORS.BAD_PASS);
                 }
             });
         } else {
             this.setState({extraProps: {bsStyle: 'error'}});
             Toast.error(ERRORS.NO_MATCH);
+            /** @TODO MPR, 02/11/16: check on change, not submit*/
         }
     }
 
@@ -129,56 +123,35 @@ export class UpdatePassword extends React.Component {
 
     renderPasswordReset() {
         return (
-            <div className={`update-password ${this.state.background}`}>
-                <div className="update-password-container">
-                    <div className="update-password-content">
-                        <h1 className="header">UPDATE PASSWORD</h1>
-                        <div className="copy-container">
-                            <span className="copy">{CHANGE_COPY.PART_ONE}
-                                <span className="link">{CHANGE_COPY.PART_TWO}</span>
-                            </span>
-                            <br />
-                            <span className="copy">{CHANGE_COPY.PART_THREE}</span>
-                        </div>
-                        <form method="POST" className="update-password-form">
-                            <Input
-                                ref="newPassword"
-                                name="newPassword"
-                                id="newPassword"
-                                type={this.state.type}
-                                placeholder="PA******"
-                                label={LABELS.NEW}
-                                validate="required"
-                                {...this.state.extraProps}
-                            />
-                            <Input
-                                ref="confirmPassword"
-                                name="confirmPassword"
-                                id="confirmPassword"
-                                type={this.state.type}
-                                placeholder="PA******"
-                                label={LABELS.CONFIRM}
-                                validate="required"
-                                {...this.state.extraProps}
-                            />
-                            <Input
-                                type="radio"
-                                ref="toggle"
-                                name="toggle"
-                                className="toggle-characters"
-                                label={LABELS.TOGGLE}
-                                value="text"
-                                checked={this.state.type === 'text'}
-                                onChange={this.handleOptionSelect.bind(this)}
-                            />
-                        </form>
-                        <Button
-                            id="submit-button"
-                            className="submit-button"
-                            onClick={this.submit.bind(this)}
+            <div>
+                <Panel header={HEADINGS.PASSWORD} className="standard">
+                    <p>{CHANGE_COPY}</p>
+                    <form>
+                        <Input
+                            type="password"
+                            value={this.state.new}
+                            placeholder="********"
+                            label="New Password"
+                            validate="required"
+                            ref="newInput"
+                            name="newInput"
+                            onChange={e => this.setState({new: e.target.value})}
+                            {...this.state.extraProps}
                         />
-                    </div>
-                </div>
+                        <Input
+                            type="password"
+                            value={this.state.confirm}
+                            placeholder="********"
+                            label="Confirm Password"
+                            validate="required"
+                            ref="confirmInput"
+                            name="confirmInput"
+                            onChange={e => this.setState({confirm: e.target.value})}
+                            {...this.state.extraProps}
+                        />
+                        <Button onClick={this.submit.bind(this)}>Update</Button>
+                    </form>
+                </Panel>
             </div>
         );
     }
@@ -186,17 +159,13 @@ export class UpdatePassword extends React.Component {
     render() {
         var page;
 
-        if (this.state.currentPage === 'update-password') {
-            page = this.renderPasswordReset;
-        } else {
+        if (this.state.currentPage === 'confirm-re-login') {
             page = this.renderConfirmReLogin;
+        } else {
+            page = this.renderPasswordReset;
         }
 
-        return (
-            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
-                {page.call(this)}
-            </Layout>
-        );
+        return page.call(this);
     }
 }
 
@@ -218,6 +187,6 @@ mapStateToProps = state => {
     };
 };
 
-Page = connect(mapStateToProps)(UpdatePassword);
-Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
-export default Page;
+OtherPage = connect(mapStateToProps)(Page);
+OtherPage._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
+export default OtherPage;
