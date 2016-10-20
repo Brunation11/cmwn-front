@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import FlipBoard from 'components/flipboard';
 import {Table, Column} from 'components/table';
 import Layout from 'layouts/two_col';
-import Store from 'components/store';
 
 import DefaultProfile from 'media/icon_class_blue.png';
 
@@ -51,21 +50,20 @@ var Component = React.createClass({
             </Table>
         );
     },
-    renderImport: function () {
-        var state = Store.getState();
-        if (!state.currentUser ||
-            !state.currentUser._embedded ||
-            !state.currentUser._embedded.groups ||
-            !state.currentUser._embedded.groups.length ||
-            state.currentUser._embedded.groups[0]._links.import == null
+    renderImport: function () { // TODO: do we actually need this on this page? 10/20/16 AIM
+        if (!this.props.currentUser ||
+            !this.props.currentUser._embedded ||
+            !this.props.currentUser._embedded.groups ||
+            !this.props.currentUser._embedded.groups.length ||
+            this.props.currentUser._embedded.groups[0]._links.import == null
         ) {
             return null;
         }
         return (
-                <Button className="standard purple" onClick={ () => {
-                    History.push('/schools/' + state.currentUser._embedded.groups[0].group_id + '/edit');
-                }} >Import Spreadsheet</Button>
-                );
+           <Button className="standard purple" onClick={ () => {
+               History.push('/schools/' + state.currentUser._embedded.groups[0].group_id + '/edit');
+           }} >Import Spreadsheet</Button>
+        );
     },
     renderAdminView: function () {
         return (
@@ -94,7 +92,8 @@ var mapStateToProps = state => {
     var data = [];
     var loading = true;
     var currentUser = state.currentUser;
-    if (state.page && state.page.data && state.page.data._embedded && state.page.data._embedded.group) {
+    if (state.page && state.page.data && state.page.data._embedded &&
+        state.page.data._embedded.group) {
         loading = state.page.loading;
         data = state.page.data._embedded.group;
     }
