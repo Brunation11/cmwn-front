@@ -4,7 +4,6 @@ import Immutable from 'seamless-immutable';
 import { connect } from 'react-redux';
 
 import Actions from 'components/actions';
-import Store from 'components/store';
 import Util from 'components/util';
 import GLOBALS from 'components/globals';
 
@@ -39,8 +38,7 @@ export default function (endpointIdentifier, componentName) {
         }
 
         attemptLoadComponentData() {
-            var state = Store.getState();
-            Util.attemptComponentLoad(state, this.props.endpointIdentifier,
+            Util.attemptComponentLoad(this.props.state, this.props.endpointIdentifier,
                 componentName, this.props.onError);
         }
 
@@ -99,10 +97,14 @@ export default function (endpointIdentifier, componentName) {
         var component = {};
         var data = {};
         var loading = true;
+        var lastLoadedStage;
         if (state.components && state.components[endpointIdentifier + '-' + componentName]) {
             component = state.components[endpointIdentifier + '-' + componentName];
             loading = component.loading;
             data = component.data;
+        }
+        if (state.pageLoadingStage) {
+            lastLoadedStage = state.pageLoadingStage.lastCompletedStage;
         }
         return {
             endpointIdentifier,
@@ -110,7 +112,8 @@ export default function (endpointIdentifier, componentName) {
             data,
             loading,
             component,
-            lastLoadedStage: state.pageLoadingStage.lastCompletedStage
+            lastLoadedStage,
+            state,
         };
     };
 
