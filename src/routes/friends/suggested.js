@@ -63,6 +63,15 @@ export class Suggested extends React.Component{
         });
     }
 
+    renderNoData(data) {
+        if (data == null) {
+            //render nothing before a request has been made
+            return null;
+        }
+        //render a nice message if the list is actually empty
+        return NO_DATA;
+    }
+
     renderRequestStatus(item) {
         return (
             <span
@@ -149,14 +158,15 @@ export class Suggested extends React.Component{
     }
 
     render() {
-        if (this.props.data.length === 0) {
+        var self = this;
+        if (self.props.data == null || self.props.data.length === 0) {
             return (
                 <Layout
                     currentUser={this.props.currentUser}
                     className={PAGE_UNIQUE_IDENTIFIER}
                     navMenuId="navMenu"
                 >
-                    {NO_DATA}
+                    {self.renderNoData(self.props.data)}
                 </Layout>
             );
         }
