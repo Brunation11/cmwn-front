@@ -83,15 +83,6 @@ Version - 0.3.12
 
 - 78945d8: linter
 - 6009a6c: updated alpha logo to beta
-
-Version - 0.3.14
-----
-
-- 8436cc0: bump version
-
-Version - 0.3.12
-----
-
 - 7130400: merge ditto
 - a236f51: Version bump [ci skip]
 - 53b2ee6: Version bump [ci skip]
