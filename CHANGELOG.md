@@ -1,3 +1,10 @@
+Version - 0.3.21
+----
+
+- 61fac2f: removed non snorlax routes
+- fe98df2: Version bump [ci skip]
+- 6009a6c: updated alpha logo to beta
+
 Version - 0.3.20
 ----
 
