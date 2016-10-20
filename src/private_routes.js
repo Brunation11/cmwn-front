@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars, max-len */
 import _ from 'lodash';
 
 import Users from 'routes/users';
@@ -13,6 +14,7 @@ import Classes from 'routes/classes';
 import ClassView from 'routes/classes/view';
 import ClassEdit from 'routes/classes/edit';
 import ClassProfile from 'routes/classes/profile';
+import UserCards from 'routes/classes/user_cards';
 import Friends from 'routes/friends';
 import SuggestedFriends from 'routes/friends/suggested';
 import Profile from 'routes/users/profile';
@@ -21,6 +23,8 @@ import UserAdmin from 'routes/users/view';
 import Game from 'routes/game';
 import Games from 'routes/games';
 import ChangePassword from 'routes/change_password';
+import NewsFeed from 'routes/newsfeed';
+import Flips from 'routes/users/flips';
 
 var redirect = function (path) {
     return function (nextState, transition) {
@@ -51,6 +55,8 @@ var routes = [
     { path: 'users/:id/view(/)', onEnter: redirect('/profile/:id/view') },
     { path: 'user/:id/edit(/)', onEnter: redirect('/profile/:id/edit')},
     { path: 'users/:id/edit(/)', onEnter: redirect('/profile/:id/edit')},
+   // { path: '/trophycase(/)', title: 'Flips', endpoint: '/flip', component: Flips},
+   // { path: 'user/:id/trophycase(/)', title: 'My Earned Flips', endpoint: '/user/:id/flip', component: Flips},
     { path: 'student/:id(/)', title: 'Profile', endpoint: 'user/:id', component: Profile},
     { path: 'profile/:id(/)', title: 'Profile', endpoint: 'user/:id', component: Profile},
     { path: 'student/edit(/)', title: 'Edit Student', endpoint: '$$me', component: StudentEdit },
@@ -79,6 +85,7 @@ var routes = [
     { path: 'class/:id(/)', title: 'Classes', endpoint: '/group/:id', component: ClassProfile},
     { path: 'classes/:id(/)', onEnter: redirect('/class/:id')},
     { path: 'class/:id/view(/)', title: 'Classes', endpoint: '/group/:id', component: ClassView},
+    { path: 'class/:id/cards(/)', title: 'User Cards', endpoint: '/group/:id', component: UserCards},
     { path: 'classes/:id/view(/)', onEnter: redirect('/class/:id/view')},
     { path: 'class/:id/edit(/)', title: 'Edit Classes', endpoint: '/group/:id', component: ClassEdit},
     { path: 'classes/:id/edit(/)', onEnter: redirect('/class/:id/edit')},
@@ -87,7 +94,8 @@ var routes = [
     { path: 'friends(/)', title: 'Friends', endpoint: '$$friend', component: Friends},
     { path: 'friends/suggested(/)', title: 'Suggested Friends', endpoint: '$$suggested_friends',
         component: SuggestedFriends},
-    { path: 'suggestedfriends(/)', onEnter: redirect('/friends/suggested')}
+    { path: 'suggestedfriends(/)', onEnter: redirect('/friends/suggested')},
+   // { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed}
 ];
 
 routes = _.map(routes, i => {
