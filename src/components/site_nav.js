@@ -7,7 +7,7 @@ import PublicRoutes from 'public_routes';
 import PrivateRoutes from 'private_routes';
 import Util from 'components/util';
 
-import SKRIBBLE_LINK from 'media/skribble-link.jpg';
+import SKRIBBLE_LINK from 'media/skribble-link.png';
 
 var addHardcodedEntries = function (menuItems) {
     menuItems.unshift({
