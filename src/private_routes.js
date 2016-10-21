@@ -57,8 +57,8 @@ var routes = [
     { path: 'users/:id/view(/)', onEnter: redirect('/profile/:id/view') },
     { path: 'user/:id/edit(/)', onEnter: redirect('/profile/:id/edit')},
     { path: 'users/:id/edit(/)', onEnter: redirect('/profile/:id/edit')},
-   // { path: '/trophycase(/)', title: 'Flips', endpoint: '/flip', component: Flips},
-   // { path: 'user/:id/trophycase(/)', title: 'My Earned Flips', endpoint: '/user/:id/flip', component: Flips},
+    { path: '/trophycase(/)', title: 'Flips', endpoint: '/flip', component: Flips},
+    { path: 'user/:id/trophycase(/)', title: 'My Earned Flips', endpoint: '/user/:id/flip', component: Flips},
     { path: 'student/:id(/)', title: 'Profile', endpoint: 'user/:id', component: Profile},
     { path: 'profile/:id(/)', title: 'Profile', endpoint: 'user/:id', component: Profile},
     { path: 'student/edit(/)', title: 'Edit Student', endpoint: '$$me', component: StudentEdit },
@@ -97,7 +97,7 @@ var routes = [
     { path: 'friends/suggested(/)', title: 'Suggested Friends', endpoint: '$$suggested_friends',
         component: SuggestedFriends},
     { path: 'suggestedfriends(/)', onEnter: redirect('/friends/suggested')},
-   // { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed}
+    { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed}
 ];
 
 routes = _.map(routes, i => {

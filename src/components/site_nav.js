@@ -16,7 +16,7 @@ var addHardcodedEntries = function (menuItems) {
         label: <img src={SKRIBBLE_LINK} alt="Skribble" />
     });
     menuItems.unshift({url: '/profile', label: 'Activities'});
-//    menuItems.push({url: `/user/${this.props.currentUser.user_id}/feed`, label: 'Feed'});
+    menuItems.push({url: `/user/${this.props.currentUser.user_id}/feed`, label: 'Feed'});
     menuItems.push({url: '/profile/edit', label: 'Edit My Profile'});
     menuItems.push({url: '/logout', label: 'Logout'});
     return menuItems;
