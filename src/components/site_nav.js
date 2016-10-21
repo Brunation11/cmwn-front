@@ -108,7 +108,9 @@ var SiteNav = React.createClass({
         return _.map(menuItems, item => (
             <li
                 className={ClassNames({
-                    'active-menu': sessionStorage.activeItem === item.label || sessionStorage.activeItem === item.uuid
+                    'active-menu':
+                        sessionStorage.activeItem === item.label ||
+                        sessionStorage.activeItem === item.uuid
                 })}
                 key={`(${item.label})-${item.url}`}
             >
