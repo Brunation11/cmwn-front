@@ -12,7 +12,7 @@ var Page;
 
 const MEDIA_URL = 'https://media-staging.changemyworldnow.com/f';
 
-const FAQs = {
+export const FAQs = {
     student: {
         label: "Student FAQ",
         href: `${MEDIA_URL}/ad969fcf71ecda4f1e5a72f05863bf37.pdf`,
@@ -44,7 +44,7 @@ export class Help extends React.Component {
         )
     }
     render() {
-        if (!this.props.currentUser || this.props.currentUser.type === 'CHILD') {
+        if (!this.props || !this.props.currentUser || this.props.currentUser.type === 'CHILD') {
             return null;
         }
         return (

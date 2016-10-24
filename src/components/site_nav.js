@@ -6,19 +6,17 @@ import ClassNames from 'classnames';
 import PublicRoutes from 'public_routes';
 import PrivateRoutes from 'private_routes';
 import Util from 'components/util';
+import { FAQs } from 'routes/help';
 
 var addHardcodedEntries = function (menuItems) {
     menuItems.unshift({url: '/profile', label: 'Activities'});
 //    menuItems.push({url: `/user/${this.props.currentUser.user_id}/feed`, label: 'Feed'});
     menuItems.push({url: '/profile/edit', label: 'Edit My Profile'});
+    var help = {url: '/help', label: 'Help'};
     if (this.props.currentUser.type === 'CHILD') {
-        menuItems.push({ // go directly to help PDF
-            url: 'https://media-staging.changemyworldnow.com/f/ad969fcf71ecda4f1e5a72f05863bf37.pdf',
-            label: 'Help'
-        });
-    } else {
-        menuItems.push({url: '/help', label: 'Help'});
+       help.url = FAQs.student.href; // go directly to help PDF
     }
+    menuItems.push(help);
     menuItems.push({url: '/logout', label: 'Logout'});
     return menuItems;
 };
