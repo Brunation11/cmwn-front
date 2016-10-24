@@ -1,7 +1,6 @@
 import React from 'react';
 import Shortid from 'shortid';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import { Panel } from 'react-bootstrap';
 
 import Layout from 'layouts/two_col';
@@ -16,37 +15,46 @@ const MEDIA_URL = 'https://media-staging.changemyworldnow.com/f';
 const FAQs = {
     student: {
         label: "Student FAQ",
-        href: `${MEDIA_URL}/ad969fcf71ecda4f1e5a72f05863bf37`,
-        src: `${MEDIA_URL}/ad969fcf71ecda4f1e5a72f05863bf37&compressiontype=2&size=25`,
+        href: `${MEDIA_URL}/ad969fcf71ecda4f1e5a72f05863bf37.pdf`,
+        type: "student",
     },
     teacher: {
-        label: "Student FAQ",
-        href: `${MEDIA_URL}/09258b65b267583dbd0eedc434d5b11f`,
-        src: `${MEDIA_URL}/09258b65b267583dbd0eedc434d5b11f&compressiontype=2&size=25`,
+        label: "Teacher FAQ",
+        href: `${MEDIA_URL}/09258b65b267583dbd0eedc434d5b11f.pdf`,
+        type: "teacher",
     },
     admin: {
-        label: "Student FAQ",
-        href: `${MEDIA_URL}/15d775ce44bc7dec5e8c74333ef7c93b`,
-        src: `${MEDIA_URL}/15d775ce44bc7dec5e8c74333ef7c93b&compressiontype=2&size=25`,
+        label: "School Admin FAQ",
+        href: `${MEDIA_URL}/15d775ce44bc7dec5e8c74333ef7c93b.pdf`,
+        type: "admin",
     },
 };
 
 export class Help extends React.Component {
+    componentWillReceiveProps(props) {
+        if (props.currentUser && props.currentUser.type === 'CHILD') {
+            window.location.replace(FAQs.student.href);
+        }
+    }
     renderLink(data) {
         return (
-            <Link to={data.href}>
-                <img alt={data.label} src={data.img} />
+            <li><a href={data.href}>
                 <h2>{data.label}</h2>
-            </Link>
+            </a></li>
         )
     }
     render() {
+        if (!this.props.currentUser || this.props.currentUser.type === 'CHILD') {
+            return null;
+        }
         return (
             <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <Panel header="HELP" className="standard">
-                    {this.renderLink(FAQs.student)}
-                    {this.renderLink(FAQs.teacher)}
-                    {this.renderLink(FAQs.principal)}
+                    <ul>
+                        {this.renderLink(FAQs.student)}
+                        {this.renderLink(FAQs.teacher)}
+                        {this.renderLink(FAQs.admin)}
+                    </ul>
                 </Panel>
             </Layout>
         );

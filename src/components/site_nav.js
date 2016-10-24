@@ -11,7 +11,14 @@ var addHardcodedEntries = function (menuItems) {
     menuItems.unshift({url: '/profile', label: 'Activities'});
 //    menuItems.push({url: `/user/${this.props.currentUser.user_id}/feed`, label: 'Feed'});
     menuItems.push({url: '/profile/edit', label: 'Edit My Profile'});
-    menuItems.push({url: '/help', label: 'Help'});
+    if (this.props.currentUser.type === 'CHILD') {
+        menuItems.push({ // go directly to help PDF
+            url: 'https://media-staging.changemyworldnow.com/f/ad969fcf71ecda4f1e5a72f05863bf37.pdf',
+            label: 'Help'
+        });
+    } else {
+        menuItems.push({url: '/help', label: 'Help'});
+    }
     menuItems.push({url: '/logout', label: 'Logout'});
     return menuItems;
 };
@@ -99,20 +106,34 @@ var SiteNav = React.createClass({
             }
         });
 
-        return _.map(menuItems, item => (
-            <li
-                className={ClassNames({
-                    'active-menu': sessionStorage.activeItem === item.label
-                })}
-                key={`(${item.label})-${item.url}`}
-            >
+        return _.map(menuItems, item => {
+            var link = (
                 <Link
                     to={item.url}
                 >
                     {item.label}
                 </Link>
-            </li>
-        ));
+            );
+            if (item.url.includes('http')) {
+                link = (
+                    <a
+                        href={item.url}
+                    >
+                        {item.label}
+                    </a>
+                );
+            }
+            return (
+                <li
+                    className={ClassNames({
+                        'active-menu': sessionStorage.activeItem === item.label
+                    })}
+                    key={`(${item.label})-${item.url}`}
+                >
+                        {link}
+                </li>
+            );
+        });
     },
     render: function () {
         return (
