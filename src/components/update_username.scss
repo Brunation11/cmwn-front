@@ -193,7 +193,7 @@
         width: 72%;
         height: 68px;
 
-        &:after {
+        &::after {
             position: absolute;
             top: -64%;
             right: -6%;
@@ -309,7 +309,7 @@
             background-position: -804px -126px;
         }
 
-        &.selected:after {
+        &.selected::after {
             position: absolute;
             top: 10%;
             left: -25%;
@@ -321,7 +321,7 @@
             content: '';
         }
 
-        &.not-selected:after {
+        &.not-selected::after {
             position: absolute;
             top: 10%;
             left: -25%;
@@ -363,7 +363,7 @@
         font-family: $cmwn-jade-font;
         font-size: 1.25rem;
 
-        &:after {
+        &::after {
             position: absolute;
             top: -50%;
             right: -90%;
@@ -543,7 +543,7 @@
         .step-1 {
             font-size: 7rem;
 
-            &:after {
+            &::after {
                 font-size: 1.5rem;
             }
         }
@@ -552,7 +552,7 @@
             background-position: -23px -23px;
             background-size: 850px 613px;
 
-            &:after {
+            &::after {
                 top: -62%;
             }
 
@@ -588,7 +588,7 @@
             }
         }
 
-        .step-3:after {
+        .step-3::after {
             right: -85%;
             width: 80%;
         }
@@ -641,7 +641,7 @@
         .step-1 {
             font-size: 7rem;
 
-            &:before {
+            &::before {
                 font-size: 1.5rem;
             }
         }
@@ -654,7 +654,7 @@
             background-position: -18px -18px;
             background-size: 750px 541px;
 
-            &:after {
+            &::after {
                 top: -52%;
                 right: -5%;
             }
@@ -707,7 +707,7 @@
         .step-3 {
             font-size: 1rem;
 
-            &:after {
+            &::after {
                 right: -100%;
                 width: 90%;
             }
@@ -790,7 +790,7 @@
         .step-1 {
             font-size: 6rem;
 
-            &:before {
+            &::before {
                 font-size: 1.25rem;
             }
         }
@@ -807,7 +807,7 @@
             width: 69%;
             height: 52px;
 
-            &:after {
+            &::after {
                 top: -60%;
             }
 
@@ -843,7 +843,7 @@
         .step-2 {
             font-size: 5rem;
 
-            &:before {
+            &::before {
                 left: 44%;
                 font-size: 1.25rem;
             }
@@ -865,7 +865,7 @@
         .step-3 {
             font-size: 1rem;
 
-            &:after {
+            &::after {
                 right: -80%;
                 width: 70%;
             }
@@ -950,7 +950,7 @@
         .step-1 {
             font-size: 4rem;
 
-            &:before {
+            &::before {
                 bottom: 8%;
                 font-size: 1rem;
             }
@@ -970,7 +970,7 @@
             width: 69%;
             height: 45px;
 
-            &:after {
+            &::after {
                 top: -54%;
                 right: -7%;
             }
@@ -1011,7 +1011,7 @@
         .step-2 {
             font-size: 5rem;
 
-            &:before {
+            &::before {
                 left: 44%;
                 font-size: 1.25rem;
             }
@@ -1035,7 +1035,7 @@
         .step-3 {
             font-size: 1rem;
 
-            &:after {
+            &::after {
                 right: -50%;
                 width: 45%;
             }
