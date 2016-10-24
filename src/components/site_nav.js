@@ -98,19 +98,24 @@ var SiteNav = React.createClass({
 
         _.map(menuItems, item => {
             currentUrl = window.location.href.replace(/^.*changemyworldnow.com/, '');
-            if (sessionStorage.activeItem === item.label || sessionStorage.activeItem === item.uuid) {
+            if (sessionStorage.activeItem + '' !== 'undefined' && (
+                    sessionStorage.activeItem === item.label ||
+                    sessionStorage.activeItem === item.uuid
+            )) {
                 return;
             } else if (currentUrl === item.url) {
                 sessionStorage.activeItem = item.uuid || item.label;
             }
         });
 
+
         return _.map(menuItems, item => (
             <li
                 className={ClassNames({
                     'active-menu':
+                        sessionStorage.activeItem + '' !== 'undefined' && (
                         sessionStorage.activeItem === item.label ||
-                        sessionStorage.activeItem === item.uuid
+                        sessionStorage.activeItem === item.uuid)
                 })}
                 key={`(${item.label})-${item.url}`}
             >
