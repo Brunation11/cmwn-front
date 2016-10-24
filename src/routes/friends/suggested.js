@@ -132,8 +132,9 @@ export class Suggested extends React.Component{
     }
 
     render() {
-        if (this.props.data == null) {
-            return this.renderNoData();
+        var self = this;
+        if (self.props.data == null || self.props.data === []) {
+            return self.renderNoData();
         }
         return (
            <Layout className={PAGE_UNIQUE_IDENTIFIER}>

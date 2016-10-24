@@ -33,6 +33,7 @@ var sri = require('gulp-sri');
 var mocha = require('gulp-mocha');
 var zip = require('gulp-zip');
 var webdriver = require('gulp-webdriver');
+var scssGlobals = require('./scss_globals.js');
 
 /** @const */
 var APP_PREFIX = 'APP_';
@@ -52,7 +53,6 @@ if (args.development || args.prod) {
 } else if (process.env.NODE_ENV) {
     mode = process.env.NODE_ENV;
 }
-
 
 require.extensions['.css'] = _.noop;
 require.extensions['.scss'] = _.noop;
@@ -220,6 +220,7 @@ var zipTheBuild = function () {
       .pipe(gulp.dest('./'));
 };
 
+
 var buildAndCopyStaticResources = function () {
     var config = {
         resolve: {
@@ -241,7 +242,7 @@ var buildAndCopyStaticResources = function () {
                 }, {
                     test: /\.scss$/,
                     loader: ExtractTextPlugin.extract('style-loader',
-                        'css-loader!autoprefixer-loader!sass-loader')
+                        'css-loader!autoprefixer-loader!sass-loader!prepend?data=' + scssGlobals)
                 }, {
                     test: /\.(jpe?g|png|gif|svg)$/i,
                     loader: 'url-loader?limit=10000'
@@ -327,7 +328,7 @@ gulp.task('dev-server', ['development-server']);
 gulp.task('development-server', executeAsProcess('npm', ['start']));
 
 /*·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´JS Build Tasks`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·*/
-gulp.task('build', ['primary-style', 'webpack:build', 'index'], zipTheBuild);
+gulp.task('build', ['index'], zipTheBuild);
 /** Selects whether to rerun as dev or prod build task*/
 gulp.task('webpack:build', selectBuildMode);
 /** Convienience methods to run only the webpack portion of a build*/
