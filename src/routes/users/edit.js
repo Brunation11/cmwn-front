@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import React from 'react';
 import _ from 'lodash';
-import {Button, Input, Panel} from 'react-bootstrap';
+import {Button, Input, Panel, Modal} from 'react-bootstrap';
 import { connect } from 'react-redux';
 import ClassNames from 'classnames';
 import Moment from 'moment';
@@ -14,7 +14,7 @@ import Layout from 'layouts/two_col';
 import GLOBALS from 'components/globals';
 // import Validate from 'components/validators';
 import Util from 'components/util';
-// import UpdateUsername from 'components/update_username';
+import UpdateUsername from 'components/update_username';
 import ProfileImage from 'components/profile_image';
 import Form from 'components/form';
 import DropdownDatepicker from 'components/dropdown_datepicker';
@@ -275,6 +275,20 @@ export class EditProfile extends React.Component {
 // CURRENTLY UNUSED FUNCTIONS, VERIFY FOR FUTURE IMPLIMENTATION
 // ************************************************************
 
+    showModal() {
+        this.setState({generatorOn: true});
+    }
+
+    hideModal() {
+        this.setState({generatorOn: false});
+    }
+
+    renderUsernameGenerator() {
+        return (
+            <div>HELLO WORLD</div>
+        );
+    }
+
     renderEmail() {
         return (
             <Input
@@ -396,7 +410,7 @@ export class EditProfile extends React.Component {
                 <div className="username-container">
                     <Button
                         className="update-username-btn"
-                        onClick={""}
+                        onClick={this.showModal.bind(this)}
                     >
                         CHANGE
                     </Button>
@@ -425,11 +439,29 @@ export class EditProfile extends React.Component {
 
         return (
             <Layout currentUser={this.props.currentUser} className="edit-profile">
+                <Modal
+                    className="username-generator-modal"
+                    show={this.state.generatorOn}
+                    onHide={this.hideModal.bind(this)}
+                    keyboard={false}
+                    backdrop="static"
+                    id="username-genetator-modal"
+                >
+                    <Modal.Body>
+                        <UpdateUsername
+                            className="username-genetator"
+                            currentUser={this.props.currentUser}
+                        />
+                    <Button
+                        className="close-modal-btn"
+                        onClick={this.hideModal.bind(this)}
+                    />
+                    </Modal.Body>
+                </Modal>
                 <Panel
                     header={`${HEADINGS.EDIT_TITLE} ${this.state.first_name} ${this.state.last_name}`}
                     className="standard edit-profile"
                 >
-
                     <div className="left profile-image-container">
                         <ProfileImage
                             data={this.props.data}
