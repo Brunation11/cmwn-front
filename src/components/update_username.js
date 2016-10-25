@@ -251,15 +251,37 @@ export class UpdateUsername extends React.Component {
         );
     }
 
+    renderDesktop() {
+        var page;
+
+        if (this.state.page === 'confirm') {
+            page = this.renderConfirmation;
+        } else if (this.state.page === 'login-notice') {
+            page = this.renderLoginNotice;
+        } else {
+            page = this.renderGenerator;
+        }
+
+        return (
+            <div className="desktop">
+                {page.call(this)}
+                <Button
+                    className="close-modal-btn"
+                    onClick={this.hideModal.bind(this)}
+                />
+            </div>
+        );
+    }
+
     renderMobile() {
         var page;
 
         if (this.state.page === 'confirm') {
-            page = this.renderMobileConfirmation;
+            page = this.renderConfirmation;
         } else if (this.state.page === 'login-notice') {
             page = this.renderLoginNotice;
         } else {
-            page = this.renderMobileGenerator;
+            page = this.renderGenerator;
         }
 
         return(
