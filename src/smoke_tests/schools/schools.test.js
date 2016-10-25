@@ -3,55 +3,51 @@ import { expect } from 'chai';
 import { mount } from 'enzyme';
 import ProviderWrapper from 'smoke_tests/provider_wrapper.js';
 
-import { SchoolProfile } from 'routes/schools/profile';
-import { PAGE_UNIQUE_IDENTIFIER } from 'routes/schools/profile';
+import { Schools } from 'routes/schools';
 
-import studentDataA from 'mocks/users/student_data_a';
-import teacherData from 'mocks/users/teacher_data';
-import principalData from 'mocks/users/principal_data';
+import studentData from 'mocks/schools/student_school_page';
+import teacherData from 'mocks/schools/teacher_school_page';
+import principalData from 'mocks/schools/principal_school_page';
 
 var createWrapper = function (data) {
-    var school = <SchoolProfile data={data} loading={false} />;
-    var provider = <ProviderWrapper route={school} />;
-    const WRAPPER = mount(provider);
+    var schools = <Schools data={data} loading={false} />;
+    const WRAPPER = mount(<ProviderWrapper route={schools} />);
     return WRAPPER;
 };
 
 var checkContents = function (WRAPPER, data) {
-    var schools = 0;
-    var i;
-    expect(WRAPPER.instance()).to.be.instanceOf(SchoolProfile);
-    expect(WRAPPER.hasClass(PAGE_UNIQUE_IDENTIFIER)).to.equal(true);
+    expect(WRAPPER.find('Schools')).to.have.length(1);
     expect(WRAPPER.find('Layout')).to.have.length(1);
-    expect(WRAPPER.find('Flipboard')).to.have.length(1);
-    for (i = 0; i < data._embedded.groups.length; i++) {
-        if (data._embedded.groups[i].type === 'school') {
-            schools++;
-        }
-    }
-    expect(WRAPPER.find('.flip')).to.have.length(schools);
-    expect(WRAPPER.find('a')).to.have.length(schools);
-    expect(WRAPPER.find('img')).to.have.length(schools);
-    expect(WRAPPER.find('p')).to.have.length(schools);
+    expect(WRAPPER.find('FlipBoard')).to.have.length(1);
+    expect(WRAPPER.find('.flip')).to.have.length(1);
+    expect(WRAPPER.find('a')).to.have.length(4);
+    expect(WRAPPER.find('img')).to.have.length(1);
+    expect(WRAPPER.find('p')).to.have.length(1);
 };
 
 var schoolsSmokeTests = function () {
     describe('when viewed by a student', function () {
         it('should load all schools', function () {
-            const WRAPPER = createWrapper(studentDataA);
-            checkContents(WRAPPER, studentDataA);
+            const WRAPPER = createWrapper(studentData._embedded.group);
+            console.log('student wrapper');
+            console.log(WRAPPER.debug());
+            checkContents(WRAPPER, studentData._embedded.group);
         });
     });
     describe('when viewed by a teacher', function () {
         it('should load all schools', function () {
-            const WRAPPER = createWrapper(teacherData);
-            checkContents(WRAPPER, teacherData);
+            const WRAPPER = createWrapper(teacherData._embedded.group);
+            console.log('teacher wrapper');
+            console.log(WRAPPER.debug());
+            checkContents(WRAPPER, teacherData._embedded.group);
         });
     });
     describe('when viewed by a principal', function () {
         it('should load all schools', function () {
-            const WRAPPER = createWrapper(principalData);
-            checkContents(WRAPPER, principalData);
+            const WRAPPER = createWrapper(principalData._embedded.group);
+            console.log('principal wrapper');
+            console.log(WRAPPER.debug());
+            checkContents(WRAPPER, principalData._embedded.group);
         });
     });
 };
