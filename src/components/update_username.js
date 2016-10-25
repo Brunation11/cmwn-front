@@ -251,6 +251,32 @@ export class UpdateUsername extends React.Component {
         );
     }
 
+    renderMobile() {
+        var page;
+
+        if (this.state.page === 'confirm') {
+            page = this.renderMobileConfirmation;
+        } else if (this.state.page === 'login-notice') {
+            page = this.renderLoginNotice;
+        } else {
+            page = this.renderMobileGenerator;
+        }
+
+        return(
+            <div className="mobile">
+                <Button
+                    className="close-modal-btn"
+                    onClick={this.hideModal.bind(this)}
+                >
+                    <span className="original-label">{LABELS.CURRENT}</span>
+                    <span className="original">{this.state.original}</span>
+                    <span className="prompt">{BUTTONS.MOBILE_ORIGINAL}</span>
+                </Button>
+                {page.call(this)}
+            </div>
+        );
+    }
+
     render() {
         var page;
 
