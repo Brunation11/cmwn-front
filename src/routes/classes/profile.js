@@ -115,9 +115,10 @@ export class Profile extends React.Component {
            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                {this.renderClassInfo()}
                <USER_SOURCE>
-                   <FlipBoard renderFlip={this.renderFlip} header={
-                     HEADINGS.CLASS + this.state.title
-                   } />
+                    <FlipBoard
+                        renderFlip={this.renderFlip}
+                        header={`${HEADINGS.CLASS} ${this.state.title}`}
+                    />
                </USER_SOURCE>
            </Layout>
         );
