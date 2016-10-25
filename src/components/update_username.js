@@ -21,7 +21,12 @@ const LABELS = {
 };
 
 const BUTTONS = {
-    ORIGINAL: 'KEEP IT!'
+    ORIGINAL: 'KEEP IT!',
+    MOBILE_ORIGINAL: 'TAP TO KEEP IT',
+    STEP_TWO_PROMPT: 'GOOD JOB!',
+    STEP_TWO: 'CONTINUE TO STEP 2',
+    STEP_THREE_PROMPT: 'ALMOST DONE!',
+    STEP_THREE: 'CONTINUE TO STEP 3'
 };
 
 const COPY = {
@@ -300,16 +305,6 @@ export class UpdateUsername extends React.Component {
     }
 
     render() {
-        var page;
-
-        if (this.state.page === 'confirm') {
-            page = this.renderConfirmation;
-        } else if (this.state.page === 'login-notice') {
-            page = this.renderLoginNotice;
-        } else {
-            page = this.renderGenerator;
-        }
-
         return (
             <div>
                 <Modal
@@ -321,11 +316,8 @@ export class UpdateUsername extends React.Component {
                     id="username-genetator-modal"
                 >
                     <Modal.Body>
-                        {page.call(this)}
-                        <Button
-                            className="close-modal-btn"
-                            onClick={this.hideModal.bind(this)}
-                        />
+                        {this.renderDesktop.call(this)}
+                        {this.renderMobile.call(this)}
                     </Modal.Body>
                 </Modal>
 

@@ -73,6 +73,9 @@
     }
 }
 
+.mobile {
+    display: none;
+}
 
 .loading {
     position: fixed;
@@ -1110,3 +1113,12 @@
     }
 }
 
+@media (max-width: 414px) {
+    .desktop {
+        display: none;
+    }
+
+    .mobile {
+        display: inline-block;
+    }
+}
