@@ -47,8 +47,12 @@ export class ProfileView extends React.Component {
         this.setState(nextProps.data);
         this.resolveRole();
 
-        if (nextProps.currentUser && nextProps.currentUser.type === 'CHILD') {
-            window.location.replace(window.location.href.replace('view', 'edit'));
+        if (nextProps.currentUser.type === 'CHILD') {
+            if (nextProps.currentUser.user_id === nextProps.data.user_id) {
+                window.location.replace(window.location.href.replace('/view', '/edit'));
+            } else {
+                window.location.replace(window.location.href.replace('/view', ''));
+            }
         }
     }
 
@@ -79,9 +83,9 @@ export class ProfileView extends React.Component {
     }
 
     render() {
-        if (this.props.currentUser.type === 'CHILD' ||
-            this.props.data.username == null ||
-            !Util.decodePermissions(this.props.data.scope).update) {
+        if (this.props.data.username == null ||
+            !Util.decodePermissions(this.props.data.scope).update ||
+            this.props.currentUser.type === 'CHILD') {
             return null;
         }
         return (
