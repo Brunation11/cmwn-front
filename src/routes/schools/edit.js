@@ -16,6 +16,8 @@ import History from 'components/history';
 
 import Layout from 'layouts/two_col';
 
+import 'routes/schools/edit.scss';
+
 export const PAGE_UNIQUE_IDENTIFIER = 'school-edit';
 
 const HEADINGS = {
