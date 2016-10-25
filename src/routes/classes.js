@@ -83,7 +83,7 @@ var Component = React.createClass({
         var view = (this.props.currentUser && this.props.currentUser.type === 'CHILD') ?
             this.renderChildView : this.renderAdminView;
         return (
-            <Layout className="user-list">
+            <Layout currentUser={this.props.currentUser} className="user-list">
                 {view()}
             </Layout>
         );
