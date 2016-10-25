@@ -5,9 +5,11 @@ import Game from 'components/game';
 import History from 'components/history';
 import GLOBALS from 'components/globals';
 
-import Layout from 'layouts/one_col';
+import Layout from 'layouts/two_col';
 
-const PAGE_UNIQUE_IDENTIFIER = 'single-game';
+import 'routes/play.scss';
+
+const PAGE_UNIQUE_IDENTIFIER = 'single-game-two-col';
 
 var mapStateToProps;
 var Page;
@@ -51,7 +53,10 @@ export class GamePage extends React.Component {
 
     render() {
         return (
-            <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
+            <Layout
+                className={PAGE_UNIQUE_IDENTIFIER}
+                currentUser={this.props.currentUser}
+            >
                 <Game
                     ref="gameRef"
                     game={this.props.params.game}
