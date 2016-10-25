@@ -8,10 +8,6 @@ Version - 0.3.24
 Version - 0.3.23
 ----
 
-
-Version - 0.3.23
-----
-
 - 1f91540: Version bump [ci skip]
 
 Version - 0.3.22
@@ -22,7 +18,6 @@ Version - 0.3.22
 - 0a4f783: Version bump [ci skip]
 - fdb1cd4: Version bump [ci skip]
 - 14a7c2f: Version bump [ci skip]
-
 
 Version - 0.3.20
 ----
@@ -75,28 +70,6 @@ Version - 0.3.16
 
 Version - 0.3.15
 ----
-
-- 6e72f47: remove unused component and styles
-- bd813d3: Version bump [ci skip]
-=======
-- 7412902: Version bump [ci skip]
-- 8436cc0: bump version
-- 0a4f783: Version bump [ci skip]
-- 14a7c2f: Version bump [ci skip]
-- 19c862b: linter
-- c96a0d7: add initial testing, test data, and smoke test file for newsfeed
-- 7c71703: remove default from export declaration on class. remove on error props for images
-- 6d8aa6f: update style rules, refactor for linter
-- dd5554a: Version bump [ci skip]
-
-
-Version - 0.3.20
-----
-- 7412902: Version bump [ci skip]
-- 8436cc0: bump version
-
-Version - 0.3.15
-----
 - 14a7c2f: Version bump [ci skip]
 - 19c862b: linter
 - c96a0d7: add initial testing, test data, and smoke test file for newsfeed
@@ -126,8 +99,6 @@ Version - 0.3.13
 - 6d3c8ae: Version bump [ci skip]
 - 78945d8: linter
 
-Version - 0.3.14
-----
 
 - 8436cc0: bump version
 
