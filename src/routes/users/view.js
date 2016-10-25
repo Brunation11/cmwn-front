@@ -46,6 +46,10 @@ export class ProfileView extends React.Component {
     componentWillReceiveProps(nextProps) {
         this.setState(nextProps.data);
         this.resolveRole();
+
+        if (nextProps.currentUser && nextProps.currentUser.type === 'CHILD') {
+            window.location.replace(window.location.href.replace('view', 'edit'));
+        }
     }
 
     suspendAccount() {
@@ -75,7 +79,9 @@ export class ProfileView extends React.Component {
     }
 
     render() {
-        if (this.props.data.username == null || !Util.decodePermissions(this.props.data.scope).update) {
+        if (this.props.currentUser.type === 'CHILD' ||
+            this.props.data.username == null ||
+            !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
         return (
