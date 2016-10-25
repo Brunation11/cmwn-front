@@ -71,7 +71,7 @@ class SurveyModal extends React.Component {
 
                             if (value.length === 0) return null;
 
-                            if (value.constructor === Array) {
+                            if (_.isArray(value)) {
                                 return (
                                     <div>
                                         <h4>{HEADINGS[screen]}</h4>
@@ -88,13 +88,13 @@ class SurveyModal extends React.Component {
                                             return (
                                                 <div>
                                                     <p>{HEADINGS[dropzone]}</p>
-                                                    <ul>
+                                                    <ol>
                                                         {_.map(qualities, function (quality){
                                                             return (
                                                                 <li> {quality.replace(/-/g, ' ')} </li>
                                                             );
                                                         })}
-                                                    </ul>
+                                                    </ol>
                                                 </div>
                                             );
                                         })}
@@ -105,11 +105,13 @@ class SurveyModal extends React.Component {
                             return (
                                 <div>
                                     <h4>{HEADINGS[screen]}</h4>
-                                    <div>{_.map(value, function (data){
-                                        return (
-                                            <p>{data.ref.replace(/-/g, ' ')}</p>
-                                        );
-                                    })}</div>
+                                    <ol>
+                                        {_.map(value, function (data){
+                                            return (
+                                                <li>{data.ref.replace(/-/g, ' ')}</li>
+                                            );
+                                        })}
+                                    </ol>
                                 </div>
                             );
                         })}
