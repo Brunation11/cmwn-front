@@ -1,5 +1,4 @@
 import React from 'react';
-import Shortid from 'shortid';
 import { connect } from 'react-redux';
 import { Panel } from 'react-bootstrap';
 
@@ -12,28 +11,28 @@ var Page;
 
 const MEDIA_URL = 'https://media-staging.changemyworldnow.com/f';
 
-export const FAQs = {
-    student: {
-        label: "Student FAQ",
+const FAQS = {
+    STUDENT: {
+        label: 'Student FAQ',
         href: `${MEDIA_URL}/ad969fcf71ecda4f1e5a72f05863bf37.pdf`,
-        type: "student",
+        type: 'student',
     },
-    teacher: {
-        label: "Teacher FAQ",
+    TEACHER: {
+        label: 'Teacher FAQ',
         href: `${MEDIA_URL}/09258b65b267583dbd0eedc434d5b11f.pdf`,
-        type: "teacher",
+        type: 'teacher',
     },
-    admin: {
-        label: "School Admin FAQ",
+    ADMIN: {
+        label: 'School Admin FAQ',
         href: `${MEDIA_URL}/15d775ce44bc7dec5e8c74333ef7c93b.pdf`,
-        type: "admin",
+        type: 'admin',
     },
 };
 
 export class Help extends React.Component {
     componentWillReceiveProps(props) {
         if (props.currentUser && props.currentUser.type === 'CHILD') {
-            window.location.replace(FAQs.student.href);
+            window.location.replace(FAQS.STUDENT.href);
         }
     }
     renderLink(data) {
@@ -41,7 +40,7 @@ export class Help extends React.Component {
             <li><a href={data.href}>
                 <h2>{data.label}</h2>
             </a></li>
-        )
+        );
     }
     render() {
         if (!this.props || !this.props.currentUser || this.props.currentUser.type === 'CHILD') {
@@ -51,9 +50,9 @@ export class Help extends React.Component {
             <Layout className={PAGE_UNIQUE_IDENTIFIER}>
                 <Panel header="HELP" className="standard">
                     <ul>
-                        {this.renderLink(FAQs.student)}
-                        {this.renderLink(FAQs.teacher)}
-                        {this.renderLink(FAQs.admin)}
+                        {this.renderLink(FAQS.STUDENT)}
+                        {this.renderLink(FAQS.TEACHER)}
+                        {this.renderLink(FAQS.ADMIN)}
                     </ul>
                 </Panel>
             </Layout>

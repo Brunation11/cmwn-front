@@ -9,12 +9,12 @@ import Util from 'components/util';
 import { FAQs } from 'routes/help';
 
 var addHardcodedEntries = function (menuItems) {
+    var help = {url: '/help', label: 'Help'};
     menuItems.unshift({url: '/profile', label: 'Activities'});
 //    menuItems.push({url: `/user/${this.props.currentUser.user_id}/feed`, label: 'Feed'});
     menuItems.push({url: '/profile/edit', label: 'Edit My Profile'});
-    var help = {url: '/help', label: 'Help'};
     if (this.props.currentUser.type === 'CHILD') {
-       help.url = FAQs.student.href; // go directly to help PDF
+        help.url = FAQs.student.href; // go directly to help PDF
     }
     menuItems.push(help);
     menuItems.push({url: '/logout', label: 'Logout'});
