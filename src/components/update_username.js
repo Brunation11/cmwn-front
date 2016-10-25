@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import {Button, Modal} from 'react-bootstrap';
 import ClassNames from 'classnames';
 import _ from 'lodash';
 
@@ -36,7 +36,8 @@ export class UpdateUsername extends React.Component {
 
         this.state = _.defaults({
             loading: false,
-            page: 'generator'
+            page: 'generator',
+            generatorOn: false
         });
     }
 
@@ -105,6 +106,14 @@ export class UpdateUsername extends React.Component {
         this.setState({
             page: 'login-notice'
         });
+    }
+
+    showModal() {
+        this.setState({generatorOn: true});
+    }
+
+    hideModal() {
+        this.setState({generatorOn: false});
     }
 
     handleSelect(username) {
@@ -254,7 +263,31 @@ export class UpdateUsername extends React.Component {
         }
 
         return (
-            page.call(this)
+            <div>
+                <Modal
+                    className="username-generator-modal"
+                    show={this.state.generatorOn}
+                    onHide={this.hideModal.bind(this)}
+                    keyboard={false}
+                    backdrop="static"
+                    id="username-genetator-modal"
+                >
+                    <Modal.Body>
+                        {page.call(this)}
+                        <Button
+                            className="close-modal-btn"
+                            onClick={this.hideModal.bind(this)}
+                        />
+                    </Modal.Body>
+                </Modal>
+
+                <Button
+                    className="update-username-btn"
+                    onClick={this.showModal.bind(this)}
+                >
+                    CHANGE
+                </Button>
+            </div>
         );
     }
 }
