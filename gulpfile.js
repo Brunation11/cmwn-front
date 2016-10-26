@@ -439,7 +439,7 @@ gulp.task('smoke', function () {
 });
 
 gulp.task('coverage', function () {
-    var proc = spawn('./.test/test.sh');
+    var proc = spawn('./test.sh');
 
     proc.on('exit', function (exitCode) {
         console.log('process exited with code ' + exitCode);
