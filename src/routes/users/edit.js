@@ -401,7 +401,7 @@ export class EditProfile extends React.Component {
             <div>
                 <div className="username-container">
                     <UpdateUsername
-                        className="username-genetator"
+                        className={ClassNames('username-genetator', {hidden: this.props.currentUser.type !== 'CHILD'})}
                         currentUser={this.props.currentUser}
                     />
                     <span className="username-display">
