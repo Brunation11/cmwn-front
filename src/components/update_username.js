@@ -371,13 +371,13 @@ export class UpdateUsername extends React.Component {
                 </div>
                 <div className="content">
                     <Button
-                        className='original'
+                        className="original"
                         onClick={this.setOriginal.bind(this)}
                     >
                         {this.state.original}
                     </Button>
                     <Button
-                        className='selected-option'
+                        className="selected-option"
                         onClick={this.setChildUsername.bind(this)}
                     >
                         {this.state.selected}
@@ -437,10 +437,10 @@ export class UpdateUsername extends React.Component {
         } else if (this.state.page === 'generator') {
             page = this.renderMobileGenerator;
         } else {
-            page = this.renderWelcome
+            page = this.renderWelcome;
         }
 
-        return(
+        return (
             <div className={`mobile ${this.state.page}`}>
                 <Button
                     className="close-modal-btn"
@@ -477,7 +477,7 @@ export class UpdateUsername extends React.Component {
                 </Modal>
 
                 <Button
-                    className="update-username-btn"
+                    className={`update-username-btn ${this.props.className}`}
                     onClick={this.showModal.bind(this)}
                 >
                     CHANGE

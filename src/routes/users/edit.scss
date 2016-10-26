@@ -44,6 +44,7 @@ $halfway-break-2: 540px;
         position: relative;
         border: 1px solid $cmwn-white;
         width: 45%;
+        text-align: center;
 
         &::before {
             position: absolute;
@@ -68,6 +69,11 @@ $halfway-break-2: 540px;
                 border-top: 2px dotted $cmwn-white;
                 content: '';
             }
+        }
+
+        .action-link {
+            position: relative;
+            z-index: 1;
         }
     }
 

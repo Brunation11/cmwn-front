@@ -401,7 +401,11 @@ export class EditProfile extends React.Component {
             <div>
                 <div className="username-container">
                     <UpdateUsername
-                        className={ClassNames('username-genetator', {hidden: this.props.currentUser.type !== 'CHILD'})}
+                        className={ClassNames(
+                            'username-genetator', {
+                                hidden: this.props.currentUser.type !== 'CHILD'
+                            }
+                        )}
                         currentUser={this.props.currentUser}
                     />
                     <span className="username-display">
@@ -439,7 +443,7 @@ export class EditProfile extends React.Component {
                             currentUser={this.props.currentUser}
                             link-below={true}
                         />
-                        <p className={ClassNames({hidden:
+                        <p className={ClassNames('action-link', {hidden:
                             !Util.decodePermissions(this.props.data.scope).delete})}>
                             <a onClick={this.suspendAccount.bind(this)}>{SUSPEND}</a>
                         </p>
