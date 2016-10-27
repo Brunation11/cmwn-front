@@ -34,7 +34,7 @@
         z-index: 1;
         outline: none;
         border: 0;
-        background: url('https://media-staging.changemyworldnow.com/f/ec720b982eaf6e0d9772cc553db54b55');
+        background: url('#{$media-url}ec720b982eaf6e0d9772cc553db54b55');
         background-color: transparent;
         background-repeat: no-repeat;
         background-size: contain;
@@ -48,7 +48,7 @@
             transform: translateX(-50%);
             transition: opacity .25s ease-in-out;
             opacity: 0;
-            background: url('https://media-staging.changemyworldnow.com/f/018ce6adb27b39dd12249a22ea4f26cd');
+            background: url('#{$media-url}018ce6adb27b39dd12249a22ea4f26cd');
             background-repeat: no-repeat;
             background-size: contain;
             width: 500%;
@@ -170,4 +170,3 @@
         }
     }
 }
-

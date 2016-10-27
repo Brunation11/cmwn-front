@@ -43,12 +43,12 @@
 
         .confirm {
             margin: 4% 4% -2% 0;
-            background: url('https://media-staging.changemyworldnow.com/f/b49c70aefe76975c606d3207e80e8790');
+            background: url('#{$media-url}b49c70aefe76975c606d3207e80e8790');
             background-repeat: no-repeat;
             background-size: contain;
 
             &:hover {
-                background: url('https://media-staging.changemyworldnow.com/f/b817397c67340b57820c3e220140ead6');
+                background: url('#{$media-url}b817397c67340b57820c3e220140ead6');
                 background-repeat: no-repeat;
                 background-size: contain;
             }
@@ -56,12 +56,12 @@
 
         .cancel {
             margin: 4% 0 -2%;
-            background: url('https://media-staging.changemyworldnow.com/f/28a0bfff5c46c4e4026ac06d8ad66888');
+            background: url('#{$media-url}28a0bfff5c46c4e4026ac06d8ad66888');
             background-repeat: no-repeat;
             background-size: contain;
 
             &:hover {
-                background: url('https://media-staging.changemyworldnow.com/f/83444e08ebe7e27f4decc5a1b1706230');
+                background: url('#{$media-url}83444e08ebe7e27f4decc5a1b1706230');
                 background-repeat: no-repeat;
                 background-size: contain;
             }
@@ -116,7 +116,7 @@
             left: 1%;
             transition: border .25s linear;
             opacity: 0;
-            background: url('https://media-staging.changemyworldnow.com/f/63a92d7c12894d238fa2ceaf0611886a');
+            background: url('#{$media-url}63a92d7c12894d238fa2ceaf0611886a');
             background-repeat: no-repeat;
             background-size: cover;
             width: 30px;
@@ -153,7 +153,7 @@
             left: 1.25%;
             transition: border .25s linear;
             opacity: 0;
-            background: url('https://media-staging.changemyworldnow.com/f/63a92d7c12894d238fa2ceaf0611886a');
+            background: url('#{$media-url}63a92d7c12894d238fa2ceaf0611886a');
             background-repeat: no-repeat;
             background-size: cover;
             width: 30px;
