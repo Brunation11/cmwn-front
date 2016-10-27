@@ -214,7 +214,7 @@ export class Friends extends React.Component {
 }
 
 mapStateToProps = state => {
-    var data = {};
+    var data;
     var loading = true;
     var rowCount = 1;
     var currentPage = 1;

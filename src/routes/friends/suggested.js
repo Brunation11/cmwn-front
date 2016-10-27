@@ -203,7 +203,7 @@ export class Suggested extends React.Component{
 }
 
 mapStateToProps = state => {
-    var data = [];
+    var data;
     var currentUser = {};
     var loading = true;
     if (state.page && state.page.data != null &&
