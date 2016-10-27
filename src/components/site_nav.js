@@ -9,14 +9,10 @@ import Util from 'components/util';
 import { FAQs } from 'routes/help';
 
 var addHardcodedEntries = function (menuItems) {
-    var help = {url: '/help', label: 'Help'};
     menuItems.unshift({url: '/profile', label: 'Activities'});
 //    menuItems.push({url: `/user/${this.props.currentUser.user_id}/feed`, label: 'Feed'});
     menuItems.push({url: '/profile/edit', label: 'Edit My Profile'});
-    if (this.props.currentUser.type === 'CHILD') {
-        help.url = FAQs.student.href; // go directly to help PDF
-    }
-    menuItems.push(help);
+    menuItems.push({url: '/help', label: 'Help'});
     menuItems.push({url: '/logout', label: 'Logout'});
     return menuItems;
 };
@@ -105,22 +101,6 @@ var SiteNav = React.createClass({
         });
 
         return _.map(menuItems, item => {
-            var link = (
-                <Link
-                    to={item.url}
-                >
-                    {item.label}
-                </Link>
-            );
-            if (item.url.includes('http')) {
-                link = (
-                    <a
-                        href={item.url}
-                    >
-                        {item.label}
-                    </a>
-                );
-            }
             return (
                 <li
                     className={ClassNames({
@@ -128,7 +108,11 @@ var SiteNav = React.createClass({
                     })}
                     key={`(${item.label})-${item.url}`}
                 >
-                        {link}
+                    <Link
+                        to={item.url}
+                    >
+                        {item.label}
+                    </Link>
                 </li>
             );
         });
