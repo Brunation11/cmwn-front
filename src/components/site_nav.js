@@ -6,7 +6,6 @@ import ClassNames from 'classnames';
 import PublicRoutes from 'public_routes';
 import PrivateRoutes from 'private_routes';
 import Util from 'components/util';
-import { FAQs } from 'routes/help';
 
 import SKRIBBLE_LINK from 'media/skribble-link.png';
 
