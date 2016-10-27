@@ -28,13 +28,13 @@ export default class Flag extends React.Component {
         });
     }
 
-    componentDidMount() {
-        if (this.props.data) this.setState({data: this.props.data});
-    }
+    // componentDidMount() {
+    //     if (this.props.data) this.setState({data: this.props.data});
+    // }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.data && nextProps.data !== this.props.data) this.setState({data: nextProps.data});
-    }
+    // componentWillReceiveProps(nextProps) {
+    //     if (nextProps.data && nextProps.data !== this.props.data) this.setState({data: nextProps.data});
+    // }
 
     handleOptionSelect(e) {
         if (this.state.reason !== e.target.value) {
@@ -61,9 +61,9 @@ export default class Flag extends React.Component {
             url: `${GLOBALS.API_URL}flag`,
             handleErrors: false
         }, {
-            flaggee: this.state.data.friend_id,
+            flaggee: this.props.data.friend_id,
             reason: this.state.reason,
-            url: this.state.data.image
+            url: this.props.data.image
         }).then (() => {
             Toast.success(COPY.SUCCESS);
         }).catch (e => {
@@ -122,7 +122,7 @@ export default class Flag extends React.Component {
     }
 
     render() {
-        if (!this.state.data) return null;
+        if (!this.props.data) return null;
         return (
             <div className="flag-container">
                 <Modal
@@ -146,6 +146,3 @@ export default class Flag extends React.Component {
         );
     }
 }
-
-// endpoint requirements for what will be submitted = [flaggee user_id, reason, image_url]
-// keys for post = [flagger, flaggee, reason, url]
