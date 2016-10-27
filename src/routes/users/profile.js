@@ -34,7 +34,7 @@ const FLIP_SOURCE = GenerateDataSource('user_flip', PAGE_UNIQUE_IDENTIFIER);
 const HEADINGS = {
     ACTION: 'Profile',
     ARCADE: 'Activities',
-    TROPHYCASE: 'Trophycase'
+    FLIPBOARD: 'Flipboard'
 };
 
 const PLAY = 'Play Now!';
@@ -251,7 +251,7 @@ export class Profile extends React.Component {
                         </div>
                     </Panel>
                     <Panel
-                        header={HEADINGS.TROPHYCASE}
+                        header={HEADINGS.FLIPBOARD}
                         className={ClassNames('standard', {
                             hidden: !this.state.isStudent
                         })}
@@ -279,7 +279,7 @@ export class Profile extends React.Component {
                     </div>
                 </Panel>
                 <Panel
-                    header={HEADINGS.TROPHYCASE}
+                    header={HEADINGS.FLIPBOARD}
                     className={ClassNames('standard', {
                         hidden: !this.state.isStudent
                     })}
@@ -312,7 +312,7 @@ export class Profile extends React.Component {
                     </Modal.Body>
                 </Modal>
                 <Panel
-                    header={HEADINGS.TROPHYCASE}
+                    header={HEADINGS.FLIPBOARD}
                     className={ClassNames('standard', {
                         hidden: !this.state.isStudent
                     })}
