@@ -27,7 +27,7 @@ const IGNORED_ROUTES_FOR_CHILDREN = [
 ];
 
 const ROUTES_SPECIFIC_FOR_SUPER_USERS = [
-    'Flags'
+    'Flags',
 ];
 
 var buildMenuRoutes = function (links) {

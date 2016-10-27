@@ -27,6 +27,7 @@ import ChangePassword from 'routes/change_password';
 import NewsFeed from 'routes/newsfeed';
 import Flips from 'routes/users/flips';
 import FlagView from 'routes/flags';
+import AAYView from 'routes/aay_survey';
 
 var redirect = function (path) {
     return function (nextState, transition) {
@@ -99,7 +100,8 @@ var routes = [
         component: SuggestedFriends},
     { path: 'suggestedfriends(/)', onEnter: redirect('/friends/suggested')},
     { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed},
-    { path: '/flaggedimages(/)', title: 'Flagged Images', endpoint: '/flag', component: FlagView}
+    { path: '/flaggedimages(/)', title: 'Flagged Images', endpoint: '/flag', component: FlagView},
+    { path: 'all-about-you(/)', title: 'AAY Data', endpoint: '/game-data/all-about-you', component: AAYView},
 ];
 
 routes = _.map(routes, i => {
