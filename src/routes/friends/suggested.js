@@ -63,15 +63,6 @@ export class Suggested extends React.Component{
         });
     }
 
-    renderNoData(data) {
-        if (data == null) {
-            //render nothing before a request has been made
-            return null;
-        }
-        //render a nice message if the list is actually empty
-        return NO_DATA;
-    }
-
     renderRequestStatus(item) {
         return (
             <span
@@ -158,15 +149,24 @@ export class Suggested extends React.Component{
     }
 
     render() {
-        var self = this;
-        if (self.props.data == null || self.props.data.length === 0) {
+        if (this.props.data == null) {
             return (
                 <Layout
                     currentUser={this.props.currentUser}
                     className={PAGE_UNIQUE_IDENTIFIER}
                     navMenuId="navMenu"
                 >
-                    {self.renderNoData(self.props.data)}
+                    {null}
+                </Layout>
+            );
+        } else if (this.props.data.length === 0) {
+            return (
+                <Layout
+                    currentUser={this.props.currentUser}
+                    className={PAGE_UNIQUE_IDENTIFIER}
+                    navMenuId="navMenu"
+                >
+                    {NO_DATA}
                 </Layout>
             );
         }
@@ -203,11 +203,11 @@ export class Suggested extends React.Component{
 }
 
 mapStateToProps = state => {
-    var data = [];
+    var data;
     var currentUser = {};
     var loading = true;
-    if (state.page && state.page.data != null && state.page.data._embedded &&
-        state.page.data._embedded.suggest) {
+    if (state.page && state.page.data != null &&
+        state.page.data._embedded && state.page.data._embedded.suggest) {
         loading = state.page.loading;
         data = state.page.data._embedded.suggest;
     }

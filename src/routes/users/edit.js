@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import React from 'react';
 import _ from 'lodash';
-import {Button, Input, Panel, Modal} from 'react-bootstrap';
+import {Button, Input, Panel} from 'react-bootstrap';
 import { connect } from 'react-redux';
 import ClassNames from 'classnames';
 import Moment from 'moment';
@@ -275,14 +275,6 @@ export class EditProfile extends React.Component {
 // CURRENTLY UNUSED FUNCTIONS, VERIFY FOR FUTURE IMPLIMENTATION
 // ************************************************************
 
-    showModal() {
-        this.setState({generatorOn: true});
-    }
-
-    hideModal() {
-        this.setState({generatorOn: false});
-    }
-
     renderUsernameGenerator() {
         return (
             <div>HELLO WORLD</div>
@@ -408,12 +400,14 @@ export class EditProfile extends React.Component {
         return (
             <div>
                 <div className="username-container">
-                    <Button
-                        className="update-username-btn"
-                        onClick={this.showModal.bind(this)}
-                    >
-                        CHANGE
-                    </Button>
+                    <UpdateUsername
+                        className={ClassNames(
+                            'username-genetator', {
+                                hidden: this.props.currentUser.type !== 'CHILD'
+                            }
+                        )}
+                        currentUser={this.props.currentUser}
+                    />
                     <span className="username-display">
                         <h1 className="username-label">USERNAME</h1>
                         <span className="username">{this.state.username.toUpperCase()}</span>
@@ -439,25 +433,6 @@ export class EditProfile extends React.Component {
 
         return (
             <Layout currentUser={this.props.currentUser} className="edit-profile">
-                <Modal
-                    className="username-generator-modal"
-                    show={this.state.generatorOn}
-                    onHide={this.hideModal.bind(this)}
-                    keyboard={false}
-                    backdrop="static"
-                    id="username-genetator-modal"
-                >
-                    <Modal.Body>
-                        <UpdateUsername
-                            className="username-genetator"
-                            currentUser={this.props.currentUser}
-                        />
-                    <Button
-                        className="close-modal-btn"
-                        onClick={this.hideModal.bind(this)}
-                    />
-                    </Modal.Body>
-                </Modal>
                 <Panel
                     header={`${HEADINGS.EDIT_TITLE} ${this.state.first_name} ${this.state.last_name}`}
                     className="standard edit-profile"
@@ -468,7 +443,7 @@ export class EditProfile extends React.Component {
                             currentUser={this.props.currentUser}
                             link-below={true}
                         />
-                        <p className={ClassNames({hidden:
+                        <p className={ClassNames('action-link', {hidden:
                             !Util.decodePermissions(this.props.data.scope).delete})}>
                             <a onClick={this.suspendAccount.bind(this)}>{SUSPEND}</a>
                         </p>

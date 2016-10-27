@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import {Button, Modal} from 'react-bootstrap';
 import ClassNames from 'classnames';
 import _ from 'lodash';
 
@@ -16,18 +16,37 @@ const BAD_UPDATE = 'Could not update your user name to ';
 const CALL_TO_ACTION = '*CLICK YOUR PREFERRED USERNAME';
 
 const LABELS = {
-    CURRENT: 'CURRENT USERNAME:',
-    SAVE: 'STEP 3: DON\'T FORGET TO'
+    CURRENT: 'CURRENT USERNAME: ',
+    SAVE: 'STEP 3: DON\'T FORGET TO',
+    SELECT: 'CLICK YOUR PREFERRED USERNAME',
+    WELCOME: 'name generator',
+    INSTRUCTIONS_PT_1: 'NOT SURE HOW THIS WORKS?',
+    INSTRUCTIONS_PT_2: 'SWIPE FOR INSTRUCTIONS',
+    INSTRUCTIONS_PT_3: 'BACK TO HOME'
 };
 
 const BUTTONS = {
-    ORIGINAL: 'KEEP IT!'
+    ORIGINAL: 'KEEP IT!',
+    MOBILE_ORIGINAL: 'TAP TO KEEP IT',
+    STEP_TWO_PROMPT: 'GOOD JOB!',
+    STEP_TWO: 'CONTINUE TO STEP 2',
+    STEP_THREE_PROMPT: 'ALMOST DONE!',
+    STEP_THREE: 'CONTINUE TO STEP 3'
 };
 
 const COPY = {
     CONFIRM_NOTICE_1: 'You will not be able to',
     CONFIRM_NOTICE_2: 'get your old name again!',
-    LOGIN_NOTICE: 'Next time you will log in as:'
+    LOGIN_NOTICE: 'Next time you will log in as:',
+    INSTRUCTIONS_HEADER: 'How to use the name generator:',
+    INSTRUCTIONS_PT_1: '1. Tap the "Generate Name" button.',
+    INSTRUCTIONS_PT_2: 'A new username will appear in the box.',
+    INSTRUCTIONS_PT_3: 'Then tap the bottom arrow to go to step two.',
+    INSTRUCTIONS_PT_4: '2. You will then see your old username and the new one that was just generated.',
+    INSTRUCTIONS_PT_5: 'Tap the one you want, then go to step three.',
+    INSTRUCTIONS_PT_6: '3. Confirm which name you want to use.',
+    INSTRUCTIONS_PT_7: 'Remember: if you choose the new name, you can\'t get your old one back.'
+
 };
 
 export class UpdateUsername extends React.Component {
@@ -36,7 +55,8 @@ export class UpdateUsername extends React.Component {
 
         this.state = _.defaults({
             loading: false,
-            page: 'generator'
+            page: 'welcome',
+            generatorOn: false
         });
     }
 
@@ -91,7 +111,7 @@ export class UpdateUsername extends React.Component {
         HttpManager.POST({
             url: this.props.currentUser._links.user_name.href
         }, {
-            'user_name': this.state.option
+            'user_name': this.state.selected
         }).then(server => {
             this.setState({
                 username: server.response.username
@@ -107,6 +127,19 @@ export class UpdateUsername extends React.Component {
         });
     }
 
+    showModal() {
+        this.setState({generatorOn: true});
+    }
+
+    hideModal() {
+        this.setState({
+            generatorOn: false,
+            page: 'welcome',
+            option: null,
+            last: null
+        });
+    }
+
     handleSelect(username) {
         this.setState({
             selected: username
@@ -116,58 +149,49 @@ export class UpdateUsername extends React.Component {
     setOriginal() {
         this.setState({
             selected: this.state.original,
-            page: 'login-notice'
         });
+
+        this.setPage('login-notice');
     }
 
-    setNewUsername() {
+    setPage(page) {
         this.setState({
-            page: 'confirm'
+            page: page
         });
     }
 
-    renderGenerator() {
+    renderDesktopGenerator() {
         var self = this;
         return (
-            <div className={`update-username-container ${this.state.page}`}>
-                {/* loader */}
+            <div className={`desktop-update-username-container ${this.state.page}`}>
                 <div className={ClassNames('animated loading', {hidden: !self.state.loading})}>
                     <div className="loader" />
                 </div>
 
-                {/* Step 1 container */}
                 <div className="container step-1-container">
-                    {/* Step 1 icon */}
                     <span className="step-1">1</span>
-                    {/* Generated username field */}
                     <span className="generated">{self.state.option}</span>
-                    {/* Generate username button */}
                     <Button
                         className="generate-btn animated slideInDown"
                         onClick={self.reloadChildUsername.bind(self)}
                     />
                 </div>
 
-                {/* Current username container */}
                 <div className="container current-username-container">
-                    {/* Current username field */}
                     <span className="original-label">{LABELS.CURRENT}</span>
                     <span className="original">{self.state.original}</span>
-                    {/* Keep current username button */}
                     <Button
                         className="original-btn"
-                        onClick={self.setOriginal.bind(self)} //update function to render login notice
+                        onClick={self.setOriginal.bind(self)}
                     >
                         {BUTTONS.ORIGINAL}
                     </Button>
                 </div>
 
-                {/* Call to action container */}
                 <div className="container call-to-action-container">
                     <span className="call-to-action">{CALL_TO_ACTION}</span>
                 </div>
 
-                {/* Step 2 container */}
                 <div className="container step-2-container">
                     <Button
                         className={ClassNames(
@@ -197,16 +221,14 @@ export class UpdateUsername extends React.Component {
                     >
                         {self.state.last}
                     </Button>
-                    {/* Step 2 icon */}
                     <span className="step-2">2</span>
                 </div>
 
-                {/* Step 3 container */}
                 <div className="container step-3-container">
                     <span className="step-3">{LABELS.SAVE}</span>
                     <Button
                         className="save-btn"
-                        onClick={this.setNewUsername.bind(this)}
+                        onClick={this.setPage.bind(this, 'confirmation')}
                     />
                 </div>
 
@@ -214,9 +236,9 @@ export class UpdateUsername extends React.Component {
         );
     }
 
-    renderConfirmation() {
+    renderDesktopConfirmation() {
         return (
-            <div className={`confirmation-container ${this.state.page}`}>
+            <div className={`desktop-confirmation-container ${this.state.page}`}>
                 <img className="header" src={`${GLOBALS.MEDIA_URL}8aa292e3231eb77be37da7ae0225799e.png`} />
                 <span className="prompt">{COPY.CONFIRM_NOTICE_1}</span>
                 <span className="prompt">{COPY.CONFIRM_NOTICE_2}</span>
@@ -232,33 +254,240 @@ export class UpdateUsername extends React.Component {
         );
     }
 
+    renderWelcome() {
+        return (
+            <div className={`mobile-welcome-container ${this.state.page}`}>
+                <div className="welcome-container">
+                    <div className="content">
+                        <span className="prompt">{LABELS.WELCOME}</span>
+                        <Button
+                            className="start-btn"
+                            onClick={this.setPage.bind(this, 'generator')}
+                        />
+                    </div>
+                    <div className="instructions-prompt-container">
+                        <span className="prompt">{LABELS.INSTRUCTIONS_PT_1}</span>
+                        <span className="prompt">{LABELS.INSTRUCTIONS_PT_2}</span>
+                    </div>
+                </div>
+
+                <div className="instructions-container">
+                    <div className="instructions-prompt-container">
+                        <span className="prompt">{LABELS.INSTRUCTIONS_PT_3}</span>
+                    </div>
+                    <div className="instructions">
+                        <span className="copy-header">{COPY.INSTRUCTIONS_HEADER}</span>
+                        <span className="copy">{COPY.INSTRUCTIONS_PT_1}</span>
+                        <span className="copy">{COPY.INSTRUCTIONS_PT_2}</span>
+                        <span className="copy">{COPY.INSTRUCTIONS_PT_3}</span>
+                        <span className="copy">{COPY.INSTRUCTIONS_PT_4}</span>
+                        <span className="copy">{COPY.INSTRUCTIONS_PT_5}</span>
+                        <span className="copy">{COPY.INSTRUCTIONS_PT_6}</span>
+                        <span className="copy">{COPY.INSTRUCTIONS_PT_7}</span>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+    renderMobileGenerator() {
+        return (
+            <div className={`mobile-update-username-container ${this.state.page}`}>
+                <div className="content">
+                    <div className="container step-1-container">
+                        <div className="generated">{this.state.option}</div>
+                        <Button
+                            className="generate-btn animated slideInDown"
+                            onClick={this.reloadChildUsername.bind(this)}
+                        />
+                    </div>
+                </div>
+
+                <div className="next">
+                    <span className="label">{BUTTONS.STEP_TWO_PROMPT}</span>
+                    <span className="label">{BUTTONS.STEP_TWO}</span>
+                </div>
+
+                <Button
+                    className="next-btn"
+                    onClick={this.setPage.bind(this, 'select')}
+                />
+            </div>
+        );
+    }
+
+    renderMobileSelect() {
+        return (
+            <div className={`mobile-select-container ${this.state.page}`}>
+                <span className="prompt">{LABELS.SELECT}</span>
+                <div className="content">
+                    <Button
+                        className={ClassNames(
+                            'option',
+                            {
+                                selected: this.state.selected && this.state.selected === this.state.option
+                            }
+                        )}
+                        onClick={this.handleSelect.bind(this, this.state.option)}
+                    >
+                        {this.state.option}
+                    </Button>
+                    <Button
+                        className={ClassNames(
+                            'last',
+                            {
+                                selected: this.state.selected && this.state.selected === this.state.last,
+                            }
+                        )}
+                        onClick={this.handleSelect.bind(this, this.state.last)}
+                    >
+                        {this.state.last}
+                    </Button>
+                </div>
+                <Button
+                    className="prev-btn"
+                    onClick={this.setPage.bind(this, 'generator')}
+                />
+                <div className="next">
+                    <span className="label">{BUTTONS.STEP_TWO_PROMPT}</span>
+                    <span className="label">{BUTTONS.STEP_TWO}</span>
+                </div>
+                <Button
+                    className="next-btn"
+                    onClick={this.setPage.bind(this, 'confirmation')}
+                />
+            </div>
+
+        );
+    }
+
+    renderMobileConfirmation() {
+        return (
+            <div className={`mobile-confirmation-container ${this.state.page}`}>
+                <img className="header" src={`${GLOBALS.MEDIA_URL}8aa292e3231eb77be37da7ae0225799e.png`} />
+                <div className="prompt-container">
+                    <span className="prompt">{COPY.CONFIRM_NOTICE_1}</span>
+                    <span className="prompt">{COPY.CONFIRM_NOTICE_2}</span>
+                </div>
+                <div className="content">
+                    <Button
+                        className="original"
+                        onClick={this.setOriginal.bind(this)}
+                    >
+                        {this.state.original}
+                    </Button>
+                    <Button
+                        className="selected-option"
+                        onClick={this.setChildUsername.bind(this)}
+                    >
+                        {this.state.selected}
+                    </Button>
+                </div>
+            </div>
+        );
+    }
+
     renderLoginNotice() {
         return (
             <div className={`login-notice-container ${this.state.page}`}>
                 <img className="header" src={`${GLOBALS.MEDIA_URL}b9567bafdf9c186ccac49a3c32c45ae8.png`} />
                 <span className="prompt">{COPY.LOGIN_NOTICE}</span>
                 <span className="username">{this.state.username}</span>
+                <div className="content">
+                    <Button
+                        className="mobile-close-modal-btn"
+                        onClick={this.hideModal.bind(this)}
+                    />
+                </div>
+            </div>
+        );
+    }
+
+    renderDesktop() {
+        var page;
+
+        if (this.state.page === 'login-notice') {
+            page = this.renderLoginNotice;
+        } else if (this.state.page === 'confirmation') {
+            page = this.renderDesktopConfirmation;
+        } else {
+            page = this.renderDesktopGenerator;
+        }
+
+        return (
+            <div className="desktop">
+                {page.call(this)}
+                <Button
+                    className="close-modal-btn"
+                    onClick={this.hideModal.bind(this)}
+                />
+            </div>
+        );
+    }
+
+    renderMobile() {
+        var page;
+
+        if (this.state.page === 'login-notice') {
+            page = this.renderLoginNotice;
+        } else if (this.state.page === 'confirmation') {
+            page = this.renderMobileConfirmation;
+        } else if (this.state.page === 'select') {
+            page = this.renderMobileSelect;
+        } else if (this.state.page === 'generator') {
+            page = this.renderMobileGenerator;
+        } else {
+            page = this.renderWelcome;
+        }
+
+        return (
+            <div className={`mobile ${this.state.page}`}>
+                <Button
+                    className="close-modal-btn"
+                    onClick={this.hideModal.bind(this)}
+                >
+                    <span className="original-label">
+                        {LABELS.CURRENT}
+                        <span className="original">
+                            {this.state.original}
+                        </span>
+                    </span>
+                    <span className="prompt">{BUTTONS.MOBILE_ORIGINAL}</span>
+                </Button>
+                {page.call(this)}
             </div>
         );
     }
 
     render() {
-        var page;
-
-        if (this.state.page === 'confirm') {
-            page = this.renderConfirmation;
-        } else if (this.state.page === 'login-notice') {
-            page = this.renderLoginNotice;
-        } else {
-            page = this.renderGenerator;
-        }
-
         return (
-            page.call(this)
+            <div>
+                <Modal
+                    className={`username-generator-modal ${this.state.page}`}
+                    show={this.state.generatorOn}
+                    onHide={this.hideModal.bind(this)}
+                    keyboard={false}
+                    backdrop="static"
+                    id="username-genetator-modal"
+                >
+                    <Modal.Body>
+                        {this.renderDesktop.call(this)}
+                        {this.renderMobile.call(this)}
+                    </Modal.Body>
+                </Modal>
+
+                <Button
+                    className={`update-username-btn ${this.props.className}`}
+                    onClick={this.showModal.bind(this)}
+                >
+                    CHANGE
+                </Button>
+            </div>
         );
     }
 }
 
 export default UpdateUsername;
+
 
 
