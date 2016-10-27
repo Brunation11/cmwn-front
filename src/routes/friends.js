@@ -153,7 +153,17 @@ export class Friends extends React.Component {
     }
 
     render() {
-        if (this.props.data.length === 0) {
+        if (this.props.data == null) {
+            return (
+                <Layout
+                    currentUser={this.props.currentUser}
+                    className={PAGE_UNIQUE_IDENTIFIER}
+                    navMenuId="navMenu"
+                >
+                    {null}
+                </Layout>
+            );
+        } else if (this.props.data.length === 0) {
             return (
                 <Layout
                     currentUser={this.props.currentUser}
@@ -204,7 +214,7 @@ export class Friends extends React.Component {
 }
 
 mapStateToProps = state => {
-    var data = {};
+    var data;
     var loading = true;
     var rowCount = 1;
     var currentPage = 1;
