@@ -28,11 +28,7 @@ import NewsFeed from 'routes/newsfeed';
 import Flips from 'routes/users/flips';
 import FlagView from 'routes/flags';
 import AAYView from 'routes/aay_survey';
-<<<<<<< HEAD
-import ResourceCenter from 'routes/resource_center';
 import Help from 'routes/help';
-=======
->>>>>>> parent of 38233f1... Merge branch 'Annalise/resource-center_CORE-2339' into qa
 
 var redirect = function (path) {
     return function (nextState, transition) {
@@ -107,6 +103,7 @@ var routes = [
     { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed},
     { path: '/flaggedimages(/)', title: 'Flagged Images', endpoint: '/flag', component: FlagView},
     { path: 'all-about-you(/)', title: 'AAY Data', endpoint: '/game-data/all-about-you', component: AAYView},
+    { path: 'help(/)', title: 'Help', component: Help},
 ];
 
 routes = _.map(routes, i => {
