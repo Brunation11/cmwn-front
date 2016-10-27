@@ -149,7 +149,17 @@ export class Suggested extends React.Component{
     }
 
     render() {
-        if (this.props.data.length === 0) {
+        if (this.props.data == null) {
+            return (
+                <Layout
+                    currentUser={this.props.currentUser}
+                    className={PAGE_UNIQUE_IDENTIFIER}
+                    navMenuId="navMenu"
+                >
+                    {null}
+                </Layout>
+            );
+        } else if (this.props.data.length === 0) {
             return (
                 <Layout
                     currentUser={this.props.currentUser}
@@ -196,8 +206,8 @@ mapStateToProps = state => {
     var data = [];
     var currentUser = {};
     var loading = true;
-    if (state.page && state.page.data != null && state.page.data._embedded &&
-        state.page.data._embedded.suggest) {
+    if (state.page && state.page.data != null &&
+        state.page.data._embedded && state.page.data._embedded.suggest) {
         loading = state.page.loading;
         data = state.page.data._embedded.suggest;
     }
