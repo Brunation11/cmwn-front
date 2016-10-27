@@ -111,7 +111,7 @@ export class UpdateUsername extends React.Component {
         HttpManager.POST({
             url: this.props.currentUser._links.user_name.href
         }, {
-            'user_name': this.state.option
+            'user_name': this.state.selected
         }).then(server => {
             this.setState({
                 username: server.response.username
