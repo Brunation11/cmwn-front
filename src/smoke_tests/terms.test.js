@@ -5,6 +5,7 @@ import { mount } from 'enzyme';
 import { TermsPage, PAGE_UNIQUE_IDENTIFIER} from 'routes/terms';
 
 var termsSmokeTest = function () {
+    console.log('***************************' + PAGE_UNIQUE_IDENTIFIER);
     it('should load the terms page', function () {
         const WRAPPER = mount(<TermsPage />);
         expect(WRAPPER.instance()).to.be.instanceof(TermsPage);
