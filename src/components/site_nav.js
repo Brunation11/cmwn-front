@@ -6,10 +6,12 @@ import ClassNames from 'classnames';
 import PublicRoutes from 'public_routes';
 import PrivateRoutes from 'private_routes';
 import Util from 'components/util';
+import { FAQs } from 'routes/help';
 
 import SKRIBBLE_LINK from 'media/skribble-link.png';
 
 var addHardcodedEntries = function (menuItems) {
+    var help = {url: '/help', label: 'Help'};
     menuItems.unshift({
         url: '/play/skribble',
         uuid: 'Skribble',
@@ -19,6 +21,10 @@ var addHardcodedEntries = function (menuItems) {
     menuItems.push({url: `/user/${this.props.currentUser.user_id}/feed`, label: 'Feed'});
     menuItems.push({url: '/resources', label: 'Resource Center'});
     menuItems.push({url: '/profile/edit', label: 'Edit My Profile'});
+    if (this.props.currentUser.type === 'CHILD') {
+        help.url = FAQs.student.href; // go directly to help PDF
+    }
+    menuItems.push(help);
     menuItems.push({url: '/logout', label: 'Logout'});
     return menuItems;
 };
@@ -116,24 +122,37 @@ var SiteNav = React.createClass({
             }
         });
 
-
-        return _.map(menuItems, item => (
-            <li
-                className={ClassNames({
-                    'active-menu':
-                        sessionStorage.activeItem + '' !== 'undefined' && (
-                        sessionStorage.activeItem === item.label ||
-                        sessionStorage.activeItem === item.uuid)
-                })}
-                key={`(${item.label})-${item.url}`}
-            >
+        return _.map(menuItems, item => {
+            var link = (
                 <Link
                     to={item.url}
                 >
                     {item.label}
                 </Link>
-            </li>
-        ));
+            );
+            if (item.url.includes('http')) {
+                link = (
+                    <a
+                        href={item.url}
+                    >
+                        {item.label}
+                    </a>
+                );
+            }
+            return (
+              <li
+                  className={ClassNames({
+                      'active-menu':
+                          sessionStorage.activeItem + '' !== 'undefined' && (
+                          sessionStorage.activeItem === item.label ||
+                          sessionStorage.activeItem === item.uuid)
+                  })}
+                  key={`(${item.label})-${item.url}`}
+              >
+                        {link}
+                </li>
+            );
+        });
     },
     render: function () {
         return (

@@ -29,6 +29,7 @@ import Flips from 'routes/users/flips';
 import FlagView from 'routes/flags';
 import AAYView from 'routes/aay_survey';
 import ResourceCenter from 'routes/resource_center';
+import Help from 'routes/help';
 
 var redirect = function (path) {
     return function (nextState, transition) {
@@ -104,6 +105,7 @@ var routes = [
     { path: '/flaggedimages(/)', title: 'Flagged Images', endpoint: '/flag', component: FlagView},
     { path: 'all-about-you(/)', title: 'AAY Data', endpoint: '/game-data/all-about-you', component: AAYView},
     { path: 'resources(/)', component: ResourceCenter, endpoint: ''},
+    { path: 'help(/)', title: 'Help', component: Help},
 ];
 
 routes = _.map(routes, i => {
