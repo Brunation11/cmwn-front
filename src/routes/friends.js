@@ -133,7 +133,7 @@ class Friends extends React.Component {
         );
         if (this.props.data.length === 0) {
             return (
-                <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+                <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
                     {NO_FRIENDS}
                 </Layout>
             );
@@ -168,7 +168,7 @@ class Friends extends React.Component {
             </form>
         );
         return (
-            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+            <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
                 {FRIENDS}
             </Layout>
         );

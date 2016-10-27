@@ -13,6 +13,7 @@ $overlay-color: #fff;
         & > * { // scss-lint:disable UnnecessaryParentReference
             display: inline-block;
             padding: $standard;
+            vertical-align: top;
             text-align: center;
         }
         // nth-child styles for games tile
@@ -148,6 +149,8 @@ $overlay-color: #fff;
             margin: 5px auto 10px;
             max-width: 200px;
             text-align: center;
+            word-break: break-word;
+            word-wrap: break-word;
         }
     }
 }

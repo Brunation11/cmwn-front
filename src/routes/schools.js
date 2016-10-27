@@ -31,7 +31,7 @@ export class Schools extends React.Component {
 
     render() {
         return (
-            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+            <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
                 <FlipBoard
                     data={this.props.data}
                     header={TITLE}
@@ -46,12 +46,17 @@ export class Schools extends React.Component {
 mapStateToProps = state => {
     var data = [];
     var loading = true;
+    var currentUser;
     if (state.page && state.page.data && state.page.data._embedded && state.page.data._embedded.group) {
         loading = state.page.loading;
         data = state.page.data._embedded.group;
     }
+    if (state.currentUser != null){
+        currentUser = state.currentUser;
+    }
     return {
         data,
+        currentUser,
         loading
     };
 };
