@@ -62,7 +62,7 @@ export class EditDistrict extends React.Component{
             return null;
         }
         return (
-           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+           <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
               <Panel header={HEADINGS.EDIT_TITLE + this.props.data.title} className="standard">
                   <Link to={'/district/' + this.props.data.org_id}>Return to District Dashboard</Link>
                   <br />
@@ -159,12 +159,17 @@ export class CreateSchool extends React.Component{
 mapStateToProps = state => {
     var data = {title: ''};
     var loading = true;
+    var currentUser;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
     }
+    if (state.currentUser != null){
+        currentUser = state.currentUser;
+    }
     return {
         data,
+        currentUser,
         loading
     };
 };

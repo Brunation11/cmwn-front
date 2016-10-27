@@ -5,7 +5,7 @@ import Footer from 'components/footer';
 import EventManager from 'components/event_manager';
 
 var Layout = React.createClass({
-    getInitialProps: function () {
+    getDefaultProps: function () {
         return {
             rightPanel: this.props.rightPanel || (<div></div>)
         };
@@ -24,9 +24,13 @@ var Layout = React.createClass({
                 <div className="content">
                     {this.props.children}
                 </div>
-                <Sidebar menuIsOpen={this.menuIsOpen}/>
+                <Sidebar
+                    currentUser={this.props.currentUser}
+                    menuIsOpen={this.state.menuIsOpen}
+                    navMenuId={this.props.navMenuId}
+                />
                 {this.props.rightPanel()}}
-                <Footer />
+                <Footer loggedIn={this.props.currentUser && this.props.currentUser.username != null} />
              </div>
         );
     }

@@ -48,6 +48,7 @@ var Game = React.createClass({
     },
     getInitialState: function () {
         return {
+            isFullscreen: false,
             fullscreenFallback: false,
             demo: false
         };
@@ -63,6 +64,11 @@ var Game = React.createClass({
                 this.onExit
             )
         });
+        if (Screenfull.enabled) {
+            document.addEventListener(Screenfull.raw.fullscreenchange, () => {
+                this.setState({isFullscreen: Screenfull.isFullscreen});
+            });
+        }
     },
     componentDidMount: function () {
         var frame = ReactDOM.findDOMNode(this.refs.gameRef);
@@ -141,6 +147,7 @@ var Game = React.createClass({
         if (e.keyCode === 27 || e.charCode === 27) {
             Screenfull.exit();
             self.setState({
+                isFullscreen: false,
                 fullscreenFallback: false,
             });
         }
@@ -162,12 +169,14 @@ var Game = React.createClass({
         if (frame) frame.contentWindow.dispatchEvent(event);
     },
     makeFullScreen: function () {
+        var nextState = {isFullscreen: true};
         if (Screenfull.enabled) {
             Screenfull.request(ReactDOM.findDOMNode(this.refs.wrapRef));
         } else {
-            this.setState({fullscreenFallback: true});
+            nextState.fullscreenFallback = true;
             this.resizeFrame();
         }
+        this.setState(nextState);
     },
     checkForPortrait: function () {
         var isPortrait = (Detector.isMobileOrTablet() && Detector.isPortrait());
@@ -182,7 +191,7 @@ var Game = React.createClass({
             <div className={COMPONENT_IDENTIFIER}>
                 <div ref="wrapRef" className={ClassNames(
                     'game-frame-wrapper',
-                    {fullscreen: this.state.fullscreenFallback}
+                    {fs: this.state.isFullscreen, fullscreen: this.state.fullscreenFallback}
                 )}>
                     <div
                         ref="overlay"

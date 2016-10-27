@@ -1,5 +1,7 @@
 @import 'variables';
 
+$flip-width: 172px;
+
 .class-profile {
 
     .flip {
@@ -7,12 +9,16 @@
         img {
             transition: background-color 2s;
             background-color: $cmwn-purple;
-            width: 172px;
-            max-width: 172px;
+            width: $flip-width;
+            max-width: $flip-width;
 
             &:hover {
                 background-color: $cmwn-blue;
             }
+        }
+
+        p {
+            max-width: $flip-width;
         }
     }
 }
