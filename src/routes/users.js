@@ -130,7 +130,7 @@ var Component = React.createClass({
         var state = Store.getState();
         if (this.props.data.length === 0) {
             return (
-                <Layout>
+                <Layout currentUser={this.props.currentUser}>
                     <h2 className="placeholder">{NO_NETWORK}</h2>
                 </Layout>
             );
@@ -141,7 +141,7 @@ var Component = React.createClass({
             view = this.renderAdminView;
         }
         return (
-            <Layout className="user-list">
+            <Layout currentUser={this.props.currentUser} className="user-list">
                 {view()}
             </Layout>
         );
@@ -151,12 +151,17 @@ var Component = React.createClass({
 var mapStateToProps = state => {
     var data = {};
     var loading = true;
+    var currentUser;
     if (state.page && state.page.data && state.page.data._embedded && state.page.data._embedded.user) {
         loading = state.page.loading;
         data = state.page.data._embedded.user;
     }
+    if (state.currentUser != null){
+        currentUser = state.currentUser;
+    }
     return {
         data,
+        currentUser,
         loading
     };
 };

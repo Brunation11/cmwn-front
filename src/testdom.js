@@ -33,6 +33,9 @@ global.window.Rollbar = global.window.Rollbar || {
 	error: _.noop,
 	configure: _.noop
 };
+global.window.sessionStorage = {};
+global.window.sessionStorage.getItem = _.noop;
+global.window.sessionStorage.setItem = _.noop;
 
 global.window.grecaptcha = {
     render: function(container, params) {

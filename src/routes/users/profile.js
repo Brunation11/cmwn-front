@@ -186,7 +186,7 @@ export class Profile extends React.Component {
                         </span>
                         <div className={ClassNames('coming-soon', { hidden: !item.coming_soon})} />
                         <div className={ClassNames('desktop-only', { hidden: !meta.desktop})} />
-                        <object data={`${GLOBALS.GAME_URL}${item.game_id}/thumb.jpg`} type="image/png" >
+                        <object data={`${GLOBALS.GAME_URL}${item.game_id}/thumb.gif`} type="image/gif" >
                             <img src={FlipBgDefault}></img>
                         </object>
                     </div>
@@ -338,7 +338,11 @@ export class Profile extends React.Component {
         profile = this.state.user_id === this.props.currentUser.user_id ?
         this.renderCurrentUserProfile : this.renderUserProfile;
         return (
-           <Layout className={PAGE_UNIQUE_IDENTIFIER} navMenuId="navMenu">
+           <Layout
+               currentUser={this.props.currentUser}
+               className={PAGE_UNIQUE_IDENTIFIER}
+               navMenuId="navMenu"
+           >
                {profile.apply(this)}
            </Layout>
         );
