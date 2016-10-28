@@ -1,4 +1,4 @@
-Version - 0.3.24
+Version - 0.3.25
 ----
 
 - 61fac2f: removed non snorlax routes
