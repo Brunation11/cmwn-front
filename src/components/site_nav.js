@@ -29,7 +29,8 @@ var addHardcodedEntries = function (menuItems) {
 };
 
 const IGNORED_ROUTES_FOR_CHILDREN = [
-    'Friends and Network'
+    'Friends and Network',
+    'Profile'
 ];
 
 const ROUTES_SPECIFIC_FOR_SUPER_USERS = [
