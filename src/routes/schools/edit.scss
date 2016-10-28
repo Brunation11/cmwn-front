@@ -1,0 +1,27 @@
+.school-edit {
+    .upload-status {
+        position: relative;
+        overflow: hidden;
+
+        .statuslabel {
+            position: absolute;
+        }
+    }
+
+    .upload-status,
+    .dummyframe {
+        transition: max-height 2s;
+        padding-top: 15px;
+        max-height: 0;
+
+        &.open {
+            transition: max-height 2s;
+            max-height: 200px;
+
+            .dummyframe {
+                transition: max-height 2s;
+                max-height: 200px;
+            }
+        }
+    }
+}
