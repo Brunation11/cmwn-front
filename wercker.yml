@@ -101,8 +101,12 @@ deploy:
       name: Preparing release
       code: |-
         export SHORT_HASH=$(git log -n 1 --abbrev-commit | head -n 1 | sed -e 's/^commit //')
-        $PWD/bin/version_bump.sh --print-current
-        export VERSION="$($PWD/bin/version_bump.sh --print-current)-$SHORT_HASH"
+        export VERSION="$($PWD/bin/version_bump.sh --print-current)"
+        if [[ $DRAFT = true ]] then
+          echo "Is a Draft"
+          export VERSION="$VERSION-$SHORT_HASH"
+        fi
+        echo "$VERSION"
     - script:
       name: Installing pips
       code: |-
