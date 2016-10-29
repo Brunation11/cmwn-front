@@ -65,11 +65,7 @@ draft-release:
       name: Preparing release
       code: |-
         export SHORT_HASH=$(git log -n 1 --abbrev-commit | head -n 1 | sed -e 's/^commit //')
-        export VERSION="$($PWD/bin/version_bump.sh --print-current)"
-        if [[ $DRAFT = true ]] then
-          echo "Is a Draft"
-          export VERSION="$VERSION-$SHORT_HASH"
-        fi
+        export VERSION="$($PWD/bin/version_bump.sh --print-current)-$SHORT_HASH"
         echo "$VERSION"
         mkdir -p artifact
         mv build.zip artifact/platform-front-$VERSION.zip
@@ -94,18 +90,36 @@ draft-release:
       file: artifact/platform-front-$VERSION.zip
       filename: platform-front-$VERSION.zip
 
-deploy:
+deploy-draft:
   box: python:2.7
   steps:
     - script:
       name: Preparing release
       code: |-
         export SHORT_HASH=$(git log -n 1 --abbrev-commit | head -n 1 | sed -e 's/^commit //')
+        export VERSION="$($PWD/bin/version_bump.sh --print-current)-$SHORT_HASH"
+        echo "$VERSION"
+    - script:
+      name: Installing pips
+      code: |-
+        pip install boto3
+        export DEPLOY='true'
+    - script:
+      name: Running deploy
+      code: |-
+        echo "Deploying $DEPLOY_APP_NAME @ $VERSION to $DEPLOY_ENV"
+        python bin/deploy.py $VERSION $DEPLOY_APP_NAME $DEPLOY_ENV -v
+  after-steps:
+    - slack-notifier:
+      url: $SLACK_URL
+
+deploy:
+  box: python:2.7
+  steps:
+    - script:
+      name: Preparing release
+      code: |-
         export VERSION="$($PWD/bin/version_bump.sh --print-current)"
-        if [[ $DRAFT = true ]] then
-          echo "Is a Draft"
-          export VERSION="$VERSION-$SHORT_HASH"
-        fi
         echo "$VERSION"
     - script:
       name: Installing pips
