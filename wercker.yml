@@ -33,8 +33,7 @@ release:
     - script:
       name: Preparing release
       code: |-
-        export SHORT_HASH=$(git log -n 1 --abbrev-commit | head -n 1 | sed -e 's/^commit //')
-        export VERSION="$($PWD/bin/version_bump.sh --print-current)-$SHORT_HASH"
+        export VERSION="$($PWD/bin/version_bump.sh --print-current)"
         echo "$VERSION"
         mkdir -p artifact
         mv build.zip artifact/platform-front-$VERSION.zip
@@ -51,7 +50,7 @@ release:
       name: Creating release on github
       token: $MC_GITHUB_TOKEN
       tag: $VERSION
-      draft: true
+      draft: false
     - github-upload-asset:
       name: Adding build artifact to tag
       token: $MC_GITHUB_TOKEN
@@ -66,7 +65,11 @@ draft-release:
       name: Preparing release
       code: |-
         export SHORT_HASH=$(git log -n 1 --abbrev-commit | head -n 1 | sed -e 's/^commit //')
-        export VERSION="$($PWD/bin/version_bump.sh --print-current)-$SHORT_HASH"
+        export VERSION="$($PWD/bin/version_bump.sh --print-current)"
+        if [[ $DRAFT = true ]] then
+          echo "Is a Draft"
+          export VERSION="$VERSION-$SHORT_HASH"
+        fi
         echo "$VERSION"
         mkdir -p artifact
         mv build.zip artifact/platform-front-$VERSION.zip
