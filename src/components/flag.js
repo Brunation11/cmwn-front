@@ -28,14 +28,6 @@ export default class Flag extends React.Component {
         });
     }
 
-    // componentDidMount() {
-    //     if (this.props.data) this.setState({data: this.props.data});
-    // }
-
-    // componentWillReceiveProps(nextProps) {
-    //     if (nextProps.data && nextProps.data !== this.props.data) this.setState({data: nextProps.data});
-    // }
-
     handleOptionSelect(e) {
         if (this.state.reason !== e.target.value) {
             this.setState({
@@ -58,10 +50,9 @@ export default class Flag extends React.Component {
         }
 
         HttpManager.POST({
-            url: `${GLOBALS.API_URL}flag`,
-            handleErrors: false
+            url: `${GLOBALS.API_URL}flag`
         }, {
-            flaggee: this.props.data.friend_id,
+            flaggee: this.props.data.friend_id || this.props.data.suggest_id,
             reason: this.state.reason,
             url: this.props.data.image
         }).then (() => {
