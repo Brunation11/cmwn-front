@@ -56,7 +56,7 @@ export class ViewDistrict extends React.Component{
             return null;
         }
         return (
-            <Layout>
+            <Layout currentUser={this.props.currentUser}>
                 <Panel id="panel-1" header={HEADINGS.TITLE + this.props.data.title} className="standard">
                     <p className="right" >
                         <EditLink className="purple" text="Edit District" base="/district"

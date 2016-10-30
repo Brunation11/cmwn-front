@@ -52,7 +52,7 @@ export class EditClass extends React.Component {
             return null;
         }
         return (
-           <Layout>
+           <Layout currentUser={this.props.currentUser}>
               <Panel header={HEADINGS.EDIT_TITLE + this.props.data.title} className="standard">
                 <Link to={'/class/' + this.props.data.group_id + '/view'}>Return to Class Dashboard</Link>
                 <br />
