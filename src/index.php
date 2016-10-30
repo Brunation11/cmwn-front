@@ -27,7 +27,7 @@ if (!$https && $proxy !== 'https') {
         <style>
             @font-face {
                 font-family: "CMWNJadeRegular";
-                src: url("/fonts/cmwn.woff") format("woff");
+                src: url('https://media-staging.changemyworldnow.com/f/049b12512d27668decde968976466521.ttf') format('ttf');
             }
             @font-face{
                 font-family: "Source Sans Pro";
@@ -62,7 +62,7 @@ if (!$https && $proxy !== 'https') {
         <!-- endinject -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/humane-js/3.2.2/themes/flatty.min.css" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/sweetalert2/3.2.3/sweetalert2.min.css" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/5.0.7/sweetalert2.min.css" crossorigin="anonymous">
         <!-- inject:style -->
         <!-- endinject -->
         <!--[if IE]>
