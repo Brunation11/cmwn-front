@@ -59,7 +59,7 @@ class SurveyModal extends React.Component {
                 <a onClick={this.open}>
                     {`${HEADINGS.CLICK}${this.props.data.username}'s ${HEADINGS.DATA}`}
                 </a>
-                <Modal show={this.state.showModal} onHide={this.close}>
+                <Modal className="survey-modal" show={this.state.showModal} onHide={this.close}>
                     <Panel className="standard">
                         <div className="heading">
                             <a onClick={this.close} className="modal-close" title="close">X</a>
