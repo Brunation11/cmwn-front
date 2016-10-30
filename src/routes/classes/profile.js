@@ -54,7 +54,11 @@ export class Profile extends React.Component {
     }
     resolveRole() {
         var newState = {};
-        if (this.props.currentUser && this.props.currentUser.type !== 'CHILD') {
+        if (
+            this.props.currentUser &&
+            this.props.currentUser.type &&
+            this.props.currentUser.type.toLowerCase() !== 'child'
+        ) {
             newState.isStudent = false;
         } else {
             newState.isStudent = true;
@@ -92,8 +96,13 @@ export class Profile extends React.Component {
         );
     }
     renderClassInfo() {
-        if (this.state.group_id == null ||
-                (this.props.currentUser && this.props.currentUser.type.toLowerCase() === 'child')) {
+        if (
+            this.state.group_id == null || (
+                this.props.currentUser &&
+                this.props.currentUser.type &&
+                this.props.currentUser.type.toLowerCase() === 'child'
+            )
+        ) {
             return null;
         }
         return (
@@ -108,11 +117,11 @@ export class Profile extends React.Component {
         );
     }
     render() {
-        if (!this.props.data || !this.state) {
+        if (this.props.data == null) {
             return null;
         }
         return (
-           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+           <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
                {this.renderClassInfo()}
                <USER_SOURCE>
                     <FlipBoard

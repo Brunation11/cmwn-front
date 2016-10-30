@@ -99,7 +99,7 @@ export class View extends React.Component{
                     .page;
         }
         return (
-            <Layout>
+            <Layout currentUser={this.props.currentUser}>
                 <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard" id="panel-1">
                     <p className="right" id="editButton">
                         <EditLink className="purple" base="/class" id={this.state.group_id}
