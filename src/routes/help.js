@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Panel } from 'react-bootstrap';
 
 import Layout from 'layouts/two_col';
-import GLOBALS from 'components/globals';
 import LINKS from 'components/ib_links';
 
 export const PAGE_UNIQUE_IDENTIFIER = 'help';

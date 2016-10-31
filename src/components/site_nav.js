@@ -13,10 +13,10 @@ import SKRIBBLE_LINK from 'media/skribble-link.png';
 var helpLink = function () {
     var help = {url: '/help', label: 'Help'};
     if (this.props.currentUser.type === 'CHILD') {
-      help.url = LINKS.FAQS.STUDENT;
+        help.url = LINKS.FAQS.STUDENT;
     }
     return help;
-}
+};
 
 var addHardcodedEntries = function (menuItems) {
     menuItems.unshift({
@@ -150,7 +150,7 @@ var SiteNav = React.createClass({
                 >
                     {link}
                 </li>
-            )
+            );
         });
     },
     render: function () {
