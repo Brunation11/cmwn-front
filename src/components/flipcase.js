@@ -65,11 +65,16 @@ export default class Flipcase extends React.Component {
 
     render() {
         var renderFunction;
+        var header = COPY.HEADER;
 
         if (this.state && !this.state.flips.length) return null;
 
         if (this.props.render === 'all') renderFunction = this.renderAll;
         if (this.props.render === 'earned') renderFunction = this.renderEarned;
+
+        if (typeof this.props.user === 'string') {
+          header = `${this.props.user}'s Earned Flips:`;
+        }
 
         return (
             <div className={ClassNames(
@@ -80,10 +85,11 @@ export default class Flipcase extends React.Component {
                 }
             )}>
                 <span className="header">
-                    {COPY.HEADER}<strong>{this.state.flips.length}</strong>
+                    {header}<strong>{this.state.flips.length}</strong>
                 </span>
                 {renderFunction.call(this)}
             </div>
         );
     }
 }
+

@@ -261,6 +261,7 @@ export class Profile extends React.Component {
                                 type="trophycase"
                                 header={true}
                                 render="earned"
+                                user={this.state.username}
                             />
                         </FLIP_SOURCE>
                     </Panel>
