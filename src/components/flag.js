@@ -52,7 +52,7 @@ export default class Flag extends React.Component {
         HttpManager.POST({
             url: `${GLOBALS.API_URL}flag`
         }, {
-            flaggee: this.props.data.friend_id || this.props.data.suggest_id,
+            flaggee: this.props.data,
             reason: this.state.reason,
             url: this.props.data.image
         }).then (() => {
