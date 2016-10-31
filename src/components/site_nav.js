@@ -122,37 +122,24 @@ var SiteNav = React.createClass({
             }
         });
 
-        return _.map(menuItems, item => {
-            var link = (
+
+        return _.map(menuItems, item => (
+            <li
+                className={ClassNames({
+                    'active-menu':
+                        sessionStorage.activeItem + '' !== 'undefined' && (
+                        sessionStorage.activeItem === item.label ||
+                        sessionStorage.activeItem === item.uuid)
+                })}
+                key={`(${item.label})-${item.url}`}
+            >
                 <Link
                     to={item.url}
                 >
                     {item.label}
                 </Link>
-            );
-            if (item.url.includes('http')) {
-                link = (
-                    <a
-                        href={item.url}
-                    >
-                        {item.label}
-                    </a>
-                );
-            }
-            return (
-              <li
-                  className={ClassNames({
-                      'active-menu':
-                          sessionStorage.activeItem + '' !== 'undefined' && (
-                          sessionStorage.activeItem === item.label ||
-                          sessionStorage.activeItem === item.uuid)
-                  })}
-                  key={`(${item.label})-${item.url}`}
-              >
-                        {link}
-                </li>
-            );
-        });
+            </li>
+        ));
     },
     render: function () {
         return (

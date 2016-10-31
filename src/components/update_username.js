@@ -114,7 +114,8 @@ export class UpdateUsername extends React.Component {
             'user_name': this.state.selected
         }).then(server => {
             this.setState({
-                username: server.response.username
+                username: server.response.username,
+                original: server.response.username.slice(0, -3)
             });
             Toast.success(`${GOOD_UPDATE}${server.response.username}`);
         }).catch(err => {

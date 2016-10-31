@@ -91,7 +91,11 @@ export class AAYView extends React.Component {
 
     render() {
         return (
-            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+            <Layout
+                className={PAGE_UNIQUE_IDENTIFIER}
+                navMenuId="navMenu"
+                currentUser={this.props.currentUser}
+            >
                 {this.renderDataState()}
             </Layout>
         );
@@ -102,16 +106,19 @@ mapStateToProps = state => {
     var data = [];
     var loading = true;
     var links;
+    var currentUser = {};
     if (state.page && state.page.data && state.page.data._embedded && state.page.data._embedded.items) {
         loading = state.page.loading;
         data = state.page.data._embedded.items;
         links = state.page.data._links.self.href;
+        currentUser = state.currentUser;
     }
 
     return {
         data,
         loading,
-        links
+        links,
+        currentUser
     };
 };
 

@@ -1,38 +1,40 @@
 @import 'variables';
 
-.modal-dialog {
-    width: 90%;
-}
-
-.panel-body {
-    margin-left: 10px;
-
-    h4 {
-        color: $cmwn-blue;
-        font-family: $cmwn-jade-font;
+.survey-modal {
+    .modal-dialog {
+        width: 90%;
     }
 
-    ol {
-        list-style-type: decimal;
-        list-style-position: inside;
-    }
+    .panel-body {
+        margin-left: 10px;
 
-    .heading {
-        color: $cmwn-purple;
-        font-family: $cmwn-jade-font;
-
-        h1 {
-            text-align: center;
+        h4 {
+            color: $cmwn-blue;
+            font-family: $cmwn-jade-font;
         }
 
-        .modal-close {
-            float: right;
-            margin-top: -27px;
-            margin-right: -5px;
-            cursor: pointer;
-            text-decoration: none;
+        ol {
+            list-style-type: decimal;
+            list-style-position: inside;
+        }
+
+        .heading {
             color: $cmwn-purple;
-            font-size: 1rem;
+            font-family: $cmwn-jade-font;
+
+            h1 {
+                text-align: center;
+            }
+
+            .modal-close {
+                float: right;
+                margin-top: -27px;
+                margin-right: -5px;
+                cursor: pointer;
+                text-decoration: none;
+                color: $cmwn-purple;
+                font-size: 1rem;
+            }
         }
     }
 }
