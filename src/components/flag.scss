@@ -87,7 +87,8 @@
     }
 
     .radio-offensive,
-    .radio-inappropriate {
+    .radio-inappropriate,
+    .radio-other {
         display: none;
         position: absolute;
 
@@ -180,13 +181,13 @@
 
     .offensive .radio-offensive ~ span::before,
     .inappropriate .radio-inappropriate ~ span::before,
-    .other .control-label span::before {
+    .other .radio-other ~ span::before {
         background-color: $cmwn-dark-blue;
     }
 
     .offensive .radio-offensive ~ span::after,
     .inappropriate .radio-inappropriate ~ span::after,
-    .other .control-label span::after {
+    .other .radio-other ~ span::after, {
         opacity: 1;
     }
 }

@@ -29,7 +29,7 @@ export default class Flag extends React.Component {
     }
 
     handleOptionSelect(e) {
-        if (this.state.reason !== e.target.value) {
+        if (e.target.name === 'other' || this.state.reason !== e.target.value) {
             this.setState({
                 reason: e.target.value
             });
@@ -98,11 +98,21 @@ export default class Flag extends React.Component {
                     onChange={this.handleOptionSelect.bind(this)}
                 />
                 <Input
+                    type="radio"
+                    ref="other"
+                    name="other"
+                    className="radio-other"
+                    label={COPY.OTHER}
+                    value="other"
+                    checked={this.state.reason !== COPY.OFFENSIVE &&
+                        this.state.reason !== COPY.INAPPROPRIATE}
+                    onChange={this.handleOptionSelect.bind(this)}
+                />
+                <Input
                     type="textarea"
                     ref="other"
                     name="other"
                     className="input-other"
-                    label={COPY.OTHER}
                     placeholder="Type your concern here."
                     onChange={this.handleOptionSelect.bind(this)}
                 />
