@@ -6,6 +6,8 @@ var path = require('path');
 var webpack = require('webpack');
 var autoprefixer = require('autoprefixer');
 
+var scssGlobals = require('./scss_globals.js');
+
 module.exports = {
     devtool: 'cheap-source-map',
     resolve: {
@@ -40,7 +42,13 @@ module.exports = {
         },
         {
             test: /\.scss$/,
-            loaders: ['style', 'css', 'postcss', 'sass']
+            loaders: [
+                'style',
+                'css',
+                'postcss',
+                'sass',
+                'prepend?data=' + scssGlobals
+            ]
         },
         {
             test: /\.(jpe?g|png|gif|svg)$/i,

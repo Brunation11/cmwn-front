@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {Link} from 'react-router';
 import ClassNames from 'classnames';
 
 import SiteNav from 'components/site_nav';
@@ -20,9 +21,9 @@ class Sidebar extends React.Component {
         //offsetHeight cannot be accurately retrieved from reactdom
         /* istanbul ignore if*/
         if (
+            this.refs &&
             this.refs[USERNAMEREF] &&
             this.state.fontSize >= 12 &&
-            this.refs &&
             ReactDOM.findDOMNode(this.refs[USERNAMEREF]).offsetHeight > 2 * this.state.fontSize
         ) {
             this.setState({fontSize: this.state.fontSize - 1});
@@ -32,10 +33,10 @@ class Sidebar extends React.Component {
     componentWillUpdate(nextProps, nextState) {
         /* istanbul ignore if*/
         if (
+            this.refs &&
             this.refs[USERNAMEREF] &&
             this.state.fontSize >= 12 &&
             nextState.fontSize === this.state.fontSize &&
-            this.refs &&
             ReactDOM.findDOMNode(this.refs[USERNAMEREF]).offsetHeight > 2 * this.state.fontSize
         ) {
             this.setState({fontSize: this.state.fontSize - 1});
@@ -45,9 +46,9 @@ class Sidebar extends React.Component {
     componentDidUpdate() {
         /* istanbul ignore if*/
         if (
+            this.refs &&
             this.refs[USERNAMEREF] &&
             this.state.fontSize >= 12 &&
-            this.refs &&
             ReactDOM.findDOMNode(this.refs[USERNAMEREF]).offsetHeight > 2 * this.state.fontSize
         ) {
             this.setState({fontSize: this.state.fontSize - 1});
@@ -58,9 +59,9 @@ class Sidebar extends React.Component {
             <div>
                 <p className="welcome">{WELCOME}</p>
                 <p className={ClassNames('username')} style={{'fontSize': this.state.fontSize}}>
-                    <a ref={USERNAMEREF} Click={this.attemptNavigate}>
+                    <Link ref={USERNAMEREF} to="/profile" >
                         {this.props.currentUser.username}
-                    </a>
+                    </Link >
                 </p>
             </div>
         );

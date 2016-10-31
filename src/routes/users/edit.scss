@@ -4,7 +4,7 @@
 $halfway-break-1: 826px;
 $halfway-break-2: 540px;
 
-#cmwn-app .edit-student { // scss-lint:disable IdSelector
+#cmwn-app .edit-profile { // scss-lint:disable IdSelector
     .content,
     .panel {
         background: $cmwn-green;
@@ -44,6 +44,7 @@ $halfway-break-2: 540px;
         position: relative;
         border: 1px solid $cmwn-white;
         width: 45%;
+        text-align: center;
 
         &::before {
             position: absolute;
@@ -68,6 +69,11 @@ $halfway-break-2: 540px;
                 border-top: 2px dotted $cmwn-white;
                 content: '';
             }
+        }
+
+        .action-link {
+            position: relative;
+            z-index: 1;
         }
     }
 
@@ -107,6 +113,7 @@ $halfway-break-2: 540px;
         .update-username-btn {
             position: relative;
             float: right;
+            z-index: 1;
             border: 0;
             border-radius: 14px;
             box-shadow: -2px 2px 8px -3px $cmwn-black;
@@ -273,10 +280,10 @@ $halfway-break-2: 540px;
 
     .update-password-btn:hover,
     .update-password-btn:focus,
-    .update-password-btn:active,
-    .update-password-btn:active:focus {
+    .update-password-btn:active {
         outline: none;
         border: 0;
+        box-shadow: none;
         background-position: 1115px 398px;
     }
 

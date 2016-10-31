@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars, max-len */
 import _ from 'lodash';
 
 import Users from 'routes/users';
@@ -20,10 +21,14 @@ import Profile from 'routes/users/profile';
 import StudentEdit from 'routes/users/edit';
 import UserAdmin from 'routes/users/view';
 import Game from 'routes/game';
+import Play from 'routes/play';
 import Games from 'routes/games';
 import ChangePassword from 'routes/change_password';
 import NewsFeed from 'routes/newsfeed';
 import Flips from 'routes/users/flips';
+import FlagView from 'routes/flags';
+import AAYView from 'routes/aay_survey';
+import Help from 'routes/help';
 
 var redirect = function (path) {
     return function (nextState, transition) {
@@ -42,6 +47,7 @@ var routes = [
     { path: 'profile(/)', title: 'Profile', endpoint: '$$self', component: Profile},
     { path: 'games(/)', title: 'Games', component: Games},
     { path: 'game/:game(/)', title: 'Games', endpoint: '$$self', component: Game},
+    { path: 'play/:game(/)', title: 'Games', endpoint: '$$self', component: Play},
     { path: 'profile/edit(/)', title: 'Edit Profile', endpoint: '$$self', component: StudentEdit },
     { path: 'profile/:id/edit(/)', title: 'Edit Profile', endpoint: '/user/:id', component: StudentEdit },
     { path: 'profile/view(/)', title: 'User Admin', endpoint: '$$self', component: UserAdmin },
@@ -94,7 +100,10 @@ var routes = [
     { path: 'friends/suggested(/)', title: 'Suggested Friends', endpoint: '$$suggested_friends',
         component: SuggestedFriends},
     { path: 'suggestedfriends(/)', onEnter: redirect('/friends/suggested')},
-    { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed}
+    { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed},
+    { path: '/flaggedimages(/)', title: 'Flagged Images', endpoint: '/flag', component: FlagView},
+    { path: 'all-about-you(/)', title: 'AAY Data', endpoint: '/game-data/all-about-you', component: AAYView},
+    { path: 'help(/)', title: 'Help', component: Help},
 ];
 
 routes = _.map(routes, i => {

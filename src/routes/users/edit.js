@@ -14,7 +14,7 @@ import Layout from 'layouts/two_col';
 import GLOBALS from 'components/globals';
 // import Validate from 'components/validators';
 import Util from 'components/util';
-// import UpdateUsername from 'components/update_username';
+import UpdateUsername from 'components/update_username';
 import ProfileImage from 'components/profile_image';
 import Form from 'components/form';
 import DropdownDatepicker from 'components/dropdown_datepicker';
@@ -275,6 +275,12 @@ export class EditProfile extends React.Component {
 // CURRENTLY UNUSED FUNCTIONS, VERIFY FOR FUTURE IMPLIMENTATION
 // ************************************************************
 
+    renderUsernameGenerator() {
+        return (
+            <div>HELLO WORLD</div>
+        );
+    }
+
     renderEmail() {
         return (
             <Input
@@ -394,12 +400,14 @@ export class EditProfile extends React.Component {
         return (
             <div>
                 <div className="username-container">
-                    <Button
-                        className="update-username-btn"
-                        onClick={""}
-                    >
-                        CHANGE
-                    </Button>
+                    <UpdateUsername
+                        className={ClassNames(
+                            'username-genetator', {
+                                hidden: this.props.currentUser.type !== 'CHILD'
+                            }
+                        )}
+                        currentUser={this.props.currentUser}
+                    />
                     <span className="username-display">
                         <h1 className="username-label">USERNAME</h1>
                         <span className="username">{this.state.username.toUpperCase()}</span>
@@ -424,19 +432,18 @@ export class EditProfile extends React.Component {
         }
 
         return (
-            <Layout currentUser={this.props.currentUser} className="edit-student">
+            <Layout currentUser={this.props.currentUser} className="edit-profile">
                 <Panel
                     header={`${HEADINGS.EDIT_TITLE} ${this.state.first_name} ${this.state.last_name}`}
                     className="standard edit-profile"
                 >
-
                     <div className="left profile-image-container">
                         <ProfileImage
                             data={this.props.data}
                             currentUser={this.props.currentUser}
                             link-below={true}
                         />
-                        <p className={ClassNames({hidden:
+                        <p className={ClassNames('action-link', {hidden:
                             !Util.decodePermissions(this.props.data.scope).delete})}>
                             <a onClick={this.suspendAccount.bind(this)}>{SUSPEND}</a>
                         </p>
