@@ -1,6 +1,7 @@
 import React from 'react';
 import {Panel, ButtonGroup, Button, DropdownButton, MenuItem} from 'react-bootstrap';
 import _ from 'lodash';
+import Shortid from 'shortid';
 //import ClassNames from 'classnames';
 
 import GLOBALS from 'components/globals';
@@ -13,14 +14,24 @@ import 'components/paginator.scss';
 var _getButtonPattern = function (currentPage, pageCount) {
     var pattern;
     if (pageCount <= 5) {
+        //if there are less than 5 display em all
         pattern = _.map(Array(pageCount), (v, i) => i + 1);
-    } else if (currentPage === 1 && currentPage === pageCount) {
+    } else if (currentPage === 1 || currentPage === pageCount) {
+        //there are more than 5 pages, and we are on the first or last one
         pattern = [1, 2, '...', pageCount - 1, pageCount];
     } else if (currentPage === 2) {
+        //there are more than 5 and we are on the second
         pattern = [1, 2, 3, '...', 5];
+    } else if (pageCount === 6 && (currentPage === 3 || currentPage === 4)) {
+        //edge cases where we would end up displaying more ellipsis than just every option
+        pattern = [1, 2, 3, 4, 5, 6];
+    } else if (currentPage === 3) {
+        pattern = [1, 2, 3, 4, '...', 6];
     } else if (currentPage === pageCount - 1) {
+        //there are more than 5 and we are on the second to last
         pattern = [1, '...', pageCount - 2, pageCount - 1, pageCount];
     } else {
+        //were somewhere in the middle, so show our neighbor pages and the first and last
         pattern = [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', pageCount];
     }
     pattern.unshift('<');
@@ -76,13 +87,17 @@ var Paginator = React.createClass({
     renderPageSelectors: function () {
         var self = this;
         return _.map(_getButtonPattern(self.state.currentPage, self.state.pageCount), value => {
+            var className = '';
+            if (self.state.currentPage === value) {
+                className = 'active';
+            }
             if (value === '<') {
-                return (<Button key={value} onClick={self.selectPage.bind(self,
+                return (<Button key={Shortid.generate()} onClick={self.selectPage.bind(self,
                     Math.max(1, self.state.currentPage - 1), self.props.pagePaginator)}>{value}</Button>);
             } else if (value === '>') {
                 return (
                     <Button
-                        key={value}
+                        key={Shortid.generate()}
                         onClick={self.selectPage.bind(
                             self,
                             Math.min(self.state.pageCount, self.state.currentPage + 1),
@@ -93,10 +108,17 @@ var Paginator = React.createClass({
                     </Button>
                 );
             } else if (value === '...') {
-                return (<Button key={value} disabled={true}>{value}</Button>);
+                return (<Button key={Shortid.generate()} disabled={true}>{value}</Button>);
             } else {
-                return (<Button key={value} onClick={self.selectPage.bind(self, value,
-                    self.props.pagePaginator)}>{value}</Button>);
+                return (
+                    <Button
+                        className={className}
+                        key={Shortid.generate()}
+                        onClick={self.selectPage.bind(self, value, self.props.pagePaginator)}
+                    >
+                        {value}
+                    </Button>
+                );
             }
         });
     },
