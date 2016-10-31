@@ -10,6 +10,7 @@ import DeleteLink from 'components/delete_link';
 import {Table, Column} from 'components/table';
 import Util from 'components/util';
 import Paragraph from 'components/conditional_paragraph';
+import Paginator from 'components/paginator';
 import GenerateDataSource from 'components/datasource';
 
 export const PAGE_UNIQUE_IDENTIFIER = 'school-view';
@@ -110,59 +111,63 @@ export class SchoolView extends React.Component {
                 <Panel header={HEADINGS.CLASSES} className="standard">
                     <Link to={'/classes'} id="school-view-classes">View All Your Classes</Link>
                     <CLASS_SOURCE>
-                        <Table className="school-classes">
-                            <Column dataKey="title"
-                                renderCell={(data, row) => (
-                                    <Link to={`/class/${row.group_id}`}>
-                                        {_.startCase(data)}
-                                    </Link>
-                                )}
-                            />
-                            <Column dataKey="description" />
-                            <Column dataKey="title" renderHeader={HEADINGS.ADMIN}
-                                renderCell={(data, row) => (
-                                    <Link to={`/class/${row.group_id}/view`}>
-                                        {HEADINGS.ADMIN}
-                                    </Link>
-                                )}
-                            />
-                            <Column dataKey="title" renderHeader={HEADINGS.EDIT}
-                                renderCell={(data, row) => (
-                                    <Link to={`/class/${row.group_id}/edit`}>
-                                        {HEADINGS.EDIT}
-                                    </Link>
-                                )}
-                            />
-                        </Table>
+                        <Paginator>
+                            <Table className="school-classes">
+                                <Column dataKey="title"
+                                    renderCell={(data, row) => (
+                                        <Link to={`/class/${row.group_id}`}>
+                                            {_.startCase(data)}
+                                        </Link>
+                                    )}
+                                />
+                                <Column dataKey="description" />
+                                <Column dataKey="title" renderHeader={HEADINGS.ADMIN}
+                                    renderCell={(data, row) => (
+                                        <Link to={`/class/${row.group_id}/view`}>
+                                            {HEADINGS.ADMIN}
+                                        </Link>
+                                    )}
+                                />
+                                <Column dataKey="title" renderHeader={HEADINGS.EDIT}
+                                    renderCell={(data, row) => (
+                                        <Link to={`/class/${row.group_id}/edit`}>
+                                            {HEADINGS.EDIT}
+                                        </Link>
+                                    )}
+                                />
+                            </Table>
+                        </Paginator>
                     </CLASS_SOURCE>
                 </Panel>
                 <Panel header={HEADINGS.USERS} className="standard">
                     <Link to={'/users'} id="school-view-users">View All Your Users</Link>
                     <USER_SOURCE>
-                        <Table className="school-users">
-                            <Column dataKey="first_name" renderHeader="Name"
-                                renderCell={(data, row) => (
-                                    <Link to={`/user/${row.user_id}`}>
-                                        {row.first_name + ' ' + row.last_name}
-                                    </Link>
-                                )}
-                            />
-                            <Column dataKey="username" />
-                            <Column dataKey="title" renderHeader="Admin View"
-                                renderCell={(data, row) => (
-                                    <Link to={`/user/${row.user_id}/view`}>
-                                        Admin View
-                                    </Link>
-                                )}
-                            />
-                            <Column dataKey="title" renderHeader="Edit"
-                                renderCell={(data, row) => (
-                                    <Link to={`/user/${row.user_id}/edit`}>
-                                        Edit
-                                    </Link>
-                                )}
-                            />
-                        </Table>
+                        <Paginator rowCount={10} currentPage={1}>
+                            <Table className="school-users">
+                                <Column dataKey="first_name" renderHeader="Name"
+                                    renderCell={(data, row) => (
+                                        <Link to={`/user/${row.user_id}`}>
+                                            {row.first_name + ' ' + row.last_name}
+                                        </Link>
+                                    )}
+                                />
+                                <Column dataKey="username" />
+                                <Column dataKey="title" renderHeader="Admin View"
+                                    renderCell={(data, row) => (
+                                        <Link to={`/user/${row.user_id}/view`}>
+                                            Admin View
+                                        </Link>
+                                    )}
+                                />
+                                <Column dataKey="title" renderHeader="Edit"
+                                    renderCell={(data, row) => (
+                                        <Link to={`/user/${row.user_id}/edit`}>
+                                            Edit
+                                        </Link>
+                                    )}
+                                />
+                            </Table>
+                        </Paginator>
                     </USER_SOURCE>
                 </Panel>
            </Layout>
