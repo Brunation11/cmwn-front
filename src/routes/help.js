@@ -5,6 +5,8 @@ import { Panel } from 'react-bootstrap';
 import Layout from 'layouts/two_col';
 import LINKS from 'components/ib_links';
 
+import 'routes/help.scss';
+
 export const PAGE_UNIQUE_IDENTIFIER = 'help';
 
 var mapStateToProps;
@@ -33,7 +35,7 @@ export class Help extends React.Component {
 
     renderLink(data) {
         return (
-            <li><a href={data.href}>
+            <li><a href={data.href} target="_blank">
                 <h2>{data.label}</h2>
             </a></li>
         );
