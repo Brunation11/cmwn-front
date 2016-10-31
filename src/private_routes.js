@@ -26,6 +26,7 @@ import Games from 'routes/games';
 import ChangePassword from 'routes/change_password';
 import NewsFeed from 'routes/newsfeed';
 import Flips from 'routes/users/flips';
+import Help from 'routes/help';
 
 var redirect = function (path) {
     return function (nextState, transition) {
@@ -97,7 +98,8 @@ var routes = [
     { path: 'friends/suggested(/)', title: 'Suggested Friends', endpoint: '$$suggested_friends',
         component: SuggestedFriends},
     { path: 'suggestedfriends(/)', onEnter: redirect('/friends/suggested')},
-   // { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed}
+   // { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed},
+    { path: 'help(/)', title: 'Help', component: Help},
 ];
 
 routes = _.map(routes, i => {
