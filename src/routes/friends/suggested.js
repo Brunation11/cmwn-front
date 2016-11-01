@@ -133,11 +133,11 @@ export class Suggested extends React.Component{
 
     render() {
         var self = this;
-        if (self.props.data == null || self.props.data === []) {
-            return self.renderNoData();
-        }
-        return (
-           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+        var content;
+        if (self.props.data == null || !self.props.data.length) {
+            content = self.renderNoData(self.props.data);
+        } else {
+            content = (
                 <form>
                     <FlipBoard
                         renderFlip={this.renderFlip.bind(this)}
@@ -161,13 +161,21 @@ export class Suggested extends React.Component{
                         }}
                     />
                 </form>
+            );
+        }
+        return (
+           <Layout
+               className={PAGE_UNIQUE_IDENTIFIER}
+               currentUser={this.props.currentUser}
+           >
+               {content}
            </Layout>
         );
     }
 }
 
 mapStateToProps = state => {
-    var data = [];
+    var data = null;
     var currentUser = {};
     var loading = true;
     if (state.page && state.page.data != null && state.page.data._embedded &&

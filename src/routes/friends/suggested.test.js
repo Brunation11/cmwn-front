@@ -16,7 +16,6 @@ describe('test <Suggested /> component', function (){
     
     it('checks that all elements are present', function (){
         expect(WRAPPER.find('Layout')).to.have.length(1);
-        expect(WRAPPER.find('form')).to.have.length(1);
     });
 });
 
