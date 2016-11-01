@@ -96,7 +96,6 @@ Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
                     Errors.handle401(err);
                 });
             }).catch(err => {
-                Log.error(err);
                 Errors.handle401(err);
             })
         }
