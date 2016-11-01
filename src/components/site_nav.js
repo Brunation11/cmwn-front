@@ -9,6 +9,7 @@ import Util from 'components/util';
 
 var addHardcodedEntries = function (menuItems) {
     menuItems.unshift({url: '/profile', label: 'Activities'});
+    menuItems.push({url: '/resources', label: 'Resource Center'});
 //    menuItems.push({url: `/user/${this.props.currentUser.user_id}/feed`, label: 'Feed'});
     menuItems.push({url: '/profile/edit', label: 'Edit My Profile'});
     menuItems.push({url: '/logout', label: 'Logout'});
@@ -16,6 +17,7 @@ var addHardcodedEntries = function (menuItems) {
 };
 
 const IGNORED_ROUTES_FOR_CHILDREN = [
+    'Resource Center',
     'Friends and Network',
     'Profile'
 ];
@@ -77,9 +79,11 @@ var buildMenuRoutes = function (links) {
 
 var SiteNav = React.createClass({
     renderNavItems: function () {
-        var menuItems = buildMenuRoutes(this.props.data);
         var currentUrl;
+        var menuItems = buildMenuRoutes(this.props.data);
+        menuItems = addHardcodedEntries.call(this, menuItems);
         //manually hidden items for children
+
         menuItems = _.filter(menuItems, item => this.props.currentUser.type !== 'CHILD' || (
             this.props.currentUser.type === 'CHILD' &&
             !~IGNORED_ROUTES_FOR_CHILDREN.indexOf(item.label))
