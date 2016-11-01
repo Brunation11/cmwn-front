@@ -19,9 +19,7 @@ describe('test <Suggested /> component', function (){
         expect(WRAPPER.find('form')).to.have.length(1);
         expect(WRAPPER.find('FlipBoard')).to.have.length(1);
     });
-    it('checks that the layout still loads', function (){
-        expect(WRAPPER.find('Layout')).to.have.length(1);
-    });
+
 });
 
 describe('renders empty suggested friends', function (){
@@ -29,6 +27,9 @@ describe('renders empty suggested friends', function (){
     const WRAPPER = shallow(suggested);
     it('checks that a message is displayed when no suggested friends are present', function () {
         expect(WRAPPER.find('h2')).to.have.length(1);
+    });
+    it('checks that the layout still loads', function (){
+        expect(WRAPPER.find('Layout')).to.have.length(1);
     });
 });
 
