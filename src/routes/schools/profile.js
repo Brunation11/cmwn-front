@@ -23,7 +23,8 @@ const CLASS_SOURCE = GenerateDataSource('group_class', PAGE_UNIQUE_IDENTIFIER);
 const HEADINGS = {
     ALL_CLASSES: 'All Classes',
     MY_CLASSES: 'My Classes',
-    DISTRICTS: 'Member of Districts'
+    DISTRICTS: 'Member of Districts',
+    CLASS_ENDING: ' Classes'
 };
 
 const TEXT = {
@@ -121,7 +122,8 @@ export class SchoolProfile extends React.Component {
                    {this.props.data.description}
                </Panel>
                <CLASS_SOURCE>
-                   <FlipBoard renderFlip={this.renderFlip} header={HEADINGS.MY_CLASSES} />
+                   <FlipBoard renderFlip={this.renderFlip}
+                        header={`${this.props.data.title}${HEADINGS.CLASS_ENDING}`} />
                </CLASS_SOURCE>
            </Layout>
         );

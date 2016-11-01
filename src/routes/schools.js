@@ -29,15 +29,28 @@ export class Schools extends React.Component {
         );
     }
 
+
+    renderData() {
+        if (this.props.data === []) {
+            return (
+                <h2 className="placeholder">{NO_SCHOOLS}</h2>
+            );
+        }
+
+        return (
+            <FlipBoard
+                data={this.props.data}
+                header={TITLE}
+                renderFlip={this.renderFlip}
+                renderNoData={() => null}
+            />
+        );
+    }
+
     render() {
         return (
             <Layout className={PAGE_UNIQUE_IDENTIFIER}>
-                <FlipBoard
-                    data={this.props.data}
-                    header={TITLE}
-                    renderFlip={this.renderFlip}
-                    renderNoData={() => (<h2 className="placeholder">{NO_SCHOOLS}</h2>)}
-                />
+                {this.renderData()}
             </Layout>
         );
     }
