@@ -72,7 +72,10 @@ export default function (endpointIdentifier, componentName) {
             // transformation will only be
             // applied on new data
             propsForChild = Immutable(props)
-                .set('rowCount', this.props.component.page_size || this.props.rowCount || GLOBALS.DEFAULT_PAGINATION_ROWS)
+                .set(
+                    'rowCount',
+                    this.props.component.page_size || this.props.rowCount || GLOBALS.DEFAULT_PAGINATION_ROWS
+                )
                 .set('currentPage', this.props.component.page || this.props.currentPage || 1)
                 .set('pageCount', this.props.component.page_count || this.props.pageCount || 1)
                 .set('componentName', this.props.componentName)
