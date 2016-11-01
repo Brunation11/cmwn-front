@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import Actions from 'components/actions';
 import Store from 'components/store';
 import Util from 'components/util';
+import GLOBALS from 'components/globals';
 
 var mapStateToProps;
 
@@ -71,6 +72,12 @@ export default function (endpointIdentifier, componentName) {
             // transformation will only be
             // applied on new data
             propsForChild = Immutable(props)
+                .set(
+                    'rowCount',
+                    this.props.component.page_size || this.props.rowCount || GLOBALS.DEFAULT_PAGINATION_ROWS
+                )
+                .set('currentPage', this.props.component.page || this.props.currentPage || 1)
+                .set('pageCount', this.props.component.page_count || this.props.pageCount || 1)
                 .set('componentName', this.props.componentName)
                 .set('endpointIdentifier', this.props.endpointIdentifier);
             return (
@@ -89,7 +96,7 @@ export default function (endpointIdentifier, componentName) {
     };
 
     mapStateToProps = state => {
-        var component;
+        var component = {};
         var data = {};
         var loading = true;
         if (state.components && state.components[endpointIdentifier + '-' + componentName]) {
