@@ -69,7 +69,7 @@ export class ResourceCenter extends React.Component {
     render() {
         if (this.props.currentUser && this.props.currentUser.type === 'ADULT') {
             return (
-                <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+                <Layout className={PAGE_UNIQUE_IDENTIFIER} currentUser={this.props.currentUser}>
                     <Panel header={TITLE} className="standard">
                         <h1>CURRICULUM</h1>
                         <ul>
