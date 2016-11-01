@@ -29,24 +29,24 @@ var schoolsSmokeTests = function () {
     describe('when viewed by a student', function () {
         it('should load all schools', function () {
             const WRAPPER = createWrapper(studentData._embedded.group);
-            console.log('student wrapper');
-            console.log(WRAPPER.debug());
+            //console.log('student wrapper');
+            //console.log(WRAPPER.debug());
             checkContents(WRAPPER, studentData._embedded.group);
         });
     });
     describe('when viewed by a teacher', function () {
         it('should load all schools', function () {
             const WRAPPER = createWrapper(teacherData._embedded.group);
-            console.log('teacher wrapper');
-            console.log(WRAPPER.debug());
+            //console.log('teacher wrapper');
+            //console.log(WRAPPER.debug());
             checkContents(WRAPPER, teacherData._embedded.group);
         });
     });
     describe('when viewed by a principal', function () {
         it('should load all schools', function () {
             const WRAPPER = createWrapper(principalData._embedded.group);
-            console.log('principal wrapper');
-            console.log(WRAPPER.debug());
+            //console.log('principal wrapper');
+            //console.log(WRAPPER.debug());
             checkContents(WRAPPER, principalData._embedded.group);
         });
     });
