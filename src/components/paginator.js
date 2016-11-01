@@ -13,8 +13,11 @@ import 'components/paginator.scss';
 
 var _getButtonPattern = function (currentPage, pageCount) {
     var pattern;
-    if (pageCount <= 5) {
-        //if there are less than 5 display em all
+    //general approach here is to display the first and last pages at all times, and then
+    //show the current, previous and next, and sensibly link them with ellipses
+    //this results in having between 5 and 7 buttons at any given time.
+    if (pageCount <= 6) {
+        //if there are less than 6 display em all
         pattern = _.map(Array(pageCount), (v, i) => i + 1);
     } else if (currentPage === 1 || currentPage === pageCount) {
         //there are more than 5 pages, and we are on the first or last one
@@ -22,16 +25,19 @@ var _getButtonPattern = function (currentPage, pageCount) {
     } else if (currentPage === 2) {
         //there are more than 5 and we are on the second
         pattern = [1, 2, 3, '...', 5];
-    } else if (pageCount === 6 && (currentPage === 3 || currentPage === 4)) {
-        //edge cases where we would end up displaying more ellipsis than just every option
-        pattern = [1, 2, 3, 4, 5, 6];
     } else if (currentPage === 3) {
+        // 3 and n-2 are special cases requiring 6 elements to sensibly display
+        // 3 case
         pattern = [1, 2, 3, 4, '...', 6];
+    } else if (currentPage === pageCount - 2) {
+        // n-2 case
+        pattern = [1, '...', pageCount - 3, pageCount - 2, pageCount - 1, pageCount];
     } else if (currentPage === pageCount - 1) {
         //there are more than 5 and we are on the second to last
         pattern = [1, '...', pageCount - 2, pageCount - 1, pageCount];
     } else {
-        //were somewhere in the middle, so show our neighbor pages and the first and last
+        //we're somewhere in the middle, so show our neighbor pages and the first and last
+        //this is the most complex case, so it requires 7 buttons
         pattern = [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', pageCount];
     }
     pattern.unshift('<');

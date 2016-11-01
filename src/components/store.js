@@ -117,8 +117,11 @@ var pageReducer = (page = Immutable({title: 'Change My World Now'}), action) => 
             page_ = page_.set('data', action_.data);
             return page_;
         }.bind(null, page, action),
-        [ACTION_CONSTANTS.END_GET_NEXT_PAGE_PAGE]: function (page_, action_) {
-            page_ = page_.set('data', action_.data);
+        [ACTION_CONSTANTS.END_GET_NEXT_PAGE_PAGE_FULFILLED]: function (page_, action_) {
+            page_ = page_.set('data',
+                action.data ||
+                action_.payload.response
+            );
             return page_;
         }.bind(null, page, action),
         [ACTION_CONSTANTS.END_CHANGE_PAGE_ROW_COUNT]: function (page_, action_) {

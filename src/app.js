@@ -416,7 +416,7 @@ var hashCode = function (s){
 // MPR, 8/19/16: note, switching this to scrub and only report errors in all environments
 // uncomment the conditional outside this comment to reenable it, or use the
 // window.__cmwn.interactiveDebug function in the console to reenable it temporarily
-Rollbar.configure({scrubFields: ['first_name', 'last_name', 'meta', 'email', 'birthdate'],
+Rollbar.configure({scrubFields: ['first_name', 'last_name', 'meta', 'email', 'birthdate', '_embedded', 'data'],
     reportLevel: 'error'}); //eslint-disable-line no-undef
 //}
 //Dynamic rollbar configuration for throttling. Static configuration happens in index.php
