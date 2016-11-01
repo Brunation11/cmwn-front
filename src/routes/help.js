@@ -3,51 +3,51 @@ import { connect } from 'react-redux';
 import { Panel } from 'react-bootstrap';
 
 import Layout from 'layouts/two_col';
-import GLOBALS from 'components/globals';
+import LINKS from 'components/ib_links';
+
+import 'routes/help.scss';
 
 export const PAGE_UNIQUE_IDENTIFIER = 'help';
 
 var mapStateToProps;
 var Page;
 
+const HEADER = 'Frequently Asked Questions';
 const FAQS = {
     STUDENT: {
         label: 'Student FAQ',
-        href: `${GLOBALS.MEDIA_URL}/ad969fcf71ecda4f1e5a72f05863bf37.pdf`,
+        href: LINKS.FAQS.STUDENT,
         type: 'student',
     },
     TEACHER: {
         label: 'Teacher FAQ',
-        href: `${GLOBALS.MEDIA_URL}/09258b65b267583dbd0eedc434d5b11f.pdf`,
+        href: LINKS.FAQS.TEACHER,
         type: 'teacher',
     },
     ADMIN: {
         label: 'School Admin FAQ',
-        href: `${GLOBALS.MEDIA_URL}/15d775ce44bc7dec5e8c74333ef7c93b.pdf`,
+        href: LINKS.FAQS.ADMIN,
         type: 'admin',
     },
 };
 
 export class Help extends React.Component {
-    componentWillReceiveProps(props) {
-        if (props.currentUser && props.currentUser.type === 'CHILD') {
-            window.location.replace(FAQS.STUDENT.href);
-        }
-    }
+
     renderLink(data) {
         return (
-            <li><a href={data.href}>
+            <li><a href={data.href} target="_blank">
                 <h2>{data.label}</h2>
             </a></li>
         );
     }
+
     render() {
         if (!this.props || !this.props.currentUser || this.props.currentUser.type === 'CHILD') {
             return null;
         }
         return (
             <Layout className={PAGE_UNIQUE_IDENTIFIER} currentUser={this.props.currentUser}>
-                <Panel header="HELP" className="standard">
+                <Panel header={HEADER} className="standard">
                     <ul>
                         {this.renderLink(FAQS.STUDENT)}
                         {this.renderLink(FAQS.TEACHER)}
