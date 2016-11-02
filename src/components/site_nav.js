@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router';
 import _ from 'lodash';
+import Shortid from 'shortid';
 
 import ClassNames from 'classnames';
 import PublicRoutes from 'public_routes';
@@ -16,14 +17,20 @@ var addHardcodedEntries = function (menuItems) {
         label: <img src={SKRIBBLE_LINK} alt="Skribble" />
     });
     menuItems.unshift({url: '/profile', label: 'Activities'});
-//    menuItems.push({url: `/user/${this.props.currentUser.user_id}/feed`, label: 'Feed'});
+    menuItems.push({url: '/resources', label: 'Resource Center'});
+    menuItems.push({url: `/user/${this.props.currentUser.user_id}/feed`, label: 'Feed'});
     menuItems.push({url: '/profile/edit', label: 'Edit My Profile'});
     menuItems.push({url: '/logout', label: 'Logout'});
     return menuItems;
 };
 
 const IGNORED_ROUTES_FOR_CHILDREN = [
+    'Resource Center',
     'Friends and Network',
+    'Flags'
+];
+
+const IGNORED_ROUTES_FOR_EVERYONE = [
     'Profile'
 ];
 
@@ -84,14 +91,18 @@ var buildMenuRoutes = function (links) {
 
 var SiteNav = React.createClass({
     renderNavItems: function () {
-        var menuItems = buildMenuRoutes(this.props.data);
         var currentUrl;
+        var menuItems = buildMenuRoutes(this.props.data);
         //manually hidden items for children
-        menuItems = _.filter(menuItems, item => this.props.currentUser.type !== 'CHILD' || (
-            this.props.currentUser.type === 'CHILD' &&
-            !~IGNORED_ROUTES_FOR_CHILDREN.indexOf(item.label))
-        );
         menuItems = addHardcodedEntries.call(this, menuItems);
+
+        menuItems = _.filter(menuItems, item =>
+            !~IGNORED_ROUTES_FOR_EVERYONE.indexOf(item.label) && (
+                this.props.currentUser.type !== 'CHILD' || (
+                    this.props.currentUser.type === 'CHILD' &&
+                    !~IGNORED_ROUTES_FOR_CHILDREN.indexOf(item.label))
+            )
+        );
 
         if (sessionStorage == null) {
             return null;
@@ -118,7 +129,7 @@ var SiteNav = React.createClass({
                         sessionStorage.activeItem === item.label ||
                         sessionStorage.activeItem === item.uuid)
                 })}
-                key={`(${item.label})-${item.url}`}
+                key={Shortid.generate()}
             >
                 <Link
                     to={item.url}
