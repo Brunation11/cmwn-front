@@ -19,7 +19,8 @@ var addHardcodedEntries = function (menuItems) {
 
 const IGNORED_ROUTES_FOR_CHILDREN = [
     'Resource Center',
-    'Friends and Network'
+    'Friends and Network',
+    'Flags'
 ];
 
 const IGNORED_ROUTES_FOR_EVERYONE = [
@@ -86,6 +87,7 @@ var SiteNav = React.createClass({
         var currentUrl;
         var menuItems = buildMenuRoutes(this.props.data);
         //manually hidden items for children
+        menuItems = addHardcodedEntries.call(this, menuItems);
 
         menuItems = _.filter(menuItems, item =>
             !~IGNORED_ROUTES_FOR_EVERYONE.indexOf(item.label) && (
@@ -94,7 +96,6 @@ var SiteNav = React.createClass({
                     !~IGNORED_ROUTES_FOR_CHILDREN.indexOf(item.label))
             )
         );
-        menuItems = addHardcodedEntries.call(this, menuItems);
 
         if (sessionStorage == null) {
             return null;

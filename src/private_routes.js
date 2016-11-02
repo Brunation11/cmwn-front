@@ -26,7 +26,7 @@ import ChangePassword from 'routes/change_password';
 import NewsFeed from 'routes/newsfeed';
 import Flips from 'routes/users/flips';
 import ResourceCenter from 'routes/resource_center';
-//import FlagView from 'routes/flagging';
+import FlagView from 'routes/flags';
 
 var redirect = function (path) {
     return function (nextState, transition) {
@@ -99,7 +99,7 @@ var routes = [
     { path: 'suggestedfriends(/)', onEnter: redirect('/friends/suggested')},
     { path: 'resources(/)', component: ResourceCenter, endpoint: ''},
     { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed},
-    //{ path: '/flaggedimages(/)', title: 'Flagged Images', endpoint: '/flag', component: FlagView}
+    { path: '/flaggedimages(/)', title: 'Flagged Images', endpoint: '/flag', component: FlagView}
 ];
 
 routes = _.map(routes, i => {
