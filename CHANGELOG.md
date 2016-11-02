@@ -5,11 +5,6 @@ Version - 0.3.24
 - fe98df2: Version bump [ci skip]
 - 6009a6c: updated alpha logo to beta
 
-Version - 0.3.20
-----
-
-- a52c741: Version bump [ci skip]
-
 Version - 0.3.23
 ----
 
@@ -36,7 +31,6 @@ Version - 0.3.21
 - 7c71703: remove default from export declaration on class. remove on error props for images
 - 6d8aa6f: update style rules, refactor for linter
 - dd5554a: Version bump [ci skip]
-
 
 Version - 0.3.20
 ----

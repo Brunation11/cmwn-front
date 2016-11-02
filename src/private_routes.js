@@ -26,6 +26,7 @@ import ChangePassword from 'routes/change_password';
 import NewsFeed from 'routes/newsfeed';
 import Flips from 'routes/users/flips';
 import ResourceCenter from 'routes/resource_center';
+//import FlagView from 'routes/flagging';
 
 var redirect = function (path) {
     return function (nextState, transition) {
@@ -56,8 +57,8 @@ var routes = [
     { path: 'users/:id/view(/)', onEnter: redirect('/profile/:id/view') },
     { path: 'user/:id/edit(/)', onEnter: redirect('/profile/:id/edit')},
     { path: 'users/:id/edit(/)', onEnter: redirect('/profile/:id/edit')},
-   // { path: '/trophycase(/)', title: 'Flips', endpoint: '/flip', component: Flips},
-   // { path: 'user/:id/trophycase(/)', title: 'My Earned Flips', endpoint: '/user/:id/flip', component: Flips},
+    { path: '/trophycase(/)', title: 'Flips', endpoint: '/flip', component: Flips},
+    { path: 'user/:id/trophycase(/)', title: 'My Earned Flips', endpoint: '/user/:id/flip', component: Flips},
     { path: 'student/:id(/)', title: 'Profile', endpoint: 'user/:id', component: Profile},
     { path: 'profile/:id(/)', title: 'Profile', endpoint: 'user/:id', component: Profile},
     { path: 'student/edit(/)', title: 'Edit Student', endpoint: '$$me', component: StudentEdit },
@@ -97,7 +98,8 @@ var routes = [
         component: SuggestedFriends},
     { path: 'suggestedfriends(/)', onEnter: redirect('/friends/suggested')},
     { path: 'resources(/)', component: ResourceCenter, endpoint: ''},
-   // { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed},
+    { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed},
+    //{ path: '/flaggedimages(/)', title: 'Flagged Images', endpoint: '/flag', component: FlagView}
 ];
 
 routes = _.map(routes, i => {
