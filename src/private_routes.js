@@ -28,6 +28,7 @@ import NewsFeed from 'routes/newsfeed';
 import Flips from 'routes/users/flips';
 import ResourceCenter from 'routes/resource_center';
 import FlagView from 'routes/flags';
+import Help from 'routes/help';
 
 var redirect = function (path) {
     return function (nextState, transition) {
@@ -101,6 +102,7 @@ var routes = [
     { path: 'suggestedfriends(/)', onEnter: redirect('/friends/suggested')},
     { path: 'resources(/)', component: ResourceCenter, endpoint: ''},
     { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed},
+    { path: 'help(/)', title: 'Help', component: Help},
     { path: '/flaggedimages(/)', title: 'Flagged Images', endpoint: '/flag', component: FlagView}
 ];
 
