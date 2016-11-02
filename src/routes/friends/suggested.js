@@ -28,6 +28,7 @@ const ADD_FRIEND = 'Add Friend';
 const REQUESTED = 'Request Sent';
 const ACCEPT = 'Accept';
 const PROFILE = 'View Profile';
+
 const PAGE_UNIQUE_IDENTIFIER = 'suggested-friends';
 
 var mapStateToProps;
@@ -67,6 +68,7 @@ export class Suggested extends React.Component{
             </h2>
         );
     }
+
     renderRequestStatus(item) {
         return (
             <span

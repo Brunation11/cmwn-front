@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router';
 import _ from 'lodash';
+import Shortid from 'shortid';
 
 import ClassNames from 'classnames';
 import PublicRoutes from 'public_routes';
@@ -25,6 +26,7 @@ var addHardcodedEntries = function (menuItems) {
         label: <img src={SKRIBBLE_LINK} alt="Skribble" />
     });
     menuItems.unshift({url: '/profile', label: 'Activities'});
+    menuItems.push({url: '/resources', label: 'Resource Center'});
     menuItems.push({url: `/user/${this.props.currentUser.user_id}/feed`, label: 'Feed'});
     menuItems.push({url: '/profile/edit', label: 'Edit My Profile'});
     menuItems.push(helpLink.call(this));
@@ -35,6 +37,10 @@ var addHardcodedEntries = function (menuItems) {
 const IGNORED_ROUTES_FOR_CHILDREN = [
     'Resource Center',
     'Friends and Network',
+    'Flags'
+];
+
+const IGNORED_ROUTES_FOR_EVERYONE = [
     'Profile'
 ];
 
@@ -102,10 +108,17 @@ var SiteNav = React.createClass({
         var menuItems = buildMenuRoutes(this.props.data);
         var currentUrl;
         var permissions = Util.decodePermissions(this.props.currentUser.scope);
+
+        //need to add hardcoded entries before filterning, because some will be
+        //removed based on user type
+        menuItems = addHardcodedEntries.call(this, menuItems);
         //manually hidden items for children
-        menuItems = _.filter(menuItems, item => this.props.currentUser.type !== 'CHILD' || (
-            this.props.currentUser.type === 'CHILD' &&
-            !~IGNORED_ROUTES_FOR_CHILDREN.indexOf(item.label))
+        menuItems = _.filter(menuItems, item =>
+            !~IGNORED_ROUTES_FOR_EVERYONE.indexOf(item.label) && (
+                this.props.currentUser.type !== 'CHILD' || (
+                    this.props.currentUser.type === 'CHILD' &&
+                    !~IGNORED_ROUTES_FOR_CHILDREN.indexOf(item.label))
+            )
         );
 
         //manually hiding flags for non-super users
@@ -114,7 +127,6 @@ var SiteNav = React.createClass({
             !~ROUTES_SPECIFIC_FOR_SUPER_USERS.indexOf(item.label))
         );
 
-        menuItems = addHardcodedEntries.call(this, menuItems);
 
         if (sessionStorage == null) {
             return null;
@@ -160,7 +172,7 @@ var SiteNav = React.createClass({
                             sessionStorage.activeItem === item.label ||
                             sessionStorage.activeItem === item.uuid)
                     })}
-                    key={`(${item.label})-${item.url}`}
+                    key={Shortid.generate()}
                 >
                     {link}
                 </li>

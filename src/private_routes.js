@@ -28,6 +28,7 @@ import NewsFeed from 'routes/newsfeed';
 import Flips from 'routes/users/flips';
 import FlagView from 'routes/flags';
 import AAYView from 'routes/aay_survey';
+import ResourceCenter from 'routes/resource_center';
 import Help from 'routes/help';
 
 var redirect = function (path) {
@@ -100,10 +101,12 @@ var routes = [
     { path: 'friends/suggested(/)', title: 'Suggested Friends', endpoint: '$$suggested_friends',
         component: SuggestedFriends},
     { path: 'suggestedfriends(/)', onEnter: redirect('/friends/suggested')},
-    { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed},
     { path: '/flaggedimages(/)', title: 'Flagged Images', endpoint: '/flag', component: FlagView},
     { path: 'all-about-you(/)', title: 'AAY Data', endpoint: '/game-data/all-about-you', component: AAYView},
+    { path: 'resources(/)', component: ResourceCenter, endpoint: ''},
+    { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed},
     { path: 'help(/)', title: 'Help', component: Help},
+    { path: '/flaggedimages(/)', title: 'Flagged Images', endpoint: '/flag', component: FlagView}
 ];
 
 routes = _.map(routes, i => {

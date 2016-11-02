@@ -19,7 +19,18 @@ describe('test <Suggested /> component', function (){
         expect(WRAPPER.find('form')).to.have.length(1);
         expect(WRAPPER.find('FlipBoard')).to.have.length(1);
     });
+});
 
+describe('renders null suggested friends', function (){
+    var suggested = <Suggested />;
+    const WRAPPER = shallow(suggested);
+    it('checks that if data is null render returns null', function (){
+        expect(WRAPPER.children()).to.have.length(0);
+    });
+
+    it('checks that the layout still loads', function (){
+        expect(WRAPPER.find('Layout')).to.have.length(1);
+    });
 });
 
 describe('renders empty suggested friends', function (){
