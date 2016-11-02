@@ -50,12 +50,6 @@ export class Schools extends React.Component {
     render() {
         return (
             <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
-                <FlipBoard
-                    data={this.props.data}
-                    header={TITLE}
-                    renderFlip={this.renderFlip}
-                    renderNoData={() => (<h2 className="placeholder">{NO_SCHOOLS}</h2>)}
-                />
                 {this.renderData()}
             </Layout>
         );
