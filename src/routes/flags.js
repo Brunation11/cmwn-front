@@ -21,6 +21,7 @@ const TEXT = {
     NO_FLAGS: 'Sorry. There are no flagged images to display at this time.'
 };
 
+
 export class FlagView extends React.Component {
 
     renderFlagTable() {
@@ -70,7 +71,11 @@ export class FlagView extends React.Component {
 
     render() {
         return (
-            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+            <Layout
+                className={PAGE_UNIQUE_IDENTIFIER}
+                navMenuId="navMenu"
+                currentUser={this.props.currentUser}
+            >
                     {this.renderDataState()}
             </Layout>
         );
@@ -81,12 +86,19 @@ export class FlagView extends React.Component {
 mapStateToProps = state => {
     var data = [];
     var loading = true;
+    var currentUser = {};
     if (state.page && state.page.data && state.page.data._embedded && state.page.data._embedded.flags) {
         loading = state.page.loading;
         data = state.page.data;
     }
+
+    if (state.currentUser != null){
+        currentUser = state.currentUser;
+    }
+
     return {
         data,
+        currentUser,
         loading
     };
 };

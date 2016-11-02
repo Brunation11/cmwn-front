@@ -8,7 +8,7 @@ import MockFlipWrapper from 'mocks/mock_flip_wrapper';
 import studentDataB from 'mocks/users/student_data_b';
 
 describe('test <Suggested /> component', function (){
-    var suggested = <Suggested data={studentDataB} />;
+    var suggested = <Suggested data={[studentDataB]}/>;
     const WRAPPER = shallow(suggested);
     it('checks that WRAPPER is an instance of Suggested', function (){
         expect(WRAPPER.instance()).to.be.instanceOf(Suggested);
@@ -18,6 +18,18 @@ describe('test <Suggested /> component', function (){
         expect(WRAPPER.find('Layout')).to.have.length(1);
         expect(WRAPPER.find('form')).to.have.length(1);
         expect(WRAPPER.find('FlipBoard')).to.have.length(1);
+    });
+
+});
+
+describe('renders empty suggested friends', function (){
+    var suggested = <Suggested data={[]} />;
+    const WRAPPER = shallow(suggested);
+    it('checks that a message is displayed when no suggested friends are present', function () {
+        expect(WRAPPER.find('h2')).to.have.length(1);
+    });
+    it('checks that the layout still loads', function (){
+        expect(WRAPPER.find('Layout')).to.have.length(1);
     });
 });
 
