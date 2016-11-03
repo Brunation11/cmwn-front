@@ -13,7 +13,7 @@ const MEDIA_URL = 'https://media-staging.changemyworldnow.com/f';
 export const CURRICULUM_LINKS = [
     {
         label: 'Getting Your Class Started with Change My World Now',
-        href: `${MEDIA_URL}/6d7975d31455308906053eef4263cfad.pdf`,
+        href: `${MEDIA_URL}/799d3519627884d48bba3df07d5130c7.pdf,
     },
 ];
 export const STUDENT_ENGAGEMENT_LINKS = [
