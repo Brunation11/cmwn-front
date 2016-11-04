@@ -1,19 +1,15 @@
 import React from 'react';
-import _ from 'lodash';
 import {Button, Input, Panel} from 'react-bootstrap';
 import { connect } from 'react-redux';
 import Moment from 'moment';
 
-import Actions from 'components/actions';
-import ClassNames from 'classnames';
 import HttpManager from 'components/http_manager';
 import Toast from 'components/toast';
 import Layout from 'layouts/god_mode_two_col';
 import GLOBALS from 'components/globals';
-import Validate from 'components/validators';
-import Util from 'components/util';
 import Form from 'components/form';
 import DropdownDatepicker from 'components/dropdown_datepicker';
+import Log from 'components/log';
 
 export const PAGE_UNIQUE_IDENTIFIER = 'god-mode-create-user';
 
@@ -29,19 +25,18 @@ var Page;
 
 export class CreateUser extends React.Component {
     constructor() {
-        debugger;
         super();
         this.state = {
-            user_id: '',
-            first_name: '',
-            middle_name: '',
-            last_name: '',
+            user_id: '', //eslint-disable-line camelcase
+            first_name: '', //eslint-disable-line camelcase
+            middle_name: '', //eslint-disable-line camelcase
+            last_name: '', //eslint-disable-line camelcase
             gender: '',
             type: '',
             username: '',
             email: '',
             birthdate: ''
-        }
+        };
     }
 
     submitData() {
@@ -49,12 +44,12 @@ export class CreateUser extends React.Component {
 
         var postData = {
             username: this.state.username,
-            first_name: this.state.first_name,
-            last_name: this.state.last_name,
+            first_name: this.state.first_name, //eslint-disable-line camelcase
+            last_name: this.state.last_name, //eslint-disable-line camelcase
             email: this.state.email,
             gender: this.state.gender,
             type: this.state.type,
-            middle_name: this.state.middle_name,
+            middle_name: this.state.middle_name, //eslint-disable-line camelcase
         };
 
         if (birthdate.isValid()) {
@@ -64,8 +59,7 @@ export class CreateUser extends React.Component {
         if (this.refs.formRef.isValid()) {
             HttpManager.POST(`${GLOBALS.API_URL}user`, postData).then((res) => {
                 Toast.success('User Created');
-                console.log(res.response.user_id);
-                this.setState({user_id: res.response.user_id})
+                this.setState({user_id: res.response.user_id}); //eslint-disable-line camelcase
             }).catch(err => {
                 Toast.error(BAD_CREATE + (err.message ? ' Message: ' + err.message : ''));
                 Log.log('Server refused user create', err, postData);
@@ -150,7 +144,6 @@ export class CreateUser extends React.Component {
                 <option value="">Select gender</option>
                 <option value="F">Female</option>
                 <option value="M">Male</option>
-                <option value="O">Other</option>
             </Input>
         );
     }
@@ -234,7 +227,7 @@ export class CreateUser extends React.Component {
 
     renderFields() {
         return (
-            <Form ref='formRef'>
+            <Form ref="formRef">
                 {this.renderEditableUserName()}
                 {this.renderEditableEmail()}
                 {this.renderEditableFirstName()}
@@ -255,20 +248,22 @@ export class CreateUser extends React.Component {
     }
 
     renderUserCreateSuccess() {
-        debugger;
         return (
-            <div className='standard'>
-                <p> user created successfully. click <a href={`/user/${this.state.user_id}`}>here</a> to visit profile. </p>
-                <p> click <a href='/sa/settings/user/create'>here</a> to create another user</p>
+            <div className="standard">
+                <p> user created successfully. click
+                    <a href={`/user/${this.state.user_id}`}>here</a>
+                    to visit profile.
+                </p>
+                <p> click <a href="/sa/settings/user/create">here</a> to create another user</p>
             </div>
         );
     }
 
     render() {
-        return(
+        return (
             <Layout currentUser={this.props.currentUser}>
-                <Panel className='standard' header={HEADINGS.CREATE}>
-                    {this.state.user_id != '' ? this.renderUserCreateSuccess() : this.renderFields()}
+                <Panel className="standard" header={HEADINGS.CREATE}>
+                    {this.state.user_id !== '' ? this.renderUserCreateSuccess() : this.renderFields()}
                 </Panel>
             </Layout>
         );
@@ -276,11 +271,10 @@ export class CreateUser extends React.Component {
 }
 
 mapStateToProps = state => {
-    debugger;
     var currentUser = {};
     var loading = true;
 
-    if(state.page) {
+    if (state.page) {
         loading = state.page.loading;
     }
 

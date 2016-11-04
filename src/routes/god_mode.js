@@ -1,10 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import {Button, Input, Panel} from 'react-bootstrap';
-import GLOBALS from 'components/globals';
-import Toast from 'components/toast';
-import HttpManager from 'components/http_manager';
+import { Panel } from 'react-bootstrap';
 import Layout from 'layouts/god_mode_two_col';
 
 import 'routes/users/profile.scss';

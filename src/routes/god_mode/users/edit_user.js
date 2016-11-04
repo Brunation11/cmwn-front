@@ -10,16 +10,11 @@ import HttpManager from 'components/http_manager';
 import Toast from 'components/toast';
 import Layout from 'layouts/god_mode_two_col';
 import GLOBALS from 'components/globals';
-import Validate from 'components/validators';
-import Util from 'components/util';
 import UpdateUsername from 'components/update_username';
-import ProfileImage from 'components/profile_image';
 import Form from 'components/form';
 import DropdownDatepicker from 'components/dropdown_datepicker';
 import ACTION_CONSTANTS from 'components/action_constants';
-import CodeChange from 'components/code_change';
-import ForgotPass from 'components/forgot_pass';
-import ChangePassword from 'components/change_password';
+import Log from 'components/log';
 
 export const PAGE_UNIQUE_IDENTIFIER = 'god-mode-edit-user';
 
@@ -27,7 +22,7 @@ var mapStateToProps;
 var Page;
 
 const HEADINGS = {
-    EDIT : 'Edit User: '
+    EDIT: 'Edit User: '
 };
 
 const INVALID_SUBMISSION = 'Invalid submission. Please update fields highlighted in red and submit again';
@@ -159,7 +154,7 @@ export class EditUser extends React.Component {
             <Form ref="formRef">
                 {this.renderStaticFeild('Username', this.props.data.username)}
                 {this.renderStaticFeild('Email', this.props.data.email)}
-                {this.renderStaticFeild('Type',this.props.data.type)}
+                {this.renderStaticFeild('Type', this.props.data.type)}
                 {this.renderEditableFirstName()}
                 {this.renderEditableMiddleName()}
                 {this.renderEditableLastName()}
@@ -178,12 +173,12 @@ export class EditUser extends React.Component {
 
         var postData = {
             username: this.state.username,
-            first_name: this.state.first_name,
-            last_name: this.state.last_name,
+            first_name: this.state.first_name, //eslint-disable-line camelcase
+            last_name: this.state.last_name, //eslint-disable-line camelcase
             email: this.state.email,
             gender: this.state.gender,
             type: this.state.type,
-            middle_name: this.state.middle_name,
+            middle_name: this.state.middle_name, //eslint-disable-line camelcase
         };
 
         if (birthdate.isValid()) {
@@ -209,9 +204,11 @@ export class EditUser extends React.Component {
         return (
             <Layout classname="edit-student"
                     currentUser={this.props.currentUser}
-                    navMenuId='navMenu'
+                    navMenuId="navMenu"
             >
-                <Panel header={`${HEADINGS.EDIT} ${this.props.data.username}`} className="standard edit-profile">
+                <Panel header={`${HEADINGS.EDIT} ${this.props.data.username}`}
+                    className="standard edit-profile"
+                >
                     <div className="left">
                         {this.renderUserFields()}
                     </div>

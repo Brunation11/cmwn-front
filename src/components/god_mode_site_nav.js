@@ -7,8 +7,6 @@ import PublicRoutes from 'public_routes';
 import PrivateRoutes from 'private_routes';
 import Util from 'components/util';
 
-const WELCOME = 'Welcome';
-
 var addHardcodedEntries = function (menuItems) {
     menuItems.push({url: '/sa/settings/users', label: 'Manage Users'});
     menuItems.push({url: '/sa/settings', label: 'God Mode Home'});
@@ -112,7 +110,7 @@ var GodModeSiteNav = React.createClass({
         return (
             <div>
                 <p className={ClassNames('username')} style={{'fontSize': 25}}>
-                    <Link to='/profile'>
+                    <Link to="/profile">
                         {this.props.currentUser.username}
                     </Link>
                 </p>
@@ -121,9 +119,8 @@ var GodModeSiteNav = React.createClass({
     },
 
     render: function () {
-        debugger;
         return (
-            <div className='sidebar'>
+            <div className="sidebar">
                 {this.renderWelcome()}
 
                 <nav className="">
