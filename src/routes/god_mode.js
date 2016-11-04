@@ -1,11 +1,11 @@
 import React from 'react';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import {Button, Input, Panel} from 'react-bootstrap';
 import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
 import HttpManager from 'components/http_manager';
-
-import Layout from 'layouts/two_col';
+import Layout from 'layouts/god_mode_two_col';
 
 import 'routes/users/profile.scss';
 
@@ -14,34 +14,28 @@ export const PAGE_UNIQUE_IDENTIFIER = 'god-mode-home';
 var mapStateToProps;
 var Page;
 
-const BAD_GET = 'Unable to find user with the user id given';
+const HEADINGS = {
+    HEADER: 'Welcome To God Mode',
+};
+
 export class GodModeHome extends React.Component {
     constructor() {
         super();
-        this.state = {
-            userId: ''
-        };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState(nextProps.data);
     }
 
     render() {
-        if (this.props.data == null) {
+        if (this.props.data === null || _.isEmpty(this.props.data) ) {
             return null;
         }
 
         return (
            <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
-               <Panel header="Welcome to God Mode" className="standard">
-                    <Input
-                        type='text'
-                        ref="userId"
-                        value={this.state.userId}
-                        placeholder="Enter the user id"
-                        onChange={e => {
-                            this.setState({userId: e.target.value});
-                    }}/>
-                    <br/>
-                    <br/>
-                    <Button href={`sa/user/${this.state.userId}/edit`}> Edit User </Button>
+               <Panel header={HEADINGS.HEADER} className="standard">
+                    <p>This is an admin dashboard</p>
                </Panel>
            </Layout>
         );

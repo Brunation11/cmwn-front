@@ -27,6 +27,8 @@ import NewsFeed from 'routes/newsfeed';
 import Flips from 'routes/users/flips';
 import GodModeHome from 'routes/god_mode';
 import EditUser from 'routes/god_mode/users/edit_user';
+import ManageUsers from 'routes/god_mode/users/manage_users';
+import CreateUser from 'routes/god_mode/users/create_user';
 
 var redirect = function (path) {
     return function (nextState, transition) {
@@ -78,7 +80,7 @@ var routes = [
     { path: 'schools/:id(/)', onEnter: redirect('/school/:id')},
     { path: 'school/:id/view(/)', title: 'School', endpoint: '/group/:id', component: SchoolView},
     { path: 'schools/:id/view(/)', onEnter: redirect('/school/:id/view')},
-    { path: 'school/:id/edit(/)', title: 'Edit School', endpoint: '/group/:id', component: SchoolEdit},
+    { path: 'school/:id/edit()', title: 'Edit School', endpoint: '/group/:id', component: SchoolEdit},
     { path: 'schools/:id/edit(/)', onEnter: redirect('/school/:id/edit')},
     { path: 'school/:id/profile(/)', title: 'School', endpoint: '/group/:id', component: SchoolProfile},
     { path: 'schools/:id/profile(/)', onEnter: redirect('/school/:id/profile')},
@@ -97,8 +99,10 @@ var routes = [
     { path: 'friends/suggested(/)', title: 'Suggested Friends', endpoint: '$$suggested_friends',
         component: SuggestedFriends},
     { path: 'suggestedfriends(/)', onEnter: redirect('/friends/suggested')},
-    { path: 'sa(/)', component: GodModeHome},
-    { path: 'sa/user/:id/edit(/)', title: 'Edit User', endpoint: '/user/:id', component: EditUser}
+    { path: 'sa/settings(/)', title: 'God Mode', component: GodModeHome},
+    { path: 'sa/settings/users(/)', title: 'Manage Users', endpoint: '/user', component: ManageUsers},
+    { path: 'sa/settings/user/:id/edit(/)', title: 'Edit User', endpoint: '/user/:id', component: EditUser},
+    { path: 'sa/settings/user/create(/)', title: 'Create User', component: CreateUser}
    // { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed}
 ];
 

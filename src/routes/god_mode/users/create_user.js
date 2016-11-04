@@ -12,47 +12,67 @@ import Layout from 'layouts/god_mode_two_col';
 import GLOBALS from 'components/globals';
 import Validate from 'components/validators';
 import Util from 'components/util';
-import UpdateUsername from 'components/update_username';
-import ProfileImage from 'components/profile_image';
 import Form from 'components/form';
 import DropdownDatepicker from 'components/dropdown_datepicker';
-import ACTION_CONSTANTS from 'components/action_constants';
-import CodeChange from 'components/code_change';
-import ForgotPass from 'components/forgot_pass';
-import ChangePassword from 'components/change_password';
 
-export const PAGE_UNIQUE_IDENTIFIER = 'god-mode-edit-user';
+export const PAGE_UNIQUE_IDENTIFIER = 'god-mode-create-user';
+
+const HEADINGS = {
+    CREATE: 'Create User'
+};
+
+const INVALID_SUBMISSION = 'Invalid submission. Please update fields highlighted in red and submit again';
+const BAD_CREATE = 'There was a problem creating user. Please try again later.';
 
 var mapStateToProps;
 var Page;
 
-const HEADINGS = {
-    EDIT : 'Edit User: '
-};
-
-const INVALID_SUBMISSION = 'Invalid submission. Please update fields highlighted in red and submit again';
-const BAD_UPDATE = 'There was a problem updating your profile. Please try again later.';
-
-export class EditUser extends React.Component {
-    constructor(props) {
+export class CreateUser extends React.Component {
+    constructor() {
+        debugger;
         super();
-        this.state = props.data;
+        this.state = {
+            user_id: '',
+            first_name: '',
+            middle_name: '',
+            last_name: '',
+            gender: '',
+            type: '',
+            username: '',
+            email: '',
+            birthdate: ''
+        }
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.setState(nextProps.data);
-    }
+    submitData() {
+        var birthdate = Moment(this.state.birthdate);
 
-    shouldComponentUpdate() {
-        return (true);
-    }
+        var postData = {
+            username: this.state.username,
+            first_name: this.state.first_name,
+            last_name: this.state.last_name,
+            email: this.state.email,
+            gender: this.state.gender,
+            type: this.state.type,
+            middle_name: this.state.middle_name,
+        };
 
-    renderStaticFeild(fieldName, value) {
-        return (
-            <span className="user-metadata">
-                <p className="standard field">{fieldName}: {value}</p>
-            </span>
-        );
+        if (birthdate.isValid()) {
+            postData.birthdate = birthdate.format('YYYY-MM-DD');
+        }
+
+        if (this.refs.formRef.isValid()) {
+            HttpManager.POST(`${GLOBALS.API_URL}user`, postData).then((res) => {
+                Toast.success('User Created');
+                console.log(res.response.user_id);
+                this.setState({user_id: res.response.user_id})
+            }).catch(err => {
+                Toast.error(BAD_CREATE + (err.message ? ' Message: ' + err.message : ''));
+                Log.log('Server refused user create', err, postData);
+            });
+        } else {
+            Toast.error(INVALID_SUBMISSION);
+        }
     }
 
     renderEditableMiddleName() {
@@ -135,6 +155,26 @@ export class EditUser extends React.Component {
         );
     }
 
+    renderEditableType() {
+        return (
+            <Input
+                type="select"
+                value={this.state.type}
+                placeholder="Type"
+                label="Type:"
+                ref="typeInput"
+                name="typeInput"
+                validate="required"
+                validationEvent="onBlur"
+                onChange={e => this.setState({type: e.target.value})}
+            >
+                <option value="">Select Type</option>
+                <option value="CHILD">Child</option>
+                <option value="ADULT">Adult</option>
+            </Input>
+        );
+    }
+
     renderEditableBirthday() {
         var dob = this.state.birthdate ?
             new Date(this.state.birthdate).toISOString() : new Date().toISOString();
@@ -154,101 +194,105 @@ export class EditUser extends React.Component {
         );
     }
 
-    renderUserFields() {
+    renderEditableUserName() {
         return (
-            <Form ref="formRef">
-                {this.renderStaticFeild('Username', this.props.data.username)}
-                {this.renderStaticFeild('Email', this.props.data.email)}
-                {this.renderStaticFeild('Type',this.props.data.type)}
+            <Input
+                type="text"
+                value={this.state.username}
+                placeholder="user name"
+                label="User Name:"
+                ref="usernameInput"
+                name="usernameInput"
+                hasFeedback
+                onChange={
+                        e => this.setState({
+                            username: e.target.value
+                        })
+                    }
+            />
+        );
+    }
+
+    renderEditableEmail() {
+        return (
+            <Input
+                type="text"
+                value={this.state.email}
+                placeholder="email"
+                label="Email:"
+                ref="emailInput"
+                name="emailInput"
+                hasFeedback
+                onChange={
+                        e => this.setState({
+                            email: e.target.value
+                        })
+                    }
+            />
+        );
+    }
+
+    renderFields() {
+        return (
+            <Form ref='formRef'>
+                {this.renderEditableUserName()}
+                {this.renderEditableEmail()}
                 {this.renderEditableFirstName()}
                 {this.renderEditableMiddleName()}
                 {this.renderEditableLastName()}
                 {this.renderEditableGender()}
+                {this.renderEditableType()}
                 {this.renderEditableBirthday()}
                 <br/>
                 <br/>
-                <Button className="right"
-                        onClick={this.submitData.bind(this)}> Save </Button>
+                <Button className="purple standard"
+                        onClick={this.submitData.bind(this)}
+                >
+                    Create
+                </Button>
             </Form>
         );
     }
 
-    submitData() {
-        var birthdate = Moment(this.state.birthdate);
-
-        var postData = {
-            username: this.state.username,
-            first_name: this.state.first_name,
-            last_name: this.state.last_name,
-            email: this.state.email,
-            gender: this.state.gender,
-            type: this.state.type,
-            middle_name: this.state.middle_name,
-        };
-
-        if (birthdate.isValid()) {
-            postData.birthdate = birthdate.format('YYYY-MM-DD');
-        }
-
-        if (this.refs.formRef.isValid()) {
-            HttpManager.PUT(`${GLOBALS.API_URL}user/${this.state.user_id}`, postData).then(() => {
-                Toast.success('Profile Updated');
-                Actions.dispatch[ACTION_CONSTANTS.UPDATE_USERNAME]({'username': this.state.username});
-            }).catch(err => {
-                Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
-                Log.log('Server refused profile update', err, postData);
-            });
-        } else {
-            Toast.error(INVALID_SUBMISSION);
-        }
+    renderUserCreateSuccess() {
+        debugger;
+        return (
+            <div className='standard'>
+                <p> user created successfully. click <a href={`/user/${this.state.user_id}`}>here</a> to visit profile. </p>
+                <p> click <a href='/sa/settings/user/create'>here</a> to create another user</p>
+            </div>
+        );
     }
 
     render() {
-        if (this.props.data == null || _.isEmpty(this.props.data)) return null;
-
-        return (
-            <Layout classname="edit-student"
-                    currentUser={this.props.currentUser}
-                    navMenuId='navMenu'
-            >
-                <Panel header={`${HEADINGS.EDIT} ${this.props.data.username}`} className="standard edit-profile">
-                    <div className="left">
-                        {this.renderUserFields()}
-                    </div>
+        return(
+            <Layout currentUser={this.props.currentUser}>
+                <Panel className='standard' header={HEADINGS.CREATE}>
+                    {this.state.user_id != '' ? this.renderUserCreateSuccess() : this.renderFields()}
                 </Panel>
-                <UpdateUsername
-                    className={ClassNames({
-                        hidden:
-                            this.props.data.type !== 'CHILD' ||
-                            this.props.data.user_id !== this.props.currentUser.user_id
-                    })}
-                    username={this.props.data.username}
-                />
             </Layout>
         );
     }
 }
 
 mapStateToProps = state => {
-    var data = {};
-    var loading = true;
+    debugger;
     var currentUser = {};
+    var loading = true;
 
-    if (state.page && state.page.data != null) {
+    if(state.page) {
         loading = state.page.loading;
-        data = state.page.data;
     }
+
     if (state.currentUser != null) {
         currentUser = state.currentUser;
     }
 
     return {
-        data,
         loading,
         currentUser
     };
 };
 
-Page = connect(mapStateToProps)(EditUser);
-Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
+Page = connect(mapStateToProps)(CreateUser);
 export default Page;
