@@ -164,13 +164,13 @@ export class SchoolEdit extends React.Component {
         );
         if (this.props.data._links.import == null) {
             return (
-                <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+                <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
                     {SCHOOL_EDIT}
                 </Layout>
             );
         }
         return (
-           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+           <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
                 {SCHOOL_EDIT}
                 {''/*<CreateClass data={this.props.data} />*/}
                 <BulkUpload data={this.props.data} url={this.props.data._links.import.href} />
@@ -368,12 +368,17 @@ export class BulkUpload extends React.Component {
 mapStateToProps = state => {
     var data = {title: ''};
     var loading = true;
+    var currentUser;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
     }
+    if (state.currentUser != null){
+        currentUser = state.currentUser;
+    }
     return {
         data,
+        currentUser,
         loading
     };
 };

@@ -18,7 +18,7 @@ class BrowserDetector {
         return h > w;
     }
     isIe() {
-        return !!~document.getElementsByTagName('html')[0].className.indexOf('ie');
+        return 'ActiveXObject' in window;
     }
     isIe9() {
         return !!~document.getElementsByTagName('html')[0].className.indexOf('ie9');

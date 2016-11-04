@@ -87,7 +87,7 @@ export class SchoolView extends React.Component {
             return null;
         }
         return (
-            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+            <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
                 <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard">
                     <p className="right" id="buttons">
                         <EditLink className="purple" base="/school" id={this.state.group_id}
@@ -178,12 +178,17 @@ export class SchoolView extends React.Component {
 mapStateToProps = state => {
     var data = {};
     var loading = true;
+    var currentUser;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
     }
+    if (state.currentUser != null){
+        currentUser = state.currentUser;
+    }
     return {
         data,
+        currentUser,
         loading
     };
 };
