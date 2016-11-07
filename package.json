@@ -23,6 +23,7 @@
     "lodash": "^4.3.0",
     "moment": "^2.12.0",
     "null-loader": "^0.1.1",
+    "prepend-loader": "0.0.2",
     "query-string": "^3.0.0",
     "react": "^0.14.2",
     "react-addons-update": "^0.14.2",
