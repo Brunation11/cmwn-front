@@ -2,80 +2,75 @@ import React from 'react';
 import {Link} from 'react-router';
 import _ from 'lodash';
 
+import GLOBALS from 'components/globals';
+import HttpManager from 'components/http_manager';
 import ClassNames from 'classnames';
-import PublicRoutes from 'public_routes';
 import PrivateRoutes from 'private_routes';
 import Util from 'components/util';
 
-var addHardcodedEntries = function (menuItems) {
-    menuItems.push({url: '/sa/settings/users', label: 'Manage Users'});
-    menuItems.push({url: '/sa/settings', label: 'God Mode Home'});
-    menuItems.push({url: '/profile', label: 'Exit'});
+class GodModeSiteNav extends React.Component {
+    constructor(props) {
+        debugger;
+        super(props);
+    }
 
-    return menuItems;
-};
+    componentDidMount() {
+        this.getSaSettingsLinks();
+    }
 
-var buildMenuRoutes = function (links) {
-    var allRoutes = PublicRoutes.concat(PrivateRoutes);
-    //goal here is to read all of our routes and match them against the list of available
-    //links returned by the server. This way, we implicitly know which endpoint routes
-    //have corresponding pages, and which are data only
+    addHardcodedEntries(menuItems) {
+        menuItems.unshift({url: '/sa/settings', label: 'God Mode Home'});
+        menuItems.push({url: '/profile', label: 'Exit'});
 
-    //reduce the set of links
-    return _.reduce(links, (a, link, k) => {
-        //try to match our endpoint to a route, and extract its parameters
-        var url;
-        var matchedRoute = _.reduce(allRoutes, (a, route) => { //eslint-disable-line no-shadow
-            var params;
-            var match;
-            if (route.endpoint && link.label != null) {
-                // there are three scenarios here - the endpoint is non dynamic, it is dynamic by parameter,
-                // or it is dynamic based on the current user.
+        return menuItems;
+    }
 
-                //the current user style is easiest. just match on the key provided
-                if (route.endpoint === '$$' + k ) {
-                    //the problem with this is that we dont know the structure of the endpoint
-                    //when we match on the current user style, so we have no way to extract parameters.
-                    //This _probably_ wont be a problem...
-                    match = route;
-                    match.params = {};
-                } else if (route.endpoint !== '/' && !~route.endpoint.indexOf(':') &&
-                        ~link.href.indexOf(route.endpoint)
-                    ) {
-                    //nondynamic is also fairly easy, as urls cannot contain colonks
-                    match = route;
-                    match.params = {};
-                } else {
-                    //last chance. If we can extract parameters from the endpoint, its a match
-                    params = Util.matchPathAndExtractParams(
-                        route.endpoint, link.href.split('/').slice(3).join('/')
-                    );
-                    if (Object.keys(params).length) {
-                        route.params = params;
-                        match = route; //MPR: ok i admit the typechange is strange here
-                                    //but i like it better than starting at null
+    getSaSettingsLinks() {
+        var links = this.props.currentUser._links;
+        if (!links || !links.sa_settings) return;
+        var promise = Promise.all([HttpManager.GET(links.sa_settings.href)]);
+        var saLinks;
+        promise.then((res) => {
+            this.setState({saLinks: res[0].response._links});
+        });
+    }
+
+    buildMenuRoutes() {
+        if (!this.state || !this.state.saLinks) return [];
+        var saLinks = _.values(this.state.saLinks);
+        var saRoutes = _.filter(PrivateRoutes, (route) => {
+                return (route.path)
+        });
+        var menuItems = _.filter(saLinks, (item) => {
+            _.map(PrivateRoutes, (route) => {
+                var params = {};
+                var url;
+                if ( route.path.match(/^sa/g) &&
+                     route.endpoint === '/' + item.href.split('/').slice(3).join('/')) {
+
+                    if (route.endpoint.indexOf(':')) {
+                        params = Util.matchPathAndExtractParams(
+                            route.endpoint, item.href.split('/').slice(3).join('/')
+                        );
                     }
+                    url = Util.replacePathPlaceholdersFromParamObject(route.path,
+                        params).split('(')[0];
+                    item['url'] = url.indexOf('/') === 0 ? url : '/' + url;
                 }
-                if ((a && match && match.endpoint.length > a.endpoint.length) || (!a && match)) a = match;
-            }
-            return a;
-        }, false);
-        if (matchedRoute) {
-            url = Util.replacePathPlaceholdersFromParamObject(matchedRoute.path,
-                matchedRoute.params).split('(')[0];
-            link = link.set('url', url.indexOf('/') === 0 ? url : '/' + url);
-            a.push(link);
-        }
-        return a;
-    }, []);
-};
+            });
 
-var GodModeSiteNav = React.createClass({
-    renderNavItems: function () {
-        var menuItems = buildMenuRoutes(this.props.data);
+            if (!_.has(item, 'url')) return false;
+            return true;
+        });
+        console.log(menuItems);
+        return menuItems;
+    }
+
+    renderNavItems() {
+        var menuItems = this.buildMenuRoutes();
+        menuItems = this.addHardcodedEntries(menuItems);
+
         var currentUrl;
-        //manually hidden items for children
-        menuItems = addHardcodedEntries.call(this, menuItems);
 
         if (sessionStorage == null) {
             return null;
@@ -104,9 +99,9 @@ var GodModeSiteNav = React.createClass({
                 </Link>
             </li>
         ));
-    },
+    }
 
-    renderWelcome: function () {
+    renderWelcome() {
         return (
             <div>
                 <p className={ClassNames('username')} style={{'fontSize': 25}}>
@@ -116,9 +111,11 @@ var GodModeSiteNav = React.createClass({
                 </p>
             </div>
         );
-    },
+    }
 
-    render: function () {
+    render() {
+        if (!this.props.currentUser || !this.props.currentUser._links ) return null;
+
         return (
             <div className="sidebar">
                 {this.renderWelcome()}
@@ -131,7 +128,7 @@ var GodModeSiteNav = React.createClass({
             </div>
         );
     }
-});
+}
 
 export default GodModeSiteNav;
 

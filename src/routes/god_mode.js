@@ -47,9 +47,11 @@ mapStateToProps = state => {
         loading = state.page.loading;
         data = state.page.data;
     }
+
     if (state.currentUser != null){
         currentUser = state.currentUser;
     }
+
     return {
         data,
         currentUser,

@@ -22,6 +22,7 @@ var Layout = React.createClass({
                 <GodModeSiteNav
                     currentUser={this.props.currentUser}
                     navMenuId={this.props.navMenuId}
+                    data={this.props.data}
                 />
                 <div className="content">
                     {this.props.children}

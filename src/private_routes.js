@@ -99,7 +99,7 @@ var routes = [
     { path: 'friends/suggested(/)', title: 'Suggested Friends', endpoint: '$$suggested_friends',
         component: SuggestedFriends},
     { path: 'suggestedfriends(/)', onEnter: redirect('/friends/suggested')},
-    { path: 'sa/settings(/)', title: 'God Mode', component: GodModeHome},
+    { path: 'sa/settings(/)', title: 'God Mode', endpoint: '/sa/settings', component: GodModeHome},
     { path: 'sa/settings/users(/)', title: 'Manage Users', endpoint: '/user', component: ManageUsers},
     { path: 'sa/settings/user/:id/edit(/)', title: 'Edit User', endpoint: '/user/:id', component: EditUser},
     { path: 'sa/settings/user/create(/)', title: 'Create User', component: CreateUser}

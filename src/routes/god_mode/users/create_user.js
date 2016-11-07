@@ -260,6 +260,8 @@ export class CreateUser extends React.Component {
     }
 
     render() {
+        if (this.props.currentUser == null || _.isEmpty(this.props.currentUser)) return null;
+
         return (
             <Layout currentUser={this.props.currentUser}>
                 <Panel className="standard" header={HEADINGS.CREATE}>

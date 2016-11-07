@@ -199,7 +199,7 @@ export class EditUser extends React.Component {
     }
 
     render() {
-        if (this.props.data == null || _.isEmpty(this.props.data)) return null;
+        if (this.props.data === null || _.isEmpty(this.props.data)) return null;
 
         return (
             <Layout classname="edit-student"

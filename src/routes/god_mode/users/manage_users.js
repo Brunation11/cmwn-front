@@ -34,21 +34,21 @@ var Page;
 
 export class ManageUsers extends React.Component {
     constructor() {
+        debugger;
         super();
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!nextProps.data || _.isEmpty(nextProps.data)) return;
-
         this.setState(nextProps.data);
     }
 
     render() {
+        debugger;
         var userData;
 
-        if (!this.props.data || _.isEmpty(this.props.data)) return null;
+        if (this.props.data === null || _.isEmpty(this.props.data)) return null;
 
-        userData = this.props.data._embedded.user;
+        userData = this.props.data;
         return (
             <Layout currentUser={this.props.currentUser}
                     className={PAGE_UNIQUE_IDENTIFIER}
@@ -115,9 +115,10 @@ mapStateToProps = state => {
     var data = [];
     var loading = true;
     var currentUser = {};
-    if (state.page && state.page.data) {
+    debugger;
+    if (state.page && state.page.data && state.page.data._embedded && state.page.data._embedded.user) {
         loading = state.page.loading;
-        data = state.page.data;
+        data = state.page.data._embedded.user;
     }
 
     if (state.currentUser != null) {
@@ -129,7 +130,7 @@ mapStateToProps = state => {
         loading,
         currentUser
     };
-};
+}
 
 Page = connect(mapStateToProps)(ManageUsers);
 export default Page;
