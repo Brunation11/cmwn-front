@@ -272,6 +272,8 @@ var buildAndCopyStaticResources = function () {
 
     var robots = gulp.src('./src/robots.txt').pipe(gulp.dest('./build'));
 
+    var logo = gulp.src('./src/media/cmwn-logo.png').pipe(gulp.dest('./build'));
+
     var primary = gulp.src('./src/styles.js')
         .pipe(gulpWebpack(config, webpack, function (err, stats) {
             if (err) {
