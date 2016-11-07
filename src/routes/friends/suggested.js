@@ -1,38 +1,35 @@
 import React from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import {Panel, Button} from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
 import Shortid from 'shortid';
 
 import FlipBoard from 'components/flipboard';
 import Toast from 'components/toast';
 import ClassNames from 'classnames';
-import History from 'components/history';
 import HttpManager from 'components/http_manager';
 import Actions from 'components/actions';
 import Store from 'components/store';
 import UserPopover from 'components/popovers/user_popover';
 import GLOBALS from 'components/globals';
+import Flag from 'components/flag';
 
 import Layout from 'layouts/two_col';
 
 import 'routes/friends/suggested.scss';
 
-const PAGE_UNIQUE_IDENTIFIER = 'suggested-friends';
-
-const NO_FRIENDS = (
-    <div>You are already friends with everyone in your group.
-        <br /> Great Work! <br /> Let's Take Action!
-    </div>);
 const HEADINGS = {
     SUGGESTED: 'Suggested Friends'
 };
+
 const FRIEND_PROBLEM = 'There was a problem adding your friend. Please try again in a little while.';
 const REQUEST_SENT = 'Your friend request has been sent!';
 const ADD_FRIEND = 'Add Friend';
 const REQUESTED = 'Request Sent';
 const ACCEPT = 'Accept';
 const PROFILE = 'View Profile';
+
+const PAGE_UNIQUE_IDENTIFIER = 'suggested-friends';
 
 var mapStateToProps;
 var Page;
@@ -43,12 +40,14 @@ export class Suggested extends React.Component{
     }
 
     addFriend(item, e) {
-        var id = item.user_id != null ? item.user_id : item.suggest_id;
         e.stopPropagation();
         e.preventDefault();
         ga('set', 'dimension7', 'sent');
-        HttpManager.POST({url: this.props.currentUser._links.friend.href}, {
-            'friend_id': id
+
+        HttpManager.POST({
+            url: this.props.currentUser._links.friend.href
+        }, {
+            'friend_id': item.user_id != null ? item.user_id : item.suggest_id
         }).then(() => {
             Toast.success(REQUEST_SENT);
             Actions.dispatch.START_RELOAD_PAGE(Store.getState());
@@ -59,88 +58,112 @@ export class Suggested extends React.Component{
 
     renderNoData(data) {
         if (data == null) {
-            //render nothing before a request has been made
             return null;
         }
-        //render a nice message if the list is actually empty
         return (
-            <Panel header={HEADINGS.SUGGESTED} className="standard">
-                <h2>{NO_FRIENDS}</h2>
-                <p><a onClick={History.goBack}>Back</a></p>
-            </Panel>
+            <h2 className="placeholder">
+                You are already friends with everyone in your group.<br />
+                Great Work! <br />
+                Let's Take Action!
+            </h2>
         );
     }
 
-    renderFlip(item) {
+    renderRequestStatus(item) {
         return (
-            <UserPopover
-                element={item}
-                trigger="click"
+            <span
+                className={ClassNames(
+                    'request-status', {
+                        hidden: item.relationship !== 'requested'
+                    }
+                )}
             >
-                {this.renderUserFlip.call(this, item)}
-            </UserPopover>
+                {REQUESTED}
+            </span>
         );
     }
 
-    renderUserFlip(item) {
-        var history = History;
-        var self = this;
+    renderAddFriendButton(item) {
         return (
-            <div className="flip" key={Shortid.generate()}>
-                <div className="item">
-                    <span className="overlay">
-                        <div className="relwrap">
-                            <div className="abswrap">
-                                <Button
-                                    onClick={self.addFriend.bind(self, item)}
-                                    className={ClassNames('green standard', {
-                                        hidden: item.relationship === 'Pending' ||
-                                                item.relationship === 'requested'
-                                    })}
-                                 >
-                                    {ADD_FRIEND}
-                                </Button>
-                                <Button
-                                    onClick={self.addFriend.bind(self, item)}
-                                    className={ClassNames('blue standard', {
-                                        hidden: item.relationship !== 'Pending'
-                                    })}
-                                >
-                                    {ACCEPT}
-                                </Button>
-                                <Button
-                                    className={ClassNames('blue standard', {
-                                        hidden: item.relationship !== 'requested'
-                                    })}
-                                >
-                                    {REQUESTED}
-                                </Button>
-                                <Button
-                                    className="purple standard"
-                                    onClick={history.push.bind(null, '/profile/' + item.suggest_id)}
-                                >
-                                    {PROFILE}
-                                </Button>
+            <Button
+                onClick={this.addFriend.bind(this, item)}
+                className={ClassNames(
+                    'green standard', {
+                        hidden: item.relationship === 'Pending' ||
+                        item.relationship === 'requested'
+                    }
+                )}
+            >
+                {ADD_FRIEND}
+            </Button>
+        );
+    }
+
+    renderAcceptRequestButton(item) {
+        return (
+            <Button
+                onClick={this.addFriend.bind(this, item)}
+                className={ClassNames(
+                    'blue standard', {
+                        hidden: item.relationship !== 'Pending'
+                    }
+                )}
+            >
+                {ACCEPT}
+            </Button>
+        );
+    }
+
+    renderViewProfileButton(item) {
+        return (
+            <a
+                className="btn purple standard"
+                href={`/profile/${item.suggested_id}`}
+            >
+                {PROFILE}
+            </a>
+        );
+    }
+
+    renderCard(item) {
+        return (
+            <Flag
+                data={item}
+            >
+                <UserPopover
+                    element={item}
+                    trigger="click"
+                >
+                    <div className="user-card" key={Shortid.generate()}>
+                        <span className="overlay">
+                            <div className="prompts">
+                                {this.renderAddFriendButton(item)}
+                                <br />
+                                {this.renderAcceptRequestButton(item)}
+                                <br />
+                                {this.renderRequestStatus(item)}
+                                <br />
+                                {this.renderViewProfileButton(item)}
                             </div>
-                        </div>
-                    </span>
-                    <img src={item.image}></img>
-                </div>
-                <p className="link-text" >{item.username}</p>
-            </div>
+                        </span>
+                        <img className="avatar" src={item.image}></img>
+                        <p className="link-text" >{item.username}</p>
+                    </div>
+                </UserPopover>
+            </Flag>
         );
     }
 
     render() {
         var self = this;
-        if (self.props.data == null || self.props.data === []) {
-            return self.renderNoData();
-        }
-        return (
-           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+        var content;
+        if (self.props.data == null || !self.props.data.length) {
+            content = self.renderNoData(self.props.data);
+        } else {
+            content = (
                 <form>
                     <FlipBoard
-                        renderFlip={this.renderFlip.bind(this)}
+                        renderFlip={this.renderCard.bind(this)}
                         header={HEADINGS.SUGGESTED}
                         data={this.props.data}
                         transform={data => {
@@ -154,24 +177,29 @@ export class Suggested extends React.Component{
                                     image = data.images.data[0].url;
                                 }
                             }
-
-                            data = data.set('image', image);
-
-                            return data;
+                            return data.set('image', image);
                         }}
                     />
                 </form>
+            );
+        }
+        return (
+           <Layout
+               className={PAGE_UNIQUE_IDENTIFIER}
+               currentUser={this.props.currentUser}
+           >
+               {content}
            </Layout>
         );
     }
 }
 
 mapStateToProps = state => {
-    var data = [];
+    var data = null;
     var currentUser = {};
     var loading = true;
-    if (state.page && state.page.data != null && state.page.data._embedded &&
-        state.page.data._embedded.suggest) {
+    if (state.page && state.page.data != null &&
+        state.page.data._embedded && state.page.data._embedded.suggest) {
         loading = state.page.loading;
         data = state.page.data._embedded.suggest;
     }
@@ -188,4 +216,3 @@ mapStateToProps = state => {
 Page = connect(mapStateToProps)(Suggested);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
-
