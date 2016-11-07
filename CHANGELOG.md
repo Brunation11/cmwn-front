@@ -93,11 +93,13 @@ Version - 0.3.14
 Version - 0.3.13
 ----
 
-- e99cf48: add expect clause to test to check for flipcase
-- efe45f4: rename class
-- ae16532: remove commented test code
-- 6d3c8ae: Version bump [ci skip]
-- 78945d8: linter
+- 7412902: Version bump [ci skip]
+- 8436cc0: bump version
+
+Version - 0.3.14
+----
+
+- 8436cc0: bump version
 
 Version - 0.3.12
 ----
@@ -109,6 +111,7 @@ Version - 0.3.12
 
 Version - 0.3.11
 ----
+
 - 53b2ee6: Version bump [ci skip]
 
 Version - 0.0.0
