@@ -118,6 +118,7 @@ export class Game extends React.Component {
     }
 
     onExit(nextState) {
+        if (this.state.isFullscreen) this.exitFullscreen();
         this.setState(nextState);
     }
 
@@ -152,12 +153,16 @@ export class Game extends React.Component {
 
     listenForEsc(e) {
         if (e.keyCode === 27 || e.charCode === 27) {
-            Screenfull.exit();
-            this.setState({
-                fullscreenFallback: false,
-                isFullscreen: false,
-            });
+            this.exitFullscreen();
         }
+    }
+
+    exitFullscreen() {
+        Screenfull.exit();
+        this.setState({
+            fullscreenFallback: false,
+            isFullscreen: false,
+        });
     }
 
     resizeFrame() {
