@@ -1,5 +1,4 @@
 import React from 'react';
-import Loader from 'react-loader';
 import _ from 'lodash';
 import ClassNames from 'classnames';
 import Shortid from 'shortid';
@@ -7,7 +6,6 @@ import {Panel, Modal} from 'react-bootstrap';
 import QueryString from 'query-string';
 import { connect } from 'react-redux';
 import Moment from 'moment';
-import InfiniteScroll from 'react-infinite-scroller';
 
 import Detector from 'components/browser_detector';
 import ProfileImage from 'components/profile_image';
@@ -18,7 +16,7 @@ import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
 import History from 'components/history';
 import GenerateDataSource from 'components/datasource';
-import Actions from 'components/actions';
+import InfinitePaginator from 'components/infinite_paginator';
 
 import Layout from 'layouts/two_col';
 
@@ -29,29 +27,10 @@ import 'routes/users/profile.scss';
 var mapStateToProps;
 var Page;
 
-const LOADER_OPTIONS = {
-    lines: 5,
-    length: 20,
-    width: 2,
-    radius: 30,
-    corners: 1,
-    rotate: 0,
-    direction: 1,
-    color: '#000',
-    speed: 1,
-    trail: 40,
-    shadow: false,
-    hwaccel: false,
-    zIndex: 2e9,
-    top: '50%',
-    left: '50%',
-    scale: 1.00
-};
-
 const PAGE_UNIQUE_IDENTIFIER = 'profile';
-const GAME_COMPONENT = 'games';
+const GAME_COMPONENT_IDENTIFIER = 'games';
 
-const GAME_WRAPPER = GenerateDataSource(GAME_COMPONENT, PAGE_UNIQUE_IDENTIFIER);
+const GAME_WRAPPER = GenerateDataSource(GAME_COMPONENT_IDENTIFIER, PAGE_UNIQUE_IDENTIFIER);
 const FLIP_SOURCE = GenerateDataSource('user_flip', PAGE_UNIQUE_IDENTIFIER);
 
 const TITLES = {
@@ -136,7 +115,6 @@ export class Profile extends React.Component {
     constructor(props) {
         super(props);
         this.state = _.defaults({
-            hasMore: true,
             gameOn: false,
             gameId: -1
         }, _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {},
@@ -157,7 +135,6 @@ export class Profile extends React.Component {
     componentWillReceiveProps(nextProps) {
         var nextState = nextProps.data;
         this.resolveRole(nextProps);
-        nextState = _.defaults(nextState, {'hasMore': nextProps.hasMore});
         this.setState(nextState);
     }
 
@@ -251,37 +228,25 @@ export class Profile extends React.Component {
         );
     }
 
-    test() {
-        //this.setState({hasMore: false});
-        Actions.dispatch.GET_NEXT_INFINITE_COMPONENT_PAGE(
-            this.props.state,
-            GAME_COMPONENT,
-            PAGE_UNIQUE_IDENTIFIER
-        );
-    }
-
     renderGameList() {
         if (this.state._links == null || this.props.currentUser.user_id !== this.state.user_id) {
             return null;
         }
         return (
-           <InfiniteScroll
-              pageStart={0}
-              loadMore={this.test.bind(this)}
-              hasMore={this.state.hasMore}
-              initialLoad={false}
-              loader={
-                    <Loader loaded={false} options={LOADER_OPTIONS} className="spinner" />
-              }
-           >
                <GAME_WRAPPER transform={dataTransform}>
-                   <FlipBoard
-                       renderFlip={this.renderFlip.bind(this)}
-                       header={HEADINGS.ARCADE}
-                       id="game-flip-board"
-                   />
+                   <InfinitePaginator
+                       state={this.props.state}
+                       componentIdentifier={GAME_COMPONENT_IDENTIFIER}
+                       pageIdentifier={PAGE_UNIQUE_IDENTIFIER}
+                       hasMore={this.props.hasMore}
+                   >
+                       <FlipBoard
+                           renderFlip={this.renderFlip.bind(this)}
+                           header={HEADINGS.ARCADE}
+                           id="game-flip-board"
+                       />
+                   </InfinitePaginator>
                </GAME_WRAPPER>
-           </InfiniteScroll>
         );
     }
 
@@ -429,7 +394,7 @@ Profile.defaultProps = {
 };
 
 mapStateToProps = state => {
-    var componentKey = GAME_COMPONENT + '-' + PAGE_UNIQUE_IDENTIFIER;
+    var componentKey = GAME_COMPONENT_IDENTIFIER + '-' + PAGE_UNIQUE_IDENTIFIER;
     var data = {};
     var loading = true;
     var currentUser = {};
