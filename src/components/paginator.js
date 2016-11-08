@@ -24,11 +24,11 @@ var _getButtonPattern = function (currentPage, pageCount) {
         pattern = [1, 2, '...', pageCount - 1, pageCount];
     } else if (currentPage === 2) {
         //there are more than 5 and we are on the second
-        pattern = [1, 2, 3, '...', 5];
+        pattern = [1, 2, 3, '...', pageCount];
     } else if (currentPage === 3) {
         // 3 and n-2 are special cases requiring 6 elements to sensibly display
         // 3 case
-        pattern = [1, 2, 3, 4, '...', 6];
+        pattern = [1, 2, 3, 4, '...', pageCount];
     } else if (currentPage === pageCount - 2) {
         // n-2 case
         pattern = [1, '...', pageCount - 3, pageCount - 2, pageCount - 1, pageCount];
