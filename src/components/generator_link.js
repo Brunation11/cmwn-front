@@ -1,8 +1,6 @@
 import React from 'react';
 import {Button} from 'react-bootstrap';
 
-import History from 'components/history';
-
 const GENERATE = 'Generate User Cards';
 
 class GeneratorLink extends React.Component {

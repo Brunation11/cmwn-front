@@ -21,9 +21,9 @@ class FlipBoard extends React.Component {
         });
     }
     componentDidUpdate(prevProps, prevState) {
-      if (this.state.data.length > 0 && this.state.data !== prevState.data) {
-        this.props.onLoad();
-      }
+        if (this.state.data.length > 0 && this.state.data !== prevState.data) {
+            this.props.onLoad();
+        }
     }
     render() {
         if (this.state.data == null) {
