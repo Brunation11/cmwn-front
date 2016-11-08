@@ -89,27 +89,27 @@ const PASS_UPDATED = '<p>You have successfully updated your password.' +
 
 export var dataTransform = function (data) {
     return data;
-    var array = data;
-    var currentIndex;
-    var temporaryValue;
-    var randomIndex;
-    if (array == null) {
-        array = [];
-    } else if (!_.isArray(array)) {
-        return [];
-    }
-    currentIndex = array.length;
-     // While there remain elements to shuffle...
-    while (0 !== currentIndex) {
-        // Pick a remaining element...
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-        // And swap it with the current element.
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-    }
-    return _.filter(array, v => !v.coming_soon).concat(_.filter(array, v => v.coming_soon));
+//    var array = data;
+//    var currentIndex;
+//    var temporaryValue;
+//    var randomIndex;
+//    if (array == null) {
+//        array = [];
+//    } else if (!_.isArray(array)) {
+//        return [];
+//    }
+//    currentIndex = array.length;
+//     // While there remain elements to shuffle...
+//    while (0 !== currentIndex) {
+//        // Pick a remaining element...
+//        randomIndex = Math.floor(Math.random() * currentIndex);
+//        currentIndex -= 1;
+//        // And swap it with the current element.
+//        temporaryValue = array[currentIndex];
+//        array[currentIndex] = array[randomIndex];
+//        array[randomIndex] = temporaryValue;
+//    }
+//    return _.filter(array, v => !v.coming_soon).concat(_.filter(array, v => v.coming_soon));
 };
 
 export class Profile extends React.Component {
@@ -238,7 +238,6 @@ export class Profile extends React.Component {
             GAME_COMPONENT,
             PAGE_UNIQUE_IDENTIFIER
         );
-        console.log('HORK');
     }
 
     renderGameList() {
@@ -250,6 +249,7 @@ export class Profile extends React.Component {
               pageStart={0}
               loadMore={this.test.bind(this)}
               hasMore={this.state.hasMore}
+              initialLoad={false}
               loader={<div className="loader">loading</div>}
            >
                <GAME_WRAPPER transform={dataTransform}>
@@ -418,10 +418,8 @@ mapStateToProps = state => {
         currentUser = state.currentUser;
     }
     if (state.components && state.components[componentKey] && state.components[componentKey].has_more) {
-        debugger;
         hasMore = state.components[componentKey].has_more === true;
     }
-    debugger;
     return {
         state,
         hasMore,

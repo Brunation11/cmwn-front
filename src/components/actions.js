@@ -264,8 +264,9 @@ Actions = Actions.set(ACTION_CONSTANTS.CHANGE_COMPONENT_ROW_COUNT, function
 });
 
 Actions = Actions.set(ACTION_CONSTANTS.GET_NEXT_INFINITE_COMPONENT_PAGE, function
-    (state, endpointIdentifier, componentName, pageNum) {
+    (state, endpointIdentifier, componentName) {
     var componentKey = endpointIdentifier + '-' + componentName;
+    var endpoint;
     if (
         state.components == null ||
         state.components[componentKey] == null ||
@@ -276,7 +277,7 @@ Actions = Actions.set(ACTION_CONSTANTS.GET_NEXT_INFINITE_COMPONENT_PAGE, functio
             payload: []
         };
     }
-    var endpoint = Util.modifyTemplatedQueryParams(
+    endpoint = Util.modifyTemplatedQueryParams(
         state.components[componentKey]._links.find.href, {
             page: state.components[componentKey].page_count === 1 ?
                 1 :
