@@ -164,16 +164,26 @@ var locationReducer = (previousLoc = {}, action) => {
 
 var componentReducer = (allComponents = Immutable({_componentsToLoad: 0, _componentsLoaded: 0}), action) => {
     /* @TODO MPR, 5/25/16: Update from Laravel pagination names */
-    var setComponentData = function (component) {
+    var setComponentData = function (component, isInfinite = false) {
         var extractedEmbedded = _.reduce(action.data._embedded, (a, i) => i);
         component = component.set('loading', false);
         component = component.set('response', action.data);
-        component = component.set('data', extractedEmbedded);
+        if (isInfinite) {
+            component = component.set('data', _.concat(component.data, extractedEmbedded));
+            component = component.set('has_more', true);
+            if (action.data.page === action.data.page_count) {
+                component = component.set('page', 0);
+            } else {
+                component = component.set('page', action.data.page);
+            }
+        } else {
+            component = component.set('data', extractedEmbedded);
+            component = component.set('page', action.data.page);
+        }
         component = component.set('_links', action.data._links);
         component = component.set('page_count', action.data.page_count);
         component = component.set('page_size', action.data.page_size);
         component = component.set('total_items', action.data.total_items);
-        component = component.set('page', action.data.page);
         return component;
     };
     //single component reducers
@@ -189,6 +199,13 @@ var componentReducer = (allComponents = Immutable({_componentsToLoad: 0, _compon
         }.bind(null, allComponents[action.endpointIdentifier + '-' + action.componentName]),
         [ACTION_CONSTANTS.END_COMPONENT_DATA]: function (component) {
             return setComponentData(component);
+        }.bind(null, allComponents[action.endpointIdentifier + '-' + action.componentName]),
+        [ACTION_CONSTANTS.GET_NEXT_INFINITE_COMPONENT_PAGE]: function (component) {
+            component = component.set('has_more', false);
+            return component;
+        }.bind(null, allComponents[action.endpointIdentifier + '-' + action.componentName]),
+        [ACTION_CONSTANTS.END_GET_NEXT_INFINITE_COMPONENT_PAGE]: function (component) {
+            return setComponentData(component, true);
         }.bind(null, allComponents[action.endpointIdentifier + '-' + action.componentName]),
         [ACTION_CONSTANTS.END_GET_NEXT_COMPONENT_PAGE]: function (component) {
             return setComponentData(component);
@@ -212,7 +229,7 @@ var componentReducer = (allComponents = Immutable({_componentsToLoad: 0, _compon
             page: 1,
             requested: false,
             total_items: 0, //eslint-disable-line camelcase
-            page_size: GLOBALS.DEFAULT_PAGINATION_ROWS //eslint-disable-line camelcase
+            page_size: GLOBALS.DEFAULT_PAGINATION_ROWS, //eslint-disable-line camelcase
         };
         allComponents = allComponents.set('_componentsToLoad',
             allComponents._componentsToLoad == null ? 1 : allComponents._componentsToLoad + 1);

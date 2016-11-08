@@ -6,6 +6,7 @@ import {Panel, Modal} from 'react-bootstrap';
 import QueryString from 'query-string';
 import { connect } from 'react-redux';
 import Moment from 'moment';
+import InfiniteScroll from 'react-infinite-scroller';
 
 import Detector from 'components/browser_detector';
 import ProfileImage from 'components/profile_image';
@@ -16,6 +17,7 @@ import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
 import History from 'components/history';
 import GenerateDataSource from 'components/datasource';
+import Actions from 'components/actions';
 
 import Layout from 'layouts/two_col';
 
@@ -27,8 +29,9 @@ var mapStateToProps;
 var Page;
 
 const PAGE_UNIQUE_IDENTIFIER = 'profile';
+const GAME_COMPONENT = 'games';
 
-const GAME_WRAPPER = GenerateDataSource('games', PAGE_UNIQUE_IDENTIFIER);
+const GAME_WRAPPER = GenerateDataSource(GAME_COMPONENT, PAGE_UNIQUE_IDENTIFIER);
 const FLIP_SOURCE = GenerateDataSource('user_flip', PAGE_UNIQUE_IDENTIFIER);
 
 const TITLES = {
@@ -85,6 +88,7 @@ const PASS_UPDATED = '<p>You have successfully updated your password.' +
     '<br />Be sure to remember for next time!</p>';
 
 export var dataTransform = function (data) {
+    return data;
     var array = data;
     var currentIndex;
     var temporaryValue;
@@ -112,6 +116,7 @@ export class Profile extends React.Component {
     constructor(props) {
         super(props);
         this.state = _.defaults({
+            hasMore: true,
             gameOn: false,
             gameId: -1
         }, _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {},
@@ -130,8 +135,10 @@ export class Profile extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        var nextState = nextProps.data;
         this.resolveRole(nextProps);
-        this.setState(nextProps.data);
+        nextState = _.defaults(nextState, {'hasMore': nextProps.hasMore});
+        this.setState(nextState);
     }
 
     resolveRole(props) {
@@ -224,18 +231,35 @@ export class Profile extends React.Component {
         );
     }
 
+    test() {
+        //this.setState({hasMore: false});
+        Actions.dispatch.GET_NEXT_INFINITE_COMPONENT_PAGE(
+            this.props.state,
+            GAME_COMPONENT,
+            PAGE_UNIQUE_IDENTIFIER
+        );
+        console.log('HORK');
+    }
+
     renderGameList() {
         if (this.state._links == null || this.props.currentUser.user_id !== this.state.user_id) {
             return null;
         }
         return (
-           <GAME_WRAPPER transform={dataTransform}>
-               <FlipBoard
-                   renderFlip={this.renderFlip.bind(this)}
-                   header={HEADINGS.ARCADE}
-                   id="game-flip-board"
-               />
-           </GAME_WRAPPER>
+           <InfiniteScroll
+              pageStart={0}
+              loadMore={this.test.bind(this)}
+              hasMore={this.state.hasMore}
+              loader={<div className="loader">loading</div>}
+           >
+               <GAME_WRAPPER transform={dataTransform}>
+                   <FlipBoard
+                       renderFlip={this.renderFlip.bind(this)}
+                       header={HEADINGS.ARCADE}
+                       id="game-flip-board"
+                   />
+               </GAME_WRAPPER>
+           </InfiniteScroll>
         );
     }
 
@@ -378,16 +402,29 @@ export class Profile extends React.Component {
     }
 }
 
+Profile.defaultProps = {
+    state: {}
+};
+
 mapStateToProps = state => {
+    var componentKey = GAME_COMPONENT + '-' + PAGE_UNIQUE_IDENTIFIER;
     var data = {};
     var loading = true;
     var currentUser = {};
+    var hasMore = true;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
         currentUser = state.currentUser;
     }
+    if (state.components && state.components[componentKey] && state.components[componentKey].has_more) {
+        debugger;
+        hasMore = state.components[componentKey].has_more === true;
+    }
+    debugger;
     return {
+        state,
+        hasMore,
         data,
         loading,
         currentUser
