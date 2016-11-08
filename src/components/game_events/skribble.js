@@ -2,6 +2,7 @@ import _ from 'lodash';
 
 import HttpManager from 'components/http_manager';
 import Log from 'components/log';
+import Toast from 'components/toast';
 
 var unboundEvents = {
     getData: function (options, e) {
@@ -42,10 +43,14 @@ var unboundEvents = {
                 .then(server => e.respond(server.response))
                 .catch(err => Log.error(err));
         } else {
-            url += '/' + skribbleData.skribble_id + (skramble ? '?skramble=' + skramble : '');
+            url += '/asdasdas' + skribbleData.skribble_id + (skramble ? '?skramble=' + skramble : '');
             HttpManager.PUT(url, skribbleData)
                 .then(server => e.respond(server.response))
-                .catch(err => Log.error(err));
+                .catch(err => {
+                    Log.error(err);
+                    Toast.error('There was an error while attempting to save your Skribble. ' +
+                        'Please try again later.');
+                });
         }
     }
 };
