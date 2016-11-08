@@ -1,4 +1,5 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import Shortid from 'shortid';
 import FlipBoard from 'components/flipboard';
@@ -34,6 +35,9 @@ export class UserCards extends React.Component {
     componentWillReceiveProps(nextProps) {
         this.setState(nextProps.data);
         this.resolveRole(nextProps);
+    }
+    openPrint() {
+      window.print();
     }
     resolveRole() {
         var newState = {};
@@ -73,11 +77,13 @@ export class UserCards extends React.Component {
             <div className="user-cards">
                 <USER_SOURCE>
                     <FlipBoard
+                        ref="cards"
                         renderFlip={this.renderFlip}
+                        onLoad={this.openPrint}
                         header={this.props.data.title}
                     />
-                    <a className="btn standard purple print" href="javascript:window.print()">PRINT</a>
-                    <a className="btn standard purple print" href="javascript:window.print()">PRINT</a>
+                    <a className="btn standard purple print" href="javascript:window.print();">PRINT</a>
+                    <a className="btn standard purple print" href="javascript:window.print();">PRINT</a>
                 </USER_SOURCE>
             </div>
         );
