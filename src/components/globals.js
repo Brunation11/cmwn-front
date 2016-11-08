@@ -12,7 +12,7 @@ import DefaultProfile from 'media/profile_transparent.png';
 const GLOBALS = _.defaults(window.__cmwn, {
     API_URL: 'https://api.changemyworldnow.com/',
     GAME_URL: 'https://games.changemyworldnow.com/',
-    MEDIA_URL: 'https://media-staging.changemyworldnow.com/',
+    MEDIA_URL: 'https://media-staging.changemyworldnow.com/f/',
     MODE: 'production',
     DEFAULT_PROFILE: DefaultProfile,
     CURRENT_USER: {
