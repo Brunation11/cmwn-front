@@ -1,5 +1,11 @@
 @import '../../variables';
 
+.loader {
+    display: block;
+    position: relative;
+    height: 100px;
+}
+
 .profile {
 
     .panel-body {

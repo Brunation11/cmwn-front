@@ -1,4 +1,5 @@
 import React from 'react';
+import Loader from 'react-loader';
 import _ from 'lodash';
 import ClassNames from 'classnames';
 import Shortid from 'shortid';
@@ -27,6 +28,25 @@ import 'routes/users/profile.scss';
 
 var mapStateToProps;
 var Page;
+
+const LOADER_OPTIONS = {
+    lines: 5,
+    length: 20,
+    width: 2,
+    radius: 30,
+    corners: 1,
+    rotate: 0,
+    direction: 1,
+    color: '#000',
+    speed: 1,
+    trail: 40,
+    shadow: false,
+    hwaccel: false,
+    zIndex: 2e9,
+    top: '50%',
+    left: '50%',
+    scale: 1.00
+};
 
 const PAGE_UNIQUE_IDENTIFIER = 'profile';
 const GAME_COMPONENT = 'games';
@@ -250,7 +270,9 @@ export class Profile extends React.Component {
               loadMore={this.test.bind(this)}
               hasMore={this.state.hasMore}
               initialLoad={false}
-              loader={<div className="loader">loading</div>}
+              loader={
+                    <Loader loaded={false} options={LOADER_OPTIONS} className="spinner" />
+              }
            >
                <GAME_WRAPPER transform={dataTransform}>
                    <FlipBoard
