@@ -1,14 +1,15 @@
 @import 'variables';
-// scss-lint:disable IdSelector
 
 body:fullscreen .global-header {
     display: none;
 }
 
+// scss-lint:disable IdSelector
 body:fullscreen #cmwn-app .sweater,
 body:fullscreen #game-modal {
     background: $cmwn-black;
 }
+// scss-lint:enable IdSelector
 
 html body:fullscreen .modal-dialog {
     margin: 0;
