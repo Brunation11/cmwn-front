@@ -1,22 +1,38 @@
 import React from 'react';
 import {Link} from 'react-router';
 import _ from 'lodash';
+import Shortid from 'shortid';
 
 import ClassNames from 'classnames';
 import PublicRoutes from 'public_routes';
 import PrivateRoutes from 'private_routes';
 import Util from 'components/util';
 
+import SKRIBBLE_LINK from 'media/skribble-link.png';
+
 var addHardcodedEntries = function (menuItems) {
+    menuItems.unshift({
+        url: '/play/skribble',
+        uuid: 'Skribble',
+        label: <img src={SKRIBBLE_LINK} alt="Skribble" />
+    });
     menuItems.unshift({url: '/profile', label: 'Activities'});
-//    menuItems.push({url: `/user/${this.props.currentUser.user_id}/feed`, label: 'Feed'});
+    menuItems.push({url: '/resources', label: 'Resource Center'});
+    menuItems.push({url: `/user/${this.props.currentUser.user_id}/feed`, label: 'Feed'});
     menuItems.push({url: '/profile/edit', label: 'Edit My Profile'});
+    menuItems.push({url: '/help', label: 'Help'});
     menuItems.push({url: '/logout', label: 'Logout'});
     return menuItems;
 };
 
 const IGNORED_ROUTES_FOR_CHILDREN = [
-    'Friends and Network'
+    'Resource Center',
+    'Friends and Network',
+    'Flags'
+];
+
+const IGNORED_ROUTES_FOR_EVERYONE = [
+    'Profile'
 ];
 
 var buildMenuRoutes = function (links) {
@@ -76,14 +92,18 @@ var buildMenuRoutes = function (links) {
 
 var SiteNav = React.createClass({
     renderNavItems: function () {
-        var menuItems = buildMenuRoutes(this.props.data);
         var currentUrl;
+        var menuItems = buildMenuRoutes(this.props.data);
         //manually hidden items for children
-        menuItems = _.filter(menuItems, item => this.props.currentUser.type !== 'CHILD' || (
-            this.props.currentUser.type === 'CHILD' &&
-            !~IGNORED_ROUTES_FOR_CHILDREN.indexOf(item.label))
-        );
         menuItems = addHardcodedEntries.call(this, menuItems);
+
+        menuItems = _.filter(menuItems, item =>
+            !~IGNORED_ROUTES_FOR_EVERYONE.indexOf(item.label) && (
+                this.props.currentUser.type !== 'CHILD' || (
+                    this.props.currentUser.type === 'CHILD' &&
+                    !~IGNORED_ROUTES_FOR_CHILDREN.indexOf(item.label))
+            )
+        );
 
         if (sessionStorage == null) {
             return null;
@@ -91,19 +111,26 @@ var SiteNav = React.createClass({
 
         _.map(menuItems, item => {
             currentUrl = window.location.href.replace(/^.*changemyworldnow.com/, '');
-            if (sessionStorage.activeItem === item.label) {
+            if (sessionStorage.activeItem + '' !== 'undefined' && (
+                    sessionStorage.activeItem === item.label ||
+                    sessionStorage.activeItem === item.uuid
+            )) {
                 return;
             } else if (currentUrl === item.url) {
-                sessionStorage.activeItem = item.label;
+                sessionStorage.activeItem = item.uuid || item.label;
             }
         });
+
 
         return _.map(menuItems, item => (
             <li
                 className={ClassNames({
-                    'active-menu': sessionStorage.activeItem === item.label
+                    'active-menu':
+                        sessionStorage.activeItem + '' !== 'undefined' && (
+                        sessionStorage.activeItem === item.label ||
+                        sessionStorage.activeItem === item.uuid)
                 })}
-                key={`(${item.label})-${item.url}`}
+                key={Shortid.generate()}
             >
                 <Link
                     to={item.url}

@@ -1,0 +1,15 @@
+@import 'variables';
+
+.resource-center {
+    color: $cmwn-blue;
+
+    a {
+        text-decoration: underline;
+        color: $cmwn-blue;
+    }
+
+    ul {
+        margin-bottom: $standard * 2;
+        font-weight: bold;
+    }
+}
