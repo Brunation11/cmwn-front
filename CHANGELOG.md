@@ -32,7 +32,6 @@ Version - 0.3.21
 - 6d8aa6f: update style rules, refactor for linter
 - dd5554a: Version bump [ci skip]
 
-
 Version - 0.3.20
 ----
 - 7412902: Version bump [ci skip]
@@ -77,7 +76,6 @@ Version - 0.3.12
 Version - 0.3.11
 ----
 - 53b2ee6: Version bump [ci skip]
-
 
 Version - 0.0.0
 ---------------
