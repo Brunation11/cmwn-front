@@ -86,9 +86,13 @@ const BROWSER_NOT_SUPPORTED = (
 const PASS_UPDATED = '<p>You have successfully updated your password.' +
     '<br />Be sure to remember for next time!</p>';
 
+export const BAD_TRANSFORM_TYPE = new TypeError('Game list expected item of type array');
+
 export var dataTransform = function (data) {
-    return data;
-//    var array = data;
+    var array;
+    data = data || [];
+    if (!_.isArray(data)) throw BAD_TRANSFORM_TYPE;
+    array = data;
 //    var currentIndex;
 //    var temporaryValue;
 //    var randomIndex;
@@ -108,7 +112,7 @@ export var dataTransform = function (data) {
 //        array[currentIndex] = array[randomIndex];
 //        array[randomIndex] = temporaryValue;
 //    }
-//    return _.filter(array, v => !v.coming_soon).concat(_.filter(array, v => v.coming_soon));
+    return _.filter(array, v => !v.coming_soon).concat(_.filter(array, v => v.coming_soon));
 };
 
 export class Profile extends React.Component {

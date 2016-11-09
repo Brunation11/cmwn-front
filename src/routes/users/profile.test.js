@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { mount, shallow } from 'enzyme';
 
 import { Profile } from 'routes/users/profile';
-import { dataTransform } from 'routes/users/profile';
+import { dataTransform, BAD_TRANSFORM_TYPE } from 'routes/users/profile';
 import MockFlipWrapper from 'mocks/mock_flip_wrapper';
 import GLOBALS from 'components/globals';
 import profileSmoke from 'smoke_tests/users/profile.test.js';
@@ -149,7 +149,7 @@ describe('Profile Unit Tests', function () {
         });
 
         it('handles undefined input', function () {
-            expect(dataTransform(null)).to.be.an.instanceof(Array).and.to.be.empty;
+            expect(dataTransform()).to.be.an.instanceof(Array).and.to.be.empty;
         });
 
         it('handles empty list', function () {
@@ -157,11 +157,11 @@ describe('Profile Unit Tests', function () {
         });
 
         it('handles non array', function () {
-            expect(dataTransform({})).to.be.an.instanceof(Array).and.to.be.empty;
+            expect(dataTransform.bind(null, {})).to.throw(BAD_TRANSFORM_TYPE);
         });
 
         it('handles nonsense', function () {
-            expect(dataTransform('cat dog!!!!')).to.be.an.instanceof(Array).and.to.be.empty;
+            expect(dataTransform.bind(null, 'cat dog!!!!')).to.throw(BAD_TRANSFORM_TYPE);
         });
 
         it('handles one element', function () {
