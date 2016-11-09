@@ -35,3 +35,4 @@ scssReport.json
 scsslint.json
 /tar-*
 *.tar
+.eslintrc

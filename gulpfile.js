@@ -21,7 +21,7 @@ var eslint = require('gulp-eslint');
 var scsslint = require('gulp-scss-lint');
 var stylish = require('gulp-scss-lint-stylish2');
 var fs = require('fs');
-var eslintConfigJs = JSON.parse(fs.readFileSync('./.eslintrc'));
+var eslintConfigJs = JSON.parse(fs.readFileSync('./.eslintrc_platform'));
 var eslintConfigTest = JSON.parse(fs.readFileSync('./.eslintrc_test'));
 var eslintConfigConfig = JSON.parse(fs.readFileSync('./.eslintrc_config'));
 var env = require('gulp-env');
@@ -33,7 +33,7 @@ var sri = require('gulp-sri');
 var mocha = require('gulp-mocha');
 var zip = require('gulp-zip');
 var webdriver = require('gulp-webdriver');
-var scssGlobals = require('./scss_globals.js');
+var jsonfile = require('jsonfile');
 
 /** @const */
 var APP_PREFIX = 'APP_';
@@ -53,6 +53,7 @@ if (args.development || args.prod) {
 } else if (process.env.NODE_ENV) {
     mode = process.env.NODE_ENV;
 }
+
 
 require.extensions['.css'] = _.noop;
 require.extensions['.scss'] = _.noop;
@@ -220,7 +221,6 @@ var zipTheBuild = function () {
       .pipe(gulp.dest('./'));
 };
 
-
 var buildAndCopyStaticResources = function () {
     var config = {
         resolve: {
@@ -242,7 +242,7 @@ var buildAndCopyStaticResources = function () {
                 }, {
                     test: /\.scss$/,
                     loader: ExtractTextPlugin.extract('style-loader',
-                        'css-loader!autoprefixer-loader!sass-loader!prepend?data=' + scssGlobals)
+                        'css-loader!autoprefixer-loader!sass-loader')
                 }, {
                     test: /\.(jpe?g|png|gif|svg)$/i,
                     loader: 'url-loader?limit=10000'
@@ -271,8 +271,6 @@ var buildAndCopyStaticResources = function () {
     var reset = gulp.src('./src/reset.css').pipe(gulp.dest('./build'));
 
     var robots = gulp.src('./src/robots.txt').pipe(gulp.dest('./build'));
-
-    var logo = gulp.src('./src/media/cmwn-logo.png').pipe(gulp.dest('./build'));
 
     var primary = gulp.src('./src/styles.js')
         .pipe(gulpWebpack(config, webpack, function (err, stats) {
@@ -330,7 +328,7 @@ gulp.task('dev-server', ['development-server']);
 gulp.task('development-server', executeAsProcess('npm', ['start']));
 
 /*·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´JS Build Tasks`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·*/
-gulp.task('build', ['index'], zipTheBuild);
+gulp.task('build', ['primary-style', 'webpack:build', 'index'], zipTheBuild);
 /** Selects whether to rerun as dev or prod build task*/
 gulp.task('webpack:build', selectBuildMode);
 /** Convienience methods to run only the webpack portion of a build*/
@@ -370,7 +368,17 @@ gulp.task('sri', ['webpack:build', 'explicit-utf-8'], function () {
 });
 
 /*·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´Lint and Testing Tasks`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·*/
-gulp.task('lint', ['lint-js', 'lint-config', 'lint-scss']);
+gulp.task('lint', ['make-lint-config', 'lint-js', 'lint-config', 'lint-scss']);
+gulp.task('make-lint-config', function () {
+    jsonfile.writeFile(
+        '.eslintrc',
+        _.defaultsDeep(eslintConfigTest, eslintConfigConfig, eslintConfigJs),
+        {spaces: 4},
+        function (err) {
+            console.error('OH NO ' + err);
+        }
+    );
+});
 gulp.task('lint-js', function () {
     return gulp.src(['src/**/*.js', '!src/**/*.test.js'])
         // eslint() attaches the lint output to the eslint property
@@ -478,5 +486,6 @@ gulp.task('test', ['e2e', 'unit'], () => {
 gulp.task('showBuildErrors', function () {
     console.log(fs.readFileSync('build_errors.log'));
 });
+
 
 
