@@ -5,15 +5,12 @@ import { connect } from 'react-redux';
 import Moment from 'moment';
 
 import Actions from 'components/actions';
-import ClassNames from 'classnames';
 import HttpManager from 'components/http_manager';
 import Toast from 'components/toast';
 import Layout from 'layouts/god_mode_two_col';
 import GLOBALS from 'components/globals';
-import UpdateUsername from 'components/update_username';
 import Form from 'components/form';
 import DropdownDatepicker from 'components/dropdown_datepicker';
-import ACTION_CONSTANTS from 'components/action_constants';
 import Log from 'components/log';
 
 export const PAGE_UNIQUE_IDENTIFIER = 'god-mode-edit-user';
@@ -47,6 +44,48 @@ export class EditUser extends React.Component {
             <span className="user-metadata">
                 <p className="standard field">{fieldName}: {value}</p>
             </span>
+        );
+    }
+
+    renderEditableUsername() {
+        return (
+            <Input
+                type="text"
+                value={this.state.username}
+                placeholder="username"
+                label="Username:"
+                validate="required"
+                ref="usernameInput"
+                name="usernameInput"
+                validationEvent="onBlur"
+                hasFeedback
+                onChange={
+                    e => this.setState({
+                        username: e.target.value
+                    })
+                }
+            />
+        );
+    }
+
+    renderEditableEmail() {
+        return (
+            <Input
+                type="text"
+                value={this.state.email}
+                placeholder="Email"
+                label="Email:"
+                validate="required"
+                ref="emailInput"
+                name="emailInput"
+                validationEvent="onBlur"
+                hasFeedback
+                onChange={
+                    e => this.setState({
+                        email: e.target.value //eslint-disable-line camelcase
+                    })
+                }
+            />
         );
     }
 
@@ -152,9 +191,9 @@ export class EditUser extends React.Component {
     renderUserFields() {
         return (
             <Form ref="formRef">
-                {this.renderStaticFeild('Username', this.props.data.username)}
-                {this.renderStaticFeild('Email', this.props.data.email)}
-                {this.renderStaticFeild('Type', this.props.data.type)}
+                {this.renderStaticFeild('User Type', this.props.data.type)}
+                {this.renderEditableUsername()}
+                {this.renderEditableEmail()}
                 {this.renderEditableFirstName()}
                 {this.renderEditableMiddleName()}
                 {this.renderEditableLastName()}
@@ -188,7 +227,7 @@ export class EditUser extends React.Component {
         if (this.refs.formRef.isValid()) {
             HttpManager.PUT(`${GLOBALS.API_URL}user/${this.state.user_id}`, postData).then(() => {
                 Toast.success('Profile Updated');
-                Actions.dispatch[ACTION_CONSTANTS.UPDATE_USERNAME]({'username': this.state.username});
+                Actions.dispatch.START_RELOAD_PAGE(this.props.state);
             }).catch(err => {
                 Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
                 Log.log('Server refused profile update', err, postData);
@@ -203,8 +242,8 @@ export class EditUser extends React.Component {
 
         return (
             <Layout classname="edit-student"
-                    currentUser={this.props.currentUser}
-                    navMenuId="navMenu"
+                currentUser={this.props.currentUser}
+                navMenuId="navMenu"
             >
                 <Panel header={`${HEADINGS.EDIT} ${this.props.data.username}`}
                     className="standard edit-profile"
@@ -213,14 +252,6 @@ export class EditUser extends React.Component {
                         {this.renderUserFields()}
                     </div>
                 </Panel>
-                <UpdateUsername
-                    className={ClassNames({
-                        hidden:
-                            this.props.data.type !== 'CHILD' ||
-                            this.props.data.user_id !== this.props.currentUser.user_id
-                    })}
-                    username={this.props.data.username}
-                />
             </Layout>
         );
     }
@@ -241,6 +272,7 @@ mapStateToProps = state => {
 
     return {
         data,
+        state,
         loading,
         currentUser
     };
