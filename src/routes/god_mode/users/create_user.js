@@ -228,23 +228,25 @@ export class CreateUser extends React.Component {
 
     renderFields() {
         return (
-            <Form ref="formRef">
-                {this.renderEditableUserName()}
-                {this.renderEditableEmail()}
-                {this.renderEditableFirstName()}
-                {this.renderEditableMiddleName()}
-                {this.renderEditableLastName()}
-                {this.renderEditableGender()}
-                {this.renderEditableType()}
-                {this.renderEditableBirthday()}
-                <br/>
-                <br/>
-                <Button className="purple standard"
-                        onClick={this.submitData.bind(this)}
-                >
-                    Create
-                </Button>
-            </Form>
+            <div className="left">
+                <Form ref="formRef">
+                    {this.renderEditableUserName()}
+                    {this.renderEditableEmail()}
+                    {this.renderEditableFirstName()}
+                    {this.renderEditableMiddleName()}
+                    {this.renderEditableLastName()}
+                    {this.renderEditableGender()}
+                    {this.renderEditableType()}
+                    {this.renderEditableBirthday()}
+                    <br/>
+                    <br/>
+                    <Button className="purple standard"
+                            onClick={this.submitData.bind(this)}
+                    >
+                        Create
+                    </Button>
+                </Form>
+            </div>
         );
     }
 

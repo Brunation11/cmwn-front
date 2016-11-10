@@ -241,12 +241,12 @@ export class EditUser extends React.Component {
         if (this.props.data === null || _.isEmpty(this.props.data)) return null;
 
         return (
-            <Layout classname="edit-student"
+            <Layout classname="edit"
                 currentUser={this.props.currentUser}
                 navMenuId="navMenu"
             >
                 <Panel header={`${HEADINGS.EDIT} ${this.props.data.username}`}
-                    className="standard edit-profile"
+                    className="standard"
                 >
                     <div className="left">
                         {this.renderUserFields()}
