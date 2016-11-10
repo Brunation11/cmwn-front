@@ -2,7 +2,6 @@ import React from 'react';
 import {Link} from 'react-router';
 import _ from 'lodash';
 
-import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
 import ClassNames from 'classnames';
 import PrivateRoutes from 'private_routes';
@@ -28,20 +27,25 @@ class GodModeSiteNav extends React.Component {
 
     getSaSettingsLinks() {
         var links = this.props.currentUser._links;
+        var promise;
+
         if (!links || !links.sa_settings) return;
-        var promise = Promise.all([HttpManager.GET(links.sa_settings.href)]);
-        var saLinks;
+
+        promise = Promise.all([HttpManager.GET(links.sa_settings.href)]);
+
         promise.then((res) => {
             this.setState({saLinks: res[0].response._links});
         });
     }
 
     buildMenuRoutes() {
+        var saLinks;
+        var menuItems;
         if (!this.state || !this.state.saLinks) return [];
 
-        var saLinks = _.clone(this.state.saLinks, true);
+        saLinks = _.clone(this.state.saLinks, true);
 
-        var menuItems = _.filter(saLinks, (item, key) => {
+        menuItems = _.filter(saLinks, (item, key) => {
             _.map(PrivateRoutes, (route) => {
                 var params = {};
                 var url;
@@ -54,13 +58,13 @@ class GodModeSiteNav extends React.Component {
                             route.endpoint, item.href.split('/').slice(3).join('/')
                         );
 
-                        if (! _.keys(params).length) return;
+                        if (!_.keys(params).length) return;
                     }
 
-                    if (!~route.endpoint.indexOf('$$') && !~item.href.indexOf(route.endpoint)) return;
+                    if (route.endpoint !== '$$' + key && !~item.href.indexOf(route.endpoint)) return;
 
                     url = Util.replacePathPlaceholdersFromParamObject(route.path, params).split('(')[0];
-                    item['url'] = url.indexOf('/') === 0 ? url : '/' + url;
+                    item.url = url.indexOf('/') === 0 ? url : '/' + url;
                 }
             });
 
@@ -74,9 +78,9 @@ class GodModeSiteNav extends React.Component {
 
     renderNavItems() {
         var menuItems = this.buildMenuRoutes();
+        var currentUrl;
         menuItems = this.addHardcodedEntries(menuItems);
 
-        var currentUrl;
 
         if (sessionStorage == null) {
             return null;

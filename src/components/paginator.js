@@ -81,7 +81,6 @@ var Paginator = React.createClass({
         this.setState({currentPage: pageNum});
     },
     selectRowCount: function (e, count, isPagePaginator = this.props.pagePaginator) {
-        debugger;
         this.props.onRowCountChange(count);
         if (isPagePaginator) {
             Actions.dispatch.CHANGE_PAGE_ROW_COUNT(Store.getState(), count);

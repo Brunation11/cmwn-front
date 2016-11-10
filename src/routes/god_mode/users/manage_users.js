@@ -41,7 +41,7 @@ export class ManageUsers extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-            this.setState({
+        this.setState({
             data: nextProps.data,
             rowCount: nextProps.rowCount,
             pageCount: nextProps.pageCount,
@@ -70,7 +70,6 @@ export class ManageUsers extends React.Component {
     }
 
     render() {
-        debugger;
         var userData;
 
         if (this.props.data === null || _.isEmpty(this.props.data)) return null;
@@ -88,14 +87,14 @@ export class ManageUsers extends React.Component {
                 </Panel>
                 <Panel header={HEADINGS.USERS} className="standard">
                 <Paginator
-                            endpointIdentifier={'user'}
-                            rowCount={this.props.rowCount}
-                            currentPage={this.props.currentPage}
-                            pageCount={this.props.pageCount}
-                            componentName={PAGE_UNIQUE_IDENTIFIER}
-                            data={userData}
-                            pagePaginator={true}
-                        >
+                    endpointIdentifier={'user'}
+                    rowCount={this.props.rowCount}
+                    currentPage={this.props.currentPage}
+                    pageCount={this.props.pageCount}
+                    componentName={PAGE_UNIQUE_IDENTIFIER}
+                    data={userData}
+                    pagePaginator={true}
+                >
                     <Table className="admin">
                         <Column renderHeader={HEADINGS.NAME}
                             renderCell={(data, row) => {
@@ -123,7 +122,7 @@ export class ManageUsers extends React.Component {
                                     <a onClick={() => {
                                         var userId = row.user_id;
                                         this.deleteAction(userId);
-                                         } }
+                                    } }
                                     >
                                         {DELETE}
                                     </a>
@@ -168,7 +167,7 @@ mapStateToProps = state => {
         rowCount,
         currentPage
     };
-}
+};
 
 Page = connect(mapStateToProps)(ManageUsers);
 export default Page;

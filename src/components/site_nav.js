@@ -36,7 +36,6 @@ const IGNORED_ROUTES_FOR_EVERYONE = [
 ];
 
 var buildMenuRoutes = function (links) {
-    debugger;
     var allRoutes = PublicRoutes.concat(PrivateRoutes);
     //goal here is to read all of our routes and match them against the list of available
     //links returned by the server. This way, we implicitly know which endpoint routes
@@ -86,8 +85,6 @@ var buildMenuRoutes = function (links) {
                 matchedRoute.params).split('(')[0];
             link = link.set('url', url.indexOf('/') === 0 ? url : '/' + url);
             a.push(link);
-            console.log(matchedRoute, link);
-
         }
         return a;
     }, []);

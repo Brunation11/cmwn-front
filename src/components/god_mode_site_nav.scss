@@ -1,8 +1,9 @@
 @import 'variables';
 
-#god-mode-site-nav {
+#god-mode-site-nav { // scss-lint:disable IdSelector
     .sidebar {
         width: 200px;
+
         .username {
             a {
                 color: $cmwn-purple;
