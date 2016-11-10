@@ -13,17 +13,17 @@ var Page;
 const FAQS = {
     STUDENT: {
         label: 'Student FAQ',
-        href: `${GLOBALS.MEDIA_URL}/f/ad969fcf71ecda4f1e5a72f05863bf37.pdf`,
+        href: `${GLOBALS.MEDIA_URL}ad969fcf71ecda4f1e5a72f05863bf37.pdf`,
         type: 'student',
     },
     TEACHER: {
         label: 'Teacher FAQ',
-        href: `${GLOBALS.MEDIA_URL}/f/09258b65b267583dbd0eedc434d5b11f.pdf`,
+        href: `${GLOBALS.MEDIA_URL}09258b65b267583dbd0eedc434d5b11f.pdf`,
         type: 'teacher',
     },
     ADMIN: {
         label: 'School Admin FAQ',
-        href: `${GLOBALS.MEDIA_URL}/f/15d775ce44bc7dec5e8c74333ef7c93b.pdf`,
+        href: `${GLOBALS.MEDIA_URL}15d775ce44bc7dec5e8c74333ef7c93b.pdf`,
         type: 'admin',
     },
 };
