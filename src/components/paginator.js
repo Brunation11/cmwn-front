@@ -1,6 +1,7 @@
 import React from 'react';
 import {Panel, ButtonGroup, Button, DropdownButton, MenuItem} from 'react-bootstrap';
 import _ from 'lodash';
+import Shortid from 'shortid';
 //import ClassNames from 'classnames';
 
 import GLOBALS from 'components/globals';
@@ -12,15 +13,31 @@ import 'components/paginator.scss';
 
 var _getButtonPattern = function (currentPage, pageCount) {
     var pattern;
-    if (pageCount <= 5) {
+    //general approach here is to display the first and last pages at all times, and then
+    //show the current, previous and next, and sensibly link them with ellipses
+    //this results in having between 5 and 7 buttons at any given time.
+    if (pageCount <= 6) {
+        //if there are less than 6 display em all
         pattern = _.map(Array(pageCount), (v, i) => i + 1);
-    } else if (currentPage === 1 && currentPage === pageCount) {
+    } else if (currentPage === 1 || currentPage === pageCount) {
+        //there are more than 5 pages, and we are on the first or last one
         pattern = [1, 2, '...', pageCount - 1, pageCount];
     } else if (currentPage === 2) {
-        pattern = [1, 2, 3, '...', 5];
+        //there are more than 5 and we are on the second
+        pattern = [1, 2, 3, '...', pageCount];
+    } else if (currentPage === 3) {
+        // 3 and n-2 are special cases requiring 6 elements to sensibly display
+        // 3 case
+        pattern = [1, 2, 3, 4, '...', pageCount];
+    } else if (currentPage === pageCount - 2) {
+        // n-2 case
+        pattern = [1, '...', pageCount - 3, pageCount - 2, pageCount - 1, pageCount];
     } else if (currentPage === pageCount - 1) {
+        //there are more than 5 and we are on the second to last
         pattern = [1, '...', pageCount - 2, pageCount - 1, pageCount];
     } else {
+        //we're somewhere in the middle, so show our neighbor pages and the first and last
+        //this is the most complex case, so it requires 7 buttons
         pattern = [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', pageCount];
     }
     pattern.unshift('<');
@@ -64,6 +81,7 @@ var Paginator = React.createClass({
         this.setState({currentPage: pageNum});
     },
     selectRowCount: function (e, count, isPagePaginator = this.props.pagePaginator) {
+        debugger;
         this.props.onRowCountChange(count);
         if (isPagePaginator) {
             Actions.dispatch.CHANGE_PAGE_ROW_COUNT(Store.getState(), count);
@@ -76,13 +94,17 @@ var Paginator = React.createClass({
     renderPageSelectors: function () {
         var self = this;
         return _.map(_getButtonPattern(self.state.currentPage, self.state.pageCount), value => {
+            var className = '';
+            if (self.state.currentPage === value) {
+                className = 'active';
+            }
             if (value === '<') {
-                return (<Button key={value} onClick={self.selectPage.bind(self,
+                return (<Button key={Shortid.generate()} onClick={self.selectPage.bind(self,
                     Math.max(1, self.state.currentPage - 1), self.props.pagePaginator)}>{value}</Button>);
             } else if (value === '>') {
                 return (
                     <Button
-                        key={value}
+                        key={Shortid.generate()}
                         onClick={self.selectPage.bind(
                             self,
                             Math.min(self.state.pageCount, self.state.currentPage + 1),
@@ -93,10 +115,17 @@ var Paginator = React.createClass({
                     </Button>
                 );
             } else if (value === '...') {
-                return (<Button key={value} disabled={true}>{value}</Button>);
+                return (<Button key={Shortid.generate()} disabled={true}>{value}</Button>);
             } else {
-                return (<Button key={value} onClick={self.selectPage.bind(self, value,
-                    self.props.pagePaginator)}>{value}</Button>);
+                return (
+                    <Button
+                        className={className}
+                        key={Shortid.generate()}
+                        onClick={self.selectPage.bind(self, value, self.props.pagePaginator)}
+                    >
+                        {value}
+                    </Button>
+                );
             }
         });
     },

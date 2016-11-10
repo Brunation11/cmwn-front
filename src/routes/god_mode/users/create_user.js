@@ -254,7 +254,7 @@ export class CreateUser extends React.Component {
                     <a href={`/user/${this.state.user_id}`}>here</a>
                     to visit profile.
                 </p>
-                <p> click <a href="/sa/settings/user/create">here</a> to create another user</p>
+                <p> click <a href="/sa/user/create">here</a> to create another user</p>
             </div>
         );
     }

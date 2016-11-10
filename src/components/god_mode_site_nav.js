@@ -8,9 +8,10 @@ import ClassNames from 'classnames';
 import PrivateRoutes from 'private_routes';
 import Util from 'components/util';
 
+import 'components/god_mode_site_nav.scss';
+
 class GodModeSiteNav extends React.Component {
     constructor(props) {
-        debugger;
         super(props);
     }
 
@@ -19,7 +20,7 @@ class GodModeSiteNav extends React.Component {
     }
 
     addHardcodedEntries(menuItems) {
-        menuItems.unshift({url: '/sa/settings', label: 'God Mode Home'});
+        menuItems.unshift({url: '/sa', label: 'God Mode Home'});
         menuItems.push({url: '/profile', label: 'Exit'});
 
         return menuItems;
@@ -37,32 +38,37 @@ class GodModeSiteNav extends React.Component {
 
     buildMenuRoutes() {
         if (!this.state || !this.state.saLinks) return [];
-        var saLinks = _.values(this.state.saLinks);
-        var saRoutes = _.filter(PrivateRoutes, (route) => {
-                return (route.path)
-        });
-        var menuItems = _.filter(saLinks, (item) => {
+
+        var saLinks = _.clone(this.state.saLinks, true);
+
+        var menuItems = _.filter(saLinks, (item, key) => {
             _.map(PrivateRoutes, (route) => {
                 var params = {};
                 var url;
-                if ( route.path.match(/^sa/g) &&
-                     route.endpoint === '/' + item.href.split('/').slice(3).join('/')) {
+                if (route.path.match(/^sa/g) && route.endpoint && item.label !== null) {
 
-                    if (route.endpoint.indexOf(':')) {
+                    if (~route.endpoint.indexOf(':')) {
+                    // if there are params in the route end point, we try to extract params
+                    // and if no params could be extracted, route is ignored
                         params = Util.matchPathAndExtractParams(
                             route.endpoint, item.href.split('/').slice(3).join('/')
                         );
+
+                        if (! _.keys(params).length) return;
                     }
-                    url = Util.replacePathPlaceholdersFromParamObject(route.path,
-                        params).split('(')[0];
+
+                    if (!~route.endpoint.indexOf('$$') && !~item.href.indexOf(route.endpoint)) return;
+
+                    url = Util.replacePathPlaceholdersFromParamObject(route.path, params).split('(')[0];
                     item['url'] = url.indexOf('/') === 0 ? url : '/' + url;
                 }
             });
 
             if (!_.has(item, 'url')) return false;
+
             return true;
         });
-        console.log(menuItems);
+
         return menuItems;
     }
 
@@ -104,9 +110,9 @@ class GodModeSiteNav extends React.Component {
     renderWelcome() {
         return (
             <div>
-                <p className={ClassNames('username')} style={{'fontSize': 25}}>
-                    <Link to="/profile">
-                        {this.props.currentUser.username}
+                <p className={ClassNames('username')} style={{'fontSize': 40}}>
+                    <Link to="/sa">
+                        Admin
                     </Link>
                 </p>
             </div>
@@ -117,14 +123,16 @@ class GodModeSiteNav extends React.Component {
         if (!this.props.currentUser || !this.props.currentUser._links ) return null;
 
         return (
-            <div className="sidebar">
-                {this.renderWelcome()}
+            <div id="god-mode-site-nav">
+                <div className="sidebar">
+                    {this.renderWelcome()}
 
-                <nav className="">
-                    <ul>
-                        {this.renderNavItems()}
-                    </ul>
-                </nav>
+                    <nav className="">
+                        <ul>
+                            {this.renderNavItems()}
+                        </ul>
+                    </nav>
+                </div>
             </div>
         );
     }

@@ -18,7 +18,7 @@ var Layout = React.createClass({
     },
     render: function () {
         return (
-             <div className={'layout ' + this.props.className}>
+             <div className={'layout'}>
                 <GodModeSiteNav
                     currentUser={this.props.currentUser}
                     navMenuId={this.props.navMenuId}

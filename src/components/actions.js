@@ -96,7 +96,6 @@ Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
                     Errors.handle401(err);
                 });
             }).catch(err => {
-                Log.error(err);
                 Errors.handle401(err);
             })
         }
@@ -149,6 +148,7 @@ Actions = Actions.set(ACTION_CONSTANTS.START_RELOAD_PAGE, function (state) {
 });
 
 Actions = Actions.set(ACTION_CONSTANTS.GET_NEXT_PAGE_PAGE, function (state, pageNum) {
+    debugger;
     return {
         type: ACTION_CONSTANTS.END_GET_NEXT_PAGE_PAGE,
         payload: {

@@ -9,6 +9,8 @@ import HttpManager from 'components/http_manager';
 import Toast from 'components/toast';
 import GLOBALS from 'components/globals';
 import Log from 'components/log';
+import Paginator from 'components/paginator';
+import Actions from 'components/actions';
 
 export const PAGE_UNIQUE_IDENTIFIER = 'manage-users';
 
@@ -34,12 +36,37 @@ var Page;
 
 export class ManageUsers extends React.Component {
     constructor() {
-        debugger;
         super();
+        this.deleteAction = this.deleteAction.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState(nextProps.data);
+            this.setState({
+            data: nextProps.data,
+            rowCount: nextProps.rowCount,
+            pageCount: nextProps.pageCount,
+            currentPage: nextProps.currentPage
+        });
+    }
+
+    shouldComponentUpdate() {
+        return (true);
+    }
+
+    deleteAction(userId) {
+        if (window.confirm(CONFIRM_DELETE)) { //eslint-disable-line no-alert
+            HttpManager.DELETE({
+                url: GLOBALS.API_URL + 'user/' + userId,
+                handleErrors: false
+            }).then(
+                Toast.success(USER_REMOVED)
+            ).catch(err => {
+                Toast.error(BAD_DELETE);
+                Log.error('User not deleted: ' + err.message, err);
+            });
+        }
+
+        Actions.dispatch.START_RELOAD_PAGE(this.props.state);
     }
 
     render() {
@@ -51,17 +78,25 @@ export class ManageUsers extends React.Component {
         userData = this.props.data;
         return (
             <Layout currentUser={this.props.currentUser}
-                    className={PAGE_UNIQUE_IDENTIFIER}
                     navMenuId="navMenu"
             >
                 <Panel header={HEADINGS.HEADER} className="standard">
-                    <Button className="purple standard" href={"/sa/settings/user/create"}>
+                    <Button className="purple standard" href={"/sa/user/create"}>
                         {HEADINGS.CREATE}
                     </Button>
                     <br/>
                 </Panel>
                 <Panel header={HEADINGS.USERS} className="standard">
-                    <Table data={userData} className="admin">
+                <Paginator
+                            endpointIdentifier={'user'}
+                            rowCount={this.props.rowCount}
+                            currentPage={this.props.currentPage}
+                            pageCount={this.props.pageCount}
+                            componentName={PAGE_UNIQUE_IDENTIFIER}
+                            data={userData}
+                            pagePaginator={true}
+                        >
+                    <Table className="admin">
                         <Column renderHeader={HEADINGS.NAME}
                             renderCell={(data, row) => {
                                 return (
@@ -76,7 +111,7 @@ export class ManageUsers extends React.Component {
                         <Column renderHeader={HEADINGS.EDIT}
                             renderCell={(data, row) => {
                                 return (
-                                    <Link to={`/sa/settings/user/${row.user_id}/edit`}>
+                                    <Link to={`/sa/user/${row.user_id}/edit`}>
                                         {EDIT}
                                     </Link>
                                 ); }
@@ -87,17 +122,8 @@ export class ManageUsers extends React.Component {
                                 return (
                                     <a onClick={() => {
                                         var userId = row.user_id;
-                                        if (window.confirm(CONFIRM_DELETE)) { //eslint-disable-line no-alert
-                                            HttpManager.DELETE({
-                                                url: GLOBALS.API_URL + 'user/' + userId,
-                                                handleErrors: false
-                                            }).then(
-                                                Toast.success.bind(this, USER_REMOVED)
-                                            ).catch(err => {
-                                                Toast.error(BAD_DELETE);
-                                                Log.error('User not deleted: ' + err.message, err);
-                                            });
-                                        } } }
+                                        this.deleteAction(userId);
+                                         } }
                                     >
                                         {DELETE}
                                     </a>
@@ -105,6 +131,7 @@ export class ManageUsers extends React.Component {
                             }
                         />
                     </Table>
+                    </Paginator>
                 </Panel>
             </Layout>
         );
@@ -115,10 +142,17 @@ mapStateToProps = state => {
     var data = [];
     var loading = true;
     var currentUser = {};
-    debugger;
+
+    var pageCount = 1;
+    var rowCount = 25;
+    var currentPage = 1;
+
     if (state.page && state.page.data && state.page.data._embedded && state.page.data._embedded.user) {
         loading = state.page.loading;
         data = state.page.data._embedded.user;
+        pageCount = state.page.data.page_count;
+        rowCount = state.page.data.page_size;
+        currentPage = state.page.data.page;
     }
 
     if (state.currentUser != null) {
@@ -127,8 +161,12 @@ mapStateToProps = state => {
 
     return {
         data,
+        state,
         loading,
-        currentUser
+        currentUser,
+        pageCount,
+        rowCount,
+        currentPage
     };
 }
 
