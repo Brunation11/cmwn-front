@@ -26,9 +26,13 @@ import Games from 'routes/games';
 import ChangePassword from 'routes/change_password';
 import NewsFeed from 'routes/newsfeed';
 import Flips from 'routes/users/flips';
+import GodModeHome from 'routes/god_mode';
+import EditUser from 'routes/god_mode/users/edit_user';
+import ManageUsers from 'routes/god_mode/users/manage_users';
+import CreateUser from 'routes/god_mode/users/create_user';
+import ResourceCenter from 'routes/resource_center';
 import FlagView from 'routes/flags';
 import AAYView from 'routes/aay_survey';
-import ResourceCenter from 'routes/resource_center';
 import Help from 'routes/help';
 
 var redirect = function (path) {
@@ -82,7 +86,7 @@ var routes = [
     { path: 'schools/:id(/)', onEnter: redirect('/school/:id')},
     { path: 'school/:id/view(/)', title: 'School', endpoint: '/group/:id', component: SchoolView},
     { path: 'schools/:id/view(/)', onEnter: redirect('/school/:id/view')},
-    { path: 'school/:id/edit(/)', title: 'Edit School', endpoint: '/group/:id', component: SchoolEdit},
+    { path: 'school/:id/edit()', title: 'Edit School', endpoint: '/group/:id', component: SchoolEdit},
     { path: 'schools/:id/edit(/)', onEnter: redirect('/school/:id/edit')},
     { path: 'school/:id/profile(/)', title: 'School', endpoint: '/group/:id', component: SchoolProfile},
     { path: 'schools/:id/profile(/)', onEnter: redirect('/school/:id/profile')},
@@ -103,10 +107,13 @@ var routes = [
     { path: 'suggestedfriends(/)', onEnter: redirect('/friends/suggested')},
     { path: '/flaggedimages(/)', title: 'Flagged Images', endpoint: '/flag', component: FlagView},
     { path: 'all-about-you(/)', title: 'AAY Data', endpoint: '/game-data/all-about-you', component: AAYView},
+    { path: 'sa(/)', title: 'God Mode', endpoint: '/sa/settings', component: GodModeHome},
+    { path: 'sa/users(/)', title: 'Manage Users', endpoint: '$$user', component: ManageUsers},
+    { path: 'sa/user/:id/edit(/)', title: 'Edit User', endpoint: '/user/:id', component: EditUser},
+    { path: 'sa/user/create(/)', title: 'Create User', component: CreateUser},
     { path: 'resources(/)', component: ResourceCenter, endpoint: ''},
     { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed},
     { path: 'help(/)', title: 'Help', component: Help},
-    { path: '/flaggedimages(/)', title: 'Flagged Images', endpoint: '/flag', component: FlagView}
 ];
 
 routes = _.map(routes, i => {

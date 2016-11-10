@@ -35,8 +35,8 @@ var addHardcodedEntries = function (menuItems) {
 };
 
 const IGNORED_ROUTES_FOR_CHILDREN = [
-    'Resource Center',
     'Friends and Network',
+    'Resource Center',
     'Flags'
 ];
 

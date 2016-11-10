@@ -92,7 +92,6 @@ Version - 0.3.14
 
 Version - 0.3.13
 ----
-
 - 7412902: Version bump [ci skip]
 - 8436cc0: bump version
 
@@ -100,6 +99,10 @@ Version - 0.3.14
 ----
 
 - 8436cc0: bump version
+- e99cf48: add expect clause to test to check for flipcase
+- 7412902: Version bump [ci skip]
+- 0a4f783: Version bump [ci skip]
+- 14a7c2f: Version bump [ci skip]
 
 Version - 0.3.12
 ----

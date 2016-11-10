@@ -489,6 +489,3 @@ export class UpdateUsername extends React.Component {
 }
 
 export default UpdateUsername;
-
-
-
