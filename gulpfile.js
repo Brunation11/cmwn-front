@@ -313,8 +313,14 @@ ___  ______  ______  ______  ______  ______  ______  ______  ______  ______  ___
 
 gulp.task('default', ['build', 'watch', 'development-server']);
 
-gulp.task('watch', function () {
-    gulp.watch('src/**/*.js', ['test', 'lint', 'showBuildErrors']);
+gulp.task('watch', ['watch-js', 'watch-scss']);
+
+gulp.task('watch-js', function () {
+    gulp.watch(['src/**/*.js', '!src/**/*.test.js'], ['webpack:build', 'explicit-utf-8', 'sri'], buildIndexPage);
+});
+
+gulp.task('watch-scss', function () {
+    gulp.watch(['src/**/*.scss'], ['primary-style']);
 });
 
 /** watches changes to the js and regenerates the index and sris accordingly */
