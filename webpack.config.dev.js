@@ -4,11 +4,13 @@
  */
 var path = require('path');
 var webpack = require('webpack');
+var HappyPack = require('happypack');
 var autoprefixer = require('autoprefixer');
 
 var scssGlobals = require('./scss_globals.js');
 
 module.exports = {
+    cache: true,
     devtool: 'cheap-source-map',
     resolve: {
         root: path.resolve('./src'),
@@ -25,16 +27,27 @@ module.exports = {
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoErrorsPlugin()
+        new webpack.NoErrorsPlugin(),
+        new HappyPack({
+            cache: process.env.HAPPY_CACHE ===  '1',
+            loaders: [
+                {
+                    path: 'babel',
+                    query: {
+                        plugins: ['transform-runtime'],
+                        presets: ['react', 'es2015'],
+                        cacheDirectory: false
+                    }
+                }
+            ],
+            threads: 2
+        })
     ],
     module: {
         loaders: [{
             test: /\.js$/,
-            loader: 'babel',
+            loader: 'happypack/loader',
             include: path.join(__dirname, 'src'),
-            query: {
-                presets: ['react', 'es2015']
-            }
         },
         {
             test: /\.css$/,
