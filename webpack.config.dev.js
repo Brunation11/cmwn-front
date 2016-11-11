@@ -6,6 +6,7 @@ var path = require('path');
 var webpack = require('webpack');
 var HappyPack = require('happypack');
 var autoprefixer = require('autoprefixer');
+var happyThreadPool = HappyPack.ThreadPool({ size: 5 });
 
 var scssGlobals = require('./scss_globals.js');
 
@@ -28,25 +29,28 @@ module.exports = {
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin(),
-        new HappyPack({
-            cache: process.env.HAPPY_CACHE ===  '1',
-            loaders: [
-                {
-                    path: 'babel',
-                    query: {
-                        plugins: ['transform-runtime'],
-                        presets: ['react', 'es2015'],
-                        cacheDirectory: false
-                    }
+        createHappyPlugin('js', [
+            {
+                path: 'babel',
+                query: {
+                    plugins: ['transform-runtime'],
+                    presets: ['react', 'es2015'],
+                    cacheDirectory: false
                 }
-            ],
-            threads: 2
-        })
+            }
+        ]),
+        createHappyPlugin('scss', [
+            'style',
+            'css',
+            'postcss',
+            'sass',
+            'prepend?data=' + scssGlobals
+        ])
     ],
     module: {
         loaders: [{
             test: /\.js$/,
-            loader: 'happypack/loader',
+            loaders: ['happypack/loader?id=js'],
             include: path.join(__dirname, 'src'),
         },
         {
@@ -55,13 +59,7 @@ module.exports = {
         },
         {
             test: /\.scss$/,
-            loaders: [
-                'style',
-                'css',
-                'postcss',
-                'sass',
-                'prepend?data=' + scssGlobals
-            ]
+            loaders: ['happypack/loader?id=scss']
         },
         {
             test: /\.(jpe?g|png|gif|svg)$/i,
@@ -71,7 +69,7 @@ module.exports = {
             ]
         }, {
             test: /\.woff$/,
-            loader: 'url?limit=100000'
+            loaders: ['url?limit=100000']
         }]
     },
     sassLoader: {
@@ -83,4 +81,17 @@ module.exports = {
 };
 
 
+function createHappyPlugin(id, loaders) {
+    return new HappyPack({
+        id: id,
+        loaders: loaders,
+        threadPool: happyThreadPool,
+
+        // disable happy caching with HAPPY_CACHE=0
+        cache: process.env.HAPPY_CACHE !== '0',
+
+        // make happy more verbose with HAPPY_VERBOSE=1
+        verbose: process.env.HAPPY_VERBOSE !== '0',
+    });
+}
 
