@@ -327,7 +327,17 @@ ___  ______  ______  ______  ______  ______  ______  ______  ______  ______  ___
 
 gulp.task('default', ['build', 'watch', 'development-server']);
 
-gulp.task('watch', ['watch-js', 'watch-scss']);
+gulp.task('watch', function () {
+    var execSync = require('child_process').execSync;
+    execSync('./start-watch.sh');
+});
+
+gulp.task('end-watch', function () {
+    var execSync = require('child_process').execSync;
+    execSync('tmux kill-session -t front');
+});
+
+gulp.task('watch-code', ['watch-js', 'watch-scss']);
 
 gulp.task('watch-js', function () {
     gulp.watch(['src/**/*.js', '!src/**/*.test.js'],
