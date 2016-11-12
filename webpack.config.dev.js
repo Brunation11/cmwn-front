@@ -54,6 +54,7 @@ module.exports = {
     module: {
         loaders: [{
             test: /\.js$/,
+            exclude: /(node_modules|bower_components)/,
             loaders: ['happypack/loader?id=js'],
             include: path.join(__dirname, 'src'),
         },
