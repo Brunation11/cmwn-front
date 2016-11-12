@@ -60,20 +60,24 @@ module.exports = {
         },
         {
             test: /\.css$/,
+            exclude: /(node_modules|bower_components)/,
             loaders: ['style', 'css', 'postcss']
         },
         {
             test: /\.scss$/,
+            exclude: /(node_modules|bower_components)/,
             loaders: ['happypack/loader?id=scss']
         },
         {
             test: /\.(jpe?g|png|gif|svg)$/i,
+            exclude: /(node_modules|bower_components)/,
             loaders: [
                 'file?hash=sha512&digest=hex&name=[hash].[ext]',
                 'img?-minimize&progressive=true'
             ]
         }, {
             test: /\.woff$/,
+            exclude: /(node_modules|bower_components)/,
             loaders: ['url?limit=100000']
         }]
     },
