@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 require('babel-core/register');//for mocha to use es6
 require('app-module-path').addPath(__dirname + '/src');
 /*global require process*/
@@ -11,12 +12,11 @@ var path = require('path');
 var gutil = require('gulp-util');
 var webpack = require('webpack');
 var gulpWebpack = require('webpack-stream');
-var webpackDevConfig = require('./webpack.config.dev.js');
-var webpackProdConfig = require('./webpack.config.prod.js');
-var appPackage = require('./package.json');
+var spawn = require('child_process').spawn;
 var exec = require('child_process').exec;
 var execSync = require('child_process').execSync;
-var spawn = require('child_process').spawn;
+var webpackProdConfig = require('./webpack.config.prod.js');
+var appPackage = require('./package.json');
 var eslint = require('gulp-eslint');
 var scsslint = require('gulp-scss-lint');
 var stylish = require('gulp-scss-lint-stylish2');
@@ -44,7 +44,7 @@ var APP_PREFIX = 'APP_';
 // APP_ENV environment variable
 // NODE_ENV environment variable
 var mode = 'development';
-if (args.development || args.prod) {
+if (args.development || args.dev) {
     mode = 'development';
 } else if (args.prod || args.production) {
     mode = 'production';
@@ -92,7 +92,18 @@ var executeAsProcess = function (command, flags) {
 };
 
 var buildDevelopment = function () {
-    var wpStream = gulpWebpack(webpackDevConfig, null, function (err, stats) {
+    var wpStream;
+    try {
+        fs.statSync('build/vendor-manifest.json');
+        console.log('Vendor bundle already exists. If you have updated package.json modules,' +
+            'remove this file or rerun `gulp webpack:build-vendor`');
+    } catch(err) {
+        execSync('mkdir -p build');
+        execSync('touch build/vendor-manifest.json');
+        execSync('echo "{}" > build/vendor-manifest.json');
+        buildVendor();
+    }
+    wpStream = gulpWebpack(require('./webpack.config.dev.js'), null, function (err, stats) {
         var statsStr = stats.toString({
             colors: true
         });
@@ -159,59 +170,74 @@ var buildProduction = function () {
         .pipe(gulp.dest('./build'));
 };
 
+var buildVendor = function () {
+    execSync('node ./node_modules/webpack/bin/webpack.js --config webpack.config.vendor.js');
+};
+
 var buildIndexPage = function () {
     var target = gulp.src('./src/index.php');
     var sriHashes = JSON.parse(fs.readFileSync('./build/sri.json'));
 
-    return target
-        .pipe(inject(gulp.src('./build/inline.css'), {
-            starttag: '<!-- inject:style -->',
-            transform: function (filePath, file) {
-                return '<style>\n' + file.contents.toString('utf8') + '\n</style>';
+    target = target.pipe(inject(gulp.src('./build/inline.css'), {
+        starttag: '<!-- inject:style -->',
+        transform: function (filePath, file) {
+            return '<style>\n' + file.contents.toString('utf8') + '\n</style>';
+        }
+    }))
+    .pipe(inject(gulp.src('./build/reset.css'), {
+        starttag: '<!-- inject:reset -->',
+        transform: function (filePath, file) {
+            return '<style>\n' + file.contents.toString('utf8') + '\n</style>';
+        }
+    }))
+    .pipe(inject(gulp.src('./src/app.js', {read: false}), {
+        starttag: '<!-- inject:env -->',
+        transform: function () {
+            //note: we aren't actually doing anything with app.js, but a file is mandatory
+            var output = '<script>';
+            output += '\nwindow.__cmwn = {};';
+            output += '\nwindow.__cmwn.MODE = "local";';
+            output += '\nwindow.__cmwn.VERSION = "' + appPackage.version + '";';
+            _.each(process.env, function (value, key) {
+                if (key.indexOf(APP_PREFIX) === 0) {
+                    console.log('Writing ' + key + ' : ' + value);
+                    output +=
+                        '\nwindow.__cmwn.' +
+                        _.capitalize(key.split(APP_PREFIX)[1]) +
+                        ' = ' + JSON.stringify(value) + ';';
+                }
+            });
+            output += '\n</script>';
+            return output;
+        }
+    }))
+    .pipe(inject(gulp.src('./src/app.js', {read: false}), {
+        starttag: '<!-- app:js -->',
+        transform: function () {
+            if (mode === 'production' || mode === 'prod') {
+                return '<script src="/cmwn-' +
+                    appPackage.version +
+                    '.js" integrity="' +
+                    sriHashes['build/cmwn-' +
+                    appPackage.version + '.js'] +
+                    '" crossorigin="anonymous"></script>';
             }
-        }))
-        .pipe(inject(gulp.src('./build/reset.css'), {
-            starttag: '<!-- inject:reset -->',
-            transform: function (filePath, file) {
-                return '<style>\n' + file.contents.toString('utf8') + '\n</style>';
-            }
-        }))
-        .pipe(inject(gulp.src('./src/app.js', {read: false}), {
-            starttag: '<!-- inject:env -->',
+            return '<script src="/cmwn-' + appPackage.version + '.js"></script>';
+        }
+    }));
+
+    if (mode === 'development') {
+        target = target.pipe(inject(gulp.src('./src/app.js', {read: false}), {
+            starttag: '<!-- app:vendor -->',
             transform: function () {
                 //note: we aren't actually doing anything with app.js, but a file is mandatory
-                var output = '<script>';
-                output += '\nwindow.__cmwn = {};';
-                output += '\nwindow.__cmwn.MODE = "local";';
-                output += '\nwindow.__cmwn.VERSION = "' + appPackage.version + '";';
-                _.each(process.env, function (value, key) {
-                    if (key.indexOf(APP_PREFIX) === 0) {
-                        console.log('Writing ' + key + ' : ' + value);
-                        output +=
-                            '\nwindow.__cmwn.' +
-                            _.capitalize(key.split(APP_PREFIX)[1]) +
-                            ' = ' + JSON.stringify(value) + ';';
-                    }
-                });
-                output += '\n</script>';
+                var output = '<script src="/vendor.bundle.js"></script>';
                 return output;
             }
-        }))
-        .pipe(inject(gulp.src('./src/app.js', {read: false}), {
-            starttag: '<!-- app:js -->',
-            transform: function () {
-                if (mode === 'production' || mode === 'prod') {
-                    return '<script src="/cmwn-' +
-                        appPackage.version +
-                        '.js" integrity="' +
-                        sriHashes['build/cmwn-' +
-                        appPackage.version + '.js'] +
-                        '" crossorigin="anonymous"></script>';
-                }
-                return '<script src="/cmwn-' + appPackage.version + '.js"></script>';
-            }
-        }))
-        .pipe(gulp.dest('./build'));
+        }));
+    }
+
+    return target.pipe(gulp.dest('./build'));
 };
 
 var zipTheBuild = function () {
@@ -316,7 +342,8 @@ gulp.task('default', ['build', 'watch', 'development-server']);
 gulp.task('watch', ['watch-js', 'watch-scss']);
 
 gulp.task('watch-js', function () {
-    gulp.watch(['src/**/*.js', '!src/**/*.test.js'], ['webpack:build', 'explicit-utf-8', 'sri'], buildIndexPage);
+    gulp.watch(['src/**/*.js', '!src/**/*.test.js'],
+         ['webpack:build', 'explicit-utf-8', 'sri'], buildIndexPage);
 });
 
 gulp.task('watch-scss', function () {
@@ -342,6 +369,7 @@ gulp.task('build-warning', function () {
     console.log(gutil.colors.yellow('Warning: `gulp webpack:build` does not build the index or some styles.' +
         ' Run `gulp build` to build all artifacts'));
 });
+gulp.task('webpack:build-vendor', buildVendor);
 gulp.task('webpack:build-prod', ['build-warning'], buildProduction);
 gulp.task('webpack:build-production', ['build-warning'], buildProduction);
 gulp.task('webpack:build-dev', ['build-warning'], buildDevelopment);
