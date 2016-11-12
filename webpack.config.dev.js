@@ -35,7 +35,7 @@ module.exports = {
         }),
         createHappyPlugin('js', [
             {
-                path: 'babel',
+                path: 'babel?cacheDirectory=true',
                 query: {
                     plugins: ['transform-runtime'],
                     presets: ['react', 'es2015'],
