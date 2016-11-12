@@ -6,34 +6,15 @@ require('app-module-path').addPath(__dirname + '/src');
 /*eslint no-console:0 */
 /*eslint-disable vars-on-top */
 var gulp = require('gulp');
-var del = require('del');
 var args = require('yargs').argv;
 var path = require('path');
 var gutil = require('gulp-util');
-var webpack = require('webpack');
-var gulpWebpack = require('webpack-stream');
-var spawn = require('child_process').spawn;
-var exec = require('child_process').exec;
-var execSync = require('child_process').execSync;
-var webpackProdConfig = require('./webpack.config.prod.js');
 var appPackage = require('./package.json');
 var eslint = require('gulp-eslint');
-var scsslint = require('gulp-scss-lint');
-var stylish = require('gulp-scss-lint-stylish2');
 var fs = require('fs');
 var eslintConfigJs = JSON.parse(fs.readFileSync('./.eslintrc'));
-var eslintConfigTest = JSON.parse(fs.readFileSync('./.eslintrc_test'));
-var eslintConfigConfig = JSON.parse(fs.readFileSync('./.eslintrc_config'));
 var env = require('gulp-env');
 var _ = require('lodash');
-var inject = require('gulp-inject');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var mergeStream = require('merge-stream');
-var sri = require('gulp-sri');
-var mocha = require('gulp-mocha');
-var zip = require('gulp-zip');
-var webdriver = require('gulp-webdriver');
-var scssGlobals = require('./scss_globals.js');
 
 /** @const */
 var APP_PREFIX = 'APP_';
@@ -80,7 +61,7 @@ ___  ______  ______  ______  ______  ______  ______  ______  ______  ______  ___
  */
 var executeAsProcess = function (command, flags) {
     return function () {
-        var start = spawn(command, flags);
+        var start = require('child_process').spawn(command, flags);
         start.stdout.on('data', function (data) {
             console.log('stdout: ' + data);
         });
@@ -92,6 +73,7 @@ var executeAsProcess = function (command, flags) {
 };
 
 var buildDevelopment = function () {
+    var execSync = require('child_process').execSync;
     var wpStream;
     try {
         fs.statSync('build/vendor-manifest.json');
@@ -103,7 +85,7 @@ var buildDevelopment = function () {
         execSync('echo "{}" > build/vendor-manifest.json');
         buildVendor();
     }
-    wpStream = gulpWebpack(require('./webpack.config.dev.js'), null, function (err, stats) {
+    wpStream = require('webpack-stream')(require('./webpack.config.dev.js'), null, function (err, stats) {
         var statsStr = stats.toString({
             colors: true
         });
@@ -135,9 +117,9 @@ var buildDevelopment = function () {
 
 var buildProduction = function () {
     // modify some webpack config options
-    var myConfig = webpackProdConfig;
+    var myConfig = require('./webpack.config.prod.js');
 
-    var wpStream = gulpWebpack(myConfig, webpack, function (err, stats) {
+    var wpStream = require('webpack-stream')(myConfig, require('webpack'), function (err, stats) {
         var statsStr = stats.toString({
             colors: true
         });
@@ -171,10 +153,12 @@ var buildProduction = function () {
 };
 
 var buildVendor = function () {
+    var execSync = require('child_process').execSync;
     execSync('node ./node_modules/webpack/bin/webpack.js --config webpack.config.vendor.js');
 };
 
 var buildIndexPage = function () {
+    var inject = require('gulp-inject');
     var target = gulp.src('./src/index.php');
     var sriHashes = JSON.parse(fs.readFileSync('./build/sri.json'));
 
@@ -241,6 +225,7 @@ var buildIndexPage = function () {
 };
 
 var zipTheBuild = function () {
+    var zip = require('gulp-zip');
     return gulp.src(['build/**/*.*', 'build/.htaccess'])
       .pipe(zip('build.zip'))
       .pipe(gulp.dest('./'));
@@ -248,6 +233,9 @@ var zipTheBuild = function () {
 
 
 var buildAndCopyStaticResources = function () {
+    var scssGlobals = require('./scss_globals.js');
+    var mergeStream = require('merge-stream');
+    var ExtractTextPlugin = require('extract-text-webpack-plugin');
     var config = {
         resolve: {
             root: path.resolve('./src'),
@@ -299,7 +287,7 @@ var buildAndCopyStaticResources = function () {
     var robots = gulp.src('./src/robots.txt').pipe(gulp.dest('./build'));
 
     var primary = gulp.src('./src/styles.js')
-        .pipe(gulpWebpack(config, webpack, function (err, stats) {
+        .pipe(require('webpack-stream')(config, require('webpack'), function (err, stats) {
             if (err) {
                 throw new gutil.PluginError('webpack:style', err);
             }
@@ -308,7 +296,7 @@ var buildAndCopyStaticResources = function () {
             }));
 
             //a little cleanup of intermediate files
-            del(['./build/styles.js']);
+            require('del')(['./build/styles.js']);
         }))
         .pipe(gulp.dest('./build'));
     return mergeStream(reset, primary);
@@ -386,7 +374,8 @@ gulp.task('webpack:build-development', ['build-warning'], buildDevelopment);
 /** This task converts our JS output to utf-8, as this is what the browser expects when generating SRI hashes
  * This task also ultimately produces our final build artifact. */
 gulp.task('explicit-utf-8', ['webpack:build'], function (done) {
-    exec('iconv -f LATIN1 -t UTF-8 ./build/build.js > ./build/cmwn-' + appPackage.version + '.js', done);
+    require('child_process')
+        .exec('iconv -f LATIN1 -t UTF-8 ./build/build.js > ./build/cmwn-' + appPackage.version + '.js', done);
 });
 /** Convienience Build Aliases */
 // eAP here just lets us restart gulp with appropriate flags
@@ -406,6 +395,7 @@ gulp.task('primary-style', buildAndCopyStaticResources);
 
 /** Creates Single Resource Integrity (SRI) hashes for the primary JS*/
 gulp.task('sri', ['webpack:build', 'explicit-utf-8'], function () {
+    var sri = require('gulp-sri');
     return gulp.src('./build/cmwn-' +
         appPackage.version + '.js').pipe(sri({algorithms: ['sha256']})).pipe(gulp.dest('./build'));
 });
@@ -427,19 +417,21 @@ gulp.task('lint-js', function () {
 });
 gulp.task('lint-test', function () {
     return gulp.src(['src/**/*.test.js'])
-        .pipe(eslint(_.defaultsDeep(eslintConfigTest, eslintConfigJs)))
+        .pipe(eslint(_.defaultsDeep(JSON.parse(fs.readFileSync('./.eslintrc_test')), eslintConfigJs)))
         .pipe(eslint.format())
         .pipe(eslint.format('stylish', fs.createWriteStream('testlint.log')))
         .pipe(eslint.failAfterError());
 });
 gulp.task('lint-config', function () {
     return gulp.src(['gulpfile.js', 'webpack.config.dev.js', 'webpack.config.prod.js'])
-        .pipe(eslint(_.defaultsDeep(eslintConfigConfig, eslintConfigJs)))
+        .pipe(eslint(_.defaultsDeep(JSON.parse(fs.readFileSync('./.eslintrc_config')), eslintConfigJs)))
         .pipe(eslint.format())
         .pipe(eslint.format('stylish', fs.createWriteStream('configlint.log')))
         .pipe(eslint.failAfterError());
 });
 gulp.task('lint-scss', function () {
+    var stylish = require('gulp-scss-lint-stylish2');
+    var scsslint = require('gulp-scss-lint');
     var reporter = stylish();
     return gulp.src(['src/**/*.scss'])
         .pipe(scsslint({
@@ -451,6 +443,7 @@ gulp.task('lint-scss', function () {
 });
 
 gulp.task('unit', function () {
+    var mocha = require('gulp-mocha');
     process.env.NODE_ENV = 'production';
     process.env.BABEL_ENV = 'production';
     var tests = gulp.src(['src/**/*.test.js'], {read: false})
@@ -472,6 +465,7 @@ gulp.task('unit', function () {
 });
 
 gulp.task('smoke', function () {
+    var mocha = require('gulp-mocha');
     process.env.NODE_ENV = 'production';
     process.env.BABEL_ENV = 'production';
     var tests = gulp.src(['./smoke.test.js'], {read: false})
@@ -483,7 +477,7 @@ gulp.task('smoke', function () {
 });
 
 gulp.task('coverage', function () {
-    var proc = spawn('./test.sh');
+    var proc = require('child_process').spawn('./test.sh');
 
     proc.on('exit', function (exitCode) {
         console.log('process exited with code ' + exitCode);
@@ -500,6 +494,8 @@ gulp.task('coverage', function () {
 
 
 gulp.task('e2e', () => {
+    var execSync = require('child_process').execSync;
+    var webdriver = require('gulp-webdriver');
     var overrideHostIP = process.env.DOCKER_HOST_IP;
     var hostIP = overrideHostIP || execSync('docker-machine ip front').toString().split('\n')[0];
     if (hostIP === '' || hostIP == null) {
