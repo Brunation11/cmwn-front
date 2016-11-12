@@ -350,6 +350,15 @@ gulp.task('watch-scss', function () {
     gulp.watch(['src/**/*.scss'], ['primary-style']);
 });
 
+gulp.task('watch-test', function () {
+    gulp.watch(['src/**/*.js'], ['coverage']);
+});
+
+gulp.task('watch-lint', function () {
+    gulp.watch(['src/**/*.scss'], ['lint-scss']);
+    gulp.watch(['src/**/*.js'], ['lint-js']);
+});
+
 /** watches changes to the js and regenerates the index and sris accordingly */
 gulp.task('watch-version', function () {
     gulp.watch('build/build.js', ['sri', 'index']);
