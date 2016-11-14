@@ -32,8 +32,8 @@ import ManageUsers from 'routes/god_mode/users/manage_users';
 import CreateUser from 'routes/god_mode/users/create_user';
 import ResourceCenter from 'routes/resource_center';
 import FlagView from 'routes/flags';
-import Help from 'routes/help';
 import AAYView from 'routes/aay_survey';
+import Help from 'routes/help';
 
 var redirect = function (path) {
     return function (nextState, transition) {
@@ -105,6 +105,8 @@ var routes = [
     { path: 'friends/suggested(/)', title: 'Suggested Friends', endpoint: '$$suggested_friends',
         component: SuggestedFriends},
     { path: 'suggestedfriends(/)', onEnter: redirect('/friends/suggested')},
+    { path: '/flaggedimages(/)', title: 'Flagged Images', endpoint: '/flag', component: FlagView},
+    { path: 'sa/game-data/:id', title: 'AAY Data', endpoint: '/game-data/:id', component: AAYView},
     { path: 'sa(/)', title: 'God Mode', endpoint: '/sa/settings', component: GodModeHome},
     { path: 'sa/users(/)', title: 'Manage Users', endpoint: '$$user', component: ManageUsers},
     { path: 'sa/user/:id/edit(/)', title: 'Edit User', endpoint: '/user/:id', component: EditUser},
@@ -112,8 +114,6 @@ var routes = [
     { path: 'resources(/)', component: ResourceCenter, endpoint: ''},
     { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed},
     { path: 'help(/)', title: 'Help', component: Help},
-    { path: '/flaggedimages(/)', title: 'Flagged Images', endpoint: '/flag', component: FlagView},
-    { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed},
     { path: 'all-about-you(/)', title: 'AAY Data', endpoint: '/game-data/all-about-you', component: AAYView}
 ];
 

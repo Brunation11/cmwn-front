@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {Panel} from 'react-bootstrap';
 import {Link} from 'react-router';
-import Layout from 'layouts/two_col';
+import Layout from 'layouts/god_mode_two_col';
 import {Table, Column} from 'components/table';
 import SurveyModal from 'components/popovers/survey_modal';
 import HttpManager from 'components/http_manager';
@@ -91,7 +91,7 @@ export class AAYView extends React.Component {
 
     render() {
         return (
-            <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+            <Layout currentUser={this.props.currentUser}>
                 {this.renderDataState()}
             </Layout>
         );
@@ -102,16 +102,19 @@ mapStateToProps = state => {
     var data = [];
     var loading = true;
     var links;
+    var currentUser = {};
     if (state.page && state.page.data && state.page.data._embedded && state.page.data._embedded.items) {
         loading = state.page.loading;
         data = state.page.data._embedded.items;
         links = state.page.data._links.self.href;
+        currentUser = state.currentUser;
     }
 
     return {
         data,
         loading,
-        links
+        links,
+        currentUser
     };
 };
 
