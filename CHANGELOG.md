@@ -19,23 +19,57 @@ Version - 0.3.22
 - fdb1cd4: Version bump [ci skip]
 - 14a7c2f: Version bump [ci skip]
 
-Version - 0.3.21
-----
-
-- 7412902: Version bump [ci skip]
-- 8436cc0: bump version
-- 0a4f783: Version bump [ci skip]
-- 14a7c2f: Version bump [ci skip]
-- 19c862b: linter
-- c96a0d7: add initial testing, test data, and smoke test file for newsfeed
-- 7c71703: remove default from export declaration on class. remove on error props for images
-- 6d8aa6f: update style rules, refactor for linter
-- dd5554a: Version bump [ci skip]
-
 Version - 0.3.20
 ----
+
+- a52c741: Version bump [ci skip]
 - 7412902: Version bump [ci skip]
 - 8436cc0: bump version
+
+Version - 0.3.19
+----
+
+- c2ff31f: linter
+- e41223a: refactor render function to check embedded data for flips as well as user flip
+- 340fef3: add route for viewing a users earned flips
+- d16a3fe: refactor build menu routes function to account for routes with similar enpoints
+- 6c328c3: Version bump [ci skip]
+
+Version - 0.3.18
+----
+
+- 584f049: linter
+- ff7f7e8: minor visual tweaks
+- f12cd44: Version bump [ci skip]
+
+Version - 0.3.17
+----
+
+- ce7a824: linter
+- 7fdaac9: adjust font size
+- dd60b72: Version bump [ci skip]
+
+Version - 0.3.16
+----
+
+- 516feec: linter
+- f726d29: refactor tests to match component changes
+- f242342: add id to login button
+- 03269be: linter
+- 0c99436: linter
+- d364a74: linter
+- 2834a42: add style sheet for change password route
+- e9bae13: refactor render function to create reset password function. add new confirm re-login function.
+- ca251ff: add new assets for confirm password reset
+- 441a873: linter
+- 77f0480: add style rules for forgot password, confirm teacher, and confirm student pages
+- 8840956: add confirm teacher and confirm student password reset screens. add reference to user type to state. add function for setting user type to state. refactor forgot password page
+- cef7302: add new assets for reset password
+- d641b9c: add responsive styles for login page
+- 58c73bc: refactor login component. remove tabs. add functions for rendering login and forgot password pages.
+- b2f86ca: add new login page assets
+- 3a40efe: Version bump [ci skip]
+
 
 Version - 0.3.15
 ----
@@ -64,7 +98,6 @@ Version - 0.3.13
 - 8436cc0: bump version
 - 0a4f783: Version bump [ci skip]
 - 14a7c2f: Version bump [ci skip]
-<<<<<<< HEAD
 
 Version - 0.3.15
 ----
@@ -78,6 +111,10 @@ Version - 0.3.14
 ----
 
 - 8436cc0: bump version
+- e99cf48: add expect clause to test to check for flipcase
+- 7412902: Version bump [ci skip]
+- 0a4f783: Version bump [ci skip]
+- 14a7c2f: Version bump [ci skip]
 
 Version - 0.3.12
 ----
@@ -89,6 +126,7 @@ Version - 0.3.12
 
 Version - 0.3.11
 ----
+
 - 53b2ee6: Version bump [ci skip]
 
 Version - 0.0.0

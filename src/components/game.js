@@ -64,6 +64,11 @@ export class Game extends React.Component {
                 this.onExit.bind(this)
             )
         });
+        if (Screenfull.enabled) {
+            document.addEventListener(Screenfull.raw.fullscreenchange, () => {
+                this.setState({isFullscreen: Screenfull.isFullscreen});
+            });
+        }
     }
 
     componentDidMount() {
@@ -150,6 +155,7 @@ export class Game extends React.Component {
             Screenfull.exit();
             this.setState({
                 fullscreenFallback: false,
+                isFullscreen: false,
             });
         }
     }
@@ -173,12 +179,14 @@ export class Game extends React.Component {
     }
 
     makeFullScreen() {
+        var nextState = {isFullscreen: true};
         if (Screenfull.enabled) {
             Screenfull.request(ReactDOM.findDOMNode(this.refs.wrapRef));
         } else {
-            this.setState({fullscreenFallback: true});
-            this.resizeFrame.call(this);
+            nextState.fullscreenFallback = true;
+            this.resizeFrame().call(this);
         }
+        this.setState(nextState);
     }
 
     checkForPortrait() {
@@ -199,7 +207,7 @@ export class Game extends React.Component {
             <div className={COMPONENT_IDENTIFIER}>
                 <div ref="wrapRef" className={ClassNames(
                     'game-frame-wrapper',
-                    {fullscreen: this.state.fullscreenFallback}
+                    {fs: this.state.isFullscreen, fullscreen: this.state.fullscreenFallback}
                 )}>
                     <div
                         ref="overlay"

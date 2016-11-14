@@ -12,15 +12,15 @@ import Log from 'components/log';
 import Toast from 'components/toast';
 import Layout from 'layouts/two_col';
 import GLOBALS from 'components/globals';
-import Validate from 'components/validators';
+// import Validate from 'components/validators';
 import Util from 'components/util';
 import UpdateUsername from 'components/update_username';
 import ProfileImage from 'components/profile_image';
 import Form from 'components/form';
 import DropdownDatepicker from 'components/dropdown_datepicker';
 import ACTION_CONSTANTS from 'components/action_constants';
-import CodeChange from 'components/code_change';
-import ForgotPass from 'components/forgot_pass';
+// import CodeChange from 'components/code_change';
+// import ForgotPass from 'components/forgot_pass';
 import ChangePassword from 'components/change_password';
 
 
@@ -30,7 +30,8 @@ var mapStateToProps;
 var Page;
 
 const HEADINGS = {
-    EDIT_TITLE: 'Edit User: '
+    EDIT_TITLE: 'Edit User: ',
+    CURRENT_USERNAME: 'YOUR CURRENT USERNAME IS:'
 };
 const ERRORS = {
     BAD_DELETE: 'Sorry, there was a problem deleting the user. Please refresh and try again.',
@@ -70,12 +71,14 @@ export var decodeEditingPermissions = function (isStudent) {
             canEdit: false
         }
     };
+
     if (!isStudent) {
         perms.username.canEdit = true;
         perms.firstName.canEdit = true;
         perms.lastName.canEdit = true;
         perms.birthday.canEdit = true;
     }
+
     // check if any fields are editable
     canEdit = _.reduce(Object.keys(perms), (overall, k) => { return overall || perms[k].canEdit; }, false);
     perms.canEdit = canEdit;
@@ -115,65 +118,46 @@ export class EditProfile extends React.Component {
     }
 
     resolveRole(props) {
-        var newState = {};
-        if (props.currentUser && props.currentUser.type &&
-            props.currentUser.type !== 'CHILD') {
-            newState.isStudent = false;
+        if (props.currentUser && props.currentUser.type && props.currentUser.type !== 'CHILD') {
+            this.setState({isStudent: false});
         } else {
-            newState.isStudent = true;
+            this.setState({isStudent: true});
         }
-        this.setState(newState);
     }
 
     suspendAccount() {
         if (window.confirm(CONFIRM_DELETE)) { //eslint-disable-line no-alert
-            HttpManager.DELETE({url: GLOBALS.API_URL + 'user/' + this.state.user_id, handleErrors: false})
+            HttpManager.DELETE({url: `${GLOBALS.API_URL}user/${this.state.user_id}`, handleErrors: false})
                 .then(Toast.success.bind(this, USER_REMOVED))
                 .catch(err => {
                     Toast.error(ERRORS.BAD_DELETE);
-                    Log.error('User not deleted: ' + err.message, err);
+                    Log.error(`User not deleted: ${err.message}`, err);
                 });
         }
     }
 
-    resetPassword() {
-        if (this.props.data._links.forgot == null) {
-            return;
-        }
-        //note: This should only appear for adults, who have email addresses
-        HttpManager.GET(this.props.data._links.forgot.href, {email: this.props.data.email}).then(
-            Toast.success.bind(this, 'Password Reset. This user will recieve an email with further ' +
-                'instructions.')
-        ).catch(err => {
-            Toast.error(ERRORS.BAD_RESET + (err.message ? ' Message: ' + err.message : ''));
-            Log.log('Server refused profile update', err);
-        });
-    }
-
-    submitData() {
+    submit() {
         var birthdate = Moment(this.state.birthdate);
         /** @TODO MPR, 3/18/16: Remove unneeded fields*/
+
         var postData = {
             username: this.state.username,
             first_name: this.state.first_name, //eslint-disable-line camelcase
             last_name: this.state.last_name //eslint-disable-line camelcase
         };
-        //if (!this.state.isStudent) {
-        //    if (this.state.email) {
+
         postData.email = this.state.email;
-        //}
         postData.gender = this.state.gender;
-        if (birthdate.isValid()) {
-            postData.birthdate = birthdate.format('YYYY-MM-DD');
-        }
         postData.type = this.state.type;
-        //}
+        if (birthdate.isValid()) postData.birthdate = birthdate.format('YYYY-MM-DD');
+
         if (this.refs.formRef.isValid()) {
-            HttpManager.PUT(`${GLOBALS.API_URL}user/${this.state.user_id}`, postData).then(() => {
+            HttpManager.PUT(`${GLOBALS.API_URL}user/${this.state.user_id}`, postData)
+            .then(() => {
                 Toast.success('Profile Updated');
                 Actions.dispatch[ACTION_CONSTANTS.UPDATE_USERNAME]({'username': this.state.username});
             }).catch(err => {
-                Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
+                Toast.error(`${BAD_UPDATE} ${err.message ? `Message: ${err.message}` : ''}`);
                 Log.log('Server refused profile update', err, postData);
             });
         } else {
@@ -181,162 +165,152 @@ export class EditProfile extends React.Component {
         }
     }
 
-    removeParent(i) {
-        var self = this;
-        return function () {
-            self.state.parents.splice(i, 1);
-            self.setState({parents: self.state.parents});
-        };
-    }
+// ************************************************************
+// CURRENTLY UNUSED FUNCTIONS, VERIFY FOR FUTURE IMPLIMENTATION
+// ************************************************************
 
-    addParent() {
-        var parents = this.state.parents || [];
-        parents.push({name: 'Jane Adams'});
-        this.setState({parents});
-    }
+    // resetPassword() {
+    //     if (this.props.data._links.forgot == null) {
+    //         return;
+    //     }
+    //     //note: This should only appear for adults, who have email addresses
+    //     HttpManager.GET(this.props.data._links.forgot.href, {email: this.props.data.email}).then(
+    //         Toast.success.bind(this,
+    //             'Password Reset. This user will recieve an email with further instructions.')
+    //     ).catch(err => {
+    //         Toast.error(`${ERRORS.BAD_RESET} ${err.message ? `Message: ${err.message}` : ''}`);
+    //         Log.log('Server refused profile update', err);
+    //     });
+    // }
 
-    renderParent(parent, i) {
-        // TODO: MPR, 11/14/15: Implement Autocomplete, store parent ID
+    // addParent() {
+    //     var parents = this.state.parents || [];
+    //     parents.push({name: 'Jane Adams'});
+    //     this.setState({parents});
+    // }
+
+    // removeParent(i) {
+    //     var self = this;
+    //     return function () {
+    //         self.state.parents.splice(i, 1);
+    //         self.setState({parents: self.state.parents});
+    //     };
+    // }
+
+    // renderParent(parent, i) {
+    //     // TODO: MPR, 11/14/15: Implement Autocomplete, store parent ID
+    //     return (
+    //         <span>
+    //             <Input
+    //                 type="text"
+    //                 groupClassName="has-addon"
+    //                 value={parent.name}
+    //                 placeholder="Parent or Guardian"
+    //                 label="Parent or Guardian"
+    //                 bsStyle={Validate.required(parent.name)}
+    //                 hasFeedback
+    //                 ref={`parentRef${i}`}
+    //                 key={`parentRef${i}`}
+    //                 addonAfter={<Button onClick={this.removeParent(i)} >X</Button>}
+    //                 onChange={() => {
+    //                     var parents = this.state.parents;
+    //                     parents[i] = {name: this.refs[`parentRef${i}`].getValue()};
+    //                     this.setState({parents});
+    //                 }}
+    //             />
+    //         </span>
+    //     );
+    // }
+
+    // renderParentFields() {
+    //     if (this.state.parents && this.state.parents.length) {
+    //         return _.map(this.state.parents, this.renderParent);
+    //     }
+    //     return null;
+    // }
+
+    // renderSchoolInformation() {
+    //     var teachers = _.map(this.state.teachers, this.renderTeacherInputs);
+    //     if (!teachers.length) {
+    //         teachers = null;
+    //     }
+    //     return (
+    //        <div>
+    //             <Input
+    //                 type="select"
+    //                 value={this.state.grade}
+    //                 placeholder="Grade"
+    //                 label="Grade"
+    //                 ref="gradeInput"
+    //                 onChange={this.setState.bind(this, {grade: this.refs.gradeInput.getValue()})}
+    //             >{this.renderk8()}</Input>
+    //             {teachers}
+    //        </div>
+    //     );
+    // }
+
+    // renderk8() {
+    //     return (
+    //         _.map(Array(9), (v, i) => {
+    //             return (<option value={i}>{i === 0 ? 'k' : i}</option>);
+    //         })
+    //     );
+    // }
+
+    // renderTeacherInputs() {}
+
+    // renderParentInfo() {
+    //     return (
+    //         <span>
+    //             <h3>Parent or Guardian</h3>
+    //             {this.renderParentFields()}
+    //             <p><a onClick={this.addParent}>+ Add parent or guardian</a></p>
+    //             <h3>School Information</h3>
+    //             {this.renderSchoolInformation()}
+    //         </span>
+    //     );
+    // }
+
+// ************************************************************
+// CURRENTLY UNUSED FUNCTIONS, VERIFY FOR FUTURE IMPLIMENTATION
+// ************************************************************
+
+    renderUsernameGenerator() {
         return (
-            <span>
-                <Input
-                    type="text"
-                    groupClassName="has-addon"
-                    value={parent.name}
-                    placeholder="Parent or Guardian"
-                    label="Parent or Guardian"
-                    bsStyle={Validate.required(parent.name)}
-                    hasFeedback
-                    ref={`parentRef${i}`}
-                    key={`parentRef${i}`}
-                    addonAfter={<Button onClick={this.removeParent(i)} >X</Button>}
-                    onChange={() => {
-                        var parents = this.state.parents;
-                        parents[i] = {name: this.refs[`parentRef${i}`].getValue()};
-                        this.setState({parents});
-                    }}
-                />
-            </span>
+            <div>HELLO WORLD</div>
         );
     }
-
-    renderParentFields() {
-        if (this.state.parents && this.state.parents.length) {
-            return _.map(this.state.parents, this.renderParent);
-        }
-        return null;
-    }
-
-    renderSchoolInformation() {
-        var teachers = _.map(this.state.teachers, this.renderTeacherInputs);
-        if (!teachers.length) {
-            teachers = null;
-        }
-        return (
-           <div>
-                <Input
-                    type="select"
-                    value={this.state.grade}
-                    placeholder="Grade"
-                    label="Grade"
-                    ref="gradeInput"
-                    onChange={this.setState.bind(this, {grade: this.refs.gradeInput.getValue()})}
-                >{this.renderk8()}</Input>
-                {teachers}
-           </div>
-        );
-    }
-
-    renderk8() {
-        return (
-            _.map(Array(9), (v, i) => {
-                return (<option value={i}>{i === 0 ? 'k' : i}</option>);
-            })
-        );
-    }
-
-    renderTeacherInputs() {}
 
     renderEmail() {
-        if (this.state.isStudent || this.state.email == null) {
-            return null;
-        }
         return (
             <Input
                 type="text"
                 value={this.state.email}
                 placeholder="Email"
-                label="Email"
+                label="EMAIL"
                 ref="emailInput"
                 validate="required"
                 name="emailInput"
                 validationEvent="onBlur"
                 disabled
                 hasFeedback
-                onChange={e => this.setState({email: e.target.value})} //eslint-disable-line camelcase
             />
         );
     }
 
-    renderStaticUsername() {
-        return (
-            <span className="user-metadata">
-                <p>Username:</p>
-                <p className="standard field">{this.state.username}</p>
-            </span>
-        );
-    }
-
-    renderEditableUsername() {
+    renderFirstName(perms) {
         return (
             <Input
-                type="text"
-                value={this.state.username}
-                placeholder="Username"
-                label="Username:"
-                ref="usernameInput"
-                validate={[
-                    Validate.max.bind(null, 25),
-                    Validate.regex.bind(null, /^[a-zA-Z0-9_-]+$/),
-                ]}
-                name="usernameInput"
-                validationEvent="onBlur"
-                disabled={this.props.currentUser.user_id !== this.state.user_id}
-                hasFeedback
-                onChange={
-                    e => {
-                        this.setState({
-                            username: e.target.value
-                        });
-                        return true;
-                    }
-                }
-            />
-        );
-    }
-
-    renderStaticFirstName() {
-        return (
-            <span className="user-metadata">
-                <p>First Name:</p>
-                <p className="standard field">{this.state.first_name}</p>
-            </span>
-        );
-    }
-
-    renderEditableFirstName() {
-        return (
-            <Input
+                ref="firstnameInput"
+                name="firstnameInput"
                 type="text"
                 value={this.state.first_name}
                 placeholder="first name"
-                label="First Name:"
+                label="FIRST NAME"
                 validate="required"
-                ref="firstnameInput"
-                name="firstnameInput"
                 validationEvent="onBlur"
                 hasFeedback
-                disabled={this.state.isStudent}
+                disabled={!perms.firstName.canEdit}
                 onChange={
                     e => this.setState({
                         first_name: e.target.value //eslint-disable-line camelcase
@@ -346,54 +320,33 @@ export class EditProfile extends React.Component {
         );
     }
 
-    renderStaticLastName() {
-        return (
-            <span className="user-metadata">
-                <p>Last Name:</p>
-                <p className="standard field">{this.state.last_name}</p>
-            </span>
-        );
-    }
-
-    renderEditableLastName() {
+    renderLastName(perms) {
         return (
             <Input
+                ref="lastnameInput"
+                name="lastnameInput"
                 type="text"
                 value={this.state.last_name}
                 placeholder="last name"
-                label="Last Name:"
+                label="LAST NAME"
                 validate="required"
-                ref="lastnameInput"
-                name="lastnameInput"
+                validationEvent="onBlur"
                 hasFeedback
+                disabled={!perms.lastName.canEdit}
                 onChange={
-                        e => this.setState({
-                            last_name: e.target.value //eslint-disable-line camelcase
-                        })
-                    }
-                // disabled={this.state.isStudent}
+                    e => this.setState({
+                        last_name: e.target.value //eslint-disable-line camelcase
+                    })
+                }
             />
         );
     }
 
-    renderStaticBirthday() {
-        var day = Moment(this.state.dob).date();
-        var month = Moment(this.state.dob).month() + 1;
-        var year = Moment(this.state.dob).year();
-
-        return (
-            <span className="user-metadata">
-                <p>Birthday:</p>
-                <p className="standard field">{Moment((day + month + year)).format('MMMM Do, YYYY')}</p>
-            </span>
-        );
-    }
-
-    renderEditableBirthday() {
+    renderBirthday(perms) {
         return (
             <DropdownDatepicker
                 ref="dropdownDatepicker"
-                disabled={this.state.isStudent}
+                disabled={!perms.birthday.canEdit}
                 value={this.state.dob}
                 hasFeedback
                 onChange={
@@ -408,29 +361,22 @@ export class EditProfile extends React.Component {
         );
     }
 
-    renderParentInfo() {
-        return (
-            <span>
-                <h3>Parent or Guardian</h3>
-                {this.renderParentFields()}
-                <p><a onClick={this.addParent}>+ Add parent or guardian</a></p>
-                <h3>School Information</h3>
-                {this.renderSchoolInformation()}
-            </span>
-        );
-    }
-
-    renderEditableGender() {
+    rendedGender(perms) {
         return (
             <Input
                 type="select"
                 value={this.state.gender}
                 placeholder="Gender"
-                label="Gender"
+                label="GENDER"
                 validate="required"
                 ref="genderInput"
                 name="genderInput"
-                onChange={e => this.setState({gender: e.target.value})}
+                disabled={!perms.gender.canEdit}
+                onChange={
+                    e => this.setState({
+                        gender: e.target.value
+                    })
+                }
             >
                 <option value="">Select gender</option>
                 <option value="female">Female</option>
@@ -440,77 +386,90 @@ export class EditProfile extends React.Component {
         );
     }
 
-    renderUserFields() {
-        var perms = decodeEditingPermissions(this.state.isStudent);
-
+    renderFormSubmit() {
         return (
-            <Form ref="formRef">
-                {perms.username.canEdit ? this.renderEditableUsername() : null}
-                {!perms.username.canEdit && perms.username.canView ? this.renderStaticUsername() : null}
-                {perms.email.canView ? this.renderEmail() : null}
-                {perms.firstName.canEdit ? this.renderEditableFirstName() : null}
-                {!perms.firstName.canEdit && perms.firstName.canView ? this.renderStaticFirstName() : null}
-                {perms.lastName.canEdit ? this.renderEditableLastName() : null}
-                {!perms.lastName.canEdit && perms.lastName.canView ? this.renderStaticLastName() : null}
-                {perms.birthday.canEdit ? this.renderEditableBirthday() : null}
-                {!perms.birthday.canEdit && perms.birthday.canView ? this.renderStaticBirthday() : null}
-
-                {perms.canEdit ?
-                    <Button className="user-metadata-btn"
-                        onClick={this.submitData.bind(this)}> Save </Button> :
-                    null
-                }
-            </Form>
+            <Button className="update-user-metadata-btn" onClick={this.submit.bind(this)}>Save</Button>
         );
     }
 
+    renderUserFields() {
+        var perms = decodeEditingPermissions(this.state.isStudent);
+        // refactor update username to use component
+        // {perms.username.canEdit ? this.renderEditableUsername() : null}
+        // {!perms.username.canEdit && perms.username.canView ? this.renderStaticUsername() : null}
+        return (
+            <div>
+                <div className="username-container">
+                    <UpdateUsername
+                        className={ClassNames(
+                            'username-genetator', {
+                                hidden: this.props.currentUser.type !== 'CHILD'
+                            }
+                        )}
+                        currentUser={this.props.currentUser}
+                    />
+                    <span className="username-display">
+                        <h1 className="username-label">USERNAME</h1>
+                        <span className="username">{this.state.username.toUpperCase()}</span>
+                    </span>
+                </div>
+                <Form ref="formRef">
+                    {perms.email.canView ? this.renderEmail() : null}
+                    {perms.firstName.canView ? this.renderFirstName(perms) : null}
+                    {perms.lastName.canView ? this.renderLastName(perms) : null}
+                    {perms.birthday.canView ? this.renderBirthday(perms) : null}
+                </Form>
+                {perms.canEdit ? this.renderFormSubmit.call(this) : null}
+            </div>
+        );
+    }
 
     render() {
-        if (this.props.data == null || this.props.data.user_id == null ||
+        if (this.props.data == null ||
+            this.props.data.user_id == null ||
             !Util.decodePermissions(this.props.data.scope).update) {
             return null;
         }
 
         return (
-           <Layout currentUser={this.props.currentUser} className="edit-student">
-                <Panel header={HEADINGS.EDIT_TITLE + this.state.first_name + ' ' + this.state.last_name}
-                    className="standard edit-profile">
-                    <div className="left">
+            <Layout currentUser={this.props.currentUser} className="edit-profile">
+                <Panel
+                    header={`${HEADINGS.EDIT_TITLE} ${this.state.first_name} ${this.state.last_name}`}
+                    className="standard edit-profile"
+                >
+                    <div className="left profile-image-container">
                         <ProfileImage
                             data={this.props.data}
                             currentUser={this.props.currentUser}
                             link-below={true}
                         />
-                        <p className={ClassNames({hidden:
+                        <p className={ClassNames('action-link', {hidden:
                             !Util.decodePermissions(this.props.data.scope).delete})}>
                             <a onClick={this.suspendAccount.bind(this)}>{SUSPEND}</a>
                         </p>
                     </div>
-                    <div className="right">
+
+                    <div className="right user-fields">
                         {this.renderUserFields()}
                     </div>
+
+                    <div className="current-username-container">
+                        <h1 className="username-label">{HEADINGS.CURRENT_USERNAME}</h1>
+                        <span className="username">{this.state.username.toUpperCase()}</span>
+                    </div>
+
+                    <ChangePassword
+                        className="test"
+                        user_id={this.state.user_id}
+                        url={this.state._links.password}
+                        currentUser={this.props.currentUser}
+                    />
                 </Panel>
-                <UpdateUsername
-                    className={ClassNames({
-                        hidden:
-                            this.state.type !== 'CHILD' ||
-                            this.state.user_id !== this.props.currentUser.user_id
-                    })}
-                    username={this.state.username}
-                />
-                <ChangePassword
-                    user_id={this.state.user_id}
-                    url={this.state._links.password}
-                    currentUser={this.props.currentUser}
-                />
-                <ForgotPass data={this.props.data} user_id={this.state.user_id}
-                    currentUser={this.props.currentUser}/>
-                <CodeChange data={this.props.data} user_id={this.state.user_id}
-                    currentUser={this.props.currentUser}/>
             </Layout>
         );
     }
 }
+
 
 mapStateToProps = state => {
     var data = {};
