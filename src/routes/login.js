@@ -98,7 +98,7 @@ var Component = React.createClass({
             url: dataUrl,
         }, {
             'username': user,
-            'password': this.refs.password.getValue()
+            'password': this.state.password
         });
         req.then(res => {
             if (res.response && res.response.status && res.response.detail &&
@@ -136,11 +136,15 @@ var Component = React.createClass({
         });
     },
     attemptLogin: function (e) {
-        var user = this.getUsernameWithoutSpaces();
+        var user;
         var logout;
         var logoutUrl;
 
-        if (this.state.currentPage === 'forgot-password') return;
+        if (this.state.currentPage === 'forgot-password' ||
+            !this.state.username ||
+            !this.state.password) return;
+
+        user = this.getUsernameWithoutSpaces();
 
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
             if (this.props.data._links && this.props.data._links.login == null) {
@@ -212,8 +216,8 @@ var Component = React.createClass({
         }
     },
     getUsernameWithoutSpaces: function () {
-        var newLogin = this.refs.login.getValue().replace(/\s/g, '');
-        return newLogin;
+        if (!this.state.username) return;
+        return this.state.username.replace(/\s/g, '');
     },
     renderLogin: function () {
         return (
@@ -256,6 +260,7 @@ var Component = React.createClass({
                                 className="login-button"
                                 onKeyPress={this.attemptLogin}
                                 onClick={this.attemptLogin}
+                                disabled={!this.state.username || !this.state.password}
                             />
                             <a
                                 className="forgot-password-link"
