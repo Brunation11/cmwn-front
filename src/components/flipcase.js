@@ -34,7 +34,7 @@ export default class Flipcase extends React.Component {
         return (_.map(allFlips, (flip) => {
             var earnedFlip = _.find(this.state.flips, ['flip_id', flip.flip_id]);
             var earnedOn = earnedFlip ? earnedFlip.earned : null;
-            var status = earnedOn ? 'earned' : 'static';
+            var status = earnedOn ? 'earned' : 'unearned';
 
             return (
                 <FlipPopover
@@ -73,7 +73,7 @@ export default class Flipcase extends React.Component {
         if (this.props.render === 'earned') renderFunction = this.renderEarned;
 
         if (typeof this.props.user === 'string') {
-          header = `${this.props.user}'s Earned Flips:`;
+            header = `${this.props.user}'s Earned Flips:`;
         }
 
         return (
