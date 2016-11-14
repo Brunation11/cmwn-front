@@ -104,11 +104,6 @@ deploy-draft:
         export VERSION="$($PWD/bin/version_bump.sh --print-current)-$SHORT_HASH"
         echo "$VERSION"
     - script:
-      name: Installing pips
-      code: |-
-        pip install boto3
-        export DEPLOY='true'
-    - script:
       name: Running deploy
       code: |-
         echo "Deploying $DEPLOY_APP_NAME @ $VERSION to $DEPLOY_ENV"
@@ -129,11 +124,6 @@ deploy:
       code: |-
         export VERSION="$($PWD/bin/version_bump.sh --print-current)"
         echo "$VERSION"
-    - script:
-      name: Installing pips
-      code: |-
-        pip install boto3
-        export DEPLOY='true'
     - script:
       name: Running deploy
       code: |-
