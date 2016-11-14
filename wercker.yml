@@ -91,11 +91,11 @@ draft-release:
       filename: platform-front-$VERSION.zip
 
 deploy-draft:
-    box:
-      id: cmwn/python
-      username: $DOCKER_USER
-      password: $DOCKER_PASS
-      entrypoint: /bin/bash -c
+  box:
+    id: cmwn/python
+    username: $DOCKER_USER
+    password: $DOCKER_PASS
+    entrypoint: /bin/bash -c
   steps:
     - script:
       name: Preparing release
@@ -103,11 +103,6 @@ deploy-draft:
         export SHORT_HASH=$(git log -n 1 --abbrev-commit | head -n 1 | sed -e 's/^commit //')
         export VERSION="$($PWD/bin/version_bump.sh --print-current)-$SHORT_HASH"
         echo "$VERSION"
-    - script:
-      name: Installing pips
-      code: |-
-        pip install boto3
-        export DEPLOY='true'
     - script:
       name: Running deploy
       code: |-
@@ -118,22 +113,17 @@ deploy-draft:
       url: $SLACK_URL
 
 deploy:
-    box:
-      id: cmwn/python
-      username: $DOCKER_USER
-      password: $DOCKER_PASS
-      entrypoint: /bin/bash -c
+  box:
+    id: cmwn/python
+    username: $DOCKER_USER
+    password: $DOCKER_PASS
+    entrypoint: /bin/bash -c
   steps:
     - script:
       name: Preparing release
       code: |-
         export VERSION="$($PWD/bin/version_bump.sh --print-current)"
         echo "$VERSION"
-    - script:
-      name: Installing pips
-      code: |-
-        pip install boto3
-        export DEPLOY='true'
     - script:
       name: Running deploy
       code: |-
