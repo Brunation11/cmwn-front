@@ -1,0 +1,38 @@
+@import 'variables';
+
+#god-mode-site-nav { // scss-lint:disable IdSelector
+    .sidebar {
+        width: 200px;
+
+        .username {
+            a {
+                color: $cmwn-purple;
+            }
+        }
+
+        .active-menu {
+            margin-top: 0;
+            border-top: {
+                width: 7.5px;
+                style: solid;
+                color: $cmwn-purple;
+            }
+            background-color: $cmwn-purple;
+        }
+
+        nav {
+
+            li {
+                border-bottom-color: $cmwn-purple;
+            }
+
+            li:first-child {
+                border-top-color: $cmwn-purple;
+            }
+
+            a {
+                color: $cmwn-purple;
+            }
+        }
+    }
+}

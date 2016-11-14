@@ -62,14 +62,12 @@ const TITLES = {
 
 const HEADINGS = {
     ACTION: 'Profile',
-    ARCADE: 'Activities',
-    TROPHYCASE: 'Trophycase'
+    ARCADE: 'Activities'
 };
 
 const PLAY = 'Play Now!';
 const COMING_SOON = 'Coming Soon!';
 const DESKTOP_ONLY = 'Log on with a Desktop computer to play!';
-const CLASSES = 'Classes';
 
 const BROWSER_NOT_SUPPORTED = (
     <span>
@@ -79,10 +77,12 @@ const BROWSER_NOT_SUPPORTED = (
                 download it for free here
             </a>.
         </p>
-    </span>);
+    </span>
+);
 
-const PASS_UPDATED = '<p>You have successfully updated your password.' +
-    '<br />Be sure to remember for next time!</p>';
+const PASS_UPDATED = (
+    <p>You have successfully updated your password.<br />Be sure to remember for next time!</p>
+);
 
 export var dataTransform = function (data) {
     var array = data;
@@ -111,6 +111,7 @@ export var dataTransform = function (data) {
 export class Profile extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = _.defaults({
             gameOn: false,
             gameId: -1
@@ -135,16 +136,14 @@ export class Profile extends React.Component {
     }
 
     resolveRole(props) {
-        var newState = {};
         // remember we actually want current user here, not the user whose
         // profile we are looking at
         if (props.currentUser && props.currentUser.type &&
             props.currentUser.type !== 'CHILD') {
-            newState.isStudent = false;
+            this.setState({isStudent: false});
         } else {
-            newState.isStudent = true;
+            this.setState({isStudent: true});
         }
-        this.setState(newState);
     }
 
     showModal(gameUrl) {
@@ -174,6 +173,7 @@ export class Profile extends React.Component {
                 </div>
             );
         }
+
         return (
             <div className="modal-game">
                 <Game
@@ -239,142 +239,122 @@ export class Profile extends React.Component {
         );
     }
 
-    renderClassList() {
-        if (!this.state || !this.state._embedded || !this.state._embedded.group_class) {
-            return null;
-        }
+    renderUserMetaData() {
+        var ISODate = (new Date(this.state.birthdate)).toISOString();
+
+        if (this.state.friend_status !== 'FRIEND') return null;
+
         return (
-            <p>
-                <strong>{CLASSES} </strong>:
-                {_.map(this.state._embedded.group_class, item => item.title).join(', ')}
-            </p>
+            <div
+                className={ClassNames(
+                    'right',
+                    'user-fields',
+                    {
+                        hidden: this.state.friend_status !== 'FRIEND'
+                    }
+                )}
+            >
+                <p className="label">Username:</p>
+                <p className="standard field">{this.state.username}</p>
+                <p className="label">First Name:</p>
+                <p className="standard field">{this.state.first_name}</p>
+                <p className="label">Last Name:</p>
+                <p className="standard field">{this.state.last_name}</p>
+                <p className="label">Birthday:</p>
+                <p className="standard field">{Moment(ISODate).format('MM-DD-YYYY')}</p>
+            </div>
         );
     }
 
     renderUserProfile() {
-        var ISODate = (new Date(this.state.birthdate)).toISOString();
-        if (this.state.friend_status === 'FRIEND') {
-            return (
-                <div>
-                    <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
-                        <div className="left">
-                            <div className="frame">
-                                <ProfileImage
-                                    data={this.props.data}
-                                    currentUser={this.props.currentUser}
-                                    link-below={true}
-                                 />
-                            </div>
-                        </div>
-                        <div className="right">
-                            <div className="user-metadata">
-                                <p>Username:</p>
-                                <p className="standard field">{this.state.username}</p>
-                                <p>First Name:</p>
-                                <p className="standard field">{this.state.first_name}</p>
-                                <p>Last Name:</p>
-                                <p className="standard field">{this.state.last_name}</p>
-                                <p>Birthday:</p>
-                                <p className="standard field">{Moment(ISODate).format('MM-DD-YYYY')}</p>
-                            </div>
-                        </div>
-                    </Panel>
-                    <Panel
-                        header={HEADINGS.TROPHYCASE}
-                        className={ClassNames('standard', {
-                            hidden: !this.state.isStudent
-                        })}
-                    >
-                        <FLIP_SOURCE>
-                           <Flipcase
-                                type="trophycase"
-                                header={true}
-                                render="earned"
-                            />
-                        </FLIP_SOURCE>
-                    </Panel>
-                </div>
-            );
-        }
         return (
-            <div>
-                <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
-                    <div className="frame non-friend">
+            <Layout
+                currentUser={this.props.currentUser}
+                className={ClassNames(
+                    PAGE_UNIQUE_IDENTIFIER,
+                    'user',
+                    {
+                        friends: this.state.friend_status === 'FRIEND',
+                        student: this.state.type === 'CHILD'
+                    }
+                )}
+                navMenuId="navMenu"
+            >
+                <Panel
+                    header={`${this.state.username}'s Profile`}
+                    className="standard user-profile"
+                >
+                    <div className="left profile-image-container">
                         <ProfileImage
                             data={this.props.data}
                             currentUser={this.props.currentUser}
                             link-below={true}
                         />
                     </div>
+                    {this.renderUserMetaData()}
                 </Panel>
-                <Panel
-                    header={HEADINGS.TROPHYCASE}
-                    className={ClassNames('standard', {
-                        hidden: !this.state.isStudent
-                    })}
-                >
-                    <FLIP_SOURCE>
-                       <Flipcase
-                            type="trophycase"
-                            header={true}
-                            render="earned"
-                        />
-                    </FLIP_SOURCE>
-                </Panel>
-            </div>
+                <FLIP_SOURCE>
+                   <Flipcase
+                        className={ClassNames(
+                            {
+                                hidden: this.state.type !== 'CHILD'
+                            }
+                        )}
+                        type="trophycase"
+                        header={true}
+                        render="earned"
+                    />
+                </FLIP_SOURCE>
+            </Layout>
         );
     }
 
     renderCurrentUserProfile() {
         return (
-            <div>
-                <Modal
-                    className="full-width game-modal"
-                    show={this.state.gameOn}
-                    onHide={this.hideModal.bind(this)}
-                    keyboard={false}
-                    backdrop="static"
-                    id="game-modal"
-                >
-                    <Modal.Body>
-                        {this.renderGame()}
-                    </Modal.Body>
-                </Modal>
-                <Panel
-                    header={HEADINGS.TROPHYCASE}
-                    className={ClassNames('standard', {
-                        hidden: !this.state.isStudent
-                    })}
-                >
+            <Layout
+                currentUser={this.props.currentUser}
+                className={`${PAGE_UNIQUE_IDENTIFIER} current-user`}
+                navMenuId="navMenu"
+            >
+                <div>
+                    <Modal
+                        className="full-width game-modal"
+                        show={this.state.gameOn}
+                        onHide={this.hideModal.bind(this)}
+                        keyboard={false}
+                        backdrop="static"
+                        id="game-modal"
+                    >
+                        <Modal.Body>
+                            {this.renderGame()}
+                        </Modal.Body>
+                    </Modal>
                     <FLIP_SOURCE>
-                       <Flipcase
+                        <Flipcase
+                            className={ClassNames(
+                                {
+                                    hidden: !this.state.isStudent
+                                }
+                            )}
                             type="trophycase"
                             header={true}
                             render="earned"
                         />
                     </FLIP_SOURCE>
-                </Panel>
-                {this.renderGameList()}
-            </div>
+                    {this.renderGameList()}
+                </div>
+            </Layout>
         );
     }
 
     render() {
-        var profile;
-        if (this.state.user_id == null || this.props.currentUser.user_id == null) {
-            return null;
+        if (this.state.user_id == null || this.props.currentUser.user_id == null) return null;
+
+        if (this.state.user_id === this.props.currentUser.user_id) {
+            return this.renderCurrentUserProfile();
+        } else {
+            return this.renderUserProfile();
         }
-        profile = this.state.user_id === this.props.currentUser.user_id ?
-        this.renderCurrentUserProfile : this.renderUserProfile;
-        return (
-           <Layout
-               currentUser={this.props.currentUser}
-               className={PAGE_UNIQUE_IDENTIFIER}
-               navMenuId="navMenu"
-           >
-               {profile.apply(this)}
-           </Layout>
-        );
     }
 }
 

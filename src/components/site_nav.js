@@ -7,24 +7,44 @@ import ClassNames from 'classnames';
 import PublicRoutes from 'public_routes';
 import PrivateRoutes from 'private_routes';
 import Util from 'components/util';
+import LINKS from 'components/ib_links';
+
+import SKRIBBLE_LINK from 'media/skribble-link.png';
+
+var helpLink = function () {
+    var help = {url: '/help', label: 'Help'};
+    if (this.props.currentUser.type === 'CHILD') {
+        help.url = LINKS.FAQS.STUDENT;
+    }
+    return help;
+};
 
 var addHardcodedEntries = function (menuItems) {
+    menuItems.unshift({
+        url: '/play/skribble',
+        uuid: 'Skribble',
+        label: <img src={SKRIBBLE_LINK} alt="Skribble" />
+    });
     menuItems.unshift({url: '/profile', label: 'Activities'});
     menuItems.push({url: '/resources', label: 'Resource Center'});
-    //menuItems.push({url: `/user/${this.props.currentUser.user_id}/feed`, label: 'Feed'});
     menuItems.push({url: '/profile/edit', label: 'Edit My Profile'});
+    menuItems.push(helpLink.call(this));
     menuItems.push({url: '/logout', label: 'Logout'});
     return menuItems;
 };
 
 const IGNORED_ROUTES_FOR_CHILDREN = [
-    'Resource Center',
     'Friends and Network',
+    'Resource Center',
     'Flags'
 ];
 
 const IGNORED_ROUTES_FOR_EVERYONE = [
     'Profile'
+];
+
+const ROUTES_SPECIFIC_FOR_SUPER_USERS = [
+    'Flags',
 ];
 
 var buildMenuRoutes = function (links) {
@@ -84,11 +104,14 @@ var buildMenuRoutes = function (links) {
 
 var SiteNav = React.createClass({
     renderNavItems: function () {
-        var currentUrl;
         var menuItems = buildMenuRoutes(this.props.data);
-        //manually hidden items for children
-        menuItems = addHardcodedEntries.call(this, menuItems);
+        var currentUrl;
+        var permissions = Util.decodePermissions(this.props.currentUser.scope);
 
+        //need to add hardcoded entries before filterning, because some will be
+        //removed based on user type
+        menuItems = addHardcodedEntries.call(this, menuItems);
+        //manually hidden items for children
         menuItems = _.filter(menuItems, item =>
             !~IGNORED_ROUTES_FOR_EVERYONE.indexOf(item.label) && (
                 this.props.currentUser.type !== 'CHILD' || (
@@ -97,33 +120,62 @@ var SiteNav = React.createClass({
             )
         );
 
+        //manually hiding flags for non-super users
+        menuItems = _.filter(menuItems, item => (
+            (permissions.delete && permissions.update && permissions.create) ||
+            !~ROUTES_SPECIFIC_FOR_SUPER_USERS.indexOf(item.label))
+        );
+
+
         if (sessionStorage == null) {
             return null;
         }
 
         _.map(menuItems, item => {
             currentUrl = window.location.href.replace(/^.*changemyworldnow.com/, '');
-            if (sessionStorage.activeItem === item.label) {
+            if (sessionStorage.activeItem + '' !== 'undefined' && (
+                    sessionStorage.activeItem === item.label ||
+                    sessionStorage.activeItem === item.uuid
+            )) {
                 return;
             } else if (currentUrl === item.url) {
-                sessionStorage.activeItem = item.label;
+                sessionStorage.activeItem = item.uuid || item.label;
             }
         });
 
-        return _.map(menuItems, item => (
-            <li
-                className={ClassNames({
-                    'active-menu': sessionStorage.activeItem === item.label
-                })}
-                key={Shortid.generate()}
-            >
+        return _.map(menuItems, item => {
+            var link = (
                 <Link
                     to={item.url}
                 >
                     {item.label}
                 </Link>
-            </li>
-        ));
+            );
+
+            if (item.url.includes('http')) { // direct link to open in new tab/window
+                link = (
+                    <a
+                        href={item.url}
+                        target="_blank"
+                    >
+                        {item.label}
+                    </a>
+                );
+            }
+            return (
+                <li
+                    className={ClassNames({
+                        'active-menu':
+                            sessionStorage.activeItem + '' !== 'undefined' && (
+                            sessionStorage.activeItem === item.label ||
+                            sessionStorage.activeItem === item.uuid)
+                    })}
+                    key={Shortid.generate()}
+                >
+                    {link}
+                </li>
+            );
+        });
     },
     render: function () {
         return (

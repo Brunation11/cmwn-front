@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-
+import ShortId from 'shortid';
 import 'components/table.scss';
 
 // const BREADCRUMBS = 'Return to class list';
@@ -50,7 +50,7 @@ export var Table = React.createClass({
         }
         cells = React.Children.map(this.props.children, col => {
             return (
-                <td key={col.props.dataKey} className={col.props.className}>
+                <td key={ShortId.generate()} className={col.props.className}>
                     {_renderCell.call(col, row[col.props.dataKey], row)}
                 </td>
             );

@@ -275,7 +275,7 @@ var Component = React.createClass({
                                     {SIGNUP_PROMPT.COPY_2}
                                 </p>
                                 <a
-                                    className="mobile"
+                                    className="mobile-link"
                                     onClick={this.displaySignupModal}
                                 >
                                     {SIGNUP_PROMPT.MOBILE_LINK}
@@ -344,7 +344,7 @@ var Component = React.createClass({
                                     {SIGNUP_PROMPT.COPY_2}
                                 </p>
                                 <a
-                                    className="mobile"
+                                    className="mobile-link"
                                     onClick={this.displaySignupModal}
                                 >
                                     {SIGNUP_PROMPT.MOBILE_LINK}
