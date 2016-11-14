@@ -1,5 +1,7 @@
 import React from 'react';
+
 import _ from 'lodash';
+
 import Shortid from 'shortid';
 
 import {Panel} from 'react-bootstrap';
@@ -15,15 +17,20 @@ class FlipBoard extends React.Component {
         };
     }
 
+    componentDidMount(){
+        if (this.props.data) this.setState({ data: _.map(this.props.data, this.props.transform)});
+    }
+
     componentWillReceiveProps(nextProps) {
-        this.setState({
-            data: _.map((nextProps.data === null ||
-                nextProps.data === []) ? null : nextProps.data, this.props.transform)
-        });
+        if (!_.isEqual(this.props.data, nextProps.data)) {
+            this.setState({
+                data: _.map(nextProps.data, this.props.transform)
+            });
+        }
     }
 
     render() {
-        if (this.state.data == null) {
+        if (!this.state.data.length) {
             return this.props.renderNoData();
         }
         return (

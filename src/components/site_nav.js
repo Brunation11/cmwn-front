@@ -1,6 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router';
 import _ from 'lodash';
+import Shortid from 'shortid';
 
 import ClassNames from 'classnames';
 import PublicRoutes from 'public_routes';
@@ -9,14 +10,21 @@ import Util from 'components/util';
 
 var addHardcodedEntries = function (menuItems) {
     menuItems.unshift({url: '/profile', label: 'Activities'});
-    menuItems.push({url: `/user/${this.props.currentUser.user_id}/feed`, label: 'Feed'});
+    menuItems.push({url: '/resources', label: 'Resource Center'});
+    //menuItems.push({url: `/user/${this.props.currentUser.user_id}/feed`, label: 'Feed'});
     menuItems.push({url: '/profile/edit', label: 'Edit My Profile'});
     menuItems.push({url: '/logout', label: 'Logout'});
     return menuItems;
 };
 
 const IGNORED_ROUTES_FOR_CHILDREN = [
-    'Friends and Network'
+    'Resource Center',
+    'Friends and Network',
+    'Flags'
+];
+
+const IGNORED_ROUTES_FOR_EVERYONE = [
+    'Profile'
 ];
 
 var buildMenuRoutes = function (links) {
@@ -31,7 +39,8 @@ var buildMenuRoutes = function (links) {
         var url;
         var matchedRoute = _.reduce(allRoutes, (a, route) => { //eslint-disable-line no-shadow
             var params;
-            if (!a && route.endpoint && link.label != null) {
+            var match;
+            if (route.endpoint && link.label != null) {
                 // there are three scenarios here - the endpoint is non dynamic, it is dynamic by parameter,
                 // or it is dynamic based on the current user.
 
@@ -40,23 +49,26 @@ var buildMenuRoutes = function (links) {
                     //the problem with this is that we dont know the structure of the endpoint
                     //when we match on the current user style, so we have no way to extract parameters.
                     //This _probably_ wont be a problem...
-                    a = route;
-                    a.params = {};
+                    match = route;
+                    match.params = {};
                 } else if (route.endpoint !== '/' && !~route.endpoint.indexOf(':') &&
                         ~link.href.indexOf(route.endpoint)
                     ) {
                     //nondynamic is also fairly easy, as urls cannot contain colonks
-                    a = route;
-                    a.params = {};
+                    match = route;
+                    match.params = {};
                 } else {
                     //last chance. If we can extract parameters from the endpoint, its a match
-                    params = Util.matchPathAndExtractParams(route.endpoint, link.href);
+                    params = Util.matchPathAndExtractParams(
+                        route.endpoint, link.href.split('/').slice(3).join('/')
+                    );
                     if (Object.keys(params).length) {
                         route.params = params;
-                        a = route; //MPR: ok i admit the typechange is strange here
+                        match = route; //MPR: ok i admit the typechange is strange here
                                     //but i like it better than starting at null
                     }
                 }
+                if ((a && match && match.endpoint.length > a.endpoint.length) || (!a && match)) a = match;
             }
             return a;
         }, false);
@@ -72,24 +84,18 @@ var buildMenuRoutes = function (links) {
 
 var SiteNav = React.createClass({
     renderNavItems: function () {
-        var menuItems = buildMenuRoutes(this.props.data);
         var currentUrl;
-//        var menuItems = _.reduce(this.props.data, (a, i, k) => {
-//            if (i.label != null) {
-//                var link = ~k.indexOf('_') ? k.split('_')[1] : k;
-//                a.push({
-//                    url: i.view_url || '/' + link,
-//                    text: i.label == null ? _.startCase(link) : i.label
-//                });
-//            }
-//            return a;
-//        }, []);
+        var menuItems = buildMenuRoutes(this.props.data);
         //manually hidden items for children
-        menuItems = _.filter(menuItems, item => this.props.currentUser.type !== 'CHILD' || (
-            this.props.currentUser.type === 'CHILD' &&
-            !~IGNORED_ROUTES_FOR_CHILDREN.indexOf(item.label))
-        );
         menuItems = addHardcodedEntries.call(this, menuItems);
+
+        menuItems = _.filter(menuItems, item =>
+            !~IGNORED_ROUTES_FOR_EVERYONE.indexOf(item.label) && (
+                this.props.currentUser.type !== 'CHILD' || (
+                    this.props.currentUser.type === 'CHILD' &&
+                    !~IGNORED_ROUTES_FOR_CHILDREN.indexOf(item.label))
+            )
+        );
 
         if (sessionStorage == null) {
             return null;
@@ -109,7 +115,7 @@ var SiteNav = React.createClass({
                 className={ClassNames({
                     'active-menu': sessionStorage.activeItem === item.label
                 })}
-                key={`(${item.label})-${item.url}`}
+                key={Shortid.generate()}
             >
                 <Link
                     to={item.url}
