@@ -1,6 +1,3 @@
-// eslint-disable snake-case
-import GLOBALS from 'components/globals';
-
 const IB_IDS = {
     GAME_TILES: {
         'aqua-lunch-man': '364c9a2dcd31232af6ee96514b7e8c8b.gif',
