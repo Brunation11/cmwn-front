@@ -92,10 +92,6 @@ Version - 0.3.14
 
 Version - 0.3.13
 ----
-<<<<<<< HEAD
-- 7412902: Version bump [ci skip]
-- 8436cc0: bump version
-=======
 
 - e99cf48: add expect clause to test to check for flipcase
 - 7412902: Version bump [ci skip]
