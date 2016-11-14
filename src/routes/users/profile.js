@@ -16,7 +16,7 @@ import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
 import History from 'components/history';
 import GenerateDataSource from 'components/datasource';
-import IB_IDS from 'components/ib_links';
+import IB_IDS from 'components/ib_ids';
 
 import Layout from 'layouts/two_col';
 
@@ -188,7 +188,7 @@ export class Profile extends React.Component {
                         <div className={ClassNames('coming-soon', { hidden: !item.coming_soon})} />
                         <div className={ClassNames('desktop-only', { hidden: !meta.desktop})} />
                         <object
-                            data={`${GLOBALS.MEDIA_URL}${IB_IDS.GAMES_TILES[item.game_id]}`}
+                            data={`${GLOBALS.MEDIA_URL}${IB_IDS.GAME_TILES[item.game_id]}`}
                             type="image/gif"
                         >
                             <img src={FlipBgDefault}></img>

@@ -4,7 +4,7 @@ import Shortid from 'shortid';
 import Moment from 'moment';
 import ClassNames from 'classnames';
 import GLOBALS from 'components/globals';
-import IB_LINKS from 'components/ib_links';
+import IB_IDS from 'components/ib_ids';
 
 import 'components/popovers/popover.scss';
 
@@ -41,7 +41,7 @@ export default class FlipPopover extends React.Component {
             return null;
         }
 
-        const ID = IB_LINKS.FLIPS[this.state.element.flip_id][this.state.status];
+        const ID = IB_IDS.FLIPS[this.state.element.flip_id][this.state.status];
         return (
             <div className={ClassNames('single-flip', {hidden: this.state.error})}>
                 <ButtonToolbar id={Shortid.generate()}>
