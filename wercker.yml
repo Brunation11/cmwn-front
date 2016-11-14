@@ -91,11 +91,11 @@ draft-release:
       filename: platform-front-$VERSION.zip
 
 deploy-draft:
-    box:
-      id: cmwn/python
-      username: $DOCKER_USER
-      password: $DOCKER_PASS
-      entrypoint: /bin/bash -c
+  box:
+    id: cmwn/python
+    username: $DOCKER_USER
+    password: $DOCKER_PASS
+    entrypoint: /bin/bash -c
   steps:
     - script:
       name: Preparing release
@@ -113,11 +113,11 @@ deploy-draft:
       url: $SLACK_URL
 
 deploy:
-    box:
-      id: cmwn/python
-      username: $DOCKER_USER
-      password: $DOCKER_PASS
-      entrypoint: /bin/bash -c
+  box:
+    id: cmwn/python
+    username: $DOCKER_USER
+    password: $DOCKER_PASS
+    entrypoint: /bin/bash -c
   steps:
     - script:
       name: Preparing release
