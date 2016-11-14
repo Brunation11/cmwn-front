@@ -129,6 +129,11 @@ var Component = React.createClass({
             Toast.error(ERRORS.LOGIN + (res.detail ? ' Message: ' + res.detail : ''));
             Log.log(e, 'Invalid login');
         });
+
+        this.setState({
+            username: '',
+            password: ''
+        });
     },
     attemptLogin: function (e) {
         var user = this.getUsernameWithoutSpaces();
@@ -229,6 +234,10 @@ var Component = React.createClass({
                                 name="username"
                                 label={LABELS.LOGIN}
                                 placeholder="FUN-RABBIT003"
+                                value={this.state.username}
+                                onChange={e => this.setState({username: e.target.value})}
+                                onFocus={e => e.target.placeholder = ''}
+                                onBlur={e => e.target.placeholder = 'FUN-RABBIT003'}
                             />
                             <Input
                                 ref="password"
@@ -237,6 +246,10 @@ var Component = React.createClass({
                                 name="password"
                                 label={LABELS.PASSWORD}
                                 placeholder="PA********"
+                                value={this.state.password}
+                                onChange={e => this.setState({password: e.target.value})}
+                                onFocus={e => e.target.placeholder = ''}
+                                onBlur={e => e.target.placeholder = 'PA********'}
                             />
                             <Button
                                 id="login-button"

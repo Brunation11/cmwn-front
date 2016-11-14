@@ -125,6 +125,7 @@
         &:active:focus {
             outline: none;
             border: 0;
+            box-shadow: none;
             background: url('../media/login/btn-submit-hover.png');
             background-repeat: no-repeat;
             background-size: contain;
