@@ -242,6 +242,7 @@ var Component = React.createClass({
                                 onChange={e => this.setState({username: e.target.value})}
                                 onFocus={e => e.target.placeholder = ''}
                                 onBlur={e => e.target.placeholder = 'FUN-RABBIT003'}
+                                autoComplete="off"
                             />
                             <Input
                                 ref="password"
@@ -254,6 +255,7 @@ var Component = React.createClass({
                                 onChange={e => this.setState({password: e.target.value})}
                                 onFocus={e => e.target.placeholder = ''}
                                 onBlur={e => e.target.placeholder = 'PA********'}
+                                autoComplete="off"
                             />
                             <Button
                                 id="login-button"
