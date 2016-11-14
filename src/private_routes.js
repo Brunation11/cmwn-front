@@ -33,6 +33,7 @@ import CreateUser from 'routes/god_mode/users/create_user';
 import ResourceCenter from 'routes/resource_center';
 import FlagView from 'routes/flags';
 import Help from 'routes/help';
+import AAYView from 'routes/aay_survey';
 
 var redirect = function (path) {
     return function (nextState, transition) {
@@ -111,7 +112,9 @@ var routes = [
     { path: 'resources(/)', component: ResourceCenter, endpoint: ''},
     { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed},
     { path: 'help(/)', title: 'Help', component: Help},
-    { path: '/flaggedimages(/)', title: 'Flagged Images', endpoint: '/flag', component: FlagView}
+    { path: '/flaggedimages(/)', title: 'Flagged Images', endpoint: '/flag', component: FlagView},
+    { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed},
+    { path: 'all-about-you(/)', title: 'AAY Data', endpoint: '/game-data/all-about-you', component: AAYView}
 ];
 
 routes = _.map(routes, i => {
