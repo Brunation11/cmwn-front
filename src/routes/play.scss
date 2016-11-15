@@ -1,0 +1,11 @@
+
+.single-game-two-col {
+    .game-frame-wrapper {
+        width: auto;
+
+        &.fs {
+            width: 100vw;
+        }
+    }
+}
+

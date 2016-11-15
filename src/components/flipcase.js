@@ -101,3 +101,4 @@ export default class Flipcase extends React.Component {
         );
     }
 }
+

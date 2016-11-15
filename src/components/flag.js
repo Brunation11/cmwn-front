@@ -44,6 +44,20 @@ export default class Flag extends React.Component {
         this.setState({flagFormOpen: false});
     }
 
+    setUserProp() {
+        var flaggee = this.props.data;
+        var userID;
+        if (!_.has(flaggee, 'user_id')) {
+            if (_.has(flaggee, 'friend_id')) {
+                userID = flaggee.friend_id;
+            } else if (_.has(flaggee, 'suggest_id')) {
+                userID = flaggee.suggest_id;
+            }
+        }
+
+        return flaggee.set('user_id', userID);
+    }
+
     submitFlag() {
         if (!this.state.reason) {
             return Toast.error('Looks like you haven\'t selected a reason for flagging this image');
@@ -52,11 +66,12 @@ export default class Flag extends React.Component {
         HttpManager.POST({
             url: `${GLOBALS.API_URL}flag`
         }, {
-            flaggee: this.props.data,
+            flaggee: this.setUserProp(),
             reason: this.state.reason,
             url: this.props.data.image
         }).then (() => {
             Toast.success(COPY.SUCCESS);
+            this.hideModal();
         }).catch (e => {
             Toast.error(COPY.ERROR);
             Log.error(e, 'Unable to flag');

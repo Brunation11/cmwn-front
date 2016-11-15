@@ -23,7 +23,6 @@ var checkProfileRender = function (data, currentUser) {
 var checkOwnProfileContent = function (data, currentUser) {
     var profile = <Profile data={data} loading={false} currentUser={currentUser}/>;
     const WRAPPER = shallow(profile);
-    console.log(WRAPPER.debug());
     expect(WRAPPER.children()).to.have.length(1);
     expect(WRAPPER.children('div')).to.have.length(1);
     expect(WRAPPER.find('Modal')).to.have.length(1);
@@ -32,6 +31,7 @@ var checkOwnProfileContent = function (data, currentUser) {
 };
 
 var checkAnotherProfileContent = function (data, currentUser) {
+    // TODO: test that viewing non friend profiles only show authorized information
     var profile = <Profile data={data} loading={false} currentUser={currentUser}/>;
     const WRAPPER = shallow(profile);
     expect(WRAPPER.children()).to.have.length(2);
