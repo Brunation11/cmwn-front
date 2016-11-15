@@ -16,6 +16,7 @@ import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
 import History from 'components/history';
 import GenerateDataSource from 'components/datasource';
+import Flag from 'components/flag';
 import IB_IDS from 'components/ib_ids';
 
 import Layout from 'layouts/two_col';
@@ -260,11 +261,15 @@ export class Profile extends React.Component {
                     className="standard user-profile"
                 >
                     <div className="left profile-image-container">
-                        <ProfileImage
+                        <Flag
                             data={this.props.data}
-                            currentUser={this.props.currentUser}
-                            link-below={true}
-                        />
+                        >
+                            <ProfileImage
+                                data={this.props.data}
+                                currentUser={this.props.currentUser}
+                                link-below={true}
+                            />
+                        </Flag>
                     </div>
                     {this.renderUserMetaData()}
                 </Panel>
