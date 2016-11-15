@@ -366,6 +366,10 @@ var Component = React.createClass({
     render: function () {
         var page;
 
+        if (this.props.currentUser.user_id) {
+            window.location.replace(window.location.href.replace('/login', '/profile'));
+        }
+
         if (this.state.currentPage === 'forgot-password') {
             page = this.renderForgotPassword;
         } else if (this.state.currentPage === 'confirm-teacher') {
