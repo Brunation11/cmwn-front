@@ -106,7 +106,7 @@ var routes = [
         component: SuggestedFriends},
     { path: 'suggestedfriends(/)', onEnter: redirect('/friends/suggested')},
     { path: '/flaggedimages(/)', title: 'Flagged Images', endpoint: '/flag', component: FlagView},
-    { path: 'all-about-you(/)', title: 'AAY Data', endpoint: '/game-data/all-about-you', component: AAYView},
+    { path: 'sa/game-data/:id', title: 'AAY Data', endpoint: '/game-data/:id', component: AAYView},
     { path: 'sa(/)', title: 'God Mode', endpoint: '/sa/settings', component: GodModeHome},
     { path: 'sa/users(/)', title: 'Manage Users', endpoint: '$$user', component: ManageUsers},
     { path: 'sa/user/:id/edit(/)', title: 'Edit User', endpoint: '/user/:id', component: EditUser},

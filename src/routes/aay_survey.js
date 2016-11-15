@@ -2,13 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {Panel} from 'react-bootstrap';
 import {Link} from 'react-router';
-import Layout from 'layouts/two_col';
+import Layout from 'layouts/god_mode_two_col';
 import {Table, Column} from 'components/table';
 import SurveyModal from 'components/popovers/survey_modal';
 import HttpManager from 'components/http_manager';
 import _ from 'lodash';
-
-const PAGE_UNIQUE_IDENTIFIER = 'aay-survey-view';
 
 const HEADINGS = {
     TITLE: 'All About You Survey Results',
@@ -91,11 +89,7 @@ export class AAYView extends React.Component {
 
     render() {
         return (
-            <Layout
-                className={PAGE_UNIQUE_IDENTIFIER}
-                navMenuId="navMenu"
-                currentUser={this.props.currentUser}
-            >
+            <Layout currentUser={this.props.currentUser}>
                 {this.renderDataState()}
             </Layout>
         );

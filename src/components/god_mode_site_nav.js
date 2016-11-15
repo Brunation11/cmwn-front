@@ -18,6 +18,11 @@ class GodModeSiteNav extends React.Component {
         this.getSaSettingsLinks();
     }
 
+    componentWillReceiveProps(nextProps) {
+        this.props = nextProps;
+        this.getSaSettingsLinks();
+    }
+
     addHardcodedEntries(menuItems) {
         menuItems.unshift({url: '/sa', label: 'God Mode Home'});
         menuItems.push({url: '/profile', label: 'Exit'});
@@ -57,11 +62,11 @@ class GodModeSiteNav extends React.Component {
                         params = Util.matchPathAndExtractParams(
                             route.endpoint, item.href.split('/').slice(3).join('/')
                         );
-
-                        if (!_.keys(params).length) return;
+                        if (_.isEmpty(params)) return;
+                    } else {
+                        if (route.endpoint !== '$$' + key && !~item.href.indexOf(route.endpoint)) return;
                     }
 
-                    if (route.endpoint !== '$$' + key && !~item.href.indexOf(route.endpoint)) return;
 
                     url = Util.replacePathPlaceholdersFromParamObject(route.path, params).split('(')[0];
                     item.url = url.indexOf('/') === 0 ? url : '/' + url;
