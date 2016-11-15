@@ -28,13 +28,6 @@ const ADD_FRIEND = 'Add Friend';
 const REQUESTED = 'Request Sent';
 const ACCEPT = 'Accept';
 const PROFILE = 'View Profile';
-const NO_DATA = (
-    <h2 className="placeholder">
-        You are already friends with everyone in your group.<br />
-        Great Work! <br />
-        Let's Take Action!
-    </h2>
-);
 
 const PAGE_UNIQUE_IDENTIFIER = 'suggested-friends';
 
@@ -61,6 +54,19 @@ export class Suggested extends React.Component{
         }).catch(() => {
             Toast.error(FRIEND_PROBLEM);
         });
+    }
+
+    renderNoData(data) {
+        if (data == null) {
+            return null;
+        }
+        return (
+            <h2 className="placeholder">
+                You are already friends with everyone in your group.<br />
+                Great Work! <br />
+                Let's Take Action!
+            </h2>
+        );
     }
 
     renderRequestStatus(item) {
@@ -149,34 +155,12 @@ export class Suggested extends React.Component{
     }
 
     render() {
-        if (this.props.data == null) {
-            return (
-                <Layout
-                    currentUser={this.props.currentUser}
-                    className={PAGE_UNIQUE_IDENTIFIER}
-                    navMenuId="navMenu"
-                >
-                    {null}
-                </Layout>
-            );
-        } else if (this.props.data.length === 0) {
-            return (
-                <Layout
-                    currentUser={this.props.currentUser}
-                    className={PAGE_UNIQUE_IDENTIFIER}
-                    navMenuId="navMenu"
-                >
-                    {NO_DATA}
-                </Layout>
-            );
-        }
-
-        return (
-            <Layout
-                currentUser={this.props.currentUser}
-                className={PAGE_UNIQUE_IDENTIFIER}
-                navMenuId="navMenu"
-            >
+        var self = this;
+        var content;
+        if (self.props.data == null || !self.props.data.length) {
+            content = self.renderNoData(self.props.data);
+        } else {
+            content = (
                 <form>
                     <FlipBoard
                         renderFlip={this.renderCard.bind(this)}
@@ -197,13 +181,21 @@ export class Suggested extends React.Component{
                         }}
                     />
                 </form>
+            );
+        }
+        return (
+           <Layout
+               className={PAGE_UNIQUE_IDENTIFIER}
+               currentUser={this.props.currentUser}
+           >
+               {content}
            </Layout>
         );
     }
 }
 
 mapStateToProps = state => {
-    var data;
+    var data = null;
     var currentUser = {};
     var loading = true;
     if (state.page && state.page.data != null &&
