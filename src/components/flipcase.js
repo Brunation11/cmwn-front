@@ -71,7 +71,7 @@ export default class Flipcase extends React.Component {
         var renderFunction;
         var popover = HEADINGS.POPOVER_SELF;
 
-        if (this.props.data == null) return null;
+        if (this.props.data == null || !this.props.data.length) return null;
 
         if (this.props.render === 'all' && this.state.allFlips) renderFunction = this.renderAll;
         if (this.props.render === 'earned' && this.state.flips) renderFunction = this.renderEarned;
