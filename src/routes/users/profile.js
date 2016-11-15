@@ -282,7 +282,7 @@ export class Profile extends React.Component {
                     <Panel
                         header={HEADINGS.TROPHYCASE}
                         className={ClassNames('standard', {
-                            hidden: !this.state.isStudent
+                            hidden: this.state.type !== 'CHILD'
                         })}
                     >
                         <FLIP_SOURCE>
@@ -310,7 +310,7 @@ export class Profile extends React.Component {
                 <Panel
                     header={HEADINGS.TROPHYCASE}
                     className={ClassNames('standard', {
-                        hidden: !this.state.isStudent
+                        hidden: this.state.type !== 'CHILD'
                     })}
                 >
                     <FLIP_SOURCE>
