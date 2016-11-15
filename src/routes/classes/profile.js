@@ -1,7 +1,6 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
 import _ from 'lodash';
 import QueryString from 'query-string';
-import {Link} from 'react-router';
 import {Panel} from 'react-bootstrap';
 import { connect } from 'react-redux';
 
@@ -127,18 +126,18 @@ export class Profile extends React.Component {
                         renderFlip={this.renderCard.bind(this)}
                         header={`${HEADINGS.CLASS} ${this.state.title}`}
                         transform={data => {
-                           var image;
-                           if (!_.has(data, '_embedded.image')) {
-                               image = GLOBALS.DEFAULT_PROFILE;
-                           } else {
-                               if (data._embedded.image.url != null) {
-                                   image = data._embedded.image.url;
-                               } else {
-                                   image = data.images.data[0].url;
-                               }
-                           }
-                           return data.set('image', image);
-                       }}
+                            var image;
+                            if (!_.has(data, '_embedded.image')) {
+                                image = GLOBALS.DEFAULT_PROFILE;
+                            } else {
+                                if (data._embedded.image.url != null) {
+                                    image = data._embedded.image.url;
+                                } else {
+                                    image = data.images.data[0].url;
+                                }
+                            }
+                            return data.set('image', image);
+                        }}
                     />
                </USER_SOURCE>
            </Layout>

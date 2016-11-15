@@ -68,9 +68,9 @@
     }
 
     .avatar {
-        width: 100%;
         transition: background-color 2s;
         background-color: $cmwn-purple;
+        width: 100%;
 
         &:hover {
             background-color: $cmwn-blue;
