@@ -263,28 +263,28 @@ export class BulkUpload extends React.Component {
             if (!this.refs.formRef.isValid()) {
                 e.preventDefault();
                 result = ERRORS.NOT_FILLED;
-                Toast.error(result);
+                // Toast.error(result);
             } else if (this.state.tos === false) {
                 e.preventDefault();
                 result = ERRORS.NO_AGREE;
-                Toast.error(result);
+                // Toast.error(result);
             } else if (this.state.teacherCode === this.state.studentCode) {
                 e.preventDefault();
                 result = ERRORS.SAME_CODES;
-                Toast.error(result);
+                // Toast.error(result);
             } else if (!isPassValid(this.state.teacherCode) || !isPassValid(this.state.studentCode)) {
                 e.preventDefault();
                 result = ERRORS.PASSW_REQ;
-                Toast.error(result);
+                // Toast.error(result);
             } else if (!this.refs.fileInput.getValue()) {
                 e.preventDefault();
                 result = ERRORS.NO_FILE;
-                Toast.error(result);
+                // Toast.error(result);
             }
         } catch(err) {
             e.preventDefault();
         }
-        Toast.success(result);
+        // Toast.success(result);
         window.setTimeout(() => {
             this.setState({
                 studentCode: '',

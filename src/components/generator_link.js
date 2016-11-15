@@ -1,8 +1,6 @@
 import React from 'react';
 import {Button} from 'react-bootstrap';
 
-import History from 'components/history';
-
 const GENERATE = 'Generate User Cards';
 
 class GeneratorLink extends React.Component {
@@ -33,9 +31,12 @@ class GeneratorLink extends React.Component {
         //     (this.state.uuid == null && this.state.id == null)) {
         //     return null;
         // }
+        var url = window.location.href;
+        url = url.substring(0, url.indexOf('/', 8)); // search past 'https://'
+        url += `${this.state.base}/${this.state.uuid}/cards`;
         return (
             <Button id="generate-btn" className={this.props.className + ' standard'}
-                onClick={() => History.push(`${this.state.base}/${this.state.uuid}/cards`)}>
+                href={`javascript:window.open("${url}");`}>
                 {this.props.text ? this.props.text : GENERATE}</Button>
         );
     }

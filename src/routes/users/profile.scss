@@ -1,5 +1,27 @@
 @import '../../variables';
 
+.game-modal {
+    display: block;
+    position: fixed;
+
+    .modal-dialog {
+        position: absolute;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+
+        .modal-content {
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            margin: 0;
+            width: 80vw;
+            min-width: 300px; //arbitrary, so game doesn't shrink forever
+            max-width: 150vh;
+        }
+    }
+}
+
 .profile {
     .flag-container {
         left: 50%;
@@ -16,7 +38,8 @@
 
     .flag-button {
         position: absolute;
-        right: 0;
+        top: 30px;
+        right: 30px;
         transition: opacity .5s ease-in-out;
         opacity: 0;
         z-index: 3;
@@ -58,131 +81,32 @@
         }
     }
 
-    .panel-body {
-        display: flex;
-        padding: $standard;
-        flex-wrap: wrap;
-        justify-content: space-between;
+    &.current-user {
+        .flipboard .panel-body {
+            display: flex;
+            padding: $standard;
+            flex-wrap: wrap;
+            justify-content: space-between;
 
-
-        > * {
-            position: relative;
-            flex: 1 0 275px;//arbitrary, looks good as a breakpoint
-        }
-
-        .right {
-            z-index: 2;
-            margin: 0 auto;
-
-            label,
-            span,
-            h3,
-            h2,
-            p,
-            a {
-                //fixes a horrible chrome/osx font aliasing issue http://stackoverflow.com/questions/8024061/webkit-blurry-text-with-css-scale-translate3d
-                transform: translate3d(0, 0, 0);
-                filter: blur(0);
-            }
-
-            .input-group-addon {
-                margin: 0;
-                border: 0;
-                padding: 0;
-            }
-
-            .has-addon {
-
-                // scss-lint:disable SelectorDepth, NestingDepth
-
-                .form-control-feedback::before {
-                    margin-left: -75px;
-                }
-                // scss-lint:enable SelectorDepth, NestingDepth
-
-            }
-        }
-
-        .left {
-            z-index: 1;
-            margin: 0 auto;
 
             > * {
                 position: relative;
-                margin: 0 auto;
-                text-align: center;
-            }
-
-            .flag-container {
-                left: 0;
-                transform: none;
+                flex: 1 0 275px;//arbitrary, looks good as a breakpoint
             }
         }
 
-        .frame {
-            margin-top: ($standard * 5);
-            width: 100%;
-
-            &.non-friend {
-                transform: translateY(-25%);
-                flex: none;
-            }
-
-            .profile-image {
-                margin: 0 auto;
-                width: 100%;
-
-                // scss-lint:disable SelectorDepth, NestingDepth
-
-                .profile-pic {
-                    margin: 0 auto;
-                    border: 1px solid $cmwn-blue;
-                    border-radius: 10px;
-                    box-shadow: -5px 5px 5px $cmwn-lighter-blue;
-                    padding: $standard;
-                    width: 60%;
-                }
-                // scss-lint:enable SelectorDepth, NestingDepth
-            }
-        }
-
-        .user-metadata {
-            padding: 1rem;
-            color: $cmwn-blue;
-            font-size: 1rem;
-
-            .field {
-                border-radius: 5px;
-                box-shadow: 0 0 6px $cmwn-medium-blue;
-                background: url('../../media/blue-header-bg.jpg');
-                padding: $standard / 3;
-                color: $cmwn-white;
-                font-size: 1.25rem;
-            }
-        }
-    }
-
-    .flip {
-        border: 1px solid $cmwn-off-white;
-        border-collapse: collapse;
-        flex-basis: 280px;
-
-        object {
-            display: inline-block;
-            border: 1px solid $cmwn-black;
-            background: $cmwn-white;
+        .flip {
+            border: 1px solid $cmwn-off-white;
             border-collapse: collapse;
+            flex-basis: 280px;
+
+            object {
+                display: inline-block;
+                border: 1px solid $cmwn-black;
+                background: $cmwn-white;
+                border-collapse: collapse;
+            }
         }
-    }
-
-    .link-below {
-
-        .below {
-            display: none;
-        }
-    }
-
-    .item {
 
         .overlay {
             overflow: scroll;
@@ -240,6 +164,58 @@
         .desktop-only {
             background: url('../../media/desktop-only.png') no-repeat 100% 100%;
             background-size: 25%;
+        }
+    }
+
+    &.user {
+        .panel-heading {
+            border: 0;
+        }
+
+        .label {
+            text-transform: uppercase;
+            color: $cmwn-white;
+            font-family: $cmwn-jade-font;
+            font-size: 1.25rem;
+        }
+
+        .field {
+            border-radius: 5px;
+            box-shadow: 0 0 6px $cmwn-medium-blue;
+            background: url('../../media/blue-header-bg.jpg');
+            padding: $standard / 3;
+            color: $cmwn-white;
+            font-size: 1.25rem;
+        }
+
+        .left.profile-image-container {
+            position: relative;
+            border: 1px solid $cmwn-white;
+            width: 45%;
+
+            .profile-image {
+                margin: $standard * 2;
+                border: 2px solid $cmwn-white;
+                border-radius: 2px;
+                padding-bottom: 0;
+            }
+        }
+
+        .right.user-fields {
+            position: relative;
+            padding: 0 $standard;
+            width: 55%;
+        }
+
+        &:not(.friends) {
+            .left.profile-image-container {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            .right.user-fields {
+                display: none;
+            }
         }
     }
 }
