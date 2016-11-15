@@ -72,7 +72,8 @@ var executeAsProcess = function (command, flags) {
     };
 };
 
-var buildDevelopment = function () {
+var buildDevelopment = function (finish = true) {
+    var task;
     var execSync = require('child_process').execSync;
     var wpStream;
     try {
@@ -110,9 +111,13 @@ var buildDevelopment = function () {
         wpStream.end();
         throw err;
     });
-    return gulp.src('./src/app.js')
-        .pipe(wpStream)
-        .pipe(gulp.dest('./build'));
+
+    task = gulp.src('./src/app.js')
+        .pipe(wpStream);
+    if (finish) {
+        task = task.pipe(gulp.dest('./build'));
+    }
+    return task;
 };
 
 var buildProduction = function () {
@@ -315,6 +320,55 @@ var selectBuildMode = function () {
     return buildDevelopment();
 };
 
+
+var runUnitTests = function (filePath = 'src/**/*.test.js') {
+    var mocha = require('gulp-mocha');
+    process.env.NODE_ENV = 'production';
+    process.env.BABEL_ENV = 'production';
+    var tests = gulp.src([filePath], {read: false})
+         .pipe(mocha({
+             require: ['./src/testdom.js'],
+             timeout: 2000,
+             reporter: 'min'
+         }))
+         .once('error', () => {
+             process.exit(1);
+         })
+         .once('end', () => {
+             process.exit();
+         });
+    tests.on('error', function (err) {
+        console.log('SOMETHING HAPPENED:' + err);
+    });
+    return tests;
+};
+
+var runCoverage = function (fileName) {
+    var spawnArgs = [];
+//    var proc;
+
+    console.log('Running tests for ' + (fileName == null ? 'all files' : fileName));
+    if (fileName != null) {
+        spawnArgs.push('-f');
+        spawnArgs.push(fileName);
+    }
+//    proc =
+    require('child_process').spawn('./test.sh', spawnArgs,
+        {stdio: [process.stdin, process.stdout, process.stderr]});
+//
+//    proc.on('exit', function (exitCode) {
+//        console.log('process exited with code ' + exitCode);
+//    });
+//
+//    proc.stdout.on('data', function (chunk) {
+//        console.log('' + chunk);
+//    });
+//
+//    proc.stdout.on('end', function () {
+//        console.log('finished collecting data chunks from stdout');
+//    });
+};
+
 /*
 ___  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______  ___
  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__
@@ -349,7 +403,12 @@ gulp.task('watch-scss', function () {
 });
 
 gulp.task('watch-test', function () {
-    gulp.watch(['src/**/*.js'], ['coverage']);
+    runCoverage(); //we need to guarentee this has run at least once for individual files to work
+    gulp.watch(['src/**/*.js']).on('change', function (file) {
+        file = file.path.slice(__dirname.length + 1);
+        runCoverage(file);
+        console.log('***************************************************** ' + file);
+    });
 });
 
 gulp.task('watch-lint', function () {
@@ -453,25 +512,11 @@ gulp.task('lint-scss', function () {
 });
 
 gulp.task('unit', function () {
-    var mocha = require('gulp-mocha');
-    process.env.NODE_ENV = 'production';
-    process.env.BABEL_ENV = 'production';
-    var tests = gulp.src(['src/**/*.test.js'], {read: false})
-         .pipe(mocha({
-             require: ['./src/testdom.js'],
-             timeout: 2000,
-             reporter: 'min'
-         }))
-         .once('error', () => {
-             process.exit(1);
-         })
-         .once('end', () => {
-             process.exit();
-         });
-    tests.on('error', function (err) {
-        console.log('SOMETHING HAPPENED:' + err);
-    });
-    return tests;
+    var filePath = args.path;
+    if (!filePath || filePath === '') {
+        filePath = undefined;
+    }
+    runUnitTests(filePath);
 });
 
 gulp.task('smoke', function () {
@@ -486,22 +531,7 @@ gulp.task('smoke', function () {
     return tests;
 });
 
-gulp.task('coverage', function () {
-    var proc = require('child_process').spawn('./test.sh');
-
-    proc.on('exit', function (exitCode) {
-        console.log('process exited with code ' + exitCode);
-    });
-
-    proc.stdout.on('data', function (chunk) {
-        console.log('' + chunk);
-    });
-
-    proc.stdout.on('end', function () {
-        console.log('finished collecting data chunks from stdout');
-    });
-});
-
+gulp.task('coverage', runCoverage.bind(null, undefined));
 
 gulp.task('e2e', () => {
     var execSync = require('child_process').execSync;

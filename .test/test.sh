@@ -1,18 +1,30 @@
 FILENAME="./src"
+TESTFILE="src/**/*.test.js"
+PARTB=
 while getopts f: opt
 do
     case "$opt" in
-        f) 
-            echo 'got hurr'
-            FILENAME="$OPTARG";;
+        f) FILENAME="$OPTARG";;
         \?) #unknown flag
             echo >&2 \
             "usage: $0 [-f filename]"
             exit 1;;
     esac
 done
-PARTB=
-echo "*****************************************$FILENAME"
+if [[ "$FILENAME" =~ "test" ]]
+    then
+        TESTFILE=$FILENAME
+        FILENAME=${FILENAME%.*}.js
+    else
+        if [ "$FILENAME" != "./src" ]
+            then
+                TESTFILE=${FILENAME%.*}.test.js
+        fi
+fi
+if [ $FILENAME != './src' ] && [ ! -f $TESTFILE ]; then
+    echo "No test file ($TESTFILE) exists for the modified file ($FILENAME). Perhaps you should make one!"
+    exit 0;
+fi
 export BABEL_ENV="production"
 export NODE_ENV="production"
 export DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -24,12 +36,12 @@ if [ "$FILENAME" = "./src" ]
         echo 'testing all files'
     else
         PARTB=$(find src -name \*.js | grep -v "$FILENAME" | sed -e 's/^/-x /')
-        echo "testing $FILENAME"
+        echo "testing $FILENAME via $TESTFILE"
 fi
 PARTA="../node_modules/istanbul/lib/cli.js cover --verbose --print both -x 'src/mocks/**/*.js' -x 'src/**/*.test.js' "
-PARTC=" ../node_modules/mocha/bin/_mocha -- 'src/routes/users/profile.test.js' --require ignore-styles --require ./src/testdom.js"
+PARTC=" ../node_modules/mocha/bin/_mocha -- $TESTFILE --require ignore-styles --require ./src/testdom.js"
 RUNTEST=$PARTA$PARTB$PARTC
-echo $RUNTEST
+
 export NODE_PATH=${DIR}/src
 eval $RUNTEST
 #../node_modules/istanbul/src/cli.js cover --verbose --print both -x 'src/mocks/**/*.js' -x 'src/**/*.test.js' ../node_modules/mocha/bin/_mocha -- 'src/**/*.test.js' --require ignore-styles --require ./src/testdom.js
