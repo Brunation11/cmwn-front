@@ -23,19 +23,21 @@ var checkProfileRender = function (data, currentUser) {
 var checkOwnProfileContent = function (data, currentUser) {
     var profile = <Profile data={data} loading={false} currentUser={currentUser}/>;
     const WRAPPER = shallow(profile);
+    console.log(WRAPPER.debug());
     expect(WRAPPER.children()).to.have.length(1);
     expect(WRAPPER.children('div')).to.have.length(1);
     expect(WRAPPER.find('Modal')).to.have.length(1);
-    expect(WRAPPER.find('Panel')).to.have.length(1);
     expect(WRAPPER.find('FlipBoard')).to.have.length(1);
+    expect(WRAPPER.find('Flipcase')).to.have.length(1);
 };
 
 var checkAnotherProfileContent = function (data, currentUser) {
     var profile = <Profile data={data} loading={false} currentUser={currentUser}/>;
     const WRAPPER = shallow(profile);
-    expect(WRAPPER.children()).to.have.length(1);
-    expect(WRAPPER.find('Panel')).to.have.length(2);
-    expect(WRAPPER.find('.frame')).to.have.length(1);
+    expect(WRAPPER.children()).to.have.length(2);
+    expect(WRAPPER.find('Panel')).to.have.length(1);
+    expect(WRAPPER.find('Connect')).to.have.length(1);
+    expect(WRAPPER.find('Flipcase')).to.have.length(1);
 };
 
 describe('Profile Smoke Tests', function () {
