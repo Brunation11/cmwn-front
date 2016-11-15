@@ -32,35 +32,6 @@ const PAGE_UNIQUE_IDENTIFIER = 'profile';
 const GAME_WRAPPER = GenerateDataSource('games', PAGE_UNIQUE_IDENTIFIER);
 const FLIP_SOURCE = GenerateDataSource('user_flip', PAGE_UNIQUE_IDENTIFIER);
 
-const TITLES = {
-    'aqua-lunch-man': '364c9a2dcd31232af6ee96514b7e8c8b.gif',
-    'be-bright': 'e2426e0504ee73d6dc45c689f5d5f323.gif',
-    'drought-out': 'a93c9f72b0df38ff63a6d0b686231bf6.gif',
-    'happy-fish-face': 'f64606d786cb75e0eff7ca5ea5706abf.gif',
-    'safety-first': '87ee5b0898c7e736e27353adf888fe4d.gif',
-    'vr-world': '69faa25178b47e20275d19a63c5ff255.gif',
-    'litter-bug': 'f55a5a39ada3b6b5e88f14298e631725.gif',
-    'meerkat-mania': '47605ffc74272d540f2aaf083e1748fb.gif',
-    'polar-bear': 'fb390fecbf002b31bada0644f66fdb9a.gif',
-    'printmaster': '01a37a9e8707c8cdcc77afe8e611ce47.gif',
-    'sea-turtle': '88929f4f060b7573c9137d4a67c2f049.gif',
-    'tag-it': '9edd1259b96b2d676a88c83047af3656.gif',
-    'twirl-n-swirl': 'dcd11a5f09726c4b0a91586b530c8264.gif',
-    'fire': '6b2eab034602dc55d7c32312499bbc71.gif',
-    'monarch': 'aca58f6b79a7ef1331a5f1f88a26c89b.gif',
-    'waterdrop': '51861f8a31c9d899d73b38995625ed46.gif',
-    'twirling-tower': '3890d968d8295e472006d0e8d0787f4a.gif',
-    'salad-rain': '0a4edeec009c5ac56b1e586014cf002d.gif',
-    'reef-builder': '19ff5314ce51ea7f4a059f0c07ac4142.gif',
-    'pedal-pusher': '5e0eab9f9a6b70fc47b7586172f20c09.gif',
-    'bloom-boom': 'd0341487768a960b6d255a3b25d2bf12.gif',
-    'all-about-you': '14f629c77736290adc41531d72a6cc54.gif',
-    'animal-id': '1d30b3302aad1608ad76c4029a4c2d5a.gif',
-    'carbon-catcher': 'ab894b9d48a225ffdace7215003dd228.gif',
-    'skribble': '10b58a3fbacaa46203faf65a02f8fbbc.gif',
-    'turtle-hurdle': '1cf1a4952107ce19e6b8675643a17c5d.gif'
-};
-
 const HEADINGS = {
     ACTION: 'Profile',
     ARCADE: 'Activities'
