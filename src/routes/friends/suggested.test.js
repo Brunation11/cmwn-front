@@ -39,6 +39,9 @@ describe('renders empty suggested friends', function (){
     it('checks that a message is displayed when no suggested friends are present', function () {
         expect(WRAPPER.find('h2')).to.have.length(1);
     });
+    it('checks that the layout still loads', function (){
+        expect(WRAPPER.find('Layout')).to.have.length(1);
+    });
 });
 
 describe('test rendering a flip', function (){
