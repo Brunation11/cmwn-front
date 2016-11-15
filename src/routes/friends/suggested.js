@@ -118,7 +118,7 @@ export class Suggested extends React.Component{
         return (
             <a
                 className="btn purple standard"
-                href={`/profile/${item.suggested_id}`}
+                href={`/profile/${item.suggest_id ? item.suggest_id : item.suggested_id}`}
             >
                 {PROFILE}
             </a>
