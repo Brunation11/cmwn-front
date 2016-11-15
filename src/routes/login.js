@@ -131,11 +131,13 @@ var Component = React.createClass({
         });
     },
     attemptLogin: function (e) {
-        var user = this.getUsernameWithoutSpaces();
+        var user;
         var logout;
         var logoutUrl;
 
         if (this.state.currentPage === 'forgot-password') return;
+
+        user = this.getUsernameWithoutSpaces();
 
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
             if (this.props.data._links && this.props.data._links.login == null) {
