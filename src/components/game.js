@@ -64,6 +64,11 @@ export class Game extends React.Component {
                 this.onExit.bind(this)
             )
         });
+        if (Screenfull.enabled) {
+            document.addEventListener(Screenfull.raw.fullscreenchange, () => {
+                this.setState({isFullscreen: Screenfull.isFullscreen});
+            });
+        }
     }
 
     componentDidMount() {
@@ -83,6 +88,7 @@ export class Game extends React.Component {
             frame.contentWindow.addEventListener('click', callApi, false);
         }, false);
         this.checkForPortrait.call(this);
+        this.setState({mounted: true});
     }
 
     componentWillReceiveProps(nextProps) {
@@ -110,6 +116,7 @@ export class Game extends React.Component {
 
     componentWillUnmount() {
         this.clearEvent.call(this);
+        this.setState({mounted: false});
     }
 
     onExit(nextState) {
@@ -150,35 +157,47 @@ export class Game extends React.Component {
             Screenfull.exit();
             this.setState({
                 fullscreenFallback: false,
+                isFullscreen: false,
             });
         }
     }
 
     resizeFrame() {
-        var frame = ReactDOM.findDOMNode(this.refs.gameRef);
-        if (frame) {
-            frame.contentWindow.innerWidth = ReactDOM.findDOMNode(this.refs.wrapRef).offsetWidth;
-            frame.contentWindow.innerHeight = ReactDOM.findDOMNode(this.refs.wrapRef).offsetHeight;
+        var frame;
+        if (this.state.mounted) {
+            frame = ReactDOM.findDOMNode(this.refs.gameRef);
+            if (frame) {
+                frame.contentWindow.innerWidth = ReactDOM.findDOMNode(this.refs.wrapRef).offsetWidth;
+                frame.contentWindow.innerHeight = ReactDOM.findDOMNode(this.refs.wrapRef).offsetHeight;
+            }
+            setTimeout(() => {
+                this.dispatchPlatformEvent.call(this, 'resize');
+            }, 1000);
         }
-        this.dispatchPlatformEvent.call(this, 'resize');
     }
 
     dispatchPlatformEvent(name, data) {
+        var frame;
+        var event;
         /** TODO: MPR, 1/15/16: Polyfill event */
-        var frame = ReactDOM.findDOMNode(this.refs.gameRef);
-        var event = new Event('platform-event', {bubbles: true, cancelable: false});
-        this.toggleDemoButton.call(this);
-        _.defaults(event, {type: 'platform-event', name, data});
-        if (frame) frame.contentWindow.dispatchEvent(event);
+        if (this.state.mounted) {
+            frame = ReactDOM.findDOMNode(this.refs.gameRef);
+            event = new Event('platform-event', {bubbles: true, cancelable: false});
+            this.toggleDemoButton.call(this);
+            _.defaults(event, {type: 'platform-event', name, data});
+            if (frame) frame.contentWindow.dispatchEvent(event);
+        }
     }
 
     makeFullScreen() {
+        var nextState = {isFullscreen: true};
         if (Screenfull.enabled) {
             Screenfull.request(ReactDOM.findDOMNode(this.refs.wrapRef));
         } else {
-            this.setState({fullscreenFallback: true});
-            this.resizeFrame.call(this);
+            nextState.fullscreenFallback = true;
+            this.resizeFrame().call(this);
         }
+        this.setState(nextState);
     }
 
     checkForPortrait() {
@@ -199,7 +218,7 @@ export class Game extends React.Component {
             <div className={COMPONENT_IDENTIFIER}>
                 <div ref="wrapRef" className={ClassNames(
                     'game-frame-wrapper',
-                    {fullscreen: this.state.fullscreenFallback}
+                    {fs: this.state.isFullscreen, fullscreen: this.state.fullscreenFallback}
                 )}>
                     <div
                         ref="overlay"
