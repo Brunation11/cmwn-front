@@ -79,12 +79,17 @@ Version - 0.3.15
 - 7c71703: remove default from export declaration on class. remove on error props for images
 - 6d8aa6f: update style rules, refactor for linter
 - dd5554a: Version bump [ci skip]
+- efe45f4: rename class
+- ae16532: remove commented test code
 
 Version - 0.3.14
 ----
 
 - 8436cc0: bump version
 - e99cf48: add expect clause to test to check for flipcase
+- 7412902: Version bump [ci skip]
+- 0a4f783: Version bump [ci skip]
+- 14a7c2f: Version bump [ci skip]
 - efe45f4: rename class
 - ae16532: remove commented test code
 - 6d3c8ae: Version bump [ci skip]
@@ -96,23 +101,6 @@ Version - 0.3.13
 - e99cf48: add expect clause to test to check for flipcase
 - 7412902: Version bump [ci skip]
 - 8436cc0: bump version
-- 0a4f783: Version bump [ci skip]
-- 14a7c2f: Version bump [ci skip]
-
-Version - 0.3.15
-----
-
-- efe45f4: rename class
-- ae16532: remove commented test code
-- 6d3c8ae: Version bump [ci skip]
-- 78945d8: linter
-
-Version - 0.3.14
-----
-
-- 8436cc0: bump version
-- e99cf48: add expect clause to test to check for flipcase
-- 7412902: Version bump [ci skip]
 - 0a4f783: Version bump [ci skip]
 - 14a7c2f: Version bump [ci skip]
 
