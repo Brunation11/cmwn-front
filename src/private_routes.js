@@ -26,9 +26,14 @@ import Games from 'routes/games';
 import ChangePassword from 'routes/change_password';
 import NewsFeed from 'routes/newsfeed';
 import Flips from 'routes/users/flips';
+<<<<<<< 7c1e69f3779d6fc77fe3a985e7a1cb3df8e0331e
 import ResourceCenter from 'routes/resource_center';
 import FlagView from 'routes/flags';
 import Help from 'routes/help';
+=======
+import GodMode from 'routes/god_mode';
+import GodModeGames from 'routes/god_mode/games';
+>>>>>>> adding god mode games route
 
 var redirect = function (path) {
     return function (nextState, transition) {
@@ -103,7 +108,9 @@ var routes = [
     { path: 'resources(/)', component: ResourceCenter, endpoint: ''},
     { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed},
     { path: 'help(/)', title: 'Help', component: Help},
-    { path: '/flaggedimages(/)', title: 'Flagged Images', endpoint: '/flag', component: FlagView}
+    { path: '/flaggedimages(/)', title: 'Flagged Images', endpoint: '/flag', component: FlagView},
+    { path: 'sa(/)', component: GodMode},
+    { path: 'sa/games(/)', component: GodModeGames},
 ];
 
 routes = _.map(routes, i => {
