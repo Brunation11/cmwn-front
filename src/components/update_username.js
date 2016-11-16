@@ -12,19 +12,18 @@ import 'components/update_username.scss';
 
 const GOOD_UPDATE = 'Username updated to ';
 const BAD_UPDATE = 'Could not update your user name to ';
-
 const CALL_TO_ACTION = '*CLICK YOUR PREFERRED USERNAME';
-
 const LABELS = {
     CURRENT: 'CURRENT USERNAME: ',
     SAVE: 'STEP 3: DON\'T FORGET TO',
     SELECT: 'CLICK YOUR PREFERRED USERNAME',
     WELCOME: 'name generator',
-    INSTRUCTIONS_PT_1: 'NOT SURE HOW THIS WORKS?',
-    INSTRUCTIONS_PT_2: 'SWIPE FOR INSTRUCTIONS',
-    INSTRUCTIONS_PT_3: 'BACK TO HOME'
+    INSTRUCTIONS: [
+        'NOT SURE HOW THIS WORKS?',
+        'SWIPE FOR INSTRUCTIONS',
+        'BACK TO HOME'
+    ]
 };
-
 const BUTTONS = {
     ORIGINAL: 'KEEP IT!',
     MOBILE_ORIGINAL: 'TAP TO KEEP IT',
@@ -33,20 +32,27 @@ const BUTTONS = {
     STEP_THREE_PROMPT: 'ALMOST DONE!',
     STEP_THREE: 'CONTINUE TO STEP 3'
 };
-
 const COPY = {
-    CONFIRM_NOTICE_1: 'You will not be able to',
-    CONFIRM_NOTICE_2: 'get your old name again!',
+    CONFIRM_NOTICE: [
+        'You will not be able to',
+        'get your old name again!'
+    ],
     LOGIN_NOTICE: 'Next time you will log in as:',
     INSTRUCTIONS_HEADER: 'How to use the name generator:',
-    INSTRUCTIONS_PT_1: '1. Tap the "Generate Name" button.',
-    INSTRUCTIONS_PT_2: 'A new username will appear in the box.',
-    INSTRUCTIONS_PT_3: 'Then tap the bottom arrow to go to step two.',
-    INSTRUCTIONS_PT_4: '2. You will then see your old username and the new one that was just generated.',
-    INSTRUCTIONS_PT_5: 'Tap the one you want, then go to step three.',
-    INSTRUCTIONS_PT_6: '3. Confirm which name you want to use.',
-    INSTRUCTIONS_PT_7: 'Remember: if you choose the new name, you can\'t get your old one back.'
-
+    INSTRUCTIONS: [
+        '1. Tap the "Generate Name" button.',
+        'A new username will appear in the box.',
+        'Then tap the bottom arrow to go to step two.',
+        '2. You will then see your old username and the new one that was just generated.',
+        'Tap the one you want, then go to step three.',
+        '3. Confirm which name you want to use.',
+        'Remember: if you choose the new name, you can\'t get your old one back.'
+    ]
+};
+const ASSETS = {
+    DESKTOP_CONFIRMATION_HEADER: `${GLOBALS.MEDIA_URL}8aa292e3231eb77be37da7ae0225799e.png`,
+    MOBILE_CONFIRMATION_HEADER: `${GLOBALS.MEDIA_URL}8aa292e3231eb77be37da7ae0225799e.png`,
+    LOGIN_NOTICE_HEADER: `${GLOBALS.MEDIA_URL}b9567bafdf9c186ccac49a3c32c45ae8.png`,
 };
 
 export class UpdateUsername extends React.Component {
@@ -150,9 +156,8 @@ export class UpdateUsername extends React.Component {
     setOriginal() {
         this.setState({
             selected: this.state.original,
+            page: 'login-notice'
         });
-
-        this.setPage('login-notice');
     }
 
     setPage(page) {
@@ -240,9 +245,9 @@ export class UpdateUsername extends React.Component {
     renderDesktopConfirmation() {
         return (
             <div className={`desktop-confirmation-container ${this.state.page}`}>
-                <img className="header" src={`${GLOBALS.MEDIA_URL}8aa292e3231eb77be37da7ae0225799e.png`} />
-                <span className="prompt">{COPY.CONFIRM_NOTICE_1}</span>
-                <span className="prompt">{COPY.CONFIRM_NOTICE_2}</span>
+                <img className="header" src={ASSETS.DESKTOP_CONFIRMATION_HEADER} />
+                <span className="prompt">{COPY.CONFIRM_NOTICE[0]}</span>
+                <span className="prompt">{COPY.CONFIRM_NOTICE[1]}</span>
                 <Button
                     className="cancel-btn"
                     onClick={this.setOriginal.bind(this)}
@@ -267,24 +272,24 @@ export class UpdateUsername extends React.Component {
                         />
                     </div>
                     <div className="instructions-prompt-container">
-                        <span className="prompt">{LABELS.INSTRUCTIONS_PT_1}</span>
-                        <span className="prompt">{LABELS.INSTRUCTIONS_PT_2}</span>
+                        <span className="prompt">{LABELS.INSTRUCTIONS[0]}</span>
+                        <span className="prompt">{LABELS.INSTRUCTIONS[1]}</span>
                     </div>
                 </div>
 
                 <div className="instructions-container">
                     <div className="instructions-prompt-container">
-                        <span className="prompt">{LABELS.INSTRUCTIONS_PT_3}</span>
+                        <span className="prompt">{LABELS.INSTRUCTIONS[3]}</span>
                     </div>
                     <div className="instructions">
                         <span className="copy-header">{COPY.INSTRUCTIONS_HEADER}</span>
-                        <span className="copy">{COPY.INSTRUCTIONS_PT_1}</span>
-                        <span className="copy">{COPY.INSTRUCTIONS_PT_2}</span>
-                        <span className="copy">{COPY.INSTRUCTIONS_PT_3}</span>
-                        <span className="copy">{COPY.INSTRUCTIONS_PT_4}</span>
-                        <span className="copy">{COPY.INSTRUCTIONS_PT_5}</span>
-                        <span className="copy">{COPY.INSTRUCTIONS_PT_6}</span>
-                        <span className="copy">{COPY.INSTRUCTIONS_PT_7}</span>
+                        <span className="copy">{COPY.INSTRUCTIONS[0]}</span>
+                        <span className="copy">{COPY.INSTRUCTIONS[1]}</span>
+                        <span className="copy">{COPY.INSTRUCTIONS[2]}</span>
+                        <span className="copy">{COPY.INSTRUCTIONS[3]}</span>
+                        <span className="copy">{COPY.INSTRUCTIONS[4]}</span>
+                        <span className="copy">{COPY.INSTRUCTIONS[5]}</span>
+                        <span className="copy">{COPY.INSTRUCTIONS[6]}</span>
                     </div>
                 </div>
             </div>
@@ -365,7 +370,7 @@ export class UpdateUsername extends React.Component {
     renderMobileConfirmation() {
         return (
             <div className={`mobile-confirmation-container ${this.state.page}`}>
-                <img className="header" src={`${GLOBALS.MEDIA_URL}8aa292e3231eb77be37da7ae0225799e.png`} />
+                <img className="header" src={ASSETS.MOBILE_CONFIRMATION_HEADER} />
                 <div className="prompt-container">
                     <span className="prompt">{COPY.CONFIRM_NOTICE_1}</span>
                     <span className="prompt">{COPY.CONFIRM_NOTICE_2}</span>
@@ -391,7 +396,7 @@ export class UpdateUsername extends React.Component {
     renderLoginNotice() {
         return (
             <div className={`login-notice-container ${this.state.page}`}>
-                <img className="header" src={`${GLOBALS.MEDIA_URL}b9567bafdf9c186ccac49a3c32c45ae8.png`} />
+                <img className="header" src={ASSETS.LOGIN_NOTICE_HEADER} />
                 <span className="prompt">{COPY.LOGIN_NOTICE}</span>
                 <span className="username">{this.state.username}</span>
                 <div className="content">
@@ -489,6 +494,3 @@ export class UpdateUsername extends React.Component {
 }
 
 export default UpdateUsername;
-
-
-
