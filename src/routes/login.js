@@ -98,7 +98,7 @@ var Component = React.createClass({
             url: dataUrl,
         }, {
             'username': user,
-            'password': this.refs.password.getValue()
+            'password': this.state.password
         });
         req.then(res => {
             if (res.response && res.response.status && res.response.detail &&
@@ -129,13 +129,22 @@ var Component = React.createClass({
             Toast.error(ERRORS.LOGIN + (res.detail ? ' Message: ' + res.detail : ''));
             Log.log(e, 'Invalid login');
         });
+
+        this.setState({
+            username: '',
+            password: ''
+        });
     },
     attemptLogin: function (e) {
-        var user = this.getUsernameWithoutSpaces();
+        var user;
         var logout;
         var logoutUrl;
 
-        if (this.state.currentPage === 'forgot-password') return;
+        if (this.state.currentPage === 'forgot-password' ||
+            !this.state.username ||
+            !this.state.password) return;
+
+        user = this.getUsernameWithoutSpaces();
 
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
             if (this.props.data._links && this.props.data._links.login == null) {
@@ -207,8 +216,8 @@ var Component = React.createClass({
         }
     },
     getUsernameWithoutSpaces: function () {
-        var newLogin = this.refs.login.getValue().replace(/\s/g, '');
-        return newLogin;
+        if (!this.state.username) return;
+        return this.state.username.replace(/\s/g, '');
     },
     renderLogin: function () {
         return (
@@ -229,6 +238,11 @@ var Component = React.createClass({
                                 name="username"
                                 label={LABELS.LOGIN}
                                 placeholder="FUN-RABBIT003"
+                                value={this.state.username}
+                                onChange={e => this.setState({username: e.target.value})}
+                                onFocus={e => e.target.placeholder = ''}
+                                onBlur={e => e.target.placeholder = 'FUN-RABBIT003'}
+                                autoComplete="off"
                             />
                             <Input
                                 ref="password"
@@ -237,12 +251,18 @@ var Component = React.createClass({
                                 name="password"
                                 label={LABELS.PASSWORD}
                                 placeholder="PA********"
+                                value={this.state.password}
+                                onChange={e => this.setState({password: e.target.value})}
+                                onFocus={e => e.target.placeholder = ''}
+                                onBlur={e => e.target.placeholder = 'PA********'}
+                                autoComplete="off"
                             />
                             <Button
                                 id="login-button"
                                 className="login-button"
                                 onKeyPress={this.attemptLogin}
                                 onClick={this.attemptLogin}
+                                disabled={!this.state.username || !this.state.password}
                             />
                             <a
                                 className="forgot-password-link"
@@ -262,7 +282,7 @@ var Component = React.createClass({
                                     {SIGNUP_PROMPT.COPY_2}
                                 </p>
                                 <a
-                                    className="mobile"
+                                    className="mobile-link"
                                     onClick={this.displaySignupModal}
                                 >
                                     {SIGNUP_PROMPT.MOBILE_LINK}
@@ -331,7 +351,7 @@ var Component = React.createClass({
                                     {SIGNUP_PROMPT.COPY_2}
                                 </p>
                                 <a
-                                    className="mobile"
+                                    className="mobile-link"
                                     onClick={this.displaySignupModal}
                                 >
                                     {SIGNUP_PROMPT.MOBILE_LINK}
