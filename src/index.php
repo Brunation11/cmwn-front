@@ -27,7 +27,7 @@ if (!$https && $proxy !== 'https') {
         <style>
             @font-face {
                 font-family: "CMWNJadeRegular";
-                src: url("/fonts/cmwn.woff") format("woff");
+                src: url('https://media-staging.changemyworldnow.com/f/049b12512d27668decde968976466521.ttf') format('ttf');
             }
             @font-face{
                 font-family: "Source Sans Pro";

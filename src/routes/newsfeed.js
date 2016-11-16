@@ -9,6 +9,8 @@ import GLOBALS from 'components/globals';
 import Layout from 'layouts/two_col';
 import Game from 'components/game';
 
+import IB_IDS from 'components/ib_ids';
+
 import 'routes/newsfeed.scss';
 
 var mapStateToProps;
@@ -129,13 +131,17 @@ export class Feed extends React.Component {
     renderGameFeedItem(item) {
         var gameLink = item._links.games.href;
         var gameID = _.last(gameLink.split('/'));
-        var avatar = `/flips/${gameID}-static.gif`;
-        var thumbnail = `${GLOBALS.GAME_URL}${gameID}/thumb.jpg`;
+        var avatar = `${GLOBALS.MEDIA_URL}${IB_IDS.FLIPS[gameID] ?
+            IB_IDS.FLIPS[gameID].static :
+            IB_IDS.FLIPS.default}`;
+        var thumbnail = `${GLOBALS.MEDIA_URL}${IB_IDS.GAME_TILES[gameID] ?
+            IB_IDS.GAME_TILES[gameID] :
+            IB_IDS.GAME_TILES.default}`;
         var onClick = this.showModal.bind(this, `${GLOBALS.GAME_URL}${gameID}/index.html`);
 
         return (
             <div className="feed-item" id={gameID} key={Shortid.generate()}>
-                <a onClick={onClick.bind(this)}>
+                <a className="wrapper" onClick={onClick.bind(this)}>
                     <div className="content">
                         <div className="author">
                             <div className="avatar">

@@ -45,6 +45,7 @@ describe('resource center unit tests', function () {
         const WRAPPER = createWrapper(teacherData);
         it('should render the resource center', function () {
             checkContent(WRAPPER);
-        }); 
+        });
     });
 });
+
