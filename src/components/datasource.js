@@ -65,13 +65,17 @@ export default function (endpointIdentifier, componentName) {
 
             if (this.props.noLink) {
                 return (
-                    <div className={this.props.className}>{this.props.renderNoLink()}</div>
+                    <div className={this.props.className}>
+                        {this.props.renderNoLink ? this.props.renderNoLink() : ''}
+                    </div>
                 );
             }
 
             if (this.props.data == null || (_.isArray(this.props.data) && this.props.data.length === 0)) {
                 return (
-                        <div className={this.props.className}>{this.props.renderNoData()}</div>
+                        <div className={this.props.className}>
+                            {this.props.renderNoData()}
+                        </div>
                 );
             }
 
