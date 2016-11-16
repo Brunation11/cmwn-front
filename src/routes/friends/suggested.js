@@ -62,7 +62,8 @@ export class Suggested extends React.Component{
     renderNoLink() {
         return (
             <h2 className="placeholder">
-                At this time, as an adult user you cannot make friends ... but it is on the way!!!!
+                At this time, as an adult user you cannot make friends ...<br/>
+                but it is on the way!!!!
             </h2>
         );
     }
