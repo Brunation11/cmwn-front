@@ -23,7 +23,11 @@ export class FlipWall extends React.Component {
     render() {
         if (!this.props.data || !this.props.data._embedded) return null;
         return (
-            <Layout className={PAGE_UNIQUE_IDENTIFIER} navMenuId="navMenu">
+            <Layout
+                currentUser={this.props.currentUser}
+                className={PAGE_UNIQUE_IDENTIFIER}
+                navMenuId="navMenu"
+            >
                 <Panel className="standard" header={HEADER}>
                     <FLIP_SOURCE>
                         <Flipcase

@@ -1,46 +1,172 @@
 @import 'variables';
 
 .friends-page {
-    .overlay {
+    .placeholder {
         text-align: center;
     }
 
-    .btn {
-        transition: opacity 1s ease-in-out;
-        opacity: 1;
+    .flipboard .panel-body {
+        text-align: justify;
+    }
 
-        &.standard {
-            margin: 5px 0;
-            width: 100%;
+    .flag-container {
+        display: inline-block;
+        width: 33.3%;
+
+        .btn-toolbar {
+            margin: 0;
         }
 
-
-        &.nohover,
-        &.nohover:hover,
-        &.nohover:focus {
-            background-color: $cmwn-blue;
+        &:hover,
+        &:focus {
+            .flag-button,
+            .overlay {
+                opacity: 1;
+            }
         }
     }
 
-    .disabled {
-        display: none;
+    .flag-button {
+        position: absolute;
+        right: 6%;
+        transition: opacity .5s ease-in-out;
+        opacity: 0;
+        z-index: 1;
+        outline: none;
+        border: 0;
+        background: url('#{$media-url}ec720b982eaf6e0d9772cc553db54b55.png');
+        background-color: transparent;
+        background-repeat: no-repeat;
+        background-size: contain;
+        width: 35px;
+        height: 50px;
+
+        &::after {
+            position: absolute;
+            top: -100%;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: opacity .25s ease-in-out;
+            opacity: 0;
+            background: url('#{$media-url}018ce6adb27b39dd12249a22ea4f26cd.png');
+            background-repeat: no-repeat;
+            background-size: contain;
+            width: 500%;
+            height: 100%;
+            content: '';
+        }
+
+        &:hover,
+        &:focus,
+        &:active {
+            outline: none;
+            border: 0;
+            box-shadow: none;
+            background-color: transparent;
+
+            &::after {
+                opacity: 1;
+            }
+        }
+    }
+
+    .user-card {
+        position: relative;
+        text-align: center;
+    }
+
+    .overlay {
+        position: absolute;
+        transition: opacity .5s ease-in-out;
+        opacity: 0;
+        width: 100%;
+        height: 90%;
+        text-align: center;
     }
 
     .prompts {
-        text-align: center;
+        position: absolute;
+        bottom: 10%;
+        width: 100%;
+        white-space: pre-wrap;
 
-        .pending-prompt {
-            margin: 0 auto;
+        .btn,
+        .request-status {
+            position: relative;
+            top: 30%;
+            float: left;
+            clear: both;
+            margin: 10% 0 0;
+        }
+
+        .btn {
+            left: 50%;
+            transform: translateX(-50%);
+            transition: opacity 1s ease-in-out;
+
+            &.nohover,
+            &.nohover:hover,
+            &.nohover:focus {
+                background-color: $cmwn-blue;
+            }
+        }
+
+        .request-status {
+            float: none;
             text-transform: uppercase;
             color: $cmwn-white;
             font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
             font-size: 18px;
         }
+
+        .disabled {
+            display: none;
+        }
     }
 
-    .flip {
-        img {
-            max-width: 200px;
+
+    .avatar {
+        width: 100%;
+    }
+
+    @media (min-width: 747px) and (max-width: 826px) {
+        .prompts {
+            .btn,
+            .request-status {
+                font-size: 15px;
+            }
+        }
+    }
+
+    @media (min-width: 667px) and (max-width: 747px) {
+        .flag-container {
+            width: 50%;
+        }
+    }
+
+    @media (min-width: 414px) and (max-width: 667px) {
+        .prompts {
+            .btn,
+            .request-status {
+                font-size: 11px;
+            }
+        }
+    }
+
+    @media (max-width: 414px) {
+        .flag-container {
+            width: 50%;
+        }
+
+        .overlay {
+            height: 89%;
+        }
+
+        .prompts {
+            .btn,
+            .request-status {
+                font-size: 12px;
+            }
         }
     }
 }
