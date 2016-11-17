@@ -284,7 +284,6 @@ export class BulkUpload extends React.Component {
         } catch(err) {
             e.preventDefault();
         }
-        Toast.success(result);
         window.setTimeout(() => {
             this.setState({
                 studentCode: '',
