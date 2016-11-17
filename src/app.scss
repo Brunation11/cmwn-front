@@ -253,6 +253,7 @@ h3 {
     .global-header::after {
         display: block;
         position: absolute;
+        top: 0;
         right: 0;
         bottom: -12px;
         left: 0;
@@ -319,6 +320,7 @@ h3 {
         width: 22vmin;
         min-width: 180px;
         max-width: 210px;
+        vertical-align: top;
 
         img {
             width: 100%;
@@ -326,10 +328,10 @@ h3 {
     }
 
     .header-logo {
-        margin-top: 8px;
+        margin-top: 15px;
         margin-left: $standard * 2;
         width: calc(100% - 180px - 8em);
-        vertical-align: middle;
+        vertical-align: bottom;
 
         img {
             width: 100%;
@@ -361,7 +363,7 @@ h3 {
 
     .logout {
         position: absolute;
-        top: 5px;
+        top: 20px;
         width: 9%;
         height: 30%;
         color: $cmwn-white;
@@ -568,13 +570,6 @@ h3 {
             margin-left: auto;
             padding: 0 $standard;
         }
-    }
-
-    @media (min-width: $ultrawide-min-break) {
-
-    }
-
-    @media (min-width: $monitor-max-break) {
 
         .logo {
             margin-left: calc(((#{$monitor-max-break} - (100 * 1vw)) / 2) + 10px);
@@ -582,7 +577,6 @@ h3 {
     }
 
     @media (min-width: $monitor-max-break + (2 * $ultrawide-logo-offset)) {
-
         .logo {
             margin-left: -$ultrawide-logo-offset;
         }
