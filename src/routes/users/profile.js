@@ -16,6 +16,7 @@ import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
 import History from 'components/history';
 import GenerateDataSource from 'components/datasource';
+import IB_IDS from 'components/ib_ids';
 
 import Layout from 'layouts/two_col';
 
@@ -31,45 +32,14 @@ const PAGE_UNIQUE_IDENTIFIER = 'profile';
 const GAME_WRAPPER = GenerateDataSource('games', PAGE_UNIQUE_IDENTIFIER);
 const FLIP_SOURCE = GenerateDataSource('user_flip', PAGE_UNIQUE_IDENTIFIER);
 
-const TITLES = {
-    'aqua-lunch-man': '364c9a2dcd31232af6ee96514b7e8c8b.gif',
-    'be-bright': 'e2426e0504ee73d6dc45c689f5d5f323.gif',
-    'drought-out': 'a93c9f72b0df38ff63a6d0b686231bf6.gif',
-    'happy-fish-face': 'f64606d786cb75e0eff7ca5ea5706abf.gif',
-    'safety-first': '87ee5b0898c7e736e27353adf888fe4d.gif',
-    'vr-world': '69faa25178b47e20275d19a63c5ff255.gif',
-    'litter-bug': 'f55a5a39ada3b6b5e88f14298e631725.gif',
-    'meerkat-mania': '47605ffc74272d540f2aaf083e1748fb.gif',
-    'polar-bear': 'fb390fecbf002b31bada0644f66fdb9a.gif',
-    'printmaster': '01a37a9e8707c8cdcc77afe8e611ce47.gif',
-    'sea-turtle': '88929f4f060b7573c9137d4a67c2f049.gif',
-    'tag-it': '9edd1259b96b2d676a88c83047af3656.gif',
-    'twirl-n-swirl': 'dcd11a5f09726c4b0a91586b530c8264.gif',
-    'fire': '6b2eab034602dc55d7c32312499bbc71.gif',
-    'monarch': 'aca58f6b79a7ef1331a5f1f88a26c89b.gif',
-    'waterdrop': '51861f8a31c9d899d73b38995625ed46.gif',
-    'twirling-tower': '3890d968d8295e472006d0e8d0787f4a.gif',
-    'salad-rain': '0a4edeec009c5ac56b1e586014cf002d.gif',
-    'reef-builder': '19ff5314ce51ea7f4a059f0c07ac4142.gif',
-    'pedal-pusher': '5e0eab9f9a6b70fc47b7586172f20c09.gif',
-    'bloom-boom': 'd0341487768a960b6d255a3b25d2bf12.gif',
-    'all-about-you': '14f629c77736290adc41531d72a6cc54.gif',
-    'animal-id': '1d30b3302aad1608ad76c4029a4c2d5a.gif',
-    'carbon-catcher': 'ab894b9d48a225ffdace7215003dd228.gif',
-    'skribble': '10b58a3fbacaa46203faf65a02f8fbbc.gif',
-    'turtle-hurdle': '1cf1a4952107ce19e6b8675643a17c5d.gif'
-};
-
 const HEADINGS = {
     ACTION: 'Profile',
-    ARCADE: 'Activities',
-    TROPHYCASE: 'Trophycase'
+    ARCADE: 'Activities'
 };
 
 const PLAY = 'Play Now!';
 const COMING_SOON = 'Coming Soon!';
 const DESKTOP_ONLY = 'Log on with a Desktop computer to play!';
-const CLASSES = 'Classes';
 
 const BROWSER_NOT_SUPPORTED = (
     <span>
@@ -79,10 +49,12 @@ const BROWSER_NOT_SUPPORTED = (
                 download it for free here
             </a>.
         </p>
-    </span>);
+    </span>
+);
 
-const PASS_UPDATED = '<p>You have successfully updated your password.' +
-    '<br />Be sure to remember for next time!</p>';
+const PASS_UPDATED = (
+    <p>You have successfully updated your password.<br />Be sure to remember for next time!</p>
+);
 
 export var dataTransform = function (data) {
     var array = data;
@@ -111,6 +83,7 @@ export var dataTransform = function (data) {
 export class Profile extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = _.defaults({
             gameOn: false,
             gameId: -1
@@ -135,16 +108,14 @@ export class Profile extends React.Component {
     }
 
     resolveRole(props) {
-        var newState = {};
         // remember we actually want current user here, not the user whose
         // profile we are looking at
         if (props.currentUser && props.currentUser.type &&
             props.currentUser.type !== 'CHILD') {
-            newState.isStudent = false;
+            this.setState({isStudent: false});
         } else {
-            newState.isStudent = true;
+            this.setState({isStudent: true});
         }
-        this.setState(newState);
     }
 
     showModal(gameUrl) {
@@ -174,6 +145,7 @@ export class Profile extends React.Component {
                 </div>
             );
         }
+
         return (
             <div className="modal-game">
                 <Game
@@ -215,7 +187,10 @@ export class Profile extends React.Component {
                         </span>
                         <div className={ClassNames('coming-soon', { hidden: !item.coming_soon})} />
                         <div className={ClassNames('desktop-only', { hidden: !meta.desktop})} />
-                        <object data={`${GLOBALS.MEDIA_URL}${TITLES[item.game_id]}`} type="image/gif" >
+                        <object
+                            data={`${GLOBALS.MEDIA_URL}${IB_IDS.GAME_TILES[item.game_id]}`}
+                            type="image/gif"
+                        >
                             <img src={FlipBgDefault}></img>
                         </object>
                     </div>
@@ -239,142 +214,123 @@ export class Profile extends React.Component {
         );
     }
 
-    renderClassList() {
-        if (!this.state || !this.state._embedded || !this.state._embedded.group_class) {
-            return null;
-        }
+    renderUserMetaData() {
+        var ISODate = (new Date(this.state.birthdate)).toISOString();
+
+        if (this.state.friend_status !== 'FRIEND') return null;
+
         return (
-            <p>
-                <strong>{CLASSES} </strong>:
-                {_.map(this.state._embedded.group_class, item => item.title).join(', ')}
-            </p>
+            <div
+                className={ClassNames(
+                    'right',
+                    'user-fields',
+                    {
+                        hidden: this.state.friend_status !== 'FRIEND'
+                    }
+                )}
+            >
+                <p className="label">Username:</p>
+                <p className="standard field">{this.state.username}</p>
+                <p className="label">First Name:</p>
+                <p className="standard field">{this.state.first_name}</p>
+                <p className="label">Last Name:</p>
+                <p className="standard field">{this.state.last_name}</p>
+                <p className="label">Birthday:</p>
+                <p className="standard field">{Moment(ISODate).format('MM-DD-YYYY')}</p>
+            </div>
         );
     }
 
     renderUserProfile() {
-        var ISODate = (new Date(this.state.birthdate)).toISOString();
-        if (this.state.friend_status === 'FRIEND') {
-            return (
-                <div>
-                    <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
-                        <div className="left">
-                            <div className="frame">
-                                <ProfileImage
-                                    data={this.props.data}
-                                    currentUser={this.props.currentUser}
-                                    link-below={true}
-                                 />
-                            </div>
-                        </div>
-                        <div className="right">
-                            <div className="user-metadata">
-                                <p>Username:</p>
-                                <p className="standard field">{this.state.username}</p>
-                                <p>First Name:</p>
-                                <p className="standard field">{this.state.first_name}</p>
-                                <p>Last Name:</p>
-                                <p className="standard field">{this.state.last_name}</p>
-                                <p>Birthday:</p>
-                                <p className="standard field">{Moment(ISODate).format('MM-DD-YYYY')}</p>
-                            </div>
-                        </div>
-                    </Panel>
-                    <Panel
-                        header={HEADINGS.TROPHYCASE}
-                        className={ClassNames('standard', {
-                            hidden: !this.state.isStudent
-                        })}
-                    >
-                        <FLIP_SOURCE>
-                           <Flipcase
-                                type="trophycase"
-                                header={true}
-                                render="earned"
-                            />
-                        </FLIP_SOURCE>
-                    </Panel>
-                </div>
-            );
-        }
         return (
-            <div>
-                <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
-                    <div className="frame non-friend">
+            <Layout
+                currentUser={this.props.currentUser}
+                className={ClassNames(
+                    PAGE_UNIQUE_IDENTIFIER,
+                    'user',
+                    {
+                        friends: this.state.friend_status === 'FRIEND',
+                        student: this.state.type === 'CHILD'
+                    }
+                )}
+                navMenuId="navMenu"
+            >
+                <Panel
+                    header={`${this.state.username}'s Profile`}
+                    className="standard user-profile"
+                >
+                    <div className="left profile-image-container">
                         <ProfileImage
                             data={this.props.data}
                             currentUser={this.props.currentUser}
                             link-below={true}
                         />
                     </div>
+                    {this.renderUserMetaData()}
                 </Panel>
-                <Panel
-                    header={HEADINGS.TROPHYCASE}
-                    className={ClassNames('standard', {
-                        hidden: !this.state.isStudent
-                    })}
-                >
-                    <FLIP_SOURCE>
-                       <Flipcase
-                            type="trophycase"
-                            header={true}
-                            render="earned"
-                        />
-                    </FLIP_SOURCE>
-                </Panel>
-            </div>
+                <FLIP_SOURCE>
+                   <Flipcase
+                        className={ClassNames(
+                            {
+                                hidden: this.state.type !== 'CHILD'
+                            }
+                        )}
+                        type="trophycase"
+                        header={true}
+                        render="earned"
+                        user={this.state.username}
+                    />
+                </FLIP_SOURCE>
+            </Layout>
         );
     }
 
     renderCurrentUserProfile() {
         return (
-            <div>
-                <Modal
-                    className="full-width game-modal"
-                    show={this.state.gameOn}
-                    onHide={this.hideModal.bind(this)}
-                    keyboard={false}
-                    backdrop="static"
-                    id="game-modal"
-                >
-                    <Modal.Body>
-                        {this.renderGame()}
-                    </Modal.Body>
-                </Modal>
-                <Panel
-                    header={HEADINGS.TROPHYCASE}
-                    className={ClassNames('standard', {
-                        hidden: !this.state.isStudent
-                    })}
-                >
+            <Layout
+                currentUser={this.props.currentUser}
+                className={`${PAGE_UNIQUE_IDENTIFIER} current-user`}
+                navMenuId="navMenu"
+            >
+                <div>
+                    <Modal
+                        className="full-width game-modal"
+                        show={this.state.gameOn}
+                        onHide={this.hideModal.bind(this)}
+                        keyboard={false}
+                        backdrop="static"
+                        id="game-modal"
+                    >
+                        <Modal.Body>
+                            {this.renderGame()}
+                        </Modal.Body>
+                    </Modal>
                     <FLIP_SOURCE>
-                       <Flipcase
+                        <Flipcase
+                            className={ClassNames(
+                                {
+                                    hidden: !this.state.isStudent
+                                }
+                            )}
                             type="trophycase"
                             header={true}
                             render="earned"
                         />
                     </FLIP_SOURCE>
-                </Panel>
-                {this.renderGameList()}
-            </div>
+                    {this.renderGameList()}
+                </div>
+            </Layout>
         );
     }
 
     render() {
-        var profile;
-        if (this.state.user_id == null || this.props.currentUser.user_id == null) {
-            return null;
+        if (this.state.user_id == null || this.props.currentUser.user_id == null) return null;
+
+        if (this.state.user_id === this.props.currentUser.user_id) {
+            return this.renderCurrentUserProfile();
+        } else {
+            return this.renderUserProfile();
         }
-        profile = this.state.user_id === this.props.currentUser.user_id ?
-        this.renderCurrentUserProfile : this.renderUserProfile;
-        return (
-           <Layout
-               currentUser={this.props.currentUser}
-               className={PAGE_UNIQUE_IDENTIFIER}
-               navMenuId="navMenu"
-           >
-               {profile.apply(this)}
-           </Layout>
-        );
     }
 }
 
@@ -397,4 +353,3 @@ mapStateToProps = state => {
 Page = connect(mapStateToProps)(Profile);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
-
