@@ -89,6 +89,9 @@ class ChangePassword extends React.Component {
                         ref="currentInput"
                         name="currentInput"
                         onChange={e => this.setState({current: e.target.value})}
+                        onFocus={e => e.target.placeholder = ''}
+                        onBlur={e => e.target.placeholder = 'PA******'}
+                        autoComplete="off"
                     />
                     <Input
                         id="new-pass"
@@ -100,6 +103,9 @@ class ChangePassword extends React.Component {
                         ref="newInput"
                         name="newInput"
                         onChange={e => this.setState({new: e.target.value})}
+                        onFocus={e => e.target.placeholder = ''}
+                        onBlur={e => e.target.placeholder = 'PA******'}
+                        autoComplete="off"
                         {...this.state.extraProps}
                     />
                     <Input
@@ -112,11 +118,14 @@ class ChangePassword extends React.Component {
                         ref="confirmInput"
                         name="confirmInput"
                         onChange={e => this.setState({confirm: e.target.value})}
+                        onFocus={e => e.target.placeholder = ''}
+                        onBlur={e => e.target.placeholder = 'PA******'}
+                        autoComplete="off"
                         {...this.state.extraProps}
                     />
                     <Input
                         type="radio"
-                        ref="offensive"
+                        ref="show-pass"
                         name="toggle"
                         className="toggle-characters"
                         label="Check to show password characters"
