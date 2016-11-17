@@ -10,14 +10,14 @@
             width: 100%;
 
             &.open {
-                .panel-body { height: 400px; } // larger than panel will be
+                .panel-body { max-height: 900px; } // larger than panel will be
             }
         }
 
         .panel-body {
-            height: 0px;
-            //max-height: 0px;
-            transition: height 2s ease-in-out;
+            height: auto;
+            max-height: 0px;
+            transition: max-height 0.5s ease-in-out;
             text-align: center;
             overflow: hidden;
         }

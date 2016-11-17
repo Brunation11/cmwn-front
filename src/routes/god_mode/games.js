@@ -46,15 +46,6 @@ const FIELD_LABELS = {
     'title': 'Title',
 };
 
-const FIELD_KEYS = {
-    'coming_soon': 0,
-    'description': 1,
-    'game_id': 2,
-    'desktop': 3,
-    'unity': 4,
-    'title': 5,
-};
-
 export class GodModeGames extends React.Component {
     constructor(props) {
         super(props);
@@ -77,38 +68,50 @@ export class GodModeGames extends React.Component {
         return games;
     }
 
-    toggleOpen(openGame, item) {
+    addGameInputData(item) {
         var games = this.state.games;
         var gameId = item.game_id;
+        games[gameId] = {};
 
-        if (!games[item.game_id]) {
-            games[gameId] = {};
+        //games = this.addInputTypes(item, games, gameId);
 
-            //games = this.addInputTypes(item, games, gameId);
-
-            _.forEach(item, (inputValue, inputType) => {
-                if (typeof inputValue === 'object') {
-                    _.forEach(inputValue, (inputValue_, inputType_) => {
-                        if (inputType_ in FIELDS) games[gameId][inputType_] = inputValue_;
-                    });
-                } else {
-                    if (inputType in FIELDS) games[gameId][inputType] = inputValue;
-                }
-            });
-
-            games[gameId].key = Shortid.generate();
-        }
-
-        this.setState({
-            open: openGame ? item.game_id : '',
-            games,
+        _.forEach(item, (inputValue, inputType) => {
+            if (typeof inputValue === 'object') {
+                _.forEach(inputValue, (inputValue_, inputType_) => {
+                    if (inputType_ in FIELDS) games[gameId][inputType_] = inputValue_;
+                });
+            } else {
+                if (inputType in FIELDS) games[gameId][inputType] = inputValue;
+            }
         });
+
+        games[gameId].key = Shortid.generate();
+
+        this.setState({games});
+    }
+
+    toggleOpen(openGame, item) {
+        if (!this.state.games[item.game_id]) this.addGameInputData(item);
+
+        this.setState({open: openGame ? item.game_id : ''});
     }
 
     renderInputField(inputValue, inputType, gameId, key) {
         var games = this.state.games;
-        //var game = games[gameId];
         var self = this;
+
+        if (!games[gameId]) {
+            return (
+               <Input
+                    type={FIELD_TYPES[inputType]}
+                    label={FIELD_LABELS[inputType]}
+                    ref={`${inputType}-input`}
+                    name={`${inputType}-input`}
+                    key={key}
+                    placeholder="NO DATA"
+               />
+            );
+        } 
 
         if (FIELD_TYPES[inputType] === 'checkbox') {
             return (
@@ -148,10 +151,9 @@ export class GodModeGames extends React.Component {
         var open = this.state.open === item.game_id;
         var text = open ? 'CLOSE' : 'EDIT';
         var currentItem = this.state.games[item.game_id] ? this.state.games[item.game_id] : item;
-        var form = open ? _.map(Object.keys(currentItem), (inputType, key) => {
+        var form = _.map(Object.keys(currentItem), (inputType, key) => {
             return this.renderInputField(currentItem[inputType], inputType, item.game_id, key);
-        }) : null;
-
+        });
         var title = currentItem.title === '' ? ' ' : currentItem.title;
 
         return (
