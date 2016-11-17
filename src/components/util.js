@@ -86,6 +86,22 @@ var Util = {
         }
         return path.slice(0, -1);
     },
+    getLinkFromPageFallbackToCurrentUser(state, endpointIdentifier) {
+        var endpoint;
+        if (state.page && state.page.data && state.page.data._links[endpointIdentifier] != null) {
+            endpoint = state.page.data._links[endpointIdentifier].href;
+        } else if (state.currentUser && state.currentUser._links[endpointIdentifier] != null) {
+            /* @TODO MPR, 3/22/16: This conditional should not exist, and only is here as a stopgap
+             * while the me endpoint does not
+             * exactly match the authenticated / endpoint. */
+            /* @TODO MPR, 11/17/16: Then again... */
+            endpoint = state.currentUser._links[endpointIdentifier].href;
+        }
+        return endpoint;
+    },
+    linkIsPresentInUserOrPage(state, endpointIdentifier) {
+        return Util.getLinkFromPageFallbackToCurrentUser(state, endpointIdentifier) != null;
+    },
     attemptComponentLoad(state, endpointIdentifier, componentName) {
         if (state.pageLoadingStage.lastCompletedStage !== GLOBALS.PAGE_LOAD_STATE.COMPONENT ||
             state.components[endpointIdentifier + '-' + componentName].requested) {

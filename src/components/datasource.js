@@ -116,7 +116,7 @@ export default function (endpointIdentifier, componentName) {
             loading = component.loading;
             data = component.data;
         }
-        if (state.currentUser && state.currentUser._links && !state.currentUser._links[endpointIdentifier]) {
+        if (!Util.linkIsPresentInUserOrPage(state, endpointIdentifier)) {
             noLink = true;
         }
         return {
