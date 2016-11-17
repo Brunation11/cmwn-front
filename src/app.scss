@@ -328,7 +328,7 @@ h3 {
     }
 
     .header-logo {
-        margin-top: 8px;
+        margin-top: 15px;
         margin-left: $standard * 2;
         width: calc(100% - 180px - 8em);
         vertical-align: bottom;
@@ -576,12 +576,7 @@ h3 {
         }
     }
 
-    @media (min-width: $ultrawide-min-break) {
-
-    }
-
     @media (min-width: $monitor-max-break + (2 * $ultrawide-logo-offset)) {
-
         .logo {
             margin-left: -$ultrawide-logo-offset;
         }
