@@ -88,9 +88,18 @@ var Util = {
     },
     getLinkFromPageFallbackToCurrentUser(state, endpointIdentifier) {
         var endpoint;
-        if (state.page && state.page.data && state.page.data._links[endpointIdentifier] != null) {
+        if (!state) return endpoint;
+        if (
+            state.page &&
+            state.page.data &&
+            state.page.data._links &&
+            state.page.data._links[endpointIdentifier] != null
+        ) {
             endpoint = state.page.data._links[endpointIdentifier].href;
-        } else if (state.currentUser && state.currentUser._links[endpointIdentifier] != null) {
+        } else if (state.currentUser &&
+            state.currentUser._links &&
+            state.currentUser._links[endpointIdentifier] != null
+        ) {
             /* @TODO MPR, 3/22/16: This conditional should not exist, and only is here as a stopgap
              * while the me endpoint does not
              * exactly match the authenticated / endpoint. */
