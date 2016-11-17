@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { mount, shallow } from 'enzyme';
 
 import surveyData from 'mocks/aay_survey_data.js';
-import SurveyModal from 'components/popovers/survey_modal';
+import SurveyModal from 'components/survey_modal';
 
 var checkSurveyModal = function (data) {
     var tempData = {
