@@ -1,7 +1,6 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
 import _ from 'lodash';
 import QueryString from 'query-string';
-import {Link} from 'react-router';
 import {Panel} from 'react-bootstrap';
 import { connect } from 'react-redux';
 
@@ -13,6 +12,7 @@ import EditLink from 'components/edit_link';
 import Util from 'components/util';
 import GenerateDataSource from 'components/datasource';
 import GLOBALS from 'components/globals';
+import Flag from 'components/flag';
 
 import 'routes/classes/profile.scss';
 
@@ -54,7 +54,11 @@ export class Profile extends React.Component {
     }
     resolveRole() {
         var newState = {};
-        if (this.props.currentUser && this.props.currentUser.type !== 'CHILD') {
+        if (
+            this.props.currentUser &&
+            this.props.currentUser.type &&
+            this.props.currentUser.type.toLowerCase() !== 'child'
+        ) {
             newState.isStudent = false;
         } else {
             newState.isStudent = true;
@@ -71,29 +75,32 @@ export class Profile extends React.Component {
             </a></p>
         );
     }
-    renderFlip(item){
-        var image;
-        if (!_.has(item, '_embedded.image')) {
-            image = GLOBALS.DEFAULT_PROFILE;
-        } else {
-            if (item._embedded.image.url != null) {
-                image = item._embedded.image.url;
-            } else {
-                image = item.images.data[0].url;
-            }
-        }
+
+    renderCard(item) {
         return (
-            <div className="flip" key={Shortid.generate()}>
-                <Link to={`/student/${item.user_id.toString()}`} id={item.username}>
-                    <img src={image}></img>
-                    <p className="linkText" >{item.username}</p>
-                </Link>
-            </div>
+            <Flag
+                data={item}
+            >
+                <a
+                    className="user-card"
+                    key={Shortid.generate()}
+                    href={`/profile/${item.user_id}`}
+                >
+                    <img className="avatar" src={item.image} />
+                    <p className="link-text" >{item.username}</p>
+                </a>
+            </Flag>
         );
     }
+
     renderClassInfo() {
-        if (this.state.group_id == null ||
-                (this.props.currentUser && this.props.currentUser.type.toLowerCase() === 'child')) {
+        if (
+            this.state.group_id == null || (
+                this.props.currentUser &&
+                this.props.currentUser.type &&
+                this.props.currentUser.type.toLowerCase() === 'child'
+            )
+        ) {
             return null;
         }
         return (
@@ -108,16 +115,29 @@ export class Profile extends React.Component {
         );
     }
     render() {
-        if (!this.props.data || !this.state) {
+        if (this.props.data == null) {
             return null;
         }
         return (
-           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+           <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
                {this.renderClassInfo()}
                <USER_SOURCE>
                     <FlipBoard
-                        renderFlip={this.renderFlip}
+                        renderFlip={this.renderCard.bind(this)}
                         header={`${HEADINGS.CLASS} ${this.state.title}`}
+                        transform={data => {
+                            var image;
+                            if (!_.has(data, '_embedded.image')) {
+                                image = GLOBALS.DEFAULT_PROFILE;
+                            } else {
+                                if (data._embedded.image.url != null) {
+                                    image = data._embedded.image.url;
+                                } else {
+                                    image = data.images.data[0].url;
+                                }
+                            }
+                            return data.set('image', image);
+                        }}
                     />
                </USER_SOURCE>
            </Layout>

@@ -33,8 +33,7 @@ release:
     - script:
       name: Preparing release
       code: |-
-        export SHORT_HASH=$(git log -n 1 --abbrev-commit | head -n 1 | sed -e 's/^commit //')
-        export VERSION="$($PWD/bin/version_bump.sh --print-current)-$SHORT_HASH"
+        export VERSION="$($PWD/bin/version_bump.sh --print-current)"
         echo "$VERSION"
         mkdir -p artifact
         mv build.zip artifact/platform-front-$VERSION.zip
@@ -51,7 +50,7 @@ release:
       name: Creating release on github
       token: $MC_GITHUB_TOKEN
       tag: $VERSION
-      draft: true
+      draft: false
     - github-upload-asset:
       name: Adding build artifact to tag
       token: $MC_GITHUB_TOKEN
@@ -91,25 +90,45 @@ draft-release:
       file: artifact/platform-front-$VERSION.zip
       filename: platform-front-$VERSION.zip
 
-deploy:
-  box: python:2.7
+deploy-draft:
+  box:
+    id: cmwn/python
+    username: $DOCKER_USER
+    password: $DOCKER_PASS
+    entrypoint: /bin/bash -c
   steps:
     - script:
       name: Preparing release
       code: |-
         export SHORT_HASH=$(git log -n 1 --abbrev-commit | head -n 1 | sed -e 's/^commit //')
-        $PWD/bin/version_bump.sh --print-current
         export VERSION="$($PWD/bin/version_bump.sh --print-current)-$SHORT_HASH"
-    - script:
-      name: Installing pips
-      code: |-
-        pip install boto3
-        export DEPLOY='true'
+        echo "$VERSION"
     - script:
       name: Running deploy
       code: |-
         echo "Deploying $DEPLOY_APP_NAME @ $VERSION to $DEPLOY_ENV"
-        python bin/deploy.py $VERSION $DEPLOY_APP_NAME $DEPLOY_ENV -v
+        python /deploy.py $VERSION $DEPLOY_APP_NAME $DEPLOY_ENV -v
+  after-steps:
+    - slack-notifier:
+      url: $SLACK_URL
+
+deploy:
+  box:
+    id: cmwn/python
+    username: $DOCKER_USER
+    password: $DOCKER_PASS
+    entrypoint: /bin/bash -c
+  steps:
+    - script:
+      name: Preparing release
+      code: |-
+        export VERSION="$($PWD/bin/version_bump.sh --print-current)"
+        echo "$VERSION"
+    - script:
+      name: Running deploy
+      code: |-
+        echo "Deploying $DEPLOY_APP_NAME @ $VERSION to $DEPLOY_ENV"
+        python /deploy.py $VERSION $DEPLOY_APP_NAME $DEPLOY_ENV -v
   after-steps:
     - slack-notifier:
       url: $SLACK_URL

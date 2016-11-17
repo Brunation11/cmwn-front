@@ -16,6 +16,8 @@ import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
 import History from 'components/history';
 import GenerateDataSource from 'components/datasource';
+import Flag from 'components/flag';
+import IB_IDS from 'components/ib_ids';
 
 import Layout from 'layouts/two_col';
 
@@ -186,7 +188,10 @@ export class Profile extends React.Component {
                         </span>
                         <div className={ClassNames('coming-soon', { hidden: !item.coming_soon})} />
                         <div className={ClassNames('desktop-only', { hidden: !meta.desktop})} />
-                        <object data={`${GLOBALS.GAME_URL}${item.game_id}/thumb.jpg`} type="image/png" >
+                        <object
+                            data={`${GLOBALS.MEDIA_URL}${IB_IDS.GAME_TILES[item.game_id]}`}
+                            type="image/gif"
+                        >
                             <img src={FlipBgDefault}></img>
                         </object>
                     </div>
@@ -256,11 +261,15 @@ export class Profile extends React.Component {
                     className="standard user-profile"
                 >
                     <div className="left profile-image-container">
-                        <ProfileImage
+                        <Flag
                             data={this.props.data}
-                            currentUser={this.props.currentUser}
-                            link-below={true}
-                        />
+                        >
+                            <ProfileImage
+                                data={this.props.data}
+                                currentUser={this.props.currentUser}
+                                link-below={true}
+                            />
+                        </Flag>
                     </div>
                     {this.renderUserMetaData()}
                 </Panel>
@@ -274,6 +283,7 @@ export class Profile extends React.Component {
                         type="trophycase"
                         header={true}
                         render="earned"
+                        user={this.state.username}
                     />
                 </FLIP_SOURCE>
             </Layout>
@@ -348,4 +358,3 @@ mapStateToProps = state => {
 Page = connect(mapStateToProps)(Profile);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
-
