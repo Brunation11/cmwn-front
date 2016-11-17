@@ -1,0 +1,38 @@
+//TODO
+@import '../../variables';
+
+.god-mode-games {
+    .item {
+        position: relative;
+        width: 100%;
+
+        .item-panel {
+            width: 100%;
+
+            &.open {
+                .panel-body { height: auto }
+            }
+        }
+
+        .panel-heading {
+            background: none;
+            background-color: $cmwn-purple;
+        }
+
+        .panel-body {
+            height: 0;
+            max-height: auto;
+            overflow: none;
+            transition: height 1s;
+        }
+
+        .edit-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 20px;
+            box-shadow: none;
+        }
+
+    }
+}
