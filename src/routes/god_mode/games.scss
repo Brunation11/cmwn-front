@@ -10,20 +10,34 @@
             width: 100%;
 
             &.open {
-                .panel-body { height: auto }
+                .panel-body { height: 400px; } // larger than panel will be
             }
         }
 
-        .panel-heading {
-            background: none;
-            background-color: $cmwn-purple;
+        .panel-body {
+            height: 0px;
+            //max-height: 0px;
+            transition: height 2s ease-in-out;
+            text-align: center;
+            overflow: hidden;
         }
 
-        .panel-body {
-            height: 0;
-            max-height: auto;
-            overflow: none;
-            transition: height 1s;
+        .form {
+            width: 80%;
+        }
+
+        .text,
+        .textarea {
+            width: 100%;
+        }
+
+        .textarea {
+            height: 5em;
+        }
+
+        .edit-btn,
+        .save-btn {
+            box-shadow: none;
         }
 
         .edit-btn {
@@ -31,8 +45,6 @@
             top: 0;
             right: 0;
             margin: 20px;
-            box-shadow: none;
         }
-
     }
 }

@@ -46,6 +46,15 @@ const FIELD_LABELS = {
     'title': 'Title',
 };
 
+const FIELD_KEYS = {
+    'coming_soon': 0,
+    'description': 1,
+    'game_id': 2,
+    'desktop': 3,
+    'unity': 4,
+    'title': 5,
+};
+
 export class GodModeGames extends React.Component {
     constructor(props) {
         super(props);
@@ -68,7 +77,7 @@ export class GodModeGames extends React.Component {
         return games;
     }
 
-    toggleOpen(editGame, item) {
+    toggleOpen(openGame, item) {
         var games = this.state.games;
         var gameId = item.game_id;
 
@@ -86,17 +95,19 @@ export class GodModeGames extends React.Component {
                     if (inputType in FIELDS) games[gameId][inputType] = inputValue;
                 }
             });
+
+            games[gameId].key = Shortid.generate();
         }
 
         this.setState({
-            open: editGame ? item.game_id : '',
+            open: openGame ? item.game_id : '',
             games,
         });
     }
 
-    renderInputField(inputValue, inputType, gameId) {
+    renderInputField(inputValue, inputType, gameId, key) {
         var games = this.state.games;
-        var game = games[gameId];
+        //var game = games[gameId];
         var self = this;
 
         if (FIELD_TYPES[inputType] === 'checkbox') {
@@ -104,11 +115,11 @@ export class GodModeGames extends React.Component {
                <Input
                     type={FIELD_TYPES[inputType]}
                     label={FIELD_LABELS[inputType]}
-                    checked={game[inputType]}
+                    checked={games[gameId][inputType]}
                     ref={`${inputType}-input`}
                     name={`${inputType}-input`}
-                    key={Shortid.generate()}
-                    onInput={e => {
+                    key={key}
+                    onChange={e => {
                         games[gameId][inputType] = e.target.checked;
                         self.setState({games});
                     }}
@@ -118,14 +129,14 @@ export class GodModeGames extends React.Component {
 
         return (
            <Input
-                className="text"
+                className={FIELD_TYPES[inputType]}
                 type={FIELD_TYPES[inputType]}
                 label={FIELD_LABELS[inputType]}
-                value={game[inputType]}
+                value={games[gameId][inputType]}
                 ref={`${inputType}-input`}
                 name={`${inputType}-input`}
-                key={Shortid.generate()}
-                onInput={e => {
+                key={key}
+                onChange={e => {
                     games[gameId][inputType] = e.target.value
                     self.setState({games});
                 }}
@@ -135,28 +146,36 @@ export class GodModeGames extends React.Component {
 
     renderFlip(item) {
         var open = this.state.open === item.game_id;
-        var text = open ? 'Close' : 'Edit';
-
-        var form = open ? _.map(this.state.games[item.game_id], (inputValue, inputType) => {
-            return this.renderInputField(inputValue, inputType, item.game_id);
+        var text = open ? 'CLOSE' : 'EDIT';
+        var currentItem = this.state.games[item.game_id] ? this.state.games[item.game_id] : item;
+        var form = open ? _.map(Object.keys(currentItem), (inputType, key) => {
+            return this.renderInputField(currentItem[inputType], inputType, item.game_id, key);
         }) : null;
 
+        var title = currentItem.title === '' ? ' ' : currentItem.title;
+
         return (
-            <div className="item" key={Shortid.generate()}>
-                <Panel header={item.title} className={ClassNames(
+            <div className="item" key={currentItem.key}>
+                <Panel header={title} className={ClassNames(
                         'item-panel',
                         'standard', {
                             open
                         }
                     )}
                 >
-                    <div className="body">
+                    <div className="form">
                         {form}
                     </div>
+                    <br />
+                    <Button
+                        className="btn standard purple save-btn"
+                    >
+                        SAVE
+                    </Button>
                 </Panel>
                 <Button
                     className="btn standard green edit-btn"
-                    onClick={this.toggleOpen.bind(this, !open, item)}
+                    onClick={this.toggleOpen.bind(this, !open, currentItem)}
                 >
                     {text}
                 </Button>
