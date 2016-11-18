@@ -182,7 +182,8 @@ $halfway-break-2: 540px;
             }
 
             &:nth-of-type(1) {
-                background-position: 112px 0;
+                background-position: 109px 0;
+                width: 36%;
 
                 // scss-lint:disable NestingDepth
                 &::before {
@@ -192,7 +193,7 @@ $halfway-break-2: 540px;
             }
 
             &:nth-of-type(2) {
-                background-position: 90px 0;
+                background-position: 89px 0;
 
                 // scss-lint:disable NestingDepth
                 &::before {
@@ -202,7 +203,7 @@ $halfway-break-2: 540px;
             }
 
             &:nth-of-type(3) {
-                background-position: 93px 0;
+                background-position: 92px 0;
 
                 // scss-lint:disable NestingDepth
                 &::before {
