@@ -3,6 +3,8 @@ import {ButtonToolbar, OverlayTrigger, Popover} from 'react-bootstrap';
 import Shortid from 'shortid';
 import Moment from 'moment';
 import ClassNames from 'classnames';
+import IB_IDS from 'components/ib_ids';
+import GLOBALS from 'components/globals';
 
 import 'components/popovers/popover.scss';
 
@@ -35,6 +37,10 @@ export default class FlipPopover extends React.Component {
     }
 
     render() {
+        var id = this.state.element.flip_id;
+        var flip = IB_IDS.FLIPS[id] ? IB_IDS.FLIPS[id][this.state.status] : IB_IDS.FLIPS.default;
+        var src = `${GLOBALS.MEDIA_URL}${flip}`;
+
         if (!this._mounted) {
             return null;
         }
@@ -64,12 +70,7 @@ export default class FlipPopover extends React.Component {
                             >
                                 {this.state.element.description}
                             </Popover>}>
-                            <img
-                                src={`/flips/${this.state.element.flip_id}-${this.state.status}.gif`}
-                                onError={ () => {
-                                    this.setState({error: true});
-                                } }
-                            />
+                            <img src={src} />
                     </OverlayTrigger>
                 </ButtonToolbar>
             </div>
