@@ -25,7 +25,8 @@ const IB_IDS = {
         'animal-id': '1d30b3302aad1608ad76c4029a4c2d5a.gif',
         'carbon-catcher': 'ab894b9d48a225ffdace7215003dd228.gif',
         'skribble': '10b58a3fbacaa46203faf65a02f8fbbc.gif',
-        'turtle-hurdle': '1cf1a4952107ce19e6b8675643a17c5d.gif'
+        'turtle-hurdle': '1cf1a4952107ce19e6b8675643a17c5d.gif',
+        '3d-world': '3d45287ac7d23711d32af8b7c797c2f8.gif'
     },
     FLIPS: {
         'default': 'b86903222ed7cc0fa7c8a281614d5dd3.png',
