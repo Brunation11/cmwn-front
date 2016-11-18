@@ -194,13 +194,23 @@ export class GodModeGames extends React.Component {
         if (!this.props.data) return null;
         return (
            <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
-               <GAME_WRAPPER>
-                   <FlipBoard
-                        renderFlip={this.renderFlip.bind(this)}
-                        id="game-flip-board"
-                        header={null}
-                   />
-               </GAME_WRAPPER>
+                <Button
+                    className="btn standard purple save-all-btn"
+                >
+                    SAVE ALL
+                </Button>
+                <GAME_WRAPPER>
+                    <FlipBoard
+                         renderFlip={this.renderFlip.bind(this)}
+                         id="game-flip-board"
+                         header={null}
+                    />
+                </GAME_WRAPPER>
+                <Button
+                    className="btn standard purple save-all-btn"
+                >
+                    SAVE ALL
+                </Button>
            </Layout>
         );
     }

@@ -2,6 +2,7 @@
 @import '../../variables';
 
 .god-mode-games {
+
     .item {
         position: relative;
         width: 100%;
@@ -53,6 +54,19 @@
     
         .save-btn {
             margin: $standard;
+        }
+    }
+
+    .save-all-btn {
+        position: relative;
+        left: 2*$standard;
+
+        &:nth-of-type(1) {
+            margin: 2*$standard 0 $standard 0;
+        }
+
+        &:nth-of-type(2) {
+            margin: $standard 0 2*$standard 0;
         }
     }
 }
