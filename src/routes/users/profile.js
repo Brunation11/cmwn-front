@@ -34,7 +34,8 @@ const FLIP_SOURCE = GenerateDataSource('user_flip', PAGE_UNIQUE_IDENTIFIER);
 
 const HEADINGS = {
     ACTION: 'Profile',
-    ARCADE: 'Activities'
+    ARCADE: 'Activities',
+    TROPHYCASE: 'Trophycase'
 };
 
 const PLAY = 'Play Now!';
@@ -276,7 +277,7 @@ export class Profile extends React.Component {
                             }
                         )}
                         type="trophycase"
-                        header={true}
+                        header={HEADINGS.TROPHYCASE}
                         render="earned"
                         user={this.state.username}
                     />
@@ -313,7 +314,7 @@ export class Profile extends React.Component {
                                 }
                             )}
                             type="trophycase"
-                            header={true}
+                            header={HEADINGS.TROPHYCASE}
                             render="earned"
                         />
                     </FLIP_SOURCE>
