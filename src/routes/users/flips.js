@@ -1,7 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {Panel} from 'react-bootstrap';
-
 import Layout from 'layouts/two_col';
 import Flipcase from 'components/flipcase';
 import GenerateDataSource from 'components/datasource';
@@ -28,15 +26,13 @@ export class FlipWall extends React.Component {
                 className={PAGE_UNIQUE_IDENTIFIER}
                 navMenuId="navMenu"
             >
-                <Panel className="standard" header={HEADER}>
-                    <FLIP_SOURCE>
-                        <Flipcase
-                            header={true}
-                            render="all"
-                            allFlips={this.props.data._embedded.flip || this.props.data._embedded.flip_user}
-                        />
-                    </FLIP_SOURCE>
-                </Panel>
+                <FLIP_SOURCE>
+                    <Flipcase
+                        header={HEADER}
+                        render="all"
+                        allFlips={this.props.data._embedded.flip || this.props.data._embedded.flip_user}
+                    />
+                </FLIP_SOURCE>
             </Layout>
         );
     }
