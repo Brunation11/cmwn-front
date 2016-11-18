@@ -28,15 +28,13 @@ export class FlipWall extends React.Component {
                 className={PAGE_UNIQUE_IDENTIFIER}
                 navMenuId="navMenu"
             >
-                <Panel className="standard" header={HEADER}>
-                    <FLIP_SOURCE>
-                        <Flipcase
-                            header={true}
-                            render="all"
-                            allFlips={this.props.data._embedded.flip || this.props.data._embedded.flip_user}
-                        />
-                    </FLIP_SOURCE>
-                </Panel>
+                <FLIP_SOURCE>
+                    <Flipcase
+                        header={HEADER}
+                        render="all"
+                        allFlips={this.props.data._embedded.flip || this.props.data._embedded.flip_user}
+                    />
+                </FLIP_SOURCE>
             </Layout>
         );
     }
