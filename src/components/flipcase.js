@@ -34,7 +34,7 @@ export default class Flipcase extends React.Component {
 
     renderAll() {
         var allFlips = _.shuffle(this.state.allFlips);
-        return (_.map(allFlips, (flip) => {
+        return (_.map(allFlips, (flip, key) => {
             var earnedFlip = _.find(this.state.flips, ['flip_id', flip.flip_id]);
             var earnedOn = earnedFlip ? earnedFlip.earned : null;
             var status = earnedOn ? 'earned' : 'unearned';
@@ -47,6 +47,7 @@ export default class Flipcase extends React.Component {
                     type="flip"
                     trigger="click"
                     status={status}
+                    key={key}
                 />
             );
         }));
@@ -54,7 +55,7 @@ export default class Flipcase extends React.Component {
 
     renderEarned() {
         var earnedFlips = _.shuffle(this.state.flips);
-        return (_.map(earnedFlips, (flip) => {
+        return (_.map(earnedFlips, (flip, key) => {
             return (
                 <FlipPopover
                     element={flip}
@@ -62,6 +63,7 @@ export default class Flipcase extends React.Component {
                     type="flip"
                     trigger="click"
                     status="earned"
+                    key={key}
                 />
             );
         }));
