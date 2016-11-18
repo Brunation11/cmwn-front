@@ -10,7 +10,9 @@
             width: 100%;
 
             &.open {
-                .panel-body { max-height: 900px; } // larger than panel will be
+                .panel-body {
+                    max-height: 900px; // larger than panel will be
+                }
             }
         }
 
@@ -20,10 +22,12 @@
             transition: max-height 0.5s ease-in-out;
             text-align: center;
             overflow: hidden;
+            padding: 0 $standard;
         }
 
         .form {
             width: 80%;
+            margin: $standard;
         }
 
         .text,
@@ -45,6 +49,10 @@
             top: 0;
             right: 0;
             margin: 20px;
+        }
+    
+        .save-btn {
+            margin: $standard;
         }
     }
 }

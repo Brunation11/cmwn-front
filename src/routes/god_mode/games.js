@@ -87,13 +87,18 @@ export class GodModeGames extends React.Component {
 
         games[gameId].key = Shortid.generate();
 
-        this.setState({games});
+        return games;
     }
 
     toggleOpen(openGame, item) {
-        if (!this.state.games[item.game_id]) this.addGameInputData(item);
-
-        this.setState({open: openGame ? item.game_id : ''});
+        if (!this.state.games[item.game_id]) {
+            var games = this.addGameInputData(item);
+            this.setState({games}, () => {
+                this.setState({open: openGame ? item.game_id : ''});
+            });
+        } else {
+            this.setState({open: openGame ? item.game_id : ''});
+        }
     }
 
     renderInputField(inputValue, inputType, gameId, key) {
@@ -154,7 +159,7 @@ export class GodModeGames extends React.Component {
         var form = _.map(Object.keys(currentItem), (inputType, key) => {
             return this.renderInputField(currentItem[inputType], inputType, item.game_id, key);
         });
-        var title = currentItem.title === '' ? ' ' : currentItem.title;
+        var title = currentItem.title === '' ? '<BLANK>' : currentItem.title;
 
         return (
             <div className="item" key={currentItem.key}>
@@ -193,7 +198,7 @@ export class GodModeGames extends React.Component {
                    <FlipBoard
                         renderFlip={this.renderFlip.bind(this)}
                         id="game-flip-board"
-                        header={false}
+                        header={null}
                    />
                </GAME_WRAPPER>
            </Layout>
