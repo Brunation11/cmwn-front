@@ -176,7 +176,6 @@ Actions = Actions.set(ACTION_CONSTANTS.CHANGE_PAGE_ROW_COUNT, function (state, i
 Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentifier, componentName) {
     var endpoint;
     var state = Store.getState();
-    debugger;
     if (Util.linkIsPresentInUserOrPage(state, endpointIdentifier)) {
         endpoint = Util.getLinkFromPageFallbackToCurrentUser(state, endpointIdentifier);
     } else {
