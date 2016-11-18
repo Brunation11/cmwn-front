@@ -13,6 +13,7 @@ import Store from 'components/store';
 import UserPopover from 'components/popovers/user_popover';
 import GLOBALS from 'components/globals';
 import Flag from 'components/flag';
+import GenerateDataSource from 'components/datasource';
 
 import Layout from 'layouts/two_col';
 
@@ -30,6 +31,8 @@ const ACCEPT = 'Accept';
 const PROFILE = 'View Profile';
 
 const PAGE_UNIQUE_IDENTIFIER = 'suggested-friends';
+
+const SUGGEST_SOURCE = GenerateDataSource('suggested_friends', PAGE_UNIQUE_IDENTIFIER);
 
 var mapStateToProps;
 var Page;
@@ -54,6 +57,15 @@ export class Suggested extends React.Component{
         }).catch(() => {
             Toast.error(FRIEND_PROBLEM);
         });
+    }
+
+    renderNoLink() {
+        return (
+            <h2 className="placeholder">
+                At this time, as an adult user you cannot make friends ...<br/>
+                but it is on the way!!!!
+            </h2>
+        );
     }
 
     renderNoData(data) {
@@ -118,7 +130,7 @@ export class Suggested extends React.Component{
         return (
             <a
                 className="btn purple standard"
-                href={`/profile/${item.suggested_id}`}
+                href={`/profile/${item.suggest_id ? item.suggest_id : item.suggested_id}`}
             >
                 {PROFILE}
             </a>
@@ -155,17 +167,15 @@ export class Suggested extends React.Component{
     }
 
     render() {
-        var self = this;
-        var content;
-        if (self.props.data == null || !self.props.data.length) {
-            content = self.renderNoData(self.props.data);
-        } else {
-            content = (
-                <form>
+        var content = (
+            <form>
+                <SUGGEST_SOURCE
+                    renderNoLink={this.renderNoLink}
+                    renderNoData={this.renderNoData}
+                >
                     <FlipBoard
                         renderFlip={this.renderCard.bind(this)}
                         header={HEADINGS.SUGGESTED}
-                        data={this.props.data}
                         transform={data => {
                             var image;
                             if (!_.has(data, '_embedded.image')) {
@@ -180,9 +190,10 @@ export class Suggested extends React.Component{
                             return data.set('image', image);
                         }}
                     />
-                </form>
-            );
-        }
+                </SUGGEST_SOURCE>
+            </form>
+        );
+
         return (
            <Layout
                className={PAGE_UNIQUE_IDENTIFIER}
@@ -195,19 +206,12 @@ export class Suggested extends React.Component{
 }
 
 mapStateToProps = state => {
-    var data = null;
     var currentUser = {};
     var loading = true;
-    if (state.page && state.page.data != null &&
-        state.page.data._embedded && state.page.data._embedded.suggest) {
-        loading = state.page.loading;
-        data = state.page.data._embedded.suggest;
-    }
     if (state.currentUser != null){
         currentUser = state.currentUser;
     }
     return {
-        data,
         loading,
         currentUser
     };

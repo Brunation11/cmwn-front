@@ -56,6 +56,32 @@ describe('setPageTitle', function () {
     });
 });
 
+describe('linkIsPresentInUserOrPage', function () {
+    it('handles empty state', function () {
+        expect(Util.linkIsPresentInUserOrPage(null, 'someLink')).to.be.false;
+    });
+    it('handles empty pagedata', function () {
+        expect(Util.linkIsPresentInUserOrPage({page: null}, 'someLink')).to.be.false;
+    });
+    it('handles empty page data', function () {
+        expect(Util.linkIsPresentInUserOrPage({page: {data: null}}, 'someLink')).to.be.false;
+    });
+    it('handles empty page links', function () {
+        expect(Util.linkIsPresentInUserOrPage({page: {data: {_links: {}}}}, 'someLink')).to.be.false;
+    });
+    it('handles empty currentUser', function () {
+        expect(Util.linkIsPresentInUserOrPage({currentUser: null}, 'someLink')).to.be.false;
+    });
+    it('handles empty currentUser links', function () {
+        expect(Util.linkIsPresentInUserOrPage({currentUser: {_links: {}}}, 'someLink')).to.be.false;
+    });
+    it('returns true regardless of what link is from page', function () {
+        expect(Util.linkIsPresentInUserOrPage({page: {data: {_links: {someLink: {href: 'aaa'}}}}}, 'someLink')).to.be.true;
+    });
+    it('returns true regardless of what link is from currentUser', function () {
+        expect(Util.linkIsPresentInUserOrPage({currentUser: {_links: {someLink: {href: 'bbb'}}}}, 'someLink')).to.be.true;
+    });
+});
 
 describe('matchPathandExtractParams', function () {
     it('handles null route', function () {
