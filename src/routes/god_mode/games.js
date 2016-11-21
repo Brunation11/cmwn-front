@@ -6,6 +6,9 @@ import {Button, Input, Panel} from 'react-bootstrap';
 
 import FlipBoard from 'components/flipboard';
 import GenerateDataSource from 'components/datasource';
+import HttpManager from 'components/http_manager';
+import Toast from 'components/toast';
+import Form from 'components/form';
 
 import Layout from 'layouts/two_col';
 
@@ -19,27 +22,27 @@ const PAGE_UNIQUE_IDENTIFIER = 'god-mode-games';
 const GAME_WRAPPER = GenerateDataSource('games', PAGE_UNIQUE_IDENTIFIER);
 
 const FIELDS = [
+    'game_id',
     'coming_soon',
     'description',
-    'game_id',
     'desktop',
     'unity',
     'title',
 ];
 
 const FIELD_TYPES = {
-    [FIELDS[0]]: 'checkbox',
-    [FIELDS[1]]: 'textarea',
-    [FIELDS[2]]: 'text',
+    [FIELDS[0]]: 'text',
+    [FIELDS[1]]: 'checkbox',
+    [FIELDS[2]]: 'textarea',
     [FIELDS[3]]: 'checkbox',
     [FIELDS[4]]: 'checkbox',
     [FIELDS[5]]: 'text',
 };
 
 const FIELD_LABELS = {
-    [FIELDS[0]]: 'Coming Soon',
-    [FIELDS[1]]: 'Description',
-    [FIELDS[2]]: 'Game ID',
+    [FIELDS[0]]: 'Game ID',
+    [FIELDS[1]]: 'Coming Soon',
+    [FIELDS[2]]: 'Description',
     [FIELDS[3]]: 'Desktop Only',
     [FIELDS[4]]: 'Unity',
     [FIELDS[5]]: 'Title',
@@ -75,6 +78,25 @@ export class GodModeGames extends React.Component {
         this.state = {
             open: '',
             games: {},
+        };
+    }
+
+    submitGame(item) {
+        var postData = {
+            game_id: item.game_id,
+            data: item,
+        };
+        HttpManager.POST({url: this.props.data._links.games.href},
+            postData).then(() => {
+                console.log(`${item.title} successfully updated`);
+            }).catch(err => {
+                console.log(`Could not post to ${item.title}`);
+        });
+    }
+
+    deleteGame(item) {
+        var postData = {
+            game_id: item.game_id
         };
     }
 
@@ -160,15 +182,16 @@ export class GodModeGames extends React.Component {
                         }
                     )}
                 >
-                    <div className="form">
+                    <Form ref="formRef">
                         {form}
-                    </div>
-                    <br />
-                    <Button
-                        className="btn standard purple save-btn"
-                    >
-                        SAVE
-                    </Button>
+                        <br />
+                        <Button
+                            className="btn standard purple save-btn"
+                            onClick={this.submitGame.bind(this, currentItem)}
+                        >
+                            SAVE
+                        </Button>
+                    </Form>
                 </Panel>
                 <Button
                     className="btn standard green edit-btn"
