@@ -60,7 +60,6 @@ Version - 0.3.13
 ----
 
 - e99cf48: add expect clause to test to check for flipcase
-<<<<<<< HEAD
 - efe45f4: rename class
 - ae16532: remove commented test code
 - 6d3c8ae: Version bump [ci skip]
