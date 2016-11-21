@@ -176,13 +176,8 @@ Actions = Actions.set(ACTION_CONSTANTS.CHANGE_PAGE_ROW_COUNT, function (state, i
 Actions = Actions.set(ACTION_CONSTANTS.COMPONENT_DATA, function (endpointIdentifier, componentName) {
     var endpoint;
     var state = Store.getState();
-    if (state.page && state.page.data && state.page.data._links[endpointIdentifier] != null) {
-        endpoint = state.page.data._links[endpointIdentifier].href;
-    } else if (state.currentUser && state.currentUser._links[endpointIdentifier] != null) {
-        /* @TODO MPR, 3/22/16: This conditional should not exist, and only is here as a stopgap
-         * while the me endpoint does not
-         * exactly match the authenticated / endpoint. */
-        endpoint = state.currentUser._links[endpointIdentifier].href;
+    if (Util.linkIsPresentInUserOrPage(state, endpointIdentifier)) {
+        endpoint = Util.getLinkFromPageFallbackToCurrentUser(state, endpointIdentifier);
     } else {
         Log.info('HAL Link for component endpoint ' + endpointIdentifier +
             ' could not be resolved in component ' + componentName +
