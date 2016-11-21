@@ -463,6 +463,7 @@ export class EditProfile extends React.Component {
                         user_id={this.state.user_id}
                         url={this.state._links.password}
                         currentUser={this.props.currentUser}
+                        confirmReLogin={true}
                     />
                 </Panel>
             </Layout>
@@ -491,4 +492,3 @@ mapStateToProps = state => {
 
 Page = connect(mapStateToProps)(EditProfile);
 export default Page;
-
