@@ -1,7 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
 import ClassNames from 'classnames';
-import Shortid from 'shortid';
 import { connect } from 'react-redux';
 import {Button, Input, Panel} from 'react-bootstrap';
 
@@ -19,31 +18,54 @@ const PAGE_UNIQUE_IDENTIFIER = 'god-mode-games';
 
 const GAME_WRAPPER = GenerateDataSource('games', PAGE_UNIQUE_IDENTIFIER);
 
-const FIELDS = {
-    'coming_soon': '',
-    'description': '',
-    'game_id': '',
-    'desktop': false,
-    'unity': false,
-    'title': '',
-};
+const FIELDS = [
+    'coming_soon',
+    'description',
+    'game_id',
+    'desktop',
+    'unity',
+    'title',
+];
 
 const FIELD_TYPES = {
-    'coming_soon': 'checkbox',
-    'description': 'textarea',
-    'game_id': 'text',
-    'desktop': 'checkbox',
-    'unity': 'checkbox',
-    'title': 'text',
+    [FIELDS[0]]: 'checkbox',
+    [FIELDS[1]]: 'textarea',
+    [FIELDS[2]]: 'text',
+    [FIELDS[3]]: 'checkbox',
+    [FIELDS[4]]: 'checkbox',
+    [FIELDS[5]]: 'text',
 };
 
 const FIELD_LABELS = {
-    'coming_soon': 'Coming Soon',
-    'description': 'Description',
-    'game_id': 'Game ID',
-    'desktop': 'Desktop Only',
-    'unity': 'Unity',
-    'title': 'Title',
+    [FIELDS[0]]: 'Coming Soon',
+    [FIELDS[1]]: 'Description',
+    [FIELDS[2]]: 'Game ID',
+    [FIELDS[3]]: 'Desktop Only',
+    [FIELDS[4]]: 'Unity',
+    [FIELDS[5]]: 'Title',
+};
+
+var dataTransform = function (data) {
+    var games = _.map(data, filterInputFields);
+    return games;
+}
+
+var filterInputFields = function (item, index) {
+    var gameItem = {};
+    
+    _.forEach(item, (inputValue, inputType) => {
+        if (typeof inputValue === 'object') {
+            _.forEach(inputValue, (inputValue_, inputType_) => {
+                if (FIELDS.indexOf(inputType_) > -1) gameItem[inputType_] = inputValue_;
+            });
+        } else {
+            if (FIELDS.indexOf(inputType) > -1) gameItem[inputType] = inputValue;
+        }
+    });
+    
+    gameItem.key = index;
+    
+    return gameItem;
 };
 
 export class GodModeGames extends React.Component {
@@ -56,67 +78,25 @@ export class GodModeGames extends React.Component {
         };
     }
 
-    addInputTypes(item, games, gameId) {
-        _.forEach(item, (inputValue, inputType) => {
-            if (typeof inputValue === 'object') {
-                games = this.addInputTypes(inputValue, games, gameId);
-            } else {
-                if (inputType in FIELDS) games[gameId][inputType] = inputValue;
-            }
+    updateGameData(data) {
+        var games = {};
+
+        _.forEach(data, item => {
+            games[item.game_id] = item;
         });
 
-        return games;
-    }
-
-    addGameInputData(item) {
-        var games = this.state.games;
-        var gameId = item.game_id;
-        games[gameId] = {};
-
-        //games = this.addInputTypes(item, games, gameId);
-
-        _.forEach(item, (inputValue, inputType) => {
-            if (typeof inputValue === 'object') {
-                _.forEach(inputValue, (inputValue_, inputType_) => {
-                    if (inputType_ in FIELDS) games[gameId][inputType_] = inputValue_;
-                });
-            } else {
-                if (inputType in FIELDS) games[gameId][inputType] = inputValue;
-            }
-        });
-
-        games[gameId].key = Shortid.generate();
-
-        return games;
+        if (!_.isEqual(games, this.state.games)) {
+            this.setState({ games });
+        }
     }
 
     toggleOpen(openGame, item) {
-        if (!this.state.games[item.game_id]) {
-            var games = this.addGameInputData(item);
-            this.setState({games}, () => {
-                this.setState({open: openGame ? item.game_id : ''});
-            });
-        } else {
-            this.setState({open: openGame ? item.game_id : ''});
-        }
+        this.setState({open: openGame ? item.game_id : ''});
     }
 
     renderInputField(inputValue, inputType, gameId, key) {
         var games = this.state.games;
         var self = this;
-
-        if (!games[gameId]) {
-            return (
-               <Input
-                    type={FIELD_TYPES[inputType]}
-                    label={FIELD_LABELS[inputType]}
-                    ref={`${inputType}-input`}
-                    name={`${inputType}-input`}
-                    key={key}
-                    placeholder="NO DATA"
-               />
-            );
-        } 
 
         if (FIELD_TYPES[inputType] === 'checkbox') {
             return (
@@ -127,6 +107,7 @@ export class GodModeGames extends React.Component {
                     ref={`${inputType}-input`}
                     name={`${inputType}-input`}
                     key={key}
+                    validate="required"
                     onChange={e => {
                         games[gameId][inputType] = e.target.checked;
                         self.setState({games});
@@ -144,6 +125,7 @@ export class GodModeGames extends React.Component {
                 ref={`${inputType}-input`}
                 name={`${inputType}-input`}
                 key={key}
+                validate="required"
                 onChange={e => {
                     games[gameId][inputType] = e.target.value
                     self.setState({games});
@@ -153,13 +135,21 @@ export class GodModeGames extends React.Component {
     }
 
     renderFlip(item) {
-        var open = this.state.open === item.game_id;
-        var text = open ? 'CLOSE' : 'EDIT';
-        var currentItem = this.state.games[item.game_id] ? this.state.games[item.game_id] : item;
-        var form = _.map(Object.keys(currentItem), (inputType, key) => {
+        var open;
+        var text;
+        var currentItem;
+        var form;
+        var title;
+
+        if (!this.state.games[item.game_id]) return null;
+
+        open = this.state.open === item.game_id;
+        text = open ? 'CLOSE' : 'EDIT';
+        currentItem = this.state.games[item.game_id] ? this.state.games[item.game_id] : item;
+        form = _.map(Object.keys(currentItem), (inputType, key) => {
             return this.renderInputField(currentItem[inputType], inputType, item.game_id, key);
         });
-        var title = currentItem.title === '' ? '<BLANK>' : currentItem.title;
+        title = currentItem.title === '' ? '<BLANK>' : currentItem.title;
 
         return (
             <div className="item" key={currentItem.key}>
@@ -192,6 +182,7 @@ export class GodModeGames extends React.Component {
 
     render() {
         if (!this.props.data) return null;
+
         return (
            <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
                 <Button
@@ -199,11 +190,12 @@ export class GodModeGames extends React.Component {
                 >
                     SAVE ALL
                 </Button>
-                <GAME_WRAPPER>
+                <GAME_WRAPPER transform={dataTransform}>
                     <FlipBoard
-                         renderFlip={this.renderFlip.bind(this)}
-                         id="game-flip-board"
-                         header={null}
+                        renderFlip={this.renderFlip.bind(this)}
+                        updateParent={this.updateGameData.bind(this)}
+                        id="game-flip-board"
+                        header={null}
                     />
                 </GAME_WRAPPER>
                 <Button

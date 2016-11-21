@@ -25,6 +25,10 @@ class FlipBoard extends React.Component {
         if (!_.isEqual(this.props.data, nextProps.data)) {
             this.setState({
                 data: _.map(nextProps.data, this.props.transform)
+            }, () => {
+                if (typeof this.props.updateParent === 'function') {
+                    this.props.updateParent(this.state.data);
+                }
             });
         }
     }
