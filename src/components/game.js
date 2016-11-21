@@ -10,6 +10,8 @@ import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
 import Detector from 'components/browser_detector';
 
+import CHROME_ICON from 'media/Google_Chrome_icon_(2011).svg.png';
+
 import 'components/game.scss';
 
 const EVENT_PREFIX = '_e_';
@@ -18,6 +20,10 @@ const FULLSCREEN = 'Full Screen';
 const DEMO_MODE = 'Demo Mode';
 
 const PORTRAIT_TEXT = 'Please turn this game into landscape mode to continue.';
+
+/* eslint-disable max-len */
+const BROWSER_NOT_SUPPORTED = <span>Sorry! Your browser or device is currently not supported for this game. We are working to add support soon, but until then please try again on a computer with a supported browser. ChangeMyWorldNow reccomends <a href="https://www.google.com/chrome/browser/desktop/index.html" target="_blank">Google Chrome <img src={CHROME_ICON} /></a></span>;
+/* eslint-enable max-len */
 
 const COMPONENT_IDENTIFIER = 'game';
 
@@ -194,6 +200,9 @@ export class Game extends React.Component {
 
     render() {
         if (this.props.url == null) return null;
+        if (Detector.isIe()) {
+            return BROWSER_NOT_SUPPORTED;
+        }
         return (
             <div className={COMPONENT_IDENTIFIER}>
                 <div ref="wrapRef" className={ClassNames(
