@@ -79,7 +79,7 @@ class ChangePassword extends React.Component {
         if (this.props.confirmReLogin) {
             SweetAlert({
                 animation: false,
-                html: 'You will need to login again<br />for security purposes after resetting<br />your new password.',
+                html: 'You will need to login again<br />for security purposes after resetting<br />your new password.', //eslint-disable-line max-len
                 allowOutsideClickg: false,
                 allowEscapeKey: false,
                 customClass: 'confirm-re-login'
