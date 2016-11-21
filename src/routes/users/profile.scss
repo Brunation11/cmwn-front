@@ -1,4 +1,4 @@
-@import '../../variables';
+@import 'variables';
 
 .game-modal {
     display: block;
@@ -23,6 +23,20 @@
 }
 
 .profile {
+
+    .panel-body {
+        display: flex;
+        padding: $standard;
+        flex-wrap: wrap;
+        justify-content: space-between;
+
+
+        > * {
+            position: relative;
+            flex: 1 0 275px;//arbitrary, looks good as a breakpoint
+        }
+    }
+
     &.current-user {
         .flipboard .panel-body {
             display: flex;
