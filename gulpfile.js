@@ -381,7 +381,7 @@ ___  ______  ______  ______  ______  ______  ______  ______  ______  ______  ___
 
 gulp.task('default', ['build', 'watch', 'development-server']);
 
-gulp.task('watch',  function () {
+gulp.task('watch', function () {
     var execSync = require('child_process').spawn;
     execSync('./start-watch.sh', [], {stdio: [process.stdin, process.stdout, process.stderr]});
 });
