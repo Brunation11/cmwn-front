@@ -42,7 +42,10 @@ class EditLink extends React.Component {
     }
 }
 
-EditLink.defaultProps = {base: ''};
+EditLink.defaultProps = {
+    base: '',
+    className: 'green'
+};
 
 export default EditLink;
 
