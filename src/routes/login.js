@@ -94,6 +94,7 @@ var Component = React.createClass({
         var req;
         var user = this.getUsernameWithoutSpaces();
         dataUrl = this.state.overrideLogin || this.props.currentUser._links.login.href;
+        ga('set', 'metric2', 1);
         req = HttpManager.POST({
             url: dataUrl,
         }, {
@@ -109,6 +110,7 @@ var Component = React.createClass({
             }
             if (res.status < 300 && res.status >= 200) {
                 Log.info(e, 'User login success');
+                ga('set', 'metric3', 1);
                 History.push('/profile');
             } else {
                 Toast.error(ERRORS.LOGIN + (res.response && res.response.data &&
