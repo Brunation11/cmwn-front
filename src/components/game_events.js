@@ -90,12 +90,14 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
             // TODO MPR 7/14/16: .game and .flip can be removed once all games are in React
             submitFlip(flipId);
             ga('set', 'dimension5', flipId);
+            ga('send', 'event');
         },
         flip: function (e) {
             var flipId = e.gameData.id || e.gameData.game || e.gameData.flip;
             // TODO MPR 7/14/16: .game and .flip can be removed once all games are in React
             submitFlip(flipId);
             ga('set', 'dimension5', flipId);
+            ga('send', 'event');
         },
         save: function (e) {
             var version = 1;

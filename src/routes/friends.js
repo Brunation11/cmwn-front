@@ -50,6 +50,7 @@ export class Friends extends React.Component {
         e.stopPropagation();
         e.preventDefault();
         ga('set', 'dimension7', 'send');
+        ga('send', 'event');
 
         HttpManager.POST({
             url: this.props.currentUser._links.friend.href

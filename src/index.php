@@ -197,7 +197,7 @@ if (!$https && $proxy !== 'https') {
           ga('require', 'displayfeatures');
           ga('set', 'anonymizeIp', true);
           ga('set', 'forceSSL', true);
-          ga('send', 'pageview');
+          //looking for the send? It's in app.js after the app bootstraps
 
         </script>
     </body>
