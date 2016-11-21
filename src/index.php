@@ -129,14 +129,9 @@ if (!$https && $proxy !== 'https') {
                 fileref.setAttribute("type","text/javascript");
                 fileref.setAttribute("src", "https://cdnjs.cloudflare.com/ajax/libs/xdomain/0.7.3/xdomain.min.js");
                 document.head.appendChild(fileref);
+                debugger;
             }
             //polyfill localstorage
-            if (window.localStorage == null) {
-                fileref=document.createElement('script');
-                fileref.setAttribute("type","text/javascript");
-                fileref.setAttribute("src", "//cdnjs.cloudflare.com/ajax/libs/localStorage/2.0.1/localStorage.min.js");
-                document.head.appendChild(fileref);
-            }
             try {
                 //will fail in private safari
                 window.localStorage.setItem('testKey', '1');
@@ -144,8 +139,10 @@ if (!$https && $proxy !== 'https') {
             } catch (error) {
                 //we dont rely on localstorage as a source of truth
                 //so we can safely ignore these errors
-                Storage.prototype._setItem = Storage.prototype.setItem;
-                Storage.prototype.setItem = function() {};
+                fileref = document.createElement('script');
+                fileref.setAttribute("type","text/javascript");
+                fileref.setAttribute("src", "//cdnjs.cloudflare.com/ajax/libs/localStorage/2.0.1/localStorage.min.js");
+                document.head.appendChild(fileref);
             }
         </script>
         <script>
