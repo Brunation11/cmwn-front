@@ -246,7 +246,13 @@ export class Profile extends React.Component {
     }
 
     renderUserMetaData() {
-        var ISODate = (new Date(this.state.birthdate)).toISOString();
+        var ISODate;
+        var momentDate = '';
+
+        if (this.state.birthdate) {
+            ISODate = (new Date(this.state.birthdate)).toISOString();
+            momentDate = Moment(ISODate).format('MM-DD-YYYY');
+        }
 
         if (this.state.friend_status !== 'FRIEND') return null;
 
@@ -267,7 +273,7 @@ export class Profile extends React.Component {
                 <p className="label">Last Name:</p>
                 <p className="standard field">{this.state.last_name}</p>
                 <p className="label">Birthday:</p>
-                <p className="standard field">{Moment(ISODate).format('MM-DD-YYYY')}</p>
+                <p className="standard field">{momentDate}</p>
             </div>
         );
     }
