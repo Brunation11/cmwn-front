@@ -49,7 +49,11 @@ export class Friends extends React.Component {
     addFriend(item, e) {
         e.stopPropagation();
         e.preventDefault();
-        ga('send', 'event', {'dimension7': 'sent'});
+        ga('send', 'event', {
+            'eventCategory': 'Friend',
+            'eventAction': 'Sent',
+            'dimension7': 'sent'
+        });
 
         HttpManager.POST({
             url: this.props.currentUser._links.friend.href
@@ -70,7 +74,11 @@ export class Friends extends React.Component {
     acceptRequest(item, e) {
         e.stopPropagation();
         e.preventDefault();
-        ga('send', 'event', {'dimension7': 'recieved'});
+        ga('send', 'event', {
+            'eventCategory': 'Friend',
+            'eventAction': 'Recieved',
+            'dimension7': 'recieved'
+        });
 
         HttpManager.POST({
             url: this.props.currentUser._links.friend.href

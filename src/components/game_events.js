@@ -89,22 +89,29 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
             var flipId = e.gameData.id || e.gameData.game || e.gameData.flip;
             // TODO MPR 7/14/16: .game and .flip can be removed once all games are in React
             submitFlip(flipId);
-            ga('send', 'event', {'dimension5': flipId});
+            ga('send', 'event', 'Game', 'Flip earned', flipId);
         },
         flip: function (e) {
             var flipId = e.gameData.id || e.gameData.game || e.gameData.flip;
             // TODO MPR 7/14/16: .game and .flip can be removed once all games are in React
             submitFlip(flipId);
-            ga('send', 'event', {'dimension5': flipId});
+            ga('send', 'event', 'Game', 'Flip earned', flipId);
         },
         save: function (e) {
             var version = 1;
+            var flipId = e.gameData.id || e.gameData.game || e.gameData.flip;
             if (_links.save_game == null) {
                 Log.error('Something went wrong. No game save url was provided. Game data will not be saved');
                 return;
             }
             version = e.gameData.version || version;
-            ga('send', {'metric1': e.gameData.currentScreenIndex});
+            ga('send', 'event', {
+                'eventCategory': 'Game',
+                'eventAction': 'Screen Reached',
+                'eventLabel': flipId,
+                'eventValue': e.gameData.currentScreenIndex,
+                'metric1': e.gameData.currentScreenIndex
+            });
             HttpManager.POST(
                 _links.save_game.href.replace('{game_id}', gameId),
                 {data: e.gameData, version}
@@ -114,7 +121,12 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
             exitCallback({fullscreenFallback: false});
         },
         init: function (e) {
-            ga('send', {'dimension4': gameId || e.gameData.id || e.gameData.game || e.gameData.flip});
+            ga('send', 'event', {
+                'eventCategory': 'Game',
+                'eventAction': 'Screen Reached',
+                'eventLabel': gameId || e.gameData.id || e.gameData.game || e.gameData.flip,
+                'dimension4': gameId || e.gameData.id || e.gameData.game || e.gameData.flip
+            });
             HttpManager.GET( _links.save_game.href.replace('{game_id}', gameId))
                 .then(server => e.respond(server.response.data))
                 .catch(err => {
