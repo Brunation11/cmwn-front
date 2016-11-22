@@ -89,15 +89,13 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
             var flipId = e.gameData.id || e.gameData.game || e.gameData.flip;
             // TODO MPR 7/14/16: .game and .flip can be removed once all games are in React
             submitFlip(flipId);
-            ga('set', 'dimension5', flipId);
-            ga('send', 'event');
+            ga('send', 'event', {'dimension5': flipId});
         },
         flip: function (e) {
             var flipId = e.gameData.id || e.gameData.game || e.gameData.flip;
             // TODO MPR 7/14/16: .game and .flip can be removed once all games are in React
             submitFlip(flipId);
-            ga('set', 'dimension5', flipId);
-            ga('send', 'event');
+            ga('send', 'event', {'dimension5': flipId});
         },
         save: function (e) {
             var version = 1;
@@ -106,7 +104,7 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
                 return;
             }
             version = e.gameData.version || version;
-            ga('set', 'metric1', e.gameData.currentScreenIndex);
+            ga('send', {'metric1': e.gameData.currentScreenIndex});
             HttpManager.POST(
                 _links.save_game.href.replace('{game_id}', gameId),
                 {data: e.gameData, version}
@@ -116,7 +114,7 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
             exitCallback({fullscreenFallback: false});
         },
         init: function (e) {
-            ga('set', 'dimension4', gameId || e.gameData.id || e.gameData.game || e.gameData.flip);
+            ga('send', {'dimension4': gameId || e.gameData.id || e.gameData.game || e.gameData.flip});
             HttpManager.GET( _links.save_game.href.replace('{game_id}', gameId))
                 .then(server => e.respond(server.response.data))
                 .catch(err => {
