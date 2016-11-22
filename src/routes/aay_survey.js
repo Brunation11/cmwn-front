@@ -4,11 +4,9 @@ import {Panel} from 'react-bootstrap';
 import {Link} from 'react-router';
 import Layout from 'layouts/god_mode_two_col';
 import {Table, Column} from 'components/table';
-import SurveyModal from 'components/popovers/survey_modal';
+import SurveyModal from 'components/survey_modal';
 import HttpManager from 'components/http_manager';
 import _ from 'lodash';
-
-const PAGE_UNIQUE_IDENTIFIER = 'aay-survey-view';
 
 const HEADINGS = {
     TITLE: 'All About You Survey Results',
