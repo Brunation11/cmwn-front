@@ -117,13 +117,16 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
                 {data: e.gameData, version}
             );
         },
-        exit: function () {
+        exit: function (e) {
+            var gameData = e.gameData || {id: undefined, currentScreenIndex: undefined};
+            var flipId = gameData.id || gameData.game || gameData.flip;
+            ga('send', 'event', 'Game', 'Quit', flipId, gameData.currentScreenIndex);
             exitCallback({fullscreenFallback: false});
         },
         init: function (e) {
             ga('send', 'event', {
                 'eventCategory': 'Game',
-                'eventAction': 'Screen Reached',
+                'eventAction': 'Started',
                 'eventLabel': gameId || e.gameData.id || e.gameData.game || e.gameData.flip,
                 'dimension4': gameId || e.gameData.id || e.gameData.game || e.gameData.flip
             });
