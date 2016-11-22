@@ -129,7 +129,6 @@ if (!$https && $proxy !== 'https') {
                 fileref.setAttribute("type","text/javascript");
                 fileref.setAttribute("src", "https://cdnjs.cloudflare.com/ajax/libs/xdomain/0.7.3/xdomain.min.js");
                 document.head.appendChild(fileref);
-                debugger;
             }
             //polyfill localstorage
             try {
