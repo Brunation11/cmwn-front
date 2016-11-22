@@ -129,6 +129,10 @@ var Component = React.createClass({
                 return;
             }
             Toast.error(ERRORS.LOGIN + (res.detail ? ' Message: ' + res.detail : ''));
+            ga('send', 'exception', {
+                exDescription: 'Invalid login',
+                exFatal: false
+            });
             Log.log(e, 'Invalid login');
         });
     },
