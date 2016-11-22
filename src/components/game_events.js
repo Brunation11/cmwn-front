@@ -180,6 +180,7 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
                 .catch(err => Log.error(err));
         },
         getFriends: function (e) {
+            if (!_links.friend) return;
             HttpManager.GET(_links.friend.href)
                 .then(server => {
                     var friends = _.map(server.response._embedded.friend, friend => {

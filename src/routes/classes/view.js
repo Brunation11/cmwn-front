@@ -13,6 +13,7 @@ import DeleteLink from 'components/delete_link';
 import Text from 'components/nullable_text';
 import Util from 'components/util';
 import GenerateDataSource from 'components/datasource';
+import History from 'components/history';
 
 import 'routes/classes/view.scss';
 

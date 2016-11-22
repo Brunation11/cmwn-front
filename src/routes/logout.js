@@ -45,12 +45,16 @@ export class LogoutPage extends React.Component {
             Log.info(LOG.SUCCESS);
             Util.logout();
             delete window.__USER_UNAUTHORIZED;
-            window.location.href = '/login';
+            window.setTimeout(() => { window.location.href = '/login'; }, 500);
+            /*
+                w/o the delay, the login page loads with the currentUser
+                still set as the logged in user
+            */
         }).catch(e => {
             Log.warn(e, LOG.FAILURE);
             Util.logout();
             delete window.__USER_UNAUTHORIZED;
-            window.location.href = '/login';
+            window.setTimeout(() => { window.location.href = '/login'; }, 500);
         });
     }
 

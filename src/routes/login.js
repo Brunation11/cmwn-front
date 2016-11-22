@@ -146,6 +146,8 @@ var Component = React.createClass({
 
         user = this.getUsernameWithoutSpaces();
 
+        user = this.getUsernameWithoutSpaces();
+
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
             if (this.props.data._links && this.props.data._links.login == null) {
                 if (user === this.props.data.username ||
@@ -385,6 +387,10 @@ var Component = React.createClass({
     },
     render: function () {
         var page;
+
+        if (this.props.currentUser.user_id) {
+            window.location.replace(window.location.href.replace('/login', '/profile'));
+        }
 
         if (this.state.currentPage === 'forgot-password') {
             page = this.renderForgotPassword;
