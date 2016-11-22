@@ -10,8 +10,8 @@ import Util from 'components/util';
 import 'components/god_mode_site_nav.scss';
 
 class GodModeSiteNav extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
     }
 
     componentDidMount() {

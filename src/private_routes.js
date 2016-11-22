@@ -85,7 +85,7 @@ var routes = [
     { path: 'schools/:id(/)', onEnter: redirect('/school/:id')},
     { path: 'school/:id/view(/)', title: 'School', endpoint: '/group/:id', component: SchoolView},
     { path: 'schools/:id/view(/)', onEnter: redirect('/school/:id/view')},
-    { path: 'school/:id/edit()', title: 'Edit School', endpoint: '/group/:id', component: SchoolEdit},
+    { path: 'school/:id/edit(/)', title: 'Edit School', endpoint: '/group/:id', component: SchoolEdit},
     { path: 'schools/:id/edit(/)', onEnter: redirect('/school/:id/edit')},
     { path: 'school/:id/profile(/)', title: 'School', endpoint: '/group/:id', component: SchoolProfile},
     { path: 'schools/:id/profile(/)', onEnter: redirect('/school/:id/profile')},
