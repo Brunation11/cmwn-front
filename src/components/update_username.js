@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import React from 'react';
 import {Button, Modal} from 'react-bootstrap';
 import ClassNames from 'classnames';
@@ -263,7 +264,7 @@ export class UpdateUsername extends React.Component {
     renderWelcome() {
         var scrollIntoView = function (id) {
             document.getElementById(id).scrollIntoView();
-        }
+        };
 
         return (
             <div className={`mobile-welcome-container ${this.state.page}`}>

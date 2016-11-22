@@ -30,7 +30,7 @@ $halfway-break-2: 540px;
         font-size: 1.25rem;
     }
 
-    .form-control {
+    .form-control:not(.birthday-input) {
         outline: none;
         border: 0;
         border-radius: 0;
@@ -160,47 +160,41 @@ $halfway-break-2: 540px;
         }
     }
 
-    .dropdown-datepicker .form-group {
-        display: inline-block;
-        position: relative;
-
-        &::after {
-            position: absolute;
-            top: 0;
-            right: 4%;
-            bottom: 0;
+    .dropdown-datepicker {
+        .form-group {
+            display: inline-block;
+            position: relative;
             background: url('../../media/edit_profile/dropdown_arrows.png');
             background-repeat: no-repeat;
-            background-position: 1px 0;
-            background-size: cover;
-            max-width: 20px;
-            height: 100%;
-            content: '';
-        }
+            background-position: 218% 0;
+            background-size: 63% 100%;
+            width: 33%;
+            height: 40px;
 
-        &:nth-of-type(1) {
-            width: 40%;
-
-            &::after {
-                width: 14%;
-            }
-
-            .birthday-input { // scss-lint:disable SelectorDepth
+            &::before {
+                position: absolute;
+                left: 0;
+                outline: none;
+                border: 0;
+                box-shadow: none;
+                background: $cmwn-white;
                 width: 80%;
+                height: 100%;
+                content: '';
             }
         }
 
-        &:nth-of-type(2),
-        &:nth-of-type(3) {
-            width: 30%;
-
-            &::after {
-                width: 19%;
-            }
-
-            .birthday-input { // scss-lint:disable SelectorDepth
-                width: 75%;
-            }
+        .birthday-input {
+            position: relative;
+            outline: none;
+            border: 0;
+            border-radius: 0;
+            box-shadow: none;
+            background: transparent;
+            width: 100%;
+            height: 40px;
+            color: $cmwn-black;
+            font-size: 1.25rem;
         }
     }
 
