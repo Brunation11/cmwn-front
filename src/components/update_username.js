@@ -261,9 +261,13 @@ export class UpdateUsername extends React.Component {
     }
 
     renderWelcome() {
+        var scrollIntoView = function (id) {
+            document.getElementById(id).scrollIntoView();
+        }
+
         return (
             <div className={`mobile-welcome-container ${this.state.page}`}>
-                <div className="welcome-container">
+                <div id="welcome-container" className="welcome-container">
                     <div className="content">
                         <span className="prompt">{LABELS.WELCOME}</span>
                         <Button
@@ -271,15 +275,21 @@ export class UpdateUsername extends React.Component {
                             onClick={this.setPage.bind(this, 'generator')}
                         />
                     </div>
-                    <div className="instructions-prompt-container">
+                    <div
+                        className="instructions-prompt-container"
+                        onClick={scrollIntoView.bind(this, 'instructions-container')}
+                    >
                         <span className="prompt">{LABELS.INSTRUCTIONS[0]}</span>
                         <span className="prompt">{LABELS.INSTRUCTIONS[1]}</span>
                     </div>
                 </div>
 
-                <div className="instructions-container">
-                    <div className="instructions-prompt-container">
-                        <span className="prompt">{LABELS.INSTRUCTIONS[3]}</span>
+                <div id="instructions-container" className="instructions-container">
+                    <div
+                        className="instructions-prompt-container"
+                        onClick={scrollIntoView.bind(this, 'welcome-container')}
+                    >
+                        <span className="prompt">{LABELS.INSTRUCTIONS[2]}</span>
                     </div>
                     <div className="instructions">
                         <span className="copy-header">{COPY.INSTRUCTIONS_HEADER}</span>
