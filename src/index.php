@@ -131,21 +131,77 @@ if (!$https && $proxy !== 'https') {
                 document.head.appendChild(fileref);
             }
             //polyfill localstorage
-            if (window.localStorage == null) {
-                fileref=document.createElement('script');
-                fileref.setAttribute("type","text/javascript");
-                fileref.setAttribute("src", "//cdnjs.cloudflare.com/ajax/libs/localStorage/2.0.1/localStorage.min.js");
-                document.head.appendChild(fileref);
-            }
             try {
                 //will fail in private safari
                 window.localStorage.setItem('testKey', '1');
                 window.localStorage.removeItem('testKey');
             } catch (error) {
-                //we dont rely on localstorage as a source of truth
-                //so we can safely ignore these errors
-                Storage.prototype._setItem = Storage.prototype.setItem;
-                Storage.prototype.setItem = function() {};
+                var setStorage = function() {
+                    var Storage = function() {
+                        function setData(data) {
+                            data = JSON.stringify(data);
+                            window.name = data;
+                        }
+
+                        function clearData() {
+                            window.name = '';
+                        }
+
+                        function getData() {
+                            var data = window.name;
+                            return data ? JSON.parse(data) : {};
+                        }
+
+                        // initialise if there's already data
+                        var data = getData();
+
+                        function numKeys() {
+                            var n = 0;
+                            for (var k in data) {
+                                if (data.hasOwnProperty(k)) n += 1;
+                            }
+                            return n;
+                        }
+
+                        return {
+                            clear: function() {
+                                data = {};
+                                clearData();
+                                this.length = numKeys();
+                            },
+                            getItem: function(key) {
+                                key = encodeURIComponent(key);
+                                return data[key] === undefined ? null : data[key];
+                            },
+                            key: function(i) {
+                                var ctr = 0;
+                                for (var k in data) {
+                                    if (ctr == i) return decodeURIComponent(k);
+                                    else ctr++;
+                                }
+                                return null;
+                            },
+                            removeItem: function(key) {
+                                key = encodeURIComponent(key);
+                                delete data[key];
+                                setData(data);
+                                this.length = numKeys();
+                            },
+                            setItem: function(key, value) {
+                                key = encodeURIComponent(key);
+                                data[key] = String(value);
+                                setData(data);
+                                this.length = numKeys();
+                            },
+                            length: 0
+                        };
+                    };
+
+                    window._localStorage = new Storage();
+                    window._sessionStorage = new Storage();
+                };
+
+                setStorage();
             }
         </script>
         <script>
