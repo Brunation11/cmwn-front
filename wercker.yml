@@ -91,7 +91,11 @@ draft-release:
       filename: platform-front-$VERSION.zip
 
 deploy-draft:
-  box: python:2.7
+  box:
+    id: cmwn/python
+    username: $DOCKER_USER
+    password: $DOCKER_PASS
+    entrypoint: /bin/bash -c
   steps:
     - script:
       name: Preparing release
@@ -100,21 +104,20 @@ deploy-draft:
         export VERSION="$($PWD/bin/version_bump.sh --print-current)-$SHORT_HASH"
         echo "$VERSION"
     - script:
-      name: Installing pips
-      code: |-
-        pip install boto3
-        export DEPLOY='true'
-    - script:
       name: Running deploy
       code: |-
         echo "Deploying $DEPLOY_APP_NAME @ $VERSION to $DEPLOY_ENV"
-        python bin/deploy.py $VERSION $DEPLOY_APP_NAME $DEPLOY_ENV -v
+        python /deploy.py $VERSION $DEPLOY_APP_NAME $DEPLOY_ENV -v
   after-steps:
     - slack-notifier:
       url: $SLACK_URL
 
 deploy:
-  box: python:2.7
+  box:
+    id: cmwn/python
+    username: $DOCKER_USER
+    password: $DOCKER_PASS
+    entrypoint: /bin/bash -c
   steps:
     - script:
       name: Preparing release
@@ -122,15 +125,10 @@ deploy:
         export VERSION="$($PWD/bin/version_bump.sh --print-current)"
         echo "$VERSION"
     - script:
-      name: Installing pips
-      code: |-
-        pip install boto3
-        export DEPLOY='true'
-    - script:
       name: Running deploy
       code: |-
         echo "Deploying $DEPLOY_APP_NAME @ $VERSION to $DEPLOY_ENV"
-        python bin/deploy.py $VERSION $DEPLOY_APP_NAME $DEPLOY_ENV -v
+        python /deploy.py $VERSION $DEPLOY_APP_NAME $DEPLOY_ENV -v
   after-steps:
     - slack-notifier:
       url: $SLACK_URL

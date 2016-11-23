@@ -26,14 +26,14 @@ import Games from 'routes/games';
 import ChangePassword from 'routes/change_password';
 import NewsFeed from 'routes/newsfeed';
 import Flips from 'routes/users/flips';
-<<<<<<< 7c1e69f3779d6fc77fe3a985e7a1cb3df8e0331e
+import GodModeHome from 'routes/god_mode';
+import EditUser from 'routes/god_mode/users/edit_user';
+import ManageUsers from 'routes/god_mode/users/manage_users';
+import CreateUser from 'routes/god_mode/users/create_user';
 import ResourceCenter from 'routes/resource_center';
 import FlagView from 'routes/flags';
 import Help from 'routes/help';
-=======
-import GodMode from 'routes/god_mode';
 import GodModeGames from 'routes/god_mode/games';
->>>>>>> adding god mode games route
 
 var redirect = function (path) {
     return function (nextState, transition) {
@@ -105,11 +105,14 @@ var routes = [
     { path: 'friends/suggested(/)', title: 'Suggested Friends', endpoint: '$$suggested_friends',
         component: SuggestedFriends},
     { path: 'suggestedfriends(/)', onEnter: redirect('/friends/suggested')},
+    { path: 'sa(/)', title: 'God Mode', endpoint: '/sa/settings', component: GodModeHome},
+    { path: 'sa/users(/)', title: 'Manage Users', endpoint: '$$user', component: ManageUsers},
+    { path: 'sa/user/:id/edit(/)', title: 'Edit User', endpoint: '/user/:id', component: EditUser},
+    { path: 'sa/user/create(/)', title: 'Create User', component: CreateUser},
     { path: 'resources(/)', component: ResourceCenter, endpoint: ''},
     { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed},
     { path: 'help(/)', title: 'Help', component: Help},
     { path: '/flaggedimages(/)', title: 'Flagged Images', endpoint: '/flag', component: FlagView},
-    { path: 'sa(/)', component: GodMode},
     { path: 'sa/games(/)', component: GodModeGames},
 ];
 
