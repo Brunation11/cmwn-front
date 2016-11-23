@@ -8,9 +8,10 @@ import FlipBoard from 'components/flipboard';
 import GenerateDataSource from 'components/datasource';
 import HttpManager from 'components/http_manager';
 import Toast from 'components/toast';
+import Log from 'components/log';
 import Form from 'components/form';
 
-import Layout from 'layouts/two_col';
+import Layout from 'layouts/god_mode_two_col';
 
 import 'routes/god_mode/games.scss';
 
@@ -64,9 +65,10 @@ const NEW_GAME = {
 };
 
 var dataTransform = function (data) {
-    var games = _.map(data, filterInputFields);
-    games.unshift(NEW_GAME);
-    return games;
+    data = _.filter(data, item => !item.deleted);
+    data = _.map(data, filterInputFields);
+    data.unshift(NEW_GAME);
+    return data;
 }
 
 var filterInputFields = function (item, index) {
@@ -120,15 +122,20 @@ export class GodModeGames extends React.Component {
         });
 
         if (create) {
-            // TODO PUSH new game
-            console.log('making new game');
-            console.log(item);
+            HttpManager.POST({url: `${this.props.data._links.games.href}`},
+                postData).then(() => {
+                    Toast.success(`${item.title} successfully created`);
+                }).catch(err => {
+                    Toast.error(`Could not create ${item.title}: ${err.response.status} ${err.response.detail}`);
+                    Log.log('Could not create game', err, postData);
+            });
         } else {
             HttpManager.PUT({url: `${this.props.data._links.games.href}/${item.game_id}`},
                 postData).then(() => {
-                    console.log(`${item.title} successfully saved`);
+                    Toast.success(`${item.title} successfully saved`);
                 }).catch(err => {
-                    console.log(`Could not post to ${item.title}`);
+                    Toast.error(`Could not save ${item.title}: ${err.response.status} ${err.response.detail}`);
+                    Log.log('Could not save game', err, postData);
             });
         }
     }
@@ -144,13 +151,15 @@ export class GodModeGames extends React.Component {
             var postData = {
                 game_id: item.game_id
             };
-            console.log('deleting ' + this.state.deleteTry);
-            //HttpManager.DELETE({url: `${this.props.data._links.games.href}/${item.game_id}`},
-            //    postData).then(() => {
-            //        console.log(`${item.title} successfully deleted`);
-            //    }).catch(err => {
-            //        console.log(`Could not delete ${item.title}`);
-            //});
+
+            HttpManager.DELETE({url: `${this.props.data._links.games.href}/${item.game_id}`},
+                postData).then(() => {
+                    Toast.success(`${item.title} successfully deleted from specific endpoint`);
+                }).catch(err => {
+                    Toast.error(`Could not delete ${item.title}: ${err.response.status} ${err.response.detail}`);
+                    Log.log('Could not delete game', err, postData);
+            });
+
             this.setState({ deleteTry: '' });
         } else {
             this.setState({ deleteTry: item.game_id });
