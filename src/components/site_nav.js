@@ -36,12 +36,12 @@ var addHardcodedEntries = function (menuItems) {
 
 const IGNORED_ROUTES_FOR_CHILDREN = [
     'Resource Center',
-    'Friends and Network'
+    'Friends and Network',
+    'Flags'
 ];
 
 const IGNORED_ROUTES_FOR_EVERYONE = [
-    'Profile',
-    'Flags'
+    'Profile'
 ];
 
 var buildMenuRoutes = function (links) {
