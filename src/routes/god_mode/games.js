@@ -102,10 +102,12 @@ export class GodModeGames extends React.Component {
             games: {},
             deleteTry: '',
             update: true,
+            reset: '',
+            changed: [],
         };
     }
 
-    saveGame(item, create = false) {
+    saveGame(item, gameId, create = false) {
         var postData = {};
 
         _.forEach(item, (inputValue, inputType) => {
@@ -130,7 +132,7 @@ export class GodModeGames extends React.Component {
                     Log.log('Could not create game', err, postData);
             });
         } else {
-            HttpManager.PUT({url: `${this.props.data._links.games.href}/${item.game_id}`},
+            HttpManager.PUT({url: `${this.props.data._links.games.href}/${gameId}`},
                 postData).then(() => {
                     Toast.success(`${item.title} successfully saved`);
                 }).catch(err => {
@@ -141,18 +143,20 @@ export class GodModeGames extends React.Component {
     }
 
     saveAllGames() {
-        _.forEach(this.state.games, game => {
-            if (!game.newGame) this.saveGame(game);
+        _.forEach(this.state.games, (game, gameId) => {
+            if (this.state.changed.indexOf(gameId) !== -1 && !game.newGame) {
+                this.saveGame(game, gameId);
+            }
         });
     }
 
-    deleteGame(item) {
-        if (this.state.deleteTry === item.game_id) {
+    deleteGame(item, gameId) {
+        if (this.state.deleteTry === gameId) {
             var postData = {
-                game_id: item.game_id
+                game_id: gameId
             };
 
-            HttpManager.DELETE({url: `${this.props.data._links.games.href}/${item.game_id}`},
+            HttpManager.DELETE({url: `${this.props.data._links.games.href}/${gameId}`},
                 postData).then(() => {
                     Toast.success(`${item.title} successfully deleted from specific endpoint`);
                 }).catch(err => {
@@ -162,7 +166,7 @@ export class GodModeGames extends React.Component {
 
             this.setState({ deleteTry: '' });
         } else {
-            this.setState({ deleteTry: item.game_id });
+            this.setState({ deleteTry: gameId });
         }
     }
 
@@ -188,9 +192,9 @@ export class GodModeGames extends React.Component {
         }
     }
 
-    toggleOpen(openGame, item) {
+    toggleOpen(openGame, gameId) {
         this.setState({
-            open: openGame ? item.game_id : '',
+            open: openGame ? gameId : '',
             deleteTry: '',
         });
     }
@@ -198,10 +202,12 @@ export class GodModeGames extends React.Component {
     renderInputField(inputValue, inputType, gameId, key) {
         var self = this;
         var games;
+        var changed;
 
         if (inputType === 'key' || inputType === 'newGame' || typeof inputValue === 'object') return;
 
         games = _.cloneDeep(this.state.games);
+        changed = _.clone(this.state.changed);
 
         if (FIELD_TYPES[inputType] === 'checkbox') {
             return (
@@ -214,8 +220,9 @@ export class GodModeGames extends React.Component {
                     key={key}
                     validate="required"
                     onChange={e => {
+                        if (changed.indexOf(gameId) === -1) changed.push(gameId);
                         games[gameId][inputType] = e.target.checked;
-                        self.setState({ games });
+                        self.setState({ games, changed });
                     }}
                />
             );
@@ -232,8 +239,9 @@ export class GodModeGames extends React.Component {
                 key={key}
                 validate="required"
                 onChange={e => {
+                    if (changed.indexOf(gameId) === -1) changed.push(gameId);
                     games[gameId][inputType] = e.target.value
-                    self.setState({ games });
+                    self.setState({ games, changed });
                 }}
            />
         );
@@ -271,7 +279,7 @@ export class GodModeGames extends React.Component {
                         {form}
                         <Button
                             className="btn standard purple save-btn"
-                            onClick={this.saveGame.bind(this, currentItem, currentItem.newGame)}
+                            onClick={this.saveGame.bind(this, currentItem, item.game_id, currentItem.newGame)}
                         >
                             {currentItem.newGame ? 'CREATE' : 'SAVE'}
                         </Button>
@@ -280,7 +288,7 @@ export class GodModeGames extends React.Component {
                                 hidden: currentItem.newGame
                             })}
                             onClick={() => {
-                                this.setState({ reset: currentItem.game_id });
+                                this.setState({ reset: item.game_id });
                             }}
                         >
                             RESET
@@ -289,9 +297,9 @@ export class GodModeGames extends React.Component {
                             className={ClassNames('btn', 'standard', 'purple', 'delete-btn', {
                                 hidden: currentItem.newGame
                             })}
-                            onClick={this.deleteGame.bind(this, currentItem)}
+                            onClick={this.deleteGame.bind(this, currentItem, item.game_id)}
                         >
-                            {this.state.deleteTry === currentItem.game_id ? "ARE YOU SURE?" : "DELETE"}
+                            {this.state.deleteTry === item.game_id ? "ARE YOU SURE?" : "DELETE"}
                         </Button>
                     </Form>
                 </Panel>
@@ -299,7 +307,7 @@ export class GodModeGames extends React.Component {
                     className={ClassNames('btn', 'standard', 'green', 'edit-btn', {
                         hidden: currentItem.newGame
                     })}
-                    onClick={this.toggleOpen.bind(this, !open, currentItem)}
+                    onClick={this.toggleOpen.bind(this, !open, item.game_id)}
                 >
                     {text}
                 </Button>
@@ -316,7 +324,7 @@ export class GodModeGames extends React.Component {
                     className="btn standard purple save-all-btn"
                     onClick={this.saveAllGames.bind(this)}
                 >
-                    SAVE ALL EXISTING GAMES
+                    SAVE ALL UPDATED GAMES
                 </Button>
                 <Button
                     className="btn standard green reset-all-btn"
@@ -336,6 +344,7 @@ export class GodModeGames extends React.Component {
                     <FlipBoard
                         renderFlip={this.renderFlip.bind(this)}
                         updateParent={this.updateGameData.bind(this)}
+                        alwaysUpdateParent
                         id="game-flip-board"
                         header={null}
                     />
