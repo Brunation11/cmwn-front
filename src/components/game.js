@@ -64,6 +64,11 @@ export class Game extends React.Component {
                 this.onExit.bind(this)
             )
         });
+        if (Screenfull.enabled) {
+            document.addEventListener(Screenfull.raw.fullscreenchange, () => {
+                this.setState({isFullscreen: Screenfull.isFullscreen});
+            });
+        }
     }
 
     componentDidMount() {
@@ -113,6 +118,7 @@ export class Game extends React.Component {
     }
 
     onExit(nextState) {
+        if (this.state.isFullscreen) this.exitFullscreen();
         this.setState(nextState);
     }
 
@@ -147,11 +153,16 @@ export class Game extends React.Component {
 
     listenForEsc(e) {
         if (e.keyCode === 27 || e.charCode === 27) {
-            Screenfull.exit();
-            this.setState({
-                fullscreenFallback: false,
-            });
+            this.exitFullscreen();
         }
+    }
+
+    exitFullscreen() {
+        Screenfull.exit();
+        this.setState({
+            fullscreenFallback: false,
+            isFullscreen: false,
+        });
     }
 
     resizeFrame() {
@@ -173,12 +184,14 @@ export class Game extends React.Component {
     }
 
     makeFullScreen() {
+        var nextState = {isFullscreen: true};
         if (Screenfull.enabled) {
-            Screenfull.request(ReactDOM.findDOMNode(this.refs.wrapRef));
+            Screenfull.request(document.body);
         } else {
-            this.setState({fullscreenFallback: true});
-            this.resizeFrame.call(this);
+            nextState.fullscreenFallback = true;
+            this.resizeFrame();
         }
+        this.setState(nextState);
     }
 
     checkForPortrait() {
@@ -199,7 +212,7 @@ export class Game extends React.Component {
             <div className={COMPONENT_IDENTIFIER}>
                 <div ref="wrapRef" className={ClassNames(
                     'game-frame-wrapper',
-                    {fullscreen: this.state.fullscreenFallback}
+                    {fs: this.state.isFullscreen, fullscreen: this.state.fullscreenFallback}
                 )}>
                     <div
                         ref="overlay"

@@ -5,7 +5,7 @@ services:
     build: ./docker/php
     environment:
       APP_API_URL: "https://api-local.changemyworldnow.com/"
-      APP_GAME_URL: "https://games-dev.changemyworldnow.com/"
+      APP_GAME_URL: "https://games-qa.changemyworldnow.com/"
       APP_MODE: "local"
       APP_CLOUDINARY_CLOUD_NAME: "cmwnstage"
       APP_CLOUDINARY_UPLOAD_PRESET: "qa-profile-image"
