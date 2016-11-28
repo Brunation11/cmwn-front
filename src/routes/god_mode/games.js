@@ -64,6 +64,25 @@ const NEW_GAME = {
     newGame: true,
 };
 
+const LOG = {
+    CREATE: 'Could not create game',
+    SAVE: 'Could not save game',
+    DELETE: 'Could not delete game',
+};
+
+const TOAST = {
+    SUCCESS: {
+        CREATE: ' successfully created',
+        SAVE: ' successfully saved',
+        DELETE: ' successfully deleted',
+    },
+    ERROR: {
+        CREATE:  'Could not create ',
+        SAVE: 'Could not save ',
+        DELETE: 'Could not delete ',
+    },
+};
+
 var dataTransform = function (data) {
     data = _.filter(data, item => !item.deleted);
     data = _.map(data, filterInputFields);
@@ -126,18 +145,18 @@ export class GodModeGames extends React.Component {
         if (create) {
             HttpManager.POST({url: `${this.props.data._links.games.href}`},
                 postData).then(() => {
-                    Toast.success(`${item.title} successfully created`);
+                    Toast.success(`${item.title}${TOAST.SUCCESS.CREATE}`);
                 }).catch(err => {
-                    Toast.error(`Could not create ${item.title}: ${err.response.status} ${err.response.detail}`);
-                    Log.log('Could not create game', err, postData);
+                    Toast.error(`${TOAST.ERROR.CREATE}${item.title}: ${err.response.status} ${err.response.detail}`);
+                    Log.log(LOG.CREATE, err, postData);
             });
         } else {
             HttpManager.PUT({url: `${this.props.data._links.games.href}/${gameId}`},
                 postData).then(() => {
-                    Toast.success(`${item.title} successfully saved`);
+                    Toast.success(`${item.title}${TOAST.SUCCESS.SAVE}`);
                 }).catch(err => {
-                    Toast.error(`Could not save ${item.title}: ${err.response.status} ${err.response.detail}`);
-                    Log.log('Could not save game', err, postData);
+                    Toast.error(`${TOAST.ERROR.SAVE}${item.title}: ${err.response.status} ${err.response.detail}`);
+                    Log.log(LOG.SAVE, err, postData);
             });
         }
     }
@@ -158,10 +177,10 @@ export class GodModeGames extends React.Component {
 
             HttpManager.DELETE({url: `${this.props.data._links.games.href}/${gameId}`},
                 postData).then(() => {
-                    Toast.success(`${item.title} successfully deleted from specific endpoint`);
+                    Toast.success(`${item.title}${TOAST.SUCCESS.DELETE}`);
                 }).catch(err => {
-                    Toast.error(`Could not delete ${item.title}: ${err.response.status} ${err.response.detail}`);
-                    Log.log('Could not delete game', err, postData);
+                    Toast.error(`${TOAST.ERROR.DELETE}${item.title}: ${err.response.status} ${err.response.detail}`);
+                    Log.log(LOG.DELETE, err, postData);
             });
 
             this.setState({ deleteTry: '' });
@@ -254,7 +273,7 @@ export class GodModeGames extends React.Component {
         var form;
         var title;
 
-        if (!this.state.games[item.game_id]) return null;
+        if (!this.state.games || !this.state.games[item.game_id]) return null;
 
         currentItem = this.state.games[item.game_id];
         open = this.state.open === item.game_id || currentItem.newGame;
@@ -316,7 +335,7 @@ export class GodModeGames extends React.Component {
     }
 
     render() {
-        if (!this.props.data) return null;
+        if (this.props.data === null || _.isEmpty(this.props.data)) return null;
 
         const BUTTONS = (
             <div>            
@@ -338,7 +357,11 @@ export class GodModeGames extends React.Component {
         );
 
         return (
-           <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
+            <Layout
+                currentUser={this.props.currentUser}
+                className={PAGE_UNIQUE_IDENTIFIER}
+                navMenuId="navMenu"
+            >
                 {BUTTONS}
                 <GAME_WRAPPER transform={dataTransform}>
                     <FlipBoard
