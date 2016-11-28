@@ -399,7 +399,7 @@ gulp.task('watch-js', function () {
 });
 
 gulp.task('watch-scss', function () {
-    gulp.watch(['src/**/*.scss'], ['primary-style']);
+    gulp.watch(['src/**/*.scss'], ['primary-style', 'explicit-utf-8', 'sri'], buildIndexPage);
 });
 
 gulp.task('watch-test', function () {

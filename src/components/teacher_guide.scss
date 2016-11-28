@@ -1,0 +1,36 @@
+@import 'variables';
+
+.teacher-guide {
+    position: fixed;
+    bottom: 0;
+    right: 115px;
+    background: #47b72c;
+    color: #fff;
+    border: black 2px solid;
+    border-radius: 20px;
+    border-bottom: 0;
+    font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
+    font-size: 19px;
+    padding: 888888888px 4px 9px 8px;
+    z-index: 3;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    font-smoothing: antialiased;
+    letter-spacing: 0.13px;
+
+    & > span {
+        padding-right: 5.3px;
+        padding-left: 1px;
+        vertical-align: middle;
+    }
+
+    & > .btn.standard {
+        padding: 6px 15px 9px 14px;
+        border: white 1px solid;
+        border-radius: 11px;
+        font-size: 20px;
+        box-shadow: black 0px 0px 1px 1px;
+        text-transform: uppercase;
+        letter-spacing: 0.2px;
+    }
+}
