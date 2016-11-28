@@ -18,50 +18,57 @@ import 'routes/god_mode/games.scss';
 var mapStateToProps;
 var Page;
 
-const PAGE_UNIQUE_IDENTIFIER = 'god-mode-games';
+export const PAGE_UNIQUE_IDENTIFIER = 'god-mode-games';
 
 const GAME_WRAPPER = GenerateDataSource('games', PAGE_UNIQUE_IDENTIFIER);
 
-const FIELDS = [
-    'game_id',
+export const FIELDS = [
     'title',
     'description',
     'coming_soon',
     'desktop',
     'unity',
+    'meta',
+    'key',
+    'newGame',
+    'game_id',
+];
+
+export const NON_INPUTS = [
+    'meta',
+    'key',
+    'newGame',
+    'game_id',
 ];
 
 const FIELD_TYPES = {
     [FIELDS[0]]: 'text',
-    [FIELDS[1]]: 'text',
-    [FIELDS[2]]: 'textarea',
+    [FIELDS[1]]: 'textarea',
+    [FIELDS[2]]: 'checkbox',
     [FIELDS[3]]: 'checkbox',
     [FIELDS[4]]: 'checkbox',
-    [FIELDS[5]]: 'checkbox',
 };
 
 const FIELD_LABELS = {
-    [FIELDS[0]]: 'Game ID',
-    [FIELDS[1]]: 'Title',
-    [FIELDS[2]]: 'Description',
-    [FIELDS[3]]: 'Coming Soon',
-    [FIELDS[4]]: 'Desktop Only',
-    [FIELDS[5]]: 'Unity',
+    [FIELDS[0]]: 'Title',
+    [FIELDS[1]]: 'Description',
+    [FIELDS[2]]: 'Coming Soon',
+    [FIELDS[3]]: 'Desktop Only',
+    [FIELDS[4]]: 'Unity',
 };
 
 const NEW_GAME = {
-    [FIELDS[0]]: 'new_game',
-    [FIELDS[1]]: 'New Game',
-    [FIELDS[2]]: 'Description',
+    [FIELDS[0]]: 'New Game',
+    [FIELDS[1]]: 'Description',
+    [FIELDS[2]]: false,
     [FIELDS[3]]: false,
     [FIELDS[4]]: false,
-    [FIELDS[5]]: false,
-    meta: {
+    [FIELDS[5]]: {
+        [FIELDS[3]]: false,
         [FIELDS[4]]: false,
-        [FIELDS[5]]: false,
     },
-    key: -1,
-    newGame: true,
+    [FIELDS[6]]: -1,
+    [FIELDS[7]]: true,
 };
 
 const LOG = {
@@ -83,18 +90,18 @@ const TOAST = {
     },
 };
 
-var dataTransform = function (data) {
+export var dataTransform = function (data) {
     data = _.filter(data, item => !item.deleted);
     data = _.map(data, filterInputFields);
     data.unshift(NEW_GAME);
     return data;
 }
 
-var filterInputFields = function (item, index) {
+export var filterInputFields = function (item, index) {
     var gameItem = {};
 
     _.forEach(item, (inputValue, inputType) => {
-        if (typeof inputValue === 'object') {
+        if (typeof inputValue === 'object' && FIELDS.indexOf(inputType) !== -1) {
             gameItem[inputType] = {};
             _.forEach(inputValue, (inputValue_, inputType_) => {
                 if (FIELDS.indexOf(inputType_) > -1) {
@@ -103,7 +110,7 @@ var filterInputFields = function (item, index) {
                 }
             });
         } else {
-            if (FIELDS.indexOf(inputType) > -1) gameItem[inputType] = inputValue;
+            if (FIELDS.indexOf(inputType) !== -1) gameItem[inputType] = inputValue;
         }
     });
     
@@ -223,7 +230,7 @@ export class GodModeGames extends React.Component {
         var games;
         var changed;
 
-        if (inputType === 'key' || inputType === 'newGame' || typeof inputValue === 'object') return;
+        if (NON_INPUTS.indexOf(inputType) !== -1) return;
 
         games = _.cloneDeep(this.state.games);
         changed = _.clone(this.state.changed);
