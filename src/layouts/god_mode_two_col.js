@@ -18,6 +18,11 @@ var Layout = React.createClass({
         });
     },
     render: function () {
+        if (!this.props.currentUser ||
+            !this.props.currentUser._links ||
+            !this.props.currentUser._links.sa_settings ||
+            !this.props.currentUser._links.sa_settings.href) return null;
+
         return (
              <div className={'layout'}>
                 <GodModeSiteNav
