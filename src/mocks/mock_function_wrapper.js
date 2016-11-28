@@ -16,14 +16,6 @@ class MockFunctionWrapper extends React.Component {
             });
         }
     }
-
-    componentWillReceiveProps(nextProps) {
-        if (!nextProps.state) return;
-
-        this.setState({ [nextProps.state.key]: [nextProps.state.value] }, () => {
-            console.log('************\n' + this.state);
-        });
-    }
 }
 
 export default MockFunctionWrapper;
