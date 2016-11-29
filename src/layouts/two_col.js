@@ -5,9 +5,6 @@ import Sidebar from 'components/sidebar';
 import Footer from 'components/footer';
 import EventManager from 'components/event_manager';
 
-var Page;
-var mapStateToProps;
-
 var Layout = React.createClass({
     getDefaultProps: function () {
         return {navMenuId: ''};
@@ -37,21 +34,5 @@ var Layout = React.createClass({
     }
 });
 
-mapStateToProps = state => {
-    var data = [];
-    var loading = true;
-    var currentUser = state.currentUser;
-    if (state.page && state.page.loading && state.page.data) {
-        loading = state.page.loading;
-        data = state.page.data;
-    }
-    return {
-        data,
-        loading,
-        currentUser,
-    };
-};
-
-Page = connect(mapStateToProps)(Layout);
-export default Page;
+export default Layout;
 
