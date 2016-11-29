@@ -497,6 +497,7 @@ export class EditProfile extends React.Component {
                             this.state.user_id !== this.props.currentUser.user_id
                     })}
                     username={this.state.username}
+                    data={this.props.data}
                 />
                 <ChangePassword
                     user_id={this.state.user_id}

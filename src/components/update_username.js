@@ -35,9 +35,6 @@ const COPY = {
     DISCLAIMER: 'Note: Once you change your username, you won\'t be able to go back to your original.'
 };
 
-var Page;
-var mapStateToProps;
-
 var UpdateUsername = React.createClass({
     getInitialState: function () {
         return {
@@ -201,19 +198,5 @@ var UpdateUsername = React.createClass({
     }
 });
 
-mapStateToProps = state => {
-    var data = [];
-    var loading = true;
-    if (state.page && state.page.loading && state.page.data) {
-        loading = state.page.loading;
-        data = state.page.data;
-    }
-    return {
-        data,
-        loading,
-    };
-};
-
-Page = connect(mapStateToProps)(UpdateUsername);
-export default Page;
+export default UpdateUsername;
 
