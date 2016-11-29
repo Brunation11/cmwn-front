@@ -68,7 +68,7 @@ export default class Flag extends React.Component {
         }, {
             flaggee: this.setUserProp(),
             reason: this.state.reason,
-            url: this.props.data.image
+            url: this.props.data.image || this.props.data._embedded.image.url
         }).then (() => {
             Toast.success(COPY.SUCCESS);
             this.hideModal();

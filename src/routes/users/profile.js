@@ -16,6 +16,7 @@ import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
 import History from 'components/history';
 import GenerateDataSource from 'components/datasource';
+import Flag from 'components/flag';
 
 import Layout from 'layouts/two_col';
 
@@ -264,11 +265,15 @@ export class Profile extends React.Component {
                     <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
                         <div className="left">
                             <div className="frame">
-                                <ProfileImage
+                                <Flag
                                     data={this.props.data}
-                                    currentUser={this.props.currentUser}
-                                    link-below={true}
-                                 />
+                                >
+                                    <ProfileImage
+                                        data={this.props.data}
+                                        currentUser={this.props.currentUser}
+                                        link-below={true}
+                                    />
+                                </Flag>
                             </div>
                         </div>
                         <div className="right">
@@ -305,11 +310,15 @@ export class Profile extends React.Component {
             <div>
                 <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
                     <div className="frame non-friend">
-                        <ProfileImage
+                        <Flag
                             data={this.props.data}
-                            currentUser={this.props.currentUser}
-                            link-below={true}
-                        />
+                        >
+                            <ProfileImage
+                                data={this.props.data}
+                                currentUser={this.props.currentUser}
+                                link-below={true}
+                            />
+                        </Flag>
                     </div>
                 </Panel>
                 <Panel
