@@ -2,7 +2,6 @@ import React from 'react';
 import {Panel, Button, Glyphicon} from 'react-bootstrap';
 import SweetAlert from 'sweetalert2';
 import ClassNames from 'classnames';
-import { connect } from 'react-redux';
 
 import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
