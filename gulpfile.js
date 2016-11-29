@@ -118,7 +118,6 @@ var buildDevelopment = function (finish = true) {
     task = gulp.src('./src/app.js')
         .pipe(wpStream)
         .on('error', function () {
-            console.log('wooooooo');
             this.emit('end');
         });
     if (finish) {
