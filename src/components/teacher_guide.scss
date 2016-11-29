@@ -1,39 +1,69 @@
-@import 'variables';
+@import '../variables';
 
 .teacher-guide {
     position: fixed;
-    bottom: 0;
     right: 115px;
-    background: #47b72c;
-    color: #fff;
-    border: black 2px solid;
-    border-radius: 20px;
-    border-bottom: 0;
-    font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
-    font-size: 19px;
-    padding: 8px 4px 9px 8px;
+    bottom: 0;
     z-index: 3;
+    border: $cmwn-black 2px solid;
+    border-bottom: 0;
+    border-radius: 20px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+    background: $cmwn-green;
+    padding: 8px 4px 9px 8px;
     text-rendering: optimizeLegibility;
-    font-smoothing: antialiased;
-    -webkit-font-smoothing: antialiased;
+    letter-spacing: .13px;
+    color: $cmwn-white;
+    font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
+    font-size: 19px;
     -moz-osx-font-smoothing: grayscale;
-    letter-spacing: 0.13px;
+    -webkit-font-smoothing: antialiased;
+    font-smoothing: antialiased;
 
-    & > span {
+    > span {
         padding-right: 5.3px;
         padding-left: 1px;
         vertical-align: middle;
     }
 
-    & > .btn.standard {
-        padding: 6px 15px 9px 14px;
-        border: white 1px solid;
+    > .btn.standard {
+        border: $cmwn-white 1px solid;
         border-radius: 11px;
-        font-size: 20px;
-        box-shadow: black 0px 0px 1px 1px;
+        box-shadow: $cmwn-black 0 0 1px 1px;
+        padding: 6px 15px 9px 14px;
         text-transform: uppercase;
-        letter-spacing: 0.2px;
+        letter-spacing: .2px;
+        font-size: 20px;
+    }
+}
+
+.guide-modal {
+
+    .modal-dialog {
+        margin: 92px auto 30px;
+        border: $cmwn-purple 3px solid;
+        border-radius: 14px;
+        box-shadow: $cmwn-purple 0 0 1px 1px;
+        width: 785px;
+    }
+
+    .modal-content {
+        border-radius: 10px;
+        background: $cmwn-light-blue;
+        color: $cmwn-white;
+    }
+
+    .modal-close {
+        margin-top: -25px;
+        margin-right: -50px;
+        border-radius: 50px;
+        background: $cmwn-lime;
+        padding: 0 23px;
+        font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
+        font-size: 57px;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-font-smoothing: antialiased;
+        font-smoothing: antialiased;
     }
 }
