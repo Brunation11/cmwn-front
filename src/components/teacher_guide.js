@@ -3,7 +3,7 @@ import React from 'react';
 import {Modal, Button} from 'react-bootstrap';
 //import _ from 'lodash';
 //import Shortid from 'shortid';
-//import ClassNames from 'classnames';
+import ClassNames from 'classnames';
 
 //import GLOBALS from 'components/globals';
 //import ACTION_CONSTANTS from 'components/action_constants';
@@ -39,6 +39,53 @@ class Guide extends React.Component {
         this.setState({modalOpen: false});
     }
 
+    nextPage() {
+        this.setState({page: window.Math.min(4, this.state.page + 1)});
+    }
+
+    prevPage() {
+        this.setState({page: window.Math.max(1, this.state.page - 1)});
+    }
+
+    renderPage(page){
+        return (
+            <div className="pages">
+                {this.renderPage1(page === 1)}
+                {this.renderPage2(page === 2)}
+                {this.renderPage3(page === 3)}
+                {this.renderPage4(page === 4)}
+            </div>
+        );
+    }
+    renderPage1(isActive) {
+        return (
+            <div>
+                <span className={ClassNames('page-marker page-1', {isActive})}>page 1</span>
+            </div>
+        );
+    }
+    renderPage2(isActive) {
+        return (
+            <div>
+                <span className={ClassNames('page-marker page-2', {isActive})}>page 2</span>
+            </div>
+        );
+    }
+    renderPage3(isActive) {
+        return (
+            <div>
+                <span className={ClassNames('page-marker page-3', {isActive})}>page 3</span>
+            </div>
+        );
+    }
+    renderPage4(isActive) {
+        return (
+            <div>
+                <span className={ClassNames('page-marker page-4', {isActive})}>page 4</span>
+            </div>
+        );
+    }
+
     renderModal() {
         return (
             <div className="modal-guide">
@@ -46,6 +93,25 @@ class Guide extends React.Component {
                 <a id="close-modal" onClick={this.closeModal.bind(this)} className="modal-close">
                     <span className="close-x">X</span>
                 </a>
+                {this.renderPage(this.state.page)}
+                <Button
+                    onClick={this.prevPage.bind(this)}
+                    className={'standard green', ClassNames({hidden: this.state.page === 1})}
+                >
+                    Back
+                </Button>
+                <Button
+                    onClick={this.nextPage.bind(this)}
+                    className={'standard purple', ClassNames({hidden: this.state.page === 4})}
+                >
+                    Next
+                </Button>
+                <Button
+                    onClick={this.closeModal.bind(this)}
+                    className={'standard green', ClassNames({hidden: this.state.page !== 4})}
+                >
+                    Done!
+                </Button>
             </div>
         );
     }

@@ -2,8 +2,8 @@
 
 .teacher-guide {
     position: fixed;
-    right: 115px;
     bottom: 0;
+    left: 53.55vw;
     z-index: 3;
     border: $cmwn-black 2px solid;
     border-bottom: 0;
@@ -55,15 +55,36 @@
     }
 
     .modal-close {
+        position: absolute;
+        top: -28px;
+        right: 7px;
         margin-top: -25px;
         margin-right: -50px;
-        border-radius: 50px;
+        border-radius: 31px;
+        box-shadow: rgba(0, 0, 0, .5) 0 2.5px 1px 1.4px;
         background: $cmwn-lime;
-        padding: 0 23px;
+        padding: 0 17px 0 21px;
+        min-height: 64px;
+        color: $cmwn-purple;
         font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
         font-size: 57px;
         -moz-osx-font-smoothing: grayscale;
         -webkit-font-smoothing: antialiased;
         font-smoothing: antialiased;
+
+        .close-x {
+            line-height: 64px;
+            font-size: 58px;
+        }
+    }
+
+    .page-marker {
+        display: none;
+
+        // scss-lint:disable SelectorFormat
+        &.isActive {
+            display: inherit;
+        }
+        // scss-lint:enable SelectorFormat
     }
 }
