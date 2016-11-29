@@ -214,6 +214,6 @@ mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(UpdateUsername);
+Page = connect(mapStateToProps)(UpdateUsername);
 export default Page;
 

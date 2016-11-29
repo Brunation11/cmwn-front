@@ -61,7 +61,7 @@ var Component = React.createClass({
         }
         return (
            <Button className="standard purple" onClick={ () => {
-               History.push('/schools/' + state.currentUser._embedded.groups[0].group_id + '/edit');
+               History.push('/schools/' + this.props.currentUser._embedded.groups[0].group_id + '/edit');
            }} >Import Spreadsheet</Button>
         );
     },

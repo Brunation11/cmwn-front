@@ -52,6 +52,6 @@ mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(Layout);
+Page = connect(mapStateToProps)(Layout);
 export default Page;
 
