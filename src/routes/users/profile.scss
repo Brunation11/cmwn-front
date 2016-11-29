@@ -1,6 +1,84 @@
 @import '../../variables';
 
+.game-modal {
+    display: block;
+    position: fixed;
+
+    .modal-dialog {
+        position: absolute;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+
+        .modal-content {
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            margin: 0;
+            width: 80vw;
+            min-width: 300px; //arbitrary, so game doesn't shrink forever
+            max-width: 150vh;
+        }
+    }
+}
+
 .profile {
+    .flag-container {
+        left: 50%;
+        transform: translateX(-50%);
+
+        &:hover,
+        &:focus {
+            .flag-button,
+            .overlay {
+                opacity: 1;
+            }
+        }
+    }
+
+    .flag-button {
+        position: absolute;
+        right: 0;
+        transition: opacity .5s ease-in-out;
+        opacity: 0;
+        z-index: 3;
+        outline: none;
+        border: 0;
+        background: url('#{$media-url}ec720b982eaf6e0d9772cc553db54b55.png');
+        background-color: transparent;
+        background-repeat: no-repeat;
+        background-size: contain;
+        width: 35px;
+        height: 50px;
+
+        &::after {
+            position: absolute;
+            top: -100%;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: opacity .25s ease-in-out;
+            opacity: 0;
+            background: url('#{$media-url}018ce6adb27b39dd12249a22ea4f26cd.png');
+            background-repeat: no-repeat;
+            background-size: contain;
+            width: 500%;
+            height: 100%;
+            content: '';
+        }
+
+        &:hover,
+        &:focus,
+        &:active {
+            outline: none;
+            border: 0;
+            box-shadow: none;
+            background-color: transparent;
+
+            &::after {
+                opacity: 1;
+            }
+        }
+    }
 
     .panel-body {
         display: flex;
@@ -56,6 +134,11 @@
                 margin: 0 auto;
                 text-align: center;
             }
+
+            .flag-container {
+                left: 0;
+                transform: none;
+            }
         }
 
         .frame {
@@ -67,13 +150,13 @@
                 flex: none;
             }
 
-            > * {
+            .profile-image {
                 margin: 0 auto;
                 width: 100%;
 
                 // scss-lint:disable SelectorDepth, NestingDepth
 
-                > * {
+                .profile-pic {
                     margin: 0 auto;
                     border: 1px solid $cmwn-blue;
                     border-radius: 10px;

@@ -74,8 +74,10 @@ export class UserCards extends React.Component {
                 <USER_SOURCE>
                     <FlipBoard
                         renderFlip={this.renderFlip}
+                        onLoad={() => { window.print(); }}
                         header={this.props.data.title}
                     />
+                    <a className="btn standard purple print" href="javascript:window.print()">PRINT</a>
                     <a className="btn standard purple print" href="javascript:window.print()">PRINT</a>
                 </USER_SOURCE>
             </div>

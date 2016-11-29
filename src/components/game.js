@@ -65,6 +65,11 @@ export class Game extends React.Component {
                 this.onExit.bind(this)
             )
         });
+        if (Screenfull.enabled) {
+            document.addEventListener(Screenfull.raw.fullscreenchange, () => {
+                this.setState({isFullscreen: Screenfull.isFullscreen});
+            });
+        }
     }
 
     componentDidMount() {
@@ -187,7 +192,7 @@ export class Game extends React.Component {
             Screenfull.request(ReactDOM.findDOMNode(this.refs.wrapRef));
         } else {
             nextState.fullscreenFallback = true;
-            this.resizeFrame();
+            this.resizeFrame;
         }
         this.setState(nextState);
     }

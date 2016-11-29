@@ -16,6 +16,7 @@ import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
 import History from 'components/history';
 import GenerateDataSource from 'components/datasource';
+import Flag from 'components/flag';
 
 import Layout from 'layouts/two_col';
 
@@ -57,7 +58,8 @@ const TITLES = {
     'animal-id': '1d30b3302aad1608ad76c4029a4c2d5a.gif',
     'carbon-catcher': 'ab894b9d48a225ffdace7215003dd228.gif',
     'skribble': '10b58a3fbacaa46203faf65a02f8fbbc.gif',
-    'turtle-hurdle': '1cf1a4952107ce19e6b8675643a17c5d.gif'
+    'turtle-hurdle': '1cf1a4952107ce19e6b8675643a17c5d.gif',
+    '3d-world': '3d45287ac7d23711d32af8b7c797c2f8.gif',
 };
 
 const HEADINGS = {
@@ -259,11 +261,15 @@ export class Profile extends React.Component {
                     <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
                         <div className="left">
                             <div className="frame">
-                                <ProfileImage
+                                <Flag
                                     data={this.props.data}
-                                    currentUser={this.props.currentUser}
-                                    link-below={true}
-                                 />
+                                >
+                                    <ProfileImage
+                                        data={this.props.data}
+                                        currentUser={this.props.currentUser}
+                                        link-below={true}
+                                    />
+                                </Flag>
                             </div>
                         </div>
                         <div className="right">
@@ -300,11 +306,15 @@ export class Profile extends React.Component {
             <div>
                 <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
                     <div className="frame non-friend">
-                        <ProfileImage
+                        <Flag
                             data={this.props.data}
-                            currentUser={this.props.currentUser}
-                            link-below={true}
-                        />
+                        >
+                            <ProfileImage
+                                data={this.props.data}
+                                currentUser={this.props.currentUser}
+                                link-below={true}
+                            />
+                        </Flag>
                     </div>
                 </Panel>
                 <Panel
