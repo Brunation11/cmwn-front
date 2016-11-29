@@ -47,7 +47,8 @@ default-src \
     https://*.ravenjs.com \
     https://*.raygun.io \
     https://*.errorception.com \
-    https://*.google-analytics.com; \
+    https://*.google-analytics.com \
+    https://static.elev.io; \
  frame-src \
     https://*.changemyworldnow.com \
     https://widget.cloudinary.com \
