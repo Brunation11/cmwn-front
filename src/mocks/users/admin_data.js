@@ -75,6 +75,6 @@ var adminData = {
     'updated': '2016-11-22 21:55:32',
     'user_id': '4462a4ca-42c9-11e6-9f52-d4b206a4dfe8',
     'username': 'adminUser'
-}
+};
 
 export default adminData;

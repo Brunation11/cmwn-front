@@ -84,7 +84,7 @@ const TOAST = {
         DELETE: ' successfully deleted',
     },
     ERROR: {
-        CREATE:  'Could not create ',
+        CREATE: 'Could not create ',
         SAVE: 'Could not save ',
         DELETE: 'Could not delete ',
     },
@@ -95,7 +95,7 @@ export var dataTransform = function (data) {
     data = _.map(data, filterInputFields);
     data.unshift(NEW_GAME);
     return data;
-}
+};
 
 export var filterInputFields = function (item, index) {
     var gameItem = {};
@@ -113,9 +113,9 @@ export var filterInputFields = function (item, index) {
             if (FIELDS.indexOf(inputType) !== -1) gameItem[inputType] = inputValue;
         }
     });
-    
+
     gameItem.key = index;
-    
+
     return gameItem;
 };
 
@@ -154,17 +154,19 @@ export class GodModeGames extends React.Component {
                 postData).then(() => {
                     Toast.success(`${item.title}${TOAST.SUCCESS.CREATE}`);
                 }).catch(err => {
-                    Toast.error(`${TOAST.ERROR.CREATE}${item.title}: ${err.response.status} ${err.response.detail}`);
+                    Toast.error(`${TOAST.ERROR.CREATE}${item.title}:
+                        ${err.response.status} ${err.response.detail}`);
                     Log.log(LOG.CREATE, err, postData);
-            });
+                });
         } else {
             HttpManager.PUT({url: `${this.props.data._links.games.href}/${gameId}`},
                 postData).then(() => {
                     Toast.success(`${item.title}${TOAST.SUCCESS.SAVE}`);
                 }).catch(err => {
-                    Toast.error(`${TOAST.ERROR.SAVE}${item.title}: ${err.response.status} ${err.response.detail}`);
+                    Toast.error(`${TOAST.ERROR.SAVE}${item.title}:
+                        ${err.response.status} ${err.response.detail}`);
                     Log.log(LOG.SAVE, err, postData);
-            });
+                });
         }
     }
 
@@ -177,19 +179,20 @@ export class GodModeGames extends React.Component {
     }
 
     deleteGame(item, gameId) {
+        var postData;
         if (this.state.deleteTry === gameId) {
-            var postData = {
-                game_id: gameId
+            postData = {
+                'game_id': gameId
             };
 
             HttpManager.DELETE({url: `${this.props.data._links.games.href}/${gameId}`},
                 postData).then(() => {
                     Toast.success(`${item.title}${TOAST.SUCCESS.DELETE}`);
                 }).catch(err => {
-                    Toast.error(`${TOAST.ERROR.DELETE}${item.title}: ${err.response.status} ${err.response.detail}`);
+                    Toast.error(`${TOAST.ERROR.DELETE}${item.title}:
+                        ${err.response.status} ${err.response.detail}`);
                     Log.log(LOG.DELETE, err, postData);
-            });
-
+                });
             this.setState({ deleteTry: '' });
         } else {
             this.setState({ deleteTry: gameId });
@@ -266,7 +269,7 @@ export class GodModeGames extends React.Component {
                 validate="required"
                 onChange={e => {
                     if (changed.indexOf(gameId) === -1) changed.push(gameId);
-                    games[gameId][inputType] = e.target.value
+                    games[gameId][inputType] = e.target.value;
                     self.setState({ games, changed });
                 }}
            />
@@ -325,7 +328,7 @@ export class GodModeGames extends React.Component {
                             })}
                             onClick={this.deleteGame.bind(this, currentItem, item.game_id)}
                         >
-                            {this.state.deleteTry === item.game_id ? "ARE YOU SURE?" : "DELETE"}
+                            {this.state.deleteTry === item.game_id ? 'ARE YOU SURE?' : 'DELETE'}
                         </Button>
                     </Form>
                 </Panel>
@@ -345,7 +348,7 @@ export class GodModeGames extends React.Component {
         if (this.props.data === null || _.isEmpty(this.props.data)) return null;
 
         const BUTTONS = (
-            <div>            
+            <div>
                 <Button
                     className="btn standard purple save-all-btn"
                     onClick={this.saveAllGames.bind(this)}
