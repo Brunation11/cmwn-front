@@ -18,6 +18,7 @@ var _ = require('lodash');
 
 /** @const */
 var APP_PREFIX = 'APP_';
+var isWatchInstance = false;
 
 //mode defaults to development and is selected with the following precedences:
 // --development flag
@@ -109,11 +110,16 @@ var buildDevelopment = function (finish = true) {
     wpStream.on('error', err => {
         fs.writeFile('build_errors.log', err);
         wpStream.end();
-        throw err;
+        if (!isWatchInstance) {
+            throw err;
+        }
     });
 
     task = gulp.src('./src/app.js')
-        .pipe(wpStream);
+        .pipe(wpStream)
+        .on('error', function () {
+            this.emit('end');
+        });
     if (finish) {
         task = task.pipe(gulp.dest('./build'));
     }
@@ -394,12 +400,13 @@ gulp.task('end-watch', function () {
 gulp.task('watch-code', ['watch-js', 'watch-scss']);
 
 gulp.task('watch-js', function () {
+    isWatchInstance = true;
     gulp.watch(['src/**/*.js', '!src/**/*.test.js'],
          ['webpack:build', 'explicit-utf-8', 'sri'], buildIndexPage);
 });
 
 gulp.task('watch-scss', function () {
-    gulp.watch(['src/**/*.scss'], ['primary-style']);
+    gulp.watch(['src/**/*.scss'], ['primary-style'], buildIndexPage);
 });
 
 gulp.task('watch-test', function () {
@@ -407,13 +414,17 @@ gulp.task('watch-test', function () {
     gulp.watch(['src/**/*.js']).on('change', function (file) {
         file = file.path.slice(__dirname.length + 1);
         runCoverage(file);
-        console.log('***************************************************** ' + file);
     });
 });
 
-gulp.task('watch-lint', function () {
-    gulp.watch(['src/**/*.scss'], ['lint-scss']);
+gulp.task('watch-lint', ['watch-lint-js', 'watch-lint-scss']);
+
+gulp.task('watch-lint-js', function () {
     gulp.watch(['src/**/*.js'], ['lint-js']);
+});
+
+gulp.task('watch-lint-scss', function () {
+    gulp.watch(['src/**/*.scss'], ['lint-scss']);
 });
 
 /** watches changes to the js and regenerates the index and sris accordingly */
