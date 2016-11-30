@@ -12,7 +12,10 @@ import studentDataB from 'mocks/users/student_data_b';
 var checkEditEls = function (wrapper) {
     expect(wrapper.find('Layout')).to.have.length(1);
     expect(wrapper.find('Panel')).to.have.length(1);
+    expect(wrapper.find('UpdateUsername')).to.have.length(1);
     expect(wrapper.find('ChangePassword')).to.have.length(1);
+    expect(wrapper.find('ForgotPass')).to.have.length(1);
+    expect(wrapper.find('CodeChange')).to.have.length(1);
 };
 
 var checkAdultEls = function (wrapper) {
@@ -23,6 +26,13 @@ var checkAdultEls = function (wrapper) {
 var checkEditFields = function (data, currentUser) {
     var edit = <EditProfile data={data} loading={false} currentUser={currentUser} isStudent={false}/>;
     const WRAPPER = shallow(edit);
+
+    it('updates state for edit username', function () {
+        var usernameInput = WRAPPER.find({name: 'usernameInput'});
+        expect(WRAPPER.state('username')).to.equal(data.username);
+        usernameInput.simulate('change', {target: {value: 'cat'}});
+        expect(WRAPPER.state('username')).to.equal('cat');
+    });
 
     it('updates state for edit first name', function () {
         var usernameInput = WRAPPER.find({name: 'firstnameInput'});
@@ -103,6 +113,10 @@ describe('Edit Profile Unit Tests', function () {
 
         it('has the correct general elements', function () {
             checkEditEls(WRAPPER);
+        });
+
+        it('has the correct child view elements', function () {
+            expect(WRAPPER.find('.user-metadata').children()).to.have.length(8);
         });
     });
 
