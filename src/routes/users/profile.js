@@ -16,7 +16,6 @@ import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
 import History from 'components/history';
 import GenerateDataSource from 'components/datasource';
-import Flag from 'components/flag';
 
 import Layout from 'layouts/two_col';
 
@@ -265,15 +264,11 @@ export class Profile extends React.Component {
                     <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
                         <div className="left">
                             <div className="frame">
-                                <Flag
+                                <ProfileImage
                                     data={this.props.data}
-                                >
-                                    <ProfileImage
-                                        data={this.props.data}
-                                        currentUser={this.props.currentUser}
-                                        link-below={true}
-                                    />
-                                </Flag>
+                                    currentUser={this.props.currentUser}
+                                    link-below={true}
+                                 />
                             </div>
                         </div>
                         <div className="right">
@@ -310,15 +305,11 @@ export class Profile extends React.Component {
             <div>
                 <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
                     <div className="frame non-friend">
-                        <Flag
+                        <ProfileImage
                             data={this.props.data}
-                        >
-                            <ProfileImage
-                                data={this.props.data}
-                                currentUser={this.props.currentUser}
-                                link-below={true}
-                            />
-                        </Flag>
+                            currentUser={this.props.currentUser}
+                            link-below={true}
+                        />
                     </div>
                 </Panel>
                 <Panel

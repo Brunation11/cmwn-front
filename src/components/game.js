@@ -192,7 +192,7 @@ export class Game extends React.Component {
             Screenfull.request(ReactDOM.findDOMNode(this.refs.wrapRef));
         } else {
             nextState.fullscreenFallback = true;
-            this.resizeFrame;
+            this.resizeFrame();
         }
         this.setState(nextState);
     }
