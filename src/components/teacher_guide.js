@@ -15,6 +15,26 @@ export const COMPONENT_IDENTIFIER = 'teacher-guide';
 const CALL_TO_ACTION = 'Need help navigating the page?';
 const BUTTON_TEXT = 'Teacher\'s Guide';
 
+const IMGAGES = [
+    '', //MPR, 9/30/16: I'm lazy and want the indexes to match the pages
+    'https://media-staging.changemyworldnow.com/f/3701d7ac521b378f6ed27e5651759402.png',
+    'https://media-staging.changemyworldnow.com/f/f3bb52b2a0fdc0b05fdb89dbbfc59524.png',
+    'https://media-staging.changemyworldnow.com/f/8b040b0a0be449376b74fa48b9717e7e.png',
+    'https://media-staging.changemyworldnow.com/f/b8612cb4695a3702fda87c3a2e846db9.png'
+];
+
+const COPY = [
+    '', //MPR, 9/30/16: I'm lazy and want the indexes to match the pages
+    (<span>
+         <span className="highlight">Welcome to our teacher's guide</span>
+         to printing out student user cards. Your first step is to click
+         "My Classes" on the left side menu.
+    </span>),
+    (<span></span>),
+    (<span>Click the <span className="highlight">generate user cards</span></span>),
+    (<span></span>)
+];
+
 /**
  * A tab for all adults. When clicked, provides a modal that walks them through basic
  * actions.
@@ -60,7 +80,13 @@ class Guide extends React.Component {
     renderPage1(isActive) {
         return (
             <div>
-                <span className={ClassNames('page-marker page-1', {isActive})}>page 1</span>
+                <div className={ClassNames('page-marker page-1', {isActive})}>
+                    <h2>page <span classNames="page-num">1</span></h2>
+                    <section className="feature">
+                        <img src={IMGAGES[0]} />
+                    </section>
+                    <p>{COPY[0]}</p>
+                </div>
             </div>
         );
     }
