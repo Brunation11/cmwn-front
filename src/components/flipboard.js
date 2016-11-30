@@ -23,11 +23,7 @@ class FlipBoard extends React.Component {
         if (!_.isEqual(this.props.data, nextProps.data)) {
             this.setState({
                 data: _.map(nextProps.data, this.props.transform)
-            }, () => {
-                if (typeof this.props.updateParent === 'function') {
-                    this.props.updateParent(this.state.data);
-                }
-            });
+            }, () => { this.props.updateParent(this.state.data); });
         } else if (this.props.alwaysUpdateParent) {
             this.props.updateParent(this.state.data);
         }
@@ -56,7 +52,8 @@ FlipBoard.defaultProps = {
     header: 'Flipboard',
     transform: _.identity,
     renderNoData: () => null,
-    renderFlip: () => <div className="flip" key={Shortid.generate()}></div>
+    renderFlip: () => <div className="flip" key={Shortid.generate()}></div>,
+    updateParent: _.noop,
 };
 
 export default FlipBoard;
