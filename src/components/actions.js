@@ -154,7 +154,7 @@ Actions = Actions.set(ACTION_CONSTANTS.GET_NEXT_PAGE_PAGE, function (state, page
             promise: HttpManager.GET({url: Util.modifyTemplatedQueryParams(
                 state.page.data._links.find.href,
                 {page: pageNum, per_page: //eslint-disable-line camelcase
-                    state.currentUser._links[state.location.endpoint.slice(2)].page_size}
+                    state.page.data.page_size}
             )})
         }
     };
@@ -166,8 +166,7 @@ Actions = Actions.set(ACTION_CONSTANTS.CHANGE_PAGE_ROW_COUNT, function (state, i
         payload: {
             promise: HttpManager.GET({url: Util.modifyTemplatedQueryParams(
                 state.page.data._links.find.href,
-                {per_page: itemCount, page: //eslint-disable-line camelcase
-                    state.currentUser._links[state.location.endpoint.slice(2)].page}
+                {per_page: itemCount, page: 1} //eslint-disable-line camelcase
             ) })
         }
     };

@@ -9,6 +9,7 @@ import FlipBoard from 'components/flipboard';
 import {Table, Column} from 'components/table';
 import Layout from 'layouts/two_col';
 import Store from 'components/store';
+import Paginator from 'components/paginator';
 
 import DefaultProfile from 'media/icon_class_blue.png';
 
@@ -46,9 +47,17 @@ var Component = React.createClass({
             );
         }
         return (
-            <Table data={data} className="admin">
-                {cols}
-            </Table>
+            <Paginator
+                rowCount={this.props.rowCount}
+                currentPage={this.props.currentPage}
+                pageCount={this.props.pageCount}
+                data={this.props.data}
+                pagePaginator={true}
+            >
+                <Table className="admin">
+                    {cols}
+                </Table>
+            </Paginator>
         );
     },
     renderImport: function () {
@@ -76,7 +85,15 @@ var Component = React.createClass({
     },
     renderChildView: function () {
         return (
-            <FlipBoard data={this.props.data} header={TITLE} renderFlip={this.renderFlip} />
+            <Paginator
+                rowCount={this.props.rowCount}
+                currentPage={this.props.currentPage}
+                pageCount={this.props.pageCount}
+                data={this.props.data}
+                pagePaginator={true}
+            >
+                <FlipBoard header={TITLE} renderFlip={this.renderFlip} />
+            </Paginator>
         );
     },
     render: function () {
@@ -93,14 +110,23 @@ var Component = React.createClass({
 var mapStateToProps = state => {
     var data = [];
     var loading = true;
+    var rowCount = 1;
+    var currentPage = 1;
+    var pageCount = 1;
     var currentUser = state.currentUser;
     if (state.page && state.page.data && state.page.data._embedded && state.page.data._embedded.group) {
         loading = state.page.loading;
         data = state.page.data._embedded.group;
+        rowCount = state.page.data.page_size;
+        currentPage = state.page.data.page;
+        pageCount = state.page.data.page_count;
     }
     return {
         data,
         loading,
+        rowCount,
+        currentPage,
+        pageCount,
         currentUser
     };
 };
