@@ -166,8 +166,7 @@ Actions = Actions.set(ACTION_CONSTANTS.CHANGE_PAGE_ROW_COUNT, function (state, i
         payload: {
             promise: HttpManager.GET({url: Util.modifyTemplatedQueryParams(
                 state.page.data._links.find.href,
-                {per_page: itemCount, page: //eslint-disable-line camelcase
-                    1}
+                {per_page: itemCount, page: 1} //eslint-disable-line camelcase
             ) })
         }
     };
