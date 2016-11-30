@@ -45,7 +45,11 @@ export class Suggested extends React.Component{
     addFriend(item, e) {
         e.stopPropagation();
         e.preventDefault();
-        ga('set', 'dimension7', 'sent');
+        ga('send', 'event', {
+            'eventCategory': 'Friend',
+            'eventAction': 'Sent',
+            'dimension7': 'sent'
+        });
 
         HttpManager.POST({
             url: this.props.currentUser._links.friend.href

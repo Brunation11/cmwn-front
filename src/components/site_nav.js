@@ -27,7 +27,6 @@ var addHardcodedEntries = function (menuItems) {
     });
     menuItems.unshift({url: '/profile', label: 'Activities'});
     menuItems.push({url: '/resources', label: 'Resource Center'});
-    //menuItems.push({url: `/user/${this.props.currentUser.user_id}/feed`, label: 'Feed'});
     menuItems.push({url: '/profile/edit', label: 'Edit My Profile'});
     menuItems.push(helpLink.call(this));
     menuItems.push({url: '/logout', label: 'Logout'});

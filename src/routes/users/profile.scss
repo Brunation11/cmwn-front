@@ -189,9 +189,14 @@
         border-collapse: collapse;
         flex-basis: 280px;
 
+        .item {
+            border: 1px solid $cmwn-black;
+            min-height: 121px;
+            line-height: 0;
+        }
+
         object {
             display: inline-block;
-            border: 1px solid $cmwn-black;
             background: $cmwn-white;
             border-collapse: collapse;
         }
