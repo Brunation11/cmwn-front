@@ -15,6 +15,7 @@ var unboundEvents = {
     markAsRead: function (options, e) {
         var url;
         if (e.gameData.skribble_id) {
+            ga('send', 'event', 'Skribble', 'Read', e.gameData.skribble_id);
             url = options._links.self.href + '/skribble/' + e.gameData.skribble_id;
             HttpManager.PUT(url, e.gameData.skribble)
                 .then(server => e.respond(server.response._embedded))
@@ -37,11 +38,15 @@ var unboundEvents = {
             return item;
         });
         if (skribbleData.skribble_id == null) {
+            ga('send', 'event', 'Skribble', 'Started', skribbleData.skribble_id);
             url += (skramble ? '?skramble=' + skramble : '');
             HttpManager.POST(url, skribbleData)
                 .then(server => e.respond(server.response))
                 .catch(err => Log.error(err));
         } else {
+            if (skramble) {
+                ga('send', 'event', 'Skribble', 'Sent', skribbleData.skribble_id);
+            }
             url += '/' + skribbleData.skribble_id + (skramble ? '?skramble=' + skramble : '');
             HttpManager.PUT(url, skribbleData)
                 .then(server => e.respond(server.response))

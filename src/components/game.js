@@ -48,6 +48,7 @@ export class Game extends React.Component {
         super();
 
         this.state = {
+            isFullscreen: false,
             fullscreenFallback: false,
             demo: false
         };
@@ -74,8 +75,15 @@ export class Game extends React.Component {
     componentDidMount() {
         var frame = ReactDOM.findDOMNode(this.refs.gameRef);
         var callApi;
+
         if (!frame) {
             return;
+        }
+
+        if (Screenfull.enabled) {
+            document.addEventListener(Screenfull.raw.fullscreenchange, () => {
+                this.setState({isFullscreen: Screenfull.isFullscreen});
+            });
         }
 
         callApi = _.debounce(function () {
@@ -154,8 +162,8 @@ export class Game extends React.Component {
         if (e.keyCode === 27 || e.charCode === 27) {
             Screenfull.exit();
             this.setState({
-                fullscreenFallback: false,
                 isFullscreen: false,
+                fullscreenFallback: false,
             });
         }
     }
@@ -184,7 +192,7 @@ export class Game extends React.Component {
             Screenfull.request(ReactDOM.findDOMNode(this.refs.wrapRef));
         } else {
             nextState.fullscreenFallback = true;
-            this.resizeFrame().call(this);
+            this.resizeFrame();
         }
         this.setState(nextState);
     }

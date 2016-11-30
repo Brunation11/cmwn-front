@@ -49,6 +49,7 @@ FlipBoard.defaultProps = {
     header: 'Flipboard',
     transform: _.identity,
     renderNoData: () => null,
+    onLoad: _.noop,
     renderFlip: () => <div className="flip" key={Shortid.generate()}></div>
 };
 

@@ -91,6 +91,20 @@ if (!$https && $proxy !== 'https') {
             echo "window.__cmwn.VERSION = '".$packageJSON['version']."';\n";
             echo "</script>";
          ?>
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-26000499-1', 'auto');
+          ga('require', 'linkid');
+          ga('require', 'displayfeatures');
+          ga('set', 'anonymizeIp', true);
+          ga('set', 'forceSSL', true);
+          //looking for the send? It's in app.js after the app bootstraps
+
+        </script>
     </head>
     <body>
 <!--[if lte IE 9]><style media="screen">.old-browsers{position:relative;background:#fff;width:100%;height:100%;color:#000;font-family:sans-serif;font-size:20px;text-align:center;padding:0;margin:0}.old-browsers h2{padding:20px 0}.old-browsers p,.old-browsers ul{margin:0 auto}.old-browsers p{max-width:700px;padding-b=ottom:50px;line-height:1.4em}.old-browsers ul li{display:inline-block;padding:0 25px}.old-browsers ul li img{width:115px; border: 0;}.old-browsers ul li p{padding-top:15px;color:#249AE1}body{margin:0;padding:0}</style><div class="old-browsers"><h2>Browser out of date.</h2><p>It appears you're running on a very old web browser that we're unable to support. If you would like to view the site you'll need to update your browser. Please choose from any of the following modern browsers. Thanks!</p><ul><li> <a href="https://www.google.com/intl/en/chrome/browser/desktop/index.html#brand=CHMB&utm_campaign=en&utm_source=en-ha-na-us-sk&utm_medium=ha"> <img src="http://kni-labs.github.io/old-browsers/img/chrome_128x128.png" alt="Google Chrome"><p>Google Chrome</p> </a></li><li> <a href="https://www.mozilla.org/en-US/firefox/new/"> <img src="http://kni-labs.github.io/old-browsers/img/firefox_128x128.png" alt="Mozilla Firefox"><p>Mozilla Firefox</p> </a></li><li> <a href="https://support.apple.com/downloads/safari"> <img src="http://kni-labs.github.io/old-browsers/img/safari_128x128.png" alt="Safari"><p>Safari</p> </a></li><li> <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie"> <img src="http://kni-labs.github.io/old-browsers/img/internet-explorer_128x128.png" alt="Internet Explorer"><p>Internet Explorer</p> </a></li><li> <a href="https://www.microsoft.com/en-us/windows/microsoft-edge"> <img src="http://kni-labs.github.io/old-browsers/img/edge_128x128.png" alt="Internet Explorer"><p>Microsoft Edge</p> </a></li></ul></div><![endif]-->
@@ -131,21 +145,77 @@ if (!$https && $proxy !== 'https') {
                 document.head.appendChild(fileref);
             }
             //polyfill localstorage
-            if (window.localStorage == null) {
-                fileref=document.createElement('script');
-                fileref.setAttribute("type","text/javascript");
-                fileref.setAttribute("src", "//cdnjs.cloudflare.com/ajax/libs/localStorage/2.0.1/localStorage.min.js");
-                document.head.appendChild(fileref);
-            }
             try {
                 //will fail in private safari
                 window.localStorage.setItem('testKey', '1');
                 window.localStorage.removeItem('testKey');
             } catch (error) {
-                //we dont rely on localstorage as a source of truth
-                //so we can safely ignore these errors
-                Storage.prototype._setItem = Storage.prototype.setItem;
-                Storage.prototype.setItem = function() {};
+                var setStorage = function() {
+                    var Storage = function() {
+                        function setData(data) {
+                            data = JSON.stringify(data);
+                            window.name = data;
+                        }
+
+                        function clearData() {
+                            window.name = '';
+                        }
+
+                        function getData() {
+                            var data = window.name;
+                            return data ? JSON.parse(data) : {};
+                        }
+
+                        // initialise if there's already data
+                        var data = getData();
+
+                        function numKeys() {
+                            var n = 0;
+                            for (var k in data) {
+                                if (data.hasOwnProperty(k)) n += 1;
+                            }
+                            return n;
+                        }
+
+                        return {
+                            clear: function() {
+                                data = {};
+                                clearData();
+                                this.length = numKeys();
+                            },
+                            getItem: function(key) {
+                                key = encodeURIComponent(key);
+                                return data[key] === undefined ? null : data[key];
+                            },
+                            key: function(i) {
+                                var ctr = 0;
+                                for (var k in data) {
+                                    if (ctr == i) return decodeURIComponent(k);
+                                    else ctr++;
+                                }
+                                return null;
+                            },
+                            removeItem: function(key) {
+                                key = encodeURIComponent(key);
+                                delete data[key];
+                                setData(data);
+                                this.length = numKeys();
+                            },
+                            setItem: function(key, value) {
+                                key = encodeURIComponent(key);
+                                data[key] = String(value);
+                                setData(data);
+                                this.length = numKeys();
+                            },
+                            length: 0
+                        };
+                    };
+
+                    window._localStorage = new Storage();
+                    window._sessionStorage = new Storage();
+                };
+
+                setStorage();
             }
         </script>
         <script>
@@ -186,19 +256,5 @@ if (!$https && $proxy !== 'https') {
         <!-- app:js -->
         <!-- endinject -->
         <script src='https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit' async defer></script>
-        <script>
-          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-          ga('create', 'UA-26000499-1', 'auto');
-          ga('require', 'linkid');
-          ga('require', 'displayfeatures');
-          ga('set', 'anonymizeIp', true);
-          ga('set', 'forceSSL', true);
-          ga('send', 'pageview');
-
-        </script>
     </body>
 </html>
