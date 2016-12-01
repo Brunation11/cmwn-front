@@ -26,7 +26,8 @@ class GodModeSiteNav extends React.Component {
     }
 
     getSaSettingsLinks() {
-        var links = this.props.currentUser._links;
+        var self = this;
+        var links = self.props.currentUser._links;
         var promise;
 
         if (!links || !links.sa_settings) return;
@@ -34,7 +35,7 @@ class GodModeSiteNav extends React.Component {
         promise = Promise.all([HttpManager.GET(links.sa_settings.href)]);
 
         promise.then((res) => {
-            this.setState({saLinks: res[0].response._links});
+            self.setState({saLinks: res[0].response._links}); // TODO find out why this is unmounting before this line
         });
     }
 
@@ -61,8 +62,8 @@ class GodModeSiteNav extends React.Component {
                         if (!_.keys(params).length) return;
                     }
 
-                    if (route.endpoint !== '$$' + key && !~item.href.indexOf(route.endpoint)
-                        && route.title !== item.label) return;
+                    if (route.endpoint !== '$$' + key && !~item.href.indexOf(route.endpoint) &&
+                        route.title !== item.label) return;
 
                     url = Util.replacePathPlaceholdersFromParamObject(route.path, params).split('(')[0];
                     item.url = url.indexOf('/') === 0 ? url : '/' + url;
