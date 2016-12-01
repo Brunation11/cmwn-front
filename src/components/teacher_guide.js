@@ -35,12 +35,12 @@ const COPY = [
         <span className="highlight"> Click on the link.</span>
     </span>),
     (<span>
-         Click the<br /><span className="highlight">generate user cards</span>
+         Click the<br /><span className="highlight">"generate user cards"</span>
          button on top to make the cards.</span>),
     (<span>
         <span className="highlight">You're almost there! </span>Now you should see<br />
         the User Cards for your class.<br />
-        At the top right of the page, click<span className="highlight">print</span>
+        At the top right of the page, click<span className="highlight"> print</span>
     </span>)
 ];
 
@@ -110,7 +110,7 @@ class Guide extends React.Component {
                 <div className={ClassNames('page-marker page-2', {isActive})}>
                     <h2>step <span className="page-num">2</span></h2>
                     <section className="feature">
-                        <img src={IMGAGES[2]} width="541" height="316" />
+                        <img src={IMGAGES[2]} width="541" height="373" />
                     </section>
                     <p>{COPY[2]}</p>
                 </div>
@@ -121,10 +121,10 @@ class Guide extends React.Component {
         return (
             <div>
                 <div className={ClassNames('page-marker page-3', {isActive})}>
-                    <h2>step <span className="page-num">3</span></h2>
                     <section className="feature">
-                        <img src={IMGAGES[3]} width="541" height="316" />
+                        <img src={IMGAGES[3]} width="541" height="349" />
                     </section>
+                    <h2>step 3</h2>
                     <p>{COPY[3]}</p>
                 </div>
             </div>
@@ -134,10 +134,10 @@ class Guide extends React.Component {
         return (
             <div>
                 <div className={ClassNames('page-marker page-4', {isActive})}>
-                    <h2>step <span className="page-num">4</span></h2>
                     <section className="feature">
-                        <img src={IMGAGES[4]} width="541" height="316" />
+                        <img src={IMGAGES[4]} width="541" height="352" />
                     </section>
+                    <h2>step 4</h2>
                     <p>{COPY[4]}</p>
                 </div>
             </div>
@@ -185,6 +185,7 @@ class Guide extends React.Component {
                         Done!
                     </Button>
                 </div>
+                <div className="page-count">{this.state.page} out of 4</div>
             </div>
         );
     }

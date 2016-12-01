@@ -1,4 +1,4 @@
-@import '../variables';
+@import 'variables';
 
 .teacher-guide {
     position: fixed;
@@ -50,7 +50,7 @@
 
     .modal-content {
         border-radius: 10px;
-        background: $cmwn-light-blue;
+        background: $cmwn-blue;
         color: $cmwn-white;
     }
 
@@ -61,7 +61,7 @@
         margin-top: -25px;
         margin-right: -50px;
         border-radius: 31px;
-        box-shadow: rgba(0, 0, 0, .5) 0 2.5px 1px 1.4px;
+        box-shadow: $cmwn-shady 0 2.5px 1px 1.4px;
         background: $cmwn-lime;
         padding: 0 17px 0 21px;
         min-height: 64px;
@@ -78,12 +78,22 @@
         }
     }
 
+    .page-count {
+        float: right;
+        margin-top: -23px;
+        padding-right: 7px;
+        letter-spacing: .3px;
+        color: $cmwn-purple;
+        font-family: $cmwn-jade-font;
+        font-size: 21px;
+    }
+
     .button-container {
         text-align: center;
 
         button {
             border-radius: 22px;
-            box-shadow: rgba(0, 0, 0, .5) 0 2.5px 1px 1.4px;
+            box-shadow: $cmwn-shady 0 2.5px 1px 1.4px;
             padding: 0 39px;
             min-height: 54px;
             font-family: $cmwn-jade-font;
@@ -158,16 +168,40 @@
 
         p {
             clear: both;
+            text-align: center;
             line-height: 30px;
             letter-spacing: .5px;
             font-size: 28px;
         }
 
+        h2 {
+            display: inline-block;
+            padding: 0 22px;
+            padding-top: 12px;
+            width: 130px;
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 38px;
+
+            .page-num {
+                font-size: 183px;
+            }
+        }
+
+
+        .feature {
+
+            img {
+                width: 100%;
+            }
+        }
+
         .highlight {
             text-transform: uppercase;
             letter-spacing: .3px;
-            font-family: $cmwn-jade-font;
+            font-family: $source-sans-pro;
             font-size: 30px;
+            font-weight: bold;
             -moz-osx-font-smoothing: grayscale;
             -webkit-font-smoothing: antialiased;
             font-smoothing: antialiased;
@@ -175,42 +209,92 @@
 
         &.page-1 {
 
-            h2 {
-                display: inline-block;
-                padding: 0 22px;
-                padding-top: 12px;
-                width: 130px;
-                text-align: center;
-                text-transform: uppercase;
-                font-size: 38px;
-            }
-
             .feature {
                 float: right;
                 margin-right: 67px;
                 width: 541px;
-
-                //scss-lint:disable NestingDepth
-                img {
-                    width: 100%;
-                }
-                //scss-lint:enable NestingDepth
             }
 
             .page-num {
                 line-height: 150px;
-                font-size: 183px;
             }
 
             p {
                 padding-top: 30px;
-                text-align: center;
             }
 
             .highlight {
                 display: block;
                 padding-bottom: 4px;
                 line-height: 15px;
+            }
+        }
+
+        &.page-2 {
+
+            h2 {
+                padding: 2px 31px 0;
+            }
+
+            .page-num {
+                line-height: 150px;
+            }
+
+            .feature {
+                float: left;
+                width: 617px;
+            }
+        }
+
+        &.page-3 {
+
+            h2 {
+                display: inline-block;
+                float: right;
+                margin: 0;
+                margin-top: -15px;
+                padding: 0;
+                padding-right: 3px;
+                width: 287px;
+                font-size: 60px;
+            }
+
+            p {
+                clear: none;
+                margin-top: -13px;
+                padding-left: 54px;
+                text-align: left;
+                letter-spacing: .6px;
+            }
+
+            .feature {
+                display: block;
+                clear: both;
+            }
+
+            .highlight {
+                display: block;
+            }
+        }
+
+        &.page-4 {
+
+            h2 {
+                display: block;
+                margin: 0;
+                margin-top: -39px;
+                padding: 0 0 6px 8px;
+                width: 100%;
+                font-size: 49px;
+            }
+
+            p {
+                line-height: 28px;
+                letter-spacing: 1.3px;
+            }
+
+            .feature {
+                margin-left: -3px;
             }
         }
     }
