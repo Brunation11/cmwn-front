@@ -30,9 +30,18 @@ const COPY = [
          to printing out student user cards.<br />Your first step is to click
          "My Classes" on the left side menu.
     </span>),
-    (<span></span>),
-    (<span>Click the <span className="highlight">generate user cards</span></span>),
-    (<span></span>)
+    (<span>
+         You will then find a link in the My Classes page<br />with your class name on it.
+        <span className="highlight"> Click on the link.</span>
+    </span>),
+    (<span>
+         Click the<br /><span className="highlight">generate user cards</span>
+         button on top to make the cards.</span>),
+    (<span>
+        <span className="highlight">You're almost there! </span>Now you should see<br />
+        the User Cards for your class.<br />
+        At the top right of the page, click<span className="highlight">print</span>
+    </span>)
 ];
 
 /**
@@ -98,21 +107,39 @@ class Guide extends React.Component {
     renderPage2(isActive) {
         return (
             <div>
-                <span className={ClassNames('page-marker page-2', {isActive})}>page 2</span>
+                <div className={ClassNames('page-marker page-2', {isActive})}>
+                    <h2>step <span className="page-num">2</span></h2>
+                    <section className="feature">
+                        <img src={IMGAGES[2]} width="541" height="316" />
+                    </section>
+                    <p>{COPY[2]}</p>
+                </div>
             </div>
         );
     }
     renderPage3(isActive) {
         return (
             <div>
-                <span className={ClassNames('page-marker page-3', {isActive})}>page 3</span>
+                <div className={ClassNames('page-marker page-3', {isActive})}>
+                    <h2>step <span className="page-num">3</span></h2>
+                    <section className="feature">
+                        <img src={IMGAGES[3]} width="541" height="316" />
+                    </section>
+                    <p>{COPY[3]}</p>
+                </div>
             </div>
         );
     }
     renderPage4(isActive) {
         return (
             <div>
-                <span className={ClassNames('page-marker page-4', {isActive})}>page 4</span>
+                <div className={ClassNames('page-marker page-4', {isActive})}>
+                    <h2>step <span className="page-num">4</span></h2>
+                    <section className="feature">
+                        <img src={IMGAGES[4]} width="541" height="316" />
+                    </section>
+                    <p>{COPY[4]}</p>
+                </div>
             </div>
         );
     }
