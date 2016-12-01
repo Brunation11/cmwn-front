@@ -49,9 +49,9 @@ class GodModeSiteNav extends React.Component {
             _.map(PrivateRoutes, (route) => {
                 var params = {};
                 var url;
-                if (route.path.match(/^sa/g) && route.endpoint && item.label !== null) {
+                if (route.path.match(/^sa/g) && item.label !== null) {
 
-                    if (~route.endpoint.indexOf(':')) {
+                    if (route.endpoint && ~route.endpoint.indexOf(':')) {
                     // if there are params in the route end point, we try to extract params
                     // and if no params could be extracted, route is ignored
                         params = Util.matchPathAndExtractParams(
@@ -61,7 +61,8 @@ class GodModeSiteNav extends React.Component {
                         if (!_.keys(params).length) return;
                     }
 
-                    if (route.endpoint !== '$$' + key && !~item.href.indexOf(route.endpoint)) return;
+                    if (route.endpoint !== '$$' + key && !~item.href.indexOf(route.endpoint)
+                        && route.title !== item.label) return;
 
                     url = Util.replacePathPlaceholdersFromParamObject(route.path, params).split('(')[0];
                     item.url = url.indexOf('/') === 0 ? url : '/' + url;

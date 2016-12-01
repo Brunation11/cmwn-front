@@ -113,7 +113,7 @@ var routes = [
     { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed},
     { path: 'help(/)', title: 'Help', component: Help},
     { path: '/flaggedimages(/)', title: 'Flagged Images', endpoint: '/flag', component: FlagView},
-    { path: 'sa/games(/)', component: GodModeGames},
+    { path: 'sa/games(/)', title: 'Manage Games', component: GodModeGames},
 ];
 
 routes = _.map(routes, i => {
