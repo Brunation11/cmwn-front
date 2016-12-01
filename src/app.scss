@@ -27,6 +27,27 @@ html {
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'SourceSansPro';
+    src: url('/fonts/source_sans_pro/SourceSansPro-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SourceSansPro';
+    src: url('/fonts/source_sans_pro/SourceSansPro-Black.ttf') format('truetype');
+    font-weight: bolder;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SourceSansPro';
+    src: url('/fonts/source_sans_pro/SourceSansPro-Light.ttf') format('truetype');
+    font-weight: lighter;
+    font-style: normal;
+}
+
 body {
 
     @media (max-width: $device-max-break) {
