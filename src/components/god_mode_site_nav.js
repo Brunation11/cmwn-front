@@ -35,7 +35,7 @@ class GodModeSiteNav extends React.Component {
         promise = Promise.all([HttpManager.GET(links.sa_settings.href)]);
 
         promise.then((res) => {
-            self.setState({saLinks: res[0].response._links}); // TODO find out why this is unmounting before this line
+            self.setState({saLinks: res[0].response._links});
         });
     }
 
