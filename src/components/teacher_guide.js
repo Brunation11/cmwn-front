@@ -1,6 +1,6 @@
 
 import React from 'react';
-import {Modal, Button} from 'react-bootstrap';
+import {Modal, Button, Input} from 'react-bootstrap';
 //import _ from 'lodash';
 //import Shortid from 'shortid';
 import ClassNames from 'classnames';
@@ -44,6 +44,7 @@ class Guide extends React.Component {
         super();
         this.state = {
             modalOpen: false,
+            autoPlay: true,
             page: 1
         };
     }
@@ -65,6 +66,10 @@ class Guide extends React.Component {
 
     prevPage() {
         this.setState({page: window.Math.max(1, this.state.page - 1)});
+    }
+
+    toggleAutoplay() {
+        this.setState({autoPlay: !this.state.autoPlay});
     }
 
     renderPage(page){
@@ -119,24 +124,40 @@ class Guide extends React.Component {
                     <span className="close-x">X</span>
                 </a>
                 {this.renderPage(this.state.page)}
-                <Button
-                    onClick={this.prevPage.bind(this)}
-                    className={ClassNames('standard green', {hidden: this.state.page === 1})}
-                >
-                    Back
-                </Button>
-                <Button
-                    onClick={this.nextPage.bind(this)}
-                    className={ClassNames('standard purple', {hidden: this.state.page === 4})}
-                >
-                    Next
-                </Button>
-                <Button
-                    onClick={this.closeModal.bind(this)}
-                    className={ClassNames('standard green', {hidden: this.state.page !== 4})}
-                >
-                    Done!
-                </Button>
+                <Input
+                    type="radio"
+                    ref="show-pass"
+                    name="toggle"
+                    className="toggle-characters"
+                    label="Don't show me this again"
+                    value="text"
+                    checked={this.state.autoPlay}
+                    onChange={this.toggleAutoplay.bind(this)}
+                />
+                <div className="button-container" >
+                    <Button
+                        onClick={this.prevPage.bind(this)}
+                        className={ClassNames('standard green', {hidden: this.state.page === 1})}
+                    >
+                        Back
+                    </Button>
+                    <Button
+                        onClick={this.nextPage.bind(this)}
+                        className={ClassNames('standard', {
+                            hidden: this.state.page === 4,
+                            green: this.state.page === 1,
+                            purple: this.state.page !== 1
+                        })}
+                    >
+                        Next
+                    </Button>
+                    <Button
+                        onClick={this.closeModal.bind(this)}
+                        className={ClassNames('standard green', {hidden: this.state.page !== 4})}
+                    >
+                        Done!
+                    </Button>
+                </div>
             </div>
         );
     }

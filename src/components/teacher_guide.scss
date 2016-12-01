@@ -78,12 +78,77 @@
         }
     }
 
-    .page-marker {
+    .button-container {
+        text-align: center;
+
+        button {
+            border-radius: 22px;
+            box-shadow: rgba(0, 0, 0, .5) 0 2.5px 1px 1.4px;
+            padding: 0 39px;
+            min-height: 54px;
+            font-family: $cmwn-jade-font;
+            font-size: 35px;
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-font-smoothing: antialiased;
+            font-smoothing: antialiased;
+        }
+
+        .green {
+            background: $cmwn-lime;
+            color: $cmwn-purple;
+        }
+
+        .purple {
+            background: $cmwn-purple;
+            color: $cmwn-lime;
+        }
+
+    }
+
+    .toggle-characters {
         display: none;
-        font-family: $source-sans-pro;
+    }
+
+
+    .radio {
+        text-align: center;
+        font-family: $cmwn-jade-font;
+        font-size: 15px;
         -moz-osx-font-smoothing: grayscale;
         -webkit-font-smoothing: antialiased;
         font-smoothing: antialiased;
+
+        .toggle-characters:checked+span {
+            padding-top: 1px;
+        }
+
+        .toggle-characters+span::before {
+            top: 2px;
+            display: inline-block;
+            position: relative;
+            left: -6px;
+            transition: border .25s linear;
+            border: 1px dashed $cmwn-white;
+            background-color: $cmwn-light-purple;
+            width: 15px;
+            height: 15px;
+            line-height: 13px;
+            font-size: 16px;
+            content: '';
+        }
+
+        .toggle-characters:checked+span::before {
+            top: 0;
+            background-color: $cmwn-purple;
+            padding-left: 2px;
+            color: $cmwn-white;
+            content: 'X';
+        }
+    }
+
+    .page-marker {
+        display: none;
+        font-family: $source-sans-pro;
 
         // scss-lint:disable SelectorFormat
         &.isActive {
@@ -94,7 +159,7 @@
         p {
             clear: both;
             line-height: 30px;
-            letter-spacing: .3px;
+            letter-spacing: .5px;
             font-size: 28px;
         }
 
@@ -103,14 +168,17 @@
             letter-spacing: .3px;
             font-family: $cmwn-jade-font;
             font-size: 30px;
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-font-smoothing: antialiased;
+            font-smoothing: antialiased;
         }
 
         &.page-1 {
 
             h2 {
-                padding-top: 12px;
                 display: inline-block;
                 padding: 0 22px;
+                padding-top: 12px;
                 width: 130px;
                 text-align: center;
                 text-transform: uppercase;
@@ -130,7 +198,7 @@
             }
 
             .page-num {
-                line-height: 166px;
+                line-height: 150px;
                 font-size: 183px;
             }
 
@@ -141,8 +209,8 @@
 
             .highlight {
                 display: block;
-                line-height: 15px;
                 padding-bottom: 4px;
+                line-height: 15px;
             }
         }
     }
