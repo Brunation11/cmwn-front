@@ -15,7 +15,7 @@
     text-rendering: optimizeLegibility;
     letter-spacing: .13px;
     color: $cmwn-white;
-    font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
+    font-family: $cmwn-jade-font;
     font-size: 19px;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
@@ -66,7 +66,7 @@
         padding: 0 17px 0 21px;
         min-height: 64px;
         color: $cmwn-purple;
-        font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
+        font-family: $cmwn-jade-font;
         font-size: 57px;
         -moz-osx-font-smoothing: grayscale;
         -webkit-font-smoothing: antialiased;
@@ -80,11 +80,70 @@
 
     .page-marker {
         display: none;
+        font-family: $source-sans-pro;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-font-smoothing: antialiased;
+        font-smoothing: antialiased;
 
         // scss-lint:disable SelectorFormat
         &.isActive {
             display: inherit;
         }
         // scss-lint:enable SelectorFormat
+
+        p {
+            clear: both;
+            line-height: 30px;
+            letter-spacing: .3px;
+            font-size: 28px;
+        }
+
+        .highlight {
+            text-transform: uppercase;
+            letter-spacing: .3px;
+            font-family: $cmwn-jade-font;
+            font-size: 30px;
+        }
+
+        &.page-1 {
+
+            h2 {
+                padding-top: 12px;
+                display: inline-block;
+                padding: 0 22px;
+                width: 130px;
+                text-align: center;
+                text-transform: uppercase;
+                font-size: 38px;
+            }
+
+            .feature {
+                float: right;
+                margin-right: 67px;
+                width: 541px;
+
+                //scss-lint:disable NestingDepth
+                img {
+                    width: 100%;
+                }
+                //scss-lint:enable NestingDepth
+            }
+
+            .page-num {
+                line-height: 166px;
+                font-size: 183px;
+            }
+
+            p {
+                padding-top: 30px;
+                text-align: center;
+            }
+
+            .highlight {
+                display: block;
+                line-height: 15px;
+                padding-bottom: 4px;
+            }
+        }
     }
 }

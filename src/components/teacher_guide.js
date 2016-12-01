@@ -27,7 +27,7 @@ const COPY = [
     '', //MPR, 9/30/16: I'm lazy and want the indexes to match the pages
     (<span>
          <span className="highlight">Welcome to our teacher's guide</span>
-         to printing out student user cards. Your first step is to click
+         to printing out student user cards.<br />Your first step is to click
          "My Classes" on the left side menu.
     </span>),
     (<span></span>),
@@ -81,11 +81,11 @@ class Guide extends React.Component {
         return (
             <div>
                 <div className={ClassNames('page-marker page-1', {isActive})}>
-                    <h2>page <span classNames="page-num">1</span></h2>
+                    <h2>step <span className="page-num">1</span></h2>
                     <section className="feature">
-                        <img src={IMGAGES[0]} />
+                        <img src={IMGAGES[1]} width="541" height="316" />
                     </section>
-                    <p>{COPY[0]}</p>
+                    <p>{COPY[1]}</p>
                 </div>
             </div>
         );
@@ -115,26 +115,25 @@ class Guide extends React.Component {
     renderModal() {
         return (
             <div className="modal-guide">
-                BORF
                 <a id="close-modal" onClick={this.closeModal.bind(this)} className="modal-close">
                     <span className="close-x">X</span>
                 </a>
                 {this.renderPage(this.state.page)}
                 <Button
                     onClick={this.prevPage.bind(this)}
-                    className={'standard green', ClassNames({hidden: this.state.page === 1})}
+                    className={ClassNames('standard green', {hidden: this.state.page === 1})}
                 >
                     Back
                 </Button>
                 <Button
                     onClick={this.nextPage.bind(this)}
-                    className={'standard purple', ClassNames({hidden: this.state.page === 4})}
+                    className={ClassNames('standard purple', {hidden: this.state.page === 4})}
                 >
                     Next
                 </Button>
                 <Button
                     onClick={this.closeModal.bind(this)}
-                    className={'standard green', ClassNames({hidden: this.state.page !== 4})}
+                    className={ClassNames('standard green', {hidden: this.state.page !== 4})}
                 >
                     Done!
                 </Button>
