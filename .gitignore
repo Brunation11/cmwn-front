@@ -37,3 +37,4 @@ scsslint.json
 *.tar
 .happypack
 .test/src
+testsrc
