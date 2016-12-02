@@ -32,8 +32,9 @@ class SurveyModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: _.map((this.props.data === null ||
-                this.props.data === {}) ? null : this.props.data, this.props.transform)
+            username: props.username,
+            data: props.data.data === null || props.data.data === {} ? null : props.data.data,
+            showModal: false
         };
 
         this.open = this.open.bind(this);
@@ -58,15 +59,15 @@ class SurveyModal extends React.Component {
         return (
             <div>
                 <a onClick={this.open}>
-                    {`${HEADINGS.CLICK}${this.props.data.username}'s ${HEADINGS.DATA}`}
+                    {`${HEADINGS.CLICK}${this.state.username}'s ${HEADINGS.DATA}`}
                 </a>
                 <Modal className="survey-modal" show={this.state.showModal} onHide={this.close}>
                     <Panel className="standard">
                         <div className="heading">
                             <a onClick={this.close} className="modal-close" title="close">X</a>
-                            <h1>{`${HEADINGS.DATA} of ${this.props.data.username}`}</h1>
+                            <h1>{`${HEADINGS.DATA} of ${this.state.username}`}</h1>
                         </div>
-                        {_.map(this.props.data.data.data, function (value, key) {
+                        {_.map(this.state.data, function (value, key) {
 
                             var screen = 'SCREEN' + key.split('-')[1];
 
@@ -123,11 +124,5 @@ class SurveyModal extends React.Component {
         );
     }
 }
-
-SurveyModal.defaultProps = {
-    header: 'Survey Data',
-    transform: _.identity,
-    showModal: false
-};
 
 export default SurveyModal;

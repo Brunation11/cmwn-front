@@ -10,7 +10,7 @@ var checkSurveyModal = function (data) {
                     username: 'foo',
                     data: data._embedded.items[0].data
     };
-    var surveyModal = <SurveyModal data={tempData} loading={false} showModal={false}/>
+    var surveyModal = <SurveyModal username='foo' data={data._embedded.items[0].data} loading={false} showModal={false}/>
 
     const WRAPPER = shallow(surveyModal);
     expect(WRAPPER.instance()).to.be.instanceOf(SurveyModal);

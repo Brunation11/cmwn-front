@@ -58,13 +58,10 @@ export class AAYView extends React.Component {
                     />
                     <Column dataKey="data" renderHeader={HEADINGS.DATA}
                         renderCell={(data, row) => {
-                            var tempRow = {
-                                username: this.userTableData[row.user_id],
-                                data: row.data
-                            };
                             return (
                                 <SurveyModal
-                                    data={tempRow}
+                                    username={this.userTableData[row.user_id]}
+                                    data={row.data}
                                     loading={false}
                                     showModal={false}
                                 />
