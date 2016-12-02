@@ -5,6 +5,7 @@ import {Modal, Button, Input} from 'react-bootstrap';
 //import Shortid from 'shortid';
 import ClassNames from 'classnames';
 
+import Detector from 'components/browser_detector';
 //import GLOBALS from 'components/globals';
 //import ACTION_CONSTANTS from 'components/action_constants';
 
@@ -192,7 +193,7 @@ class Guide extends React.Component {
 
     render() {
         var self = this;
-        if (!self.props.isAdult) {
+        if (!self.props.isAdult || Detector.isMobile()) {
             return null;
         }
         return (

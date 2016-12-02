@@ -44,7 +44,7 @@ $small-max-modal-width: 787px;
 .guide-modal {
 
     .modal-dialog {
-        margin: 92px auto 30px;
+        margin: 45px auto 30px;
         border: $cmwn-purple 3px solid;
         border-radius: 14px;
         box-shadow: $cmwn-purple 0 0 1px 1px;
@@ -316,15 +316,18 @@ $small-max-modal-width: 787px;
         }
 
         .pages .page-marker {
-        
+
             h2 {
                 display: block;
                 width: 100%;
                 font-size: 60px;
 
+                //without .page specificity, media query is overridden by individual page num styles
+                // scss-lint:disable SelectorDepth
                 .page-num {
                     font-size: 60px;
                 }
+                // scss-lint:enable SelectorDepth
             }
 
             .feature {
