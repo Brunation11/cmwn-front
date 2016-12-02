@@ -1,4 +1,7 @@
-@import 'variables';
+@import '../variables';
+
+$standard-max-modal-width: 866px;
+$small-max-modal-width: 787px;
 
 .teacher-guide {
     position: fixed;
@@ -295,6 +298,49 @@
 
             .feature {
                 margin-left: -3px;
+            }
+        }
+    }
+
+    @media (max-width: $standard-max-modal-width) {
+        .modal-close {
+            top: 14px;
+            right: 54px;
+        }
+    }
+
+    @media (max-width: $small-max-modal-width) {
+        .modal-dialog {
+            margin: 0;
+            width: 100%;
+        }
+
+        .pages .page-marker {
+        
+            h2 {
+                display: block;
+                width: 100%;
+                font-size: 60px;
+
+                .page-num {
+                    font-size: 60px;
+                }
+            }
+
+            .feature {
+                margin: 0;
+                max-width: 100%;
+            }
+        }
+
+        .page-count {
+            display: none;
+        }
+
+        .page-3,
+        .page-4 {
+            .feature {
+                padding-top: 60px;
             }
         }
     }
