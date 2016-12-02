@@ -1,6 +1,6 @@
 
 import React from 'react';
-import {Modal, Button, Input} from 'react-bootstrap';
+import {Modal, Button, Input, Glyphicon} from 'react-bootstrap';
 //import _ from 'lodash';
 //import Shortid from 'shortid';
 import ClassNames from 'classnames';
@@ -45,8 +45,9 @@ const COPY = [
     </span>)
 ];
 
-const LS_AUTOPLAY_KEY = 'TEACHER_GUIDE_FIRST_LOGIN';
+const LS_AUTOPLAY_KEY = 'TEACHER_GUIDE_DO_NOT_AUTO_OPEN';
 const LS_CURRENT_PAGE = 'TEACHER_GUIDE_CURRENT_PAGE';
+const LS_MINIMIZED = 'TEACHER_GUIDE_TAB_MINIMIZED';
 
 /**
  * A tab for all adults. When clicked, provides a modal that walks them through basic
@@ -55,32 +56,39 @@ const LS_CURRENT_PAGE = 'TEACHER_GUIDE_CURRENT_PAGE';
 class Guide extends React.Component {
     constructor() {
         super();
-        var autoPlay = true;
+        var startClosed = false;
+        var minimized = false;
         var page;
+        var modalOpen;
 
         try {
-            autoPlay = window.localStorage[LS_AUTOPLAY_KEY] !== 'false';
+            startClosed = window.localStorage[LS_AUTOPLAY_KEY] === 'true';
+            minimized = window.localStorage[LS_MINIMIZED] === 'true';
             page = +(window.localStorage[LS_CURRENT_PAGE]);
         } catch(error) {
-            autoPlay = window._localStorage[LS_AUTOPLAY_KEY] !== 'false';
+            startClosed = window._localStorage[LS_AUTOPLAY_KEY] === 'true';
+            minimized = window._localStorage[LS_MINIMIZED] === 'true';
             page = +(window._localStorage[LS_CURRENT_PAGE]);
         }
 
         if (isNaN(page)) page = 1;
 
-        if (autoPlay) {
+        if (!startClosed) {
             // if we autoplay once, dont do it again
             try {
-                window.localStorage.setItem(LS_AUTOPLAY_KEY, false);
+                window.localStorage.setItem(LS_AUTOPLAY_KEY, true);
             } catch(error) {
-                window._localStorage.setItem(LS_AUTOPLAY_KEY, false);
+                window._localStorage.setItem(LS_AUTOPLAY_KEY, true);
             }
+            modalOpen = true;
+            startClosed = true;
         }
 
         this.state = {
-            modalOpen: autoPlay,
-            autoPlay: autoPlay,
-            page: page
+            modalOpen,
+            startClosed,
+            minimized,
+            page
         };
     }
 
@@ -116,11 +124,20 @@ class Guide extends React.Component {
 
     toggleAutoplay() {
         try {
-            window.localStorage.setItem(LS_AUTOPLAY_KEY, !this.state.autoPlay);
+            window.localStorage.setItem(LS_AUTOPLAY_KEY, !this.state.startClosed);
         } catch(error) {
-            window._localStorage.setItem(LS_AUTOPLAY_KEY, !this.state.autoPlay);
+            window._localStorage.setItem(LS_AUTOPLAY_KEY, !this.state.startClosed);
         }
-        this.setState({autoPlay: !this.state.autoPlay});
+        this.setState({startClosed: !this.state.startClosed});
+    }
+
+    toggleTab() {
+        try {
+            window.localStorage.setItem(LS_MINIMIZED, !this.state.minimized);
+        } catch(error) {
+            window._localStorage.setItem(LS_MINIMIZED, !this.state.minimized);
+        }
+        this.setState({minimized: !this.state.minimized});
     }
 
     renderPage(page){
@@ -200,7 +217,7 @@ class Guide extends React.Component {
                     className="toggle-characters"
                     label="Don't show me this again"
                     value="text"
-                    checked={this.state.autoPlay}
+                    checked={this.state.startClosed}
                     onChange={this.toggleAutoplay.bind(this)}
                 />
                 <div className="button-container" >
@@ -238,21 +255,29 @@ class Guide extends React.Component {
             return null;
         }
         return (
-        <div className={COMPONENT_IDENTIFIER}>{CALL_TO_ACTION}
-            <Modal
-                className="guide-modal"
-                show={this.state.modalOpen}
-                onHide={self.closeModal.bind(self)}
-                keyboard={false}
-                backdrop="static"
-                id="guide-modal"
-            >
-                <Modal.Body>
-                    {self.renderModal()}
-                </Modal.Body>
-            </Modal>
-            <Button className="standard purple" onClick={self.openModal.bind(self)}>{BUTTON_TEXT}</Button>
-        </div>
+            <div className={ClassNames(COMPONENT_IDENTIFIER, {minimized: this.state.minimized})}>
+                <Modal
+                    className="guide-modal"
+                    show={this.state.modalOpen}
+                    onHide={self.closeModal.bind(self)}
+                    keyboard={false}
+                    backdrop="static"
+                    id="guide-modal"
+                >
+                    <Modal.Body>
+                        {self.renderModal()}
+                    </Modal.Body>
+                </Modal>
+                <span className={ClassNames({transhidden: this.state.minimized})}>
+                    {CALL_TO_ACTION}
+                    <Button className="standard purple" onClick={self.openModal.bind(self)}>
+                        {BUTTON_TEXT}
+                    </Button>
+                </span>
+                <a onClick={this.toggleTab.bind(this)}>
+                    <Glyphicon glyph={ (this.state.minimized ? 'chevron-down' : 'chevron-up')} />
+                </a>
+            </div>
         );
     }
 }
