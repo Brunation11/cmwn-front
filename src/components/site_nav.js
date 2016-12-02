@@ -114,22 +114,21 @@ var SiteNav = React.createClass({
             )
         );
 
-        if (sessionStorage == null) {
-            return null;
+        if (window.localStorage.isLoaded) {
+            window.localStorage.isLoaded(() => {
+                _.map(menuItems, item => {
+                    currentUrl = window.location.href.replace(/^.*changemyworldnow.com/, '');
+                    if (sessionStorage.activeItem + '' !== 'undefined' && (
+                            sessionStorage.activeItem === item.label ||
+                            sessionStorage.activeItem === item.uuid
+                    )) {
+                        return;
+                    } else if (currentUrl === item.url) {
+                        sessionStorage.activeItem = item.label;
+                    }
+                });
+            });
         }
-
-        _.map(menuItems, item => {
-            currentUrl = window.location.href.replace(/^.*changemyworldnow.com/, '');
-            if (sessionStorage.activeItem + '' !== 'undefined' && (
-                    sessionStorage.activeItem === item.label ||
-                    sessionStorage.activeItem === item.uuid
-            )) {
-                return;
-            } else if (currentUrl === item.url) {
-                sessionStorage.activeItem = item.uuid || item.label;
-            }
-        });
-
 
         return _.map(menuItems, item => {
             var link = (
