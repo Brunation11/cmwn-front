@@ -45,6 +45,9 @@ const COPY = [
     </span>)
 ];
 
+const LS_AUTOPLAY_KEY = 'TEACHER_GUIDE_FIRST_LOGIN';
+const LS_CURRENT_PAGE = 'TEACHER_GUIDE_CURRENT_PAGE';
+
 /**
  * A tab for all adults. When clicked, provides a modal that walks them through basic
  * actions.
@@ -52,10 +55,32 @@ const COPY = [
 class Guide extends React.Component {
     constructor() {
         super();
+        var autoPlay = true;
+        var page;
+
+        try {
+            autoPlay = window.localStorage[LS_AUTOPLAY_KEY] !== 'false';
+            page = +(window.localStorage[LS_CURRENT_PAGE]);
+        } catch(error) {
+            autoPlay = window._localStorage[LS_AUTOPLAY_KEY] !== 'false';
+            page = +(window._localStorage[LS_CURRENT_PAGE]);
+        }
+
+        if (isNaN(page)) page = 1;
+
+        if (autoPlay) {
+            // if we autoplay once, dont do it again
+            try {
+                window.localStorage.setItem(LS_AUTOPLAY_KEY, false);
+            } catch(error) {
+                window._localStorage.setItem(LS_AUTOPLAY_KEY, false);
+            }
+        }
+
         this.state = {
-            modalOpen: false,
-            autoPlay: true,
-            page: 1
+            modalOpen: autoPlay,
+            autoPlay: autoPlay,
+            page: page
         };
     }
 
@@ -71,14 +96,30 @@ class Guide extends React.Component {
     }
 
     nextPage() {
+        try {
+            window.localStorage.setItem(LS_CURRENT_PAGE, this.state.page + 1);
+        } catch(error) {
+            window._localStorage.setItem(LS_CURRENT_PAGE, this.state.page + 1);
+        }
         this.setState({page: window.Math.min(4, this.state.page + 1)});
+
     }
 
     prevPage() {
+        try {
+            window.localStorage.setItem(LS_CURRENT_PAGE, this.state.page - 1);
+        } catch(error) {
+            window._localStorage.setItem(LS_CURRENT_PAGE, this.state.page - 1);
+        }
         this.setState({page: window.Math.max(1, this.state.page - 1)});
     }
 
     toggleAutoplay() {
+        try {
+            window.localStorage.setItem(LS_AUTOPLAY_KEY, !this.state.autoPlay);
+        } catch(error) {
+            window._localStorage.setItem(LS_AUTOPLAY_KEY, !this.state.autoPlay);
+        }
         this.setState({autoPlay: !this.state.autoPlay});
     }
 
