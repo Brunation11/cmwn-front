@@ -35,14 +35,14 @@ var checkAdminContents = function (WRAPPER) {
 
 var checkNoSuperUserContents = function (WRAPPER) {
     expect(WRAPPER.find('EditLink')).to.have.length(1);
-    expect(WRAPPER.contains('.green')).to.equal(false);
-    expect(WRAPPER.find('.purple')).to.have.length(1);
+    expect(WRAPPER.find('.content').contains('.green')).to.equal(false);
+    expect(WRAPPER.find('.content').find('.purple')).to.have.length(1);
 };
 
 var checkSuperUserContents = function (WRAPPER) {
     expect(WRAPPER.find('EditLink')).to.have.length(2);
-    expect(WRAPPER.find('.green')).to.have.length(1);
-    expect(WRAPPER.find('.purple')).to.have.length(2);
+    expect(WRAPPER.find('.content').find('.green')).to.have.length(1);
+    expect(WRAPPER.find('.content').find('.purple')).to.have.length(2);
 };
 
 var viewSmokeTests = function () {
