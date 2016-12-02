@@ -1,7 +1,7 @@
 @import 'variables';
 
 .flipcase {
-    padding: 0;
+    padding: 0 $standard;
     width: 100%;
 
     .header {
@@ -78,7 +78,7 @@
         overflow: hidden;
     }
 
-    &.trophycase .panel-body {
+    &.trophycase {
         white-space: nowrap;
         overflow-x: auto;
     }

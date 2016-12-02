@@ -179,10 +179,10 @@ class _HttpManager {
     }
     setToken(_token) {
         this._token = _token;
-        if (window.localStorage.isLoaded) {
-            window.localStorage.isLoaded(() => {
-                window.localStorage.setItem(APP_COOKIE_NAME, _token);
-            });
+        try {
+            window.localStorage.setItem(APP_COOKIE_NAME, _token);
+        } catch(error) {
+            window._localStorage.setItem(APP_COOKIE_NAME, _token);
         }
     }
     get token() {

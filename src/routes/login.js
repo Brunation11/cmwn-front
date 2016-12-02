@@ -94,11 +94,12 @@ var Component = React.createClass({
         var req;
         var user = this.getUsernameWithoutSpaces();
         dataUrl = this.state.overrideLogin || this.props.currentUser._links.login.href;
+        ga('send', 'event', 'Login', 'Attempted');
         req = HttpManager.POST({
             url: dataUrl,
         }, {
             'username': user,
-            'password': this.state.password
+            'password': this.refs.password.getValue()
         });
         req.then(res => {
             if (res.response && res.response.status && res.response.detail &&
@@ -109,6 +110,7 @@ var Component = React.createClass({
             }
             if (res.status < 300 && res.status >= 200) {
                 Log.info(e, 'User login success');
+                ga('send', 'event', 'Login', 'Success');
                 History.push('/profile');
             } else {
                 Toast.error(ERRORS.LOGIN + (res.response && res.response.data &&
@@ -127,24 +129,20 @@ var Component = React.createClass({
                 return;
             }
             Toast.error(ERRORS.LOGIN + (res.detail ? ' Message: ' + res.detail : ''));
+            ga('send', 'event', 'Login', 'Invalid');
+            //ga('send', 'exception', {
+            //    exDescription: 'Invalid login',
+            //    exFatal: false
+            //});
             Log.log(e, 'Invalid login');
-        });
-
-        this.setState({
-            username: '',
-            password: ''
         });
     },
     attemptLogin: function (e) {
-        var user;
+        var user = this.getUsernameWithoutSpaces();
         var logout;
         var logoutUrl;
 
-        if (this.state.currentPage === 'forgot-password' ||
-            !this.state.username ||
-            !this.state.password) return;
-
-        user = this.getUsernameWithoutSpaces();
+        if (this.state.currentPage === 'forgot-password') return;
 
         user = this.getUsernameWithoutSpaces();
 
@@ -218,8 +216,8 @@ var Component = React.createClass({
         }
     },
     getUsernameWithoutSpaces: function () {
-        if (!this.state.username) return;
-        return this.state.username.replace(/\s/g, '');
+        var newLogin = this.refs.login.getValue().replace(/\s/g, '');
+        return newLogin;
     },
     renderLogin: function () {
         return (
@@ -240,11 +238,6 @@ var Component = React.createClass({
                                 name="username"
                                 label={LABELS.LOGIN}
                                 placeholder="FUN-RABBIT003"
-                                value={this.state.username}
-                                onChange={e => this.setState({username: e.target.value})}
-                                onFocus={e => e.target.placeholder = ''}
-                                onBlur={e => e.target.placeholder = 'FUN-RABBIT003'}
-                                autoComplete="off"
                             />
                             <Input
                                 ref="password"
@@ -253,18 +246,12 @@ var Component = React.createClass({
                                 name="password"
                                 label={LABELS.PASSWORD}
                                 placeholder="PA********"
-                                value={this.state.password}
-                                onChange={e => this.setState({password: e.target.value})}
-                                onFocus={e => e.target.placeholder = ''}
-                                onBlur={e => e.target.placeholder = 'PA********'}
-                                autoComplete="off"
                             />
                             <Button
                                 id="login-button"
                                 className="login-button"
                                 onKeyPress={this.attemptLogin}
                                 onClick={this.attemptLogin}
-                                disabled={!this.state.username || !this.state.password}
                             />
                             <a
                                 className="forgot-password-link"

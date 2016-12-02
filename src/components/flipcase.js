@@ -1,16 +1,13 @@
 import React from 'react';
 import _ from 'lodash';
 import ClassNames from 'classnames';
-import {Panel} from 'react-bootstrap';
 
 import FlipPopover from 'components/popovers/flip_popover';
 
 import 'components/flipcase.scss';
 
-const HEADINGS = {
-    POPOVER_SELF: 'Your Earned Flips: ',
-    POPOVER_OTHER: '\'s Earned Flips: ',
-    TROPHYCASE: 'Trophycase'
+const COPY = {
+    HEADER: 'Your Earned Flips: '
 };
 
 export default class Flipcase extends React.Component {
@@ -18,7 +15,7 @@ export default class Flipcase extends React.Component {
         super();
 
         this.state = _.defaults({
-            flips: []
+            flips: [],
         });
     }
 
@@ -34,10 +31,10 @@ export default class Flipcase extends React.Component {
 
     renderAll() {
         var allFlips = _.shuffle(this.state.allFlips);
-        return (_.map(allFlips, (flip, key) => {
+        return (_.map(allFlips, (flip) => {
             var earnedFlip = _.find(this.state.flips, ['flip_id', flip.flip_id]);
             var earnedOn = earnedFlip ? earnedFlip.earned : null;
-            var status = earnedOn ? 'earned' : 'unearned';
+            var status = earnedOn ? 'earned' : 'static';
 
             return (
                 <FlipPopover
@@ -47,15 +44,13 @@ export default class Flipcase extends React.Component {
                     type="flip"
                     trigger="click"
                     status={status}
-                    key={key}
                 />
             );
         }));
     }
 
     renderEarned() {
-        var earnedFlips = _.shuffle(this.state.flips);
-        return (_.map(earnedFlips, (flip, key) => {
+        return (_.map(this.state.flips, (flip) => {
             return (
                 <FlipPopover
                     element={flip}
@@ -63,7 +58,6 @@ export default class Flipcase extends React.Component {
                     type="flip"
                     trigger="click"
                     status="earned"
-                    key={key}
                 />
             );
         }));
@@ -71,35 +65,25 @@ export default class Flipcase extends React.Component {
 
     render() {
         var renderFunction;
-        var popover = HEADINGS.POPOVER_SELF;
 
-        if (this.props.data == null || !this.props.data.length) return null;
+        if (this.state && !this.state.flips.length) return null;
 
-        if (this.props.render === 'all' && this.state.allFlips) renderFunction = this.renderAll;
-        if (this.props.render === 'earned' && this.state.flips) renderFunction = this.renderEarned;
-
-        if (typeof this.props.user === 'string') {
-            popover = `${this.props.user}${HEADINGS.POPOVER_OTHER}`;
-        }
+        if (this.props.render === 'all') renderFunction = this.renderAll;
+        if (this.props.render === 'earned') renderFunction = this.renderEarned;
 
         return (
-            <Panel
-                header={HEADINGS.TROPHYCASE}
-                className={ClassNames(
-                    'flipcase',
-                    'standard',
-                    this.props.classNames,
-                    this.props.type,
-                    {
-                        header: this.props.header
-                    }
-                )}
-            >
+            <div className={ClassNames(
+                'flipcase',
+                this.props.classNames,
+                this.props.type, {
+                    header: this.props.header
+                }
+            )}>
                 <span className="header">
-                    {popover}<strong>{this.state.flips.length}</strong>
+                    {COPY.HEADER}<strong>{this.state.flips.length}</strong>
                 </span>
                 {renderFunction.call(this)}
-            </Panel>
+            </div>
         );
     }
 }

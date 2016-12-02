@@ -91,6 +91,20 @@ if (!$https && $proxy !== 'https') {
             echo "window.__cmwn.VERSION = '".$packageJSON['version']."';\n";
             echo "</script>";
          ?>
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-26000499-1', 'auto');
+          ga('require', 'linkid');
+          ga('require', 'displayfeatures');
+          ga('set', 'anonymizeIp', true);
+          ga('set', 'forceSSL', true);
+          //looking for the send? It's in app.js after the app bootstraps
+
+        </script>
     </head>
     <body>
 <!--[if lte IE 9]><style media="screen">.old-browsers{position:relative;background:#fff;width:100%;height:100%;color:#000;font-family:sans-serif;font-size:20px;text-align:center;padding:0;margin:0}.old-browsers h2{padding:20px 0}.old-browsers p,.old-browsers ul{margin:0 auto}.old-browsers p{max-width:700px;padding-b=ottom:50px;line-height:1.4em}.old-browsers ul li{display:inline-block;padding:0 25px}.old-browsers ul li img{width:115px; border: 0;}.old-browsers ul li p{padding-top:15px;color:#249AE1}body{margin:0;padding:0}</style><div class="old-browsers"><h2>Browser out of date.</h2><p>It appears you're running on a very old web browser that we're unable to support. If you would like to view the site you'll need to update your browser. Please choose from any of the following modern browsers. Thanks!</p><ul><li> <a href="https://www.google.com/intl/en/chrome/browser/desktop/index.html#brand=CHMB&utm_campaign=en&utm_source=en-ha-na-us-sk&utm_medium=ha"> <img src="http://kni-labs.github.io/old-browsers/img/chrome_128x128.png" alt="Google Chrome"><p>Google Chrome</p> </a></li><li> <a href="https://www.mozilla.org/en-US/firefox/new/"> <img src="http://kni-labs.github.io/old-browsers/img/firefox_128x128.png" alt="Mozilla Firefox"><p>Mozilla Firefox</p> </a></li><li> <a href="https://support.apple.com/downloads/safari"> <img src="http://kni-labs.github.io/old-browsers/img/safari_128x128.png" alt="Safari"><p>Safari</p> </a></li><li> <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie"> <img src="http://kni-labs.github.io/old-browsers/img/internet-explorer_128x128.png" alt="Internet Explorer"><p>Internet Explorer</p> </a></li><li> <a href="https://www.microsoft.com/en-us/windows/microsoft-edge"> <img src="http://kni-labs.github.io/old-browsers/img/edge_128x128.png" alt="Internet Explorer"><p>Microsoft Edge</p> </a></li></ul></div><![endif]-->
@@ -136,12 +150,72 @@ if (!$https && $proxy !== 'https') {
                 window.localStorage.setItem('testKey', '1');
                 window.localStorage.removeItem('testKey');
             } catch (error) {
-                //we dont rely on localstorage as a source of truth
-                //so we can safely ignore these errors
-                fileref = document.createElement('script');
-                fileref.setAttribute("type","text/javascript");
-                fileref.setAttribute("src", "//cdnjs.cloudflare.com/ajax/libs/localStorage/2.0.1/localStorage.min.js");
-                document.head.appendChild(fileref);
+                var setStorage = function() {
+                    var Storage = function() {
+                        function setData(data) {
+                            data = JSON.stringify(data);
+                            window.name = data;
+                        }
+
+                        function clearData() {
+                            window.name = '';
+                        }
+
+                        function getData() {
+                            var data = window.name;
+                            return data ? JSON.parse(data) : {};
+                        }
+
+                        // initialise if there's already data
+                        var data = getData();
+
+                        function numKeys() {
+                            var n = 0;
+                            for (var k in data) {
+                                if (data.hasOwnProperty(k)) n += 1;
+                            }
+                            return n;
+                        }
+
+                        return {
+                            clear: function() {
+                                data = {};
+                                clearData();
+                                this.length = numKeys();
+                            },
+                            getItem: function(key) {
+                                key = encodeURIComponent(key);
+                                return data[key] === undefined ? null : data[key];
+                            },
+                            key: function(i) {
+                                var ctr = 0;
+                                for (var k in data) {
+                                    if (ctr == i) return decodeURIComponent(k);
+                                    else ctr++;
+                                }
+                                return null;
+                            },
+                            removeItem: function(key) {
+                                key = encodeURIComponent(key);
+                                delete data[key];
+                                setData(data);
+                                this.length = numKeys();
+                            },
+                            setItem: function(key, value) {
+                                key = encodeURIComponent(key);
+                                data[key] = String(value);
+                                setData(data);
+                                this.length = numKeys();
+                            },
+                            length: 0
+                        };
+                    };
+
+                    window._localStorage = new Storage();
+                    window._sessionStorage = new Storage();
+                };
+
+                setStorage();
             }
         </script>
         <script>
@@ -177,22 +251,10 @@ if (!$https && $proxy !== 'https') {
         !function(r){function o(e){if(t[e])return t[e].exports;var n=t[e]={exports:{},id:e,loaded:!1};return r[e].call(n.exports,n,n.exports,o),n.loaded=!0,n.exports}var t={};return o.m=r,o.c=t,o.p="",o(0)}([function(r,o,t){"use strict";var e=t(1).Rollbar,n=t(2);_rollbarConfig.rollbarJsUrl=_rollbarConfig.rollbarJsUrl||"https://d37gvrvc0wt4s1.cloudfront.net/js/v1.8/rollbar.min.js";var a=e.init(window,_rollbarConfig),i=n(a,_rollbarConfig);a.loadFull(window,document,!_rollbarConfig.async,_rollbarConfig,i)},function(r,o){"use strict";function t(r){return function(){try{return r.apply(this,arguments)}catch(o){try{console.error("[Rollbar]: Internal error",o)}catch(t){}}}}function e(r,o,t){window._rollbarWrappedError&&(t[4]||(t[4]=window._rollbarWrappedError),t[5]||(t[5]=window._rollbarWrappedError._rollbarContext),window._rollbarWrappedError=null),r.uncaughtError.apply(r,t),o&&o.apply(window,t)}function n(r){var o=function(){var o=Array.prototype.slice.call(arguments,0);e(r,r._rollbarOldOnError,o)};return o.belongsToShim=!0,o}function a(r){this.shimId=++s,this.notifier=null,this.parentShim=r,this._rollbarOldOnError=null}function i(r){var o=a;return t(function(){if(this.notifier)return this.notifier[r].apply(this.notifier,arguments);var t=this,e="scope"===r;e&&(t=new o(this));var n=Array.prototype.slice.call(arguments,0),a={shim:t,method:r,args:n,ts:new Date};return window._rollbarShimQueue.push(a),e?t:void 0})}function l(r,o){if(o.hasOwnProperty&&o.hasOwnProperty("addEventListener")){var t=o.addEventListener;o.addEventListener=function(o,e,n){t.call(this,o,r.wrap(e),n)};var e=o.removeEventListener;o.removeEventListener=function(r,o,t){e.call(this,r,o&&o._wrapped?o._wrapped:o,t)}}}var s=0;a.init=function(r,o){var e=o.globalAlias||"Rollbar";if("object"==typeof r[e])return r[e];r._rollbarShimQueue=[],r._rollbarWrappedError=null,o=o||{};var i=new a;return t(function(){if(i.configure(o),o.captureUncaught){i._rollbarOldOnError=r.onerror,r.onerror=n(i);var t,a,s="EventTarget,Window,Node,ApplicationCache,AudioTrackList,ChannelMergerNode,CryptoOperation,EventSource,FileReader,HTMLUnknownElement,IDBDatabase,IDBRequest,IDBTransaction,KeyOperation,MediaController,MessagePort,ModalWindow,Notification,SVGElementInstance,Screen,TextTrack,TextTrackCue,TextTrackList,WebSocket,WebSocketWorker,Worker,XMLHttpRequest,XMLHttpRequestEventTarget,XMLHttpRequestUpload".split(",");for(t=0;t<s.length;++t)a=s[t],r[a]&&r[a].prototype&&l(i,r[a].prototype)}return r[e]=i,i})()},a.prototype.loadFull=function(r,o,e,n,a){var i=function(){var o;if(void 0===r._rollbarPayloadQueue){var t,e,n,i;for(o=new Error("rollbar.js did not load");t=r._rollbarShimQueue.shift();)for(n=t.args,i=0;i<n.length;++i)if(e=n[i],"function"==typeof e){e(o);break}}"function"==typeof a&&a(o)},l=!1,s=o.createElement("script"),u=o.getElementsByTagName("script")[0],p=u.parentNode;s.crossOrigin="",s.src=n.rollbarJsUrl,s.async=!e,s.onload=s.onreadystatechange=t(function(){if(!(l||this.readyState&&"loaded"!==this.readyState&&"complete"!==this.readyState)){s.onload=s.onreadystatechange=null;try{p.removeChild(s)}catch(r){}l=!0,i()}}),p.insertBefore(s,u)},a.prototype.wrap=function(r,o){try{var t;if(t="function"==typeof o?o:function(){return o||{}},"function"!=typeof r)return r;if(r._isWrap)return r;if(!r._wrapped){r._wrapped=function(){try{return r.apply(this,arguments)}catch(o){throw o._rollbarContext=t()||{},o._rollbarContext._wrappedSource=r.toString(),window._rollbarWrappedError=o,o}},r._wrapped._isWrap=!0;for(var e in r)r.hasOwnProperty(e)&&(r._wrapped[e]=r[e])}return r._wrapped}catch(n){return r}};for(var u="log,debug,info,warn,warning,error,critical,global,configure,scope,uncaughtError".split(","),p=0;p<u.length;++p)a.prototype[u[p]]=i(u[p]);r.exports={Rollbar:a,_rollbarWindowOnError:e}},function(r,o){"use strict";r.exports=function(r,o){return function(t){if(!t&&!window._rollbarInitialized){var e=window.RollbarNotifier,n=o||{},a=n.globalAlias||"Rollbar",i=window.Rollbar.init(n,r);i._processShimQueue(window._rollbarShimQueue||[]),window[a]=i,window._rollbarInitialized=!0,e.processPayloads()}}}}]);
         // End Rollbar Snippet
         </script>
+        <!-- app:vendor -->
+        <!-- endinject -->
         <!-- app:js -->
         <!-- endinject -->
         <script src='https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit' async defer></script>
-        <script>
-          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-          ga('create', 'UA-26000499-1', 'auto');
-          ga('require', 'linkid');
-          ga('require', 'displayfeatures');
-          ga('set', 'anonymizeIp', true);
-          ga('set', 'forceSSL', true);
-          ga('send', 'pageview');
-
-        </script>
     </body>
 </html>

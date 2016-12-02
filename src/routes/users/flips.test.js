@@ -18,7 +18,7 @@ var checkFlipWallContent = function (data, currentUser) {
     var flipWall = <FlipWall data={data} loading={false} currentUser={currentUser}/>;
     const WRAPPER = shallow(flipWall);
     expect(WRAPPER.children()).to.have.length(1);
-    expect(WRAPPER.find('Connect')).to.have.length(1);
+    expect(WRAPPER.find('Panel')).to.have.length(1);
     expect(WRAPPER.find('Flipcase')).to.have.length(1);
 };
 

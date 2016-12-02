@@ -152,18 +152,22 @@ var Util = {
         return perms;
     },
     logout() {
-        if (window.localStorage.isLoaded) {
-            window.localStorage.isLoaded(() => {
-                window.localStorage.setItem('com.cmwn.platform.userName', null);
-                window.localStorage.setItem('com.cmwn.platform.userId', null);
-                window.localStorage.setItem('com.cmwn.platform.profileImage', null);
-                window.localStorage.setItem('com.cmwn.platform.roles', null);
-                window.localStorage.setItem('com.cmwn.platform._links', null);
-                Actions.dispatch.LOGOUT();
-                Log.info('User logout successful');
-                EventManager.update('userChanged', null);
-            });
+        try {
+            window.localStorage.setItem('com.cmwn.platform.userName', null);
+            window.localStorage.setItem('com.cmwn.platform.userId', null);
+            window.localStorage.setItem('com.cmwn.platform.profileImage', null);
+            window.localStorage.setItem('com.cmwn.platform.roles', null);
+            window.localStorage.setItem('com.cmwn.platform._links', null);
+        } catch(error) {
+            window._localStorage.setItem('com.cmwn.platform.userName', null);
+            window._localStorage.setItem('com.cmwn.platform.userId', null);
+            window._localStorage.setItem('com.cmwn.platform.profileImage', null);
+            window._localStorage.setItem('com.cmwn.platform.roles', null);
+            window._localStorage.setItem('com.cmwn.platform._links', null);
         }
+        Actions.dispatch.LOGOUT();
+        Log.info('User logout successful');
+        EventManager.update('userChanged', null);
     },
     formatString() {
         var args = Array.prototype.slice.call(arguments);

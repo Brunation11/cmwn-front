@@ -27,7 +27,6 @@ var addHardcodedEntries = function (menuItems) {
     });
     menuItems.unshift({url: '/profile', label: 'Activities'});
     menuItems.push({url: '/resources', label: 'Resource Center'});
-    //menuItems.push({url: `/user/${this.props.currentUser.user_id}/feed`, label: 'Feed'});
     menuItems.push({url: '/profile/edit', label: 'Edit My Profile'});
     menuItems.push(helpLink.call(this));
     menuItems.push({url: '/logout', label: 'Logout'});
@@ -35,8 +34,8 @@ var addHardcodedEntries = function (menuItems) {
 };
 
 const IGNORED_ROUTES_FOR_CHILDREN = [
-    'Resource Center',
     'Friends and Network',
+    'Resource Center',
     'Flags'
 ];
 
@@ -114,19 +113,29 @@ var SiteNav = React.createClass({
             )
         );
 
-        if (window.localStorage.isLoaded) {
-            window.localStorage.isLoaded(() => {
-                _.map(menuItems, item => {
-                    currentUrl = window.location.href.replace(/^.*changemyworldnow.com/, '');
-                    if (sessionStorage.activeItem + '' !== 'undefined' && (
-                            sessionStorage.activeItem === item.label ||
-                            sessionStorage.activeItem === item.uuid
-                    )) {
-                        return;
-                    } else if (currentUrl === item.url) {
-                        sessionStorage.activeItem = item.label;
-                    }
-                });
+        currentUrl = window.location.href.replace(/^.*changemyworldnow.com/, '');
+
+        try {
+            _.map(menuItems, item => {
+                if (window.sessionStorage.activeItem + '' !== 'undefined' && (
+                        window.sessionStorage.activeItem === item.label ||
+                        window.sessionStorage.activeItem === item.uuid
+                )) {
+                    return;
+                } else if (currentUrl === item.url) {
+                    window.sessionStorage.activeItem = item.label;
+                }
+            });
+        } catch(error) {
+            _.map(menuItems, item => {
+                if (window._sessionStorage.activeItem + '' !== 'undefined' && (
+                        window._sessionStorage.activeItem === item.label ||
+                        window._sessionStorage.activeItem === item.uuid
+                )) {
+                    return;
+                } else if (currentUrl === item.url) {
+                    window._sessionStorage.activeItem = item.label;
+                }
             });
         }
 
