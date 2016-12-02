@@ -255,7 +255,14 @@ class Guide extends React.Component {
             return null;
         }
         return (
-            <div className={ClassNames('animated bounceInUp ' + COMPONENT_IDENTIFIER, {minimized: this.state.minimized})}>
+            <div
+                className={
+                    ClassNames(
+                        'animated bounceInUp ' + COMPONENT_IDENTIFIER,
+                        {minimized: this.state.minimized}
+                    )
+                }
+            >
                 <Modal
                     className="guide-modal"
                     show={this.state.modalOpen}
