@@ -52,13 +52,13 @@ $small-max-modal-width: 787px;
 
     .transhidden {
         display: inline-block;
-        transition: visibility 0s;
+        transition: visibility 0s, max-width 2s;
         visibility: hidden;
         padding: 0;
         max-width: 0;
         overflow: hidden;
         white-space: nowrap;
-        transition-delay: 1.2s;
+        transition-delay: 1.2s, 1.2s;
     }
 
     &.minimized {
