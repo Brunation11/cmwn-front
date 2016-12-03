@@ -7,103 +7,510 @@ $frame: '#{$media-url}c7dc7612fcdcfab9cee9dd3d83fa2141.png';
 $reset-header: '#{$media-url}13e1aa3c8a96389d0e5f9436e56110cc.png';
 $reset-btn: '#{$media-url}99bf313e31417ea15295ea7a5c416e85.png';
 $reset-btn-hvr: '#{$media-url}3975487f51b441024a9ae13d3d68ba7d.png';
+$btns: '#{$media-url}0c7044bc6e88f37a8910966dba68fe47.png';
 
-.edit-student {
+#cmwn-app .edit-profile { // scss-lint:disable IdSelector
+    .content,
+    .panel {
+        background: $cmwn-green;
+    }
+
+    .panel {
+        margin-bottom: 0;
+        box-shadow: none;
+    }
 
     a {
         color: $cmwn-purple;
     }
 
-    .panel-body {
-        display: flex;
-        margin-bottom: -1em;
-        justify-content: space-between;
-        flex-wrap: wrap;
+    .panel-heading {
+        border: 0;
+    }
 
-        > * {
+    label {
+        text-transform: uppercase;
+        color: $cmwn-white;
+        font-family: $cmwn-jade-font;
+        font-size: 1.25rem;
+    }
+
+    .form-control:not(.birthday-input) {
+        outline: none;
+        border: 0;
+        border-radius: 0;
+        background-color: $cmwn-white;
+        height: 40px;
+        color: $cmwn-black;
+        font-size: 1.25rem;
+    }
+
+    .left.profile-image-container {
+        position: relative;
+        border: 1px solid $cmwn-white;
+        width: 45%;
+        text-align: center;
+
+        &::before {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            border-left: 1px dotted $cmwn-white;
+            content: '';
+        }
+
+        .profile-image {
+            margin: $standard * 2;
+            border: 2px solid $cmwn-white;
+            border-radius: 2px;
+            padding-bottom: 0;
+
+            &::before {
+                position: absolute;
+                top: 50%;
+                right: -12%;
+                left: -12%;
+                border-top: 2px dotted $cmwn-white;
+                content: '';
+            }
+        }
+
+        .action-link {
             position: relative;
-            flex: 1 0 275px;//arbitrary, looks good as a breakpoint
-        }
-
-        .right {
-            z-index: 2;
-
-            label,
-            span,
-            h3,
-            h2,
-            p,
-            a { //fixes a horrible chrome/osx font aliasing issue http://stackoverflow.com/questions/8024061/webkit-blurry-text-with-css-scale-translate3d
-                transform: translate3d(0, 0, 0);
-                // scss-lint:disable VendorPrefix
-                -webkit-filter: blur(0);
-                // scss-lint:enable VendorPrefix
-                filter: blur(0);
-            }
-
-            .input-group-addon {
-                margin: 0;
-                border: 0;
-                padding: 0;
-            }
-
-            .has-addon {
-
-                // scss-lint:disable SelectorDepth, NestingDepth
-
-                .form-control-feedback::before {
-                    margin-left: -75px;
-                }
-                // scss-lint:enable SelectorDepth, NestingDepth
-            }
-        }
-
-        .left {
             z-index: 1;
+        }
+    }
 
-            > * {
-                position: relative;
-                text-align: center;
-            }
+    .right.user-fields {
+        position: relative;
+        padding: 0 $standard;
+        width: 55%;
 
-            > p {
-                padding-top: $standard;
-                padding-left: $standard / 3;
+        .username-label,
+        .username,
+        .update-username-btn {
+            display: block;
+            font-family: $cmwn-jade-font;
+        }
+
+        .username-container {
+            margin-bottom: 2%;
+        }
+
+        .username-display {
+            position: relative;
+            top: 4px;
+        }
+
+        .username-label {
+            margin: 6px 0 0;
+            color: $cmwn-white;
+            font-size: 1.25rem;
+        }
+
+        .username {
+            line-height: $standard * 2;
+            color: $cmwn-purple;
+            font-size: 1.5rem;
+        }
+
+        .update-username-btn {
+            position: relative;
+            float: right;
+            z-index: 1;
+            border: 0;
+            border-radius: 14px;
+            box-shadow: -2px 2px 8px -3px $cmwn-black;
+            background: $cmwn-blue;
+            padding: 3px 15px;
+            color: $cmwn-white;
+            font-size: 1rem;
+        }
+
+        .update-username-btn:hover,
+        .update-username-btn:focus,
+        .update-username-btn:active,
+        .update-username-btn:active:focus {
+            outline: none;
+            border: 0;
+        }
+
+        .update-user-metadata-btn {
+            position: relative;
+            float: right;
+            margin: $standard 0;
+            outline: 0;
+            border: 0;
+            background: url($btns);
+            background-position: 633px 398px;
+            width: 140px;
+            height: 44px;
+            color: transparent;
+        }
+
+        .update-user-metadata-btn:hover,
+        .update-user-metadata-btn:focus,
+        .update-user-metadata-btn:active,
+        .update-user-metadata-btn:active:focus {
+            outline: none;
+            border: 0;
+            background-position: 1115px 398px;
+        }
+
+        form {
+            border-top: 1px solid $cmwn-white;
+            border-bottom: 1px solid $cmwn-white;
+            padding: $standard 0;
+        }
+    }
+
+    .dropdown-datepicker {
+        .form-group {
+            display: inline-block;
+            position: relative;
+            background: url('../../media/edit_profile/dropdown_arrows.png');
+            background-repeat: no-repeat;
+            background-position: 218% 0;
+            background-size: 63% 100%;
+            width: 33%;
+            height: 40px;
+
+            &::before {
+                position: absolute;
+                left: 0;
+                outline: none;
+                border: 0;
+                box-shadow: none;
+                background: $cmwn-white;
+                width: 80%;
+                height: 100%;
+                content: '';
             }
         }
 
-
-    }
-
-    .below {
-        cursor: pointer;
-        padding-top: $standard;
-        padding-left: $standard / 3;
-        text-decoration: underline;
-        color: $cmwn-purple;
-    }
-
-    .user-metadata {
-        color: $cmwn-blue;
-        font-size: 1rem;
-
-        .field {
-            border-radius: 5px;
-            box-shadow: 0 0 6px $cmwn-medium-blue;
-            background: url('../../media/blue-header-bg.jpg');
-            padding: $standard / 3;
-            color: $cmwn-white;
+        .birthday-input {
+            position: relative;
+            outline: none;
+            border: 0;
+            border-radius: 0;
+            box-shadow: none;
+            background: transparent;
+            width: 100%;
+            height: 40px;
+            color: $cmwn-black;
             font-size: 1.25rem;
         }
     }
 
-    .user-metadata-btn,
-    .user-metadata-btn:hover {
-        margin-top: 1rem;
+    .birthday-input {
+        -moz-appearance: none;
+        -webkit-appearance: none;
+    }
+
+    .current-username-container {
+        position: relative;
+        clear: both;
+        margin-bottom: $standard;
+        font-family: $cmwn-jade-font;
+
+        h1 {
+            margin: 0;
+            color: $cmwn-white;
+            font-size: 1.25rem;
+        }
+
+        span {
+            line-height: $standard * 2;
+            color: $cmwn-purple;
+            font-size: 1.5rem;
+        }
+    }
+
+    .change-password {
+        position: relative;
+        margin-bottom: 0;
+
+        .panel-body {
+            padding: 0;
+        }
+
+        form {
+            width: 50%;
+        }
+
+        .toggle-characters {
+            display: none;
+
+            &:checked ~ span::before {
+                background-color: $cmwn-dark-blue;
+            }
+        }
+    }
+
+    .radio span {
+        vertical-align: middle;
+        font-size: 1rem;
+
+        &::before {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            transition: border .25s linear;
+            border: 1px dashed $cmwn-white;
+            background-color: $cmwn-blue-light;
+            width: $standard;
+            height: $standard;
+            content: '';
+        }
+    }
+
+    .update-password-btn {
+        position: relative;
+        outline: 0;
         border: 0;
-        background: $cmwn-green;
-        color: $cmwn-white;
-        font-weight: 700;
+        background: url($btns);
+        background-position: 633px 398px;
+        width: 140px;
+        height: 44px;
+        color: transparent;
+    }
+
+    .update-password-btn:hover,
+    .update-password-btn:focus,
+    .update-password-btn:active {
+        outline: none;
+        border: 0;
+        box-shadow: none;
+        background-position: 1115px 398px;
+    }
+
+    @media (min-width: $halfway-break-1) and (max-width: $monitor-max-break) {
+        .left.profile-image-container .profile-image::before {
+            right: -13%;
+            left: -13%;
+        }
+
+        .right.user-fields {
+            .username-label {
+                font-size: 1rem;
+            }
+
+            .username {
+                font-size: 1.25rem;
+            }
+
+            .update-username-btn {
+                font-size: 1rem;
+            }
+        }
+
+        label {
+            font-size: 1rem;
+        }
+
+        .form-control {
+            height: 30px;
+            font-size: 1rem;
+        }
+
+        .change-password span {
+            font-size: .75rem;
+        }
+    }
+
+    @media (min-width: $device-max-break) and (max-width: $halfway-break-1) {
+        .form-control {
+            height: 30px;
+            font-size: 1rem;
+        }
+
+        .left.profile-image-container {
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+
+            .profile-image::before {
+                right: -15%;
+                left: -15%;
+            }
+        }
+
+        .right.user-fields {
+            right: 50%;
+            clear: both;
+            transform: translateX(50%);
+            margin-top: 5%;
+            width: 90%;
+
+            .username-display {
+                top: 6px;
+            }
+        }
+
+        .current-username-container {
+            left: 50%;
+            transform: translateX(-50%);
+            padding: $standard;
+            width: 90%;
+        }
+
+        .change-password {
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0 $standard;
+            width: 90%;
+
+            form {
+                width: 100%;
+            }
+        }
+    }
+
+    @media (min-width: $halfway-break-2) and (max-width: $device-max-break) {
+        label {
+            font-size: .75rem;
+        }
+
+        .form-control {
+            height: 25px;
+            font-size: .75rem;
+        }
+
+        .left.profile-image-container .profile-image::before {
+            right: -13%;
+            left: -13%;
+        }
+
+        .right.user-fields {
+            .username-label {
+                font-size: .75rem;
+            }
+
+            .username {
+                font-size: 1rem;
+            }
+
+            .update-username-btn {
+                font-size: .75rem;
+            }
+        }
+
+        .change-password span {
+            font-size: .75rem;
+        }
+    }
+
+    @media (min-width: $device-portrait-break) and (max-width: $halfway-break-2) {
+        .left.profile-image-container {
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+
+            .profile-image::before {
+                right: -15%;
+                left: -15%;
+            }
+        }
+
+        .right.user-fields {
+            right: 50%;
+            clear: both;
+            transform: translateX(50%);
+            margin-top: 5%;
+            width: 90%;
+        }
+
+        .current-username-container {
+            left: 50%;
+            transform: translateX(-50%);
+            padding: $standard;
+            width: 90%;
+        }
+
+        .change-password {
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0 $standard;
+            width: 90%;
+
+            form {
+                width: 100%;
+            }
+        }
+    }
+
+    @media (max-width: $device-portrait-break) {
+        label {
+            font-size: .75rem;
+        }
+
+        .form-control {
+            height: 25px;
+            font-size: .75rem;
+        }
+
+        .left.profile-image-container {
+            left: 50%;
+            transform: translateX(-50%);
+            width: 75%;
+
+            .profile-image::before {
+                right: -15%;
+                left: -15%;
+            }
+        }
+
+        .right.user-fields {
+            right: 50%;
+            clear: both;
+            transform: translateX(50%);
+            margin-top: 5%;
+            width: 90%;
+
+            .username-label {
+                font-size: .75rem;
+            }
+
+            .username {
+                font-size: 1rem;
+            }
+
+            .update-username-btn {
+                font-size: .75rem;
+            }
+        }
+
+        .current-username-container {
+            left: 50%;
+            transform: translateX(-50%);
+            padding: $standard;
+            width: 90%;
+
+            h1 {
+                font-size: 1rem;
+            }
+
+            span {
+                font-size: 1.25rem;
+            }
+        }
+
+        .change-password {
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0 $standard;
+            width: 90%;
+
+            form {
+                width: 100%;
+            }
+
+            span {
+                font-size: .75rem;
+            }
+        }
     }
 }
 
