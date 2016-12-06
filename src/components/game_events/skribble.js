@@ -7,7 +7,7 @@ import Toast from 'components/toast';
 var unboundEvents = {
     getData: function (options, e) {
         var type = e.gameData.status;
-        var url = options._links.self.href + '/skribble?' + (type ? 'status=' + type : '');
+        var url = options._links.skribbles.href + '?' + (type ? 'status=' + type : '');
         HttpManager.GET(url)
             .then(server => e.respond(server.response._embedded))
             .catch(err => {
@@ -18,18 +18,18 @@ var unboundEvents = {
     },
     save: _.noop,
     markAsRead: function (options, e) {
-        var url;
+        var url = options._links.skribbles.href;
         if (e.gameData.skribble_id) {
             ga('send', 'event', 'Skribble', 'Read', e.gameData.skribble_id);
-            url = options._links.self.href + '/skribble/' + e.gameData.skribble_id;
+            url += '/' + e.gameData.skribble_id;
             HttpManager.PUT(url, e.gameData.skribble)
                 .then(server => e.respond(server.response._embedded))
                 .catch(err => Log.error(err));
         }
     },
     saveSkribble: function (options, e) {
-        var url = options._links.self.href + '/skribble';
-        var skramble = e.gameData.skribble.skramble;
+        var url = options._links.skribbles.href;
+        var skramble = e.gameData.skribble.skramble !== false;
         var skribbleData = e.gameData.skribble;
         if (skribbleData.status === 'COMPLETE') {
             return; //do not modify complete skribbles
