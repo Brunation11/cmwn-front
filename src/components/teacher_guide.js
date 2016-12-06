@@ -59,7 +59,7 @@ class Guide extends React.Component {
         var startClosed = false;
         var minimized = false;
         var page;
-        var modalOpen;
+        //var modalOpen;
 
         try {
             startClosed = window.localStorage[LS_AUTOPLAY_KEY] === 'true';
@@ -73,19 +73,19 @@ class Guide extends React.Component {
 
         if (isNaN(page)) page = 1;
 
-        if (!startClosed) {
+        //if (!startClosed) {
             // if we autoplay once, dont do it again
-            try {
-                window.localStorage.setItem(LS_AUTOPLAY_KEY, true);
-            } catch(error) {
-                window._localStorage.setItem(LS_AUTOPLAY_KEY, true);
-            }
-            modalOpen = true;
-            startClosed = true;
+        try {
+            window.localStorage.setItem(LS_AUTOPLAY_KEY, startClosed);
+        } catch(error) {
+            window._localStorage.setItem(LS_AUTOPLAY_KEY, startClosed);
         }
+        //    modalOpen = true;
+        //    startClosed = true;
+        //}
 
         this.state = {
-            modalOpen,
+            modalOpen: !startClosed,
             startClosed,
             minimized,
             page
