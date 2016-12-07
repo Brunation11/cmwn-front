@@ -92,10 +92,10 @@ if (!$https && $proxy !== 'https') {
             echo "</script>";
          ?>
         <script>
-            var $buoop = {vs:{i:10,f:25,o:-4,s:8,c:30},mobile:false,api:4}; 
-            function $buo_f(){ 
-             var e = document.createElement("script"); 
-             e.src = "//browser-update.org/update.min.js"; 
+            var $buoop = {vs:{i:10,f:25,o:-4,s:8,c:30},mobile:false,api:4,reminder:0};
+            function $buo_f(){
+             var e = document.createElement("script");
+             e.src = "//browser-update.org/update.min.js";
              document.body.appendChild(e);
             };
             try {document.addEventListener("DOMContentLoaded", $buo_f,false)}

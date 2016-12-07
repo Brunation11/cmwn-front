@@ -104,10 +104,11 @@ h3 {
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
     opacity: 0;
-    background: url('media/generic_error.png') $cmwn-white;
+    background: url('media/pageerror-hopeless.png') $cmwn-white;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
+    -ms-behavior: url('/backgroundsize.min.htc');
 }
 
 @keyframes fadein {

@@ -465,6 +465,7 @@ window.__cmwn.interactiveDebug = function () {
  */
 function run() {
     if (window.__browserOutdated != null) {
+        document.getElementById('pageerror').style.display = 'block';
         return;
     }
     window._bootstrap_attempts = window._bootstrap_attempts || 0; //eslint-disable-line camelcase
@@ -493,6 +494,7 @@ function run() {
         if (window._bootstrap_attempts < 5) {
             window.setTimeout(run, 500);
         } else {
+            document.getElementById('pageerror').style.display = 'block';
             Errors.showApplication(err);
         }
     }

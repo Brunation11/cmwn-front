@@ -289,6 +289,9 @@ var buildAndCopyStaticResources = function () {
 
     var htaccess = gulp.src('./.htaccess').pipe(gulp.dest('./build'));
 
+    //from https://github.com/louisremi/background-size-polyfill
+    var ie8CoverFix = gulp.src('./src/media/backgroundsize.min.htc').pipe(gulp.dest('./build'));
+
     var packageJson = gulp.src('./package.json').pipe(gulp.dest('./build'));
 
     var fonts = gulp.src('./src/media/fonts/**/*.*').pipe(gulp.dest('./build/fonts'));
