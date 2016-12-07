@@ -5,6 +5,8 @@ import {Panel, Button} from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import Layout from 'layouts/two_col';
+
+import History from 'components/history';
 import {Table, Column} from 'components/table';
 import Paginator from 'components/paginator';
 import EditLink from 'components/edit_link';
