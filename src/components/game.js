@@ -9,6 +9,7 @@ import getEventsForGame from 'components/game_events';
 import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
 import Detector from 'components/browser_detector';
+import Log from 'components/log';
 
 import CHROME_ICON from 'media/Google_Chrome_icon_(2011).svg.png';
 
@@ -139,7 +140,11 @@ export class Game extends React.Component {
                 this.state.eventHandler[EVENT_PREFIX + _.upperFirst(e.name)](...arguments);
             }
             if (_.isFunction(this.props['on' + _.upperFirst(e.name)])) {
-                this.props['on' + _.upperFirst(e.name)](...arguments);
+                try {
+                    this.props['on' + _.upperFirst(e.name)](...arguments);
+                } catch(err) {
+                    Log.error('Error bubbling game event: ' + e.name + ', ' + err, e);
+                }
             }
         }
     }
