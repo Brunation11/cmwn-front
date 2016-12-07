@@ -464,6 +464,9 @@ window.__cmwn.interactiveDebug = function () {
  * if any of these steps fail. A generic application error is shown if this fails.
  */
 function run() {
+    if (window.__browserOutdated != null) {
+        return;
+    }
     window._bootstrap_attempts = window._bootstrap_attempts || 0; //eslint-disable-line camelcase
     try {
         window._bootstrap_attempts++;

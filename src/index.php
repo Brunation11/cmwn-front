@@ -57,9 +57,6 @@ if (!$https && $proxy !== 'https') {
                 font-stretch: normal;
                 src: url("/fonts/source_sans_pro/SourceSansPro-Bold.otf.woff") format("woff");
             }
-            .old-browsers {
-                z-index: 10000;
-            }
         </style>
         <!-- inject:reset -->
         <!-- endinject -->
@@ -95,10 +92,10 @@ if (!$https && $proxy !== 'https') {
             echo "</script>";
          ?>
         <script>
-            var $buoop = {vs:{i:9,f:25,o:-4,s:8,c:30},api:4};
-            function $buo_f(){
-             var e = document.createElement("script");
-             e.src = "//browser-update.org/update.min.js";
+            var $buoop = {vs:{i:10,f:25,o:-4,s:8,c:30},mobile:false,api:4}; 
+            function $buo_f(){ 
+             var e = document.createElement("script"); 
+             e.src = "//browser-update.org/update.min.js"; 
              document.body.appendChild(e);
             };
             try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
@@ -127,6 +124,7 @@ if (!$https && $proxy !== 'https') {
             <script>
             (function(){
             var ef = function(){};
+            window.__browserOutdated = 'very';
             window.console = window.console || {log:ef,warn:ef,error:ef,dir:ef};
             }());
             </script>
@@ -232,12 +230,22 @@ if (!$https && $proxy !== 'https') {
         </script>
         <script>
             var style = document.createElement('style');
-            style.appendChild(document.createTextNode(''));
-            document.head.appendChild(style);
-            if (document.styleSheets[0].addRule != null){
-                style.sheet.addRule('#pageerror', 'display:none;', 0);
-            } else if (document.styleSheets[0].insertRule != null) {
-                style.sheet.insertRule('#pageerror{display:none;}', 0);
+            if (window.__browserOutdated == null) {
+                style.appendChild(document.createTextNode(''));
+                document.head.appendChild(style);
+                if (document.styleSheets[0].addRule != null){
+                    style.sheet.addRule('#pageerror', 'display:none;', 0);
+                } else if (document.styleSheets[0].insertRule != null) {
+                    style.sheet.insertRule('#pageerror{display:none;}', 0);
+                }
+            } else {
+                style.appendChild(document.createTextNode(''));
+                document.head.appendChild(style);
+                if (document.styleSheets[0].addRule != null){
+                    style.sheet.addRule('#pageerror', 'opacity:1;', 0);
+                } else if (document.styleSheets[0].insertRule != null) {
+                    style.sheet.insertRule('#pageerror{opacity:1;}', 0);
+                }
             }
         </script>
         <!-- rollbar -->
