@@ -287,6 +287,8 @@ var buildAndCopyStaticResources = function () {
 
     var favicon = gulp.src('./src/media/favicon.ico').pipe(gulp.dest('./build'));
 
+    var logo = gulp.src('./src/media/cmwn-logo.png').pipe(gulp.dest('./build'));
+
     var htaccess = gulp.src('./.htaccess').pipe(gulp.dest('./build'));
 
     //from https://github.com/louisremi/background-size-polyfill
