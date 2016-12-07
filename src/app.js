@@ -129,6 +129,7 @@ import Store from 'components/store';
 import Util from 'components/util';
 import DevTools from 'components/devtools';
 import Actions from 'components/actions';
+import ACTION_CONSTANTS from 'components/action_constants';
 import TimerModal from 'components/timer_modal';
 import GlobalAlert from 'components/global_alert';
 import Detector from 'components/browser_detector';
@@ -487,6 +488,7 @@ function run() {
             console.warn = _.noop; //eslint-disable-line no-console
             /**let errors surface*/
         }
+        Actions.dispatch[ACTION_CONSTANTS.START_BOOTSTRAP]();
         Log.info('Application started');
     } catch(err) {
         Log.info('Application bootstrap failed, attempting to recover.' +
