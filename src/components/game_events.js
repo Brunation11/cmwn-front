@@ -203,18 +203,22 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
                 .catch(err => Log.error(err));
         },
         getFriends: function (e) {
-            HttpManager.GET(_links.friend.href)
-                .then(server => {
-                    var friends = _.map(server.response._embedded.friend, friend => {
-                        friend._embedded = friend._embedded || {};
-                        friend._embedded.image = friend._embedded.image || {};
-                        friend._embedded.image.url =
-                            friend._embedded.image.url || origin + GLOBALS.DEFAULT_PROFILE;
-                        return friend;
-                    });
-                    e.respond({user: friends});
-                })
-                .catch(err => Log.error(err));
+            if (_links.friend) {
+                HttpManager.GET(_links.friend.href)
+                    .then(server => {
+                        var friends = _.map(server.response._embedded.friend, friend => {
+                            friend._embedded = friend._embedded || {};
+                            friend._embedded.image = friend._embedded.image || {};
+                            friend._embedded.image.url =
+                                friend._embedded.image.url || origin + GLOBALS.DEFAULT_PROFILE;
+                            return friend;
+                        });
+                        e.respond({user: friends});
+                    })
+                    .catch(err => Log.error(err));
+            } else {
+                e.respond({user: []});
+            }
         }
     };
 
