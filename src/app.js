@@ -471,7 +471,6 @@ function run() {
     window._bootstrap_attempts = window._bootstrap_attempts || 0; //eslint-disable-line camelcase
     try {
         window._bootstrap_attempts++;
-        throw 'luulx'
         ReactDOM.render((
                 <Provider store={Store} >
                     <Router history={History} routes={routes} onUpdate={() => {
