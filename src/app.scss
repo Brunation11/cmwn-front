@@ -28,6 +28,8 @@ html {
 }
 
 body {
+    background: url('media/loader.gif') no-repeat center;
+    background-size: 18%;
 
     @media (max-width: $device-max-break) {
         font-size: $min-base-font-size; //IE vmax fallback
