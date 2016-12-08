@@ -57,7 +57,8 @@ const TITLES = {
     'animal-id': '1d30b3302aad1608ad76c4029a4c2d5a.gif',
     'carbon-catcher': 'ab894b9d48a225ffdace7215003dd228.gif',
     'skribble': '10b58a3fbacaa46203faf65a02f8fbbc.gif',
-    'turtle-hurdle': '1cf1a4952107ce19e6b8675643a17c5d.gif'
+    'turtle-hurdle': '1cf1a4952107ce19e6b8675643a17c5d.gif',
+    '3d-world': '3d45287ac7d23711d32af8b7c797c2f8.gif',
 };
 
 const HEADINGS = {
@@ -215,8 +216,12 @@ export class Profile extends React.Component {
                         </span>
                         <div className={ClassNames('coming-soon', { hidden: !item.coming_soon})} />
                         <div className={ClassNames('desktop-only', { hidden: !meta.desktop})} />
-                        <object data={`${GLOBALS.MEDIA_URL}${TITLES[item.game_id]}`} type="image/gif" >
-                            <img src={FlipBgDefault}></img>
+                        <object
+                            width="350"
+                            data={`${GLOBALS.MEDIA_URL}${TITLES[item.game_id]}`}
+                            type="image/gif"
+                        >
+                            <img src={FlipBgDefault} ></img>
                         </object>
                     </div>
                 </a>

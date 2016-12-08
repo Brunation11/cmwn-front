@@ -503,6 +503,7 @@ export class EditProfile extends React.Component {
                     user_id={this.state.user_id}
                     url={this.state._links.password}
                     currentUser={this.props.currentUser}
+                    confirmReLogin={true}
                 />
                 <ForgotPass data={this.props.data} user_id={this.state.user_id}
                     currentUser={this.props.currentUser}/>

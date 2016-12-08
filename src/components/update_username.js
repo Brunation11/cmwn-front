@@ -6,6 +6,7 @@ import ClassNames from 'classnames';
 import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
 import Util from 'components/util';
+import Log from 'components/log';
 
 import 'components/update_username.scss';
 
@@ -36,6 +37,11 @@ const COPY = {
 
 var UpdateUsername = React.createClass({
     getInitialState: function () {
+        if (!this.props.username) {
+            Log.warn('username should be set for update username');
+
+            return {loading: true};
+        }
         return {
             username: this.props.username.slice(0, -3),
             option: this.props.username.slice(0, -3),

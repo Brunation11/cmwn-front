@@ -40,6 +40,7 @@ export default function (endpointIdentifier, componentName) {
 
         attemptLoadComponentData() {
             var state = Store.getState();
+            if (this.props.noLink) return;
             Util.attemptComponentLoad(state, this.props.endpointIdentifier,
                 componentName, this.props.onError);
         }
@@ -62,9 +63,19 @@ export default function (endpointIdentifier, componentName) {
                 return a;
             }, {});
 
+            if (this.props.noLink) {
+                return (
+                    <div className={this.props.className}>
+                        {this.props.renderNoLink ? this.props.renderNoLink() : ''}
+                    </div>
+                );
+            }
+
             if (this.props.data == null || (_.isArray(this.props.data) && this.props.data.length === 0)) {
                 return (
-                        <div className={this.props.className}>{this.props.renderNoData()}</div>
+                        <div className={this.props.className}>
+                            {this.props.renderNoData()}
+                        </div>
                 );
             }
 
@@ -99,10 +110,14 @@ export default function (endpointIdentifier, componentName) {
         var component = {};
         var data = {};
         var loading = true;
+        var noLink = false;
         if (state.components && state.components[endpointIdentifier + '-' + componentName]) {
             component = state.components[endpointIdentifier + '-' + componentName];
             loading = component.loading;
             data = component.data;
+        }
+        if (!Util.linkIsPresentInUserOrPage(state, endpointIdentifier)) {
+            noLink = true;
         }
         return {
             endpointIdentifier,
@@ -110,6 +125,7 @@ export default function (endpointIdentifier, componentName) {
             data,
             loading,
             component,
+            noLink,
             lastLoadedStage: state.pageLoadingStage.lastCompletedStage
         };
     };
