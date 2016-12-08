@@ -1,14 +1,3 @@
-<?php
-$https = isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on');
-$proxy = isset($_SERVER['HTTP_X_FORWARDED_PROTO']) ? $_SERVER['HTTP_X_FORWARDED_PROTO'] : null;
-
-if (!$https && $proxy !== 'https') {
-    $newUrl = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-    header("HTTP/1.1 301 Moved Permanently");
-    header('Location: ' . $newUrl);
-    die();
-}
-?>
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="ie ie6"> <![endif]-->
 <!--[if IE 7]>         <html class="ie ie7"> <![endif]-->
@@ -78,19 +67,6 @@ if (!$https && $proxy !== 'https') {
         <![endif]-->
         <!-- inject:env -->
         <!-- endinject -->
-        <?php
-            echo "<script>\n";
-            echo "window.__cmwn = window.__cmwn || {};\n";
-            foreach ($_SERVER as $key=>$val) {
-                if (strrpos($key, "APP_", -strlen($key)) !== FALSE) {
-                    echo 'window.__cmwn.'.substr($key, 4)." = '".str_replace('_', '.', $val)."';\n";
-                }
-            }
-            $package = file_get_contents('./package.json');
-            $packageJSON = json_decode($package, true);
-            echo "window.__cmwn.VERSION = '".$packageJSON['version']."';\n";
-            echo "</script>";
-         ?>
         <script>
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
           (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
