@@ -48,6 +48,7 @@ export class Game extends React.Component {
         super();
 
         this.state = {
+            isFullscreen: false,
             fullscreenFallback: false,
             demo: false
         };
@@ -74,8 +75,15 @@ export class Game extends React.Component {
     componentDidMount() {
         var frame = ReactDOM.findDOMNode(this.refs.gameRef);
         var callApi;
+
         if (!frame) {
             return;
+        }
+
+        if (Screenfull.enabled) {
+            document.addEventListener(Screenfull.raw.fullscreenchange, () => {
+                this.setState({isFullscreen: Screenfull.isFullscreen});
+            });
         }
 
         callApi = _.debounce(function () {
