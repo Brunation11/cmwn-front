@@ -50,7 +50,7 @@ var Component = React.createClass({
             </Table>
         );
     },
-    renderImport: function () { // TODO: do we actually need this on this page? 10/20/16 AIM
+    renderImport: function () {
         if (!this.props.currentUser ||
             !this.props.currentUser._embedded ||
             !this.props.currentUser._embedded.groups ||
