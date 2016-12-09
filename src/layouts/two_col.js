@@ -29,7 +29,7 @@ var Layout = React.createClass({
                     {this.props.children}
                 </div>
                 <Footer loggedIn={this.props.currentUser && this.props.currentUser.username != null} />
-                <Guide />
+                <Guide isAdult={this.props.currentUser.type === 'ADULT'} />
              </div>
         );
     }
