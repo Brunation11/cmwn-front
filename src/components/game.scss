@@ -20,6 +20,7 @@ html body:fullscreen .modal-dialog {
     .modal-body,
     .modal-game {
         position: static;
+        transform: none;
         background: $cmwn-black;
     }
 
