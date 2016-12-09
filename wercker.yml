@@ -26,6 +26,7 @@ test:
       url: $SLACK_URL
 build:
   steps:
+    - script:
       name: Build packages
       code: gulp build --production
   after-steps:
