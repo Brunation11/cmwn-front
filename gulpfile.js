@@ -288,7 +288,12 @@ var buildAndCopyStaticResources = function () {
 
     var favicon = gulp.src('./src/media/favicon.ico').pipe(gulp.dest('./build'));
 
+    var logo = gulp.src('./src/media/cmwn-logo.png').pipe(gulp.dest('./build'));
+
     var htaccess = gulp.src('./.htaccess').pipe(gulp.dest('./build'));
+
+    //from https://github.com/louisremi/background-size-polyfill
+    var ie8CoverFix = gulp.src('./src/media/backgroundsize.min.htc').pipe(gulp.dest('./build'));
 
     var packageJson = gulp.src('./package.json').pipe(gulp.dest('./build'));
 

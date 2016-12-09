@@ -5,6 +5,8 @@ import {Panel, Button} from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import Layout from 'layouts/two_col';
+
+import History from 'components/history';
 import {Table, Column} from 'components/table';
 import Paginator from 'components/paginator';
 import EditLink from 'components/edit_link';
@@ -60,12 +62,13 @@ export class View extends React.Component{
         return <span>{`${HEADINGS.CLASSES}: `}{links}</span>;
     }
     renderImport() {
-        if (this.state == null || this.state._links == null || this.state._links.import == null) {
-        //if (!state.currentUser || !state.currentUser._embedded ||
-        //    !state.currentUser._embedded.groups || !state.currentUser._embedded.groups.length ||
-        //    state.currentUser._embedded.groups[0]._links.import == null) {
-        //if (!state.currentUser || !state.currentUser._embedded || !state.currentUser._embedded.groups ||
-        //    !state.currentUser._embedded.groups.length) {
+        if (
+            this.state == null || this.state._links == null || this.state._links.import == null ||
+            !this.state.currentUser ||
+            !this.state.currentUser._embedded ||
+            !this.state.currentUser._embedded.groups ||
+            !this.state.currentUser._embedded.groups.length
+        ) {
             return null;
         }
         return (
