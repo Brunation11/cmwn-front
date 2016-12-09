@@ -333,17 +333,18 @@ var runUnitTests = function (filePath = 'src/**/*.test.js') {
     process.env.NODE_ENV = 'production';
     process.env.BABEL_ENV = 'production';
     var tests = gulp.src([filePath], {read: false})
-         .pipe(mocha({
-             require: ['./src/testdom.js'],
-             timeout: 2000,
-             reporter: 'min'
-         }))
-         .once('error', () => {
-             process.exit(1);
-         })
-         .once('end', () => {
-             process.exit();
-         });
+        .pipe(mocha({
+            require: ['./src/testdom.js'],
+            timeout: 2000,
+            reporter: 'min'
+        }))
+        .once('error', (err) => {
+            console.log('SOMETHING HAPPENED:' + err);
+            process.exit(1);
+        })
+        .once('end', () => {
+            process.exit();
+        });
     tests.on('error', function (err) {
         console.log('SOMETHING HAPPENED:' + err);
     });

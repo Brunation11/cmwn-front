@@ -357,25 +357,6 @@ export class EditProfile extends React.Component {
                         confirmReLogin={true}
                     />
                 </Panel>
-                <UpdateUsername
-                    className={ClassNames({
-                        hidden:
-                            this.state.type !== 'CHILD' ||
-                            this.state.user_id !== this.props.currentUser.user_id
-                    })}
-                    username={this.state.username}
-                    data={this.props.data}
-                />
-                <ChangePassword
-                    user_id={this.state.user_id}
-                    url={this.state._links.password}
-                    currentUser={this.props.currentUser}
-                    confirmReLogin={true}
-                />
-                <ForgotPass data={this.props.data} user_id={this.state.user_id}
-                    currentUser={this.props.currentUser}/>
-                <CodeChange data={this.props.data} user_id={this.state.user_id}
-                    currentUser={this.props.currentUser}/>
             </Layout>
         );
     }
