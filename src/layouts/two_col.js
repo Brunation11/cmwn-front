@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 
 import Sidebar from 'components/sidebar';
 import Footer from 'components/footer';
@@ -29,7 +30,7 @@ var Layout = React.createClass({
                     {this.props.children}
                 </div>
                 <Footer loggedIn={this.props.currentUser && this.props.currentUser.username != null} />
-                <Guide isAdult={this.props.currentUser.type === 'ADULT'} />
+                <Guide isAdult={_.get(this, 'props.currentUser.type', '') === 'ADULT'} />
              </div>
         );
     }
