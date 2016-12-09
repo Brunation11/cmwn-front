@@ -6,7 +6,6 @@ import ClassNames from 'classnames';
 import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
 import Util from 'components/util';
-import Store from 'components/store';
 import Log from 'components/log';
 
 import 'components/update_username.scss';
@@ -101,7 +100,7 @@ var UpdateUsername = React.createClass({
         }).then(isConfirm => {
             if (isConfirm) {
                 HttpManager.POST({
-                    url: Store.getState().page.data._links.user_name.href
+                    url: this.props.data._links.user_name.href
                 }, {
                     user_name: this.state.option // eslint-disable-line
                 }).then(server => {
