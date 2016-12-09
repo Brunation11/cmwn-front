@@ -2,6 +2,7 @@ import React from 'react';
 
 import Sidebar from 'components/sidebar';
 import Footer from 'components/footer';
+import Guide from 'components/teacher_guide';
 import EventManager from 'components/event_manager';
 
 var Layout = React.createClass({
@@ -28,6 +29,7 @@ var Layout = React.createClass({
                     {this.props.children}
                 </div>
                 <Footer loggedIn={this.props.currentUser && this.props.currentUser.username != null} />
+                <Guide />
              </div>
         );
     }

@@ -89,7 +89,9 @@
         "__cmwn": false,
         "grecaptcha": false,
         "Rollbar": false,
-        "ga": false
+        "ga": false,
+        "describe": false,
+        "it": false
     },
     "extends": "eslint:recommended",
     "rulePaths": ["eslint-rules"]
