@@ -1,6 +1,6 @@
 box:
   id: cmwn/front-node:6-wheezy
-build:
+test:
   steps:
     - script:
       name: Install packages
@@ -21,12 +21,16 @@ build:
       name: Unit Tests
       code: gulp unit
     - script:
+  after-steps:
+    - slack-notifier:
+      url: $SLACK_URL
+build:
+  steps:
       name: Build packages
       code: gulp build --production
   after-steps:
     - slack-notifier:
       url: $SLACK_URL
-
 release:
   box: python:2.7
   steps:
