@@ -38,6 +38,9 @@ const LOG = {
     FAILURE: 'User logout "failed", proceeding.'
 };
 
+var mapStateToProps;
+var Page;
+
 export class LogoutPage extends React.Component {
     constructor() {
         super();
@@ -103,7 +106,7 @@ export class LogoutPage extends React.Component {
     }
 }
 
-var mapStateToProps = state => {
+mapStateToProps = state => {
     var currentUser = {};
     if (state.currentUser) {
         currentUser = state.currentUser;
@@ -113,7 +116,7 @@ var mapStateToProps = state => {
     };
 };
 
-var Page = connect(mapStateToProps)(LogoutPage);
+Page = connect(mapStateToProps)(LogoutPage);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
 
