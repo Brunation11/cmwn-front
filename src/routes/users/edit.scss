@@ -52,7 +52,7 @@ $btns: '#{$media-url}0c7044bc6e88f37a8910966dba68fe47.png';
         text-align: center;
 
         &::before {
-            position: absolute;
+            //position: absolute;
             top: 0;
             bottom: 0;
             left: 50%;
@@ -514,86 +514,73 @@ $btns: '#{$media-url}0c7044bc6e88f37a8910966dba68fe47.png';
     }
 }
 
-.swal2-container {
-    position: absolute;
+.swal2-modal.confirm-re-login {
+    // scss-lint:disable ImportantRule
     top: 50%;
-    bottom: initial;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
-    padding: 0;
-    width: 70%;
+    margin: 0 !important;
+    background: url($frame) !important;
+    background-size: 100% 100% !important;
+    width: 70% !important;
     max-width: 700px;
-    pointer-events: all !important; // scss-lint:disable ImportantRule
+    height: 400px;
+    // scss-lint:enable ImportantRule
 
-    .swal2-modal.confirm-re-login {
-        // scss-lint:disable ImportantRule
+    &::after {
         position: absolute;
-        top: 50%;
+        top: 10%;
         left: 50%;
-        transform: translateX(-50%) translateY(-50%);
-        margin: 0 !important;
-        background: url($frame) !important;
-        background-size: 100% 100% !important;
-        width: 100% !important;
-        max-width: 700px;
-        height: 400px;
-        // scss-lint:enable ImportantRule
+        transform: translateX(-50%);
+        background: url($reset-header);
+        background-repeat: no-repeat;
+        background-size: contain;
+        width: 33%;
+        height: 16%;
+        content: '';
+    }
 
-        &::after {
-            position: absolute;
-            top: 10%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: url($reset-header);
+    .swal2-content {
+        top: 30%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        color: $cmwn-deep-blue;
+        font-family: $cmwn-jade-font;
+        font-size: 32px;
+    }
+
+    .swal2-confirm {
+        position: absolute;
+        bottom: 14%;
+        left: 50% !important; // scss-lint:disable ImportantRule
+        transform: translateX(-55%);
+        outline: none;
+        box-shadow: none;
+        background: url($reset-btn);
+        background-color: transparent !important; // scss-lint:disable ImportantRule
+        background-repeat: no-repeat;
+        background-size: contain;
+        width: 26%;
+        height: 15%;
+        color: transparent;
+
+        &:hover {
+            background: url($reset-btn-hvr);
             background-repeat: no-repeat;
             background-size: contain;
-            width: 33%;
-            height: 16%;
-            content: '';
-        }
-
-        .swal2-content {
-            top: 30%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            color: $cmwn-deep-blue;
-            font-family: $cmwn-jade-font;
-            font-size: 32px;
-        }
-
-        .swal2-confirm {
-            position: absolute;
-            bottom: 14%;
-            left: 50% !important; // scss-lint:disable ImportantRule
-            transform: translateX(-55%);
-            outline: none;
-            box-shadow: none;
-            background: url($reset-btn);
-            background-color: transparent !important; // scss-lint:disable ImportantRule
-            background-repeat: no-repeat;
-            background-size: contain;
-            width: 26%;
-            height: 15%;
-            color: transparent;
-
-            &:hover {
-                background: url($reset-btn-hvr);
-                background-repeat: no-repeat;
-                background-size: contain;
-            }
         }
     }
 }
 
 @media (max-width: $halfway-break-1) {
-    .swal2-container {
-        width: 100%;
+    .swal2-modal.confirm-re-login {
+        width: 100% !important; // scss-lint:disable ImportantRule
     }
 }
 
 @media (max-width: $halfway-break-2) {
-    .swal2-container .swal2-modal.confirm-re-login {
+    .swal2-modal.confirm-re-login {
         height: 250px;
 
         .swal2-content {
