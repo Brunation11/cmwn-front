@@ -112,12 +112,13 @@ var routes = [
     { path: 'sa/users(/)', title: 'Manage Users', endpoint: '$$user', component: ManageUsers},
     { path: 'sa/user/:id/edit(/)', title: 'Edit User', endpoint: '/user/:id', component: EditUser},
     { path: 'sa/user/create(/)', title: 'Create User', component: CreateUser},
-    { path: 'sa/games(/)', title: 'Manage Games', component: GodModeGames},
     { path: 'resources(/)', component: ResourceCenter, endpoint: ''},
 //    { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed},
     { path: 'help(/)', title: 'Help', component: Help},
     { path: 'all-about-you(/)', title: 'AAY Data', endpoint: '/game-data/all-about-you', component: AAYView},
     { path: '/flaggedimages(/)', title: 'Flagged Images', endpoint: '/flag', component: FlagView},
+
+    { path: 'sa/games(/)', title: 'Manage Games', endpoint: '$$games', component: GodModeGames},
 ];
 
 routes = _.map(routes, i => {
