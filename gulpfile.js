@@ -170,7 +170,7 @@ var buildVendor = function () {
 
 var buildIndexPage = function () {
     var inject = require('gulp-inject');
-    var target = gulp.src('./src/index.php');
+    var target = gulp.src('./src/index.html');
     var sriHashes = JSON.parse(fs.readFileSync('./build/sri.json'));
 
     target = target.pipe(inject(gulp.src('./build/inline.css'), {
@@ -191,14 +191,14 @@ var buildIndexPage = function () {
             //note: we aren't actually doing anything with app.js, but a file is mandatory
             var output = '<script>';
             output += '\nwindow.__cmwn = {};';
-            output += '\nwindow.__cmwn.MODE = "local";';
+            output += '\nwindow.__cmwn.MODE = "production";';
             output += '\nwindow.__cmwn.VERSION = "' + appPackage.version + '";';
             _.each(process.env, function (value, key) {
                 if (key.indexOf(APP_PREFIX) === 0) {
                     console.log('Writing ' + key + ' : ' + value);
                     output +=
                         '\nwindow.__cmwn.' +
-                        _.capitalize(key.split(APP_PREFIX)[1]) +
+                        _.toUpper((key.split(APP_PREFIX)[1])) +
                         ' = ' + JSON.stringify(value) + ';';
                 }
             });
