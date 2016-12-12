@@ -31,15 +31,14 @@ class GodModeSiteNav extends React.Component {
     }
 
     getSaSettingsLinks() {
-        var self = this;
-        var links = self.props.currentUser._links;
+        var links = this.props.currentUser._links;
         var promise;
 
         if (!links || !links.sa_settings) return;
 
         promise = Promise.all([HttpManager.GET(links.sa_settings.href)]);
         promise.then((res) => {
-            self.setState({saLinks: res[0].response._links});
+            this.setState({saLinks: res[0].response._links});
         });
     }
 
@@ -54,11 +53,11 @@ class GodModeSiteNav extends React.Component {
             _.map(PrivateRoutes, (route) => {
                 var params = {};
                 var url;
-                if (route.path.match(/^sa/g) && item.label !== null) {
+                if (route.path.match(/^sa/g) && route.endpoint && item.label !== null) {
 
-                    if (route.endpoint && ~route.endpoint.indexOf(':')) {
-                        // if there are params in the route end point, we try to extract params
-                        // and if no params could be extracted, route is ignored
+                    if (~route.endpoint.indexOf(':')) {
+                    // if there are params in the route end point, we try to extract params
+                    // and if no params could be extracted, route is ignored
                         params = Util.matchPathAndExtractParams(
                             route.endpoint, item.href.split('/').slice(3).join('/')
                         );
@@ -66,9 +65,6 @@ class GodModeSiteNav extends React.Component {
                     } else {
                         if (route.endpoint !== '$$' + key && !~item.href.indexOf(route.endpoint)) return;
                     }
-
-                    if (route.endpoint !== '$$' + key && !~item.href.indexOf(route.endpoint) &&
-                        route.title !== item.label) return;
 
                     url = Util.replacePathPlaceholdersFromParamObject(route.path, params).split('(')[0];
                     item.url = url.indexOf('/') === 0 ? url : '/' + url;
@@ -150,4 +146,3 @@ class GodModeSiteNav extends React.Component {
 }
 
 export default GodModeSiteNav;
-

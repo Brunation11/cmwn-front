@@ -115,7 +115,6 @@ var routes = [
     { path: 'resources(/)', component: ResourceCenter, endpoint: ''},
 //    { path: 'user/:id/feed(/)', title: 'News Feed', endpoint: '/user/:id/feed', component: NewsFeed},
     { path: 'help(/)', title: 'Help', component: Help},
-    { path: 'all-about-you(/)', title: 'AAY Data', endpoint: '/game-data/all-about-you', component: AAYView},
     { path: '/flaggedimages(/)', title: 'Flagged Images', endpoint: '/flag', component: FlagView},
 
     { path: 'sa/games(/)', title: 'Manage Games', endpoint: '$$games', component: GodModeGames},
