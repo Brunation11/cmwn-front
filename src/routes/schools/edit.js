@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 
 import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
+import DropdownDatepicker from 'components/dropdown_datepicker';
 import Validate from 'components/validators';
 import Log from 'components/log';
 import Toast from 'components/toast';
@@ -34,7 +35,9 @@ const REFS = {
     FILE_INPUT: 'fileInput',
     TEACHER_INPUT: 'teacherInput',
     STUDENT_INPUT: 'studentInput',
-    TOS_INPUT: 'tosInput'
+    TOS_INPUT: 'tosInput',
+    START_DATE_SELECTED: 'startDateSelected',
+    START_DATE: 'startDate'
 };
 
 const LABELS = {
@@ -46,7 +49,9 @@ const LABELS = {
     UPLOAD: 'Upload Spreadsheet',
     TEACHER_CODE: 'Teacher Access Code',
     STUDENT_CODE: 'Student Access Code',
-    ACCEPT: 'I accept the terms and conditions.'
+    ACCEPT: 'I accept the terms and conditions.',
+    START_DATE_SELECTED: 'Delay account activity start date',
+    START_DATE: 'Start Date'
 };
 
 export const ERRORS = {
@@ -98,7 +103,8 @@ export class SchoolEdit extends React.Component {
         this.state = {
             code: '',
             title: '',
-            description: ''
+            description: '',
+            startdateselected: false
         };
     }
 
@@ -253,7 +259,9 @@ export class BulkUpload extends React.Component {
             studentCode: '',
             teacherCode: '',
             tos: false,
-            open: false
+            open: false,
+            startdateselected: false,
+            startDate: Date.now()
         };
     }
 
@@ -298,6 +306,25 @@ export class BulkUpload extends React.Component {
             ReactDOM.findDOMNode(this.refs.formRef).reset();
         }, 0);
         return result;
+    }
+    renderStartDate(){
+        if (!this.state.startdateselected) return null;
+        return (
+            <DropdownDatepicker
+                label={LABELS.START_DATE}
+                ref={REFS.START_DATE}
+                value={this.state.startDate}
+                name="code_start"
+                hasFeedback
+                onChange={
+                    date => {
+                        this.setState({
+                            startDate: date,
+                        });
+                    }
+                }
+            />
+        );
     }
 
     render() {
@@ -347,6 +374,15 @@ export class BulkUpload extends React.Component {
                     id="student-code"
                     onChange={e => this.setState({studentCode: e.target.value})}
                 />
+                <Input
+                    type="checkbox"
+                    checked={this.state.startdateselected}
+                    ref={REFS.START_DATE_SELECTED}
+                    label={LABELS.START_DATE_SELECTED}
+                    name="startdate"
+                    onChange={e => this.setState({startdateselected: e.target.checked})}
+                />
+                {this.renderStartDate()}
                 <FormControls.Static value={TERMS_COPY} />
                 <Input
                     type="checkbox"
