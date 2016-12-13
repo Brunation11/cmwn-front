@@ -67,7 +67,8 @@ export class Home extends React.Component {
     }
 
     componentDidMount() {
-        History.replace('/home');
+        //History.replace('/home');
+        //Store.
     }
 
     logoLink() {
@@ -159,11 +160,16 @@ export class Home extends React.Component {
 /* istanbul ignore next */
 mapStateToProps = state => {
     var currentUser = {};
+    var userId;
     if (state.currentUser) {
         currentUser = state.currentUser;
     }
+    if (state.current_user && state.current_user.user_id) {
+        userId = state.current_user.user_id;
+    }
     return {
-        currentUser
+        currentUser,
+        userId
     };
 };
 

@@ -28,6 +28,8 @@ html {
 }
 
 body {
+    background: url('media/loader.gif') no-repeat center;
+    background-size: 18%;
 
     @media (max-width: $device-max-break) {
         font-size: $min-base-font-size; //IE vmax fallback
@@ -104,10 +106,11 @@ h3 {
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
     opacity: 0;
-    background: url('media/generic_error.png') $cmwn-white;
+    background: url('media/pageerror-hopeless.png') $cmwn-white;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
+    -ms-behavior: url('/backgroundsize.min.htc');
 }
 
 @keyframes fadein {
