@@ -97,9 +97,15 @@ class Page extends React.Component {
         var currentYear = new Date().getFullYear();
 
         _.each(Array(150), (year, i) => {
-            items.push(
-                <option value={currentYear - i} key={Shortid.generate()}>{currentYear - i}</option>
-            );
+            if (this.props.future) {
+                items.push(
+                    <option value={currentYear + i} key={Shortid.generate()}>{currentYear + i}</option>
+                );
+            } else {
+                items.push(
+                    <option value={currentYear - i} key={Shortid.generate()}>{currentYear - i}</option>
+                );
+            }
         });
 
         return items;
@@ -159,8 +165,8 @@ class Page extends React.Component {
                 <input
                     type="hidden"
                     name={this.props.name}
-                    value={(new Date(this.state.date).toUTCString())}/
-                >
+                    value={(new Date(this.state.date).toUTCString())}
+                />
             </span>
         );
     }

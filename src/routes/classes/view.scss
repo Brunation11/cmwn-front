@@ -1,7 +1,21 @@
-@import 'variables';
+@import '../../variables';
 
 .datatable thead tr {
     font-size: 120%;
+}
+
+.code-update {
+    border: 1px dotted $cmwn-black;
+    padding: 15px;
+    text-align: right;
+
+    .form-control,
+    .btn,
+    .form-group {
+        display: inline;
+        margin: 5px;
+        width: auto;
+    }
 }
 
 @media (min-width: $device-max-break) and (max-width: 700px) { //arbitrary values relevant to elements natural break points
