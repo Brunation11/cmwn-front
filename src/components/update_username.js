@@ -1,8 +1,9 @@
-/* eslint-disable max-lines */
+/*eslint max-lines: ["error", 550]*/
+//do not extend the length of this file again. if it becomes more complex,
+//it needs to be broken apart into more managable modules
 import React from 'react';
 import {Button, Modal} from 'react-bootstrap';
 import ClassNames from 'classnames';
-import _ from 'lodash';
 
 import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
@@ -10,6 +11,8 @@ import Log from 'components/log';
 import Toast from 'components/toast';
 
 import 'components/update_username.scss';
+
+const COMPONENT_UNIQUE_IDENTIFIER = 'update-username';
 
 const GOOD_UPDATE = 'Username updated to ';
 const BAD_UPDATE = 'Could not update your user name to ';
@@ -60,11 +63,11 @@ export class UpdateUsername extends React.Component {
     constructor() {
         super();
 
-        this.state = _.defaults({
+        this.state = {
             loading: false,
             page: 'welcome',
             generatorOn: false
-        });
+        };
     }
 
     componentDidMount() {
@@ -478,7 +481,7 @@ export class UpdateUsername extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className={COMPONENT_UNIQUE_IDENTIFIER}>
                 <Modal
                     className={`username-generator-modal ${this.state.page}`}
                     show={this.state.generatorOn}
