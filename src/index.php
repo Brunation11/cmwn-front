@@ -92,6 +92,16 @@ if (!$https && $proxy !== 'https') {
             echo "</script>";
          ?>
         <script>
+            var $buoop = {vs:{i:10,f:25,o:-4,s:8,c:30},mobile:false,api:4,reminder:0};
+            function $buo_f(){
+             var e = document.createElement("script");
+             e.src = "//browser-update.org/update.min.js";
+             document.body.appendChild(e);
+            };
+            try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
+            catch(e){window.attachEvent("onload", $buo_f)}
+        </script>
+        <script>
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
           (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
           m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -107,7 +117,6 @@ if (!$https && $proxy !== 'https') {
         </script>
     </head>
     <body>
-<!--[if lte IE 9]><style media="screen">.old-browsers{position:relative;background:#fff;width:100%;height:100%;color:#000;font-family:sans-serif;font-size:20px;text-align:center;padding:0;margin:0}.old-browsers h2{padding:20px 0}.old-browsers p,.old-browsers ul{margin:0 auto}.old-browsers p{max-width:700px;padding-b=ottom:50px;line-height:1.4em}.old-browsers ul li{display:inline-block;padding:0 25px}.old-browsers ul li img{width:115px; border: 0;}.old-browsers ul li p{padding-top:15px;color:#249AE1}body{margin:0;padding:0}</style><div class="old-browsers"><h2>Browser out of date.</h2><p>It appears you're running on a very old web browser that we're unable to support. If you would like to view the site you'll need to update your browser. Please choose from any of the following modern browsers. Thanks!</p><ul><li> <a href="https://www.google.com/intl/en/chrome/browser/desktop/index.html#brand=CHMB&utm_campaign=en&utm_source=en-ha-na-us-sk&utm_medium=ha"> <img src="http://kni-labs.github.io/old-browsers/img/chrome_128x128.png" alt="Google Chrome"><p>Google Chrome</p> </a></li><li> <a href="https://www.mozilla.org/en-US/firefox/new/"> <img src="http://kni-labs.github.io/old-browsers/img/firefox_128x128.png" alt="Mozilla Firefox"><p>Mozilla Firefox</p> </a></li><li> <a href="https://support.apple.com/downloads/safari"> <img src="http://kni-labs.github.io/old-browsers/img/safari_128x128.png" alt="Safari"><p>Safari</p> </a></li><li> <a href="http://windows.microsoft.com/en-us/internet-explorer/download-ie"> <img src="http://kni-labs.github.io/old-browsers/img/internet-explorer_128x128.png" alt="Internet Explorer"><p>Internet Explorer</p> </a></li><li> <a href="https://www.microsoft.com/en-us/windows/microsoft-edge"> <img src="http://kni-labs.github.io/old-browsers/img/edge_128x128.png" alt="Internet Explorer"><p>Microsoft Edge</p> </a></li></ul></div><![endif]-->
         <div id="pageerror"><a href="/login"> </a></div>
         <div id="cmwn-app"></div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.3.14/polyfill.min.js" crossorigin="anonymous"></script>
@@ -115,13 +124,14 @@ if (!$https && $proxy !== 'https') {
             <script>
             (function(){
             var ef = function(){};
+            window.__browserOutdated = 'very';
             window.console = window.console || {log:ef,warn:ef,error:ef,dir:ef};
             }());
             </script>
             <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
             <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv-printshiv.min.js"></script>
             <script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-shim.js"></script>
-            <script src="//cdnjs.cloudflare.com/ajax/libs/es5-shim/3.4.0/es5-sham.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-sham.min.js" integrity="sha256-VWp+JQdfSrhpjCFLnytj5imNZ6utXYSk2vVGgsekbok=" crossorigin="anonymous"></script>
         <![endif]-->
         <!--[if IE]>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/flexie/1.0.3/flexie.min.js"></script>
@@ -220,12 +230,22 @@ if (!$https && $proxy !== 'https') {
         </script>
         <script>
             var style = document.createElement('style');
-            style.appendChild(document.createTextNode(''));
-            document.head.appendChild(style);
-            if (document.styleSheets[0].addRule != null){
-                style.sheet.addRule('#pageerror', 'display:none;', 0);
-            } else if (document.styleSheets[0].insertRule != null) {
-                style.sheet.insertRule('#pageerror{display:none;}', 0);
+            if (window.__browserOutdated == null) {
+                style.appendChild(document.createTextNode(''));
+                document.head.appendChild(style);
+                if (document.styleSheets[0].addRule != null){
+                    style.sheet.addRule('#pageerror', 'display:none;', 0);
+                } else if (document.styleSheets[0].insertRule != null) {
+                    style.sheet.insertRule('#pageerror{display:none;}', 0);
+                }
+            } else {
+                style.appendChild(document.createTextNode(''));
+                document.head.appendChild(style);
+                if (document.styleSheets[0].addRule != null){
+                    style.sheet.addRule('#pageerror', 'opacity:1;', 0);
+                } else if (document.styleSheets[0].insertRule != null) {
+                    style.sheet.insertRule('#pageerror{opacity:1;}', 0);
+                }
             }
         </script>
         <!-- rollbar -->
