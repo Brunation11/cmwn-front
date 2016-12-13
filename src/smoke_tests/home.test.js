@@ -13,8 +13,6 @@ export default function () {
         it('Renders homepage using mount', function () {
             const WRAPPER = mount(<Home currentUser={{}} />);
             expect(WRAPPER.instance()).to.be.instanceOf(Home);
-            expect(History.getCurrentLocation().pathname).to.equal('/home');
-            expect(History.getCurrentSize()).to.equal(1);
             History.reset();
         });
 
@@ -49,8 +47,6 @@ export default function () {
 
         it('responds properly to clicking logo as anonymous user', function () {
             const WRAPPER = mount(<Home currentUser={{}} />);
-            expect(History.getCurrentSize()).to.equal(1);
-            expect(History.getCurrentLocation().pathname).to.equal('/home');
             WRAPPER.find('.logo-button').at(0).simulate('click');
             expect(History.getCurrentSize()).to.equal(1);
             expect(History.getCurrentLocation().pathname).to.equal('/home');
@@ -59,8 +55,6 @@ export default function () {
 
         it('responds properly to clicking logo as logged in user', function () {
             const WRAPPER = mount(<Home currentUser={{user_id: 'test'}} />); //eslint-disable-line camelcase
-            expect(History.getCurrentSize()).to.equal(1);
-            expect(History.getCurrentLocation().pathname).to.equal('/home');
             WRAPPER.find('.logo-button').at(0).simulate('click');
             expect(History.getCurrentSize()).to.equal(1);
             expect(History.getCurrentLocation().pathname).to.equal('/profile');
@@ -70,21 +64,17 @@ export default function () {
 
         it('responds properly to clicking login as anyonymous user', function () {
             const WRAPPER = mount(<Home currentUser={{}} />);
-            expect(History.getCurrentLocation().pathname).to.equal('/home');
-            expect(History.getCurrentSize()).to.equal(1);
             WRAPPER.find('#login').simulate('click');
             expect(History.getCurrentLocation().pathname).to.equal('/login');
-            expect(History.getCurrentSize()).to.equal(2);
+            expect(History.getCurrentSize()).to.equal(1);
             History.reset();
         });
 
         it('responds properly to clicking login as logged in user', function () {
             const WRAPPER = mount(<Home currentUser={{user_id: 'test'}} />); //eslint-disable-line camelcase
-            expect(History.getCurrentLocation().pathname).to.equal('/home');
-            expect(History.getCurrentSize()).to.equal(1);
             WRAPPER.find('#login').simulate('click');
             expect(History.getCurrentLocation().pathname).to.equal('/profile');
-            expect(History.getCurrentSize()).to.equal(2);
+            expect(History.getCurrentSize()).to.equal(1);
             History.reset();
         });
 
