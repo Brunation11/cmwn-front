@@ -39,7 +39,7 @@ var checkSuperUser = function (WRAPPER, UPLOAD_WRAPPER) {
     expect(WRAPPER.find('Layout')).to.have.length(1);
     expect(WRAPPER.find('Panel')).to.have.length(2);
     expect(WRAPPER.find('Link')).to.have.length(1);
-    expect(WRAPPER.find('Input')).to.have.length(4);
+    expect(WRAPPER.find('Input')).to.have.length(5);
     expect(WRAPPER.find('ValidatedInput')).to.have.length(2);
     expect(WRAPPER.find('.content').find('Button')).to.have.length(2);
     expect(WRAPPER.find('BulkUpload')).to.have.length(1);
@@ -54,7 +54,7 @@ var checkSuperUser = function (WRAPPER, UPLOAD_WRAPPER) {
     expect(UPLOAD_WRAPPER.find('Form')).to.have.length(1);
     expect(UPLOAD_WRAPPER.find('[type="hidden"]')).to.have.length(4);
     expect(UPLOAD_WRAPPER.find('Static')).to.have.length(1);
-    expect(UPLOAD_WRAPPER.find('Input')).to.have.length(2);
+    expect(UPLOAD_WRAPPER.find('Input')).to.have.length(3);
     expect(UPLOAD_WRAPPER.find('ValidatedInput')).to.have.length(2);
     expect(UPLOAD_WRAPPER.find('Static')).to.have.length(1);
     expect(UPLOAD_WRAPPER.find('Button')).to.have.length(1);

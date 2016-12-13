@@ -236,6 +236,7 @@ export class EditProfile extends React.Component {
         return (
             <DropdownDatepicker
                 ref="dropdownDatepicker"
+                label="Birthday: "
                 disabled={!perms.birthday.canEdit}
                 value={this.state.dob}
                 hasFeedback
