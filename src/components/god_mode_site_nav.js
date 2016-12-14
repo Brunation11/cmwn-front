@@ -67,9 +67,6 @@ class GodModeSiteNav extends React.Component {
                         if (route.endpoint !== '$$' + key && !~item.href.indexOf(route.endpoint)) return;
                     }
 
-                    if (route.endpoint !== '$$' + key && !~item.href.indexOf(route.endpoint) &&
-                        route.title !== item.label) return;
-
                     url = Util.replacePathPlaceholdersFromParamObject(route.path, params).split('(')[0];
                     item.url = url.indexOf('/') === 0 ? url : '/' + url;
                 }
