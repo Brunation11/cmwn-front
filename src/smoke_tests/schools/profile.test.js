@@ -28,7 +28,7 @@ var checkBasicComponents = function (WRAPPER) {
 };
 
 var checkAdminComponents = function (WRAPPER) {
-    expect(WRAPPER.find('.purple')).to.have.length(1);
+    expect(WRAPPER.find('.content').find('.purple')).to.have.length(1);
     expect(WRAPPER.find('.school-admin-link')).to.have.length(1);
 };
 
