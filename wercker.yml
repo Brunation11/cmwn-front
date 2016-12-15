@@ -32,7 +32,11 @@ build:
     - slack-notifier:
       url: $SLACK_URL
 release:
-  box: python:2.7
+  box:
+    id: cmwn/python
+    username: $DOCKER_USER
+    password: $DOCKER_PASS
+    entrypoint: /bin/bash -c
   steps:
     - script:
       name: Preparing release and Uploading zip artifact
