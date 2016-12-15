@@ -75,7 +75,7 @@
     "express-http-proxy": "^0.6.0",
     "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.8.4",
-    "gifsicle": "0.1.4",
+    "gifsicle": "3.0.4",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "gulp-env": "^0.4.0",
