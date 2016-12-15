@@ -7,7 +7,6 @@ import Toast from 'components/toast';
 import Log from 'components/log';
 import History from 'components/history';
 import HttpManager from 'components/http_manager';
-import Store from 'components/store';
 import GLOBALS from 'components/globals';
 
 import Layout from 'layouts/one_col';
@@ -138,11 +137,13 @@ var Component = React.createClass({
         });
     },
     attemptLogin: function (e) {
-        var user = this.getUsernameWithoutSpaces();
+        var user;
         var logout;
         var logoutUrl;
 
         if (this.state.currentPage === 'forgot-password') return;
+
+        user = this.getUsernameWithoutSpaces();
 
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
             if (this.props.data._links && this.props.data._links.login == null) {
@@ -180,7 +181,6 @@ var Component = React.createClass({
     },
     forgotPass: function (e) {
         var req;
-        var state = Store.getState();
 
         if (this.state.currentPage === 'login') return;
 
@@ -192,7 +192,7 @@ var Component = React.createClass({
                 //unauthenticated visitors have a session and are allowed to take
                 //a handful of actions, like forgot.
                 req = HttpManager.POST({
-                    url: state.currentUser._links.forgot.href,
+                    url: this.props.currentUser._links.forgot.href,
                 }, {
                     'email': this.refs.reset.getValue(),
                 });
