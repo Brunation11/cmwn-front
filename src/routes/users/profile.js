@@ -257,7 +257,15 @@ export class Profile extends React.Component {
     }
 
     renderUserProfile() {
-        var ISODate = (new Date(this.state.birthdate)).toISOString();
+        var ISODate;
+        try {
+            ISODate = (new Date(this.state.birthdate)).toISOString();
+        } catch(err) {
+            //don't fail to load the page because the user doesn't
+            //have a birthday entered on their profile for some
+            //reason
+            ISODate = (Date.now()).toISOString();
+        }
         if (this.state.friend_status === 'FRIEND') {
             return (
                 <div>

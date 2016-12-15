@@ -214,7 +214,14 @@ var Component = React.createClass({
         }
     },
     getUsernameWithoutSpaces: function () {
-        var newLogin = this.refs.login.getValue().replace(/\s/g, '');
+        var newLogin;
+        try {
+            newLogin = this.refs.login.getValue().replace(/\s/g, '');
+        } catch(err) {
+            //ref not yet mounted, probably somebody getting antsy and
+            //hammering the enter key.
+            newLogin = '';
+        }
         return newLogin;
     },
     renderLogin: function () {
