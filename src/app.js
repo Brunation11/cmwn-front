@@ -397,6 +397,9 @@ Store.subscribe(() => {
     var state = Store.getState();
     if (state.page && state.page.title !== lastState.page.title) {
         Util.setPageTitle(state.page.title);
+        if (window.ga != null) {
+            window.ga('set', 'documentTitle', state.page.title);
+        }
     }
     progressivePageLoad();
     lastState = Store.getState();
@@ -466,7 +469,10 @@ function run() {
         window._bootstrap_attempts++;
         ReactDOM.render((
                 <Provider store={Store} >
-                    <Router history={History} routes={routes} />
+                    <Router history={History} routes={routes} onUpdate={() => {
+                        window.ga('set', 'page', window.location.href);
+                        window.ga('send', 'pageview');
+                    }}/>
                 </Provider>
         ), document.getElementById('cmwn-app'));
         console.log('%cWoah there, World Changer!', 'font-weight: bold; color: red; font-size: 60px; font-family: Helvetica, Impact, Arial, sans-serif; text-shadow: 2px 2px grey;'); //eslint-disable-line no-console, max-len

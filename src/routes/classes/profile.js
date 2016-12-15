@@ -1,6 +1,7 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
 import _ from 'lodash';
 import QueryString from 'query-string';
+import {Link} from 'react-router';
 import {Panel} from 'react-bootstrap';
 import { connect } from 'react-redux';
 
@@ -12,7 +13,6 @@ import EditLink from 'components/edit_link';
 import Util from 'components/util';
 import GenerateDataSource from 'components/datasource';
 import GLOBALS from 'components/globals';
-import Flag from 'components/flag';
 
 import 'routes/classes/profile.scss';
 
@@ -75,24 +75,26 @@ export class Profile extends React.Component {
             </a></p>
         );
     }
-
-    renderCard(item) {
+    renderFlip(item){
+        var image;
+        if (!_.has(item, '_embedded.image')) {
+            image = GLOBALS.DEFAULT_PROFILE;
+        } else {
+            if (item._embedded.image.url != null) {
+                image = item._embedded.image.url;
+            } else {
+                image = item.images.data[0].url;
+            }
+        }
         return (
-            <Flag
-                data={item}
-            >
-                <a
-                    className="user-card"
-                    key={Shortid.generate()}
-                    href={`/profile/${item.user_id}`}
-                >
-                    <img className="avatar" src={item.image} />
-                    <p className="link-text" >{item.username}</p>
-                </a>
-            </Flag>
+            <div className="flip" key={Shortid.generate()}>
+                <Link to={`/student/${item.user_id.toString()}`} id={item.username}>
+                    <img src={image}></img>
+                    <p className="linkText" >{item.username}</p>
+                </Link>
+            </div>
         );
     }
-
     renderClassInfo() {
         if (
             this.state.group_id == null || (
@@ -123,21 +125,8 @@ export class Profile extends React.Component {
                {this.renderClassInfo()}
                <USER_SOURCE>
                     <FlipBoard
-                        renderFlip={this.renderCard.bind(this)}
+                        renderFlip={this.renderFlip}
                         header={`${HEADINGS.CLASS} ${this.state.title}`}
-                        transform={data => {
-                            var image;
-                            if (!_.has(data, '_embedded.image')) {
-                                image = GLOBALS.DEFAULT_PROFILE;
-                            } else {
-                                if (data._embedded.image.url != null) {
-                                    image = data._embedded.image.url;
-                                } else {
-                                    image = data.images.data[0].url;
-                                }
-                            }
-                            return data.set('image', image);
-                        }}
                     />
                </USER_SOURCE>
            </Layout>

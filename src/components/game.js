@@ -48,6 +48,7 @@ export class Game extends React.Component {
         super();
 
         this.state = {
+            isFullscreen: false,
             fullscreenFallback: false,
             demo: false
         };
@@ -64,13 +65,25 @@ export class Game extends React.Component {
                 this.onExit.bind(this)
             )
         });
+        if (Screenfull.enabled) {
+            document.addEventListener(Screenfull.raw.fullscreenchange, () => {
+                this.setState({isFullscreen: Screenfull.isFullscreen});
+            });
+        }
     }
 
     componentDidMount() {
         var frame = ReactDOM.findDOMNode(this.refs.gameRef);
         var callApi;
+
         if (!frame) {
             return;
+        }
+
+        if (Screenfull.enabled) {
+            document.addEventListener(Screenfull.raw.fullscreenchange, () => {
+                this.setState({isFullscreen: Screenfull.isFullscreen});
+            });
         }
 
         callApi = _.debounce(function () {
@@ -149,6 +162,7 @@ export class Game extends React.Component {
         if (e.keyCode === 27 || e.charCode === 27) {
             Screenfull.exit();
             this.setState({
+                isFullscreen: false,
                 fullscreenFallback: false,
             });
         }
@@ -173,12 +187,14 @@ export class Game extends React.Component {
     }
 
     makeFullScreen() {
+        var nextState = {isFullscreen: true};
         if (Screenfull.enabled) {
             Screenfull.request(ReactDOM.findDOMNode(this.refs.wrapRef));
         } else {
-            this.setState({fullscreenFallback: true});
-            this.resizeFrame.call(this);
+            nextState.fullscreenFallback = true;
+            this.resizeFrame();
         }
+        this.setState(nextState);
     }
 
     checkForPortrait() {
@@ -199,7 +215,7 @@ export class Game extends React.Component {
             <div className={COMPONENT_IDENTIFIER}>
                 <div ref="wrapRef" className={ClassNames(
                     'game-frame-wrapper',
-                    {fullscreen: this.state.fullscreenFallback}
+                    {fs: this.state.isFullscreen, fullscreen: this.state.fullscreenFallback}
                 )}>
                     <div
                         ref="overlay"

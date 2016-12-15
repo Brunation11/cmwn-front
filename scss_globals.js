@@ -1,5 +1,5 @@
 if (!process.env.APP_MEDIA_URL) {
-    process.env.APP_MEDIA_URL = "https://media-staging.changemyworldnow.com/f/";
+    process.env.APP_MEDIA_URL = "https://media.changemyworldnow.com/f/";
 }
 
 function jsonToScssVars (obj, indent) {
