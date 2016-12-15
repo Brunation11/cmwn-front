@@ -232,6 +232,7 @@ var buildIndexPage = function () {
         }));
     }
 
+    console.log('finishing index build');
     return target.pipe(gulp.dest('./build'));
 };
 
@@ -407,12 +408,11 @@ gulp.task('watch-code', ['watch-js', 'watch-scss']);
 
 gulp.task('watch-js', function () {
     isWatchInstance = true;
-    gulp.watch(['src/**/*.js', '!src/**/*.test.js'],
-         ['webpack:build', 'explicit-utf-8', 'sri'], buildIndexPage);
+    gulp.watch(['src/**/*.js', '!src/**/*.test.js'], ['noStyleIndex']);
 });
 
 gulp.task('watch-scss', function () {
-    gulp.watch(['src/**/*.scss'], ['primary-style'], buildIndexPage);
+    gulp.watch(['src/**/*.scss'], ['noBuildIndex']);
 });
 
 gulp.task('watch-test', function () {
@@ -476,6 +476,9 @@ gulp.task('build-production', executeAsProcess('gulp build', ['build', '--produc
 
 /*·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´Resource and Static Asset Tasks`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·*/
 gulp.task('index', ['primary-style', 'webpack:build', 'explicit-utf-8', 'sri'], buildIndexPage);
+
+gulp.task('noBuildIndex', ['primary-style', 'explicit-utf-8', 'sri'], buildIndexPage);
+gulp.task('noStyleIndex', ['webpack:build', 'explicit-utf-8', 'sri'], buildIndexPage);
 
 gulp.task('primary-style', buildAndCopyStaticResources);
 
