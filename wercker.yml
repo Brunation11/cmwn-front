@@ -31,7 +31,7 @@ release:
   box: python:2.7
   steps:
     - script:
-      name: Preparing release
+      name: Preparing release and Uploading zip artifact
       code: |-
         export VERSION="$($PWD/bin/version_bump.sh --print-current)"
         echo "$VERSION"
@@ -39,78 +39,16 @@ release:
         mv build.zip artifact/platform-front-$VERSION.zip
         ls -al artifact/platform-front-$VERSION.zip
         echo "Changed file name"
-    - s3sync:
-      name: Uploading package to Amazon S3
-      key-id: $AWS_ACCESS_KEY_ID
-      key-secret: $AWS_SECRET_ACCESS_KEY
-      bucket-url: $AWS_BUCKET_URL
-      source-dir: artifact/
-      delete-removed: false
     - github-create-release:
       name: Creating release on github
       token: $MC_GITHUB_TOKEN
       tag: $VERSION
       draft: false
-    - github-upload-asset:
-      name: Adding build artifact to tag
-      token: $MC_GITHUB_TOKEN
-      tag: $VERSION
-      file: artifact/platform-front-$VERSION.zip
-      filename: platform-front-$VERSION.zip
-
-draft-release:
-  box: python:2.7
-  steps:
     - script:
-      name: Preparing release
+      name: Uploading to s3
       code: |-
-        export SHORT_HASH=$(git log -n 1 --abbrev-commit | head -n 1 | sed -e 's/^commit //')
-        export VERSION="$($PWD/bin/version_bump.sh --print-current)-$SHORT_HASH"
-        echo "$VERSION"
-        mkdir -p artifact
-        mv build.zip artifact/platform-front-$VERSION.zip
-        ls -al artifact/platform-front-$VERSION.zip
-        echo "Changed file name"
-    - s3sync:
-      name: Uploading package to Amazon S3
-      key-id: $AWS_ACCESS_KEY_ID
-      key-secret: $AWS_SECRET_ACCESS_KEY
-      bucket-url: $AWS_BUCKET_URL
-      source-dir: artifact/
-      delete-removed: false
-    - github-create-release:
-      name: Creating release on github
-      token: $MC_GITHUB_TOKEN
-      tag: $VERSION
-      draft: true
-    - github-upload-asset:
-      name: Adding build artifact to tag
-      token: $MC_GITHUB_TOKEN
-      tag: $VERSION
-      file: artifact/platform-front-$VERSION.zip
-      filename: platform-front-$VERSION.zip
-
-deploy-draft:
-  box:
-    id: cmwn/python
-    username: $DOCKER_USER
-    password: $DOCKER_PASS
-    entrypoint: /bin/bash -c
-  steps:
-    - script:
-      name: Preparing release
-      code: |-
-        export SHORT_HASH=$(git log -n 1 --abbrev-commit | head -n 1 | sed -e 's/^commit //')
-        export VERSION="$($PWD/bin/version_bump.sh --print-current)-$SHORT_HASH"
-        echo "$VERSION"
-    - script:
-      name: Running deploy
-      code: |-
-        echo "Deploying $DEPLOY_APP_NAME @ $VERSION to $DEPLOY_ENV"
-        python /deploy.py $VERSION $DEPLOY_APP_NAME $DEPLOY_ENV -v
-  after-steps:
-    - slack-notifier:
-      url: $SLACK_URL
+        echo "Uploading to S3"
+        python /deploy_to_s3.py -v --version $VERSION
 
 deploy:
   box:
@@ -120,15 +58,10 @@ deploy:
     entrypoint: /bin/bash -c
   steps:
     - script:
-      name: Preparing release
+      name: Linking build
       code: |-
-        export VERSION="$($PWD/bin/version_bump.sh --print-current)"
-        echo "$VERSION"
-    - script:
-      name: Running deploy
-      code: |-
-        echo "Deploying $DEPLOY_APP_NAME @ $VERSION to $DEPLOY_ENV"
-        python /deploy.py $VERSION $DEPLOY_APP_NAME $DEPLOY_ENV -v
+        echo "Linking $DEPLOY_APP_NAME @ $VERSION to $DEPLOY_ENV"
+        python /deploy_to_s3.py --version=$VERSION --link $DEPLOY_ENV --link-only
   after-steps:
     - slack-notifier:
       url: $SLACK_URL
