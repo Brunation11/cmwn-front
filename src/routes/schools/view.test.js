@@ -34,8 +34,8 @@ var checkAdminContent = function (WRAPPER) {
 };
 
 var checkNoSuperUserContent = function (WRAPPER) {
-    expect(WRAPPER.find('.purple')).to.have.length(1);
-    expect(WRAPPER.contains('.green')).to.equal(false);
+    expect(WRAPPER.find('.content').find('.purple')).to.have.length(1);
+    expect(WRAPPER.find('.content').contains('.green')).to.equal(false);
 };
 
 var checkSuperUserContent = function (WRAPPER) {

@@ -13,6 +13,7 @@ $cmwn-blue-light: lighten(#2CC4F4, 10%);
 $cmwn-blue-dark: darken(#2CC4F4, 10%);
 $cmwn-red: #fc0000;
 $cmwn-green: #47b72c;
+$cmwn-lime: #00ff00;
 $rule-light-gray: #e6e6e6; // 10% Gray
 $copy-medium-gray: #666; // 60% Gray
 $cmwn-black: #000;
@@ -42,6 +43,7 @@ $cmwn-light-purple: #c380ff;
 $cmwn-lighter-purple: #d5a4ff;
 $cmwn-blue-green: #04d4da;
 $cmwn-deep-blue: #0a86b7;
+$cmwn-shady: rgba(0, 0, 0, .5);
 
 //************************measures**********************
 //page
@@ -109,3 +111,4 @@ $iphone6plus-min-width: 414px;
 $iphone6plus-max-width: 736px;
 $game-fullscreen-height-landscape-iphone6plus: calc(100vmax * .5625);
 
+$media-url: 'https://media.changemyworldnow.com/f/';

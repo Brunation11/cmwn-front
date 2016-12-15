@@ -170,7 +170,7 @@ var buildVendor = function () {
 
 var buildIndexPage = function () {
     var inject = require('gulp-inject');
-    var target = gulp.src('./src/index.php');
+    var target = gulp.src('./src/index.html');
     var sriHashes = JSON.parse(fs.readFileSync('./build/sri.json'));
 
     target = target.pipe(inject(gulp.src('./build/inline.css'), {
@@ -191,14 +191,14 @@ var buildIndexPage = function () {
             //note: we aren't actually doing anything with app.js, but a file is mandatory
             var output = '<script>';
             output += '\nwindow.__cmwn = {};';
-            output += '\nwindow.__cmwn.MODE = "local";';
+            output += '\nwindow.__cmwn.MODE = "production";';
             output += '\nwindow.__cmwn.VERSION = "' + appPackage.version + '";';
             _.each(process.env, function (value, key) {
                 if (key.indexOf(APP_PREFIX) === 0) {
                     console.log('Writing ' + key + ' : ' + value);
                     output +=
                         '\nwindow.__cmwn.' +
-                        _.capitalize(key.split(APP_PREFIX)[1]) +
+                        _.toUpper((key.split(APP_PREFIX)[1])) +
                         ' = ' + JSON.stringify(value) + ';';
                 }
             });
@@ -232,6 +232,7 @@ var buildIndexPage = function () {
         }));
     }
 
+    console.log('finishing index build');
     return target.pipe(gulp.dest('./build'));
 };
 
@@ -287,7 +288,12 @@ var buildAndCopyStaticResources = function () {
 
     var favicon = gulp.src('./src/media/favicon.ico').pipe(gulp.dest('./build'));
 
+    var logo = gulp.src('./src/media/cmwn-logo.png').pipe(gulp.dest('./build'));
+
     var htaccess = gulp.src('./.htaccess').pipe(gulp.dest('./build'));
+
+    //from https://github.com/louisremi/background-size-polyfill
+    var ie8CoverFix = gulp.src('./src/media/backgroundsize.min.htc').pipe(gulp.dest('./build'));
 
     var packageJson = gulp.src('./package.json').pipe(gulp.dest('./build'));
 
@@ -332,17 +338,18 @@ var runUnitTests = function (filePath = 'src/**/*.test.js') {
     process.env.NODE_ENV = 'production';
     process.env.BABEL_ENV = 'production';
     var tests = gulp.src([filePath], {read: false})
-         .pipe(mocha({
-             require: ['./src/testdom.js'],
-             timeout: 2000,
-             reporter: 'min'
-         }))
-         .once('error', () => {
-             process.exit(1);
-         })
-         .once('end', () => {
-             process.exit();
-         });
+        .pipe(mocha({
+            require: ['./src/testdom.js'],
+            timeout: 2000,
+            reporter: 'min'
+        }))
+        .once('error', (err) => {
+            console.log('SOMETHING HAPPENED:' + err);
+            process.exit(1);
+        })
+        .once('end', () => {
+            process.exit();
+        });
     tests.on('error', function (err) {
         console.log('SOMETHING HAPPENED:' + err);
     });
@@ -401,12 +408,11 @@ gulp.task('watch-code', ['watch-js', 'watch-scss']);
 
 gulp.task('watch-js', function () {
     isWatchInstance = true;
-    gulp.watch(['src/**/*.js', '!src/**/*.test.js'],
-         ['webpack:build', 'explicit-utf-8', 'sri'], buildIndexPage);
+    gulp.watch(['src/**/*.js', '!src/**/*.test.js'], ['noStyleIndex']);
 });
 
 gulp.task('watch-scss', function () {
-    gulp.watch(['src/**/*.scss'], ['primary-style'], buildIndexPage);
+    gulp.watch(['src/**/*.scss'], ['noBuildIndex']);
 });
 
 gulp.task('watch-test', function () {
@@ -470,6 +476,9 @@ gulp.task('build-production', executeAsProcess('gulp build', ['build', '--produc
 
 /*·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´Resource and Static Asset Tasks`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·*/
 gulp.task('index', ['primary-style', 'webpack:build', 'explicit-utf-8', 'sri'], buildIndexPage);
+
+gulp.task('noBuildIndex', ['primary-style', 'explicit-utf-8', 'sri'], buildIndexPage);
+gulp.task('noStyleIndex', ['webpack:build', 'explicit-utf-8', 'sri'], buildIndexPage);
 
 gulp.task('primary-style', buildAndCopyStaticResources);
 
