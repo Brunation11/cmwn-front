@@ -1,4 +1,5 @@
 import React from 'react';
+import ClassNames from 'classnames';
 
 import GodModeSiteNav from 'components/god_mode_site_nav';
 import Footer from 'components/footer';
@@ -17,6 +18,11 @@ var Layout = React.createClass({
         });
     },
     render: function () {
+        if (!this.props.currentUser ||
+            !this.props.currentUser._links ||
+            !this.props.currentUser._links.sa_settings ||
+            !this.props.currentUser._links.sa_settings.href) return null;
+
         return (
              <div className={'layout'}>
                 <GodModeSiteNav
@@ -24,7 +30,7 @@ var Layout = React.createClass({
                     navMenuId={this.props.navMenuId}
                     data={this.props.data}
                 />
-                <div className="content">
+                <div className={ClassNames('content', this.props.className)}>
                     {this.props.children}
                 </div>
                 <Footer loggedIn={this.props.currentUser && this.props.currentUser.username != null} />

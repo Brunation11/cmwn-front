@@ -1,8 +1,13 @@
-@import 'variables';
+@import '../../variables';
 
 // additional arbitrary break point that seems to work best with the defaults in variables
 $halfway-break-1: 826px;
 $halfway-break-2: 540px;
+$frame: '#{$media-url}c7dc7612fcdcfab9cee9dd3d83fa2141.png';
+$reset-header: '#{$media-url}13e1aa3c8a96389d0e5f9436e56110cc.png';
+$reset-btn: '#{$media-url}99bf313e31417ea15295ea7a5c416e85.png';
+$reset-btn-hvr: '#{$media-url}3975487f51b441024a9ae13d3d68ba7d.png';
+$btns: '#{$media-url}0c7044bc6e88f37a8910966dba68fe47.png';
 
 #cmwn-app .edit-profile { // scss-lint:disable IdSelector
     .content,
@@ -30,7 +35,7 @@ $halfway-break-2: 540px;
         font-size: 1.25rem;
     }
 
-    .form-control {
+    .form-control:not(.birthday-input) {
         outline: none;
         border: 0;
         border-radius: 0;
@@ -47,7 +52,7 @@ $halfway-break-2: 540px;
         text-align: center;
 
         &::before {
-            position: absolute;
+            //position: absolute;
             top: 0;
             bottom: 0;
             left: 50%;
@@ -137,7 +142,7 @@ $halfway-break-2: 540px;
             margin: $standard 0;
             outline: 0;
             border: 0;
-            background: url('../../media/edit_profile/btns.png');
+            background: url($btns);
             background-position: 633px 398px;
             width: 140px;
             height: 44px;
@@ -160,47 +165,41 @@ $halfway-break-2: 540px;
         }
     }
 
-    .dropdown-datepicker .form-group {
-        display: inline-block;
-        position: relative;
-
-        &::after {
-            position: absolute;
-            top: 0;
-            right: 4%;
-            bottom: 0;
+    .dropdown-datepicker {
+        .form-group {
+            display: inline-block;
+            position: relative;
             background: url('../../media/edit_profile/dropdown_arrows.png');
             background-repeat: no-repeat;
-            background-position: 1px 0;
-            background-size: cover;
-            max-width: 20px;
-            height: 100%;
-            content: '';
-        }
+            background-position: 218% 0;
+            background-size: 63% 100%;
+            width: 33%;
+            height: 40px;
 
-        &:nth-of-type(1) {
-            width: 40%;
-
-            &::after {
-                width: 14%;
-            }
-
-            .birthday-input { // scss-lint:disable SelectorDepth
+            &::before {
+                position: absolute;
+                left: 0;
+                outline: none;
+                border: 0;
+                box-shadow: none;
+                background: $cmwn-white;
                 width: 80%;
+                height: 100%;
+                content: '';
             }
         }
 
-        &:nth-of-type(2),
-        &:nth-of-type(3) {
-            width: 30%;
-
-            &::after {
-                width: 19%;
-            }
-
-            .birthday-input { // scss-lint:disable SelectorDepth
-                width: 75%;
-            }
+        .birthday-input {
+            position: relative;
+            outline: none;
+            border: 0;
+            border-radius: 0;
+            box-shadow: none;
+            background: transparent;
+            width: 100%;
+            height: 40px;
+            color: $cmwn-black;
+            font-size: 1.25rem;
         }
     }
 
@@ -271,7 +270,7 @@ $halfway-break-2: 540px;
         position: relative;
         outline: 0;
         border: 0;
-        background: url('../../media/edit_profile/btns.png');
+        background: url($btns);
         background-position: 633px 398px;
         width: 140px;
         height: 44px;
@@ -287,10 +286,26 @@ $halfway-break-2: 540px;
         background-position: 1115px 398px;
     }
 
-    @media (min-width: $halfway-break-1) and (max-width: $monitor-max-break) {
+    @media (min-width: $halfway-break-1) and (max-width: $monitor-max-break),
+    (min-width: $halfway-break-2) and (max-width: $device-max-break) {
         .left.profile-image-container .profile-image::before {
             right: -13%;
             left: -13%;
+        }
+
+        .change-password span {
+            font-size: .75rem;
+        }
+    }
+
+    @media (min-width: $halfway-break-1) and (max-width: $monitor-max-break) {
+        label {
+            font-size: 1rem;
+        }
+
+        .form-control {
+            height: 30px;
+            font-size: 1rem;
         }
 
         .right.user-fields {
@@ -304,67 +319,6 @@ $halfway-break-2: 540px;
 
             .update-username-btn {
                 font-size: 1rem;
-            }
-        }
-
-        label {
-            font-size: 1rem;
-        }
-
-        .form-control {
-            height: 30px;
-            font-size: 1rem;
-        }
-
-        .change-password span {
-            font-size: .75rem;
-        }
-    }
-
-    @media (min-width: $device-max-break) and (max-width: $halfway-break-1) {
-        .form-control {
-            height: 30px;
-            font-size: 1rem;
-        }
-
-        .left.profile-image-container {
-            left: 50%;
-            transform: translateX(-50%);
-            width: 50%;
-
-            .profile-image::before {
-                right: -15%;
-                left: -15%;
-            }
-        }
-
-        .right.user-fields {
-            right: 50%;
-            clear: both;
-            transform: translateX(50%);
-            margin-top: 5%;
-            width: 90%;
-
-            .username-display {
-                top: 6px;
-            }
-        }
-
-        .current-username-container {
-            left: 50%;
-            transform: translateX(-50%);
-            padding: $standard;
-            width: 90%;
-        }
-
-        .change-password {
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 0 $standard;
-            width: 90%;
-
-            form {
-                width: 100%;
             }
         }
     }
@@ -379,11 +333,6 @@ $halfway-break-2: 540px;
             font-size: .75rem;
         }
 
-        .left.profile-image-container .profile-image::before {
-            right: -13%;
-            left: -13%;
-        }
-
         .right.user-fields {
             .username-label {
                 font-size: .75rem;
@@ -397,17 +346,20 @@ $halfway-break-2: 540px;
                 font-size: .75rem;
             }
         }
-
-        .change-password span {
-            font-size: .75rem;
-        }
     }
 
-    @media (min-width: $device-portrait-break) and (max-width: $halfway-break-2) {
-        .left.profile-image-container {
+    @media (min-width: $device-portrait-break) and (max-width: $halfway-break-2),
+    (max-width: $device-portrait-break),
+    (min-width: $device-max-break) and (max-width: $halfway-break-1) {
+        .left.profile-image-container,
+        .current-username-container,
+        .change-password {
             left: 50%;
             transform: translateX(-50%);
-            width: 50%;
+            width: 90%;
+        }
+
+        .left.profile-image-container {
 
             .profile-image::before {
                 right: -15%;
@@ -423,22 +375,47 @@ $halfway-break-2: 540px;
             width: 90%;
         }
 
-        .current-username-container {
-            left: 50%;
-            transform: translateX(-50%);
-            padding: $standard;
-            width: 90%;
-        }
-
         .change-password {
-            left: 50%;
-            transform: translateX(-50%);
             padding: 0 $standard;
-            width: 90%;
 
             form {
                 width: 100%;
             }
+        }
+
+        .current-username-container {
+            padding: $standard;
+        }
+    }
+
+    @media (min-width: $device-max-break) and (max-width: $halfway-break-1) {
+        .form-control {
+            height: 30px;
+            font-size: 1rem;
+        }
+
+
+        .left.profile-image-container {
+            width: 50%;
+
+            .profile-image::before {
+                right: -15%;
+                left: -15%;
+            }
+        }
+
+        .right.user-fields {
+
+            .username-display {
+                top: 6px;
+            }
+        }
+    }
+
+
+    @media (min-width: $device-portrait-break) and (max-width: $halfway-break-2) {
+        .left.profile-image-container {
+            width: 50%;
         }
     }
 
@@ -453,22 +430,10 @@ $halfway-break-2: 540px;
         }
 
         .left.profile-image-container {
-            left: 50%;
-            transform: translateX(-50%);
             width: 75%;
-
-            .profile-image::before {
-                right: -15%;
-                left: -15%;
-            }
         }
 
         .right.user-fields {
-            right: 50%;
-            clear: both;
-            transform: translateX(50%);
-            margin-top: 5%;
-            width: 90%;
 
             .username-label {
                 font-size: .75rem;
@@ -484,10 +449,6 @@ $halfway-break-2: 540px;
         }
 
         .current-username-container {
-            left: 50%;
-            transform: translateX(-50%);
-            padding: $standard;
-            width: 90%;
 
             h1 {
                 font-size: 1rem;
@@ -499,14 +460,6 @@ $halfway-break-2: 540px;
         }
 
         .change-password {
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 0 $standard;
-            width: 90%;
-
-            form {
-                width: 100%;
-            }
 
             span {
                 font-size: .75rem;
@@ -515,3 +468,77 @@ $halfway-break-2: 540px;
     }
 }
 
+.swal2-modal.confirm-re-login {
+    // scss-lint:disable ImportantRule
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    margin: 0 !important;
+    background: url($frame) !important;
+    background-size: 100% 100% !important;
+    width: 70% !important;
+    max-width: 700px;
+    height: 400px;
+    // scss-lint:enable ImportantRule
+
+    &::after {
+        position: absolute;
+        top: 10%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: url($reset-header);
+        background-repeat: no-repeat;
+        background-size: contain;
+        width: 33%;
+        height: 16%;
+        content: '';
+    }
+
+    .swal2-content {
+        top: 30%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100%;
+        color: $cmwn-deep-blue;
+        font-family: $cmwn-jade-font;
+        font-size: 32px;
+    }
+
+    .swal2-confirm {
+        position: absolute;
+        bottom: 14%;
+        left: 50% !important; // scss-lint:disable ImportantRule
+        transform: translateX(-55%);
+        outline: none;
+        box-shadow: none;
+        background: url($reset-btn);
+        background-color: transparent !important; // scss-lint:disable ImportantRule
+        background-repeat: no-repeat;
+        background-size: contain;
+        width: 26%;
+        height: 15%;
+        color: transparent;
+
+        &:hover {
+            background: url($reset-btn-hvr);
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
+    }
+}
+
+@media (max-width: $halfway-break-1) {
+    .swal2-modal.confirm-re-login {
+        width: 100% !important; // scss-lint:disable ImportantRule
+    }
+}
+
+@media (max-width: $halfway-break-2) {
+    .swal2-modal.confirm-re-login {
+        height: 250px;
+
+        .swal2-content {
+            font-size: 20px;
+        }
+    }
+}

@@ -120,28 +120,31 @@ var SiteNav = React.createClass({
             )
         );
 
-        //manually hiding flags for non-super users
-        menuItems = _.filter(menuItems, item => (
-            (permissions.delete && permissions.update && permissions.create) ||
-            !~ROUTES_SPECIFIC_FOR_SUPER_USERS.indexOf(item.label))
-        );
+        currentUrl = window.location.href.replace(/^.*changemyworldnow.com/, '');
 
-
-        if (sessionStorage == null) {
-            return null;
+        try {
+            _.map(menuItems, item => {
+                if (window.sessionStorage.activeItem + '' !== 'undefined' && (
+                        window.sessionStorage.activeItem === item.label ||
+                        window.sessionStorage.activeItem === item.uuid
+                )) {
+                    return;
+                } else if (currentUrl === item.url) {
+                    window.sessionStorage.activeItem = item.label;
+                }
+            });
+        } catch(error) {
+            _.map(menuItems, item => {
+                if (window._sessionStorage.activeItem + '' !== 'undefined' && (
+                        window._sessionStorage.activeItem === item.label ||
+                        window._sessionStorage.activeItem === item.uuid
+                )) {
+                    return;
+                } else if (currentUrl === item.url) {
+                    window._sessionStorage.activeItem = item.label;
+                }
+            });
         }
-
-        _.map(menuItems, item => {
-            currentUrl = window.location.href.replace(/^.*changemyworldnow.com/, '');
-            if (sessionStorage.activeItem + '' !== 'undefined' && (
-                    sessionStorage.activeItem === item.label ||
-                    sessionStorage.activeItem === item.uuid
-            )) {
-                return;
-            } else if (currentUrl === item.url) {
-                sessionStorage.activeItem = item.uuid || item.label;
-            }
-        });
 
         return _.map(menuItems, item => {
             var link = (

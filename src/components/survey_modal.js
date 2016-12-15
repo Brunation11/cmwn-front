@@ -2,7 +2,7 @@ import React from 'react';
 import {Modal} from 'react-bootstrap';
 import {Panel} from 'react-bootstrap';
 import _ from 'lodash';
-import 'components/popovers/survey_modal.scss';
+import 'components/survey_modal.scss';
 
 const HEADINGS = {
     'DATA': 'Survey Data',
@@ -11,18 +11,19 @@ const HEADINGS = {
     'SCREEN3': 'WHAT ARE YOU MOST PASSIONATE ABOUT?',
     'SCREEN4': 'WHAT WORLD ISSUES DO YOU MOST LIKELY WANT TO SOLVE?',
     'SCREEN5': 'WHICH PICTURE SHOWS HOW POWERFUL YOU FEEL TO MAKE THE WORLD A BETTER PLACE?',
-    'SCREEN6': 'WHAT QUALITIES MAKE SOMEBODY THE MOST POWERFUL AND LEAST POWERFUL?',
-    'SCREEN7': 'YOU SEE YOUR CLASSMATE IS BEING TEASED BY A BULLY. HOW DO YOU FEEL ABOUT IT?',
-    'SCREEN8':
+    'SCREEN6': 'YOU SEE YOUR CLASSMATE IS BEING TEASED BY A BULLY. HOW DO YOU FEEL ABOUT IT?',
+    'SCREEN7':
         'YOU SEE SOMEBODY STOP TO HELP SOMEONE ELSE. CLICK ON AN EMOJI TO SHOW HOW THAT MAKES YOU FEEL?',
-    'SCREEN9': 'A CLASSMATE YELLS AT YOU. CLICK ON AN EMOJI TO SHOW HOW THAT MAKES YOU FEEL.',
-    'SCREEN10': 'A FRIEND SHARES A GAME WITH YOU. CLICK ON AN EMOJI TO SHOW HOW THAT MAKES YOU FEEL.',
-    'SCREEN11': 'HAVE YOU EVER WORRIED ABOUT BEING BULLIED ONLINE?',
-    'SCREEN12': 'WHAT DID YOU DO WHEN YOU WERE BULLIED?',
-    'SCREEN13': 'HOW MUCH DO YOU KNOW ABOUT THE FOLLOWING TOPICS? Environment and climate change:',
-    'SCREEN14': 'HOW MUCH DO YOU KNOW ABOUT THE FOLLOWING TOPICS? Endangered species:',
-    'SCREEN15': 'HOW MUCH DO YOU KNOW ABOUT THE FOLLOWING TOPICS? Water conservation:',
-    'SCREEN16': 'WHAT THINGS ARE YOU MOST INTERESTED IN LEARNING ABOUT?',
+    'SCREEN8': 'A CLASSMATE YELLS AT YOU. CLICK ON AN EMOJI TO SHOW HOW THAT MAKES YOU FEEL.',
+    'SCREEN9': 'A FRIEND SHARES A GAME WITH YOU. CLICK ON AN EMOJI TO SHOW HOW THAT MAKES YOU FEEL.',
+    'SCREEN10': 'HAVE YOU EVER WORRIED ABOUT BEING BULLIED ONLINE?',
+    'SCREEN11': 'WHAT DID YOU DO WHEN YOU WERE BULLIED?',
+    'SCREEN12': 'HOW MUCH DO YOU KNOW ABOUT THE FOLLOWING TOPICS? Environment and climate change:',
+    'SCREEN13': 'HOW MUCH DO YOU KNOW ABOUT THE FOLLOWING TOPICS? Endangered species:',
+    'SCREEN14': 'HOW MUCH DO YOU KNOW ABOUT THE FOLLOWING TOPICS? Water conservation:',
+    'SCREEN15': 'WHAT THINGS ARE YOU MOST INTERESTED IN LEARNING ABOUT?',
+    'SCREEN16': 'WHAT QUALITIES MAKE SOMEBODY THE MOST POWERFUL AND LEAST POWERFUL?',
+
     'dropzone-0': 'Most Powerful:',
     'dropzone-1': 'Least Powerful:',
 };
@@ -31,8 +32,9 @@ class SurveyModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: _.map((this.props.data === null ||
-                this.props.data === {}) ? null : this.props.data, this.props.transform)
+            username: props.username,
+            data: props.data.data === null || props.data.data === {} ? null : props.data.data,
+            showModal: false
         };
 
         this.open = this.open.bind(this);
@@ -57,15 +59,15 @@ class SurveyModal extends React.Component {
         return (
             <div>
                 <a onClick={this.open}>
-                    {`${HEADINGS.CLICK}${this.props.data.username}'s ${HEADINGS.DATA}`}
+                    {`${HEADINGS.CLICK}${this.state.username}'s ${HEADINGS.DATA}`}
                 </a>
                 <Modal className="survey-modal" show={this.state.showModal} onHide={this.close}>
                     <Panel className="standard">
                         <div className="heading">
                             <a onClick={this.close} className="modal-close" title="close">X</a>
-                            <h1>{`${HEADINGS.DATA} of ${this.props.data.username}`}</h1>
+                            <h1>{`${HEADINGS.DATA} of ${this.state.username}`}</h1>
                         </div>
-                        {_.map(this.props.data.data.data, function (value, key) {
+                        {_.map(this.state.data, function (value, key) {
 
                             var screen = 'SCREEN' + key.split('-')[1];
 
@@ -80,7 +82,7 @@ class SurveyModal extends React.Component {
                                 );
                             }
 
-                            if (screen === 'SCREEN6') {
+                            if (screen === 'SCREEN16') {
                                 return (
                                     <div>
                                         <h4> {HEADINGS[screen]} </h4>
@@ -122,11 +124,5 @@ class SurveyModal extends React.Component {
         );
     }
 }
-
-SurveyModal.defaultProps = {
-    header: 'Survey Data',
-    transform: _.identity,
-    showModal: false
-};
 
 export default SurveyModal;

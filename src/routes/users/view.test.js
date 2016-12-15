@@ -33,6 +33,14 @@ describe('Profile View Unit Tests', function () {
         });
     });
 
+    describe('Student viewing own view page', function () {
+        it('should render null', function () {
+            var view = <ProfileView data={studentDataB} currentUser={studentDataB} loading={false} />;
+            const WRAPPER = shallow(view);
+            expect(WRAPPER.type()).to.equal(null);
+        });
+    });
+
     describe('Viewing with null username', function () {
         it('renders a null profile view', function () {
             var view = <ProfileView data={{username: null}} loading={false} />;

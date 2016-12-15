@@ -57,17 +57,20 @@ const TITLES = {
     'animal-id': '1d30b3302aad1608ad76c4029a4c2d5a.gif',
     'carbon-catcher': 'ab894b9d48a225ffdace7215003dd228.gif',
     'skribble': '10b58a3fbacaa46203faf65a02f8fbbc.gif',
-    'turtle-hurdle': '1cf1a4952107ce19e6b8675643a17c5d.gif'
+    'turtle-hurdle': '1cf1a4952107ce19e6b8675643a17c5d.gif',
+    '3d-world': '3d45287ac7d23711d32af8b7c797c2f8.gif',
 };
 
 const HEADINGS = {
     ACTION: 'Profile',
-    ARCADE: 'Activities'
+    ARCADE: 'Activities',
+    TROPHYCASE: 'Trophycase'
 };
 
 const PLAY = 'Play Now!';
 const COMING_SOON = 'Coming Soon!';
 const DESKTOP_ONLY = 'Log on with a Desktop computer to play!';
+const CLASSES = 'Classes';
 
 const BROWSER_NOT_SUPPORTED = (
     <span>
@@ -77,12 +80,10 @@ const BROWSER_NOT_SUPPORTED = (
                 download it for free here
             </a>.
         </p>
-    </span>
-);
+    </span>);
 
-const PASS_UPDATED = (
-    <p>You have successfully updated your password.<br />Be sure to remember for next time!</p>
-);
+const PASS_UPDATED = '<p>You have successfully updated your password.' +
+    '<br />Be sure to remember for next time!</p>';
 
 export var dataTransform = function (data) {
     var array = data;
@@ -111,7 +112,6 @@ export var dataTransform = function (data) {
 export class Profile extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = _.defaults({
             gameOn: false,
             gameId: -1
@@ -136,14 +136,16 @@ export class Profile extends React.Component {
     }
 
     resolveRole(props) {
+        var newState = {};
         // remember we actually want current user here, not the user whose
         // profile we are looking at
         if (props.currentUser && props.currentUser.type &&
             props.currentUser.type !== 'CHILD') {
-            this.setState({isStudent: false});
+            newState.isStudent = false;
         } else {
-            this.setState({isStudent: true});
+            newState.isStudent = true;
         }
+        this.setState(newState);
     }
 
     showModal(gameUrl) {
@@ -173,7 +175,6 @@ export class Profile extends React.Component {
                 </div>
             );
         }
-
         return (
             <div className="modal-game">
                 <Game
@@ -215,8 +216,12 @@ export class Profile extends React.Component {
                         </span>
                         <div className={ClassNames('coming-soon', { hidden: !item.coming_soon})} />
                         <div className={ClassNames('desktop-only', { hidden: !meta.desktop})} />
-                        <object data={`${GLOBALS.MEDIA_URL}${TITLES[item.game_id]}`} type="image/gif" >
-                            <img src={FlipBgDefault}></img>
+                        <object
+                            width="350"
+                            data={`${GLOBALS.MEDIA_URL}${TITLES[item.game_id]}`}
+                            type="image/gif"
+                        >
+                            <img src={FlipBgDefault} ></img>
                         </object>
                     </div>
                 </a>
@@ -240,7 +245,13 @@ export class Profile extends React.Component {
     }
 
     renderUserMetaData() {
-        var ISODate = (new Date(this.state.birthdate)).toISOString();
+        var ISODate;
+        var momentDate = '';
+
+        if (this.state.birthdate) {
+            ISODate = (new Date(this.state.birthdate)).toISOString();
+            momentDate = Moment(ISODate).format('MM-DD-YYYY');
+        }
 
         if (this.state.friend_status !== 'FRIEND') return null;
 
@@ -261,100 +272,155 @@ export class Profile extends React.Component {
                 <p className="label">Last Name:</p>
                 <p className="standard field">{this.state.last_name}</p>
                 <p className="label">Birthday:</p>
-                <p className="standard field">{Moment(ISODate).format('MM-DD-YYYY')}</p>
+                <p className="standard field">{momentDate}</p>
             </div>
         );
     }
 
-    renderUserProfile() {
+    renderClassList() {
+        if (!this.state || !this.state._embedded || !this.state._embedded.group_class) {
+            return null;
+        }
         return (
-            <Layout
-                currentUser={this.props.currentUser}
-                className={ClassNames(
-                    PAGE_UNIQUE_IDENTIFIER,
-                    'user',
-                    {
-                        friends: this.state.friend_status === 'FRIEND',
-                        student: this.state.type === 'CHILD'
-                    }
-                )}
-                navMenuId="navMenu"
-            >
-                <Panel
-                    header={`${this.state.username}'s Profile`}
-                    className="standard user-profile"
-                >
-                    <div className="left profile-image-container">
+            <p>
+                <strong>{CLASSES} </strong>:
+                {_.map(this.state._embedded.group_class, item => item.title).join(', ')}
+            </p>
+        );
+    }
+
+    renderUserProfile() {
+        var ISODate;
+        try {
+            ISODate = (new Date(this.state.birthdate)).toISOString();
+        } catch(err) {
+            //don't fail to load the page because the user doesn't
+            //have a birthday entered on their profile for some
+            //reason
+            ISODate = (Date.now()).toISOString();
+        }
+        if (this.state.friend_status === 'FRIEND') {
+            return (
+                <div>
+                    <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
+                        <div className="left">
+                            <div className="frame">
+                                <ProfileImage
+                                    data={this.props.data}
+                                    currentUser={this.props.currentUser}
+                                    link-below={true}
+                                 />
+                            </div>
+                        </div>
+                        <div className="right">
+                            <div className="user-metadata">
+                                <p>Username:</p>
+                                <p className="standard field">{this.state.username}</p>
+                                <p>First Name:</p>
+                                <p className="standard field">{this.state.first_name}</p>
+                                <p>Last Name:</p>
+                                <p className="standard field">{this.state.last_name}</p>
+                                <p>Birthday:</p>
+                                <p className="standard field">{Moment(ISODate).format('MM-DD-YYYY')}</p>
+                            </div>
+                        </div>
+                    </Panel>
+                    <Panel
+                        header={HEADINGS.TROPHYCASE}
+                        className={ClassNames('standard', {
+                            hidden: !this.state.isStudent
+                        })}
+                    >
+                        <FLIP_SOURCE>
+                           <Flipcase
+                                type="trophycase"
+                                header={true}
+                                render="earned"
+                            />
+                        </FLIP_SOURCE>
+                    </Panel>
+                </div>
+            );
+        }
+        return (
+            <div>
+                <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
+                    <div className="frame non-friend">
                         <ProfileImage
                             data={this.props.data}
                             currentUser={this.props.currentUser}
                             link-below={true}
                         />
                     </div>
-                    {this.renderUserMetaData()}
                 </Panel>
-                <FLIP_SOURCE>
-                   <Flipcase
-                        className={ClassNames(
-                            {
-                                hidden: this.state.type !== 'CHILD'
-                            }
-                        )}
-                        type="trophycase"
-                        header={true}
-                        render="earned"
-                    />
-                </FLIP_SOURCE>
-            </Layout>
-        );
-    }
-
-    renderCurrentUserProfile() {
-        return (
-            <Layout
-                currentUser={this.props.currentUser}
-                className={`${PAGE_UNIQUE_IDENTIFIER} current-user`}
-                navMenuId="navMenu"
-            >
-                <div>
-                    <Modal
-                        className="full-width game-modal"
-                        show={this.state.gameOn}
-                        onHide={this.hideModal.bind(this)}
-                        keyboard={false}
-                        backdrop="static"
-                        id="game-modal"
-                    >
-                        <Modal.Body>
-                            {this.renderGame()}
-                        </Modal.Body>
-                    </Modal>
+                <Panel
+                    header={HEADINGS.TROPHYCASE}
+                    className={ClassNames('standard', {
+                        hidden: !this.state.isStudent
+                    })}
+                >
                     <FLIP_SOURCE>
-                        <Flipcase
-                            className={ClassNames(
-                                {
-                                    hidden: !this.state.isStudent
-                                }
-                            )}
+                       <Flipcase
                             type="trophycase"
                             header={true}
                             render="earned"
                         />
                     </FLIP_SOURCE>
-                    {this.renderGameList()}
-                </div>
-            </Layout>
+                </Panel>
+            </div>
+        );
+    }
+
+    renderCurrentUserProfile() {
+        return (
+            <div>
+                <Modal
+                    className="full-width game-modal"
+                    show={this.state.gameOn}
+                    onHide={this.hideModal.bind(this)}
+                    keyboard={false}
+                    backdrop="static"
+                    id="game-modal"
+                >
+                    <Modal.Body>
+                        {this.renderGame()}
+                    </Modal.Body>
+                </Modal>
+                <Panel
+                    header={HEADINGS.TROPHYCASE}
+                    className={ClassNames('standard', {
+                        hidden: !this.state.isStudent
+                    })}
+                >
+                    <FLIP_SOURCE>
+                       <Flipcase
+                            type="trophycase"
+                            header={true}
+                            render="earned"
+                        />
+                    </FLIP_SOURCE>
+                </Panel>
+                {this.renderGameList()}
+            </div>
         );
     }
 
     render() {
-        if (this.state.user_id == null || this.props.currentUser.user_id == null) return null;
-
-        if (this.state.user_id === this.props.currentUser.user_id) {
-            return this.renderCurrentUserProfile();
-        } else {
-            return this.renderUserProfile();
+        var profile;
+        if (this.state.user_id == null || this.props.currentUser.user_id == null) {
+            return null;
         }
+        profile = this.state.user_id === this.props.currentUser.user_id ?
+        this.renderCurrentUserProfile : this.renderUserProfile;
+        return (
+           <Layout
+               currentUser={this.props.currentUser}
+               className={PAGE_UNIQUE_IDENTIFIER}
+               navMenuId="navMenu"
+           >
+               {profile.apply(this)}
+           </Layout>
+        );
     }
 }
 

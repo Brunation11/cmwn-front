@@ -149,6 +149,9 @@ export class UpdatePassword extends React.Component {
                                 placeholder="PA******"
                                 label={LABELS.NEW}
                                 validate="required"
+                                onFocus={e => e.target.placeholder = ''}
+                                onBlur={e => e.target.placeholder = 'PA******'}
+                                autoComplete="off"
                                 {...this.state.extraProps}
                             />
                             <Input
@@ -159,6 +162,9 @@ export class UpdatePassword extends React.Component {
                                 placeholder="PA******"
                                 label={LABELS.CONFIRM}
                                 validate="required"
+                                onFocus={e => e.target.placeholder = ''}
+                                onBlur={e => e.target.placeholder = 'PA******'}
+                                autoComplete="off"
                                 {...this.state.extraProps}
                             />
                             <Input

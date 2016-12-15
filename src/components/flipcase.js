@@ -1,15 +1,13 @@
 import React from 'react';
 import _ from 'lodash';
 import ClassNames from 'classnames';
-import {Panel} from 'react-bootstrap';
 
 import FlipPopover from 'components/popovers/flip_popover';
 
 import 'components/flipcase.scss';
 
-const HEADINGS = {
-    POPOVER: 'Your Earned Flips: ',
-    TROPHYCASE: 'Trophycase'
+const COPY = {
+    HEADER: 'Your Earned Flips: '
 };
 
 export default class Flipcase extends React.Component {
@@ -17,7 +15,7 @@ export default class Flipcase extends React.Component {
         super();
 
         this.state = _.defaults({
-            flips: []
+            flips: [],
         });
     }
 
@@ -52,8 +50,7 @@ export default class Flipcase extends React.Component {
     }
 
     renderEarned() {
-        var earnedFlips = _.shuffle(this.state.flips);
-        return (_.map(earnedFlips, (flip) => {
+        return (_.map(this.state.flips, (flip) => {
             return (
                 <FlipPopover
                     element={flip}
@@ -69,29 +66,24 @@ export default class Flipcase extends React.Component {
     render() {
         var renderFunction;
 
-        if (this.props.data == null) return null;
+        if (this.state && !this.state.flips.length) return null;
 
-        if (this.props.render === 'all' && this.state.allFlips) renderFunction = this.renderAll;
-        if (this.props.render === 'earned' && this.state.flips) renderFunction = this.renderEarned;
+        if (this.props.render === 'all') renderFunction = this.renderAll;
+        if (this.props.render === 'earned') renderFunction = this.renderEarned;
 
         return (
-            <Panel
-                header={HEADINGS.TROPHYCASE}
-                className={ClassNames(
-                    'flipcase',
-                    'standard',
-                    this.props.classNames,
-                    this.props.type,
-                    {
-                        header: this.props.header
-                    }
-                )}
-            >
+            <div className={ClassNames(
+                'flipcase',
+                this.props.classNames,
+                this.props.type, {
+                    header: this.props.header
+                }
+            )}>
                 <span className="header">
-                    {HEADINGS.POPOVER}<strong>{this.state.flips.length}</strong>
+                    {COPY.HEADER}<strong>{this.state.flips.length}</strong>
                 </span>
                 {renderFunction.call(this)}
-            </Panel>
+            </div>
         );
     }
 }

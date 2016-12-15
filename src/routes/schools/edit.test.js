@@ -1,15 +1,14 @@
 import React from 'react';
 import { expect } from 'chai';
 import { mount, shallow } from 'enzyme';
-import cheerio from 'cheerio';
 
 import { SchoolEdit } from 'routes/schools/edit';
 import { PAGE_UNIQUE_IDENTIFIER } from 'routes/schools/edit';
 import { BulkUpload } from 'routes/schools/edit';
 import { ERRORS } from 'routes/schools/edit';
-import { SUCCESS } from 'routes/schools/edit';
+//import { SUCCESS } from 'routes/schools/edit';
 
-import MockFunctionWrapper from 'mocks/mock_function_wrapper';
+//import MockFunctionWrapper from 'mocks/mock_function_wrapper';
 
 import schoolStudentData from 'mocks/schools/school_student_data';
 import schoolTeacherData from 'mocks/schools/school_teacher_data';
@@ -41,8 +40,7 @@ var checkSchoolImportContent = function (WRAPPER, UPLOAD_WRAPPER) {
     expect(UPLOAD_WRAPPER.find('Panel')).to.have.length(1);
     expect(UPLOAD_WRAPPER.find('iframe')).to.have.length(1);
     expect(UPLOAD_WRAPPER.find('Form')).to.have.length(1);
-    expect(UPLOAD_WRAPPER.find('input')).to.have.length(4);
-    expect(UPLOAD_WRAPPER.find('Input')).to.have.length(4);
+    expect(UPLOAD_WRAPPER.find('Input')).to.have.length(5);
     expect(UPLOAD_WRAPPER.find('Button')).to.have.length(1);
 };
 
@@ -51,7 +49,9 @@ var checkNoImportContent = function (WRAPPER, UPLOAD_WRAPPER) {
     expect(UPLOAD_WRAPPER.type()).to.equal(null);
 };
 
-var tryImport = function(UPLOAD_WRAPPER, student, teacher, tos, file) {
+var tryImport = function (UPLOAD_WRAPPER, student, teacher, tos) {
+    var e;
+    var result;
     student = student ? student : '';
     teacher = teacher ? teacher : '';
     tos = tos ? tos : false;
@@ -69,8 +69,8 @@ var tryImport = function(UPLOAD_WRAPPER, student, teacher, tos, file) {
     //    });
     //}
     UPLOAD_WRAPPER.update();
-    var e = new Event('dummy');
-    var result = UPLOAD_WRAPPER.instance().checkForm(e);
+    e = new Event('dummy');
+    result = UPLOAD_WRAPPER.instance().checkForm(e);
     return result;
 };
 
@@ -92,17 +92,15 @@ describe('school edit unit tests', function () {
         const WRAPPER = createWrapper(schoolTeacherData);
         const UPLOAD_WRAPPER = shallow(<BulkUpload data={schoolTeacherData} />);
         it('should render school edit and no import content', function () {
-            expect(WRAPPER.children()).to.have.length(1);
             checkSchoolEditContent(WRAPPER);
             checkNoImportContent(WRAPPER, UPLOAD_WRAPPER);
         });
     });
     describe('when viewed by a superuser', function () {
         const WRAPPER = createWrapper(schoolPrincipalData);
-        const UPLOAD_WRAPPER = shallow(<BulkUpload data={schoolPrincipalData} 
+        const UPLOAD_WRAPPER = shallow(<BulkUpload data={schoolPrincipalData}
             url={schoolPrincipalData._links.import.href} />);
         it('should render school edit and import content', function () {
-            expect(WRAPPER.children()).to.have.length(2);
             checkSchoolEditContent(WRAPPER);
             checkSchoolImportContent(WRAPPER, UPLOAD_WRAPPER);
         });
