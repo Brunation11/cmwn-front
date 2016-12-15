@@ -43,9 +43,6 @@ const IGNORED_ROUTES_FOR_EVERYONE = [
     'Profile'
 ];
 
-const ROUTES_SPECIFIC_FOR_SUPER_USERS = [
-    'Flags',
-];
 
 var buildMenuRoutes = function (links) {
     var allRoutes = PublicRoutes.concat(PrivateRoutes);
@@ -106,7 +103,6 @@ var SiteNav = React.createClass({
     renderNavItems: function () {
         var menuItems = buildMenuRoutes(this.props.data);
         var currentUrl;
-        var permissions = Util.decodePermissions(this.props.currentUser.scope);
 
         //need to add hardcoded entries before filterning, because some will be
         //removed based on user type

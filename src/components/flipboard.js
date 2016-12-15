@@ -54,7 +54,6 @@ FlipBoard.defaultProps = {
     onLoad: _.noop,
     renderNoData: () => null,
     renderFlip: () => <div className="flip" key={Shortid.generate()}></div>,
-    onLoad: _.noop,
     updateParent: _.noop,
 };
 
