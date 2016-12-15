@@ -1,13 +1,9 @@
 
 import React from 'react';
 import {Modal, Button, Input, Glyphicon} from 'react-bootstrap';
-//import _ from 'lodash';
-//import Shortid from 'shortid';
 import ClassNames from 'classnames';
 
 import Detector from 'components/browser_detector';
-//import GLOBALS from 'components/globals';
-//import ACTION_CONSTANTS from 'components/action_constants';
 
 import 'components/teacher_guide.scss';
 
@@ -37,7 +33,8 @@ const COPY = [
     </span>),
     (<span>
          Click the<br /><span className="highlight">"generate user cards"</span>
-         button on top to make the cards.</span>),
+         button on top to make the cards.
+    </span>),
     (<span>
         <span className="highlight">You're almost there! </span>Now you should see<br />
         the User Cards for your class.<br />
@@ -90,9 +87,6 @@ class Guide extends React.Component {
             minimized,
             page
         };
-    }
-
-    componentDidMount() {
     }
 
     openModal() {
