@@ -40,7 +40,8 @@ const IGNORED_ROUTES_FOR_CHILDREN = [
 ];
 
 const IGNORED_ROUTES_FOR_EVERYONE = [
-    'Profile'
+    'Profile',
+    'Games'
 ];
 
 var buildMenuRoutes = function (links) {
