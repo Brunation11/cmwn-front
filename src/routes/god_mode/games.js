@@ -135,6 +135,7 @@ export class GodModeGames extends React.Component {
 
     saveGame(item, gameId, create = false) {
         var postData = {};
+        var game;
 
         _.forEach(item, (inputValue, inputType) => {
             if (inputType === 'key') return;
@@ -150,7 +151,7 @@ export class GodModeGames extends React.Component {
         });
 
         if (create) {
-            HttpManager.POST({url: `${this.props.data._links.games.href}`},
+            HttpManager.POST({url: `${this.props.data._links.first.href}`},
                 postData).then(() => {
                     Toast.success(`${item.title}${TOAST.SUCCESS.CREATE}`);
                 }).catch(err => {
@@ -159,7 +160,8 @@ export class GodModeGames extends React.Component {
                     Log.log(LOG.CREATE, err, postData);
                 });
         } else {
-            HttpManager.PUT({url: `${this.props.data._links.games.href}/${gameId}`},
+            game = _.find(this.props.data._embedded.game, v => v.game_id === gameId);
+            HttpManager.PUT({url: game._links.self.href},
                 postData).then(() => {
                     Toast.success(`${item.title}${TOAST.SUCCESS.SAVE}`);
                 }).catch(err => {
@@ -180,12 +182,13 @@ export class GodModeGames extends React.Component {
 
     deleteGame(item, gameId) {
         var postData;
+        var game = _.find(this.props.data._embedded.game, v => v.game_id === gameId);
         if (this.state.deleteTry === gameId) {
             postData = {
                 'game_id': gameId
             };
 
-            HttpManager.DELETE({url: `${this.props.data._links.games.href}/${gameId}`},
+            HttpManager.DELETE({url: game._links.self.href},
                 postData).then(() => {
                     Toast.success(`${item.title}${TOAST.SUCCESS.DELETE}`);
                 }).catch(err => {
