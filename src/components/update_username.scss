@@ -1,77 +1,74 @@
 @import '../variables';
 
-.update-username {
+.username-generator-modal {
+    .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(25%);
+        outline: none;
+        border: 0;
+        box-shadow: none;
+        background-color: transparent;
+        width: 100%;
+    }
 
-    .username-generator-modal {
-        .modal-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translateX(-50%) translateY(25%);
+    .modal-body {
+        background: url('#{$media-url}93357d85e89277029365926872098414.png');
+        background-color: transparent;
+        background-size: 100% 100%;
+        padding: $standard $standard ($standard * 2);
+    }
+
+    .desktop-update-username-container ~ .close-modal-btn {
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translateX(25%) translateY(-25%);
+        outline: none;
+        border: 0;
+        background: url('#{$media-url}38e4b9a8627d63b457480b8ef60f34db.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        width: 10%;
+        height: 10%;
+
+        &:hover,
+        &:focus,
+        &:active {
             outline: none;
             border: 0;
             box-shadow: none;
-            background-color: transparent;
-            width: 100%;
-        }
-
-        .modal-body {
-            background: url('#{$media-url}93357d85e89277029365926872098414.png');
-            background-color: transparent;
-            background-size: 100% 100%;
-            padding: $standard $standard ($standard * 2);
-        }
-
-        .desktop-update-username-container ~ .close-modal-btn {
-            position: absolute;
-            top: 0;
-            right: 0;
-            transform: translateX(25%) translateY(-25%);
-            outline: none;
-            border: 0;
-            background: url('#{$media-url}38e4b9a8627d63b457480b8ef60f34db.png');
+            background: url('#{$media-url}89e604e0a2c2831692f2e1e04629cd4a.png');
             background-repeat: no-repeat;
             background-size: contain;
-            width: 10%;
-            height: 10%;
-
-            &:hover,
-            &:focus,
-            &:active {
-                outline: none;
-                border: 0;
-                box-shadow: none;
-                background: url('#{$media-url}89e604e0a2c2831692f2e1e04629cd4a.png');
-                background-repeat: no-repeat;
-                background-size: contain;
-            }
         }
+    }
 
-        .desktop-confirmation-container ~ .close-modal-btn {
-            display: none;
-        }
+    .desktop-confirmation-container ~ .close-modal-btn {
+        display: none;
+    }
 
-        .login-notice ~ .close-modal-btn {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%) translateY(-100%);
+    .login-notice ~ .close-modal-btn {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%) translateY(-100%);
+        outline: none;
+        border: 0;
+        background: url('#{$media-url}0c7044bc6e88f37a8910966dba68fe47.png');
+        background-position: -376px -337px;
+        background-size: 1100px 793px;
+        width: 27%;
+        height: 14%;
+
+        &:hover,
+        &:focus,
+        &:active {
             outline: none;
             border: 0;
-            background: url('#{$media-url}0c7044bc6e88f37a8910966dba68fe47.png');
-            background-position: -376px -337px;
-            background-size: 1100px 793px;
-            width: 27%;
-            height: 14%;
-
-            &:hover,
-            &:focus,
-            &:active {
-                outline: none;
-                border: 0;
-                box-shadow: none;
-                background-position: 177px -337px;
-            }
+            box-shadow: none;
+            background-position: 177px -337px;
         }
     }
 
@@ -157,33 +154,6 @@
             }
         }
 
-        .prev-btn,
-        .next-btn,
-        .close-modal-btn,
-        .start-btn {
-            position: absolute;
-            outline: none;
-            border: 0;
-            background-repeat: no-repeat;
-            background-size: contain;
-
-            &:active,
-            &:focus {
-                outline: none;
-                border: 0;
-                box-shadow: none;
-                background-color: $cmwn-purple;
-            }
-        }
-
-        .prev-btn,
-        .next-btn {
-            bottom: 0;
-            margin: 5%;
-            width: 50px;
-            height: 50px;
-        }
-
         .prev-btn {
             left: 0;
             background: url('#{$media-url}c84c9bb108ec839ea27fa2545e46dbb7.png');
@@ -233,6 +203,38 @@
                 border: 0;
                 box-shadow: none;
             }
+        }
+
+        .prev-btn,
+        .next-btn,
+        .close-modal-btn {
+            position: absolute;
+        }
+
+        .prev-btn,
+        .next-btn,
+        .close-modal-btn,
+        .start-btn {
+            outline: none;
+            border: 0;
+            background-repeat: no-repeat;
+            background-size: contain;
+
+            &:active,
+            &:focus {
+                outline: none;
+                border: 0;
+                box-shadow: none;
+                background-color: $cmwn-purple;
+            }
+        }
+
+        .prev-btn,
+        .next-btn {
+            bottom: 0;
+            margin: 5%;
+            width: 50px;
+            height: 50px;
         }
 
         .welcome-container {
@@ -1016,10 +1018,6 @@
             transform: translateX(-50%);
             max-width: 570px;
         }
-
-        .username-generator-modal .login-notice-container ~ .close-modal-btn {
-            max-width: 154px;
-        }
     }
 
 
@@ -1116,7 +1114,7 @@
             }
         }
 
-        .username-generator-modal .login-notice-container ~ .close-modal-btn {
+        .login-notice-container ~ .close-modal-btn {
             max-width: 154px;
         }
     }
@@ -1255,7 +1253,7 @@
             }
         }
 
-        .username-generator-modal .login-notice-container ~ .close-modal-btn {
+        .login-notice-container ~ .close-modal-btn {
             transform: translateX(-50%) translateY(-75%);
             background-position: -371px 456px;
             background-size: 1100px 794px;
@@ -1413,7 +1411,7 @@
             }
         }
 
-        .username-generator-modal .login-notice-container ~ .close-modal-btn {
+        .login-notice-container ~ .close-modal-btn {
             transform: translateX(-50%) translateY(-75%);
             background-position: -340px 415px;
             background-size: 1000px 722px;
@@ -1586,7 +1584,7 @@
             }
         }
 
-        .username-generator-modal .login-notice-container ~ .close-modal-btn {
+        .login-notice-container ~ .close-modal-btn {
             transform: translateX(-50%) translateY(-75%);
             background-position: -307px 373px;
             background-size: 900px 650px;
@@ -1601,26 +1599,27 @@
         }
     }
 
-    @media (max-width: 414px) {
-        .username-generator-modal {
-            .modal-dialog,
-            .modal-content {
-                top: 0;
-                right: 0;
-                bottom: 0;
-                left: 0;
-                transform: none;
-                margin: 0;
-                width: 100vw;
-                height: 100vh;
-            }
+}
 
-            .modal-body {
-                background-position: -10vw -10vh;
-                background-size: 120vw 120vh;
-                width: 100vw;
-                height: 100vh;
-            }
+@media (max-width: 414px) {
+    .username-generator-modal {
+        .modal-dialog,
+        .modal-content {
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            transform: none;
+            margin: 0;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .modal-body {
+            background-position: -10vw -10vh;
+            background-size: 120vw 120vh;
+            width: 100vw;
+            height: 100vh;
         }
 
         .desktop {
@@ -1638,7 +1637,12 @@
                 max-width: 320px;
             }
         }
+    }
+}
 
 
+@media (min-width: $device-max-break) {
+    .username-generator-modal .login-notice-container ~ .close-modal-btn {
+        max-width: 154px;
     }
 }
