@@ -12,15 +12,22 @@ import 'components/god_mode_site_nav.scss';
 class GodModeSiteNav extends React.Component {
     constructor() {
         super();
+
+        this.state = {
+            linksRetrieved: false
+        };
     }
 
     componentDidMount() {
         this.getSaSettingsLinks();
+        this.setState({linksRetrieved: true});
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.props = nextProps;
-        this.getSaSettingsLinks();
+    componentWillReceiveProps() {
+        if (!this.state.linksRetrieved) {
+            this.getSaSettingsLinks();
+            this.setState({linksRetrieved: true});
+        }
     }
 
     addHardcodedEntries(menuItems) {
