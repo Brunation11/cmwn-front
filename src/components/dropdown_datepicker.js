@@ -96,17 +96,12 @@ class Page extends React.Component {
         ];
         var currentYear = new Date().getFullYear();
 
-        _.each(Array(150), (year, i) => {
+        items = items.concat(_.map(Array(150), (year, i) => {
             if (this.props.future) {
-                items.push(
-                    <option value={currentYear + i} key={Shortid.generate()}>{currentYear + i}</option>
-                );
-            } else {
-                items.push(
-                    <option value={currentYear - i} key={Shortid.generate()}>{currentYear - i}</option>
-                );
+                return <option value={currentYear + i} key={Shortid.generate()}>{currentYear + i}</option>;
             }
-        });
+            return <option value={currentYear - i} key={Shortid.generate()}>{currentYear - i}</option>;
+        }));
 
         return items;
     }
