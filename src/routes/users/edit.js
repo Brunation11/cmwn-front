@@ -12,15 +12,12 @@ import Log from 'components/log';
 import Toast from 'components/toast';
 import Layout from 'layouts/two_col';
 import GLOBALS from 'components/globals';
-// import Validate from 'components/validators';
 import Util from 'components/util';
 import UpdateUsername from 'components/update_username';
 import ProfileImage from 'components/profile_image';
 import Form from 'components/form';
 import DropdownDatepicker from 'components/dropdown_datepicker';
 import ACTION_CONSTANTS from 'components/action_constants';
-// import CodeChange from 'components/code_change';
-// import ForgotPass from 'components/forgot_pass';
 import ChangePassword from 'components/change_password';
 
 
@@ -164,116 +161,6 @@ export class EditProfile extends React.Component {
             Toast.error(INVALID_SUBMISSION);
         }
     }
-
-// ************************************************************
-// CURRENTLY UNUSED FUNCTIONS, VERIFY FOR FUTURE IMPLIMENTATION
-// ************************************************************
-
-    // resetPassword() {
-    //     if (this.props.data._links.forgot == null) {
-    //         return;
-    //     }
-    //     //note: This should only appear for adults, who have email addresses
-    //     HttpManager.GET(this.props.data._links.forgot.href, {email: this.props.data.email}).then(
-    //         Toast.success.bind(this,
-    //             'Password Reset. This user will recieve an email with further instructions.')
-    //     ).catch(err => {
-    //         Toast.error(`${ERRORS.BAD_RESET} ${err.message ? `Message: ${err.message}` : ''}`);
-    //         Log.log('Server refused profile update', err);
-    //     });
-    // }
-
-    // addParent() {
-    //     var parents = this.state.parents || [];
-    //     parents.push({name: 'Jane Adams'});
-    //     this.setState({parents});
-    // }
-
-    // removeParent(i) {
-    //     var self = this;
-    //     return function () {
-    //         self.state.parents.splice(i, 1);
-    //         self.setState({parents: self.state.parents});
-    //     };
-    // }
-
-    // renderParent(parent, i) {
-    //     // TODO: MPR, 11/14/15: Implement Autocomplete, store parent ID
-    //     return (
-    //         <span>
-    //             <Input
-    //                 type="text"
-    //                 groupClassName="has-addon"
-    //                 value={parent.name}
-    //                 placeholder="Parent or Guardian"
-    //                 label="Parent or Guardian"
-    //                 bsStyle={Validate.required(parent.name)}
-    //                 hasFeedback
-    //                 ref={`parentRef${i}`}
-    //                 key={`parentRef${i}`}
-    //                 addonAfter={<Button onClick={this.removeParent(i)} >X</Button>}
-    //                 onChange={() => {
-    //                     var parents = this.state.parents;
-    //                     parents[i] = {name: this.refs[`parentRef${i}`].getValue()};
-    //                     this.setState({parents});
-    //                 }}
-    //             />
-    //         </span>
-    //     );
-    // }
-
-    // renderParentFields() {
-    //     if (this.state.parents && this.state.parents.length) {
-    //         return _.map(this.state.parents, this.renderParent);
-    //     }
-    //     return null;
-    // }
-
-    // renderSchoolInformation() {
-    //     var teachers = _.map(this.state.teachers, this.renderTeacherInputs);
-    //     if (!teachers.length) {
-    //         teachers = null;
-    //     }
-    //     return (
-    //        <div>
-    //             <Input
-    //                 type="select"
-    //                 value={this.state.grade}
-    //                 placeholder="Grade"
-    //                 label="Grade"
-    //                 ref="gradeInput"
-    //                 onChange={this.setState.bind(this, {grade: this.refs.gradeInput.getValue()})}
-    //             >{this.renderk8()}</Input>
-    //             {teachers}
-    //        </div>
-    //     );
-    // }
-
-    // renderk8() {
-    //     return (
-    //         _.map(Array(9), (v, i) => {
-    //             return (<option value={i}>{i === 0 ? 'k' : i}</option>);
-    //         })
-    //     );
-    // }
-
-    // renderTeacherInputs() {}
-
-    // renderParentInfo() {
-    //     return (
-    //         <span>
-    //             <h3>Parent or Guardian</h3>
-    //             {this.renderParentFields()}
-    //             <p><a onClick={this.addParent}>+ Add parent or guardian</a></p>
-    //             <h3>School Information</h3>
-    //             {this.renderSchoolInformation()}
-    //         </span>
-    //     );
-    // }
-
-// ************************************************************
-// CURRENTLY UNUSED FUNCTIONS, VERIFY FOR FUTURE IMPLIMENTATION
-// ************************************************************
 
     renderUsernameGenerator() {
         return (
