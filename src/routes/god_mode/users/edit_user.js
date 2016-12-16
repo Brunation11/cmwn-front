@@ -175,6 +175,7 @@ export class EditUser extends React.Component {
         return (
             <DropdownDatepicker
                 ref="dropdownDatepicker"
+                label="Birthday: "
                 value={dob}
                 hasFeedback
                 onChange={

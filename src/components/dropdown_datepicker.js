@@ -18,6 +18,7 @@ class Page extends React.Component {
             year = Moment(this.props.value).year();
         }
         this.state = {
+            date: Date.now(),
             month: month,
             day: day,
             year: year
@@ -44,9 +45,12 @@ class Page extends React.Component {
         var month = nextState.month || this.state.month;
         var day = nextState.day || this.state.day;
         var year = nextState.year || this.state.year;
+        var date;
         if (!month || !day || !year) {
             return null;
         }
+        date = new Date(`${month}-${day}-${year}`);
+        this.setState({date: date.getTime()});
         return Moment(`${month}-${day}-${year}`).format('MM-DD-YYYY');
     }
 
@@ -92,19 +96,20 @@ class Page extends React.Component {
         ];
         var currentYear = new Date().getFullYear();
 
-        _.each(Array(150), (year, i) => {
-            items.push(
-                <option value={currentYear - i} key={Shortid.generate()}>{currentYear - i}</option>
-            );
-        });
+        items = items.concat(_.map(Array(150), (year, i) => {
+            if (this.props.future) {
+                return <option value={currentYear + i} key={Shortid.generate()}>{currentYear + i}</option>;
+            }
+            return <option value={currentYear - i} key={Shortid.generate()}>{currentYear - i}</option>;
+        }));
 
         return items;
     }
 
     render() {
         return (
-            <span className="form-inline dropdown-datepicker" >
-                <label>Birthday:</label>
+            <span className={'form-inline dropdown-datepicker ' + this.props.className} >
+                <label>{this.props.label}</label>
                 <br />
                 <Input
                     className="birthday-input"
@@ -152,6 +157,11 @@ class Page extends React.Component {
                     disabled={this.props.disabled}
                 >{this.renderYearOptions()}</Input>
                 <br />
+                <input
+                    type="hidden"
+                    name={this.props.name}
+                    value={(new Date(this.state.date).toUTCString())}
+                />
             </span>
         );
     }

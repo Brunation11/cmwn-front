@@ -40,8 +40,7 @@ var checkSchoolImportContent = function (WRAPPER, UPLOAD_WRAPPER) {
     expect(UPLOAD_WRAPPER.find('Panel')).to.have.length(1);
     expect(UPLOAD_WRAPPER.find('iframe')).to.have.length(1);
     expect(UPLOAD_WRAPPER.find('Form')).to.have.length(1);
-    expect(UPLOAD_WRAPPER.find('input')).to.have.length(4);
-    expect(UPLOAD_WRAPPER.find('Input')).to.have.length(4);
+    expect(UPLOAD_WRAPPER.find('Input')).to.have.length(5);
     expect(UPLOAD_WRAPPER.find('Button')).to.have.length(1);
 };
 
