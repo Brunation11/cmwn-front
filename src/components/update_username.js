@@ -206,6 +206,7 @@ export class UpdateUsername extends React.Component {
                         className={ClassNames(
                             'option',
                             {
+                                hidden: !self.state.option,
                                 selected: self.state.selected && self.state.selected === self.state.option,
                                 'not-selected': self.state.selected &&
                                                 self.state.option &&
@@ -220,6 +221,7 @@ export class UpdateUsername extends React.Component {
                         className={ClassNames(
                             'last',
                             {
+                                hidden: !self.state.last,
                                 selected: self.state.selected && self.state.selected === self.state.last,
                                 'not-selected': self.state.selected &&
                                                 self.state.last &&
@@ -251,10 +253,12 @@ export class UpdateUsername extends React.Component {
                 <img className="header" src={ASSETS.DESKTOP_CONFIRMATION_HEADER} />
                 <span className="prompt">{COPY.CONFIRM_NOTICE[0]}</span>
                 <span className="prompt">{COPY.CONFIRM_NOTICE[1]}</span>
+                <span className="prompt">Original:</span>
                 <Button
                     className="cancel-btn"
                     onClick={this.setOriginal.bind(this)}
                 />
+                <span className="prompt">New:</span>
                 <Button
                     className="confirm-btn"
                     onClick={this.setChildUsername.bind(this)}
@@ -385,8 +389,8 @@ export class UpdateUsername extends React.Component {
             <div className={`mobile-confirmation-container ${this.state.page}`}>
                 <img className="header" src={ASSETS.MOBILE_CONFIRMATION_HEADER} />
                 <div className="prompt-container">
-                    <span className="prompt">{COPY.CONFIRM_NOTICE_1}</span>
-                    <span className="prompt">{COPY.CONFIRM_NOTICE_2}</span>
+                    <span className="prompt">{COPY.CONFIRM_NOTICE[0]}</span>
+                    <span className="prompt">{COPY.CONFIRM_NOTICE[1]}</span>
                 </div>
                 <div className="content">
                     <Button
