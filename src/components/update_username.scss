@@ -281,7 +281,7 @@
 
         .instructions-prompt-container {
             position: relative;
-            top: 70%;
+            top: 64%;
             width: 100%;
             text-align: center;
             color: $cmwn-white;
@@ -400,7 +400,6 @@
                 text-align: center;
                 color: $cmwn-white;
                 font-size: 2rem;
-                font-weight: 100;
             }
 
         }
@@ -643,7 +642,7 @@
 
             &::before {
                 position: absolute;
-                bottom: 5%;
+                bottom: 25%;
                 left: 42%;
                 transform: translateX(-50%);
                 width: 100%;
@@ -730,7 +729,6 @@
             padding: 1%;
             width: 49%;
             font-size: 1.75rem;
-            font-weight: 100;
         }
 
         .original-btn {
@@ -778,10 +776,10 @@
             background-position: -256px -128px;
             background-size: 1100px 750px;
             width: 52%;
-            height: 55px;
+            height: 56px;
             color: $cmwn-white;
             font-family: $cmwn-jade-font;
-            font-size: 1rem;
+            font-size: 1.75rem;
 
             &:hover,
             &:focus,
@@ -803,8 +801,6 @@
                 position: absolute;
                 top: 10%;
                 left: -25%;
-                background-repeat: no-repeat;
-                background-size: contain;
                 width: 20%;
                 height: 80%;
                 content: '';
@@ -812,10 +808,14 @@
 
             &.selected::after {
                 background: url('#{$media-url}a3d9df57d3eb07e7ce95d3940114dea6.png');
+                background-repeat: no-repeat;
+                background-size: contain;
             }
 
             &.not-selected::after {
                 background: url('#{$media-url}34a9d35ecea03f6ec04f924b26f997a1.png');
+                background-repeat: no-repeat;
+                background-size: contain;
             }
         }
 
