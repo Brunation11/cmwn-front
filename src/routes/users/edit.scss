@@ -52,7 +52,6 @@ $btns: '#{$media-url}0c7044bc6e88f37a8910966dba68fe47.png';
         text-align: center;
 
         &::before {
-            //position: absolute;
             top: 0;
             bottom: 0;
             left: 50%;
@@ -60,19 +59,26 @@ $btns: '#{$media-url}0c7044bc6e88f37a8910966dba68fe47.png';
         }
 
         .profile-image {
-            margin: $standard * 2;
-            border: 2px solid $cmwn-white;
-            border-radius: 2px;
-            padding-bottom: 0;
+            padding: 30px;
 
             &::before {
                 position: absolute;
                 top: 50%;
-                right: -12%;
-                left: -12%;
+                right: 0;
+                left: 0;
                 border-top: 2px dotted $cmwn-white;
                 content: '';
             }
+        }
+
+        .profile-pic {
+            position: relative;
+            border: 2px solid $cmwn-white;
+            border-radius: 2px;
+            background-size: 100% auto;
+            padding: 0 0 85%;
+            width: 100%;
+            height: auto;
         }
 
         .action-link {
