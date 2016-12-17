@@ -139,11 +139,21 @@ export var Image = React.createClass({
         }
     },
     render: function () {
-        // if (!this.props.currentUser || !this.props.user) {
-            // return null;
-        // }
         return (
-            <div className={Classnames(COMPONENT_UNIQUE_IDENTIFIER, {'link-below': this.props['link-below']})} >
+            <div className={Classnames(COMPONENT_UNIQUE_IDENTIFIER, {'link-below': this.props['link-below']})}>
+                <Modal
+                    className={`profile-image-uploader-modal ${this.state.page}`}
+                    show={this.state.uploaderOn}
+                    onHide={this.hideModal.bind(this)}
+                    keyboard={false}
+                    backdrop="static"
+                    id="profile-image-uploader-modal"
+                >
+                    <Modal.Body>
+                        {this.renderUploader.call(this)}
+                    </Modal.Body>
+                </Modal>
+
                 {this.renderImage(this.state.profileImage)}
                 {this.renderUploadButton()}
             </div>
