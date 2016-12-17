@@ -387,8 +387,8 @@ export class UpdateUsername extends React.Component {
             <div className={`mobile-confirmation-container ${this.state.page}`}>
                 <img className="header" src={ASSETS.MOBILE_CONFIRMATION_HEADER} />
                 <div className="prompt-container">
-                    <span className="prompt">{COPY.CONFIRM_NOTICE_1}</span>
-                    <span className="prompt">{COPY.CONFIRM_NOTICE_2}</span>
+                    <span className="prompt">{COPY.CONFIRM_NOTICE[0]}</span>
+                    <span className="prompt">{COPY.CONFIRM_NOTICE[1]}</span>
                 </div>
                 <div className="content">
                     <Button
