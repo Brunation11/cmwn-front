@@ -1,5 +1,5 @@
 import React from 'react';
-import {ButtonToolbar, OverlayTrigger, Popover} from 'react-bootstrap';
+import {Button, Modal, ButtonToolbar, OverlayTrigger, Popover} from 'react-bootstrap';
 import Classnames from 'classnames';
 
 import Cloudinary from 'components/cloudinary';
@@ -11,6 +11,7 @@ import History from 'components/history';
 
 import 'components/profile_image.scss';
 
+const COMPONENT_UNIQUE_IDENTIFIER = 'profile-image';
 const PIC_ALT = 'Profile Picture';
 const UPLOAD_ERROR = 'There was a problem uploading your image. Please refresh the page and try again.';
 const MODERATION = 'Your image has been submitted for moderation and should appear shortly.';
@@ -142,7 +143,7 @@ export var Image = React.createClass({
             // return null;
         // }
         return (
-            <div className={Classnames('profile-image', {'link-below': this.props['link-below']})} >
+            <div className={Classnames(COMPONENT_UNIQUE_IDENTIFIER, {'link-below': this.props['link-below']})} >
                 {this.renderImage(this.state.profileImage)}
                 {this.renderUploadButton()}
             </div>
