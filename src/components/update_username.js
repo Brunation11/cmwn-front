@@ -253,10 +253,12 @@ export class UpdateUsername extends React.Component {
                 <img className="header" src={ASSETS.DESKTOP_CONFIRMATION_HEADER} />
                 <span className="prompt">{COPY.CONFIRM_NOTICE[0]}</span>
                 <span className="prompt">{COPY.CONFIRM_NOTICE[1]}</span>
+                <span className="prompt">Original:</span>
                 <Button
                     className="cancel-btn"
                     onClick={this.setOriginal.bind(this)}
                 />
+                <span className="prompt">New:</span>
                 <Button
                     className="confirm-btn"
                     onClick={this.setChildUsername.bind(this)}
