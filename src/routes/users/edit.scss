@@ -469,6 +469,7 @@ $btns: '#{$media-url}0c7044bc6e88f37a8910966dba68fe47.png';
 
 .swal2-modal.confirm-re-login {
     // scss-lint:disable ImportantRule
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
