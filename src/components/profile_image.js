@@ -22,14 +22,17 @@ const PENDING = ' We\'re reviewing your image and it should appear shortly. ' +
 const NO_IMAGE = 'Looks like there was a problem displaying this users profile. ' +
                 'Please refresh the page to try again.';
 
-export var Image = React.createClass({
-    getInitialState: function () {
-        return {
+export default class Image extends React.Component {
+    constructor () {
+        super();
+
+        this.state = {
             profileImage: GLOBALS.DEFAULT_PROFILE,
             isModerated: false
         };
-    },
-    componentDidMount: function () {
+    }
+
+    componentDidMount () {
         if (this.props.data._embedded.image) {
             this.setState({profileImage: this.props.data._embedded.image.url});
             this.setState({isModerated: this.props.data._embedded.image.is_moderated});
@@ -50,8 +53,9 @@ export var Image = React.createClass({
                 }
             });
         }
-    },
-    startUpload: function (e) {
+    }
+
+    startUpload (e) {
         var self = this;
         e.stopPropagation();
         Cloudinary.load((e_, err) => {
@@ -89,14 +93,16 @@ export var Image = React.createClass({
             });
             /* eslint-enable camelcase */
         });
-    },
-    attemptNavigate: function () {
+    }
+
+    attemptNavigate () {
         if (this.props.data.user_id === this.props.currentUser.user_id ||
             (this.props.data && this.props.data.user_id === this.props.currentUser.user_id)) {
             History.push('/profile');
         }
-    },
-    renderImage: function (url) {
+    }
+
+    renderImage (url) {
         var style = {'backgroundImage': `url(${url})`};
         return (
              <div
@@ -108,8 +114,9 @@ export var Image = React.createClass({
                  {PIC_ALT}
             </div>
         );
-    },
-    renderUploadButton: function () {
+    }
+
+    renderUploadButton () {
         if (this.props.data.user_id !== this.props.currentUser.user_id ||
             (this.props.data && this.props.data.user_id !== this.props.currentUser.user_id)) {
             return null;
@@ -137,8 +144,9 @@ export var Image = React.createClass({
                 </ButtonToolbar>
             );
         }
-    },
-    render: function () {
+    }
+
+    render () {
         return (
             <div className={Classnames(COMPONENT_UNIQUE_IDENTIFIER, {'link-below': this.props['link-below']})}>
                 <Modal
@@ -159,7 +167,4 @@ export var Image = React.createClass({
             </div>
         );
     }
-});
-
-export default Image;
-
+};
