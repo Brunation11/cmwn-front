@@ -12,15 +12,12 @@ import Log from 'components/log';
 import Toast from 'components/toast';
 import Layout from 'layouts/two_col';
 import GLOBALS from 'components/globals';
-// import Validate from 'components/validators';
 import Util from 'components/util';
 import UpdateUsername from 'components/update_username';
 import ProfileImage from 'components/profile_image';
 import Form from 'components/form';
 import DropdownDatepicker from 'components/dropdown_datepicker';
 import ACTION_CONSTANTS from 'components/action_constants';
-// import CodeChange from 'components/code_change';
-// import ForgotPass from 'components/forgot_pass';
 import ChangePassword from 'components/change_password';
 
 
