@@ -28,7 +28,8 @@ export default class Image extends React.Component {
 
         this.state = {
             profileImage: GLOBALS.DEFAULT_PROFILE,
-            isModerated: false
+            isModerated: false,
+            page: 'welcome'
         };
     }
 
@@ -95,6 +96,25 @@ export default class Image extends React.Component {
         });
     }
 
+    showModal() {
+        this.setState({
+            uploaderOn: true
+        });
+    }
+
+    hideModal() {
+        this.setState({
+            uploaderOn: false,
+            page: 'welcome',
+        });
+    }
+
+    setPage(page) {
+        this.setState({
+            page: page
+        });
+    }
+
     attemptNavigate () {
         if (this.props.data.user_id === this.props.currentUser.user_id ||
             (this.props.data && this.props.data.user_id === this.props.currentUser.user_id)) {
@@ -116,6 +136,33 @@ export default class Image extends React.Component {
         );
     }
 
+    renderUploader () {
+        return (
+            <div className="welcome-container">
+                <div className="left">
+                    <span className="prompt-1">
+                        CLICK ANYWHERE IN THIS BOX TO
+                    </span>
+                    <span className="prompt-2">
+                        Upload or drag photo
+                        <br />
+                        from your computer
+                    </span>
+                    <button
+                        className="upload-your-photo-btn"
+                        onClick={this.startUpload.bind(this)}
+                    />
+                </div>
+                <div className="right">
+                    <button
+                        className="pick-one-from-our-avatar-btn"
+                        onClick={this.setPage.bind(this, 'avatar-selector')}
+                    />
+                </div>
+            </div>
+        );
+    }
+
     renderUploadButton () {
         if (this.props.data.user_id !== this.props.currentUser.user_id ||
             (this.props.data && this.props.data.user_id !== this.props.currentUser.user_id)) {
@@ -123,23 +170,36 @@ export default class Image extends React.Component {
         }
         if ((this.state.profileImage === GLOBALS.DEFAULT_PROFILE) || this.state.isModerated) {
             return (
-                <button className="upload" onClick={this.startUpload}>Upload Image</button>
+                <button className="upload" onClick={this.showModal.bind(this)}>Upload Image</button>
             );
         } else {
             return (
                 <ButtonToolbar>
-                    <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={
-                        <Popover className="profile-image-popover" id="upload">
-                            <strong>
-                                {PENDINGHEADER}
-                                <br />
-                            </strong>
-                            {PENDING}
-                            <a onClick={this.startUpload}>
-                                here.
-                            </a>
-                        </Popover>}>
-                        <button className="upload">Upload Image</button>
+                    <OverlayTrigger
+                        trigger="click"
+                        rootClose
+                        placement="bottom"
+                        overlay={
+                            <Popover
+                                className="profile-image-popover"
+                                id="upload"
+                            >
+                                <strong>
+                                    {PENDINGHEADER}
+                                    <br />
+                                </strong>
+                                {PENDING}
+                                <a onClick={this.showModal.bind(this)}>
+                                    here.
+                                </a>
+                            </Popover>
+                        }
+                    >
+                        <button
+                            className="upload"
+                        >
+                            Upload Image
+                        </button>
                     </OverlayTrigger>
                 </ButtonToolbar>
             );
