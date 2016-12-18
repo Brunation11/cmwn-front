@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Modal, ButtonToolbar, OverlayTrigger, Popover} from 'react-bootstrap';
+import {Modal, ButtonToolbar, OverlayTrigger, Popover} from 'react-bootstrap';
 import Classnames from 'classnames';
 
 import Cloudinary from 'components/cloudinary';
@@ -23,7 +23,7 @@ const NO_IMAGE = 'Looks like there was a problem displaying this users profile. 
                 'Please refresh the page to try again.';
 
 export default class Image extends React.Component {
-    constructor () {
+    constructor() {
         super();
 
         this.state = {
@@ -33,7 +33,7 @@ export default class Image extends React.Component {
         };
     }
 
-    componentDidMount () {
+    componentDidMount() {
         if (this.props.data._embedded.image) {
             this.setState({profileImage: this.props.data._embedded.image.url});
             this.setState({isModerated: this.props.data._embedded.image.is_moderated});
@@ -56,7 +56,7 @@ export default class Image extends React.Component {
         }
     }
 
-    startUpload (e) {
+    startUpload(e) {
         var self = this;
         e.stopPropagation();
         Cloudinary.load((e_, err) => {
@@ -115,14 +115,14 @@ export default class Image extends React.Component {
         });
     }
 
-    attemptNavigate () {
+    attemptNavigate() {
         if (this.props.data.user_id === this.props.currentUser.user_id ||
             (this.props.data && this.props.data.user_id === this.props.currentUser.user_id)) {
             History.push('/profile');
         }
     }
 
-    renderImage (url) {
+    renderImage(url) {
         var style = {'backgroundImage': `url(${url})`};
         return (
              <div
@@ -136,7 +136,7 @@ export default class Image extends React.Component {
         );
     }
 
-    renderUploader () {
+    renderUploader() {
         return (
             <div className="welcome-container">
                 <div className="left">
@@ -163,7 +163,7 @@ export default class Image extends React.Component {
         );
     }
 
-    renderUploadButton () {
+    renderUploadButton() {
         if (this.props.data.user_id !== this.props.currentUser.user_id ||
             (this.props.data && this.props.data.user_id !== this.props.currentUser.user_id)) {
             return null;
@@ -206,9 +206,16 @@ export default class Image extends React.Component {
         }
     }
 
-    render () {
+    render() {
         return (
-            <div className={Classnames(COMPONENT_UNIQUE_IDENTIFIER, {'link-below': this.props['link-below']})}>
+            <div
+                className={Classnames(
+                    COMPONENT_UNIQUE_IDENTIFIER,
+                    {
+                        'link-below': this.props['link-below']
+                    }
+                )}
+            >
                 <Modal
                     className={`profile-image-uploader-modal ${this.state.page}`}
                     show={this.state.uploaderOn}
@@ -227,4 +234,4 @@ export default class Image extends React.Component {
             </div>
         );
     }
-};
+}
