@@ -461,6 +461,10 @@
                 &.selected {
                     background-position: -843px -144px;
                 }
+
+                &.hide {
+                    visibility: hidden;
+                }
                 // scss-lint:enable NestingDepth, SelectorDepth
             }
         }
