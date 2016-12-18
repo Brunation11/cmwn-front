@@ -467,7 +467,7 @@
 
         .mobile-confirmation-container {
             position: relative;
-            top: 50%;
+            top: 47%;
             text-align: center;
             color: $cmwn-white;
             font-family: $cmwn-jade-font;
@@ -487,7 +487,7 @@
 
             .prompt {
                 display: block;
-                font-size: 1.5rem;
+                font-size: 1.25rem;
             }
 
             .original,
@@ -930,7 +930,7 @@
             border: 0;
             background: url('#{$media-url}0c7044bc6e88f37a8910966dba68fe47.png');
             background-size: 600px 433px;
-            width: 48%;
+            width: 158px;
             height: 56px;
 
             &:hover,
