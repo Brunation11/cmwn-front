@@ -1,5 +1,15 @@
 @import 'variables';
 
+$purple: #7a1ebf;
+$blue: #01aef0;
+
+$modal-background: '44cda0a040cca931add0d1f16ac19e51.png';
+$dotted-border: '446ace931cf5b20f94dc5e6490bb0a65.png';
+$upload-your-photo-btn: '1a130e9f3f37a0c199d19f5e28867e8d.png';
+$upload-your-photo-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
+$pick-one-from-our-avatar-btn: '098b84d6eb16c47f90db9a378e966e5d.png';
+$pick-one-from-our-avatar-btn-hvr: '704fdd1a962a38c868d7ba5240254aa2.png';
+
 .profile-image-popover {
     color: $cmwn-gray;
 
@@ -77,5 +87,125 @@
 
     &.with_theme .widget { // scss-lint:disable SelectorFormat
         max-width: 101vw;
+    }
+}
+
+.profile-image-uploader-modal {
+    .modal-content {
+        left: 50%;
+        transform: translateX(-50%);
+        border: 0;
+        box-shadow: none;
+        background: url('#{$media-url}#{$modal-background}');
+        background-position: 0 5px;
+        background-size: 100% 100%;
+        width: 80vw;
+        max-width: 850px;
+        height: 90vh;
+    }
+
+    .modal-body {
+        position: absolute;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .welcome-container {
+        width: 100%;
+        height: 100%;
+
+        .left {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%) translateX(10%);
+            border: 2px solid $purple;
+            border-radius: 5px;
+            background-color: $blue;
+            width: 45%;
+            height: 90%;
+
+            .prompt-1,
+            .prompt-2 {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 90%;
+                text-align: center;
+                color: $cmwn-white;
+            }
+
+            .prompt-1 {
+                top: 25%;
+                font-size: 1.25rem;
+                font-weight: 100;
+            }
+
+            .prompt-2 {
+                top: 32%;
+                border-top: 1px solid $cmwn-white;
+                border-bottom: 1px solid $cmwn-white;
+                padding: $standard;
+                font-size: 1.75rem;
+                font-weight: 200;
+            }
+
+            .upload-your-photo-btn {
+                position: absolute;
+                top: 0;
+                left: 0;
+                outline: none;
+                border: 0;
+                box-shadow: none;
+                background: url('#{$media-url}#{$upload-your-photo-btn}');
+                background-repeat: no-repeat;
+                background-position: 50% 75%;
+                background-size: 70% auto;
+                width: 100%;
+                height: 100%;
+
+                &:hover,
+                &:focus {
+                    background: url('#{$media-url}#{$upload-your-photo-btn-hvr}');
+                    background-repeat: no-repeat;
+                    background-position: 50% 75%;
+                    background-size: 70% auto;
+                }
+            }
+        }
+
+        .right {
+            position: absolute;
+            top: 50%;
+            right: 5%;
+            transform: translateY(-50%);
+            border: 2px dotted $purple;
+            border-radius: 7px;
+            width: 44%;
+            height: 90%;
+
+            .pick-one-from-our-avatar-btn {
+                position: absolute;
+                top: 0;
+                left: 0;
+                outline: none;
+                border: 0;
+                box-shadow: none;
+                background: url('#{$media-url}#{$pick-one-from-our-avatar-btn}');
+                background-repeat: no-repeat;
+                background-position: 50% 40%;
+                background-size: 70% auto;
+                width: 100%;
+                height: 100%;
+
+                &:hover,
+                &:focus {
+                    background: url('#{$media-url}#{$pick-one-from-our-avatar-btn-hvr}');
+                    background-repeat: no-repeat;
+                    background-position: 50% 40%;
+                    background-size: 70% auto;
+                }
+            }
+        }
     }
 }
