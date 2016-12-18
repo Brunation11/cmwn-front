@@ -461,10 +461,6 @@
                 &.selected {
                     background-position: -843px -144px;
                 }
-
-                &.hide {
-                    visibility: hidden;
-                }
                 // scss-lint:enable NestingDepth, SelectorDepth
             }
         }
@@ -486,7 +482,7 @@
 
             .prompt-container {
                 display: block;
-                margin: 5% 0;
+                margin: 2% 0;
             }
 
             .prompt {
@@ -619,7 +615,7 @@
 
             &::before {
                 position: absolute;
-                bottom: 25%;
+                bottom: 5%;
                 left: 42%;
                 transform: translateX(-50%);
                 width: 100%;
@@ -643,7 +639,6 @@
             text-align: center;
             color: $cmwn-white;
             font-size: 2rem;
-            font-weight: 100;
         }
 
         .generate-btn {
@@ -794,6 +789,10 @@
                 background-repeat: no-repeat;
                 background-size: contain;
             }
+
+            &.disable {
+                visibility: hidden;
+            }
         }
 
         .step-2,
@@ -861,6 +860,10 @@
                 background-color: transparent;
                 background-position: -967px -221px;
             }
+
+            &.disable {
+                visibility: hidden;
+            }
         }
 
         ~ .close-modal-btn {
@@ -914,6 +917,11 @@
             font-size: 2rem;
         }
 
+        .content {
+            display: inline-block;
+            width: 50%;
+        }
+
         .confirm-btn,
         .cancel-btn {
             display: inline;
@@ -922,7 +930,7 @@
             border: 0;
             background: url('#{$media-url}0c7044bc6e88f37a8910966dba68fe47.png');
             background-size: 600px 433px;
-            width: 28%;
+            width: 48%;
             height: 56px;
 
             &:hover,
