@@ -181,7 +181,7 @@ export class Profile extends React.Component {
                     ref="gameRef"
                     isTeacher={!this.state.isStudent}
                     url={this.state.gameUrl}
-                    onExit={this.setState.bind(this, {gameOn: false})}
+                    onExit={() => this.setState({gameOn: false}) }
                     game={this.state.game}
                     currentUser={this.props.currentUser}
                 />
