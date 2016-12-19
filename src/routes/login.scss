@@ -1,6 +1,33 @@
-@import 'variables';
+@import '../variables';
 
-#cmwn-app .login { // scss-lint:disable IdSelector
+// scss-lint:disable all
+#cmwn-app .login {
+    //from http://stackoverflow.com/questions/9707021/how-do-i-auto-hide-placeholder-text-upon-focus-using-css-or-jquery
+    ::-webkit-input-placeholder {
+        transition: opacity .5s;
+        opacity: 1;
+    }
+
+    :-moz-placeholder {
+        transition: opacity .5s;
+        opacity: 1;
+    } /* FF 4-18 */
+
+    ::-moz-placeholder {
+        transition: opacity 0.5s;
+        opacity: 1;
+    } /* FF 19+ */
+    :-ms-input-placeholder {
+        transition: opacity 0.5s;
+        opacity:1;
+    } /* IE 10+ */
+
+    *:focus::-webkit-input-placeholder { opacity:0; }
+    *:focus:-moz-placeholder { opacity:0; } /* FF 4-18 */
+    *:focus::-moz-placeholder { opacity:0; } /* FF 19+ */
+    *:focus:-ms-input-placeholder { opacity:0; } /* IE 10+ */
+    // scss-lint:enable all
+
 //********************
 // shared
 //********************

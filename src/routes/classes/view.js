@@ -1,10 +1,12 @@
 import React from 'react';
 import _ from 'lodash';
 import {Link} from 'react-router';
-import {Panel, Button} from 'react-bootstrap';
+import {Panel, Button, Input} from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import Layout from 'layouts/two_col';
+
+import History from 'components/history';
 import {Table, Column} from 'components/table';
 import Paginator from 'components/paginator';
 import EditLink from 'components/edit_link';
@@ -13,6 +15,9 @@ import DeleteLink from 'components/delete_link';
 import Text from 'components/nullable_text';
 import Util from 'components/util';
 import GenerateDataSource from 'components/datasource';
+import HttpManager from 'components/http_manager';
+import Log from 'components/log';
+import Toast from 'components/toast';
 
 import 'routes/classes/view.scss';
 
@@ -37,7 +42,17 @@ var Page;
 export class View extends React.Component{
     constructor() {
         super();
-        this.state = {scope: 0};
+        this.state = {scope: 0, codeUpdate: ''};
+    }
+    updateCode() {
+        HttpManager.POST(this.props.data._links.group_reset.href, {code: this.state.codeUpdate})
+            .then(() => Toast.success('Student codes updated successfully.' +
+               ' Your students can now log in with this code'))
+            .catch(err => {
+                Log.error(err);
+                Toast.error('There was an error while attempting to update your student\'s codes.' +
+                   ' Please try again later.');
+            });
     }
     componentDidMount() {
         this.setState(this.props.data);
@@ -59,12 +74,13 @@ export class View extends React.Component{
         return <span>{`${HEADINGS.CLASSES}: `}{links}</span>;
     }
     renderImport() {
-        if (this.state == null || this.state._links == null || this.state._links.import == null) {
-        //if (!state.currentUser || !state.currentUser._embedded ||
-        //    !state.currentUser._embedded.groups || !state.currentUser._embedded.groups.length ||
-        //    state.currentUser._embedded.groups[0]._links.import == null) {
-        //if (!state.currentUser || !state.currentUser._embedded || !state.currentUser._embedded.groups ||
-        //    !state.currentUser._embedded.groups.length) {
+        if (
+            this.state == null || this.state._links == null || this.state._links.import == null ||
+            !this.state.currentUser ||
+            !this.state.currentUser._embedded ||
+            !this.state.currentUser._embedded.groups ||
+            !this.state.currentUser._embedded.groups.length
+        ) {
             return null;
         }
         return (
@@ -124,6 +140,21 @@ export class View extends React.Component{
                     <Text label={`${HEADINGS.CREATED}: `} text={this.props.data.created_at}>
                         <p></p>
                     </Text>
+                    <div className="code-update">
+                        <Input
+                            type="text"
+                            value={this.state.codeUpdate}
+                            placeholder="Code"
+                            label="Update login code for all students who have not yet logged in"
+                            validate="required"
+                            ref="codeInput"
+                            name="codeInput"
+                            onChange={e => this.setState({codeUpdate: e.target.value})}
+                        />
+                        <Button onClick={this.updateCode.bind(this)}>
+                            Submit
+                        </Button>
+                    </div>
                 </Panel>
                 <Panel header="Students" className="standard" id="panel-2">
                     <div className="clear">
