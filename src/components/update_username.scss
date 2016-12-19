@@ -608,14 +608,14 @@
 
         .step-1 {
             position: relative;
-            left: 25%;
+            left: 5%;
             color: $cmwn-white;
             font-family: $cmwn-jade-font;
             font-size: 9rem;
 
             &::before {
                 position: absolute;
-                bottom: 5%;
+                bottom: 10%;
                 left: 42%;
                 transform: translateX(-50%);
                 width: 100%;
