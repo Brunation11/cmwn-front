@@ -254,7 +254,7 @@
 
         .instructions-prompt-container {
             position: relative;
-            top: 70%;
+            top: 64%;
             width: 100%;
             text-align: center;
             color: $cmwn-white;
@@ -373,7 +373,6 @@
                 text-align: center;
                 color: $cmwn-white;
                 font-size: 2rem;
-                font-weight: 100;
             }
 
         }
@@ -468,7 +467,7 @@
 
         .mobile-confirmation-container {
             position: relative;
-            top: 50%;
+            top: 47%;
             text-align: center;
             color: $cmwn-white;
             font-family: $cmwn-jade-font;
@@ -483,12 +482,12 @@
 
             .prompt-container {
                 display: block;
-                margin: 5% 0;
+                margin: 2% 0;
             }
 
             .prompt {
                 display: block;
-                font-size: 1.5rem;
+                font-size: 1.25rem;
             }
 
             .original,
@@ -640,7 +639,6 @@
             text-align: center;
             color: $cmwn-white;
             font-size: 2rem;
-            font-weight: 100;
         }
 
         .generate-btn {
@@ -703,7 +701,6 @@
             padding: 1%;
             width: 49%;
             font-size: 1.75rem;
-            font-weight: 100;
         }
 
         .original-btn {
@@ -751,10 +748,10 @@
             background-position: -256px -128px;
             background-size: 1100px 750px;
             width: 52%;
-            height: 55px;
+            height: 56px;
             color: $cmwn-white;
             font-family: $cmwn-jade-font;
-            font-size: 1rem;
+            font-size: 1.75rem;
 
             &:hover,
             &:focus,
@@ -776,8 +773,6 @@
                 position: absolute;
                 top: 10%;
                 left: -25%;
-                background-repeat: no-repeat;
-                background-size: contain;
                 width: 20%;
                 height: 80%;
                 content: '';
@@ -785,10 +780,18 @@
 
             &.selected::after {
                 background: url('#{$media-url}a3d9df57d3eb07e7ce95d3940114dea6.png');
+                background-repeat: no-repeat;
+                background-size: contain;
             }
 
             &.not-selected::after {
                 background: url('#{$media-url}34a9d35ecea03f6ec04f924b26f997a1.png');
+                background-repeat: no-repeat;
+                background-size: contain;
+            }
+
+            &.disable {
+                visibility: hidden;
             }
         }
 
@@ -857,6 +860,10 @@
                 background-color: transparent;
                 background-position: -967px -221px;
             }
+
+            &.disable {
+                visibility: hidden;
+            }
         }
 
         ~ .close-modal-btn {
@@ -910,6 +917,11 @@
             font-size: 2rem;
         }
 
+        .content {
+            display: inline-block;
+            width: 50%;
+        }
+
         .confirm-btn,
         .cancel-btn {
             display: inline;
@@ -918,7 +930,7 @@
             border: 0;
             background: url('#{$media-url}0c7044bc6e88f37a8910966dba68fe47.png');
             background-size: 600px 433px;
-            width: 28%;
+            width: 158px;
             height: 56px;
 
             &:hover,

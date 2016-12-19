@@ -1,6 +1,6 @@
 {
   "name": "cmwn-platorm-frontend",
-  "version": "0.7.21",
+  "version": "0.7.22",
   "description": "ChangeMyWorldNow Platform Frontend (React)",
   "main": "index.html",
   "scripts": {
