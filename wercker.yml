@@ -68,8 +68,6 @@ deploy:
     - script:
       name: Linking build
       code: |-
-        export VERSION="$($PWD/bin/version_bump.sh --print-current)"
-        echo "$VERSION"
         echo "Linking $DEPLOY_APP_NAME @ $VERSION to $DEPLOY_ENV"
         python /deploy_to_s3.py --version=$VERSION --link $DEPLOY_ENV --link-only
   after-steps:
