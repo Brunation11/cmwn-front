@@ -1,5 +1,5 @@
 import React from 'react';
-import { expect } from 'chai';
+import { expect, config } from 'chai';
 import { mount } from 'enzyme';
 import ProviderWrapper from 'smoke_tests/provider_wrapper.js';
 
@@ -10,9 +10,12 @@ import schoolStudentData from 'mocks/schools/school_student_data';
 import schoolTeacherData from 'mocks/schools/school_teacher_data';
 import schoolPrincipalData from 'mocks/schools/school_principal_data';
 
+config.includeStack = true;
+
 var createWrapper = function (data) {
-    var profile = <SchoolProfile data={data} loading={false} />;
-    const WRAPPER = mount(<ProviderWrapper route={profile} />);
+    var school = <SchoolProfile data={data} loading={false} />;
+    var provider = <ProviderWrapper route={school} />;
+    const WRAPPER = mount(provider);
     return WRAPPER;
 };
 
@@ -21,11 +24,11 @@ var checkBasicComponents = function (WRAPPER) {
     expect(WRAPPER.find('Panel')).to.have.length(1);
     expect(WRAPPER.find('.right')).to.have.length(1);
     expect(WRAPPER.find('.school-district')).to.have.length(1);
-    expect(WRAPPER.find('FlipBoard')).to.have.length(1);
+    /** TODO MPR, 11/18/16: Figure out how to check for datasource success */
 };
 
 var checkAdminComponents = function (WRAPPER) {
-    expect(WRAPPER.find('.purple')).to.have.length(1);
+    expect(WRAPPER.find('.content').find('.purple')).to.have.length(1);
     expect(WRAPPER.find('.school-admin-link')).to.have.length(1);
 };
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import {Button, Input, Panel} from 'react-bootstrap';
+import SweetAlert from 'sweetalert2';
 
 import HttpManager from 'components/http_manager';
 import Toast from 'components/toast';
@@ -27,32 +28,68 @@ class ChangePassword extends React.Component {
             current: '',
             new: '',
             confirm: '',
-            extraProps: {}
+            extraProps: {},
+            type: 'password'
         };
     }
 
+    handleOptionSelect(e) {
+        if (this.state.type !== e.target.value) {
+            this.setState({
+                type: e.target.value
+            });
+        } else {
+            this.setState({
+                type: 'password'
+            });
+        }
+    }
+
     submit() {
-        var update;
         if (!isPassValid(this.state.new)) {
             this.setState({extraProps: {bsStyle: 'error'}});
             Toast.error(ERRORS.TOO_SHORT);
         } else if (this.state.confirm === this.state.new) {
-            update = HttpManager.POST({url: this.props.url.href}, {
+            HttpManager.POST({url: this.props.url.href}, {
                 'current_password': this.state.current,
                 'password': this.state.new,
                 'password_confirmation': this.state.confirm,
                 'user_id': this.props.user_id,
-            });
-            update.then(
-                Toast.success.bind(this, PASS_UPDATED)
-            ).catch(err => {
+            }).then(() => {
+                this.confirmReLogin();
+            }).catch(err => {
                 Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
                 Toast.error(ERRORS.BAD_PASS);
+            });
+
+            this.setState({
+                current: '',
+                new: '',
+                confirm: ''
             });
         } else {
             this.setState({extraProps: {bsStyle: 'error'}});
             Toast.error(ERRORS.NO_MATCH);
             /** @TODO MPR, 11/19/15: check on change, not submit*/
+        }
+
+        this.setState({
+            current: '',
+            new: '',
+            confirm: ''
+        });
+    }
+
+    confirmReLogin() {
+        Toast.success(PASS_UPDATED);
+        if (this.props.confirmReLogin) {
+            SweetAlert({
+                animation: false,
+                html: 'You will need to login again<br />for security purposes after resetting<br />your new password.', //eslint-disable-line max-len
+                allowOutsideClickg: false,
+                allowEscapeKey: false,
+                customClass: 'confirm-re-login'
+            });
         }
     }
 
@@ -64,46 +101,71 @@ class ChangePassword extends React.Component {
             return null;
         }
         return (
-            <Panel header={HEADINGS.PASSWORD} className="standard">
-            <form>
-            <Input
-                id="old-pass"
-                type="password"
-                value={this.state.current}
-                placeholder="********"
-                label="Current Password"
-                validate="required"
-                ref="currentInput"
-                name="currentInput"
-                onChange={e => this.setState({current: e.target.value})}
-            />
-            <Input
-                id="new-pass"
-                type="password"
-                value={this.state.new}
-                placeholder="********"
-                label="New Password"
-                validate="required"
-                ref="newInput"
-                name="newInput"
-                onChange={e => this.setState({new: e.target.value})}
-                {...this.state.extraProps}
-            />
-            <Input
-                id="confirm-pass"
-                type="password"
-                value={this.state.confirm}
-                placeholder="********"
-                label="Confirm Password"
-                validate="required"
-                ref="confirmInput"
-                name="confirmInput"
-                onChange={e => this.setState({confirm: e.target.value})}
-                {...this.state.extraProps}
-            />
-            <Button onClick={this.submit.bind(this)} id="update-btn">Update</Button>
-            </form>
-        </Panel>
+            <Panel header={this.props.header ? HEADINGS.PASSWORD : ''} className="standard change-password">
+                <form>
+                    <Input
+                        id="old-pass"
+                        type={this.state.type}
+                        value={this.state.current}
+                        placeholder="PA******"
+                        label="Current Password"
+                        validate="required"
+                        ref="currentInput"
+                        name="currentInput"
+                        onChange={e => this.setState({current: e.target.value})}
+                        onFocus={e => e.target.placeholder = ''}
+                        onBlur={e => e.target.placeholder = 'PA******'}
+                        autoComplete="off"
+                    />
+                    <Input
+                        id="new-pass"
+                        type={this.state.type}
+                        value={this.state.new}
+                        placeholder="PA******"
+                        label="New Password"
+                        validate="required"
+                        ref="newInput"
+                        name="newInput"
+                        onChange={e => this.setState({new: e.target.value})}
+                        onFocus={e => e.target.placeholder = ''}
+                        onBlur={e => e.target.placeholder = 'PA******'}
+                        autoComplete="off"
+                        {...this.state.extraProps}
+                    />
+                    <Input
+                        id="confirm-pass"
+                        type={this.state.type}
+                        value={this.state.confirm}
+                        placeholder="PA******"
+                        label="Re-type Password"
+                        validate="required"
+                        ref="confirmInput"
+                        name="confirmInput"
+                        onChange={e => this.setState({confirm: e.target.value})}
+                        onFocus={e => e.target.placeholder = ''}
+                        onBlur={e => e.target.placeholder = 'PA******'}
+                        autoComplete="off"
+                        {...this.state.extraProps}
+                    />
+                    <Input
+                        type="radio"
+                        ref="show-pass"
+                        name="toggle"
+                        className="toggle-characters"
+                        label="Check to show password characters"
+                        value="text"
+                        checked={this.state.type === 'text'}
+                        onChange={this.handleOptionSelect.bind(this)}
+                    />
+                    <Button
+                        id="update-btn"
+                        className="update-password-btn"
+                        onClick={this.submit.bind(this)}
+                    >
+                        Update
+                    </Button>
+                </form>
+            </Panel>
         );
     }
 }

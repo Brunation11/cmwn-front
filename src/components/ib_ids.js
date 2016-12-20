@@ -99,7 +99,6 @@ const IB_IDS = {
             unearned: 'fd79a5aa07706bc929990d49a19117e9.gif',
             static: '683a78c259caabf38a2d159cd2c89103.gif'
         },
-
         'all-about-you': {
             earned: 'cd78ab13f5ff76db13050c240410b9fc.gif',
             unearned: '158fd4beb460f657b82acb764feff1ec.gif',

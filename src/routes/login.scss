@@ -1,6 +1,33 @@
-@import 'variables';
+@import '../variables';
 
-#cmwn-app .login { // scss-lint:disable IdSelector
+// scss-lint:disable all
+#cmwn-app .login {
+    //from http://stackoverflow.com/questions/9707021/how-do-i-auto-hide-placeholder-text-upon-focus-using-css-or-jquery
+    ::-webkit-input-placeholder {
+        transition: opacity .5s;
+        opacity: 1;
+    }
+
+    :-moz-placeholder {
+        transition: opacity .5s;
+        opacity: 1;
+    } /* FF 4-18 */
+
+    ::-moz-placeholder {
+        transition: opacity 0.5s;
+        opacity: 1;
+    } /* FF 19+ */
+    :-ms-input-placeholder {
+        transition: opacity 0.5s;
+        opacity:1;
+    } /* IE 10+ */
+
+    *:focus::-webkit-input-placeholder { opacity:0; }
+    *:focus:-moz-placeholder { opacity:0; } /* FF 4-18 */
+    *:focus::-moz-placeholder { opacity:0; } /* FF 19+ */
+    *:focus:-ms-input-placeholder { opacity:0; } /* IE 10+ */
+    // scss-lint:enable all
+
 //********************
 // shared
 //********************
@@ -121,10 +148,10 @@
 
         &:hover,
         &:focus,
-        &:active,
-        &:active:focus {
+        &:active {
             outline: none;
             border: 0;
+            box-shadow: none;
             background: url('../media/login/btn-submit-hover.png');
             background-repeat: no-repeat;
             background-size: contain;
@@ -153,7 +180,7 @@
             color: $cmwn-purple;
         }
 
-        .mobile {
+        .mobile-link {
             display: none;
         }
     }
@@ -290,6 +317,7 @@
             &:active:focus {
                 outline: none;
                 border: 0;
+                box-shadow: none;
                 background: url('../media/login/btn-closescreen-hover.png');
                 background-repeat: no-repeat;
                 background-size: contain;
@@ -343,6 +371,7 @@
             &:active:focus {
                 outline: none;
                 border: 0;
+                box-shadow: none;
                 background: url('../media/login/btn-ok-hover.png');
                 background-repeat: no-repeat;
                 background-size: contain;
@@ -631,7 +660,7 @@
                 display: none;
             }
 
-            .mobile {
+            .mobile-link {
                 display: inline-block;
                 color: $cmwn-white;
                 font-size: .5rem;
@@ -761,7 +790,7 @@
                     display: none;
                 }
 
-                .mobile {
+                .mobile-link {
                     display: inline;
                     white-space: nowrap;
                     color: $cmwn-white;

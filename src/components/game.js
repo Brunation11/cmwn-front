@@ -9,6 +9,7 @@ import getEventsForGame from 'components/game_events';
 import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
 import Detector from 'components/browser_detector';
+import Log from 'components/log';
 
 import CHROME_ICON from 'media/Google_Chrome_icon_(2011).svg.png';
 
@@ -48,6 +49,7 @@ export class Game extends React.Component {
         super();
 
         this.state = {
+            isFullscreen: false,
             fullscreenFallback: false,
             demo: false
         };
@@ -64,13 +66,25 @@ export class Game extends React.Component {
                 this.onExit.bind(this)
             )
         });
+        if (Screenfull.enabled) {
+            document.addEventListener(Screenfull.raw.fullscreenchange, () => {
+                this.setState({isFullscreen: Screenfull.isFullscreen});
+            });
+        }
     }
 
     componentDidMount() {
         var frame = ReactDOM.findDOMNode(this.refs.gameRef);
         var callApi;
+
         if (!frame) {
             return;
+        }
+
+        if (Screenfull.enabled) {
+            document.addEventListener(Screenfull.raw.fullscreenchange, () => {
+                this.setState({isFullscreen: Screenfull.isFullscreen});
+            });
         }
 
         callApi = _.debounce(function () {
@@ -113,6 +127,7 @@ export class Game extends React.Component {
     }
 
     onExit(nextState) {
+        if (this.state.isFullscreen) this.exitFullscreen();
         this.setState(nextState);
     }
 
@@ -125,7 +140,11 @@ export class Game extends React.Component {
                 this.state.eventHandler[EVENT_PREFIX + _.upperFirst(e.name)](...arguments);
             }
             if (_.isFunction(this.props['on' + _.upperFirst(e.name)])) {
-                this.props['on' + _.upperFirst(e.name)](...arguments);
+                try {
+                    this.props['on' + _.upperFirst(e.name)](...arguments);
+                } catch(err) {
+                    Log.error('Error bubbling game event: ' + e.name + ', ' + err, e);
+                }
             }
         }
     }
@@ -147,11 +166,16 @@ export class Game extends React.Component {
 
     listenForEsc(e) {
         if (e.keyCode === 27 || e.charCode === 27) {
-            Screenfull.exit();
-            this.setState({
-                fullscreenFallback: false,
-            });
+            this.exitFullscreen();
         }
+    }
+
+    exitFullscreen() {
+        Screenfull.exit();
+        this.setState({
+            fullscreenFallback: false,
+            isFullscreen: false,
+        });
     }
 
     resizeFrame() {
@@ -173,12 +197,14 @@ export class Game extends React.Component {
     }
 
     makeFullScreen() {
+        var nextState = {isFullscreen: true};
         if (Screenfull.enabled) {
-            Screenfull.request(ReactDOM.findDOMNode(this.refs.wrapRef));
+            Screenfull.request(document.body);
         } else {
-            this.setState({fullscreenFallback: true});
-            this.resizeFrame.call(this);
+            nextState.fullscreenFallback = true;
+            this.resizeFrame();
         }
+        this.setState(nextState);
     }
 
     checkForPortrait() {
@@ -199,7 +225,7 @@ export class Game extends React.Component {
             <div className={COMPONENT_IDENTIFIER}>
                 <div ref="wrapRef" className={ClassNames(
                     'game-frame-wrapper',
-                    {fullscreen: this.state.fullscreenFallback}
+                    {fs: this.state.isFullscreen, fullscreen: this.state.fullscreenFallback}
                 )}>
                     <div
                         ref="overlay"

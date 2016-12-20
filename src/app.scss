@@ -27,7 +27,30 @@ html {
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'SourceSansPro';
+    src: url('/fonts/source_sans_pro/SourceSansPro-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SourceSansPro';
+    src: url('/fonts/source_sans_pro/SourceSansPro-Black.ttf') format('truetype');
+    font-weight: bolder;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SourceSansPro';
+    src: url('/fonts/source_sans_pro/SourceSansPro-Light.ttf') format('truetype');
+    font-weight: lighter;
+    font-style: normal;
+}
+
 body {
+    background: url('media/loader.gif') no-repeat center;
+    background-size: 18%;
 
     @media (max-width: $device-max-break) {
         font-size: $min-base-font-size; //IE vmax fallback
@@ -104,10 +127,11 @@ h3 {
     animation-iteration-count: 1;
     animation-fill-mode: forwards;
     opacity: 0;
-    background: url('media/generic_error.png') $cmwn-white;
+    background: url('media/pageerror-hopeless.png') $cmwn-white;
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
+    -ms-behavior: url('/backgroundsize.min.htc');
 }
 
 @keyframes fadein {
@@ -142,7 +166,7 @@ h3 {
         position: relative;
         margin: 0;
         margin-right: auto;
-        margin-bottom: 2 * $standard;
+        margin-bottom: 5 * $standard;
         margin-left: auto;
         padding: $standard;
         max-width: $monitor-max-break;
@@ -203,27 +227,44 @@ h3 {
 
         nav {
 
-            * {
-                margin: $standard / 2 0;
+            /* scss-lint:disable all */
+            ul > * {
+                margin-top: $standard / 2;
+                padding-bottom: $standard / 2;
+                padding-left: 4px;
+                margin-left: -3px;
             }
+            /* scss-lint:enable all */
 
             li:first-child {
+                margin-top: $standard / 2;
                 border-top: 1px solid $cmwn-blue;
+                padding-top: $standard / 2;
             }
 
             li {
                 border-bottom: 1px solid $cmwn-blue;
-                padding: $standard / 2;
             }
 
             a {
+                padding-left: 3px;
                 text-decoration: none;
                 color: $cmwn-blue;
                 font-weight: bold;
             }
+
+            img {
+                margin-top: -1px;
+                margin-bottom: -$standard / 2;
+                margin-left: -10.5;
+                padding-bottom: 4px;
+                max-width: 184px;
+            }
         }
 
         .active-menu {
+            margin-top: 0;
+            border-top: solid $standard / 2 $cmwn-blue;
             background: $cmwn-blue;
 
             a {
@@ -315,7 +356,7 @@ h3 {
     }
 
     .logo {
-        position: relative;
+        position: absolute;
         width: 22vmin;
         min-width: 180px;
         max-width: 210px;
@@ -327,7 +368,7 @@ h3 {
 
     .header-logo {
         margin-top: 8px;
-        margin-left: $standard * 2;
+        margin-left: 190px;
         width: calc(100% - 180px - 8em);
         vertical-align: middle;
 
