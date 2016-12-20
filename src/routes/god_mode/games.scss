@@ -1,0 +1,87 @@
+@import 'variables';
+
+.god-mode-games {
+
+    .item {
+        position: relative;
+        width: 100%;
+
+        .item-panel {
+            width: 100%;
+
+            &.open {
+                // scss-lint:disable NestingDepth
+                .panel-body {
+                    max-height: 1000px; // larger than panel will be
+                }
+            }
+
+            &.new-game {
+                background-color: $cmwn-off-white;
+            }
+        }
+
+        .panel-body {
+            transition: max-height .5s ease-in-out;
+            padding: 0 $standard;
+            height: auto;
+            max-height: 0;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        form {
+            margin: $standard;
+            width: 80%;
+        }
+
+        .text,
+        .textarea {
+            width: 100%;
+        }
+
+        .textarea {
+            height: 5em;
+        }
+
+        .edit-btn,
+        .save-btn,
+        .reset-btn,
+        .delete-btn,
+        .create-btn {
+            box-shadow: none;
+        }
+
+        .edit-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 20px;
+        }
+
+        .save-btn,
+        .reset-btn,
+        .delete-btn,
+        .create-btn {
+            margin: $standard;
+        }
+    }
+
+    .save-all-btn,
+    .reset-all-btn {
+        position: relative;
+        left: 2 * $standard;
+        vertical-align: initial;
+
+        &:nth-of-type(1) {
+            margin: $standard;
+            margin-top: 2 * $standard;
+        }
+
+        &:nth-of-type(2) {
+            margin: $standard;
+            margin-bottom: 2 * $standard;
+        }
+    }
+}
+

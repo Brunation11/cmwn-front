@@ -4,6 +4,16 @@ body:fullscreen .global-header {
     display: none;
 }
 
+body:fullscreen .game {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: $z-bootstrap + 4;
+    background: $cmwn-black;
+    width: 100vw;
+    height: 100vh;
+}
+
 // scss-lint:disable IdSelector
 body:fullscreen #cmwn-app .sweater,
 body:fullscreen #game-modal {
@@ -20,6 +30,7 @@ html body:fullscreen .modal-dialog {
     .modal-body,
     .modal-game {
         position: static;
+        transform: none;
         background: $cmwn-black;
     }
 

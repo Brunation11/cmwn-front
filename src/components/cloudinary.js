@@ -5,7 +5,7 @@ import Toast from 'components/toast';
 import Log from 'components/log';
 
 const CLOUDINARY_URLS = [
-    '//widget.cloudinary.com/global/all.js'
+    'https://widget.cloudinary.com/global/all.js'
 /* lets avoid loading as much as possible for now */
 //    'jquery.min.js',
 //    'jquery.ui.widget.js',

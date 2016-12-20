@@ -1,8 +1,9 @@
-/* eslint-disable max-lines */
+/*eslint max-lines: ["error", 550]*/
+//do not extend the length of this file again. if it becomes more complex,
+//it needs to be broken apart into more managable modules
 import React from 'react';
 import {Button, Modal} from 'react-bootstrap';
 import ClassNames from 'classnames';
-import _ from 'lodash';
 
 import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
@@ -10,6 +11,8 @@ import Log from 'components/log';
 import Toast from 'components/toast';
 
 import 'components/update_username.scss';
+
+const COMPONENT_UNIQUE_IDENTIFIER = 'update-username';
 
 const GOOD_UPDATE = 'Username updated to ';
 const BAD_UPDATE = 'Could not update your user name to ';
@@ -60,11 +63,11 @@ export class UpdateUsername extends React.Component {
     constructor() {
         super();
 
-        this.state = _.defaults({
+        this.state = {
             loading: false,
             page: 'welcome',
             generatorOn: false
-        });
+        };
     }
 
     componentDidMount() {
@@ -113,7 +116,6 @@ export class UpdateUsername extends React.Component {
             resetLoading();
         });
     }
-
     setChildUsername() {
         HttpManager.POST({
             url: this.props.currentUser._links.user_name.href
@@ -169,6 +171,7 @@ export class UpdateUsername extends React.Component {
 
     renderDesktopGenerator() {
         var self = this;
+
         return (
             <div className={`desktop-update-username-container ${this.state.page}`}>
                 <div className={ClassNames('animated loading', {hidden: !self.state.loading})}>
@@ -204,6 +207,7 @@ export class UpdateUsername extends React.Component {
                         className={ClassNames(
                             'option',
                             {
+                                disable: !self.state.option,
                                 selected: self.state.selected && self.state.selected === self.state.option,
                                 'not-selected': self.state.selected &&
                                                 self.state.option &&
@@ -218,6 +222,7 @@ export class UpdateUsername extends React.Component {
                         className={ClassNames(
                             'last',
                             {
+                                disable: !self.state.last,
                                 selected: self.state.selected && self.state.selected === self.state.last,
                                 'not-selected': self.state.selected &&
                                                 self.state.last &&
@@ -234,7 +239,12 @@ export class UpdateUsername extends React.Component {
                 <div className="container step-3-container">
                     <span className="step-3">{LABELS.SAVE}</span>
                     <Button
-                        className="save-btn"
+                        className={ClassNames(
+                            'save-btn',
+                            {
+                                disable: !self.state.selected
+                            }
+                        )}
                         onClick={this.setPage.bind(this, 'confirmation')}
                     />
                 </div>
@@ -249,14 +259,28 @@ export class UpdateUsername extends React.Component {
                 <img className="header" src={ASSETS.DESKTOP_CONFIRMATION_HEADER} />
                 <span className="prompt">{COPY.CONFIRM_NOTICE[0]}</span>
                 <span className="prompt">{COPY.CONFIRM_NOTICE[1]}</span>
-                <Button
-                    className="cancel-btn"
-                    onClick={this.setOriginal.bind(this)}
-                />
-                <Button
-                    className="confirm-btn"
-                    onClick={this.setChildUsername.bind(this)}
-                />
+                <div className="content">
+                    <span className="prompt">
+                        Original:
+                        <br />
+                        {this.state.original}
+                    </span>
+                    <Button
+                        className="cancel-btn"
+                        onClick={this.setOriginal.bind(this)}
+                    />
+                </div>
+                <div className="content">
+                    <span className="prompt">
+                        New:
+                        <br />
+                        {this.state.selected}
+                    </span>
+                    <Button
+                        className="confirm-btn"
+                        onClick={this.setChildUsername.bind(this)}
+                    />
+                </div>
             </div>
         );
     }
@@ -383,16 +407,18 @@ export class UpdateUsername extends React.Component {
             <div className={`mobile-confirmation-container ${this.state.page}`}>
                 <img className="header" src={ASSETS.MOBILE_CONFIRMATION_HEADER} />
                 <div className="prompt-container">
-                    <span className="prompt">{COPY.CONFIRM_NOTICE_1}</span>
-                    <span className="prompt">{COPY.CONFIRM_NOTICE_2}</span>
+                    <span className="prompt">{COPY.CONFIRM_NOTICE[0]}</span>
+                    <span className="prompt">{COPY.CONFIRM_NOTICE[1]}</span>
                 </div>
                 <div className="content">
+                    <span className="prompt">Original: {this.state.original}</span>
                     <Button
                         className="original"
                         onClick={this.setOriginal.bind(this)}
                     >
                         {this.state.original}
                     </Button>
+                    <span className="prompt">New: {this.state.selected}</span>
                     <Button
                         className="selected-option"
                         onClick={this.setChildUsername.bind(this)}
@@ -478,7 +504,7 @@ export class UpdateUsername extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className={COMPONENT_UNIQUE_IDENTIFIER}>
                 <Modal
                     className={`username-generator-modal ${this.state.page}`}
                     show={this.state.generatorOn}
