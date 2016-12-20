@@ -7,7 +7,6 @@ import Toast from 'components/toast';
 import Log from 'components/log';
 import History from 'components/history';
 import HttpManager from 'components/http_manager';
-import Store from 'components/store';
 import GLOBALS from 'components/globals';
 
 import Layout from 'layouts/one_col';
@@ -92,14 +91,15 @@ var Component = React.createClass({
     login: function (e) {
         var dataUrl;
         var req;
-        var user = this.getUsernameWithoutSpaces();
+        var user = this.getInputWithoutSpaces('login');
+        var password = this.getInputWithoutSpaces('password');
         dataUrl = this.state.overrideLogin || this.props.currentUser._links.login.href;
         ga('send', 'event', 'Login', 'Attempted');
         req = HttpManager.POST({
             url: dataUrl,
         }, {
             'username': user,
-            'password': this.refs.password.getValue()
+            'password': password
         });
         req.then(res => {
             if (res.response && res.response.status && res.response.detail &&
@@ -136,15 +136,22 @@ var Component = React.createClass({
             //});
             Log.log(e, 'Invalid login');
         });
+
+        this.setState({
+            username: '',
+            password: ''
+        });
     },
     attemptLogin: function (e) {
-        var user = this.getUsernameWithoutSpaces();
+        var user;
         var logout;
         var logoutUrl;
 
-        if (this.state.currentPage === 'forgot-password') return;
+        if (this.state.currentPage === 'forgot-password' ||
+            !this.state.username ||
+            !this.state.password) return;
 
-        user = this.getUsernameWithoutSpaces();
+        user = this.getInputWithoutSpaces('login');
 
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
             if (this.props.data._links && this.props.data._links.login == null) {
@@ -182,7 +189,6 @@ var Component = React.createClass({
     },
     forgotPass: function (e) {
         var req;
-        var state = Store.getState();
 
         if (this.state.currentPage === 'login') return;
 
@@ -194,7 +200,7 @@ var Component = React.createClass({
                 //unauthenticated visitors have a session and are allowed to take
                 //a handful of actions, like forgot.
                 req = HttpManager.POST({
-                    url: state.currentUser._links.forgot.href,
+                    url: this.props.currentUser._links.forgot.href,
                 }, {
                     'email': this.refs.reset.getValue(),
                 });
@@ -215,9 +221,16 @@ var Component = React.createClass({
             }
         }
     },
-    getUsernameWithoutSpaces: function () {
-        var newLogin = this.refs.login.getValue().replace(/\s/g, '');
-        return newLogin;
+    getInputWithoutSpaces: function (field) {
+        var newField;
+        try {
+            newField = this.refs[field].getValue().replace(/\s/g, '');
+        } catch(err) {
+            //ref not yet mounted, probably somebody getting antsy and
+            //hammering the enter key.
+            newField = '';
+        }
+        return newField;
     },
     renderLogin: function () {
         return (
@@ -238,6 +251,11 @@ var Component = React.createClass({
                                 name="username"
                                 label={LABELS.LOGIN}
                                 placeholder="FUN-RABBIT003"
+                                value={this.state.username}
+                                onChange={e => this.setState({username: e.target.value})}
+                                onFocus={e => e.target.placeholder = ''}
+                                onBlur={e => e.target.placeholder = 'FUN-RABBIT003'}
+                                autoComplete="off"
                             />
                             <Input
                                 ref="password"
@@ -246,12 +264,18 @@ var Component = React.createClass({
                                 name="password"
                                 label={LABELS.PASSWORD}
                                 placeholder="PA********"
+                                value={this.state.password}
+                                onChange={e => this.setState({password: e.target.value})}
+                                onFocus={e => e.target.placeholder = ''}
+                                onBlur={e => e.target.placeholder = 'PA********'}
+                                autoComplete="off"
                             />
                             <Button
                                 id="login-button"
                                 className="login-button"
                                 onKeyPress={this.attemptLogin}
                                 onClick={this.attemptLogin}
+                                disabled={!this.state.username || !this.state.password}
                             />
                             <a
                                 className="forgot-password-link"

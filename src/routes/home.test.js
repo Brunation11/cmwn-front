@@ -6,7 +6,6 @@ import homeSmoke from 'smoke_tests/home.test.js';
 import { Home } from 'routes/home';
 import { COPY } from 'routes/home';
 import { SOURCES } from 'routes/home';
-import History from 'components/history';
 
 
 describe('Home Page Smoke Tests', function () {
@@ -59,24 +58,6 @@ describe('Home Page Unit Tests', function () {
             shallow(COPY.SLIDES[2].HEADING).text();
         expect(SLIDE.find('img').prop('src')).to.equal(SOURCES.SLIDEBG[2]);
         expect(SLIDE.find('h2').text()).to.equal(header);
-    });
-
-    it('responds properly to clicking logo as anonymous user', function () {
-        const WRAPPER = shallow(<Home currentUser={{}} />);
-        expect(History.getCurrentSize()).to.equal(1);
-        expect(History.getCurrentLocation().pathname).to.equal('/home');
-        WRAPPER.find('.logo-button').at(0).simulate('click');
-        expect(History.getCurrentSize()).to.equal(1);
-        expect(History.getCurrentLocation().pathname).to.equal('/home');
-    });
-
-    it('responds properly to clicking logo as logged in user', function () {
-        const WRAPPER = shallow(<Home currentUser={{user_id: 'test'}} />); //eslint-disable-line camelcase
-        expect(History.getCurrentSize()).to.equal(1);
-        expect(History.getCurrentLocation().pathname).to.equal('/home');
-        WRAPPER.find('.logo-button').at(0).simulate('click');
-        expect(History.getCurrentSize()).to.equal(1);
-        expect(History.getCurrentLocation().pathname).to.equal('/profile');
     });
 
     it('opens and closes the video modal', function () {

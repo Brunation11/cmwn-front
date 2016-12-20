@@ -1,0 +1,377 @@
+@import '../variables';
+
+$standard-max-modal-width: 866px;
+$small-max-modal-width: 787px;
+
+.teacher-guide {
+    position: fixed;
+    bottom: 0;
+    left: 53.3vw;
+    transition: max-width 1.3s, left 2s;
+    z-index: 3;
+    border: $cmwn-black 2px solid;
+    border-bottom: 0;
+    border-radius: 20px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    background: $cmwn-green;
+    padding: 8px 4px 9px 8px;
+    max-width: 100%;
+    overflow: hidden;
+    text-rendering: optimizeLegibility;
+    letter-spacing: .13px;
+    white-space: nowrap;
+    color: $cmwn-white;
+    font-family: $cmwn-jade-font;
+    font-size: 19px;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    font-smoothing: antialiased;
+
+    > span {
+        visibility: visible;
+        padding-right: 5.3px;
+        padding-left: 1px;
+        max-width: 100%;
+        vertical-align: middle;
+    }
+
+    .glyphicon {
+        color: $cmwn-white;
+    }
+
+    > .btn.standard {
+        border: $cmwn-white 1px solid;
+        border-radius: 11px;
+        box-shadow: $cmwn-black 0 0 1px 1px;
+        padding: 6px 15px 9px 14px;
+        text-transform: uppercase;
+        letter-spacing: .2px;
+        font-size: 20px;
+    }
+
+    .transhidden {
+        display: inline-block;
+        transition: visibility 0s, max-width 2s;
+        visibility: hidden;
+        padding: 0;
+        max-width: 0;
+        overflow: hidden;
+        white-space: nowrap;
+        transition-delay: 1.2s, 1.2s;
+    }
+
+    &.minimized {
+        left: calc(100vw - 55px);
+        transition: max-width 1.3s, left 2s;
+        max-width: 38px;
+    }
+}
+
+.guide-modal {
+
+    .modal-dialog {
+        margin: 45px auto 30px;
+        border: $cmwn-purple 3px solid;
+        border-radius: 14px;
+        box-shadow: $cmwn-purple 0 0 1px 1px;
+        width: 785px;
+    }
+
+    .modal-content {
+        border-radius: 10px;
+        background: $cmwn-blue;
+        color: $cmwn-white;
+    }
+
+    .modal-close {
+        position: absolute;
+        top: -28px;
+        right: 7px;
+        margin-top: -25px;
+        margin-right: -50px;
+        border-radius: 31px;
+        box-shadow: $cmwn-shady 0 2.5px 1px 1.4px;
+        background: $cmwn-lime;
+        padding: 0 17px 0 21px;
+        min-height: 64px;
+        color: $cmwn-purple;
+        font-family: $cmwn-jade-font;
+        font-size: 57px;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-font-smoothing: antialiased;
+        font-smoothing: antialiased;
+
+        .close-x {
+            line-height: 64px;
+            font-size: 58px;
+        }
+    }
+
+    .page-count {
+        float: right;
+        margin-top: -23px;
+        padding-right: 7px;
+        letter-spacing: .3px;
+        color: $cmwn-purple;
+        font-family: $cmwn-jade-font;
+        font-size: 21px;
+    }
+
+    .button-container {
+        text-align: center;
+
+        button {
+            border-radius: 22px;
+            box-shadow: $cmwn-shady 0 2.5px 1px 1.4px;
+            padding: 0 39px;
+            min-height: 54px;
+            font-family: $cmwn-jade-font;
+            font-size: 35px;
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-font-smoothing: antialiased;
+            font-smoothing: antialiased;
+        }
+
+        .green {
+            background: $cmwn-lime;
+            color: $cmwn-purple;
+        }
+
+        .purple {
+            background: $cmwn-purple;
+            color: $cmwn-lime;
+        }
+
+    }
+
+    .toggle-characters {
+        display: none;
+    }
+
+
+    .radio {
+        text-align: center;
+        font-family: $cmwn-jade-font;
+        font-size: 15px;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-font-smoothing: antialiased;
+        font-smoothing: antialiased;
+
+        .toggle-characters:checked+span {
+            padding-top: 1px;
+        }
+
+        .toggle-characters+span::before {
+            display: inline-block;
+            position: relative;
+            top: 2px;
+            left: -6px;
+            transition: border .25s linear;
+            border: 1px dashed $cmwn-white;
+            background-color: $cmwn-light-purple;
+            width: 15px;
+            height: 15px;
+            line-height: 13px;
+            font-size: 16px;
+            content: '';
+        }
+
+        .toggle-characters:checked+span::before {
+            top: 0;
+            background-color: $cmwn-purple;
+            padding-left: 2px;
+            color: $cmwn-white;
+            content: 'X';
+        }
+    }
+
+    .page-marker {
+        display: none;
+        font-family: $source-sans-pro;
+
+        // scss-lint:disable SelectorFormat
+        &.isActive {
+            display: inherit;
+        }
+        // scss-lint:enable SelectorFormat
+
+        p {
+            clear: both;
+            text-align: center;
+            line-height: 30px;
+            letter-spacing: .5px;
+            font-size: 28px;
+        }
+
+        h2 {
+            display: inline-block;
+            padding: 0 22px;
+            padding-top: 12px;
+            width: 130px;
+            text-align: center;
+            text-transform: uppercase;
+            font-size: 38px;
+
+            .page-num {
+                font-size: 183px;
+            }
+        }
+
+
+        .feature {
+
+            img {
+                width: 100%;
+            }
+        }
+
+        .highlight {
+            text-transform: uppercase;
+            letter-spacing: .3px;
+            font-family: $source-sans-pro;
+            font-size: 30px;
+            font-weight: bold;
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-font-smoothing: antialiased;
+            font-smoothing: antialiased;
+        }
+
+        &.page-1 {
+
+            .feature {
+                float: right;
+                margin-right: 67px;
+                width: 541px;
+            }
+
+            .page-num {
+                line-height: 150px;
+            }
+
+            p {
+                padding-top: 30px;
+            }
+
+            .highlight {
+                display: block;
+                padding-bottom: 4px;
+                line-height: 15px;
+            }
+        }
+
+        &.page-2 {
+
+            h2 {
+                padding: 2px 31px 0;
+            }
+
+            .page-num {
+                line-height: 150px;
+            }
+
+            .feature {
+                float: left;
+                width: 617px;
+            }
+        }
+
+        &.page-3 {
+
+            h2 {
+                display: inline-block;
+                float: right;
+                margin: 0;
+                margin-top: -15px;
+                padding: 0;
+                padding-right: 3px;
+                width: 287px;
+                font-size: 60px;
+            }
+
+            p {
+                clear: none;
+                margin-top: -13px;
+                padding-left: 54px;
+                text-align: left;
+                letter-spacing: .6px;
+            }
+
+            .feature {
+                display: block;
+                clear: both;
+            }
+
+            .highlight {
+                display: block;
+            }
+        }
+
+        &.page-4 {
+
+            h2 {
+                display: block;
+                margin: 0;
+                margin-top: -39px;
+                padding: 0 0 6px 8px;
+                width: 100%;
+                font-size: 49px;
+            }
+
+            p {
+                line-height: 28px;
+                letter-spacing: 1.3px;
+            }
+
+            .feature {
+                margin-left: -3px;
+            }
+        }
+    }
+
+    @media (max-width: $standard-max-modal-width) {
+        .modal-close {
+            top: 14px;
+            right: 54px;
+        }
+    }
+
+    @media (max-width: $small-max-modal-width) {
+        .modal-dialog {
+            margin: 0;
+            width: 100%;
+        }
+
+        .pages .page-marker {
+
+            h2 {
+                display: block;
+                width: 100%;
+                font-size: 60px;
+
+                //without .page specificity, media query is overridden by individual page num styles
+                // scss-lint:disable SelectorDepth
+                .page-num {
+                    font-size: 60px;
+                }
+                // scss-lint:enable SelectorDepth
+            }
+
+            .feature {
+                margin: 0;
+                max-width: 100%;
+            }
+        }
+
+        .page-count {
+            display: none;
+        }
+
+        .page-3,
+        .page-4 {
+            .feature {
+                padding-top: 60px;
+            }
+        }
+    }
+}
