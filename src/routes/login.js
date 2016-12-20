@@ -303,6 +303,9 @@ var Component = React.createClass({
                                 name="username"
                                 label={LABELS.FORGOT}
                                 placeholder="FUN-RABBIT003"
+                                onFocus={e => e.target.placeholder = ''}
+                                onBlur={e => e.target.placeholder = 'FUN-RABBIT003'}
+                                autoComplete="off"
                             />
                             <p className="option-label">{LABELS.USER_TYPE}</p>
                             <Input
