@@ -207,7 +207,7 @@ export class UpdateUsername extends React.Component {
                         className={ClassNames(
                             'option',
                             {
-                                hidden: !self.state.option,
+                                hide: !self.state.option,
                                 selected: self.state.selected && self.state.selected === self.state.option,
                                 'not-selected': self.state.selected &&
                                                 self.state.option &&
@@ -222,7 +222,7 @@ export class UpdateUsername extends React.Component {
                         className={ClassNames(
                             'last',
                             {
-                                hidden: !self.state.last,
+                                hide: !self.state.last,
                                 selected: self.state.selected && self.state.selected === self.state.last,
                                 'not-selected': self.state.selected &&
                                                 self.state.last &&
