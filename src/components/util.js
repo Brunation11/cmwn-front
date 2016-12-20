@@ -152,11 +152,19 @@ var Util = {
         return perms;
     },
     logout() {
-        window.localStorage.setItem('com.cmwn.platform.userName', null);
-        window.localStorage.setItem('com.cmwn.platform.userId', null);
-        window.localStorage.setItem('com.cmwn.platform.profileImage', null);
-        window.localStorage.setItem('com.cmwn.platform.roles', null);
-        window.localStorage.setItem('com.cmwn.platform._links', null);
+        try {
+            window.localStorage.setItem('com.cmwn.platform.userName', null);
+            window.localStorage.setItem('com.cmwn.platform.userId', null);
+            window.localStorage.setItem('com.cmwn.platform.profileImage', null);
+            window.localStorage.setItem('com.cmwn.platform.roles', null);
+            window.localStorage.setItem('com.cmwn.platform._links', null);
+        } catch(error) {
+            window._localStorage.setItem('com.cmwn.platform.userName', null);
+            window._localStorage.setItem('com.cmwn.platform.userId', null);
+            window._localStorage.setItem('com.cmwn.platform.profileImage', null);
+            window._localStorage.setItem('com.cmwn.platform.roles', null);
+            window._localStorage.setItem('com.cmwn.platform._links', null);
+        }
         Actions.dispatch.LOGOUT();
         Log.info('User logout successful');
         EventManager.update('userChanged', null);

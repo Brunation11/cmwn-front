@@ -16,7 +16,6 @@ import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
 import History from 'components/history';
 import GenerateDataSource from 'components/datasource';
-import Flag from 'components/flag';
 
 import Layout from 'layouts/two_col';
 
@@ -217,8 +216,12 @@ export class Profile extends React.Component {
                         </span>
                         <div className={ClassNames('coming-soon', { hidden: !item.coming_soon})} />
                         <div className={ClassNames('desktop-only', { hidden: !meta.desktop})} />
-                        <object data={`${GLOBALS.MEDIA_URL}${TITLES[item.game_id]}`} type="image/gif" >
-                            <img src={FlipBgDefault}></img>
+                        <object
+                            width="350"
+                            data={`${GLOBALS.MEDIA_URL}${TITLES[item.game_id]}`}
+                            type="image/gif"
+                        >
+                            <img src={FlipBgDefault} ></img>
                         </object>
                     </div>
                 </a>
@@ -238,6 +241,39 @@ export class Profile extends React.Component {
                    id="game-flip-board"
                />
            </GAME_WRAPPER>
+        );
+    }
+
+    renderUserMetaData() {
+        var ISODate;
+        var momentDate = '';
+
+        if (this.state.birthdate) {
+            ISODate = (new Date(this.state.birthdate)).toISOString();
+            momentDate = Moment(ISODate).format('MM-DD-YYYY');
+        }
+
+        if (this.state.friend_status !== 'FRIEND') return null;
+
+        return (
+            <div
+                className={ClassNames(
+                    'right',
+                    'user-fields',
+                    {
+                        hidden: this.state.friend_status !== 'FRIEND'
+                    }
+                )}
+            >
+                <p className="label">Username:</p>
+                <p className="standard field">{this.state.username}</p>
+                <p className="label">First Name:</p>
+                <p className="standard field">{this.state.first_name}</p>
+                <p className="label">Last Name:</p>
+                <p className="standard field">{this.state.last_name}</p>
+                <p className="label">Birthday:</p>
+                <p className="standard field">{momentDate}</p>
+            </div>
         );
     }
 
@@ -261,15 +297,11 @@ export class Profile extends React.Component {
                     <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
                         <div className="left">
                             <div className="frame">
-                                <Flag
+                                <ProfileImage
                                     data={this.props.data}
-                                >
-                                    <ProfileImage
-                                        data={this.props.data}
-                                        currentUser={this.props.currentUser}
-                                        link-below={true}
-                                    />
-                                </Flag>
+                                    currentUser={this.props.currentUser}
+                                    link-below={true}
+                                 />
                             </div>
                         </div>
                         <div className="right">
@@ -306,15 +338,11 @@ export class Profile extends React.Component {
             <div>
                 <Panel header={this.state.username + '\'s ' + HEADINGS.ACTION} className="standard">
                     <div className="frame non-friend">
-                        <Flag
+                        <ProfileImage
                             data={this.props.data}
-                        >
-                            <ProfileImage
-                                data={this.props.data}
-                                currentUser={this.props.currentUser}
-                                link-below={true}
-                            />
-                        </Flag>
+                            currentUser={this.props.currentUser}
+                            link-below={true}
+                        />
                     </div>
                 </Panel>
                 <Panel
