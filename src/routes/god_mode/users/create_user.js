@@ -175,6 +175,7 @@ export class CreateUser extends React.Component {
         return (
             <DropdownDatepicker
                 ref="dropdownDatepicker"
+                label="Birthday: "
                 value={dob}
                 hasFeedback
                 onChange={
@@ -193,7 +194,7 @@ export class CreateUser extends React.Component {
             <Input
                 type="text"
                 value={this.state.username}
-                placeholder="user name"
+                placeholder="username"
                 label="User Name:"
                 ref="usernameInput"
                 name="usernameInput"
@@ -253,9 +254,8 @@ export class CreateUser extends React.Component {
     renderUserCreateSuccess() {
         return (
             <div className="standard">
-                <p> user created successfully. click
-                    <a href={`/user/${this.state.user_id}`}>here</a>
-                    to visit profile.
+                <p> user created successfully.
+                    click <a href={`/user/${this.state.user_id}`}>here</a> to visit profile.
                 </p>
                 <p> click <a href="/sa/user/create">here</a> to create another user</p>
             </div>

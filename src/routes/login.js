@@ -7,7 +7,6 @@ import Toast from 'components/toast';
 import Log from 'components/log';
 import History from 'components/history';
 import HttpManager from 'components/http_manager';
-import Store from 'components/store';
 import GLOBALS from 'components/globals';
 
 import Layout from 'layouts/one_col';
@@ -99,7 +98,7 @@ var Component = React.createClass({
             url: dataUrl,
         }, {
             'username': user,
-            'password': this.refs.password.getValue()
+            'password': this.state.password
         });
         req.then(res => {
             if (res.response && res.response.status && res.response.detail &&
@@ -136,13 +135,20 @@ var Component = React.createClass({
             //});
             Log.log(e, 'Invalid login');
         });
+
+        this.setState({
+            username: '',
+            password: ''
+        });
     },
     attemptLogin: function (e) {
-        var user = this.getUsernameWithoutSpaces();
+        var user;
         var logout;
         var logoutUrl;
 
-        if (this.state.currentPage === 'forgot-password') return;
+        if (this.state.currentPage === 'forgot-password' ||
+            !this.state.username ||
+            !this.state.password) return;
 
         user = this.getUsernameWithoutSpaces();
 
@@ -182,7 +188,6 @@ var Component = React.createClass({
     },
     forgotPass: function (e) {
         var req;
-        var state = Store.getState();
 
         if (this.state.currentPage === 'login') return;
 
@@ -194,7 +199,7 @@ var Component = React.createClass({
                 //unauthenticated visitors have a session and are allowed to take
                 //a handful of actions, like forgot.
                 req = HttpManager.POST({
-                    url: state.currentUser._links.forgot.href,
+                    url: this.props.currentUser._links.forgot.href,
                 }, {
                     'email': this.refs.reset.getValue(),
                 });
@@ -216,7 +221,14 @@ var Component = React.createClass({
         }
     },
     getUsernameWithoutSpaces: function () {
-        var newLogin = this.refs.login.getValue().replace(/\s/g, '');
+        var newLogin;
+        try {
+            newLogin = this.refs.login.getValue().replace(/\s/g, '');
+        } catch(err) {
+            //ref not yet mounted, probably somebody getting antsy and
+            //hammering the enter key.
+            newLogin = '';
+        }
         return newLogin;
     },
     renderLogin: function () {
@@ -238,6 +250,11 @@ var Component = React.createClass({
                                 name="username"
                                 label={LABELS.LOGIN}
                                 placeholder="FUN-RABBIT003"
+                                value={this.state.username}
+                                onChange={e => this.setState({username: e.target.value})}
+                                onFocus={e => e.target.placeholder = ''}
+                                onBlur={e => e.target.placeholder = 'FUN-RABBIT003'}
+                                autoComplete="off"
                             />
                             <Input
                                 ref="password"
@@ -246,12 +263,18 @@ var Component = React.createClass({
                                 name="password"
                                 label={LABELS.PASSWORD}
                                 placeholder="PA********"
+                                value={this.state.password}
+                                onChange={e => this.setState({password: e.target.value})}
+                                onFocus={e => e.target.placeholder = ''}
+                                onBlur={e => e.target.placeholder = 'PA********'}
+                                autoComplete="off"
                             />
                             <Button
                                 id="login-button"
                                 className="login-button"
                                 onKeyPress={this.attemptLogin}
                                 onClick={this.attemptLogin}
+                                disabled={!this.state.username || !this.state.password}
                             />
                             <a
                                 className="forgot-password-link"

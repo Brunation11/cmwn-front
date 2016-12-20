@@ -12,6 +12,7 @@ import GLOBALS from 'components/globals';
 import Form from 'components/form';
 import DropdownDatepicker from 'components/dropdown_datepicker';
 import Log from 'components/log';
+import CodeChange from 'components/code_change';
 
 export const PAGE_UNIQUE_IDENTIFIER = 'god-mode-edit-user';
 
@@ -175,6 +176,7 @@ export class EditUser extends React.Component {
         return (
             <DropdownDatepicker
                 ref="dropdownDatepicker"
+                label="Birthday: "
                 value={dob}
                 hasFeedback
                 onChange={
@@ -201,7 +203,7 @@ export class EditUser extends React.Component {
                 {this.renderEditableBirthday()}
                 <br/>
                 <br/>
-                <Button className="right"
+                <Button className="left"
                         onClick={this.submitData.bind(this)}> Save </Button>
             </Form>
         );
@@ -238,7 +240,20 @@ export class EditUser extends React.Component {
     }
 
     render() {
+        var data;
+        var links;
         if (this.props.data === null || _.isEmpty(this.props.data)) return null;
+
+        data = this.props.data.asMutable();
+
+        if (this.props.data._links.reset == null) {
+            links = this.props.data._links.asMutable();
+            links.reset = {
+                href: `${GLOBALS.API_URL}user/${this.state.user_id}/reset`,
+                label: 'Reset Password'
+            };
+            data._links = links;
+        }
 
         return (
             <Layout classname="edit"
@@ -252,6 +267,11 @@ export class EditUser extends React.Component {
                         {this.renderUserFields()}
                     </div>
                 </Panel>
+                <CodeChange
+                    data={data}
+                    user_id={this.props.data.user_id}
+                    currentUser={this.props.currentUser}
+                />
             </Layout>
         );
     }
