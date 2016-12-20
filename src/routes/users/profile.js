@@ -181,7 +181,7 @@ export class Profile extends React.Component {
                     ref="gameRef"
                     isTeacher={!this.state.isStudent}
                     url={this.state.gameUrl}
-                    onExit={this.setState.bind(this, {gameOn: false})}
+                    onExit={() => this.setState({gameOn: false}) }
                     game={this.state.game}
                     currentUser={this.props.currentUser}
                 />
@@ -241,6 +241,39 @@ export class Profile extends React.Component {
                    id="game-flip-board"
                />
            </GAME_WRAPPER>
+        );
+    }
+
+    renderUserMetaData() {
+        var ISODate;
+        var momentDate = '';
+
+        if (this.state.birthdate) {
+            ISODate = (new Date(this.state.birthdate)).toISOString();
+            momentDate = Moment(ISODate).format('MM-DD-YYYY');
+        }
+
+        if (this.state.friend_status !== 'FRIEND') return null;
+
+        return (
+            <div
+                className={ClassNames(
+                    'right',
+                    'user-fields',
+                    {
+                        hidden: this.state.friend_status !== 'FRIEND'
+                    }
+                )}
+            >
+                <p className="label">Username:</p>
+                <p className="standard field">{this.state.username}</p>
+                <p className="label">First Name:</p>
+                <p className="standard field">{this.state.first_name}</p>
+                <p className="label">Last Name:</p>
+                <p className="standard field">{this.state.last_name}</p>
+                <p className="label">Birthday:</p>
+                <p className="standard field">{momentDate}</p>
+            </div>
         );
     }
 
