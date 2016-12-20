@@ -52,6 +52,7 @@ $btns: '#{$media-url}0c7044bc6e88f37a8910966dba68fe47.png';
         text-align: center;
 
         &::before {
+            position: absolute;
             top: 0;
             bottom: 0;
             left: 50%;
