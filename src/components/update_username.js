@@ -116,6 +116,7 @@ export class UpdateUsername extends React.Component {
             resetLoading();
         });
     }
+
     setChildUsername() {
         HttpManager.POST({
             url: this.props.currentUser._links.user_name.href
