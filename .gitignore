@@ -4,7 +4,6 @@ docker-compose.yml
 .vagrant
 node_modules
 build
-build.zip
 **/*.swp
 **/*.swo
 .DS_Store
@@ -20,8 +19,6 @@ _steps
 _projects
 .wercker
 wercker.env
-scssReport.json
-docker-compose.yml
 front.sh
 stop_front.sh
 errorShots
@@ -33,7 +30,6 @@ lib/**/*
 tar-*
 scssReport.json
 scsslint.json
-/tar-*
 *.tar
 .happypack
 .test/src

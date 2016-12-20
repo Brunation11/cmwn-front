@@ -257,8 +257,8 @@ var Store = createStore( function (state = {}, action) {
             }
             if (action_.type === ACTION_CONSTANTS.LOADER_ERROR) {
                 if (loaderState.currentStage === GLOBALS.PAGE_LOAD_STATE.COMPONENT) {
-                    Log.error('HAL link required for component load not provided. ' +
-                        'Will not load because: ' + action.payload);
+                    Log.warn('HAL link required for component load not provided. ' +
+                        'Will not load because: ' + JSON.stringify(action.payload));
                 } else if (action_.error) {
                     Log.error('Loader error at stage ' + loaderState.currentStage + ' : ' + action_.payload);
                 } else {
