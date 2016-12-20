@@ -98,7 +98,7 @@ var Component = React.createClass({
             url: dataUrl,
         }, {
             'username': user,
-            'password': this.refs.password.getValue()
+            'password': this.state.password
         });
         req.then(res => {
             if (res.response && res.response.status && res.response.detail &&
@@ -135,13 +135,20 @@ var Component = React.createClass({
             //});
             Log.log(e, 'Invalid login');
         });
+
+        this.setState({
+            username: '',
+            password: ''
+        });
     },
     attemptLogin: function (e) {
         var user;
         var logout;
         var logoutUrl;
 
-        if (this.state.currentPage === 'forgot-password') return;
+        if (this.state.currentPage === 'forgot-password' ||
+            !this.state.username ||
+            !this.state.password) return;
 
         user = this.getUsernameWithoutSpaces();
 
@@ -243,6 +250,11 @@ var Component = React.createClass({
                                 name="username"
                                 label={LABELS.LOGIN}
                                 placeholder="FUN-RABBIT003"
+                                value={this.state.username}
+                                onChange={e => this.setState({username: e.target.value})}
+                                onFocus={e => e.target.placeholder = ''}
+                                onBlur={e => e.target.placeholder = 'FUN-RABBIT003'}
+                                autoComplete="off"
                             />
                             <Input
                                 ref="password"
@@ -251,12 +263,18 @@ var Component = React.createClass({
                                 name="password"
                                 label={LABELS.PASSWORD}
                                 placeholder="PA********"
+                                value={this.state.password}
+                                onChange={e => this.setState({password: e.target.value})}
+                                onFocus={e => e.target.placeholder = ''}
+                                onBlur={e => e.target.placeholder = 'PA********'}
+                                autoComplete="off"
                             />
                             <Button
                                 id="login-button"
                                 className="login-button"
                                 onKeyPress={this.attemptLogin}
                                 onClick={this.attemptLogin}
+                                disabled={!this.state.username || !this.state.password}
                             />
                             <a
                                 className="forgot-password-link"
