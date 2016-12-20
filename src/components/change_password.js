@@ -1,5 +1,6 @@
 import React from 'react';
 import {Button, Input, Panel} from 'react-bootstrap';
+import SweetAlert from 'sweetalert2';
 
 import HttpManager from 'components/http_manager';
 import Toast from 'components/toast';
@@ -45,22 +46,26 @@ class ChangePassword extends React.Component {
     }
 
     submit() {
-        var update;
         if (!isPassValid(this.state.new)) {
             this.setState({extraProps: {bsStyle: 'error'}});
             Toast.error(ERRORS.TOO_SHORT);
         } else if (this.state.confirm === this.state.new) {
-            update = HttpManager.POST({url: this.props.url.href}, {
+            HttpManager.POST({url: this.props.url.href}, {
                 'current_password': this.state.current,
                 'password': this.state.new,
                 'password_confirmation': this.state.confirm,
                 'user_id': this.props.user_id,
-            });
-            update.then(
-                Toast.success.bind(this, PASS_UPDATED)
-            ).catch(err => {
+            }).then(() => {
+                this.confirmReLogin();
+            }).catch(err => {
                 Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
                 Toast.error(ERRORS.BAD_PASS);
+            });
+
+            this.setState({
+                current: '',
+                new: '',
+                confirm: ''
             });
         } else {
             this.setState({extraProps: {bsStyle: 'error'}});
@@ -73,6 +78,19 @@ class ChangePassword extends React.Component {
             new: '',
             confirm: ''
         });
+    }
+
+    confirmReLogin() {
+        Toast.success(PASS_UPDATED);
+        if (this.props.confirmReLogin) {
+            SweetAlert({
+                animation: false,
+                html: 'You will need to login again<br />for security purposes after resetting<br />your new password.', //eslint-disable-line max-len
+                allowOutsideClickg: false,
+                allowEscapeKey: false,
+                customClass: 'confirm-re-login'
+            });
+        }
     }
 
     render() {

@@ -1,5 +1,54 @@
 @import 'variables';
 
+body:fullscreen .global-header {
+    display: none;
+}
+
+// scss-lint:disable IdSelector
+body:fullscreen #cmwn-app .sweater,
+body:fullscreen #game-modal {
+    background: $cmwn-black;
+}
+// scss-lint:enable IdSelector
+
+html body:fullscreen .modal-dialog {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+
+    .modal-content,
+    .modal-body,
+    .modal-game {
+        position: static;
+        background: $cmwn-black;
+    }
+
+    a {
+        display: none;
+    }
+}
+
+body:fullscreen .game-frame-wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    z-index: 2;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    max-height: 56.25vw;
+
+    .game-frame {
+        max-width: 100vw;
+        max-height: 56.25vw;
+    }
+
+    ~ button {
+        display: none;
+    }
+}
+
 .game {
     margin-bottom: 50px;
 
@@ -72,40 +121,5 @@
             margin-top: $standard;
             margin-right: $standard;
         }
-
-        &.fullscreen {
-            position: fixed;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            z-index: $z-override;
-            margin-bottom: 0;
-            background: $cmwn-black;
-            padding-bottom: 0;
-            width: 100vw;
-            height: 100vh;
-
-            .game-frame {
-                top: 50%;
-                transform: translateY(-50%);
-                width: 100vw;
-                height: 56.25vw;
-            }
-
-            .overlay.portrait {
-                top: 50%;
-                transform: translateY(-50%);
-                width: 100vw;
-                max-width: 100vw;
-                height: 56.25vw;
-                max-height: 56.25vw;
-            }
-
-            ~ button {
-                display: none;
-            }
-        }
     }
 }
-

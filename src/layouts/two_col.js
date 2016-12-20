@@ -3,7 +3,6 @@ import React from 'react';
 import Sidebar from 'components/sidebar';
 import Footer from 'components/footer';
 import EventManager from 'components/event_manager';
-import Store from 'components/store';
 
 var Layout = React.createClass({
     getDefaultProps: function () {
@@ -18,14 +17,17 @@ var Layout = React.createClass({
         });
     },
     render: function () {
-        var state = Store.getState();
         return (
              <div className={'layout ' + this.props.className}>
-                <Sidebar menuIsOpen={this.state.menuIsOpen} navMenuId={this.props.navMenuId}/>
+                <Sidebar
+                    currentUser={this.props.currentUser}
+                    menuIsOpen={this.state.menuIsOpen}
+                    navMenuId={this.props.navMenuId}
+                />
                 <div className="content">
                     {this.props.children}
                 </div>
-                <Footer loggedIn={state && state.currentUser && state.currentUser.username != null} />
+                <Footer loggedIn={this.props.currentUser && this.props.currentUser.username != null} />
              </div>
         );
     }

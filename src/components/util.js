@@ -86,6 +86,31 @@ var Util = {
         }
         return path.slice(0, -1);
     },
+    getLinkFromPageFallbackToCurrentUser(state, endpointIdentifier) {
+        var endpoint;
+        if (!state) return endpoint;
+        if (
+            state.page &&
+            state.page.data &&
+            state.page.data._links &&
+            state.page.data._links[endpointIdentifier] != null
+        ) {
+            endpoint = state.page.data._links[endpointIdentifier].href;
+        } else if (state.currentUser &&
+            state.currentUser._links &&
+            state.currentUser._links[endpointIdentifier] != null
+        ) {
+            /* @TODO MPR, 3/22/16: This conditional should not exist, and only is here as a stopgap
+             * while the me endpoint does not
+             * exactly match the authenticated / endpoint. */
+            /* @TODO MPR, 11/17/16: Then again... */
+            endpoint = state.currentUser._links[endpointIdentifier].href;
+        }
+        return endpoint;
+    },
+    linkIsPresentInUserOrPage(state, endpointIdentifier) {
+        return Util.getLinkFromPageFallbackToCurrentUser(state, endpointIdentifier) != null;
+    },
     attemptComponentLoad(state, endpointIdentifier, componentName) {
         if (state.pageLoadingStage.lastCompletedStage !== GLOBALS.PAGE_LOAD_STATE.COMPONENT ||
             state.components[endpointIdentifier + '-' + componentName].requested) {
@@ -127,11 +152,19 @@ var Util = {
         return perms;
     },
     logout() {
-        window.localStorage.setItem('com.cmwn.platform.userName', null);
-        window.localStorage.setItem('com.cmwn.platform.userId', null);
-        window.localStorage.setItem('com.cmwn.platform.profileImage', null);
-        window.localStorage.setItem('com.cmwn.platform.roles', null);
-        window.localStorage.setItem('com.cmwn.platform._links', null);
+        try {
+            window.localStorage.setItem('com.cmwn.platform.userName', null);
+            window.localStorage.setItem('com.cmwn.platform.userId', null);
+            window.localStorage.setItem('com.cmwn.platform.profileImage', null);
+            window.localStorage.setItem('com.cmwn.platform.roles', null);
+            window.localStorage.setItem('com.cmwn.platform._links', null);
+        } catch(error) {
+            window._localStorage.setItem('com.cmwn.platform.userName', null);
+            window._localStorage.setItem('com.cmwn.platform.userId', null);
+            window._localStorage.setItem('com.cmwn.platform.profileImage', null);
+            window._localStorage.setItem('com.cmwn.platform.roles', null);
+            window._localStorage.setItem('com.cmwn.platform._links', null);
+        }
         Actions.dispatch.LOGOUT();
         Log.info('User logout successful');
         EventManager.update('userChanged', null);

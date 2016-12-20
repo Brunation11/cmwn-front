@@ -9,9 +9,11 @@ import Moment from 'moment';
 import Store from 'components/store';
 import {Table, Column} from 'components/table';
 import FlipBoard from 'components/flipboard';
-//import HttpManager from 'components/http_manager';
-import Layout from 'layouts/two_col';
 import GLOBALS from 'components/globals';
+import Paginator from 'components/paginator';
+//import HttpManager from 'components/http_manager';
+
+import Layout from 'layouts/two_col';
 
 import 'routes/users.scss';
 
@@ -71,9 +73,13 @@ var Component = React.createClass({
             );
         }
         return (
-            <Table data={data} className="admin">
-                {cols}
-            </Table>
+            <Paginator rowCount={this.props.rowCount} currentPage={this.props.currentPage}
+                pageCount={this.props.pageCount} data={data} pagePaginator={true}
+            >
+                <Table className="admin">
+                    {cols}
+                </Table>
+            </Paginator >
         );
     },
     renderImport: function () {
@@ -130,7 +136,7 @@ var Component = React.createClass({
         var state = Store.getState();
         if (this.props.data.length === 0) {
             return (
-                <Layout>
+                <Layout currentUser={this.props.currentUser}>
                     <h2 className="placeholder">{NO_NETWORK}</h2>
                 </Layout>
             );
@@ -141,7 +147,7 @@ var Component = React.createClass({
             view = this.renderAdminView;
         }
         return (
-            <Layout className="user-list">
+            <Layout currentUser={this.props.currentUser} className="user-list">
                 {view()}
             </Layout>
         );
@@ -150,14 +156,28 @@ var Component = React.createClass({
 
 var mapStateToProps = state => {
     var data = {};
+    var pageCount = 1;
+    var rowCount = 25;
+    var currentPage = 1;
     var loading = true;
+    var currentUser;
     if (state.page && state.page.data && state.page.data._embedded && state.page.data._embedded.user) {
         loading = state.page.loading;
         data = state.page.data._embedded.user;
+        pageCount = state.page.data.page_count;
+        rowCount = state.page.data.page_size;
+        currentPage = state.page.data.page;
+    }
+    if (state.currentUser != null){
+        currentUser = state.currentUser;
     }
     return {
         data,
-        loading
+        currentUser,
+        loading,
+        pageCount,
+        rowCount,
+        currentPage
     };
 };
 

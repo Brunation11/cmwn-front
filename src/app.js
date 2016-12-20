@@ -1,4 +1,5 @@
-/* eslint-disable vars-on-top */
+/* eslint max-lines: ["error", {"max": 530, "skipComments": true}] */
+/* eslint-disable vars-on-top  */
 /**
  * App.js
  * # Production Application Entrypoint
@@ -396,6 +397,9 @@ Store.subscribe(() => {
     var state = Store.getState();
     if (state.page && state.page.title !== lastState.page.title) {
         Util.setPageTitle(state.page.title);
+        if (window.ga != null) {
+            window.ga('set', 'documentTitle', state.page.title);
+        }
     }
     progressivePageLoad();
     lastState = Store.getState();
@@ -416,8 +420,12 @@ var hashCode = function (s){
 // MPR, 8/19/16: note, switching this to scrub and only report errors in all environments
 // uncomment the conditional outside this comment to reenable it, or use the
 // window.__cmwn.interactiveDebug function in the console to reenable it temporarily
-Rollbar.configure({scrubFields: ['first_name', 'last_name', 'meta', 'email', 'birthdate'],
-    reportLevel: 'error'}); //eslint-disable-line no-undef
+Rollbar.configure({
+    scrubFields: [
+        'first_name', 'last_name', 'meta', 'email', 'birthdate', '_embedded', 'data'
+    ],
+    reportLevel: 'error'
+}); //eslint-disable-line no-undef
 //}
 //Dynamic rollbar configuration for throttling. Static configuration happens in index.php
 //User configuration happens in Authorization.js (soon will be moved to actions.js)
@@ -461,7 +469,10 @@ function run() {
         window._bootstrap_attempts++;
         ReactDOM.render((
                 <Provider store={Store} >
-                    <Router history={History} routes={routes} />
+                    <Router history={History} routes={routes} onUpdate={() => {
+                        window.ga('set', 'page', window.location.href);
+                        window.ga('send', 'pageview');
+                    }}/>
                 </Provider>
         ), document.getElementById('cmwn-app'));
         console.log('%cWoah there, World Changer!', 'font-weight: bold; color: red; font-size: 60px; font-family: Helvetica, Impact, Arial, sans-serif; text-shadow: 2px 2px grey;'); //eslint-disable-line no-console, max-len

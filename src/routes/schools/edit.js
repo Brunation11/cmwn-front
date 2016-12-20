@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ClassNames from 'classnames';
 import {Link} from 'react-router';
 import {Button, Input, Panel, FormControls} from 'react-bootstrap';
 import { connect } from 'react-redux';
@@ -14,6 +15,8 @@ import Util from 'components/util';
 import History from 'components/history';
 
 import Layout from 'layouts/two_col';
+
+import 'routes/schools/edit.scss';
 
 export const PAGE_UNIQUE_IDENTIFIER = 'school-edit';
 
@@ -73,6 +76,8 @@ const TERMS_COPY = (
             <a href="/terms" target="_blank">Change My World Now Terms and Conditions</a>.
     </span>
 );
+
+const UPLOAD_RECIEVED_LABEL = 'Upload Recieved Status:';
 
 var checkPerms = function (data) {
     if (data && data.scope && !Util.decodePermissions(data.scope).update) {
@@ -159,13 +164,13 @@ export class SchoolEdit extends React.Component {
         );
         if (this.props.data._links.import == null) {
             return (
-                <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+                <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
                     {SCHOOL_EDIT}
                 </Layout>
             );
         }
         return (
-           <Layout className={PAGE_UNIQUE_IDENTIFIER}>
+           <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
                 {SCHOOL_EDIT}
                 {''/*<CreateClass data={this.props.data} />*/}
                 <BulkUpload data={this.props.data} url={this.props.data._links.import.href} />
@@ -247,7 +252,8 @@ export class BulkUpload extends React.Component {
         this.state = {
             studentCode: '',
             teacherCode: '',
-            tos: false
+            tos: false,
+            open: false
         };
     }
 
@@ -283,7 +289,8 @@ export class BulkUpload extends React.Component {
             this.setState({
                 studentCode: '',
                 teacherCode: '',
-                tos: false
+                tos: false,
+                open: true
             });
             ReactDOM.findDOMNode(this.refs.fileInput).value = '';
             ReactDOM.findDOMNode(this.refs.fileInput).type = '';
@@ -299,7 +306,17 @@ export class BulkUpload extends React.Component {
         }
         return (
           <Panel header={HEADINGS.UPLOAD} className="school-import standard">
-            <iframe width="0" height="0" border="0" name="dummyframe" id="dummyframe"></iframe>
+            <div className={ClassNames('upload-status', {open: this.state.open})} >
+                <span className="statuslabel" >{UPLOAD_RECIEVED_LABEL}</span>
+                <iframe
+                    height="200"
+                    border="0"
+                    name="dummyframe"
+                    className="dummyframe"
+                    id="dummyframe"
+                    >
+                </iframe>
+            </div>
             <Form ref={REFS.FORM} method="post" target="dummyframe" encType="multipart/form-data"
                 action={this.props.url} onSubmit={e => this.checkForm(e)}>
                 <input type="hidden" name="_token" value={HttpManager.token} />
@@ -351,12 +368,17 @@ export class BulkUpload extends React.Component {
 mapStateToProps = state => {
     var data = {title: ''};
     var loading = true;
+    var currentUser;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
     }
+    if (state.currentUser != null){
+        currentUser = state.currentUser;
+    }
     return {
         data,
+        currentUser,
         loading
     };
 };

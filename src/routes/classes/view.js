@@ -13,6 +13,7 @@ import DeleteLink from 'components/delete_link';
 import Text from 'components/nullable_text';
 import Util from 'components/util';
 import GenerateDataSource from 'components/datasource';
+import History from 'components/history';
 
 import 'routes/classes/view.scss';
 
@@ -99,7 +100,7 @@ export class View extends React.Component{
                     .page;
         }
         return (
-            <Layout>
+            <Layout currentUser={this.props.currentUser}>
                 <Panel header={HEADINGS.TITLE + this.props.data.title} className="standard" id="panel-1">
                     <p className="right" id="editButton">
                         <EditLink className="purple" base="/class" id={this.state.group_id}

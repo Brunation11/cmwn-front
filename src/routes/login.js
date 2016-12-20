@@ -94,6 +94,7 @@ var Component = React.createClass({
         var req;
         var user = this.getUsernameWithoutSpaces();
         dataUrl = this.state.overrideLogin || this.props.currentUser._links.login.href;
+        ga('send', 'event', 'Login', 'Attempted');
         req = HttpManager.POST({
             url: dataUrl,
         }, {
@@ -109,6 +110,7 @@ var Component = React.createClass({
             }
             if (res.status < 300 && res.status >= 200) {
                 Log.info(e, 'User login success');
+                ga('send', 'event', 'Login', 'Success');
                 History.push('/profile');
             } else {
                 Toast.error(ERRORS.LOGIN + (res.response && res.response.data &&
@@ -127,6 +129,11 @@ var Component = React.createClass({
                 return;
             }
             Toast.error(ERRORS.LOGIN + (res.detail ? ' Message: ' + res.detail : ''));
+            ga('send', 'event', 'Login', 'Invalid');
+            //ga('send', 'exception', {
+            //    exDescription: 'Invalid login',
+            //    exFatal: false
+            //});
             Log.log(e, 'Invalid login');
         });
     },
@@ -136,6 +143,8 @@ var Component = React.createClass({
         var logoutUrl;
 
         if (this.state.currentPage === 'forgot-password') return;
+
+        user = this.getUsernameWithoutSpaces();
 
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
             if (this.props.data._links && this.props.data._links.login == null) {
@@ -262,7 +271,7 @@ var Component = React.createClass({
                                     {SIGNUP_PROMPT.COPY_2}
                                 </p>
                                 <a
-                                    className="mobile"
+                                    className="mobile-link"
                                     onClick={this.displaySignupModal}
                                 >
                                     {SIGNUP_PROMPT.MOBILE_LINK}
@@ -334,7 +343,7 @@ var Component = React.createClass({
                                     {SIGNUP_PROMPT.COPY_2}
                                 </p>
                                 <a
-                                    className="mobile"
+                                    className="mobile-link"
                                     onClick={this.displaySignupModal}
                                 >
                                     {SIGNUP_PROMPT.MOBILE_LINK}
@@ -368,6 +377,10 @@ var Component = React.createClass({
     },
     render: function () {
         var page;
+
+        if (this.props.currentUser.user_id) {
+            window.location.replace(window.location.href.replace('/login', '/profile'));
+        }
 
         if (this.state.currentPage === 'forgot-password') {
             page = this.renderForgotPassword;
