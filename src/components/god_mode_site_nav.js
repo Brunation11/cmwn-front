@@ -12,10 +12,22 @@ import 'components/god_mode_site_nav.scss';
 class GodModeSiteNav extends React.Component {
     constructor() {
         super();
+
+        this.state = {
+            linksRetrieved: false
+        };
     }
 
     componentDidMount() {
         this.getSaSettingsLinks();
+        this.setState({linksRetrieved: true});
+    }
+
+    componentWillReceiveProps() {
+        if (!this.state.linksRetrieved) {
+            this.getSaSettingsLinks();
+            this.setState({linksRetrieved: true});
+        }
     }
 
     addHardcodedEntries(menuItems) {
@@ -32,7 +44,6 @@ class GodModeSiteNav extends React.Component {
         if (!links || !links.sa_settings) return;
 
         promise = Promise.all([HttpManager.GET(links.sa_settings.href)]);
-
         promise.then((res) => {
             this.setState({saLinks: res[0].response._links});
         });
@@ -57,11 +68,10 @@ class GodModeSiteNav extends React.Component {
                         params = Util.matchPathAndExtractParams(
                             route.endpoint, item.href.split('/').slice(3).join('/')
                         );
-
-                        if (!_.keys(params).length) return;
+                        if (_.isEmpty(params)) return;
+                    } else {
+                        if (route.endpoint !== '$$' + key && !~item.href.indexOf(route.endpoint)) return;
                     }
-
-                    if (route.endpoint !== '$$' + key && !~item.href.indexOf(route.endpoint)) return;
 
                     url = Util.replacePathPlaceholdersFromParamObject(route.path, params).split('(')[0];
                     item.url = url.indexOf('/') === 0 ? url : '/' + url;
@@ -143,4 +153,3 @@ class GodModeSiteNav extends React.Component {
 }
 
 export default GodModeSiteNav;
-

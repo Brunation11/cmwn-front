@@ -40,8 +40,10 @@ const IGNORED_ROUTES_FOR_CHILDREN = [
 ];
 
 const IGNORED_ROUTES_FOR_EVERYONE = [
-    'Profile'
+    'Profile',
+    'Games'
 ];
+
 
 var buildMenuRoutes = function (links) {
     var allRoutes = PublicRoutes.concat(PrivateRoutes);
@@ -100,11 +102,13 @@ var buildMenuRoutes = function (links) {
 
 var SiteNav = React.createClass({
     renderNavItems: function () {
-        var currentUrl;
         var menuItems = buildMenuRoutes(this.props.data);
-        //manually hidden items for children
-        menuItems = addHardcodedEntries.call(this, menuItems);
+        var currentUrl;
 
+        //need to add hardcoded entries before filterning, because some will be
+        //removed based on user type
+        menuItems = addHardcodedEntries.call(this, menuItems);
+        //manually hidden items for children
         menuItems = _.filter(menuItems, item =>
             !~IGNORED_ROUTES_FOR_EVERYONE.indexOf(item.label) && (
                 this.props.currentUser.type !== 'CHILD' || (

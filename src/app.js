@@ -129,6 +129,7 @@ import Store from 'components/store';
 import Util from 'components/util';
 import DevTools from 'components/devtools';
 import Actions from 'components/actions';
+import ACTION_CONSTANTS from 'components/action_constants';
 import TimerModal from 'components/timer_modal';
 import GlobalAlert from 'components/global_alert';
 import Detector from 'components/browser_detector';
@@ -464,6 +465,10 @@ window.__cmwn.interactiveDebug = function () {
  * if any of these steps fail. A generic application error is shown if this fails.
  */
 function run() {
+    if (window.__browserOutdated != null) {
+        document.getElementById('pageerror').style.display = 'block';
+        return;
+    }
     window._bootstrap_attempts = window._bootstrap_attempts || 0; //eslint-disable-line camelcase
     try {
         window._bootstrap_attempts++;
@@ -483,6 +488,7 @@ function run() {
             console.warn = _.noop; //eslint-disable-line no-console
             /**let errors surface*/
         }
+        Actions.dispatch[ACTION_CONSTANTS.START_BOOTSTRAP]();
         Log.info('Application started');
     } catch(err) {
         Log.info('Application bootstrap failed, attempting to recover.' +
@@ -490,6 +496,7 @@ function run() {
         if (window._bootstrap_attempts < 5) {
             window.setTimeout(run, 500);
         } else {
+            document.getElementById('pageerror').style.display = 'block';
             Errors.showApplication(err);
         }
     }
