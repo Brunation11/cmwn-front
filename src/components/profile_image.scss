@@ -248,12 +248,14 @@ $back-to-upload-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
         .avatar-container {
             display: flex;
             position: absolute;
-            top: 7%;
+            top: 5%;
             left: 50%;
             transform: translateX(-50%);
             z-index: 1;
-            width: 90%;
+            padding: 20px 25px;
+            width: 93%;
             height: 70%;
+            overflow: scroll;
             flex-wrap: wrap;
             justify-content: center;
             flex-direction: row;
@@ -306,6 +308,7 @@ $back-to-upload-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
             position: absolute;
             bottom: 12%;
             left: 6%;
+            width: 45%;
             color: $cmwn-white;
             font-size: 1.5rem;
             font-weight: 100;
@@ -365,7 +368,8 @@ $back-to-upload-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
     }
 
     .confirm-container {
-        .left {
+        .left,
+        .right {
             .header,
             .prompt-1,
             .prompt-2 {
@@ -376,6 +380,14 @@ $back-to-upload-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
                 text-align: center;
             }
 
+            .header {
+                top: 5%;
+                font-family: $cmwn-jade-font;
+                font-size: 60px;
+            }
+        }
+
+        .left {
             .prompt-1,
             .prompt-2 {
                 color: $cmwn-white;
@@ -383,10 +395,7 @@ $back-to-upload-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
             }
 
             .header {
-                top: 5%;
                 color: $purple;
-                font-family: $cmwn-jade-font;
-                font-size: 60px;
             }
 
             .prompt-1 {
@@ -411,32 +420,28 @@ $back-to-upload-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
 
         .right {
             .header {
-                top: 5%;
                 color: $neon-green;
-                font-family: $cmwn-jade-font;
-                font-size: 60px;
-                width: 100%;
-                text-align: center;
             }
 
             .looks-great-btn,
             .change-my-mind-btn,
             .back-to-upload-btn {
-                width: 70%;
-                height: 12%;
-                border: 0;
-                outline: none;
-                box-shadow: none;
+                position: absolute;
                 left: 50%;
                 transform: translateX(-50%);
-                position: absolute;
+                outline: none;
+                border: 0;
+                box-shadow: none;
+                width: 70%;
+                height: 12%;
             }
 
+            // scss-lint:disable NestingDepth, SelectorDepth
             .looks-great-btn {
+                top: 28%;
                 background: url('#{$media-url}#{$looks-great-btn}');
                 background-repeat: no-repeat;
                 background-size: 100% auto;
-                top: 28%;
 
                 &:hover,
                 &:focus {
@@ -447,10 +452,10 @@ $back-to-upload-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
             }
 
             .change-my-mind-btn {
+                top: 42%;
                 background: url('#{$media-url}#{$change-my-mind-btn}');
                 background-repeat: no-repeat;
                 background-size: 100% auto;
-                top: 42%;
 
                 &:hover,
                 &:focus {
@@ -461,10 +466,10 @@ $back-to-upload-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
             }
 
             .back-to-upload-btn {
+                top: 56%;
                 background: url('#{$media-url}#{$back-to-upload-btn}');
                 background-repeat: no-repeat;
                 background-size: 100% auto;
-                top: 56%;
 
                 &:hover,
                 &:focus {
@@ -473,6 +478,100 @@ $back-to-upload-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
                     background-size: 100% auto;
                 }
             }
+            // scss-lint:enable NestingDepth, SelectorDepth
+        }
+    }
+
+    @media (min-width: $device-max-break) and (max-width: $monitor-max-break) {
+        .modal-content {
+            height: 55%;
+        }
+
+        .welcome-container {
+            .left {
+                .prompt-1 {
+                    font-size: .9rem;
+                }
+
+                .prompt-2 {
+                    font-size: 1.3rem;
+                }
+
+                .upload-your-photo-btn {
+                    background-size: 75% auto;
+                }
+            }
+
+            .right {
+                .pick-one-from-our-avatar-btn {
+                    background-size: 75% auto;
+                }
+            }
+        }
+
+        .select-default-container .prompt-container {
+            font-size: 1.1rem;
+        }
+
+        .confirm-container {
+            .left,
+            .right {
+                .header {
+                    font-size: 40px;
+                }
+
+                [class^='.prompt-'] {
+                    font-size: 15px;
+                }
+            }
+        }
+    }
+
+    @media (min-width: $device-portrait-break) and (max-width: $device-max-break) {
+        .modal-content {
+            width: 100%;
+            height: 50%;
+        }
+
+        .welcome-container {
+            .left {
+                .prompt-1 {
+                    font-size: .7rem;
+                }
+
+                .prompt-2 {
+                    font-size: .95rem;
+                }
+
+                .upload-your-photo-btn {
+                    background-size: 80% auto;
+                }
+            }
+
+            .right {
+                .pick-one-from-our-avatar-btn {
+                    background-size: 80% auto;
+                }
+            }
+        }
+
+        .select-default-container .prompt-container {
+            font-size: .8rem;
+        }
+
+        .confirm-container {
+            .left,
+            .right {
+                .header {
+                    font-size: 30px;
+                }
+
+                [class^='prompt-'] {
+                    font-size: 12px;
+                }
+            }
         }
     }
 }
+
+
