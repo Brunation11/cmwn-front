@@ -278,7 +278,7 @@ export default class Image extends React.Component {
         });
     }
 
-    startUpload(e) {
+    cloudinaryUpload(e) {
         var self = this;
         var postURL = this.props.data._links.user_image.href;
         var imageURL;
@@ -306,17 +306,32 @@ export default class Image extends React.Component {
                         return;
                     }
                 }
-                self.setState({profileImage: result[0].secure_url});
-                self.setState({isModerated: false});
-                ('set', 'dimension6', 1);
-
                 imageURL = result[0].secure_url;
                 imageID = result[0].public_id;
+
+                self.setState({
+                    profileImage: imageURL,
+                    isModerated: false
+                });
+
+                ('set', 'dimension6', 1);
+
 
                 this.upload(postURL, imageURL, imageID);
             });
             /* eslint-enable camelcase */
         });
+    }
+
+    defaultUpload(e) {
+        var self = this;
+        var postURL = this.props.data._links.user_image.href;
+        var imageURL = `${GLOBALS.MEDIA_URL}${DEFAULT_IMGS[this.state.selected].clr}`;
+        var imageID = imageURL.replace('.png', '');
+
+        e.stopPropagation();
+
+        // this.upload(postURL, imageURL, imageID);
     }
 
     showModal() {
@@ -373,7 +388,7 @@ export default class Image extends React.Component {
                     </span>
                     <button
                         className="upload-your-photo-btn"
-                        onClick={this.startUpload.bind(this)}
+                        onClick={this.cloudinaryUpload.bind(this)}
                     />
                 </div>
                 <div className="right">
@@ -463,7 +478,7 @@ export default class Image extends React.Component {
                     </span>
                     <button
                         className="looks-great-btn"
-                        onClick=''
+                        onClick={this.defaultUpload.bind(this)}
                     />
                     <button
                         className="change-my-mind-btn"
@@ -471,7 +486,7 @@ export default class Image extends React.Component {
                     />
                     <button
                         className="back-to-upload-btn"
-                        onClick={this.startUpload.bind(this)}
+                        onClick={this.cloudinaryUpload.bind(this)}
                     />
                 </div>
             </div>
