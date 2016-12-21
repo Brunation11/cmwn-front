@@ -264,9 +264,28 @@ export default class Image extends React.Component {
         }
     }
 
+    upload(postURL, imageURL, imageID) {
+        HttpManager.POST({
+            url: postURL
+        }, {
+            url: imageURL,
+            image_id: imageID
+        }).then(() => {
+            Toast.error(MODERATION);
+        }).catch(() => {
+            Toast.error(UPLOAD_ERROR);
+            Log.error(e, 'Failed image upload');
+        });
+    }
+
     startUpload(e) {
         var self = this;
+        var postURL = this.props.data._links.user_image.href;
+        var imageURL;
+        var imageID;
+
         e.stopPropagation();
+
         Cloudinary.load((e_, err) => {
             if (err != null) {
                 Toast.error(UPLOAD_ERROR);
@@ -291,15 +310,10 @@ export default class Image extends React.Component {
                 self.setState({isModerated: false});
                 ('set', 'dimension6', 1);
 
-                HttpManager.POST({url: this.props.data._links.user_image.href}, {
-                    url: result[0].secure_url,
-                    image_id: result[0].public_id
-                }).then(() => {
-                    Toast.error(MODERATION);
-                }).catch(() => {
-                    Toast.error(UPLOAD_ERROR);
-                    Log.error(e, 'Failed image upload');
-                });
+                imageURL = result[0].secure_url;
+                imageID = result[0].public_id;
+
+                this.upload(postURL, imageURL, imageID);
             });
             /* eslint-enable camelcase */
         });
