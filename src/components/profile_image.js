@@ -29,13 +29,14 @@ const DEFAULT_IMGS = {
 };
 
 const ERRORS = {
-    REFRESH: 'Looks like there was a problem displaying this users profile. Please refresh the page to try again.',
+    REFRESH: 'Looks like there was a problem displaying this users profile.' +
+             'Please refresh the page to try again.',
     NO_IMAGE: 'Image could not be extracted from user',
     NO_DEFAULTS: 'Looks like there was a problem displaying our default collection.',
     MODERATION: 'Your image has been submitted for moderation and should appear shortly.',
     UPLOAD_ERROR: 'There was a problem uploading your image. Please refresh the page and try again.',
     FAILED_UPLOAD: 'Failed image upload'
-}
+};
 
 export default class Image extends React.Component {
     constructor() {
