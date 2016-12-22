@@ -1,6 +1,8 @@
+/* eslint-disable max-lines*/
 import React from 'react';
 import {Modal, ButtonToolbar, OverlayTrigger, Popover} from 'react-bootstrap';
 import Classnames from 'classnames';
+import _ from 'lodash';
 
 import Cloudinary from 'components/cloudinary';
 import Toast from 'components/toast';
@@ -22,12 +24,12 @@ const PENDING = ' We\'re reviewing your image and it should appear shortly. ' +
                 'To continue uploading a new image click ';
 const NO_IMAGE = 'Looks like there was a problem displaying this users profile. ' +
                 'Please refresh the page to try again.';
-const NO_DEFAULTS = 'Looks like there was a problem displaying our default collection.'
+const NO_DEFAULTS = 'Looks like there was a problem displaying our default collection.';
 
 const DEFAULT_IMGS = {
     bw: '4795ea6a87f34d517f750669c67a5377',
     clr: '85a95f88575463336eb36e55ed044c40'
-}
+};
 
 export default class Image extends React.Component {
     constructor() {
@@ -69,7 +71,7 @@ export default class Image extends React.Component {
             this.setState({
                 defaultsBW: res.response._embedded.items
             });
-        }).catch((err) => {
+        }).catch(() => {
             Toast.error(NO_DEFAULTS);
         });
 
@@ -80,12 +82,13 @@ export default class Image extends React.Component {
             this.setState({
                 defaultsCLR: res.response._embedded.items
             });
-        }).catch((err) => {
+        }).catch(() => {
             Toast.error(NO_DEFAULTS);
         });
     }
 
-    upload(postURL, imageURL, imageID) {
+    upload(e, postURL, imageURL, imageID) {
+        /* eslint-disable camelcase*/
         HttpManager.POST({
             url: postURL
         }, {
@@ -102,10 +105,10 @@ export default class Image extends React.Component {
             Toast.error(UPLOAD_ERROR);
             Log.error(e, 'Failed image upload');
         });
+        /* eslint-enable camelcase*/
     }
 
     cloudinaryUpload(e) {
-        var self = this;
         var postURL = this.props.data._links.user_image.href;
         var imageURL;
         var imageID;
@@ -134,21 +137,20 @@ export default class Image extends React.Component {
 
                 ('set', 'dimension6', 1);
 
-                this.upload(postURL, imageURL, imageID);
+                this.upload(e, postURL, imageURL, imageID);
             });
             /* eslint-enable camelcase */
         });
     }
 
     defaultUpload(e) {
-        var self = this;
         var postURL = this.props.data._links.user_image.href;
         var imageURL = this.state.defaultsCLR[this.state.selected].src;
         var imageID = imageURL.replace('.png', '');
 
         e.stopPropagation();
 
-        this.upload(postURL, imageURL, imageID);
+        this.upload(e, postURL, imageURL, imageID);
     }
 
     showModal() {
@@ -222,7 +224,7 @@ export default class Image extends React.Component {
         return (
             <div className="desktop select-default-container">
                 <div className="avatar-container">
-                    {_.map(this.state.defaultsBW, (value, key) => {
+                    {_.map(this.state.defaultsBW, (value) => {
                         return (
                             <div
                                 onClick={() => {
@@ -232,9 +234,9 @@ export default class Image extends React.Component {
                                 }}
                                 className={Classnames(
                                     `avatar ${value.name}`,
-                                     {
+                                    {
                                         disable: this.state.selected === value.name
-                                     }
+                                    }
                                 )}
                                 key={Shortid.generate()}
                             >
@@ -284,7 +286,10 @@ export default class Image extends React.Component {
                     <span className="prompt-1">
                         YOUR NEW PROFILE PHOTO
                     </span>
-                    <img className="selected-avatar" src={_.find(this.state.defaultsBW, ['name', this.state.selected]).src} />
+                    <img
+                        className="selected-avatar"
+                        src={_.find(this.state.defaultsBW, ['name', this.state.selected]).src}
+                    />
                     <span className="prompt-2">
                         USERNAME HERE
                     </span>
@@ -385,7 +390,7 @@ export default class Image extends React.Component {
                     className="confirm-btn"
                     onClick={() => {
                         this.setState({selected: currentOption.name});
-                        self.setPage.call(self, 'confirm')
+                        self.setPage.call(self, 'confirm');
                     }}
                 />
                 <button className="cancel-btn"
@@ -401,7 +406,10 @@ export default class Image extends React.Component {
                 <span className="header">
                     Are you sure?
                 </span>
-                <img className="selected-avatar" src={_.find(this.state.defaultsBW, ['name', this.state.selected]).src} />
+                <img
+                    className="selected-avatar"
+                    src={_.find(this.state.defaultsBW, ['name', this.state.selected]).src}
+                />
                 <button
                     className="confirm-btn"
                     onClick={this.defaultUpload.bind(this)}
