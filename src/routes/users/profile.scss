@@ -1,4 +1,4 @@
-@import '../../variables';
+@import 'variables';
 
 .game-modal {
     display: block;
@@ -120,6 +120,14 @@
                 color: $cmwn-white;
                 font-size: 1.25rem;
             }
+        }
+    }
+
+    &.current-user {
+        .flipboard .panel-body {
+            display: flex;
+            padding: $standard;
+            flex-wrap: wrap;
         }
     }
 
