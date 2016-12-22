@@ -141,11 +141,11 @@ $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
 
     .close-modal-btn {
         position: absolute;
+        background: url('#{$media-url}#{$close-modal-btn}');
+        background-repeat: no-repeat;
+        background-size: 100% auto;
         width: 20%;
         height: 20%;
-        background: url('#{$media-url}#{$close-modal-btn}');
-        background-size: 100% auto;
-        background-repeat: no-repeat;
     }
 
     .mobile.welcome-container,
@@ -514,24 +514,24 @@ $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
 
         .confirm-btn,
         .cancel-btn {
-            width: 90%;
-            height: 8%;
             left: 50%;
             transform: translateX(-50%);
+            width: 90%;
+            height: 8%;
         }
 
         .confirm-btn {
             top: 72%;
             background: url('#{$media-url}#{$mobile-save-btn}');
-            background-size: 100% auto;
             background-repeat: no-repeat;
+            background-size: 100% auto;
         }
 
         .cancel-btn {
             top: 82%;
             background: url('#{$media-url}#{$mobile-cancel-btn}');
-            background-size: 100% auto;
             background-repeat: no-repeat;
+            background-size: 100% auto;
         }
     }
 
