@@ -4,13 +4,17 @@ $purple: #7a1ebf;
 $blue: #01aef0;
 $neon-green: #22ff01;
 
+$logo-white: 'f021b6902d02f9794211c27b4a1a8b51.png';
 
-$modal-background: '44cda0a040cca931add0d1f16ac19e51.png';
-$dotted-border: '446ace931cf5b20f94dc5e6490bb0a65.png';
+$desktop-modal-background: '44cda0a040cca931add0d1f16ac19e51.png';
+$mobile-modal-background: '152278f439b050ccad2a3b2628ede367.png';
+$mobile-welcome-background: 'b20b2234ed47c5f8d32381f05d59ecbc.png';
+
 $upload-your-photo-btn: '1a130e9f3f37a0c199d19f5e28867e8d.png';
 $upload-your-photo-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
 $pick-one-from-our-avatar-btn: '098b84d6eb16c47f90db9a378e966e5d.png';
 $pick-one-from-our-avatar-btn-hvr: '704fdd1a962a38c868d7ba5240254aa2.png';
+$go-to-gallery-btn: '79ff26426b98c2f4c2ce6a407484bbfa.png';
 $confirm-btn: 'deeeaf1443056abe90d5898c4bedc46a.png';
 $confirm-btn-hvr: 'e532b054e120e57487d09d663604b348.png';
 $cancel-btn: '67d40ed6335ac512e8f54296540ddb7c.png';
@@ -20,6 +24,11 @@ $change-my-mind-btn: '17a8a545d683726aba3483da91af813c.png';
 $change-my-mind-btn-hvr: '5d8f7dd72b0933d33385cd64ecda9562.png';
 $back-to-upload-btn: '1a130e9f3f37a0c199d19f5e28867e8d.png';
 $back-to-upload-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
+$prev-btn: 'e4858cbc0d2b6e1fad066da72b6c5b68.png';
+$next-btn: 'cc9abe68d8e2168c8762729ddcbbbdad.png';
+$mobile-save-btn: 'd2b042ecfe32db5e4333c793f4912a70.png';
+$mobile-cancel-btn: '5f8508cebd4a0c965f35b7d0e0ccc05e.png';
+$close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
 
 .profile-image-popover {
     color: $cmwn-gray;
@@ -115,7 +124,7 @@ $back-to-upload-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
         transform: translateX(-50%);
         border: 0;
         box-shadow: none;
-        background: url('#{$media-url}#{$modal-background}');
+        background: url('#{$media-url}#{$desktop-modal-background}');
         background-position: 0 5px;
         background-size: 100% 100%;
         width: 80%;
@@ -130,15 +139,31 @@ $back-to-upload-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
         height: 100%;
     }
 
+    .close-modal-btn {
+        position: absolute;
+        width: 20%;
+        height: 20%;
+        background: url('#{$media-url}#{$close-modal-btn}');
+        background-size: 100% auto;
+        background-repeat: no-repeat;
+    }
+
+    .mobile.welcome-container,
+    .mobile.select-default-container,
+    .mobile.confirm-container {
+        display: none;
+    }
+
     .welcome-container,
     .select-default-container,
     .cofirm-container {
+        position: absolute;
         width: 100%;
         height: 100%;
     }
 
-    .welcome-container,
-    .confirm-container {
+    .desktop.welcome-container,
+    .desktop.confirm-container {
         .left {
             position: absolute;
             top: 50%;
@@ -163,7 +188,26 @@ $back-to-upload-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
         }
     }
 
-    .welcome-container {
+    .desktop.welcome-container,
+    .mobile.welcome-container {
+        .upload-your-photo-btn,
+        .pick-one-from-our-avatar-btn {
+            position: absolute;
+            outline: none;
+            border: 0;
+            box-shadow: none;
+        }
+    }
+
+    .desktop.welcome-container {
+        .upload-your-photo-btn,
+        .pick-one-from-our-avatar-btn {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
         .left {
             .prompt-1,
             .prompt-2 {
@@ -191,18 +235,10 @@ $back-to-upload-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
             }
 
             .upload-your-photo-btn {
-                position: absolute;
-                top: 0;
-                left: 0;
-                outline: none;
-                border: 0;
-                box-shadow: none;
                 background: url('#{$media-url}#{$upload-your-photo-btn}');
                 background-repeat: no-repeat;
                 background-position: 50% 75%;
                 background-size: 70% auto;
-                width: 100%;
-                height: 100%;
 
                 // scss-lint:disable NestingDepth, SelectorDepth
                 &:hover,
@@ -218,18 +254,10 @@ $back-to-upload-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
 
         .right {
             .pick-one-from-our-avatar-btn {
-                position: absolute;
-                top: 0;
-                left: 0;
-                outline: none;
-                border: 0;
-                box-shadow: none;
                 background: url('#{$media-url}#{$pick-one-from-our-avatar-btn}');
                 background-repeat: no-repeat;
                 background-position: 50% 40%;
                 background-size: 70% auto;
-                width: 100%;
-                height: 100%;
 
                 // scss-lint:disable NestingDepth, SelectorDepth
                 &:hover,
@@ -244,23 +272,99 @@ $back-to-upload-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
         }
     }
 
-    .select-default-container {
+    .mobile.welcome-container {
+        background: url('#{$media-url}#{$mobile-welcome-background}');
+        background-size: auto 100%;
+
+        &::after {
+            position: absolute;
+            top: 27%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: url('#{$media-url}#{$logo-white}');
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+            width: 35%;
+            height: 19%;
+            content: '';
+        }
+
+        .header {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            text-align: center;
+            color: $cmwn-white;
+            font-size: 40px;
+            font-weight: 900;
+        }
+
+        .upload-your-photo-btn {
+            top: 60%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: url('#{$media-url}#{$upload-your-photo-btn}');
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+            width: 70%;
+            height: 10%;
+        }
+
+        .pick-one-from-our-avatar-btn {
+            top: 72%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: url('#{$media-url}#{$go-to-gallery-btn}');
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+            width: 70%;
+            height: 7%;
+        }
+
+        .close-modal-btn {
+            position: absolute;
+            bottom: 0%;
+            width: 100%;
+            height: 20%;
+            text-align: center;
+            text-decoration: underline;
+            color: $cmwn-white;
+            font-family: $cmwn-jade-font;
+            font-size: 15px;
+        }
+    }
+
+    .desktop.select-default-container,
+    .mobile.select-default-container {
         .avatar-container {
             display: flex;
             position: absolute;
-            top: 5%;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 1;
-            padding: 20px 25px;
-            width: 93%;
-            height: 70%;
             overflow: scroll;
-            flex-wrap: wrap;
             justify-content: center;
             flex-direction: row;
             align-items: flex-start;
             align-content: flex-start;
+        }
+
+        .confirm-btn,
+        .cancel-btn {
+            position: absolute;
+            outline: none;
+            border: 0;
+            box-shadow: none;
+        }
+    }
+
+    .desktop.select-default-container {
+        .avatar-container {
+            top: 5%;
+            z-index: 1;
+            padding: 20px 25px;
+            width: 93%;
+            height: 70%;
+            flex-wrap: wrap;
         }
 
         .avatar {
@@ -320,19 +424,14 @@ $back-to-upload-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
             }
         }
 
-        .confirm,
-        .cancel {
-            position: absolute;
+        .confirm-btn,
+        .cancel-btn {
             bottom: 8%;
-            z-index: 1;
-            outline: none;
-            border: 0;
-            box-shadow: none;
             width: 18%;
             height: 9%;
         }
 
-        .confirm {
+        .confirm-btn {
             left: 55%;
             background: url('#{$media-url}#{$confirm-btn}');
             background-repeat: no-repeat;
@@ -347,7 +446,7 @@ $back-to-upload-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
             }
         }
 
-        .cancel {
+        .cancel-btn {
             left: 75%;
             background: url('#{$media-url}#{$cancel-btn}');
             background-repeat: no-repeat;
@@ -364,6 +463,75 @@ $back-to-upload-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
             width: 94%;
             height: 92%;
             content: '';
+        }
+    }
+
+    .mobile.select-default-container {
+        .avatar-container {
+            top: 15%;
+            width: 100%;
+            height: 50%;
+            flex-wrap: nowrap;
+        }
+
+        .avatar,
+        .clr {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .clr {
+            animation-name: slideInRight;
+        }
+
+        .prev-btn,
+        .next-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            outline: none;
+            border: 0;
+            box-shadow: none;
+            width: 12%;
+            height: 14%;
+
+        }
+
+        .prev-btn {
+            left: 3%;
+            background: url('#{$media-url}#{$prev-btn}');
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+        }
+
+        .next-btn {
+            right: 3%;
+            background: url('#{$media-url}#{$next-btn}');
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+        }
+
+        .confirm-btn,
+        .cancel-btn {
+            width: 90%;
+            height: 8%;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .confirm-btn {
+            top: 72%;
+            background: url('#{$media-url}#{$mobile-save-btn}');
+            background-size: 100% auto;
+            background-repeat: no-repeat;
+        }
+
+        .cancel-btn {
+            top: 82%;
+            background: url('#{$media-url}#{$mobile-cancel-btn}');
+            background-size: 100% auto;
+            background-repeat: no-repeat;
         }
     }
 
@@ -404,7 +572,7 @@ $back-to-upload-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
             }
 
             .prompt-2 {
-                bottom: 25%;
+                bottom: 22%;
             }
 
             .selected-avatar {
@@ -487,7 +655,7 @@ $back-to-upload-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
             height: 55%;
         }
 
-        .welcome-container {
+        .desktop.welcome-container {
             .left {
                 .prompt-1 {
                     font-size: .9rem;
@@ -509,11 +677,11 @@ $back-to-upload-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
             }
         }
 
-        .select-default-container .prompt-container {
+        .desktop.select-default-container .prompt-container {
             font-size: 1.1rem;
         }
 
-        .confirm-container {
+        .desktop.confirm-container {
             .left,
             .right {
                 .header {
@@ -533,7 +701,7 @@ $back-to-upload-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
             height: 50%;
         }
 
-        .welcome-container {
+        .desktop.welcome-container {
             .left {
                 .prompt-1 {
                     font-size: .7rem;
@@ -555,11 +723,11 @@ $back-to-upload-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
             }
         }
 
-        .select-default-container .prompt-container {
+        .desktop.select-default-container .prompt-container {
             font-size: .8rem;
         }
 
-        .confirm-container {
+        .desktop.confirm-container {
             .left,
             .right {
                 .header {
@@ -570,6 +738,26 @@ $back-to-upload-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
                     font-size: 12px;
                 }
             }
+        }
+    }
+
+    @media (max-width: $device-portrait-break) {
+        .modal-content {
+            top: 0;
+            background: url('#{$media-url}#{$mobile-modal-background}');
+            background-size: 100% 100%;
+            width: 100%;
+            height: 100%;
+        }
+
+        .desktop {
+            display: none;
+        }
+
+        .mobile.welcome-container,
+        .mobile.select-default-container,
+        .mobile-confirm-container {
+            display: block;
         }
     }
 }
