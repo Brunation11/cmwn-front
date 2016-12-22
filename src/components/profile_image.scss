@@ -1,15 +1,19 @@
 @import 'variables';
 
+// colors
 $purple: #7a1ebf;
 $blue: #01aef0;
 $neon-green: #22ff01;
 
+// image assets
 $logo-white: 'f021b6902d02f9794211c27b4a1a8b51.png';
 
+// background assets
 $desktop-modal-background: '44cda0a040cca931add0d1f16ac19e51.png';
 $mobile-modal-background: '152278f439b050ccad2a3b2628ede367.png';
 $mobile-welcome-background: 'b20b2234ed47c5f8d32381f05d59ecbc.png';
 
+// button assets
 $upload-your-photo-btn: '1a130e9f3f37a0c199d19f5e28867e8d.png';
 $upload-your-photo-btn-hvr: 'bbd1865ae0d0784de1b31750e1e66545.png';
 $pick-one-from-our-avatar-btn: '098b84d6eb16c47f90db9a378e966e5d.png';
@@ -65,7 +69,6 @@ $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
         display: none;
     }
 
-    // scss-lint:disable all
     .upload {
         display: inline-block;
         position: absolute;
@@ -87,7 +90,6 @@ $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
         transition-duration: .3s;
         transition-property: box-shadow, transform;
     }
-    // scss-lint:enable all
 
     .upload:hover,
     .upload:focus,
@@ -148,12 +150,6 @@ $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
         height: 20%;
     }
 
-    .mobile.welcome-container,
-    .mobile.select-default-container,
-    .mobile.confirm-container {
-        display: none;
-    }
-
     .welcome-container,
     .select-default-container,
     .cofirm-container {
@@ -192,6 +188,29 @@ $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
     .mobile.welcome-container {
         .upload-your-photo-btn,
         .pick-one-from-our-avatar-btn {
+            position: absolute;
+            outline: none;
+            border: 0;
+            box-shadow: none;
+        }
+    }
+
+    .desktop.select-default-container,
+    .mobile.select-default-container {
+        .avatar-container {
+            display: flex;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            overflow: scroll;
+            justify-content: center;
+            flex-direction: row;
+            align-items: flex-start;
+            align-content: flex-start;
+        }
+
+        .confirm-btn,
+        .cancel-btn {
             position: absolute;
             outline: none;
             border: 0;
@@ -269,91 +288,6 @@ $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
                 }
                 // scss-lint:enable NestingDepth, SelectorDepth
             }
-        }
-    }
-
-    .mobile.welcome-container {
-        background: url('#{$media-url}#{$mobile-welcome-background}');
-        background-size: auto 100%;
-
-        &::after {
-            position: absolute;
-            top: 27%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: url('#{$media-url}#{$logo-white}');
-            background-repeat: no-repeat;
-            background-size: 100% auto;
-            width: 35%;
-            height: 19%;
-            content: '';
-        }
-
-        .header {
-            position: absolute;
-            top: 50%;
-            width: 100%;
-            text-align: center;
-            color: $cmwn-white;
-            font-size: 40px;
-            font-weight: 900;
-        }
-
-        .upload-your-photo-btn {
-            top: 60%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: url('#{$media-url}#{$upload-your-photo-btn}');
-            background-repeat: no-repeat;
-            background-size: 100% auto;
-            width: 70%;
-            height: 10%;
-        }
-
-        .pick-one-from-our-avatar-btn {
-            top: 72%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: url('#{$media-url}#{$go-to-gallery-btn}');
-            background-repeat: no-repeat;
-            background-size: 100% auto;
-            width: 70%;
-            height: 7%;
-        }
-
-        .close-modal-btn {
-            position: absolute;
-            bottom: 0%;
-            width: 100%;
-            height: 20%;
-            text-align: center;
-            text-decoration: underline;
-            color: $cmwn-white;
-            font-family: $cmwn-jade-font;
-            font-size: 15px;
-        }
-    }
-
-    .desktop.select-default-container,
-    .mobile.select-default-container {
-        .avatar-container {
-            display: flex;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            overflow: scroll;
-            justify-content: center;
-            flex-direction: row;
-            align-items: flex-start;
-            align-content: flex-start;
-        }
-
-        .confirm-btn,
-        .cancel-btn {
-            position: absolute;
-            outline: none;
-            border: 0;
-            box-shadow: none;
         }
     }
 
@@ -466,76 +400,7 @@ $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
         }
     }
 
-    .mobile.select-default-container {
-        .avatar-container {
-            top: 15%;
-            width: 100%;
-            height: 50%;
-            flex-wrap: nowrap;
-        }
-
-        .avatar,
-        .clr {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-        }
-
-        .clr {
-            animation-name: slideInRight;
-        }
-
-        .prev-btn,
-        .next-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            outline: none;
-            border: 0;
-            box-shadow: none;
-            width: 12%;
-            height: 14%;
-
-        }
-
-        .prev-btn {
-            left: 3%;
-            background: url('#{$media-url}#{$prev-btn}');
-            background-repeat: no-repeat;
-            background-size: 100% auto;
-        }
-
-        .next-btn {
-            right: 3%;
-            background: url('#{$media-url}#{$next-btn}');
-            background-repeat: no-repeat;
-            background-size: 100% auto;
-        }
-
-        .confirm-btn,
-        .cancel-btn {
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            height: 8%;
-        }
-
-        .confirm-btn {
-            top: 72%;
-            background: url('#{$media-url}#{$mobile-save-btn}');
-            background-repeat: no-repeat;
-            background-size: 100% auto;
-        }
-
-        .cancel-btn {
-            top: 82%;
-            background: url('#{$media-url}#{$mobile-cancel-btn}');
-            background-repeat: no-repeat;
-            background-size: 100% auto;
-        }
-    }
-
-    .confirm-container {
+    .desktop.confirm-container {
         .left,
         .right {
             .header,
@@ -647,6 +512,200 @@ $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
                 }
             }
             // scss-lint:enable NestingDepth, SelectorDepth
+        }
+    }
+
+    .mobile.welcome-container,
+    .mobile.select-default-container,
+    .mobile.confirm-container {
+        display: none;
+    }
+
+    .mobile.welcome-container {
+        background: url('#{$media-url}#{$mobile-welcome-background}');
+        background-size: auto 100%;
+
+        &::after {
+            position: absolute;
+            top: 27%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: url('#{$media-url}#{$logo-white}');
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+            width: 35%;
+            height: 19%;
+            content: '';
+        }
+
+        .header {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            text-align: center;
+            color: $cmwn-white;
+            font-size: 40px;
+            font-weight: 900;
+        }
+
+        .upload-your-photo-btn {
+            top: 60%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: url('#{$media-url}#{$upload-your-photo-btn}');
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+            width: 70%;
+            height: 10%;
+        }
+
+        .pick-one-from-our-avatar-btn {
+            top: 72%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: url('#{$media-url}#{$go-to-gallery-btn}');
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+            width: 70%;
+            height: 7%;
+        }
+
+        .close-modal-btn {
+            position: absolute;
+            bottom: 0%;
+            width: 100%;
+            height: 20%;
+            text-align: center;
+            text-decoration: underline;
+            color: $cmwn-white;
+            font-family: $cmwn-jade-font;
+            font-size: 15px;
+        }
+    }
+
+
+    .mobile.select-default-container {
+        .avatar-container {
+            top: 15%;
+            width: 100%;
+            height: 50%;
+            flex-wrap: nowrap;
+        }
+
+        .avatar,
+        .clr {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .clr {
+            animation-name: slideInRight;
+        }
+
+        .prev-btn,
+        .next-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            outline: none;
+            border: 0;
+            box-shadow: none;
+            width: 12%;
+            height: 14%;
+
+        }
+
+        .prev-btn {
+            left: 3%;
+            background: url('#{$media-url}#{$prev-btn}');
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+        }
+
+        .next-btn {
+            right: 3%;
+            background: url('#{$media-url}#{$next-btn}');
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+        }
+
+        .confirm-btn,
+        .cancel-btn {
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            height: 8%;
+        }
+
+        .confirm-btn {
+            top: 72%;
+            background: url('#{$media-url}#{$mobile-save-btn}');
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+        }
+
+        .cancel-btn {
+            top: 82%;
+            background: url('#{$media-url}#{$mobile-cancel-btn}');
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+        }
+    }
+
+    .mobile-confirm-container {
+        &::after {
+            position: absolute;
+            top: 27%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: url('#{$media-url}#{$logo-white}');
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+            width: 35%;
+            height: 19%;
+            content: '';
+        }
+
+        .header {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            color: $purple;
+            font-family: $cmwn-jade-font;
+            font-size: 2rem;
+        }
+
+        .selected-avatar {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 1px solid $cmwn-white;
+            width: 70%;
+            height: 20%;
+        }
+
+        .confirm-btn,
+        .cancel-btn {
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            height: 8%;
+        }
+
+        .confirm-btn {
+            top: 72%;
+            background: url('#{$media-url}#{$mobile-save-btn}');
+            background-repeat: no-repeat;
+            background-size: 100% auto;
+        }
+
+        .cancel-btn {
+            top: 82%;
+            background: url('#{$media-url}#{$mobile-cancel-btn}');
+            background-repeat: no-repeat;
+            background-size: 100% auto;
         }
     }
 
