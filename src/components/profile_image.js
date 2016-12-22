@@ -15,21 +15,27 @@ import Shortid from 'shortid';
 import 'components/profile_image.scss';
 
 const COMPONENT_UNIQUE_IDENTIFIER = 'profile-image';
+
 const PIC_ALT = 'Profile Picture';
-const UPLOAD_ERROR = 'There was a problem uploading your image. Please refresh the page and try again.';
-const MODERATION = 'Your image has been submitted for moderation and should appear shortly.';
+
 const PENDINGHEADER = 'Woah there World Changer!';
 const PENDING = ' We\'re reviewing your image and it should appear shortly. ' +
                 'Other users will continue to see your last approved image until we\'ve reviewed this one.' +
                 'To continue uploading a new image click ';
-const NO_IMAGE = 'Looks like there was a problem displaying this users profile. ' +
-                'Please refresh the page to try again.';
-const NO_DEFAULTS = 'Looks like there was a problem displaying our default collection.';
 
 const DEFAULT_IMGS = {
-    bw: '4795ea6a87f34d517f750669c67a5377',
-    clr: '85a95f88575463336eb36e55ed044c40'
+    BW: '4795ea6a87f34d517f750669c67a5377',
+    CLR: '85a95f88575463336eb36e55ed044c40'
 };
+
+const ERRORS = {
+    REFRESH: 'Looks like there was a problem displaying this users profile. Please refresh the page to try again.',
+    NO_IMAGE: 'Image could not be extracted from user',
+    NO_DEFAULTS: 'Looks like there was a problem displaying our default collection.',
+    MODERATION: 'Your image has been submitted for moderation and should appear shortly.',
+    UPLOAD_ERROR: 'There was a problem uploading your image. Please refresh the page and try again.',
+    FAILED_UPLOAD: 'Failed image upload'
+}
 
 export default class Image extends React.Component {
     constructor() {
@@ -44,26 +50,33 @@ export default class Image extends React.Component {
 
     componentDidMount() {
         if (this.props.data._embedded.image) {
-            this.setState({profileImage: this.props.data._embedded.image.url});
-            this.setState({isModerated: this.props.data._embedded.image.is_moderated});
+            this.setState({
+                profileImage: this.props.data._embedded.image.url,
+                isModerated: this.props.data._embedded.image.is_moderated
+            });
         } else {
             HttpManager.GET({
                 url: (this.props.data._links.user_image.href),
                 handleErrors: false
-            })
-            .then(res => {
-                this.setState({profileImage: res.response.url});
+            }).then(res => {
+                this.setState({
+                    profileImage: res.response.url
+                });
             }).catch(e => {
+                //if a user has never uploaded an image, we expect a 404
                 if (e.status === 404) {
-                    //if a user has never uploaded an image, we expect a 404
-                    this.setState({profileImage: GLOBALS.DEFAULT_PROFILE});
+                    this.setState({
+                        profileImage: GLOBALS.DEFAULT_PROFILE
+                    });
                 } else {
-                    Toast.error(NO_IMAGE);
-                    Log.error(e, 'Image could not be extracted from user');
+                    Toast.error(ERRORS.REFRESH);
+                    Log.error(e, ERRORS.NO_IMAGE);
                 }
             });
         }
+    }
 
+    getDefaultImages() {
         // get black and white default images
         HttpManager.GET({
             url: `${GLOBALS.API_URL}media/${DEFAULT_IMGS.bw}`
@@ -72,7 +85,7 @@ export default class Image extends React.Component {
                 defaultsBW: res.response._embedded.items
             });
         }).catch(() => {
-            Toast.error(NO_DEFAULTS);
+            Toast.error(ERRORS.NO_DEFAULTS);
         });
 
         // get color default images
@@ -83,7 +96,7 @@ export default class Image extends React.Component {
                 defaultsCLR: res.response._embedded.items
             });
         }).catch(() => {
-            Toast.error(NO_DEFAULTS);
+            Toast.error(ERRORS.NO_DEFAULTS);
         });
     }
 
@@ -100,10 +113,10 @@ export default class Image extends React.Component {
                 isModerated: false
             });
 
-            Toast.error(MODERATION);
+            Toast.error(ERRORS.MODERATION);
         }).catch(() => {
-            Toast.error(UPLOAD_ERROR);
-            Log.error(e, 'Failed image upload');
+            Toast.error(ERRORS.UPLOAD_ERROR);
+            Log.error(e, ERRORS.FAILED_UPLOAD);
         });
         /* eslint-enable camelcase*/
     }
@@ -116,9 +129,7 @@ export default class Image extends React.Component {
         e.stopPropagation();
 
         Cloudinary.load((e_, err) => {
-            if (err != null) {
-                Toast.error(UPLOAD_ERROR);
-            }
+            if (err != null) Toast.error(ERRORS.UPLOAD_ERROR);
             /* eslint-disable camelcase*/
             Cloudinary.instance.openUploadWidget({
                 cloud_name: GLOBALS.CLOUDINARY_CLOUD_NAME || 'changemyworldnow',
@@ -145,7 +156,7 @@ export default class Image extends React.Component {
 
     defaultUpload(e) {
         var postURL = this.props.data._links.user_image.href;
-        var imageURL = this.state.defaultsCLR[this.state.selected].src;
+        var imageURL = _.get(this.state.defaultsCLR, ['name', this.state.selected]).src;
         var imageID = imageURL.replace('.png', '');
 
         e.stopPropagation();
@@ -162,7 +173,7 @@ export default class Image extends React.Component {
     hideModal() {
         this.setState({
             uploaderOn: false,
-            page: 'welcome',
+            page: 'welcome'
         });
     }
 
