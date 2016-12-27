@@ -48,8 +48,6 @@ const HEADINGS_OLD = {
     'SCREEN16': 'WHAT THINGS ARE YOU MOST INTERESTED IN LEARNING ABOUT?',
 };
 
-var version = HEADINGS_NEW;
-
 class SurveyModal extends React.Component {
     constructor(props) {
         super();
@@ -61,7 +59,6 @@ class SurveyModal extends React.Component {
 
         this.open = this.open.bind(this);
         this.close = this.close.bind(this);
-        this.version = HEADINGS_NEW;
     }
 
     componentWillReceiveProps(nextProps) {
@@ -79,6 +76,8 @@ class SurveyModal extends React.Component {
     }
 
     render() {
+        var version = HEADINGS_NEW;
+
         if (this.state.data && this.state.data['screen-6'] &&
             _.isArray(this.state.data['screen-6']['dropzone-0'])) {
             version = HEADINGS_OLD;
