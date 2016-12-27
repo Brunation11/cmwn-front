@@ -91,14 +91,15 @@ var Component = React.createClass({
     login: function (e) {
         var dataUrl;
         var req;
-        var user = this.getUsernameWithoutSpaces();
+        var user = this.getInputWithoutSpaces('login');
+        var password = this.getInputWithoutSpaces('password');
         dataUrl = this.state.overrideLogin || this.props.currentUser._links.login.href;
         ga('send', 'event', 'Login', 'Attempted');
         req = HttpManager.POST({
             url: dataUrl,
         }, {
             'username': user,
-            'password': this.state.password
+            'password': password
         });
         req.then(res => {
             if (res.response && res.response.status && res.response.detail &&
@@ -150,7 +151,7 @@ var Component = React.createClass({
             !this.state.username ||
             !this.state.password) return;
 
-        user = this.getUsernameWithoutSpaces();
+        user = this.getInputWithoutSpaces('login');
 
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
             if (this.props.data._links && this.props.data._links.login == null) {
@@ -220,16 +221,16 @@ var Component = React.createClass({
             }
         }
     },
-    getUsernameWithoutSpaces: function () {
-        var newLogin;
+    getInputWithoutSpaces: function (field) {
+        var newField;
         try {
-            newLogin = this.refs.login.getValue().replace(/\s/g, '');
+            newField = this.refs[field].getValue().replace(/\s/g, '');
         } catch(err) {
             //ref not yet mounted, probably somebody getting antsy and
             //hammering the enter key.
-            newLogin = '';
+            newField = '';
         }
-        return newLogin;
+        return newField;
     },
     renderLogin: function () {
         return (
