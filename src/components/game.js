@@ -4,6 +4,7 @@ import Screenfull from 'screenfull';
 import ClassNames from 'classnames';
 import _ from 'lodash';
 import {Button, Glyphicon} from 'react-bootstrap';
+import Shortid from 'shortid';
 
 import getEventsForGame from 'components/game_events';
 import GLOBALS from 'components/globals';
@@ -50,9 +51,14 @@ export class Game extends React.Component {
 
         this.state = {
             isFullscreen: false,
+            gameKey: Shortid.generate(),
             fullscreenFallback: false,
             demo: false
         };
+        this.gameEventHandler = this.gameEventHandler.bind(this);
+        this.listenForEsc = this.listenForEsc.bind(this);
+        this.checkForPortrait = this.checkForPortrait.bind(this);
+        this.resizeFrame = this.resizeFrame.bind(this);
     }
 
     componentWillMount() {
@@ -113,6 +119,7 @@ export class Game extends React.Component {
 
         this.setState({
             currentGame: nextProps.game,
+            gameKey: Shortid.generate(),
             eventHandler: getEventsForGame(
                 EVENT_PREFIX,
                 nextProps.game,
@@ -150,18 +157,19 @@ export class Game extends React.Component {
     }
 
     setEvent() {
-        window.addEventListener('game-event', this.gameEventHandler.bind(this));
-        window.addEventListener('platform-event', this.gameEventHandler.bind(this));
-        window.addEventListener('keydown', this.listenForEsc.bind(this));
-        window.addEventListener('resize', this.checkForPortrait.bind(this));
-        window.addEventListener('orientationchange', this.resizeFrame.bind(this));
+        window.addEventListener('game-event', this.gameEventHandler);
+        window.addEventListener('platform-event', this.gameEventHandler);
+        window.addEventListener('keydown', this.listenForEsc);
+        window.addEventListener('resize', this.checkForPortrait);
+        window.addEventListener('orientationchange', this.resizeFrame);
     }
 
     clearEvent() {
         window.removeEventListener('game-event', this.gameEventHandler);
+        window.removeEventListener('platform-event', this.gameEventHandler);
         window.removeEventListener('keydown', this.listenForEsc);
         window.removeEventListener('resize', this.checkForPortrait);
-        window.addEventListener('orientationchange', this.resizeFrame);
+        window.removeEventListener('orientationchange', this.resizeFrame);
     }
 
     listenForEsc(e) {
@@ -238,6 +246,7 @@ export class Game extends React.Component {
                     </div>
                     <iframe
                         ref="gameRef"
+                        key={this.state.gameKey}
                         className={ClassNames('game-frame', {
                             portrait: this.state.isPortrait
                         })}
