@@ -72,6 +72,12 @@ class ChangePassword extends React.Component {
             Toast.error(ERRORS.NO_MATCH);
             /** @TODO MPR, 11/19/15: check on change, not submit*/
         }
+
+        this.setState({
+            current: '',
+            new: '',
+            confirm: ''
+        });
     }
 
     confirmReLogin() {

@@ -118,7 +118,10 @@ var SiteNav = React.createClass({
 
         try {
             _.map(menuItems, item => {
-                if (window.sessionStorage.activeItem === item.label) {
+                if (window.sessionStorage.activeItem + '' !== 'undefined' && (
+                        window.sessionStorage.activeItem === item.label ||
+                        window.sessionStorage.activeItem === item.uuid
+                )) {
                     return;
                 } else if (currentUrl === item.url) {
                     window.sessionStorage.activeItem = item.label;
@@ -126,7 +129,10 @@ var SiteNav = React.createClass({
             });
         } catch(error) {
             _.map(menuItems, item => {
-                if (window._sessionStorage.activeItem === item.label) {
+                if (window._sessionStorage.activeItem + '' !== 'undefined' && (
+                        window._sessionStorage.activeItem === item.label ||
+                        window._sessionStorage.activeItem === item.uuid
+                )) {
                     return;
                 } else if (currentUrl === item.url) {
                     window._sessionStorage.activeItem = item.label;
