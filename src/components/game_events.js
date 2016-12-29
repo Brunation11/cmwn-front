@@ -190,7 +190,12 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
             }
         },
         getFriend: function (e) {
-            if (!e.gameData.friend_id) return;
+            if (
+                !e || !e.gameData || e.gameData.friend_id == null ||
+                !_links || _links.user == null
+            ) {
+                return;
+            }
             HttpManager.GET(_links.user.href + '/' + e.gameData.friend_id)
                 .then(server => {
                     var friend = server.response;
@@ -203,7 +208,7 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
                 .catch(err => Log.error(err));
         },
         getFriends: function (e) {
-            if (_links.friend) {
+            if (_links && _links.friend != null) {
                 HttpManager.GET(_links.friend.href)
                     .then(server => {
                         var friends = _.map(server.response._embedded.friend, friend => {
