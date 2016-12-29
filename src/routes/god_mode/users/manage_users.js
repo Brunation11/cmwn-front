@@ -38,6 +38,12 @@ export class ManageUsers extends React.Component {
     constructor() {
         super();
         this.deleteAction = this.deleteAction.bind(this);
+        this.state = {
+            adultCode: '',
+            childCode: '',
+        };
+        this.getCount('ADULT');
+        this.getCount('CHILD');
     }
 
     componentWillReceiveProps(nextProps) {
@@ -69,6 +75,20 @@ export class ManageUsers extends React.Component {
         Actions.dispatch.START_RELOAD_PAGE(this.props.state);
     }
 
+    getCount(type) {
+        HttpManager.GET({
+            url: GLOBALS.API_URL + 'user?type=' + type
+        }).then(res => {
+            if (type === 'ADULT') {
+                this.setState({adultCode: res.response.total_items});
+            }
+
+            if (type === 'CHILD') {
+                this.setState({childCode: res.response.total_items});
+            }
+        });
+    }
+
     render() {
         var userData;
 
@@ -80,9 +100,17 @@ export class ManageUsers extends React.Component {
                     navMenuId="navMenu"
             >
                 <Panel header={HEADINGS.HEADER} className="standard">
-                    <Button className="purple standard" href={"/sa/user/create"}>
+                    <div className="left">
+                        <h3>
+                        Adult count: {this.state.adultCode} <br/>
+                        Child count: {this.state.childCode} <br/>
+                        </h3>
+                    </div>
+                    <div className="right">
+                    <Button className="purple standard right" href={"/sa/user/create"}>
                         {HEADINGS.CREATE}
                     </Button>
+                    </div>
                     <br/>
                 </Panel>
                 <Panel header={HEADINGS.USERS} className="standard">
