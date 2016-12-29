@@ -7,7 +7,6 @@ import Toast from 'components/toast';
 import Log from 'components/log';
 import History from 'components/history';
 import HttpManager from 'components/http_manager';
-import Store from 'components/store';
 import GLOBALS from 'components/globals';
 
 import Layout from 'layouts/one_col';
@@ -94,6 +93,7 @@ var Component = React.createClass({
         var req;
         var user = this.getUsernameWithoutSpaces();
         dataUrl = this.state.overrideLogin || this.props.currentUser._links.login.href;
+        ga('send', 'event', 'Login', 'Attempted');
         req = HttpManager.POST({
             url: dataUrl,
         }, {
@@ -109,6 +109,7 @@ var Component = React.createClass({
             }
             if (res.status < 300 && res.status >= 200) {
                 Log.info(e, 'User login success');
+                ga('send', 'event', 'Login', 'Success');
                 History.push('/profile');
             } else {
                 Toast.error(ERRORS.LOGIN + (res.response && res.response.data &&
@@ -127,15 +128,22 @@ var Component = React.createClass({
                 return;
             }
             Toast.error(ERRORS.LOGIN + (res.detail ? ' Message: ' + res.detail : ''));
+            ga('send', 'event', 'Login', 'Invalid');
+            //ga('send', 'exception', {
+            //    exDescription: 'Invalid login',
+            //    exFatal: false
+            //});
             Log.log(e, 'Invalid login');
         });
     },
     attemptLogin: function (e) {
-        var user = this.getUsernameWithoutSpaces();
+        var user;
         var logout;
         var logoutUrl;
 
         if (this.state.currentPage === 'forgot-password') return;
+
+        user = this.getUsernameWithoutSpaces();
 
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
             if (this.props.data._links && this.props.data._links.login == null) {
@@ -173,7 +181,6 @@ var Component = React.createClass({
     },
     forgotPass: function (e) {
         var req;
-        var state = Store.getState();
 
         if (this.state.currentPage === 'login') return;
 
@@ -185,7 +192,7 @@ var Component = React.createClass({
                 //unauthenticated visitors have a session and are allowed to take
                 //a handful of actions, like forgot.
                 req = HttpManager.POST({
-                    url: state.currentUser._links.forgot.href,
+                    url: this.props.currentUser._links.forgot.href,
                 }, {
                     'email': this.refs.reset.getValue(),
                 });
@@ -207,7 +214,14 @@ var Component = React.createClass({
         }
     },
     getUsernameWithoutSpaces: function () {
-        var newLogin = this.refs.login.getValue().replace(/\s/g, '');
+        var newLogin;
+        try {
+            newLogin = this.refs.login.getValue().replace(/\s/g, '');
+        } catch(err) {
+            //ref not yet mounted, probably somebody getting antsy and
+            //hammering the enter key.
+            newLogin = '';
+        }
         return newLogin;
     },
     renderLogin: function () {

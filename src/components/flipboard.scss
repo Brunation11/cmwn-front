@@ -45,8 +45,8 @@ $overlay-color: #fff;
         margin: auto;
 
         > a {
+            display: block;
             margin: 0 auto;
-            max-width: $flip-standard-size;
             font-weight: bold;
 
             .link-text {
@@ -125,6 +125,7 @@ $overlay-color: #fff;
             max-width: $flip-standard-size;
             overflow: hidden;
             text-align: left;
+            line-height: normal;
             color: $overlay-color;
 
             &:hover,

@@ -1,6 +1,7 @@
 import _ from 'lodash';
 /** This file exists to resolve a circular dependency between the store and action components*/
 const ACTIONS = [
+    'START_BOOTSTRAP',
     'LOGOUT',
     'PATH_CHANGE',
     'FINISH_BOOTSTRAP',
@@ -15,6 +16,7 @@ const ACTIONS = [
     'END_GET_NEXT_INFINITE_COMPONENT_PAGE',
     'CHANGE_PAGE_ROW_COUNT',
     'END_CHANGE_PAGE_ROW_COUNT',
+    'END_CHANGE_PAGE_ROW_COUNT_FULFILLED',
     'HASH_CHANGE',
     'SEARCH_CHANGE',
     'PAGE_TITLE',

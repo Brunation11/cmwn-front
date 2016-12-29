@@ -89,54 +89,77 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
             var flipId = e.gameData.id || e.gameData.game || e.gameData.flip;
             // TODO MPR 7/14/16: .game and .flip can be removed once all games are in React
             submitFlip(flipId);
-            ga('set', 'dimension5', flipId);
+            ga('send', 'event', 'Game', 'Flip earned', flipId);
         },
         flip: function (e) {
             var flipId = e.gameData.id || e.gameData.game || e.gameData.flip;
             // TODO MPR 7/14/16: .game and .flip can be removed once all games are in React
             submitFlip(flipId);
-            ga('set', 'dimension5', flipId);
+            ga('send', 'event', 'Game', 'Flip earned', flipId);
         },
         save: function (e) {
             var version = 1;
+            var flipId = e.gameData.id || e.gameData.game || e.gameData.flip;
             if (_links.save_game == null) {
                 Log.error('Something went wrong. No game save url was provided. Game data will not be saved');
                 return;
             }
             version = e.gameData.version || version;
-            ga('set', 'metric1', e.gameData.currentScreenIndex);
+            ga('send', 'event', {
+                'eventCategory': 'Game',
+                'eventAction': 'Screen Reached',
+                'eventLabel': flipId,
+                'eventValue': e.gameData.currentScreenIndex,
+                'metric1': e.gameData.currentScreenIndex
+            });
             HttpManager.POST(
                 _links.save_game.href.replace('{game_id}', gameId),
                 {data: e.gameData, version}
             );
         },
-        exit: function () {
+        exit: function (e) {
+            var gameData = e.gameData || {id: undefined, currentScreenIndex: undefined};
+            var flipId = gameData.id || gameData.game || gameData.flip;
+            ga('send', 'event', 'Game', 'Quit', flipId, gameData.currentScreenIndex);
             exitCallback({fullscreenFallback: false});
         },
         init: function (e) {
-            ga('set', 'dimension4', gameId || e.gameData.id || e.gameData.game || e.gameData.flip);
-            HttpManager.GET( _links.save_game.href.replace('{game_id}', gameId))
-                .then(server => e.respond(server.response.data))
-                .catch(err => {
-                    var message = 'failed to get game data for ' + gameId;
-                    if (err.status === 404) {
-                        Log.info(message, err);
-                    } else {
-                        Log.error(message, err);
-                    }
-                });
+            ga('send', 'event', {
+                'eventCategory': 'Game',
+                'eventAction': 'Started',
+                'eventLabel': gameId || e.gameData.id || e.gameData.game || e.gameData.flip,
+                'dimension4': gameId || e.gameData.id || e.gameData.game || e.gameData.flip
+            });
+            //we are not concerned if this HAL link is not present,
+            //this user simply doesn't have permission to save
+            if (_.get(_links, 'save_game.href')) {
+                HttpManager.GET( _links.save_game.href.replace('{game_id}', gameId))
+                    .then(server => e.respond(server.response.data))
+                    .catch(err => {
+                        var message = 'failed to get game data for ' + gameId;
+                        if (err.status === 404) {
+                            Log.info(message, err);
+                        } else {
+                            Log.error(message, err);
+                        }
+                    });
+            }
         },
         getData: function (e) {
-            HttpManager.GET( _links.save_game.href.replace('{game_id}', gameId))
-                .then(server => e.respond(server.response))
-                .catch(err => {
-                    var message = 'failed to get game data for ' + gameId;
-                    if (err.status === 404) {
-                        Log.info(message, err);
-                    } else {
-                        Log.error(message, err);
-                    }
-                });
+            //we are not concerned if this HAL link is not present,
+            //this user simply doesn't have permission to save
+            if (_.get(_links, 'save_game.href')) {
+                HttpManager.GET( _links.save_game.href.replace('{game_id}', gameId))
+                    .then(server => e.respond(server.response))
+                    .catch(err => {
+                        var message = 'failed to get game data for ' + gameId;
+                        if (err.status === 404) {
+                            Log.info(message, err);
+                        } else {
+                            Log.error(message, err);
+                        }
+                    });
+            }
         },
         setData: function (e) {
             var version = 1;
@@ -180,18 +203,22 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
                 .catch(err => Log.error(err));
         },
         getFriends: function (e) {
-            HttpManager.GET(_links.friend.href)
-                .then(server => {
-                    var friends = _.map(server.response._embedded.friend, friend => {
-                        friend._embedded = friend._embedded || {};
-                        friend._embedded.image = friend._embedded.image || {};
-                        friend._embedded.image.url =
-                            friend._embedded.image.url || origin + GLOBALS.DEFAULT_PROFILE;
-                        return friend;
-                    });
-                    e.respond({user: friends});
-                })
-                .catch(err => Log.error(err));
+            if (_links.friend) {
+                HttpManager.GET(_links.friend.href)
+                    .then(server => {
+                        var friends = _.map(server.response._embedded.friend, friend => {
+                            friend._embedded = friend._embedded || {};
+                            friend._embedded.image = friend._embedded.image || {};
+                            friend._embedded.image.url =
+                                friend._embedded.image.url || origin + GLOBALS.DEFAULT_PROFILE;
+                            return friend;
+                        });
+                        e.respond({user: friends});
+                    })
+                    .catch(err => Log.error(err));
+            } else {
+                e.respond({user: []});
+            }
         }
     };
 

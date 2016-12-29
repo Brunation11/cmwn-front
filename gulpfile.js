@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 require('babel-core/register');//for mocha to use es6
 require('app-module-path').addPath(__dirname + '/src');
 /*global require process*/
@@ -5,21 +6,11 @@ require('app-module-path').addPath(__dirname + '/src');
 /*eslint no-console:0 */
 /*eslint-disable vars-on-top */
 var gulp = require('gulp');
-var del = require('del');
 var args = require('yargs').argv;
 var path = require('path');
 var gutil = require('gulp-util');
-var webpack = require('webpack');
-var gulpWebpack = require('webpack-stream');
-var webpackDevConfig = require('./webpack.config.dev.js');
-var webpackProdConfig = require('./webpack.config.prod.js');
 var appPackage = require('./package.json');
-var exec = require('child_process').exec;
-var execSync = require('child_process').execSync;
-var spawn = require('child_process').spawn;
 var eslint = require('gulp-eslint');
-var scsslint = require('gulp-scss-lint');
-var stylish = require('gulp-scss-lint-stylish2');
 var fs = require('fs');
 var eslintConfigJs = JSON.parse(fs.readFileSync('./.eslintrc_platform'));
 var eslintConfigTest = JSON.parse(fs.readFileSync('./.eslintrc_test'));
@@ -37,6 +28,7 @@ var jsonfile = require('jsonfile');
 
 /** @const */
 var APP_PREFIX = 'APP_';
+var isWatchInstance = false;
 
 //mode defaults to development and is selected with the following precedences:
 // --development flag
@@ -44,7 +36,7 @@ var APP_PREFIX = 'APP_';
 // APP_ENV environment variable
 // NODE_ENV environment variable
 var mode = 'development';
-if (args.development || args.prod) {
+if (args.development || args.dev) {
     mode = 'development';
 } else if (args.prod || args.production) {
     mode = 'production';
@@ -81,7 +73,7 @@ ___  ______  ______  ______  ______  ______  ______  ______  ______  ______  ___
  */
 var executeAsProcess = function (command, flags) {
     return function () {
-        var start = spawn(command, flags);
+        var start = require('child_process').spawn(command, flags);
         start.stdout.on('data', function (data) {
             console.log('stdout: ' + data);
         });
@@ -92,8 +84,21 @@ var executeAsProcess = function (command, flags) {
     };
 };
 
-var buildDevelopment = function () {
-    var wpStream = gulpWebpack(webpackDevConfig, null, function (err, stats) {
+var buildDevelopment = function (finish = true) {
+    var task;
+    var execSync = require('child_process').execSync;
+    var wpStream;
+    try {
+        fs.statSync('build/vendor-manifest.json');
+        console.log('Vendor bundle already exists. If you have updated package.json modules,' +
+            'remove this file or rerun `gulp webpack:build-vendor`');
+    } catch(err) {
+        execSync('mkdir -p build');
+        execSync('touch build/vendor-manifest.json');
+        execSync('echo "{}" > build/vendor-manifest.json');
+        buildVendor();
+    }
+    wpStream = require('webpack-stream')(require('./webpack.config.dev.js'), null, function (err, stats) {
         var statsStr = stats.toString({
             colors: true
         });
@@ -116,18 +121,27 @@ var buildDevelopment = function () {
     wpStream.on('error', err => {
         fs.writeFile('build_errors.log', err);
         wpStream.end();
-        throw err;
+        if (!isWatchInstance) {
+            throw err;
+        }
     });
-    return gulp.src('./src/app.js')
+
+    task = gulp.src('./src/app.js')
         .pipe(wpStream)
-        .pipe(gulp.dest('./build'));
+        .on('error', function () {
+            this.emit('end');
+        });
+    if (finish) {
+        task = task.pipe(gulp.dest('./build'));
+    }
+    return task;
 };
 
 var buildProduction = function () {
     // modify some webpack config options
-    var myConfig = webpackProdConfig;
+    var myConfig = require('./webpack.config.prod.js');
 
-    var wpStream = gulpWebpack(myConfig, webpack, function (err, stats) {
+    var wpStream = require('webpack-stream')(myConfig, require('webpack'), function (err, stats) {
         var statsStr = stats.toString({
             colors: true
         });
@@ -160,68 +174,90 @@ var buildProduction = function () {
         .pipe(gulp.dest('./build'));
 };
 
+var buildVendor = function () {
+    var execSync = require('child_process').execSync;
+    execSync('node ./node_modules/webpack/bin/webpack.js --config webpack.config.vendor.js');
+};
+
 var buildIndexPage = function () {
-    var target = gulp.src('./src/index.php');
+    var inject = require('gulp-inject');
+    var target = gulp.src('./src/index.html');
     var sriHashes = JSON.parse(fs.readFileSync('./build/sri.json'));
 
-    return target
-        .pipe(inject(gulp.src('./build/inline.css'), {
-            starttag: '<!-- inject:style -->',
-            transform: function (filePath, file) {
-                return '<style>\n' + file.contents.toString('utf8') + '\n</style>';
+    target = target.pipe(inject(gulp.src('./build/inline.css'), {
+        starttag: '<!-- inject:style -->',
+        transform: function (filePath, file) {
+            return '<style>\n' + file.contents.toString('utf8') + '\n</style>';
+        }
+    }))
+    .pipe(inject(gulp.src('./build/reset.css'), {
+        starttag: '<!-- inject:reset -->',
+        transform: function (filePath, file) {
+            return '<style>\n' + file.contents.toString('utf8') + '\n</style>';
+        }
+    }))
+    .pipe(inject(gulp.src('./src/app.js', {read: false}), {
+        starttag: '<!-- inject:env -->',
+        transform: function () {
+            //note: we aren't actually doing anything with app.js, but a file is mandatory
+            var output = '<script>';
+            output += '\nwindow.__cmwn = {};';
+            output += '\nwindow.__cmwn.MODE = "production";';
+            output += '\nwindow.__cmwn.VERSION = "' + appPackage.version + '";';
+            _.each(process.env, function (value, key) {
+                if (key.indexOf(APP_PREFIX) === 0) {
+                    console.log('Writing ' + key + ' : ' + value);
+                    output +=
+                        '\nwindow.__cmwn.' +
+                        _.toUpper((key.split(APP_PREFIX)[1])) +
+                        ' = ' + JSON.stringify(value) + ';';
+                }
+            });
+            output += '\n</script>';
+            return output;
+        }
+    }))
+    .pipe(inject(gulp.src('./src/app.js', {read: false}), {
+        starttag: '<!-- app:js -->',
+        transform: function () {
+            if (mode === 'production' || mode === 'prod') {
+                return '<script src="/cmwn-' +
+                    appPackage.version +
+                    '.js" integrity="' +
+                    sriHashes['build/cmwn-' +
+                    appPackage.version + '.js'] +
+                    '" crossorigin="anonymous"></script>';
             }
-        }))
-        .pipe(inject(gulp.src('./build/reset.css'), {
-            starttag: '<!-- inject:reset -->',
-            transform: function (filePath, file) {
-                return '<style>\n' + file.contents.toString('utf8') + '\n</style>';
-            }
-        }))
-        .pipe(inject(gulp.src('./src/app.js', {read: false}), {
-            starttag: '<!-- inject:env -->',
+            return '<script src="/cmwn-' + appPackage.version + '.js"></script>';
+        }
+    }));
+
+    if (mode === 'development') {
+        target = target.pipe(inject(gulp.src('./src/app.js', {read: false}), {
+            starttag: '<!-- app:vendor -->',
             transform: function () {
                 //note: we aren't actually doing anything with app.js, but a file is mandatory
-                var output = '<script>';
-                output += '\nwindow.__cmwn = {};';
-                output += '\nwindow.__cmwn.MODE = "local";';
-                output += '\nwindow.__cmwn.VERSION = "' + appPackage.version + '";';
-                _.each(process.env, function (value, key) {
-                    if (key.indexOf(APP_PREFIX) === 0) {
-                        console.log('Writing ' + key + ' : ' + value);
-                        output +=
-                            '\nwindow.__cmwn.' +
-                            _.capitalize(key.split(APP_PREFIX)[1]) +
-                            ' = ' + JSON.stringify(value) + ';';
-                    }
-                });
-                output += '\n</script>';
+                var output = '<script src="/vendor.bundle.js"></script>';
                 return output;
             }
-        }))
-        .pipe(inject(gulp.src('./src/app.js', {read: false}), {
-            starttag: '<!-- app:js -->',
-            transform: function () {
-                if (mode === 'production' || mode === 'prod') {
-                    return '<script src="/cmwn-' +
-                        appPackage.version +
-                        '.js" integrity="' +
-                        sriHashes['build/cmwn-' +
-                        appPackage.version + '.js'] +
-                        '" crossorigin="anonymous"></script>';
-                }
-                return '<script src="/cmwn-' + appPackage.version + '.js"></script>';
-            }
-        }))
-        .pipe(gulp.dest('./build'));
+        }));
+    }
+
+    console.log('finishing index build');
+    return target.pipe(gulp.dest('./build'));
 };
 
 var zipTheBuild = function () {
+    var zip = require('gulp-zip');
     return gulp.src(['build/**/*.*', 'build/.htaccess'])
       .pipe(zip('build.zip'))
       .pipe(gulp.dest('./'));
 };
 
 var buildAndCopyStaticResources = function () {
+    var scssGlobals = require('./scss_globals.js');
+    var mergeStream = require('merge-stream');
+    var ExtractTextPlugin = require('extract-text-webpack-plugin');
     var config = {
         resolve: {
             root: path.resolve('./src'),
@@ -262,7 +298,12 @@ var buildAndCopyStaticResources = function () {
 
     var favicon = gulp.src('./src/media/favicon.ico').pipe(gulp.dest('./build'));
 
+    var logo = gulp.src('./src/media/cmwn-logo.png').pipe(gulp.dest('./build'));
+
     var htaccess = gulp.src('./.htaccess').pipe(gulp.dest('./build'));
+
+    //from https://github.com/louisremi/background-size-polyfill
+    var ie8CoverFix = gulp.src('./src/media/backgroundsize.min.htc').pipe(gulp.dest('./build'));
 
     var packageJson = gulp.src('./package.json').pipe(gulp.dest('./build'));
 
@@ -273,7 +314,7 @@ var buildAndCopyStaticResources = function () {
     var robots = gulp.src('./src/robots.txt').pipe(gulp.dest('./build'));
 
     var primary = gulp.src('./src/styles.js')
-        .pipe(gulpWebpack(config, webpack, function (err, stats) {
+        .pipe(require('webpack-stream')(config, require('webpack'), function (err, stats) {
             if (err) {
                 throw new gutil.PluginError('webpack:style', err);
             }
@@ -282,7 +323,7 @@ var buildAndCopyStaticResources = function () {
             }));
 
             //a little cleanup of intermediate files
-            del(['./build/styles.js']);
+            require('del')(['./build/styles.js']);
         }))
         .pipe(gulp.dest('./build'));
     return mergeStream(reset, primary);
@@ -301,6 +342,56 @@ var selectBuildMode = function () {
     return buildDevelopment();
 };
 
+
+var runUnitTests = function (filePath = 'src/**/*.test.js') {
+    var mocha = require('gulp-mocha');
+    process.env.NODE_ENV = 'production';
+    process.env.BABEL_ENV = 'production';
+    var tests = gulp.src([filePath], {read: false})
+        .pipe(mocha({
+            require: ['./src/testdom.js'],
+            timeout: 2000,
+            reporter: 'min'
+        }))
+        .once('error', (err) => {
+            console.log('SOMETHING HAPPENED:' + err);
+            process.exit(1);
+        })
+        .once('end', () => {
+            process.exit();
+        });
+    tests.on('error', function (err) {
+        console.log('SOMETHING HAPPENED:' + err);
+    });
+    return tests;
+};
+
+var runCoverage = function (fileName) {
+    var spawnArgs = [];
+//    var proc;
+
+    console.log('Running tests for ' + (fileName == null ? 'all files' : fileName));
+    if (fileName != null) {
+        spawnArgs.push('-f');
+        spawnArgs.push(fileName);
+    }
+//    proc =
+    require('child_process').spawn('./test.sh', spawnArgs,
+        {stdio: [process.stdin, process.stdout, process.stderr]});
+//
+//    proc.on('exit', function (exitCode) {
+//        console.log('process exited with code ' + exitCode);
+//    });
+//
+//    proc.stdout.on('data', function (chunk) {
+//        console.log('' + chunk);
+//    });
+//
+//    proc.stdout.on('end', function () {
+//        console.log('finished collecting data chunks from stdout');
+//    });
+};
+
 /*
 ___  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______  ______  ___
  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__  __)(__
@@ -314,7 +405,42 @@ ___  ______  ______  ______  ______  ______  ______  ______  ______  ______  ___
 gulp.task('default', ['build', 'watch', 'development-server']);
 
 gulp.task('watch', function () {
-    gulp.watch('src/**/*.js', ['test', 'lint', 'showBuildErrors']);
+    var execSync = require('child_process').spawn;
+    execSync('./start-watch.sh', [], {stdio: [process.stdin, process.stdout, process.stderr]});
+});
+
+gulp.task('end-watch', function () {
+    var execSync = require('child_process').execSync;
+    execSync('tmux kill-session -t front');
+});
+
+gulp.task('watch-code', ['watch-js', 'watch-scss']);
+
+gulp.task('watch-js', function () {
+    isWatchInstance = true;
+    gulp.watch(['src/**/*.js', '!src/**/*.test.js'], ['noStyleIndex']);
+});
+
+gulp.task('watch-scss', function () {
+    gulp.watch(['src/**/*.scss'], ['noBuildIndex']);
+});
+
+gulp.task('watch-test', function () {
+    runCoverage(); //we need to guarentee this has run at least once for individual files to work
+    gulp.watch(['src/**/*.js']).on('change', function (file) {
+        file = file.path.slice(__dirname.length + 1);
+        runCoverage(file);
+    });
+});
+
+gulp.task('watch-lint', ['watch-lint-js', 'watch-lint-scss']);
+
+gulp.task('watch-lint-js', function () {
+    gulp.watch(['src/**/*.js'], ['lint-js']);
+});
+
+gulp.task('watch-lint-scss', function () {
+    gulp.watch(['src/**/*.scss'], ['lint-scss']);
 });
 
 /** watches changes to the js and regenerates the index and sris accordingly */
@@ -336,6 +462,7 @@ gulp.task('build-warning', function () {
     console.log(gutil.colors.yellow('Warning: `gulp webpack:build` does not build the index or some styles.' +
         ' Run `gulp build` to build all artifacts'));
 });
+gulp.task('webpack:build-vendor', buildVendor);
 gulp.task('webpack:build-prod', ['build-warning'], buildProduction);
 gulp.task('webpack:build-production', ['build-warning'], buildProduction);
 gulp.task('webpack:build-dev', ['build-warning'], buildDevelopment);
@@ -343,7 +470,8 @@ gulp.task('webpack:build-development', ['build-warning'], buildDevelopment);
 /** This task converts our JS output to utf-8, as this is what the browser expects when generating SRI hashes
  * This task also ultimately produces our final build artifact. */
 gulp.task('explicit-utf-8', ['webpack:build'], function (done) {
-    exec('iconv -f LATIN1 -t UTF-8 ./build/build.js > ./build/cmwn-' + appPackage.version + '.js', done);
+    require('child_process')
+        .exec('iconv -f LATIN1 -t UTF-8 ./build/build.js > ./build/cmwn-' + appPackage.version + '.js', done);
 });
 /** Convienience Build Aliases */
 // eAP here just lets us restart gulp with appropriate flags
@@ -359,10 +487,14 @@ gulp.task('build-production', executeAsProcess('gulp build', ['build', '--produc
 /*·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´Resource and Static Asset Tasks`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·•·.·´`·.·*/
 gulp.task('index', ['primary-style', 'webpack:build', 'explicit-utf-8', 'sri'], buildIndexPage);
 
+gulp.task('noBuildIndex', ['primary-style', 'explicit-utf-8', 'sri'], buildIndexPage);
+gulp.task('noStyleIndex', ['webpack:build', 'explicit-utf-8', 'sri'], buildIndexPage);
+
 gulp.task('primary-style', buildAndCopyStaticResources);
 
 /** Creates Single Resource Integrity (SRI) hashes for the primary JS*/
 gulp.task('sri', ['webpack:build', 'explicit-utf-8'], function () {
+    var sri = require('gulp-sri');
     return gulp.src('./build/cmwn-' +
         appPackage.version + '.js').pipe(sri({algorithms: ['sha256']})).pipe(gulp.dest('./build'));
 });
@@ -394,19 +526,21 @@ gulp.task('lint-js', function () {
 });
 gulp.task('lint-test', function () {
     return gulp.src(['src/**/*.test.js'])
-        .pipe(eslint(_.defaultsDeep(eslintConfigTest, eslintConfigJs)))
+        .pipe(eslint(_.defaultsDeep(JSON.parse(fs.readFileSync('./.eslintrc_test')), eslintConfigJs)))
         .pipe(eslint.format())
         .pipe(eslint.format('stylish', fs.createWriteStream('testlint.log')))
         .pipe(eslint.failAfterError());
 });
 gulp.task('lint-config', function () {
     return gulp.src(['gulpfile.js', 'webpack.config.dev.js', 'webpack.config.prod.js'])
-        .pipe(eslint(_.defaultsDeep(eslintConfigConfig, eslintConfigJs)))
+        .pipe(eslint(_.defaultsDeep(JSON.parse(fs.readFileSync('./.eslintrc_config')), eslintConfigJs)))
         .pipe(eslint.format())
         .pipe(eslint.format('stylish', fs.createWriteStream('configlint.log')))
         .pipe(eslint.failAfterError());
 });
 gulp.task('lint-scss', function () {
+    var stylish = require('gulp-scss-lint-stylish2');
+    var scsslint = require('gulp-scss-lint');
     var reporter = stylish();
     return gulp.src(['src/**/*.scss'])
         .pipe(scsslint({
@@ -418,27 +552,15 @@ gulp.task('lint-scss', function () {
 });
 
 gulp.task('unit', function () {
-    process.env.NODE_ENV = 'production';
-    process.env.BABEL_ENV = 'production';
-    var tests = gulp.src(['src/**/*.test.js'], {read: false})
-         .pipe(mocha({
-             require: ['./src/testdom.js'],
-             timeout: 2000,
-             reporter: 'min'
-         }))
-         .once('error', () => {
-             process.exit(1);
-         })
-         .once('end', () => {
-             process.exit();
-         });
-    tests.on('error', function (err) {
-        console.log('SOMETHING HAPPENED:' + err);
-    });
-    return tests;
+    var filePath = args.path;
+    if (!filePath || filePath === '') {
+        filePath = undefined;
+    }
+    runUnitTests(filePath);
 });
 
 gulp.task('smoke', function () {
+    var mocha = require('gulp-mocha');
     process.env.NODE_ENV = 'production';
     process.env.BABEL_ENV = 'production';
     var tests = gulp.src(['./smoke.test.js'], {read: false})
@@ -449,24 +571,11 @@ gulp.task('smoke', function () {
     return tests;
 });
 
-gulp.task('coverage', function () {
-    var proc = spawn('./test.sh');
-
-    proc.on('exit', function (exitCode) {
-        console.log('process exited with code ' + exitCode);
-    });
-
-    proc.stdout.on('data', function (chunk) {
-        console.log('' + chunk);
-    });
-
-    proc.stdout.on('end', function () {
-        console.log('finished collecting data chunks from stdout');
-    });
-});
-
+gulp.task('coverage', runCoverage.bind(null, undefined));
 
 gulp.task('e2e', () => {
+    var execSync = require('child_process').execSync;
+    var webdriver = require('gulp-webdriver');
     var overrideHostIP = process.env.DOCKER_HOST_IP;
     var hostIP = overrideHostIP || execSync('docker-machine ip front').toString().split('\n')[0];
     if (hostIP === '' || hostIP == null) {
