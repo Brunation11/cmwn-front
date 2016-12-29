@@ -20,6 +20,7 @@ var redirect = function (path) {
 var routes = [
     { path: 'home(/)', component: Home, title: 'Change My World Now', endpoint: ''},
     { path: 'ginas-corner(/)', onEnter: redirect('/')},
+    { path: 'ginas-corner/ginas-ink(/)', onEnter: redirect('/')},
     { path: 'grown-ups/partnerships-media/ginas-ink(/)', onEnter: redirect('/')},
     { path: 'grown-ups/partnerships-media/press-room/live-interviews(/)', onEnter: redirect('/')},
     { path: 'whats-my-story/my-interests/your-mark/lifestyle-design/your-own-zone(/)',
