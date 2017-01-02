@@ -39,8 +39,8 @@ export class ManageUsers extends React.Component {
         super();
         this.deleteAction = this.deleteAction.bind(this);
         this.state = {
-            adultCode: '',
-            childCode: '',
+            adultCount: '',
+            childCount: '',
         };
         this.getCount('ADULT');
         this.getCount('CHILD');
@@ -80,11 +80,11 @@ export class ManageUsers extends React.Component {
             url: GLOBALS.API_URL + 'user?type=' + type
         }).then(res => {
             if (type === 'ADULT') {
-                this.setState({adultCode: res.response.total_items});
+                this.setState({adultCount: res.response.total_items});
             }
 
             if (type === 'CHILD') {
-                this.setState({childCode: res.response.total_items});
+                this.setState({childCount: res.response.total_items});
             }
         });
     }
@@ -102,8 +102,8 @@ export class ManageUsers extends React.Component {
                 <Panel header={HEADINGS.HEADER} className="standard">
                     <div className="left">
                         <h3>
-                        Adult count: {this.state.adultCode} <br/>
-                        Child count: {this.state.childCode} <br/>
+                        Adult count: {this.state.adultCount} <br/>
+                        Child count: {this.state.childCount} <br/>
                         </h3>
                     </div>
                     <div className="right">

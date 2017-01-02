@@ -51,9 +51,9 @@ class FlipBoard extends React.Component {
 FlipBoard.defaultProps = {
     header: 'Flipboard',
     transform: _.identity,
+    onLoad: _.noop,
     renderNoData: () => null,
     renderFlip: () => <div className="flip" key={Shortid.generate()}></div>,
-    onLoad: _.noop,
     updateParent: _.noop,
 };
 
