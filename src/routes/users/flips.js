@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 import {Panel} from 'react-bootstrap';
 import Shortid from 'shortid';
+import _ from 'lodash';
 
 import Layout from 'layouts/two_col';
 import Flipcase from 'components/flipcase';
 import GenerateDataSource from 'components/datasource';
-import HttpManager from 'components/http_manager';
 
 import './flips.scss';
 
@@ -28,7 +28,7 @@ export class FlipWall extends React.Component {
             xOffset: 0,
             yOffset: 0,
             shelfIndex: 1
-        }
+        };
     }
 
     componentDidMount() {
@@ -155,7 +155,7 @@ export class FlipWall extends React.Component {
                         </div>
                         <button
                             className="nav-btn info-btn"
-                            onClick=''
+                            onClick=""
                         />
                         <button
                             className="nav-btn scroll-btn forward"

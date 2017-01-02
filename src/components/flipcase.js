@@ -27,8 +27,16 @@ export default class Flipcase extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.data && this.props.data !== nextProps.data) this.setState({flips: nextProps.data});
-        if (nextProps.allFlips && this.props.allFlips !== nextProps.allFlips) this.setState({allFlips: nextProps.allFlips});
+        if (nextProps.data && this.props.data !== nextProps.data) {
+            this.setState({
+                flips: nextProps.data
+            });
+        }
+        if (nextProps.allFlips && this.props.allFlips !== nextProps.allFlips) {
+            this.setState({
+                allFlips: nextProps.allFlips
+            });
+        }
     }
 
     renderAll() {

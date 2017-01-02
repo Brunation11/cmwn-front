@@ -62,8 +62,8 @@ $nav-btns: '#{$media-url}a9157cf49a6684031e303ddc28fabd85.png';
                 margin: 0 15%;
                 padding: 0;
                 width: 70%;
-                white-space: nowrap;
                 overflow: hidden;
+                white-space: nowrap;
             }
 
             .earned {
@@ -102,6 +102,7 @@ $nav-btns: '#{$media-url}a9157cf49a6684031e303ddc28fabd85.png';
             .scroll-btn {
                 bottom: 65%;
 
+                // scss-lint:disable NestingDepth, SelectorDepth
                 &.backward {
                     left: 4%;
                     background-position: -50px 4px;
@@ -110,6 +111,7 @@ $nav-btns: '#{$media-url}a9157cf49a6684031e303ddc28fabd85.png';
                 &.forward {
                     background-position: -50px 4px;
                 }
+                // scss-lint:enable NestingDepth, SelectorDepth
             }
 
             .single-flip {
@@ -119,8 +121,8 @@ $nav-btns: '#{$media-url}a9157cf49a6684031e303ddc28fabd85.png';
 
         .all-flips {
             position: relative;
-            padding-bottom: 75%;
             margin: 5% 0;
+            padding-bottom: 75%;
 
             .shelf-container {
                 position: absolute;
@@ -150,16 +152,19 @@ $nav-btns: '#{$media-url}a9157cf49a6684031e303ddc28fabd85.png';
                 padding-bottom: 19%;
                 height: auto;
 
+                // scss-lint:disable NestingDepth, SelectorDepth
                 &::after {
                     position: absolute;
                     content: '';
                 }
+                // scss-lint:enable NestingDepth, SelectorDepth
             }
 
             .scroll-btn {
                 left: 50%;
                 transform: translateX(-50%);
 
+                // scss-lint:disable NestingDepth, SelectorDepth
                 &.backward {
                     top: -2%;
                     background-position: -101px 4px;
@@ -177,6 +182,7 @@ $nav-btns: '#{$media-url}a9157cf49a6684031e303ddc28fabd85.png';
                         background-position: -101px -40px;
                     }
                 }
+                // scss-lint:enable NestingDepth, SelectorDepth
             }
         }
 
