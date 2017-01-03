@@ -2,7 +2,7 @@ version: '2'
 services:
   node:
     container_name: cmwn_front_node
-    build: ./docker/node
+    image: cmwn/front-node
     environment:
       APP_API_URL: "https://api-dev.changemyworldnow.com/"
       APP_GAME_URL: "https://games-qa.changemyworldnow.com/"
