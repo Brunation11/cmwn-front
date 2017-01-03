@@ -2,10 +2,17 @@
 
 $overlay-color: #fff;
 
-.flipboard {
+#cmwn-app .flipboard {
 
     img {
         vertical-align: initial;
+    }
+
+    a {
+
+        &:visited {
+            color: $cmwn-blue;
+        }
     }
 
     .panel-body {
