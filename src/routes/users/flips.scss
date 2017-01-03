@@ -1,0 +1,225 @@
+// start changes
+
+@import 'variables';
+
+$halfway-break-1: 885px;
+
+$background: '#{$media-url}1872fab42d9c57f01edc15bee49d5337.png';
+$trophcase-shelf: '#{$media-url}f39eaf3f4b14221bdf278bba4f25a353.png';
+$shelf: '#{$media-url}66432844da8fb716d11512d97f1e1a68.png';
+$trophy: '#{$media-url}2c290cd012dd70a4d4aa22d41e7b3c87.png';
+$nav-btns: '#{$media-url}a9157cf49a6684031e303ddc28fabd85.png';
+
+.discover-flips {
+    .flip-wall {
+        background: url($background);
+        background-size: 100% 100%;
+
+        .panel-body {
+            position: relative;
+            padding: 0;
+        }
+
+        .label {
+            position: absolute;
+            bottom: 7%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1;
+            width: 100%;
+            text-align: center;
+            color: $cmwn-white;
+            font-family: $cmwn-jade-font;
+            font-size: 22px;
+        }
+
+        .single-flip {
+            width: 25%;
+            height: 180px;
+        }
+
+        .nav-btn {
+            position: absolute;
+            outline: none;
+            border: 0;
+            box-shadow: none;
+            background: url($nav-btns);
+            background-repeat: no-repeat;
+            background-size: auto 200%;
+            width: 38px;
+            height: 44px;
+        }
+
+        .earned-flips {
+            position: relative;
+            background: url($trophcase-shelf);
+            background-repeat: no-repeat;
+            background-position: 0 100%;
+            background-size: 100% auto;
+
+            .earned-container {
+                position: relative;
+                margin: 0 15%;
+                padding: 0;
+                width: 70%;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+
+            .earned {
+                transition: margin 1s;
+                width: 100%;
+            }
+
+            .flipcase {
+                padding: 0;
+            }
+
+            &::before {
+                position: absolute;
+                top: 0;
+                left: 0;
+                background: url($trophy);
+                background-repeat: no-repeat;
+                background-position: 0 60%;
+                background-size: 100% auto;
+                width: 16%;
+                height: 100%;
+                content: '';
+            }
+
+            .info-btn,
+            .scroll-btn.forward {
+                right: 4%;
+            }
+
+
+            .info-btn {
+                bottom: 40%;
+                background-position: 1px 4px;
+            }
+
+            .scroll-btn {
+                bottom: 65%;
+
+                // scss-lint:disable NestingDepth, SelectorDepth
+                &.backward {
+                    left: 4%;
+                    background-position: -50px 4px;
+                }
+
+                &.forward {
+                    background-position: -50px 4px;
+                }
+                // scss-lint:enable NestingDepth, SelectorDepth
+            }
+
+            .single-flip {
+                margin-bottom: 9%;
+            }
+        }
+
+        .all-flips {
+            position: relative;
+            margin: 5% 0;
+            padding-bottom: 75%;
+
+            .shelf-container {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translateX(-50%) translateY(-50%);
+                width: 70%;
+                height: 81%;
+                overflow: hidden;
+            }
+
+            .shelves {
+                transition: margin 1s;
+            }
+
+            .flipcase {
+                position: relative;
+                background: url($shelf);
+                background-repeat: no-repeat;
+                background-position: 0 100%;
+                background-size: 100% auto;
+                padding: 2% 0 7%;
+                width: 100%;
+            }
+
+            .single-flip {
+                padding-bottom: 19%;
+                height: auto;
+
+                // scss-lint:disable NestingDepth, SelectorDepth
+                &::after {
+                    position: absolute;
+                    content: '';
+                }
+                // scss-lint:enable NestingDepth, SelectorDepth
+            }
+
+            .scroll-btn {
+                left: 50%;
+                transform: translateX(-50%);
+
+                // scss-lint:disable NestingDepth, SelectorDepth
+                &.backward {
+                    top: -2%;
+                    background-position: -101px 4px;
+
+                    &:hover {
+                        background-position: -101px -40px;
+                    }
+                }
+
+                &.forward {
+                    bottom: -2%;
+                    background-position: -101px 4px;
+
+                    &:hover {
+                        background-position: -101px -40px;
+                    }
+                }
+                // scss-lint:enable NestingDepth, SelectorDepth
+            }
+        }
+
+        @media (max-width: $device-portrait-break) {
+            .panel-body {
+                height: 85vh;
+            }
+
+            .nav-btn {
+                display: none;
+            }
+
+            .earned-flips {
+                .flipcase {
+                    margin: 0 0 0 15%;
+                    width: 85%;
+                }
+
+                .single-flip {
+                    height: 120px;
+                }
+
+                .label {
+                    bottom: 6%;
+                    font-size: 12px;
+                }
+            }
+
+            .all-flips {
+                padding-bottom: 110%;
+
+                .shelf-container {
+                    width: 100%;
+                    overflow: auto;
+                }
+            }
+
+        }
+    }
+}

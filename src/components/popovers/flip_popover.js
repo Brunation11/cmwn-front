@@ -4,6 +4,9 @@ import Shortid from 'shortid';
 import Moment from 'moment';
 import ClassNames from 'classnames';
 
+import Globals from 'components/globals';
+import IB_IDS from 'components/ib_ids';
+
 import 'components/popovers/popover.scss';
 
 export default class FlipPopover extends React.Component {
@@ -35,12 +38,19 @@ export default class FlipPopover extends React.Component {
     }
 
     render() {
-        if (!this._mounted) {
-            return null;
+        var flipID = this.state.element.flip_id;
+        var mediaID;
+
+        if (!this._mounted) return null;
+
+        if (IB_IDS.FLIPS[flipID] && IB_IDS.FLIPS[flipID][this.state.status]) {
+            mediaID = IB_IDS.FLIPS[flipID][this.state.status];
+        } else {
+            mediaID = IB_IDS.FLIPS.default;
         }
 
         return (
-            <div className={ClassNames('single-flip', {hidden: this.state.error})}>
+            <div className={ClassNames('single-flip', flipID, {hidden: this.state.error})}>
                 <ButtonToolbar id={Shortid.generate()}>
                     <OverlayTrigger
                         trigger={this.state.trigger}
@@ -65,7 +75,7 @@ export default class FlipPopover extends React.Component {
                                 {this.state.element.description}
                             </Popover>}>
                             <img
-                                src={`/flips/${this.state.element.flip_id}-${this.state.status}.gif`}
+                                src={`${Globals.MEDIA_URL}${mediaID}`}
                                 onError={ () => {
                                     this.setState({error: true});
                                 } }

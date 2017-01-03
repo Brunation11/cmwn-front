@@ -67,7 +67,7 @@ var routes = [
     { path: 'user/:id/edit(/)', onEnter: redirect('/profile/:id/edit')},
     { path: 'users/:id/edit(/)', onEnter: redirect('/profile/:id/edit')},
     { path: '/trophycase(/)', title: 'Flips', endpoint: '/flip', component: Flips},
-    { path: 'user/:id/trophycase(/)', title: 'My Earned Flips', endpoint: '/user/:id/flip', component: Flips},
+    //{ path: 'user/:id/trophycase(/)', title: 'My Earned Flips', endpoint: '/user/:id/flip', component: Flips},
     { path: 'student/:id(/)', title: 'Profile', endpoint: 'user/:id', component: Profile},
     { path: 'profile/:id(/)', title: 'Profile', endpoint: 'user/:id', component: Profile},
     { path: 'student/edit(/)', title: 'Edit Student', endpoint: '$$me', component: StudentEdit },
