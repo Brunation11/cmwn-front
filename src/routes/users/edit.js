@@ -89,13 +89,27 @@ export class EditProfile extends React.Component {
         var isStudent;
         state = _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {};
         isStudent = props.isStudent !== null && props.isStudent !== undefined ? props.isStudent : true;
-        this.state = _.defaults({}, state, {isStudent: isStudent, dob: new Date().toISOString()});
+        this.state = _.defaults(
+            {},
+            state,
+            {
+                isStudent: isStudent,
+                dob: Moment().utc().format(),
+                birthdate: Moment().utc().format()
+            }
+        );
     }
 
     componentDidMount() {
         var state;
         if (this.props.data && this.props.data.birthdate) {
-            state = _.defaults({}, this.props.data, {dob: new Date(this.props.data.birthdate).toISOString()});
+            state = _.defaults(
+                {},
+                this.props.data,
+                {
+                    dob: Moment(this.props.data.birthdate).utc().format()
+                }
+            );
         } else {
             state = this.props.data;
         }
@@ -106,7 +120,13 @@ export class EditProfile extends React.Component {
     componentWillReceiveProps(nextProps) {
         var state;
         if (nextProps.data && nextProps.data.birthdate) {
-            state = _.defaults({}, nextProps.data, {dob: new Date(nextProps.data.birthdate).toISOString()});
+            state = _.defaults(
+                {},
+                nextProps.data,
+                {
+                    dob: Moment(nextProps.data.birthdate).utc().format()
+                }
+            );
         } else {
             state = nextProps.data;
         }
