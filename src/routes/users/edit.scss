@@ -30,9 +30,11 @@ $btns: '#{$media-url}0c7044bc6e88f37a8910966dba68fe47.png';
 
     label {
         text-transform: uppercase;
+        letter-spacing: 1px;
         color: $cmwn-white;
         font-family: $cmwn-jade-font;
         font-size: 1.25rem;
+        font-weight: 100;
     }
 
     .form-control:not(.birthday-input) {
@@ -110,6 +112,7 @@ $btns: '#{$media-url}0c7044bc6e88f37a8910966dba68fe47.png';
 
         .username-label {
             margin: 6px 0 0;
+            letter-spacing: 1px;
             color: $cmwn-white;
             font-size: 1.25rem;
         }
