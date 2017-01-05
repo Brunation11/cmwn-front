@@ -2,7 +2,9 @@
 
 $overlay-color: #fff;
 
+//scss-lint:disable IdSelector, SelectorDepth
 #cmwn-app .flipboard {
+//scss-lint:enable IdSelector
 
     img {
         vertical-align: initial;

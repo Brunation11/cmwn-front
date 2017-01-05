@@ -1,6 +1,8 @@
-@import '../variables';
+@import 'variables';
 
+//scss-lint:disable IdSelector
 #cmwn-app .sidebar {
+//scss-lint:enable IdSelector
     .username,
     .username a {
         cursor: pointer;
