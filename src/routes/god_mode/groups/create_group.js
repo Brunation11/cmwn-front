@@ -1,0 +1,328 @@
+import React from 'react';
+import _ from 'lodash';
+import {Button, Input, Panel} from 'react-bootstrap';
+import { connect } from 'react-redux';
+
+import HttpManager from 'components/http_manager';
+import Toast from 'components/toast';
+import Layout from 'layouts/god_mode_two_col';
+import GLOBALS from 'components/globals';
+import Form from 'components/form';
+import Log from 'components/log';
+import EditMeta from 'components/edit_meta';
+import 'routes/god_mode/groups/create_group.scss';
+
+export const PAGE_UNIQUE_IDENTIFIER = 'god-mode-create-group';
+
+const HEADINGS = {
+    CREATE: 'Create Group'
+};
+
+const INVALID_SUBMISSION = 'Invalid submission. Please update fields highlighted in red and submit again';
+const BAD_CREATE = 'There was a problem creating Group. Please try again later.';
+
+var mapStateToProps;
+var Page;
+
+export class CreateGroup extends React.Component {
+    constructor() {
+        super();
+        this.state = {
+            title: '',
+            description: '',
+            organization_id: '', //eslint-disable-line camelcase
+            parent_id: null, //eslint-disable-line camelcase
+            type: '',
+            meta: {},
+            types: [
+                {
+                    text: '---',
+                    value: null
+                },
+                {
+                    text: 'school',
+                    value: 'school'
+                },
+                {
+                    text: 'class',
+                    value: 'class'
+                }
+            ],
+            orgs: [
+                {
+                    text: '---',
+                    value: null
+                }
+            ],
+            groups: [
+                {
+                    text: '---',
+                    value: null,
+                    organization_id: null //eslint-disable-line camelcase
+                }
+            ]
+        };
+    }
+
+    submitData() {
+        var meta = this.refs.meta.getMeta();
+        var postData;
+
+        if (meta === 'forbid_submit') {
+            return;
+        }
+
+        postData = {
+            title: this.state.title,
+            meta: meta,
+            description: this.state.description,
+            organization_id: this.state.organization_id, //eslint-disable-line camelcase
+            type: this.state.type,
+        };
+
+        if (this.refs.formRef.isValid()) {
+            HttpManager.POST(`${GLOBALS.API_URL}group`, postData).then((res) => {
+                Toast.success('Group Created');
+                this.setState({group_id: res.response.group_id}); //eslint-disable-line camelcase
+            }).catch(err => {
+                Toast.error(BAD_CREATE + (err.message ? ' Message: ' + err.message : ''));
+                Log.log('Server refused Group update', err, postData);
+            });
+        } else {
+            Toast.error(INVALID_SUBMISSION);
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({props: nextProps});
+    }
+
+    componentDidMount() {
+        var promises = [];
+        promises.push(
+            HttpManager.GET({
+                url: `${GLOBALS.API_URL}group?type=school`
+            })
+        );
+        promises.push(
+            HttpManager.GET({
+                url: `${GLOBALS.API_URL}org`
+            })
+        );
+
+        Promise.all(promises).then(responses => {
+            var groups = {};
+            var orgs = {};
+            groups[0] = {text: '---', value: null, organization_id: null}; //eslint-disable-line camelcase
+            orgs[0] = {text: '---', value: null};
+            _.each(responses[0].response._embedded.group, function (group) {
+                groups[group.group_id] = {
+                    text: group.title,
+                    value: group.group_id,
+                    organization_id: group.organization_id //eslint-disable-line camelcase
+                };
+            });
+
+            _.each(responses[1].response._embedded.org, function (org) {
+                orgs[org.org_id] = {text: org.title, value: org.org_id};
+            });
+            this.setState({groups: groups, orgs: orgs});
+        });
+    }
+
+    shouldComponentUpdate() {
+        return (true);
+    }
+
+    renderEditableTitle() {
+        return (
+            <Input
+                type="text"
+                value={this.state.title}
+                placeholder="Title"
+                label="Group Title:"
+                validate="required"
+                ref="titleInput"
+                name="titleInput"
+                validationEvent="onBlur"
+                hasFeedback
+                onChange={
+                    e => this.setState({
+                        title: e.target.value
+                    })
+                }
+            />
+        );
+    }
+
+    renderEditableDescription() {
+        return (
+            <Input
+                type="text"
+                value={this.state.description}
+                placeholder="Description"
+                label="Description:"
+                validate="required"
+                ref="descriptionInput"
+                name="descriptionInput"
+                validationEvent="onBlur"
+                hasFeedback
+                onChange={
+                    e => this.setState({
+                        description: e.target.value
+                    })
+                }
+            />
+        );
+    }
+
+    renderDropDownOrg() {
+        if (this.state.parent_id &&
+            this.state.groups[this.state.parent_id] &&
+            this.state.groups[this.state.parent_id].organization_id
+        ) {
+            return (
+                <div className="drop-down">
+                    <label className="control-label">
+                        Organization:
+                    </label>
+                    {this.state.orgs[this.state.groups[this.state.parent_id].organization_id].text}
+
+                </div>
+            );
+        }
+        return (
+            <div className="drop-down">
+                <label className="control-label">
+                    Organization:
+                </label>
+                <select
+                    className="select-options"
+                    onChange={e => this.setState({
+                        organization_id: e.target.value //eslint-disable-line camelcase
+                    })}
+                >
+                    {_.map(this.state.orgs, function (item){
+                        return (<option value={item.value}>{item.text}</option>);
+                    })}
+                </select>
+            </div>
+        );
+    }
+
+    renderDropDownParent() {
+        return (
+            <div className="drop-down">
+                <label className="control-label">
+                    Parent:
+                </label>
+                <select
+                    className="select-options"
+                    onChange={e => {
+                        var orgId = null;
+                        if (this.state.groups[e.target.value]) {
+                            orgId = this.state.groups[e.target.value].organization_id;
+                        }
+                        this.setState({
+                            parent_id: e.target.value, //eslint-disable-line camelcase
+                            organization_id: orgId //eslint-disable-line camelcase
+                        });
+                    }}
+                >
+                    {_.map(this.state.groups, function (item){
+                        return (<option value={item.value}>{item.text}</option>);
+                    })}
+                </select>
+            </div>
+        );
+    }
+
+    renderDropDownType() {
+        return (
+            <div className="drop-down">
+                <label className="control-label">
+                    Type:
+                </label>
+                <select
+                    className="select-options"
+                    onChange={e => this.setState({type: e.target.value})}
+                >
+                    {_.map(this.state.types, function (item) {
+                        return (<option value={item.value}>{item.text}</option>);
+                    })}
+                </select>
+            </div>
+        );
+    }
+
+    renderGroupFields() {
+        return (<div>
+            <Form ref="formRef">
+                {this.renderDropDownType()}
+                {this.renderDropDownParent()}
+                {this.renderDropDownOrg()}
+                {this.renderEditableTitle()}
+                {this.renderEditableDescription()}
+            </Form>
+                <EditMeta ref="meta" data={this.state.meta}/>
+                <br/>
+                <br/>
+                <Button className="green standard left"
+                        onClick={this.submitData.bind(this)}>
+                        Save
+                </Button>
+            </div>
+        );
+    }
+
+    renderGroupCreateSuccess() {
+        return (
+            <div className="standard">
+                <p> Group created successfully.
+                    click <a href={`/${this.state.type}/${this.state.group_id}`}>here</a> to visit profile.
+                </p>
+                <p> click <a href="/sa/group/create">here</a> to create another group</p>
+            </div>
+        );
+    }
+
+    render() {
+        if (this.state === null || _.isEmpty(this.state)) return null;
+
+        return (
+            <Layout currentUser={this.props.currentUser} navMenuId="navMenu">
+                <div className="god-create-group">
+                    <Panel header={`${HEADINGS.CREATE}`}
+                        className="standard"
+                    >
+                        <div className="center">
+                            {this.state.group_id ? this.renderGroupCreateSuccess() : this.renderGroupFields()}
+                        </div>
+                    </Panel>
+                </div>
+            </Layout>
+        );
+    }
+}
+
+mapStateToProps = state => {
+    var currentUser = {};
+    var loading = true;
+
+    if (state.page) {
+        loading = state.page.loading;
+    }
+
+    if (state.currentUser != null) {
+        currentUser = state.currentUser;
+    }
+
+    return {
+        loading,
+        currentUser
+    };
+};
+
+Page = connect(mapStateToProps)(CreateGroup);
+export default Page;
+
