@@ -57,7 +57,6 @@ release:
       code: |-
         echo "Uploading to S3"
         python /deploy_to_s3.py -v --version $VERSION
-
 deploy:
   box:
     id: cmwn/python
