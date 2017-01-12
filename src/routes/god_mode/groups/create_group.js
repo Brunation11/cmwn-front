@@ -15,11 +15,21 @@ import 'routes/god_mode/groups/create_group.scss';
 export const PAGE_UNIQUE_IDENTIFIER = 'god-mode-create-group';
 
 const HEADINGS = {
-    CREATE: 'Create Group'
+    CREATE: 'Create Group',
+    ORG: 'Organization',
+    PARENT: 'Parent',
+    SAVE: 'Save',
+    TYPE: 'Type',
+    CLICK: 'click',
+    HERE: 'here',
+    VISIT: 'to visit profile.',
+    ANOTHER: 'to create another group.'
 };
 
 const INVALID_SUBMISSION = 'Invalid submission. Please update fields highlighted in red and submit again';
 const BAD_CREATE = 'There was a problem creating Group. Please try again later.';
+const GROUP_CREATE_SUCCESS = 'Group created successfully';
+const SERVER_REFUSE = 'Server refused group creation';
 
 var mapStateToProps;
 var Page;
@@ -82,11 +92,11 @@ export class CreateGroup extends React.Component {
 
         if (this.refs.formRef.isValid()) {
             HttpManager.POST(`${GLOBALS.API_URL}group`, postData).then((res) => {
-                Toast.success('Group Created');
+                Toast.success(GROUP_CREATE_SUCCESS);
                 this.setState({group_id: res.response.group_id}); //eslint-disable-line camelcase
             }).catch(err => {
                 Toast.error(BAD_CREATE + (err.message ? ' Message: ' + err.message : ''));
-                Log.log('Server refused Group update', err, postData);
+                Log.log(SERVER_REFUSE, err, postData);
             });
         } else {
             Toast.error(INVALID_SUBMISSION);
@@ -184,7 +194,7 @@ export class CreateGroup extends React.Component {
             return (
                 <div className="drop-down">
                     <label className="control-label">
-                        Organization:
+                        {`${HEADINGS.ORG}:`}
                     </label>
                     {this.state.orgs[this.state.groups[this.state.parent_id].organization_id].text}
 
@@ -194,7 +204,7 @@ export class CreateGroup extends React.Component {
         return (
             <div className="drop-down">
                 <label className="control-label">
-                    Organization:
+                    {`${HEADINGS.ORG}:`}
                 </label>
                 <select
                     className="select-options"
@@ -214,7 +224,7 @@ export class CreateGroup extends React.Component {
         return (
             <div className="drop-down">
                 <label className="control-label">
-                    Parent:
+                    {`${HEADINGS.PARENT}:`}
                 </label>
                 <select
                     className="select-options"
@@ -241,7 +251,7 @@ export class CreateGroup extends React.Component {
         return (
             <div className="drop-down">
                 <label className="control-label">
-                    Type:
+                    {`${HEADINGS.TYPE}:`}
                 </label>
                 <select
                     className="select-options"
@@ -269,7 +279,7 @@ export class CreateGroup extends React.Component {
                 <br/>
                 <Button className="green standard left"
                         onClick={this.submitData.bind(this)}>
-                        Save
+                        {`${HEADINGS.SAVE}:`}
                 </Button>
             </div>
         );
@@ -278,10 +288,12 @@ export class CreateGroup extends React.Component {
     renderGroupCreateSuccess() {
         return (
             <div className="standard">
-                <p> Group created successfully.
-                    click <a href={`/${this.state.type}/${this.state.group_id}`}>here</a> to visit profile.
+                <p>
+                    {`${GROUP_CREATE_SUCCESS}.`} {`${HEADINGS.CLICK} `}
+                    <a href={`/${this.state.type}/${this.state.group_id}`}>{`${HEADINGS.HERE} `}</a>
+                    {HEADINGS.VISIT}
                 </p>
-                <p> click <a href="/sa/group/create">here</a> to create another group</p>
+                <p> {HEADINGS.CLICK} <a href="/sa/group/create">{HEADINGS.HERE}</a> {HEADINGS.ANOTHER}</p>
             </div>
         );
     }
@@ -291,12 +303,15 @@ export class CreateGroup extends React.Component {
 
         return (
             <Layout currentUser={this.props.currentUser} navMenuId="navMenu">
-                <div className="god-create-group">
+                <div className="god-create">
                     <Panel header={`${HEADINGS.CREATE}`}
                         className="standard"
                     >
                         <div className="center">
-                            {this.state.group_id ? this.renderGroupCreateSuccess() : this.renderGroupFields()}
+                            {this.state.group_id ?
+                                this.renderGroupCreateSuccess() :
+                                this.renderGroupFields()
+                            }
                         </div>
                     </Panel>
                 </div>
