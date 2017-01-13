@@ -1,0 +1,70 @@
+@import 'variables';
+
+.meta-table {
+
+    .meta-div {
+
+        display: inline-block;
+        clear: both;
+        border: 1px dotted $cmwn-light-blue;
+        padding-top: 15px;
+        width: 100%;
+
+        .btn {
+            float: left;
+            margin-bottom: 20px;
+        }
+
+        .left-input {
+            float: left;
+            padding-right: 1%;
+            padding-left: 1%;
+            width: 45%;
+        }
+
+        .right-input {
+
+            float: left;
+            padding-right: 1%;
+            padding-left: 1%;
+            width: 45%;
+            // scss-lint:disable SelectorFormat
+            .ReactTags__tags {
+                // scss-lint:disable SelectorFormat
+                // scss-lint:disable SelectorDepth
+                // scss-lint:disable NestingDepth
+                .ReactTags__selected {
+                    display: flex;
+                    margin-bottom: 1px;
+                    padding-bottom: 15px;
+                    flex-wrap: wrap;
+                }
+
+                .ReactTags__tag {
+                    margin: 1%;
+                    background: $cmwn-light-blue;
+                    padding-right: 1%;
+                    padding-left: 1%;
+                }
+
+                .ReactTags__tagInput {
+                    margin-left: 1%;
+                    width: 40%;
+                }
+
+                .ReactTags__tagInputField {
+                    width: 100%;
+                }
+            }
+        }
+    }
+
+    .add-meta {
+
+        clear: both;
+
+        .btn {
+            margin-left: 1px;
+        }
+    }
+}

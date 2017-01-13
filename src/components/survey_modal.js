@@ -108,12 +108,14 @@ class SurveyModal extends React.Component {
                                 if ((Object.keys(value)).length === 2 && _.isArray(value['dropzone-0'])) {
                                     body = _.map(value, function (qualities, dropzone){
                                         return (
-                                            <div>
+                                            <div key={dropzone}>
                                                 <p>{HEADINGS[dropzone]}</p>
                                                 <ol>
-                                                    {_.map(qualities, function (quality){
+                                                    {_.map(qualities, function (quality, index){
                                                         return (
-                                                            <li> {quality.replace(/-/g, ' ')} </li>
+                                                            <li key={index}>
+                                                                {quality.replace(/-/g, ' ')}
+                                                            </li>
                                                         );
                                                     })}
                                                 </ol>
@@ -122,10 +124,10 @@ class SurveyModal extends React.Component {
                                     });
 
                                 } else {
-                                    body = <ol>
-                                            {_.map(value, function (data){
+                                    body = <ol key={screen}>
+                                            {_.map(value, function (data, index){
                                                 return (
-                                                    <li>{data.ref.replace(/-/g, ' ')}</li>
+                                                    <li key={index}>{data.ref.replace(/-/g, ' ')}</li>
                                                 );
                                             })}
                                             </ol>;
@@ -133,8 +135,8 @@ class SurveyModal extends React.Component {
                             }
 
                             return (
-                                <div>
-                                    <h4>{version[screen]}</h4>
+                                <div key={screen}>
+                                    <h4 key="heading">{version[screen]}</h4>
                                     {body}
                                 </div>
                             );
