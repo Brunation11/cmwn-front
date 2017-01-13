@@ -355,9 +355,7 @@ export class Profile extends React.Component {
                 </Panel>
                 <Panel
                     header={HEADINGS.TROPHYCASE}
-                    className={ClassNames('standard', {
-                        hidden: !this.state.isStudent
-                    })}
+                    className={ClassNames('standard')}
                 >
                     <FLIP_SOURCE>
                        <Flipcase
@@ -411,7 +409,7 @@ export class Profile extends React.Component {
             return null;
         }
         profile = this.state.user_id === this.props.currentUser.user_id ?
-        this.renderCurrentUserProfile : this.renderUserProfile;
+            this.renderCurrentUserProfile : this.renderUserProfile;
         return (
            <Layout
                currentUser={this.props.currentUser}
