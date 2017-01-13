@@ -12,6 +12,11 @@
         box-shadow: 5px 5px 8px -8px $cmwn-medium-gray;
         background-color: $cmwn-white;
 
+        .wrapper {
+            position: relative;
+            width: 100%;
+        }
+
         a:hover {
             text-decoration: none;
         }
