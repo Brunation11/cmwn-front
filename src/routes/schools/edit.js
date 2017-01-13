@@ -14,6 +14,7 @@ import Toast from 'components/toast';
 import Form from 'components/form';
 import Util from 'components/util';
 import History from 'components/history';
+import GroupCodeChange from 'components/group_code_change';
 
 import Layout from 'layouts/two_col';
 
@@ -172,12 +173,14 @@ export class SchoolEdit extends React.Component {
             return (
                 <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
                     {SCHOOL_EDIT}
+                    <GroupCodeChange currentUser={this.props.currentUser} data={this.props.data}/>
                 </Layout>
             );
         }
         return (
            <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
                 {SCHOOL_EDIT}
+                <GroupCodeChange currentUser={this.props.currentUser} data={this.props.data}/>
                 {''/*<CreateClass data={this.props.data} />*/}
                 <BulkUpload data={this.props.data} url={this.props.data._links.import.href} />
            </Layout>
