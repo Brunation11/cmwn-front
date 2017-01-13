@@ -8,29 +8,39 @@ import Toast from 'components/toast';
 import Layout from 'layouts/god_mode_two_col';
 import Form from 'components/form';
 import Log from 'components/log';
-import GroupCodeChange from 'components/group_code_change';
 import EditMeta from 'components/edit_meta';
 
-export const PAGE_UNIQUE_IDENTIFIER = 'god-mode-edit-group';
+export const PAGE_UNIQUE_IDENTIFIER = 'god-mode-edit-org';
 
 var mapStateToProps;
 var Page;
 
 const HEADINGS = {
-    EDIT: 'Edit Group: ',
-    parent: 'Parent Group',
-    organization: 'Organization',
-    SAVE: 'Save'
+    EDIT: 'Edit Organization: ',
+    SAVE: 'Save',
+    TYPE: 'Type'
 };
 
 const INVALID_SUBMISSION = 'Invalid submission. Please update fields highlighted in red and submit again';
-const BAD_UPDATE = 'There was a problem updating group profile. Please try again later.';
+const BAD_UPDATE = 'There was a problem updating organization profile. Please try again later.';
+const UPDATED = 'Organization Updated';
+const REFUSE_UPDATE = 'Server refused organization update';
 
 
-export class EditGroup extends React.Component {
+export class EditOrg extends React.Component {
     constructor(props) {
         super();
         this.state = props.data.asMutable();
+        this.state.types = [
+            {
+                text: 'district',
+                value: 'district'
+            },
+            {
+                text: 'club',
+                value: 'club'
+            }
+        ];
     }
 
     componentWillReceiveProps(nextProps) {
@@ -41,11 +51,24 @@ export class EditGroup extends React.Component {
         return (true);
     }
 
-    renderStaticFeild(fieldName, value) {
+    renderDropDownType() {
         return (
-            <span className="user-metadata">
-                <p className="standard field">{fieldName}: {value}</p>
-            </span>
+            <div className="drop-down">
+                <label className="control-label">
+                    {`${HEADINGS.TYPE}:`}
+                </label>
+                <br/>
+                <select
+                    defaultValue={this.state.type}
+                    className="select-options"
+                    onChange={e => this.setState({type: e.target.value})}
+                >
+                    {_.map(this.state.types, function (item) {
+                        return (<option key={item.text} value={item.value}>{item.text}</option>);
+                    })}
+                </select>
+                <br/><br/>
+            </div>
         );
     }
 
@@ -55,7 +78,7 @@ export class EditGroup extends React.Component {
                 type="text"
                 value={this.state.title}
                 placeholder="Title"
-                label="Group Title:"
+                label="Organization Title:"
                 validate="required"
                 ref="titleInput"
                 name="titleInput"
@@ -91,24 +114,10 @@ export class EditGroup extends React.Component {
         );
     }
 
-    renderEntity(name) {
-        var value = this.state[name + '_id'];
-
-        if (this.state[name] && this.state[name] !== null && this.state[name].title !== null) {
-            value = this.state[name].title;
-        }
-
-        if (value !== null) {
-            return (this.renderStaticFeild(HEADINGS[name], value));
-        }
-    }
-
-    renderGroupFields() {
+    renderOrgFields() {
         return (<div>
             <Form ref="formRef">
-                {this.renderStaticFeild('Group Type', this.state.type)}
-                {this.renderEntity('parent')}
-                {this.renderEntity('organization')}
+                {this.renderDropDownType()}
                 {this.renderEditableTitle()}
                 {this.renderEditableDescription()}
             </Form>
@@ -130,21 +139,21 @@ export class EditGroup extends React.Component {
         if (meta === 'forbid_submit') {
             return;
         }
+
         postData = {
             title: this.state.title,
             meta: meta,
             description: this.state.description,
-            organization_id: this.state.organization_id, //eslint-disable-line camelcase
             type: this.state.type,
         };
 
         if (this.refs.formRef.isValid()) {
             HttpManager.PUT(this.state._links.self.href, postData).then((res) => {
-                Toast.success('Group Updated');
+                Toast.success(UPDATED);
                 this.setState(res.response);
             }).catch(err => {
                 Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
-                Log.log('Server refused Group update', err, postData);
+                Log.log(REFUSE_UPDATE, err, postData);
             });
         } else {
             Toast.error(INVALID_SUBMISSION);
@@ -159,15 +168,14 @@ export class EditGroup extends React.Component {
                 currentUser={this.props.currentUser}
                 navMenuId="navMenu"
             >
-                <div className="god-edit-group">
+                <div className="god-create">
                     <Panel header={`${HEADINGS.EDIT} ${this.state.title}`}
                         className="standard"
                     >
                         <div className="center">
-                            {this.renderGroupFields()}
+                            {this.renderOrgFields()}
                         </div>
                     </Panel>
-                    <GroupCodeChange currentUser={this.props.currentUser} data={this.state}/>
                 </div>
             </Layout>
         );
@@ -195,6 +203,6 @@ mapStateToProps = state => {
     };
 };
 
-Page = connect(mapStateToProps)(EditGroup);
+Page = connect(mapStateToProps)(EditOrg);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
