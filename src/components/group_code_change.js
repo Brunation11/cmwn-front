@@ -24,7 +24,7 @@ class GroupCodeChange extends React.Component {
             return;
         }
         update = HttpManager.POST({url: this.props.data._links.group_reset.href },
-            {email: this.props.data.email, code: this.state.code});
+            {code: this.state.code});
         update.then(
             Toast.success.bind(this,
                 'Code Reset for users in the group. They will need to update their password on next login.')
