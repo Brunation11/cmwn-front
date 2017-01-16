@@ -34,8 +34,6 @@ class GodModeSiteNav extends React.Component {
 
     addHardcodedEntries(menuItems) {
         menuItems.unshift({url: '/sa', label: 'God Mode Home'});
-        menuItems.push({url: '/sa/groups', label: 'Manage Groups'});//remove this and next line
-        menuItems.push({url: '/sa/orgs', label: 'Manage Organizations'});
         menuItems.push({url: '/profile', label: 'Exit'});
 
         return menuItems;
