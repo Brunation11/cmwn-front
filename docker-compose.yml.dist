@@ -2,11 +2,11 @@ version: '2'
 services:
   node:
     container_name: cmwn_front_node
-    image: cmwn/front-node
+    image: cmwn/front-node:6-wheezy
     environment:
       APP_API_URL: "https://api-dev.changemyworldnow.com/"
       APP_GAME_URL: "https://games-qa.changemyworldnow.com/"
-      APP_MEDIA_URL: "https://media-staging.changemyworldnow.com/"
+      APP_MEDIA_URL: "https://media-staging.changemyworldnow.com/f/"
       APP_MODE: "local"
       APP_CLOUDINARY_CLOUD_NAME: "cmwnstage"
       APP_CLOUDINARY_UPLOAD_PRESET: "qa-profile-image"
