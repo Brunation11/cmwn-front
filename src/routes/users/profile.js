@@ -113,6 +113,7 @@ export class Profile extends React.Component {
     constructor(props) {
         super(props);
         this.state = _.defaults({
+            hasFlipData: false,
             gameOn: false,
             gameId: -1
         }, _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {},
@@ -290,6 +291,7 @@ export class Profile extends React.Component {
     }
 
     renderUserProfile() {
+        var self = this;
         var ISODate;
         try {
             ISODate = (new Date(this.state.birthdate)).toISOString();
@@ -356,7 +358,7 @@ export class Profile extends React.Component {
                 <Panel
                     header={HEADINGS.TROPHYCASE}
                     className={ClassNames('standard', {
-                        hidden: !this.state.isStudent
+                        hidden: !this.state.hasFlipData
                     })}
                 >
                     <FLIP_SOURCE>
@@ -364,6 +366,9 @@ export class Profile extends React.Component {
                             type="trophycase"
                             header={true}
                             render="earned"
+                            onDataReceived={data => {
+                                self.setState({hasFlipData: (data && data.length)});
+                            }}
                         />
                     </FLIP_SOURCE>
                 </Panel>

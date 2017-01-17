@@ -2,7 +2,7 @@ version: '2'
 services:
   php:
     container_name: cmwn_front_php
-    build: ./docker/php
+    image: cmwn/front-node:6-wheezy
     environment:
       APP_API_URL: "https://api-local.changemyworldnow.com/"
       APP_GAME_URL: "https://games-qa.changemyworldnow.com/"
