@@ -198,13 +198,14 @@ export class Game extends React.Component {
 
     makeFullScreen() {
         var nextState = {isFullscreen: true};
-        if (Screenfull.enabled) {
+        window.document.body.className = window.document.body.className + ' fullscreen';
+        if (false && Screenfull.enabled) {
             Screenfull.request(document.body);
         } else {
             nextState.fullscreenFallback = true;
             this.resizeFrame();
         }
-        this.setState(nextState);
+        this.setState(nextState, () => { this.resizeFrame(); });
     }
 
     checkForPortrait() {
