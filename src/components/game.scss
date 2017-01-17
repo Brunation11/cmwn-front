@@ -1,5 +1,28 @@
 @import 'variables';
 
+body.fullscreen .game-modal {
+    .modal-dialog {
+        background: $cmwn-black;
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
+
+        .modal-content {
+            position: static;
+            top: 0;
+            left: 0;
+            transform: translateX(0);
+
+            .modal-body {
+                background: $cmwn-black;
+            }
+        }
+    }
+
+
+}
+
 body:fullscreen .global-header {
     display: none;
 }
@@ -131,6 +154,20 @@ body:fullscreen .game-frame-wrapper {
             float: left;
             margin-top: $standard;
             margin-right: $standard;
+        }
+
+        &.fullscreen {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            width: 100vw;
+            height: 100vh;
+            max-width: calc(100vh * 1.77777777778);
+            max-height: calc(100vw * 0.5625);
+
+            & ~ * {
+                display: none;
+            }
         }
     }
 }
