@@ -30,7 +30,7 @@ var CodeChange;
 const HEADINGS = {
     EDIT_TITLE: 'Edit User: ',
     CURRENT_USERNAME: 'CURRENT USERNAME IS:',
-    UPDATE_CODE: 'Update Code'
+    UPDATE_CODE: '24-Hour Password Reset Code'
 };
 const ERRORS = {
     BAD_DELETE: 'Sorry, there was a problem deleting the user. Please refresh and try again.',
@@ -383,12 +383,14 @@ CodeChange = React.createClass({
         return {code: ''};
     },
     submit: function () {
+        var self = this;
         var update = HttpManager.POST({url: this.props.endpoint}, {
             'email': this.props.email,
             'code': this.state.code
         });
         update.then(() => {
             Toast.success(CODE_UPDATED);
+            self.setState({code: ''});
         }).catch(err => {
             Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
             Toast.error(ERRORS.BAD_PASS);
@@ -403,18 +405,18 @@ CodeChange = React.createClass({
             return null;
         }
         return (
-            <Panel header={HEADINGS.UPDATE_CODE} className="standard"><form>
+            <Panel header={HEADINGS.UPDATE_CODE} className="edit-profile-code"><form>
                     <Input
                         type="text"
                         value={this.state.code}
                         placeholder="code"
-                        label="Reset Code"
+                        label="Code"
                         validate="required"
                         ref="currentInput"
                         name="currentInput"
                         onChange={e => this.setState({code: e.target.value})}
                     />
-                    <Button onClick={this.submit}>Reset Code</Button>
+                    <Button onClick={this.submit.bind(this)}>Reset Code</Button>
             </form></Panel>
         );
     }
