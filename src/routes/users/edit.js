@@ -25,20 +25,25 @@ import 'routes/users/edit.scss';
 
 var mapStateToProps;
 var Page;
+var CodeChange;
 
 const HEADINGS = {
     EDIT_TITLE: 'Edit User: ',
-    CURRENT_USERNAME: 'YOUR CURRENT USERNAME IS:'
+    CURRENT_USERNAME: 'CURRENT USERNAME IS:',
+    UPDATE_CODE: 'Update Code'
 };
 const ERRORS = {
     BAD_DELETE: 'Sorry, there was a problem deleting the user. Please refresh and try again.',
     BAD_RESET: 'This users password could not be reset at this time. Please try again later.'
 };
+/* eslint-disable max-len */
 const SUSPEND = 'Delete Account';
 const INVALID_SUBMISSION = 'Invalid submission. Please update fields highlighted in red and submit again';
 const BAD_UPDATE = 'There was a problem updating your profile. Please try again later.';
 const USER_REMOVED = 'User deleted. You will now be redirected.';
 const CONFIRM_DELETE = 'Are you sure you want to delete this user? This action cannot be undone.';
+const CODE_UPDATED = 'Code Reset for user. They will need to update their password on next login. Be sure to inform the user, as this code will expire in 24 hours.';
+/* eslint-enable max-len */
 
 export var decodeEditingPermissions = function (isStudent) {
     var canEdit = false;
@@ -66,6 +71,10 @@ export var decodeEditingPermissions = function (isStudent) {
         gender: {
             canView: false,
             canEdit: false
+        },
+        password: {
+            canView: false,
+            canEdit: false
         }
     };
 
@@ -74,6 +83,7 @@ export var decodeEditingPermissions = function (isStudent) {
         perms.firstName.canEdit = true;
         perms.lastName.canEdit = true;
         perms.birthday.canEdit = true;
+        perms.password.canEdit = true;
     }
 
     // check if any fields are editable
@@ -314,6 +324,7 @@ export class EditProfile extends React.Component {
     }
 
     render() {
+        var perms = decodeEditingPermissions(this.state.isStudent);
         if (this.props.data == null ||
             this.props.data.user_id == null ||
             !Util.decodePermissions(this.props.data.scope).update) {
@@ -354,12 +365,60 @@ export class EditProfile extends React.Component {
                         currentUser={this.props.currentUser}
                         confirmReLogin={true}
                     />
+
+                    <CodeChange
+                        endpoint={_.get(this, 'state._links.reset.href')}
+                        updatingUserEmail={this.state.email}
+                        currentUserEmail={this.props.currentUser.email}
+                        canEdit={perms.password.canEdit}
+                    />
                 </Panel>
             </Layout>
         );
     }
 }
 
+CodeChange = React.createClass({
+    getInitialState: function () {
+        return {code: ''};
+    },
+    submit: function () {
+        var update = HttpManager.POST({url: this.props.endpoint}, {
+            'email': this.props.email,
+            'code': this.state.code
+        });
+        update.then(() => {
+            Toast.success(CODE_UPDATED);
+        }).catch(err => {
+            Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
+            Toast.error(ERRORS.BAD_PASS);
+        });
+    },
+    render: function () {
+        if (
+            !this.props.canEdit ||
+            this.props.endpoint == null ||
+            this.props.updatingUserEmail === this.props.currentUserEmail
+        ) {
+            return null;
+        }
+        return (
+            <Panel header={HEADINGS.UPDATE_CODE} className="standard"><form>
+                    <Input
+                        type="text"
+                        value={this.state.code}
+                        placeholder="code"
+                        label="Reset Code"
+                        validate="required"
+                        ref="currentInput"
+                        name="currentInput"
+                        onChange={e => this.setState({code: e.target.value})}
+                    />
+                    <Button onClick={this.submit}>Reset Code</Button>
+            </form></Panel>
+        );
+    }
+});
 
 mapStateToProps = state => {
     var data = {};
