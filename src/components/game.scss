@@ -147,12 +147,17 @@ body:fullscreen .game-frame-wrapper {
                 display: none;
             }
         }
+    }
 
-        ~ button {
+    .game-buttons {
+        display: inline-block;
+        position: relative;
+        margin-top: $standard;
+        width: 100vw;
+        max-width: 100%;
+
+        button {
             display: inline-block;
-            bottom: $standard;
-            float: left;
-            margin-top: $standard;
             margin-right: $standard;
         }
 
@@ -170,4 +175,17 @@ body:fullscreen .game-frame-wrapper {
             }
         }
     }
+
+        .game-frame-wrapper {
+            left: 50%;
+            width: 137vmin;
+            padding-bottom: 77vmin;
+            transform: translateX(-50%);
+        }
+
+        .game-buttons {
+            left: 50%;
+            width: 140vmin;
+            transform: translateX(-50%);
+        }
 }

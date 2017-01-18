@@ -255,24 +255,26 @@ export class Game extends React.Component {
                         allowTransparency="true"
                     />
                 </div>
-                <Button
-                    onClick={this.makeFullScreen.bind(this)}
-                    className={ClassNames('purple', 'standard', 'full-screen-btn', {
-                        hidden: this.state.isPortrait
-                    })}
-                >
-                    <Glyphicon glyph="fullscreen" /> {FULLSCREEN}
-                </Button>
-                <Button
-                    className={ClassNames('standard',
-                        {'purple': !this.state.demo},
-                        {'green': this.state.demo},
-                        {hidden: !this.props.isTeacher || this.props.game === 'skribble'}
-                    )}
-                    onClick={this.dispatchPlatformEvent.bind(this, 'toggle-demo-mode')}
-                >
-                    {DEMO_MODE}
-                </Button>
+                <div className="game-buttons">
+                    <Button
+                        onClick={this.makeFullScreen.bind(this)}
+                        className={ClassNames('purple', 'standard', 'full-screen-btn', {
+                            hidden: this.state.isPortrait
+                        })}
+                    >
+                        <Glyphicon glyph="fullscreen" /> {FULLSCREEN}
+                    </Button>
+                    <Button
+                        className={ClassNames('standard',
+                            {'purple': !this.state.demo},
+                            {'green': this.state.demo},
+                            {hidden: !this.props.isTeacher || this.props.game === 'skribble'}
+                        )}
+                        onClick={this.dispatchPlatformEvent.bind(this, 'toggle-demo-mode')}
+                    >
+                        {DEMO_MODE}
+                    </Button>
+                </div>
             </div>
         );
     }
