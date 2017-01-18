@@ -33,6 +33,7 @@ const HEADINGS = {
     UPDATE_CODE: '24-Hour Password Reset Code'
 };
 const ERRORS = {
+    BAD_PASS: 'Sorry, there was a problem updating your password.',
     BAD_DELETE: 'Sorry, there was a problem deleting the user. Please refresh and try again.',
     BAD_RESET: 'This users password could not be reset at this time. Please try again later.'
 };
