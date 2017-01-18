@@ -416,7 +416,7 @@ export class Profile extends React.Component {
             return null;
         }
         profile = this.state.user_id === this.props.currentUser.user_id ?
-        this.renderCurrentUserProfile : this.renderUserProfile;
+            this.renderCurrentUserProfile : this.renderUserProfile;
         return (
            <Layout
                currentUser={this.props.currentUser}
