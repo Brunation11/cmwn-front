@@ -1,20 +1,15 @@
 version: '2'
 services:
-  php:
-    container_name: cmwn_front_php
-    build: ./docker/php
+  node:
+    container_name: cmwn_front_node
+    image: cmwn/front-node
     environment:
-      APP_API_URL: "https://api-local.changemyworldnow.com/"
+      APP_API_URL: "https://api-dev.changemyworldnow.com/"
       APP_GAME_URL: "https://games-qa.changemyworldnow.com/"
+      APP_MEDIA_URL: "https://media-staging.changemyworldnow.com/"
       APP_MODE: "local"
       APP_CLOUDINARY_CLOUD_NAME: "cmwnstage"
       APP_CLOUDINARY_UPLOAD_PRESET: "qa-profile-image"
-    volumes:
-      - ./:/var/www/
-  node:
-    container_name: cmwn_front_node
-    build: ./docker/node
-    environment:
       DOCKER_HOST_IP: "192.168.99.100"
     volumes:
       - ./:/var/www/
@@ -28,8 +23,6 @@ services:
       - "443:443"
     volumes:
       - ./:/var/www/
-    links:
-      - php
 
   selenium_hub:
     container_name: selenium_hub
