@@ -21,23 +21,41 @@ const ERRORS = {
 class SetSuper extends React.Component {
     constructor() {
         super();
-        this.state = this.props;
+        if (this.props && this.props.data) {
+            this.state = this.props.data;
+            this.state.super = null;
+        }
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({data: nextProps.data});
+        if (!nextProps.data || !nextProps.data._links || !nextProps.data._links.super) {
+            return;
+        }
+        nextProps.data.super = null;
+        HttpManager.GET(
+            `${nextProps.data._links.super.href}/${nextProps.data.user_id}`
+        ).then(() => {
+            nextProps.data.super = true;
+            this.setState(nextProps.data);
+        }).catch(err => {
+            if (err.status === 404) {
+                nextProps.data.super = false;
+                this.setState(nextProps.data);
+            }
+            Log.warn(err.message ? err.message : '', err);
+        });
     }
 
     submit(superFlag) {
         var update;
 
         if (window.confirm(CONFIRM[superFlag | 0])) { //eslint-disable-line no-alert
-            update = HttpManager.POST({url: this.state.data._links.super_flag.href},
+            update = HttpManager.POST({url: this.state._links.super_flag.href},
                 {super: superFlag}
             );
-            update.then( (res) => {
+            update.then(() => {
                 Toast.success('The super status is updated');
-                this.setState({data: res.response});
+                this.setState({super: superFlag});
             }).catch(err => {
                 Log.warn('Update code failed.' + (err.message ? ' Message: ' + err.message : ''), err);
                 Toast.error(ERRORS.BAD_UPDATE);
@@ -46,9 +64,11 @@ class SetSuper extends React.Component {
     }
 
     render() {
-        if (!this.state || !this.state.data._links || !this.state.data._links.super_flag) return null;
+        if (!this.state || this.state.super === null) {
+            return null;
+        }
 
-        if (this.state.data._links.sa_settings) {
+        if (this.state.super === true) {
             return (
                 <div className="right">
                     {HEADINGS.SUPER}
