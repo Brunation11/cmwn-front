@@ -264,7 +264,7 @@ export class EditUser extends React.Component {
                 <Panel header={`${HEADINGS.EDIT} ${this.props.data.username}`}
                     className="standard"
                 >
-                    <SetSuper data={this.props.data}/>
+                    <SetSuper data={this.props.data.asMutable()}/>
                     <div className="left">
                         {this.renderUserFields()}
                     </div>
