@@ -172,10 +172,14 @@ export class Game extends React.Component {
 
     exitFullscreen() {
         Screenfull.exit();
+        window.document.body.className =
+            _.without(window.document.body.className.split(' '), 'fullscreen').join(' ');
         this.setState({
             fullscreenFallback: false,
             isFullscreen: false,
-        });
+        }, this.resizeFrame);
+
+        this.resizeFrame();
     }
 
     resizeFrame() {
@@ -199,13 +203,14 @@ export class Game extends React.Component {
     makeFullScreen() {
         var nextState = {isFullscreen: true};
         window.document.body.className = window.document.body.className + ' fullscreen';
-        if (false && Screenfull.enabled) {
+        if (Screenfull.enabled) {
             Screenfull.request(document.body);
         } else {
             nextState.fullscreenFallback = true;
             this.resizeFrame();
         }
-        this.setState(nextState, () => { this.resizeFrame(); });
+        this.setState(nextState, this.resizeFrame );
+
     }
 
     checkForPortrait() {
