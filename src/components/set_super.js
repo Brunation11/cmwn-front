@@ -19,10 +19,10 @@ const ERRORS = {
 };
 
 class SetSuper extends React.Component {
-    constructor() {
+    constructor(props) {
         super();
-        if (this.props && this.props.data) {
-            this.state = this.props.data;
+        if (props && props.data) {
+            this.state = props.data;
             this.state.super = null;
         }
     }
