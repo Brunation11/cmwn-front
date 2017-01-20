@@ -1,27 +1,37 @@
-@import 'variables';
+@import '../variables';
 
-body.fullscreen .game-modal {
-    .modal-dialog {
-        background: $cmwn-black;
-        margin: 0;
-        padding: 0;
-        width: 100vw;
-        height: 100vh;
+// scss-lint:disable QualifyingElement, ImportantRule
+body.fullscreen {
+    .game-modal {
+        .modal-dialog {
+            margin: 0;
+            background: $cmwn-black;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
 
-        .modal-content {
-            position: static;
-            top: 0;
-            left: 0;
-            transform: translateX(0);
+            .modal-content {
+                position: static;
+                top: 0;
+                left: 0;
+                transform: translateX(0);
+            }
 
             .modal-body {
                 background: $cmwn-black;
             }
+
+            .modal-close {
+                display: none;
+            }
         }
     }
 
-
+    .menu {
+        display: none !important; //MPR: we all have moments of weakness
+    }
 }
+// scss-lint:enable QualifyingElement
 
 body:fullscreen .global-header {
     display: none;
@@ -93,6 +103,48 @@ body:fullscreen .game-frame-wrapper {
         max-width: 100%;
         text-align: center;
 
+        &.fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0%;
+            transform: translateY(-50%);
+            margin-top: 50%;
+            width: 100vw;
+            max-width: calc(100vh * 1.77777777778);
+            height: 100vh;
+            max-height: calc(100vw * .5625);
+
+            // scss-lint:disable SelectorDepth, NestingDepth
+            ~ * {
+                display: none;
+            }
+            // scss-lint:enable SelectorDepth, NestingDepth
+
+            .game-frame {
+                transform: translateX(-50%);
+                margin-left: 50%;
+            }
+
+        }
+
+        .game-frame {
+            position: absolute;
+            top: 0%;
+            right: 0%;
+            bottom: 0%;
+            left: 0%;
+            width: 100%;
+            max-width: calc(100vh * 1.77777778);
+            height: 100%;
+            max-height: calc(100vw * .5626);
+
+            // scss-lint:disable SelectorDepth, NestingDepth
+            &.portrait {
+                display: none;
+            }
+            // scss-lint:enable SelectorDepth, NestingDepth }
+        }
+
         .overlay {
             display: none;
             position: absolute;
@@ -128,23 +180,7 @@ body:fullscreen .game-frame-wrapper {
                     width: 100vw;
                     height: 100vh;
                 }
-                // scss-lint:enable SelectorDepth, NestingDepth
-            }
-        }
-
-        .game-frame {
-            position: absolute;
-            top: 0%;
-            right: 0%;
-            bottom: 0%;
-            left: 0%;
-            width: 100%;
-            max-width: 100%;
-            height: 100%;
-            max-height: 100%;
-
-            &.portrait {
-                display: none;
+                // scss-lint:enable SelectorDepth, NestingDepth }
             }
         }
     }
@@ -161,35 +197,30 @@ body:fullscreen .game-frame-wrapper {
             margin-right: $standard;
         }
 
-        &.fullscreen {
-            position: fixed;
-            top: 0;
-            left: 50%;
-            width: 100vw;
-            height: 100vh;
-            max-width: calc(100vh * 1.77777777778);
-            max-height: calc(100vw * 0.5625);
-
-            & ~ * {
-                display: none;
-            }
-        }
     }
 
     @media (max-width: $device-max-break) and (orientation: landscape) {
 
         .game-frame-wrapper {
             left: 50%;
-            width: 138vmin;
-            padding-bottom: 77vmin;
             transform: translateX(-50%);
+            padding-bottom: 77vmin;
+            width: 138vmin;
+
+            &.fullscreen {
+                left: 0;
+                transform: translateX(0);
+                margin: 0;
+                padding: 0;
+            }
         }
 
         .game-buttons {
             left: 50%;
-            width: 138vmin;
             transform: translateX(-50%);
+            width: 138vmin;
         }
 
     }
 }
+
