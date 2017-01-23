@@ -124,13 +124,35 @@ body:fullscreen .game-frame-wrapper {
                 display: none;
             }
         }
+    }
 
-        ~ button {
+    .game-buttons {
+        display: inline-block;
+        position: relative;
+        margin-top: $standard;
+        width: 100vw;
+        max-width: 100%;
+
+        button {
             display: inline-block;
-            bottom: $standard;
-            float: left;
-            margin-top: $standard;
             margin-right: $standard;
         }
+    }
+
+    @media (max-width: $device-max-break) and (orientation: landscape) {
+
+        .game-frame-wrapper {
+            left: 50%;
+            width: 138vmin;
+            padding-bottom: 77vmin;
+            transform: translateX(-50%);
+        }
+
+        .game-buttons {
+            left: 50%;
+            width: 138vmin;
+            transform: translateX(-50%);
+        }
+
     }
 }
