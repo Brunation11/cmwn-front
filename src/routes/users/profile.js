@@ -7,6 +7,7 @@ import QueryString from 'query-string';
 import { connect } from 'react-redux';
 import Moment from 'moment';
 
+import Util from 'components/util';
 import Detector from 'components/browser_detector';
 import ProfileImage from 'components/profile_image';
 import FlipBoard from 'components/flipboard';
@@ -15,6 +16,7 @@ import Flipcase from 'components/flipcase';
 import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
 import History from 'components/history';
+import EditLink from 'components/edit_link';
 import GenerateDataSource from 'components/datasource';
 
 import Layout from 'layouts/two_col';
@@ -326,6 +328,9 @@ export class Profile extends React.Component {
                                 <p className="standard field">{Moment(ISODate).format('MM-DD-YYYY')}</p>
                             </div>
                         </div>
+                        <EditLink base="/user" uuid={this.state.user_id}
+                            canUpdate={Util.decodePermissions(this.state.scope).update}
+                        />
                     </Panel>
                     <Panel
                         header={HEADINGS.TROPHYCASE}
@@ -354,6 +359,9 @@ export class Profile extends React.Component {
                             link-below={true}
                         />
                     </div>
+                    <EditLink base="/user" uuid={this.state.user_id}
+                        canUpdate={Util.decodePermissions(this.state.scope).update}
+                    />
                 </Panel>
                 <Panel
                     header={HEADINGS.TROPHYCASE}
