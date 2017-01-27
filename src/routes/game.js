@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
 
 import Game from 'components/game';
@@ -20,6 +21,9 @@ export class GamePage extends React.Component {
         };
     }
     componentDidMount() {
+        var gameElem = ReactDOM.findDOMNode(this.refs.gameRef);
+        gameElem.scrollIntoView();
+
         this.resolveRole(this.props);
         this.setState({
             gameId: this.props.params.game,
