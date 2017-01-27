@@ -30,6 +30,7 @@ body.fullscreen {
     .menu {
         display: none !important; //MPR: we all have moments of weakness
     }
+
 }
 // scss-lint:enable QualifyingElement
 
@@ -45,6 +46,10 @@ body:fullscreen .game {
     background: $cmwn-black;
     width: 100vw;
     height: 100vh;
+
+    .btn {
+        display: none;
+    }
 }
 
 // scss-lint:disable IdSelector
@@ -73,23 +78,34 @@ html body:fullscreen .modal-dialog {
 }
 
 body:fullscreen .game-frame-wrapper {
-    position: fixed;
     top: 50%;
     left: 50%;
-    transform: translateX(-50%) translateY(-50%);
+    transform: translateY(-50%) translateX(-50%);
     z-index: 2;
-    margin: 0;
-    width: 100%;
+    padding: 0;
+    width: 100vw;
+    max-width: 177.777777778vh;
     height: 100%;
     max-height: 56.25vw;
 
-    .game-frame {
-        max-width: 100vw;
-        max-height: 56.25vw;
-    }
-
-    ~ button {
+    ~ button,
+    ~ .game-buttons {
         display: none;
+    }
+}
+
+@media (max-width: $device-max-break) and (orientation: landscape) {
+    body:fullscreen .game-frame-wrapper {
+        left: 0%;
+        margin: 0;
+        padding: 0;
+
+        &.fullscreen {
+            .game-frame {
+                transform: translateX(0);
+                margin: 0;
+            }
+        }
     }
 }
 
@@ -98,7 +114,8 @@ body:fullscreen .game-frame-wrapper {
 
     .game-frame-wrapper {
         position: relative;
-        padding-bottom: 56.22%;
+        //MPR, 1/26/17: padding is set relative to width. Do not change this or add a height
+        padding-top: 56.26%;
         width: 100vw;
         max-width: 100%;
         text-align: center;
@@ -204,14 +221,23 @@ body:fullscreen .game-frame-wrapper {
         .game-frame-wrapper {
             left: 50%;
             transform: translateX(-50%);
-            padding-bottom: 77vmin;
-            width: 138vmin;
+            padding: 0;
+            width: 100vw;
+            max-width: calc(177.77778vh - 120px);
+            height: 100vh;
+            max-height: calc(56.53vw - 69px);
 
             &.fullscreen {
                 left: 0;
                 transform: translateX(0);
+                z-index: 2;
                 margin: 0;
                 padding: 0;
+
+                .game-frame {
+                    transform: translateX(0);
+                    margin: 0;
+                }
             }
         }
 
