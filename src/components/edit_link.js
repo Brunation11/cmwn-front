@@ -35,7 +35,7 @@ class EditLink extends React.Component {
             return null;
         }
         return (
-            <Button id="edit-btn" className={this.props.className + ' standard'}
+            <Button id="edit-btn" className={this.props.className + ' standard edit-btn'}
                 onClick={() => History.push(`${this.state.base}/${this.state.uuid}/edit`)}>
                 {this.props.text ? this.props.text : EDIT}</Button>
         );

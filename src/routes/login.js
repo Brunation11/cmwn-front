@@ -70,7 +70,7 @@ var Component = React.createClass({
         //react and chrome struggle to communicate autofilling forms.
         //lets give a little push once the browser has had half a second
         //to fill the fields
-        window.setTimeout(() => this.forceUpdate(), 500);
+        window.setTimeout(this.forceUpdate, 500);
     },
     componentWillUnmount: function () {
         window.document.removeEventListener('keydown', this.attemptLogin);
