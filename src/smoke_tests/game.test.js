@@ -33,7 +33,7 @@ export default function () {
             const WRAPPER = mount(game);
             const LAYOUT = WRAPPER.find('Layout');
             expect(LAYOUT.children()).to.have.length(2);
-            expect(LAYOUT.find('div')).to.have.length(6);
+            expect(LAYOUT.find('div')).to.have.length(7);
             expect(LAYOUT.find('Footer')).to.have.length(1);
         });
 
@@ -42,7 +42,7 @@ export default function () {
                 currentUser={studentDataA} params={{game: 'be-bright'}}/>;
             const WRAPPER = mount(game);
             const GAME = WRAPPER.find('Game');
-            expect(GAME.find('div')).to.have.length(3);
+            expect(GAME.find('div')).to.have.length(4);
             expect(GAME.find('iframe')).to.have.length(1);
             expect(GAME.find('Button')).to.have.length(2);
             expect(GAME.find('Glyphicon')).to.have.length(1);
