@@ -152,6 +152,7 @@ body:fullscreen .game-frame-wrapper {
             left: 50%;
             transform: translateX(-50%);
             width: 100%;
+            max-width: calc(177.77778vh - 120px);
             height: 100%;
 
             // scss-lint:disable SelectorDepth, NestingDepth
@@ -220,7 +221,6 @@ body:fullscreen .game-frame-wrapper {
         .game-frame-wrapper {
             left: 50%;
             transform: translateX(-50%);
-            padding: 0;
             width: 100vw;
             max-width: calc(177.77778vh - 120px);
             height: 100vh;
@@ -236,6 +236,7 @@ body:fullscreen .game-frame-wrapper {
                 .game-frame {
                     transform: translateX(0);
                     margin: 0;
+                    max-width: calc(177.77778vh - 120px);
                 }
             }
         }
