@@ -2,6 +2,10 @@
 
 // scss-lint:disable QualifyingElement, ImportantRule
 body.fullscreen {
+    .game {
+        margin: 0;
+    }
+
     .game-modal {
         .modal-dialog {
             margin: 0;
@@ -43,6 +47,7 @@ body:fullscreen .game {
     top: 0;
     left: 0;
     z-index: $z-bootstrap + 4;
+    margin: 0;
     background: $cmwn-black;
     width: 100vw;
     height: 100vh;
@@ -96,12 +101,12 @@ body:fullscreen .game-frame-wrapper {
 
 @media (max-width: $device-max-break) and (orientation: landscape) {
     body:fullscreen .game-frame-wrapper {
-        left: 0%;
         margin: 0;
         padding: 0;
 
         &.fullscreen {
             .game-frame {
+                left: 0%;
                 transform: translateX(0);
                 margin: 0;
             }
@@ -110,7 +115,7 @@ body:fullscreen .game-frame-wrapper {
 }
 
 .game {
-    margin-bottom: 50px;
+    margin: 0 60px 50px;
 
     .game-frame-wrapper {
         position: relative;
@@ -118,6 +123,7 @@ body:fullscreen .game-frame-wrapper {
         padding-top: 56.26%;
         width: 100vw;
         max-width: 100%;
+        overflow: hidden;
         text-align: center;
 
         &.fullscreen {
@@ -149,10 +155,8 @@ body:fullscreen .game-frame-wrapper {
             top: 0%;
             right: 0%;
             bottom: 0%;
-            left: 50%;
-            transform: translateX(-50%);
             width: 100%;
-            max-width: calc(177.77778vh - 120px);
+            max-width: 177.77778vh;
             height: 100%;
 
             // scss-lint:disable SelectorDepth, NestingDepth
@@ -221,10 +225,6 @@ body:fullscreen .game-frame-wrapper {
         .game-frame-wrapper {
             left: 50%;
             transform: translateX(-50%);
-            width: 100vw;
-            max-width: calc(177.77778vh - 120px);
-            height: 100vh;
-            max-height: calc(56.53vw - 69px);
 
             &.fullscreen {
                 left: 0;
@@ -236,7 +236,7 @@ body:fullscreen .game-frame-wrapper {
                 .game-frame {
                     transform: translateX(0);
                     margin: 0;
-                    max-width: calc(177.77778vh - 120px);
+                    max-width: 177.77778vh;
                 }
             }
         }
