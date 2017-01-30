@@ -61,6 +61,7 @@ const TITLES = {
     'skribble': '10b58a3fbacaa46203faf65a02f8fbbc.gif',
     'turtle-hurdle': '1cf1a4952107ce19e6b8675643a17c5d.gif',
     '3d-world': '3d45287ac7d23711d32af8b7c797c2f8.gif',
+    'drone-zone': '9e9b3bae0f9e8ba512eed9fad35868b2.png',
 };
 
 const HEADINGS = {
