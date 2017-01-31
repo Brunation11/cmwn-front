@@ -11,6 +11,7 @@ fi
 
 if [ -z ${MC_GITHUB_TOKEN+x} ]; then
     echo "MC_GITHUB_TOKEN not set in environment. Assuming local dev environment, checking $VERSION with git rev-parse."
+    git fetch
     if git rev-parse -q --verify "refs/tags/$VERSION" >/dev/null; then
         >&2 echo "The version already exists"
         exit 1
