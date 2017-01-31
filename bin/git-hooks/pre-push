@@ -16,6 +16,12 @@ do
     current_sha1=$(git rev-parse HEAD)
     current_branch=$(git rev-parse --abbrev-ref HEAD)
 
+    if $PWD/bin/check_version.sh >/dev/null; then
+        echo "[92m[pre-push] info: package.json version does not exist in remote; This version can be deployed.[0m"
+    else
+        echo "[91m[pre-push]WARNING: version already exists. If you are attempting to deploy, your deploy will fail. Bump version and redeploy.[0m"
+    fi
+
     git checkout $local_sha -q
     echo "[pre-push] checking out $local_sha"
 
@@ -61,10 +67,4 @@ do
 
     git checkout $current_branch
     echo "[92m[pre-push] success: build passed[0m"
-
-    if ../check_version.sh >/dev/null; then
-        echo "[92m[pre-push] info: package.json version does not exist in remote; This version can be deployed.[0m"
-    else
-        echo "[91m[pre-push]WARNING: version already exists. If you are attempting to deploy, your deploy will fail. Bump version and redeploy.[0m"
-    fi
 done
