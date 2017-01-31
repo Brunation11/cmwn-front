@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
-VERSION=`$PWD/bin/version_bump.sh --print-current`
+VERSION=`$PWD/bin/version_bump.sh --print-current --dry-run`
+
+if [ -z "$WERCKER_GIT_OWNER" ]; then
+    WERCKER_GIT_OWNER="ginasink"
+fi
+
+if [ -z "$WERCKER_GIT_REPOSITORY" ]; then
+    WERCKER_GIT_REPOSITORY="cmwn-front"
+fi
 
 echo "Checking if $VERSION exists at https://api.github.com/repos/$WERCKER_GIT_OWNER/$WERCKER_GIT_REPOSITORY/releases/tags/$VERSION"
 
