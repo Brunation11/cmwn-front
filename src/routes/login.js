@@ -226,9 +226,11 @@ var Component = React.createClass({
         }
     },
     getInputWithoutSpaces: function (field) {
+        var originalField;
         var newField;
         try {
-            newField = this.refs[field].getValue().replace(/\s/g, '');
+            originalField = this.refs[field];
+            newField = originalField.getValue().replace(/\s/g, '');
         } catch(err) {
             //ref not yet mounted, probably somebody getting antsy and
             //hammering the enter key.
