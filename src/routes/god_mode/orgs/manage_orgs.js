@@ -51,10 +51,6 @@ export class ManageOrgs extends React.Component {
         });
     }
 
-    shouldComponentUpdate() {
-        return (true);
-    }
-
     deleteAction(orgId) {
         if (window.confirm(CONFIRM_DELETE)) { //eslint-disable-line no-alert
             HttpManager.DELETE({

@@ -54,13 +54,9 @@ class EditMeta extends React.Component {
     }
 
     validateKey(value) {
-        var count = 0;
-
-        _.each(this.state.arrayMeta, function (item) {
-            if (item.key === value) {
-                count++;
-            }
-        });
+        var count = _.size(_.filter(this.state.arrayMeta, function (item) {
+            return (item.key === value);
+        }));
 
         if (count > 1) {
             return 'error';
@@ -87,63 +83,69 @@ class EditMeta extends React.Component {
     renderMetaField(value, key) {
         var valueDisplay;
 
-        valueDisplay = <Input
-                            type="text"
-                            ref="valueInput"
-                            name="metaValue"
-                            value={value.value}
-                            placeholder="meta-value"
-                            onChange={(e) => {
-                                var arrayMeta = this.state.arrayMeta;
-                                _.each(arrayMeta, function (item, i) {
-                                    if (arrayMeta[i].key === value.key &&
-                                        value.index === arrayMeta[i].index
-                                    ) {
-                                        if (_.has(arrayMeta[i], 'asMutable')) {
-                                            arrayMeta[i] = arrayMeta[i].asMutable();
-                                        }
-                                        arrayMeta[i].value = e.target.value;
-                                        return false;
-                                    }
-                                });
-                                this.setState({arrayMeta: arrayMeta});
-                            }}
-                        />;
+        valueDisplay = (
+            <Input
+                type="text"
+                ref="valueInput"
+                name="metaValue"
+                value={value.value}
+                placeholder="meta-value"
+                onChange={(e) => {
+                    var arrayMeta = this.state.arrayMeta;
+                    _.each(arrayMeta, function (item, i) {
+                        if (arrayMeta[i].key === value.key &&
+                            value.index === arrayMeta[i].index
+                        ) {
+                            if (_.has(arrayMeta[i], 'asMutable')) {
+                                arrayMeta[i] = arrayMeta[i].asMutable();
+                            }
+                            arrayMeta[i].value = e.target.value;
+                            return false;
+                        }
+                    });
+                    this.setState({arrayMeta: arrayMeta});
+                }}
+            />
+        );
+
         if (value.listMeta) {
-            valueDisplay = <ReactTags tags={value.tags}
-                            handleDelete={(n) => {
-                                var arrayMeta = this.state.arrayMeta;
-                                _.each(arrayMeta, function (item, i) {
-                                    if (arrayMeta[i].key === value.key &&
-                                        arrayMeta[i].index === value.index
-                                    ) {
-                                        if (!arrayMeta[i].listMeta) {
-                                            return false;
-                                        }
-                                        arrayMeta[i].tags.splice(n, 1);
-                                        return false;
-                                    }
+            valueDisplay = (
+                <ReactTags tags={value.tags}
+                    handleDelete={(n) => {
+                        var arrayMeta = this.state.arrayMeta;
+                        _.each(arrayMeta, function (item, i) {
+                            if (arrayMeta[i].key === value.key &&
+                                arrayMeta[i].index === value.index
+                            ) {
+                                if (!arrayMeta[i].listMeta) {
+                                    return false;
+                                }
+                                arrayMeta[i].tags.splice(n, 1);
+                                return false;
+                            }
+                        });
+                        this.setState({arrayMeta: arrayMeta});
+                    }}
+                    handleAddition={(tag) => {
+                        var arrayMeta = this.state.arrayMeta;
+                        _.each(arrayMeta, function (item, i) {
+                            if (arrayMeta[i].key === value.key &&
+                                arrayMeta[i].index === value.index
+                            ) {
+                                if (!arrayMeta[i].listMeta) {
+                                    return false;
+                                }
+                                arrayMeta[i].tags.push({
+                                    id: arrayMeta[i].tags.length + 1,
+                                    text: tag
                                 });
-                                this.setState({arrayMeta: arrayMeta});
-                            }}
-                            handleAddition={(tag) => {
-                                var arrayMeta = this.state.arrayMeta;
-                                _.each(arrayMeta, function (item, i) {
-                                    if (arrayMeta[i].key === value.key &&
-                                        arrayMeta[i].index === value.index
-                                    ) {
-                                        if (!arrayMeta[i].listMeta) {
-                                            return false;
-                                        }
-                                        arrayMeta[i].tags.push({
-                                            id: arrayMeta[i].tags.length + 1,
-                                            text: tag
-                                        });
-                                        return false;
-                                    }
-                                });
-                                this.setState({arrayMeta: arrayMeta});
-                            }} />;
+                                return false;
+                            }
+                        });
+                        this.setState({arrayMeta: arrayMeta});
+                    }}
+                />
+            );
         }
         return (
             <div key={key} className="meta-div">
@@ -203,18 +205,18 @@ class EditMeta extends React.Component {
             return (meta);
         }
 
-        isValid = _.map(this.refs, function (ref) {
+        isValid = _.every(this.refs, function (ref) {
             if (_.has(ref, 'isValid')) {
                 return ref.isValid();
             }
             return true;
         });
 
-        if (_.includes(isValid, false)) {
+        if (!isValid) {
             Toast.error(BAD_META);
             return 'forbid_submit';
         }
-        _.each(this.state.arrayMeta, function (value) {
+        _.map(this.state.arrayMeta, function (value) {
             if (value.key === '') {
                 return;
             }
@@ -232,6 +234,7 @@ class EditMeta extends React.Component {
                 return (tag.text);
             });
         });
+
         return (meta);
     }
 
