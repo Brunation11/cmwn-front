@@ -148,7 +148,6 @@ export class GodModeGames extends React.Component {
             deleteTry: '',
             update: 3,
             reset: '',
-            changed: [],
         };
     }
 
@@ -195,12 +194,9 @@ export class GodModeGames extends React.Component {
         var postData;
         var game = _.find(this.props.data._embedded.game, v => v.game_id === gameId);
         if (this.state.deleteTry === gameId) {
-            postData = {
-                'game_id': gameId
-            };
-
-            HttpManager.DELETE({url: game._links.self.href},
-                postData).then(() => {
+            HttpManager.DELETE(
+                    game._links.self.href
+                ).then(() => {
                     Toast.success(`${item.title}${TOAST.SUCCESS.DELETE}`);
                 }).catch(err => {
                     Toast.error(`${TOAST.ERROR.DELETE}${item.title}:
@@ -246,12 +242,10 @@ export class GodModeGames extends React.Component {
     renderInputField(inputValue, inputType, gameId, key) {
         var self = this;
         var games;
-        var changed;
 
         if (NON_INPUTS.indexOf(inputType) !== -1) return;
 
         games = _.cloneDeep(this.state.games);
-        changed = _.clone(this.state.changed);
 
         if (FIELD_TYPES[inputType] === 'checkbox') {
             return (
@@ -264,9 +258,8 @@ export class GodModeGames extends React.Component {
                     key={key}
                     validate="required"
                     onChange={e => {
-                        if (changed.indexOf(gameId) === -1) changed.push(gameId);
                         games[gameId][inputType] = e.target.checked;
-                        self.setState({ games, changed });
+                        self.setState({ games });
                     }}
                />
             );
@@ -283,9 +276,8 @@ export class GodModeGames extends React.Component {
                 key={key}
                 validate="required"
                 onChange={e => {
-                    if (changed.indexOf(gameId) === -1) changed.push(gameId);
                     games[gameId][inputType] = e.target.value;
-                    self.setState({ games, changed });
+                    self.setState({ games });
                 }}
            />
         );

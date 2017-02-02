@@ -75,14 +75,11 @@ describe('god mode games route test', function () {
         it('should change checkbox input value on change', function () {
             flipWrapper.find('Input').at(0).simulate('change', { target: { checked: true }});
             flipWrapper.update();
-            expect(flipWrapper.state('changed').indexOf(game.game_id)).to.equal(0);
             expect(flipWrapper.find('Input').at(0).prop('checked')).to.equal(true);
         });
         it('should change text input value on change', function () {
             flipWrapper.find('Input').at(1).simulate('change', { target: { value: 'test' }});
             flipWrapper.update();
-            console.log(flipWrapper.find('Input'));
-            expect(flipWrapper.state('changed').indexOf(game.game_id)).to.equal(0);
             expect(flipWrapper.find('Input').at(1).prop('value')).to.equal('test');
         });
     });
