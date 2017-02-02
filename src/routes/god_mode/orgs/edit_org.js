@@ -30,7 +30,9 @@ const REFUSE_UPDATE = 'Server refused organization update';
 export class EditOrg extends React.Component {
     constructor(props) {
         super();
-        this.state = props.data.asMutable();
+        if (_.has(props.data, 'asMutable')){
+            this.state = props.data.asMutable();
+        }
         this.state.types = [
             {
                 text: 'district',

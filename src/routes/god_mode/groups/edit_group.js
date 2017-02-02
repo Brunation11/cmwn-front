@@ -30,7 +30,9 @@ const BAD_UPDATE = 'There was a problem updating group profile. Please try again
 export class EditGroup extends React.Component {
     constructor(props) {
         super();
-        this.state = props.data.asMutable();
+        if (_.has(props.data, 'asMutable')){
+            this.state = props.data.asMutable();
+        }
     }
 
     componentWillReceiveProps(nextProps) {
