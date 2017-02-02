@@ -41,6 +41,7 @@ import CreateGroup from 'routes/god_mode/groups/create_group';
 import ManageOrgs from 'routes/god_mode/orgs/manage_orgs';
 import CreateOrg from 'routes/god_mode/orgs/create_org';
 import EditOrg from 'routes/god_mode/orgs/edit_org';
+import ManageFlips from 'routes/god_mode/flips';
 
 var redirect = function (path) {
     return function (nextState, transition) {
@@ -132,6 +133,7 @@ var routes = [
     { path: 'sa/orgs(/)', title: 'Manage Organizations', endpoint: '/org', component: ManageOrgs},
     { path: 'sa/org/create(/)', title: 'Create Organization', component: CreateOrg},
     { path: 'sa/org/:id/edit(/)', title: 'Edit Organization', endpoint: '/org/:id', component: EditOrg},
+    { path: 'sa/flips(/)', title: 'Manage Flips', endpoint: '/flip', component: ManageFlips},
 ];
 
 routes = _.map(routes, i => {
