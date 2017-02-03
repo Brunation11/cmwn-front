@@ -20,7 +20,7 @@ var Page;
 
 export const PAGE_UNIQUE_IDENTIFIER = 'god-mode-games';
 
-const GAME_WRAPPER = GenerateDataSource('games', PAGE_UNIQUE_IDENTIFIER);
+const GAME_WRAPPER = GenerateDataSource('games_deleted', PAGE_UNIQUE_IDENTIFIER);
 
 export const FIELDS = [
     'title',
@@ -60,8 +60,8 @@ const FIELD_LABELS = {
 };
 
 const NEW_GAME = {
-    [FIELDS[0]]: 'New Game',
-    [FIELDS[1]]: 'Description',
+    [FIELDS[0]]: '',
+    [FIELDS[1]]: '',
     [FIELDS[2]]: false,
     [FIELDS[3]]: false,
     [FIELDS[4]]: false,
@@ -195,7 +195,7 @@ export class GodModeGames extends React.Component {
         var game = _.find(this.props.data._embedded.game, v => v.game_id === gameId);
         if (this.state.deleteTry === gameId) {
             HttpManager.DELETE(
-                    game._links.self.href
+                    game._links.self.href,
                 ).then(() => {
                     Toast.success(`${item.title}${TOAST.SUCCESS.DELETE}`);
                 }).catch(err => {
@@ -271,6 +271,7 @@ export class GodModeGames extends React.Component {
                 type={FIELD_TYPES[inputType]}
                 label={FIELD_LABELS[inputType]}
                 value={inputValue}
+                placeholder={inputType}
                 ref={`${inputType}-input`}
                 name={`${inputType}-input`}
                 key={key}

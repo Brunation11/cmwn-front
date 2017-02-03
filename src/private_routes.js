@@ -123,7 +123,7 @@ var routes = [
     { path: 'help(/)', title: 'Help', component: Help},
     { path: '/flaggedimages(/)', title: 'Flagged Images', endpoint: '/flag', component: FlagView},
     //{ path: 'all-about-you(/)', title: 'AAY Data', endpoint: '/game-data/all-about-you', component: AAYView},
-    { path: 'sa/games(/)', title: 'Manage Games', endpoint: '$$games', component: GodModeGames},
+    { path: 'sa/games(/)', title: 'Manage Games', endpoint: '$$games_deleted', component: GodModeGames},
     { path: 'sa/groups(/)', title: 'Manage Groups', endpoint: '/group', component: ManageGroups},
     { path: 'sa/group/create(/)', title: 'Create Group', component: CreateGroup},
     { path: 'sa/group/:id/edit(/)', title: 'Edit Group', endpoint: '/group/:id', component: EditGroup},
