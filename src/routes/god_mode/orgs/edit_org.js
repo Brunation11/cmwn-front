@@ -30,7 +30,9 @@ const REFUSE_UPDATE = 'Server refused organization update';
 export class EditOrg extends React.Component {
     constructor(props) {
         super();
-        this.state = props.data.asMutable();
+        if (_.has(props.data, 'asMutable')){
+            this.state = props.data.asMutable();
+        }
         this.state.types = [
             {
                 text: 'district',
@@ -45,10 +47,6 @@ export class EditOrg extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState(nextProps.data);
-    }
-
-    shouldComponentUpdate() {
-        return (true);
     }
 
     renderDropDownType() {
@@ -125,8 +123,8 @@ export class EditOrg extends React.Component {
                 <br/>
                 <br/>
                 <Button className="green standard left"
-                        onClick={this.submitData.bind(this)}>
-                        {HEADINGS.SAVE}
+                    onClick={this.submitData.bind(this)}>
+                    {HEADINGS.SAVE}
                 </Button>
             </div>
         );

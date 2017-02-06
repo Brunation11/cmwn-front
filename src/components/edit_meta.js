@@ -5,6 +5,7 @@ import Form from 'components/form';
 import Toast from 'components/toast';
 import 'components/edit_meta.scss';
 import _ from 'lodash';
+import Util from 'components/util';
 
 const BAD_META = 'Looks like your meta input has duplicate keys. Make sure you get rid of them.';
 
@@ -19,19 +20,16 @@ class EditMeta extends React.Component {
     constructor(props) {
         super();
         this.state = {meta: props.data};
-        this.state.arrayMeta = this.createArrayMeta(props.data);
-        this.getMeta = this.getMeta.bind(this);
-        this.validateKey = this.validateKey.bind(this);
-        this.handleDelete = this.handleDelete.bind(this);
-        this.handleAddition = this.handleAddition.bind(this);
+        this.state.arrayMeta = this.createMetaArray(props.data);
+        Util.autobind(this, ['validateKey', 'getMeta']);
     }
 
     componentWillReceiveProps(nextProps) {
-        var arrayMeta = this.createArrayMeta(nextProps.data);
+        var arrayMeta = this.createMetaArray(nextProps.data);
         this.setState({meta: nextProps.data, arrayMeta: arrayMeta});
     }
 
-    createArrayMeta(data) {
+    createMetaArray(data) {
         var arrayMeta;
         var index = 0;
         if (!data || data.length === 0) {
@@ -39,111 +37,95 @@ class EditMeta extends React.Component {
         }
 
         arrayMeta = _.map(data, function (value, key) {
-            var metaEntry = {key: key, value: value, index: index++};
-            var tags;
+            var metaEntry = {key, value, index: index++};
             if (_.isArray(value)) {
                 metaEntry.listMeta = true;
-                tags = _.map(value, function (item, id) {
+                metaEntry.tags = _.map(value, function (item, id) {
                     return ({id: id + 1, text: item});
                 });
-                metaEntry.tags = tags;
             }
-            return (metaEntry);
+            return metaEntry;
         });
         return arrayMeta;
     }
 
     validateKey(value) {
-        var count = 0;
-
-        _.each(this.state.arrayMeta, function (item) {
-            if (item.key === value) {
-                count++;
-            }
-        });
+        var count = _.size(_.filter(this.state.arrayMeta, function (item) {
+            return (item.key === value);
+        }));
 
         if (count > 1) {
             return 'error';
         }
-
         return 'success';
-    }
-
-    handleDelete(i) {
-        var tags = this.state.tags;
-        tags.splice(i, 1);
-        this.setState({tags: tags});
-    }
-
-    handleAddition(tag) {
-        var tags = this.state.tags;
-        tags.push({
-            id: tags.length + 1,
-            text: tag
-        });
-        this.setState({tags: tags});
     }
 
     renderMetaField(value, key) {
         var valueDisplay;
 
-        valueDisplay = <Input
-                            type="text"
-                            ref="valueInput"
-                            name="metaValue"
-                            value={value.value}
-                            placeholder="meta-value"
-                            onChange={(e) => {
-                                var arrayMeta = this.state.arrayMeta;
-                                _.each(arrayMeta, function (item, i) {
-                                    if (arrayMeta[i].key === value.key &&
-                                        value.index === arrayMeta[i].index
-                                    ) {
-                                        if (_.has(arrayMeta[i], 'asMutable')) {
-                                            arrayMeta[i] = arrayMeta[i].asMutable();
-                                        }
-                                        arrayMeta[i].value = e.target.value;
-                                        return false;
-                                    }
-                                });
-                                this.setState({arrayMeta: arrayMeta});
-                            }}
-                        />;
+        valueDisplay = (
+            <Input
+                type="text"
+                ref="valueInput"
+                name="metaValue"
+                value={value.value}
+                placeholder="meta-value"
+                onChange={(e) => {
+                    var arrayMeta = this.state.arrayMeta;
+                    _.each(arrayMeta, function (item, i) {
+                        if (arrayMeta[i].key === value.key &&
+                            value.index === arrayMeta[i].index
+                        ) {
+                            if (_.has(arrayMeta[i], 'asMutable')) {
+                                arrayMeta[i] = arrayMeta[i].asMutable();
+                            }
+                            arrayMeta[i].value = e.target.value;
+                            return false;
+                        }
+                    });
+                    this.setState({arrayMeta: arrayMeta});
+                }}
+            />
+        );
+
         if (value.listMeta) {
-            valueDisplay = <ReactTags tags={value.tags}
-                            handleDelete={(n) => {
-                                var arrayMeta = this.state.arrayMeta;
-                                _.each(arrayMeta, function (item, i) {
-                                    if (arrayMeta[i].key === value.key &&
-                                        arrayMeta[i].index === value.index
-                                    ) {
-                                        if (!arrayMeta[i].listMeta) {
-                                            return false;
-                                        }
-                                        arrayMeta[i].tags.splice(n, 1);
-                                        return false;
-                                    }
+            valueDisplay = (
+                <ReactTags tags={value.tags}
+                    handleDelete={(n) => {
+                        var arrayMeta = this.state.arrayMeta;
+                        _.each(arrayMeta, function (item, i) {
+                            if (arrayMeta[i].key === value.key &&
+                                arrayMeta[i].index === value.index
+                            ) {
+                                if (!arrayMeta[i].listMeta) {
+                                    return false;
+                                }
+                                arrayMeta[i].tags.splice(n, 1);
+                                return false;
+                            }
+                        });
+                        this.setState({arrayMeta: arrayMeta});
+                    }}
+                    handleAddition={(tag) => {
+                        var arrayMeta = this.state.arrayMeta;
+                        _.each(arrayMeta, function (item, i) {
+                            if (arrayMeta[i].key === value.key &&
+                                arrayMeta[i].index === value.index
+                            ) {
+                                if (!arrayMeta[i].listMeta) {
+                                    return false;
+                                }
+                                arrayMeta[i].tags.push({
+                                    id: arrayMeta[i].tags.length + 1,
+                                    text: tag
                                 });
-                                this.setState({arrayMeta: arrayMeta});
-                            }}
-                            handleAddition={(tag) => {
-                                var arrayMeta = this.state.arrayMeta;
-                                _.each(arrayMeta, function (item, i) {
-                                    if (arrayMeta[i].key === value.key &&
-                                        arrayMeta[i].index === value.index
-                                    ) {
-                                        if (!arrayMeta[i].listMeta) {
-                                            return false;
-                                        }
-                                        arrayMeta[i].tags.push({
-                                            id: arrayMeta[i].tags.length + 1,
-                                            text: tag
-                                        });
-                                        return false;
-                                    }
-                                });
-                                this.setState({arrayMeta: arrayMeta});
-                            }} />;
+                                return false;
+                            }
+                        });
+                        this.setState({arrayMeta: arrayMeta});
+                    }}
+                />
+            );
         }
         return (
             <div key={key} className="meta-div">
@@ -203,14 +185,14 @@ class EditMeta extends React.Component {
             return (meta);
         }
 
-        isValid = _.map(this.refs, function (ref) {
+        isValid = _.every(this.refs, function (ref) {
             if (_.has(ref, 'isValid')) {
                 return ref.isValid();
             }
             return true;
         });
 
-        if (_.includes(isValid, false)) {
+        if (!isValid) {
             Toast.error(BAD_META);
             return 'forbid_submit';
         }
@@ -232,6 +214,7 @@ class EditMeta extends React.Component {
                 return (tag.text);
             });
         });
+
         return (meta);
     }
 
