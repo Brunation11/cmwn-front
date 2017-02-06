@@ -182,7 +182,7 @@ export class CreateOrg extends React.Component {
                     {HEADINGS.CLICK} <a href={`/district/${this.state.org_id}`}>{HEADINGS.HERE}</a>
                     {HEADINGS.VISIT}
                 </p>
-                <p> {HEADINGS.CLICK} <a href="/sa/group/create">{HEADINGS.HERE}</a> {HEADINGS.ANOTHER}</p>
+                <p> {HEADINGS.CLICK} <a href="/sa/org/create">{HEADINGS.HERE}</a> {HEADINGS.ANOTHER}</p>
             </div>
         );
     }
