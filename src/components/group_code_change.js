@@ -7,6 +7,9 @@ import Log from 'components/log';
 
 const HEADINGS = {
     UPDATE_CODE: 'Reset code for Group:',
+    RESET_SUCCESS:
+        'Code Reset for users in the group. They will need to update their password on next login.',
+    RESET_FAILED: 'Update code failed.'
 };
 const ERRORS = {
     BAD_CODE: 'Sorry, there was a problem resetting group code.',
@@ -26,10 +29,9 @@ class GroupCodeChange extends React.Component {
         update = HttpManager.POST({url: this.props.data._links.group_reset.href },
             {code: this.state.code});
         update.then(
-            Toast.success.bind(this,
-                'Code Reset for users in the group. They will need to update their password on next login.')
+            Toast.success.bind(this, HEADINGS.RESET_SUCCESS)
         ).catch(err => {
-            Log.warn('Update code failed.' + (err.message ? ' Message: ' + err.message : ''), err);
+            Log.warn(HEADINGS.RESET_FAILED + (err.message ? ' Message: ' + err.message : ''), err);
             Toast.error(ERRORS.BAD_CODE);
         });
     }

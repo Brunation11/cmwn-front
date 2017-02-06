@@ -49,10 +49,6 @@ export class EditOrg extends React.Component {
         this.setState(nextProps.data);
     }
 
-    shouldComponentUpdate() {
-        return (true);
-    }
-
     renderDropDownType() {
         return (
             <div className="drop-down">
@@ -127,8 +123,8 @@ export class EditOrg extends React.Component {
                 <br/>
                 <br/>
                 <Button className="green standard left"
-                        onClick={this.submitData.bind(this)}>
-                        {HEADINGS.SAVE}
+                    onClick={this.submitData.bind(this)}>
+                    {HEADINGS.SAVE}
                 </Button>
             </div>
         );

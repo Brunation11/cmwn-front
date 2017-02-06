@@ -7,7 +7,6 @@ import {Table, Column} from 'components/table';
 import _ from 'lodash';
 import HttpManager from 'components/http_manager';
 import Toast from 'components/toast';
-import GLOBALS from 'components/globals';
 import Log from 'components/log';
 import Paginator from 'components/paginator';
 import Actions from 'components/actions';
@@ -54,10 +53,10 @@ export class ManageGroups extends React.Component {
         });
     }
 
-    deleteAction(groupId) {
+    deleteAction(groupId, url) {
         if (window.confirm(CONFIRM_DELETE)) { //eslint-disable-line no-alert
             HttpManager.DELETE({
-                url: GLOBALS.API_URL + 'group/' + groupId,
+                url,
                 handleErrors: false
             }).then(
                 Toast.success(GROUP_REMOVED)
@@ -87,12 +86,12 @@ export class ManageGroups extends React.Component {
         groupData = this.props.data;
         return (
             <Layout currentUser={this.props.currentUser}
-                    navMenuId="navMenu"
+                navMenuId="navMenu"
             >
                 <Panel header={HEADINGS.GROUP} className="standard">
                 <br/>
                 <Button className="purple standard right" href={"/sa/group/create"}>
-                        {HEADINGS.CREATE}
+                    {HEADINGS.CREATE}
                 </Button>
                 <br/><br/>
                 <Paginator
@@ -117,7 +116,7 @@ export class ManageGroups extends React.Component {
                         <Column dataKey="group_id" renderHeader={HEADINGS.GROUP_ID}
                             renderCell ={(data) => {
                                 return (
-                                    <a title="click to copy group id" onClick={() => {
+                                    <a title={COPY_GROUP} onClick={() => {
                                         this.copyToClipBoard(data);
                                     } }
                                     >
@@ -131,10 +130,9 @@ export class ManageGroups extends React.Component {
                             renderCell={(data, row) => {
                                 if (row.parent_id === null) return (NOT_APPLICABLE);
                                 return (
-                                    <a title="click to copy parent group id" onClick={() => {
+                                    <a title={COPY_PARENT} onClick={() => {
                                         this.copyToClipBoard(row.parent_id);
-                                    } }
-                                    >
+                                    }}>
                                         {COPY_PARENT}
                                     </a>
                                 ); }
@@ -153,10 +151,8 @@ export class ManageGroups extends React.Component {
                             renderCell={(data, row) => {
                                 return (
                                     <a onClick={() => {
-                                        var groupId = row.group_id;
-                                        this.deleteAction(groupId);
-                                    } }
-                                    >
+                                        this.deleteAction(row.groupId, row._links.self.href);
+                                    }}>
                                         {DELETE}
                                     </a>
                                 ); }

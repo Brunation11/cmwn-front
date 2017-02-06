@@ -6,11 +6,11 @@ import { connect } from 'react-redux';
 import HttpManager from 'components/http_manager';
 import Toast from 'components/toast';
 import Layout from 'layouts/god_mode_two_col';
-import GLOBALS from 'components/globals';
 import Form from 'components/form';
 import Log from 'components/log';
 import EditMeta from 'components/edit_meta';
 import 'routes/god_mode/groups/create_group.scss';
+import Shortid from 'shortid';
 
 export const PAGE_UNIQUE_IDENTIFIER = 'god-mode-create-group';
 
@@ -91,7 +91,7 @@ export class CreateGroup extends React.Component {
         };
 
         if (this.refs.formRef.isValid()) {
-            HttpManager.POST(`${GLOBALS.API_URL}group`, postData).then((res) => {
+            HttpManager.POST(this.props.currentUser._links.group.href, postData).then((res) => {
                 Toast.success(GROUP_CREATE_SUCCESS);
                 this.setState({group_id: res.response.group_id}); //eslint-disable-line camelcase
             }).catch(err => {
@@ -104,44 +104,42 @@ export class CreateGroup extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        this.setState({props: nextProps});
-    }
-
-    componentDidMount() {
         var promises = [];
-        promises.push(
-            HttpManager.GET({
-                url: `${GLOBALS.API_URL}group?type=school`
-            })
-        );
-        promises.push(
-            HttpManager.GET({
-                url: `${GLOBALS.API_URL}org`
-            })
-        );
+        if (!_.isEmpty(nextProps.currentUser) &&
+            nextProps.currentUser._links &&
+            nextProps.currentUser._links.group_school &&
+            nextProps.currentUser._links.org
+        ) {
+            promises.push(
+                HttpManager.GET({
+                    url: nextProps.currentUser._links.group_school.href
+                })
+            );
+            promises.push(
+                HttpManager.GET({
+                    url: nextProps.currentUser._links.org.href
+                })
+            );
 
-        Promise.all(promises).then(responses => {
-            var groups = {};
-            var orgs = {};
-            groups[0] = {text: '---', value: null, organization_id: null}; //eslint-disable-line camelcase
-            orgs[0] = {text: '---', value: null};
-            _.each(responses[0].response._embedded.group, function (group) {
-                groups[group.group_id] = {
-                    text: group.title,
-                    value: group.group_id,
-                    organization_id: group.organization_id //eslint-disable-line camelcase
-                };
+            Promise.all(promises).then(responses => {
+                var groups = {};
+                var orgs = {};
+                groups[0] = {text: '---', value: null, organization_id: null}; //eslint-disable-line camelcase
+                orgs[0] = {text: '---', value: null};
+                _.each(responses[0].response._embedded.group, function (group) {
+                    groups[group.group_id] = {
+                        text: group.title,
+                        value: group.group_id,
+                        organization_id: group.organization_id //eslint-disable-line camelcase
+                    };
+                });
+
+                _.each(responses[1].response._embedded.org, function (org) {
+                    orgs[org.org_id] = {text: org.title, value: org.org_id};
+                });
+                this.setState({groups: groups, orgs: orgs, props: nextProps});
             });
-
-            _.each(responses[1].response._embedded.org, function (org) {
-                orgs[org.org_id] = {text: org.title, value: org.org_id};
-            });
-            this.setState({groups: groups, orgs: orgs});
-        });
-    }
-
-    shouldComponentUpdate() {
-        return (true);
+        }
     }
 
     renderEditableTitle() {
@@ -213,7 +211,7 @@ export class CreateGroup extends React.Component {
                     })}
                 >
                     {_.map(this.state.orgs, function (item){
-                        return (<option value={item.value}>{item.text}</option>);
+                        return (<option key={Shortid.generate()} value={item.value}>{item.text}</option>);
                     })}
                 </select>
             </div>
@@ -240,7 +238,7 @@ export class CreateGroup extends React.Component {
                     }}
                 >
                     {_.map(this.state.groups, function (item){
-                        return (<option value={item.value}>{item.text}</option>);
+                        return (<option key={Shortid.generate()} value={item.value}>{item.text}</option>);
                     })}
                 </select>
             </div>
@@ -258,7 +256,7 @@ export class CreateGroup extends React.Component {
                     onChange={e => this.setState({type: e.target.value})}
                 >
                     {_.map(this.state.types, function (item) {
-                        return (<option value={item.value}>{item.text}</option>);
+                        return (<option key={Shortid.generate()} value={item.value}>{item.text}</option>);
                     })}
                 </select>
             </div>
@@ -279,7 +277,7 @@ export class CreateGroup extends React.Component {
                 <br/>
                 <Button className="green standard left"
                         onClick={this.submitData.bind(this)}>
-                        {`${HEADINGS.SAVE}:`}
+                        {HEADINGS.SAVE}
                 </Button>
             </div>
         );

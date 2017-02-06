@@ -7,7 +7,6 @@ import {Table, Column} from 'components/table';
 import _ from 'lodash';
 import HttpManager from 'components/http_manager';
 import Toast from 'components/toast';
-import GLOBALS from 'components/globals';
 import Log from 'components/log';
 import Paginator from 'components/paginator';
 import Actions from 'components/actions';
@@ -51,10 +50,10 @@ export class ManageOrgs extends React.Component {
         });
     }
 
-    deleteAction(orgId) {
+    deleteAction(orgId, url) {
         if (window.confirm(CONFIRM_DELETE)) { //eslint-disable-line no-alert
             HttpManager.DELETE({
-                url: GLOBALS.API_URL + 'org/' + orgId,
+                url,
                 handleErrors: false
             }).then(
                 Toast.success(ORG_REMOVED)
@@ -105,8 +104,8 @@ export class ManageOrgs extends React.Component {
                         <Column renderHeader={HEADINGS.TITLE}
                             renderCell={(data, row) => {
                                 return (
-                                    <Link to={`/org/${row.org_id}`}>
-                                        {`${row.title}`}
+                                    <Link to={row._links.self.href}>
+                                        {row.title}
                                     </Link>
                                 ); }
                             }
@@ -116,8 +115,7 @@ export class ManageOrgs extends React.Component {
                                 return (
                                     <a title="click to copy org id" onClick={() => {
                                         this.copyToClipBoard(data);
-                                    } }
-                                    >
+                                    }}>
                                         {COPY_ORG}
                                     </a>
                                 ); }
@@ -138,9 +136,8 @@ export class ManageOrgs extends React.Component {
                                 return (
                                     <a onClick={() => {
                                         var orgId = row.org_id;
-                                        this.deleteAction(orgId);
-                                    } }
-                                    >
+                                        this.deleteAction(orgId, row._links.self.href);
+                                    }}>
                                         {DELETE}
                                     </a>
                                 ); }

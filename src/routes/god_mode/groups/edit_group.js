@@ -20,7 +20,9 @@ const HEADINGS = {
     EDIT: 'Edit Group: ',
     parent: 'Parent Group',
     organization: 'Organization',
-    SAVE: 'Save'
+    SAVE: 'Save',
+    UPDATE_SUCCESS: 'Group Updated',
+    UPDATE_FAILED: 'Server refused Group update'
 };
 
 const INVALID_SUBMISSION = 'Invalid submission. Please update fields highlighted in red and submit again';
@@ -37,10 +39,6 @@ export class EditGroup extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState(nextProps.data);
-    }
-
-    shouldComponentUpdate() {
-        return (true);
     }
 
     renderStaticFeild(fieldName, value) {
@@ -142,11 +140,11 @@ export class EditGroup extends React.Component {
 
         if (this.refs.formRef.isValid()) {
             HttpManager.PUT(this.state._links.self.href, postData).then((res) => {
-                Toast.success('Group Updated');
+                Toast.success(HEADINGS.UPDATE_SUCCESS);
                 this.setState(res.response);
             }).catch(err => {
                 Toast.error(BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''));
-                Log.log('Server refused Group update', err, postData);
+                Log.log(HEADINGS.UPDATE_FAILED, err, postData);
             });
         } else {
             Toast.error(INVALID_SUBMISSION);

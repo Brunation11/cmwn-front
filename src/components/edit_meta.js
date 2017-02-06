@@ -5,6 +5,7 @@ import Form from 'components/form';
 import Toast from 'components/toast';
 import 'components/edit_meta.scss';
 import _ from 'lodash';
+import Util from 'components/util';
 
 const BAD_META = 'Looks like your meta input has duplicate keys. Make sure you get rid of them.';
 
@@ -19,19 +20,16 @@ class EditMeta extends React.Component {
     constructor(props) {
         super();
         this.state = {meta: props.data};
-        this.state.arrayMeta = this.createArrayMeta(props.data);
-        this.getMeta = this.getMeta.bind(this);
-        this.validateKey = this.validateKey.bind(this);
-        this.handleDelete = this.handleDelete.bind(this);
-        this.handleAddition = this.handleAddition.bind(this);
+        this.state.arrayMeta = this.createMetaArray(props.data);
+        Util.autobind(this, ['validateKey', 'getMeta']);
     }
 
     componentWillReceiveProps(nextProps) {
-        var arrayMeta = this.createArrayMeta(nextProps.data);
+        var arrayMeta = this.createMetaArray(nextProps.data);
         this.setState({meta: nextProps.data, arrayMeta: arrayMeta});
     }
 
-    createArrayMeta(data) {
+    createMetaArray(data) {
         var arrayMeta;
         var index = 0;
         if (!data || data.length === 0) {
@@ -39,16 +37,14 @@ class EditMeta extends React.Component {
         }
 
         arrayMeta = _.map(data, function (value, key) {
-            var metaEntry = {key: key, value: value, index: index++};
-            var tags;
+            var metaEntry = {key, value, index: index++};
             if (_.isArray(value)) {
                 metaEntry.listMeta = true;
-                tags = _.map(value, function (item, id) {
+                metaEntry.tags = _.map(value, function (item, id) {
                     return ({id: id + 1, text: item});
                 });
-                metaEntry.tags = tags;
             }
-            return (metaEntry);
+            return metaEntry;
         });
         return arrayMeta;
     }
@@ -61,23 +57,7 @@ class EditMeta extends React.Component {
         if (count > 1) {
             return 'error';
         }
-
         return 'success';
-    }
-
-    handleDelete(i) {
-        var tags = this.state.tags;
-        tags.splice(i, 1);
-        this.setState({tags: tags});
-    }
-
-    handleAddition(tag) {
-        var tags = this.state.tags;
-        tags.push({
-            id: tags.length + 1,
-            text: tag
-        });
-        this.setState({tags: tags});
     }
 
     renderMetaField(value, key) {
@@ -216,7 +196,7 @@ class EditMeta extends React.Component {
             Toast.error(BAD_META);
             return 'forbid_submit';
         }
-        _.map(this.state.arrayMeta, function (value) {
+        _.each(this.state.arrayMeta, function (value) {
             if (value.key === '') {
                 return;
             }
