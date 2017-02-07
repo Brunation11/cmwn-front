@@ -50,14 +50,11 @@ class SetSuper extends React.Component {
     }
 
     submit(superFlag) {
-        var update;
-
         if (window.confirm(CONFIRM[superFlag | 0])) { //eslint-disable-line no-alert
             if (superFlag) {
-                update = HttpManager.POST({url: this.state._links.super.href},
+                HttpManager.POST({url: this.state._links.super.href},
                     {super: superFlag}
-                );
-                update.then(() => {
+                ).then(() => {
                     Toast.success(HEADINGS.SET_SUPER_SUCCESS);
                     this.setState({super: superFlag});
                 }).catch(err => {
@@ -68,7 +65,7 @@ class SetSuper extends React.Component {
                 HttpManager.DELETE(
                     this.state._links.super.href
                 ).then(() => {
-                    Toast.success('Revoked super privileges from user');
+                    Toast.success(HEADINGS.UNSET_SUPER_SUCCESS);
                     this.setState({super: superFlag});
                 }).catch(err => {
                     Log.warn(ERRORS.BAD_DELETE + (err.message ? 'Message: ' + err.message : ''), err);
