@@ -1,4 +1,4 @@
-@import 'variables';
+@import '../../variables';
 
 .flipboard .panel-body > * {
     text-align: left;
@@ -8,7 +8,7 @@
     .card {
         display: inline-block;
         visibility: visible;
-        // border: 1px dashed $cmwn-black;
+        border: 1px dashed $cmwn-black;
         width: 50%;
         vertical-align: top;
 
@@ -17,25 +17,13 @@
             margin: 15px 0;
         }
 
-        .heading-container-1 {
-            width: 25%;
-        }
-
-        .heading-container-2 {
-            width: 32%;
+        .heading-container {
+            margin-right: $standard / 2;
         }
 
         [class^="user-info-container"] {
             border-bottom: 1px solid $cmwn-black;
             text-align: center;
-        }
-
-        .user-info-container-1 {
-            width: 75%;
-        }
-
-        .user-info-container-2 {
-            width: 68%;
         }
 
         .heading {
@@ -48,15 +36,35 @@
 
         .site-link {
             text-align: center;
-            // scss-lint:disable all
-            font-size: 35px !important;
-            // scss-lint:enable all
+            font-family: $cmwn-jade-font;
+            font-size: 26px;
         }
 
         .disclaimer {
             margin: 10px;
             text-align: center;
             font-size: 12px;
+        }
+
+        &:nth-of-type(4n+1),
+        &:nth-of-type(4n+2) {
+            margin-top: $standard * 2;
+        }
+
+        &:nth-of-type(1),
+        &:nth-of-type(2) {
+            margin-top: 0;
+        }
+    }
+
+    .card-position {
+        max-width: 100%;
+        vertical-align: middle;
+        text-align: center;
+
+        * {
+            max-width: 100%;
+            word-wrap: break-word;
         }
     }
 
@@ -80,18 +88,8 @@
                 margin: 5px 0;
             }
 
-            .heading {
-                font-size: 1px;
-            }
-
             .user-info {
                 font-size: 25px;
-            }
-
-            .site-link {
-                // scss-lint:disable all
-                font-size: 25px !important;
-                // scss-lint:enable all
             }
 
             .disclaimer {
@@ -116,12 +114,6 @@
                 font-size: 20px;
             }
 
-            .site-link {
-                // scss-lint:disable all
-                font-size: 25px !important;
-                // scss-lint:enable all
-            }
-
             .disclaimer {
                 font-size: 10px;
             }
@@ -144,12 +136,6 @@
                 font-size: 18px;
             }
 
-            .site-link {
-                // scss-lint:disable all
-                font-size: 22px !important;
-                // scss-lint:enable all
-            }
-
             .disclaimer {
                 font-size: 8px;
             }
@@ -159,7 +145,7 @@
 
 @media print {
     @page {
-        size: landscape;
+        size: 8.5in 11in landscape;
         margin: 0;
     }
 
@@ -169,30 +155,39 @@
         display: none;
     }
 
+    .card-position {
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+    }
+
     .user-cards .card {
         width: 50vw;
         max-width: 50%;
+        height: 4in;
+        overflow: hidden;
 
         div {
             margin: 5px 0;
         }
 
+        //scss-lint:disable DuplicateProperty
         .heading {
-            font-size: 12px;
+            font-size: 22px;
+            font-size: 2.5vw;
         }
 
-        .user-info {
-            font-size: 14px;
-        }
-
+        .user-info,
         .site-link {
-            // scss-lint:disable all
-            font-size: 16px !important;
-            // scss-lint:enable all
+            font-size: 24px;
+            font-size: 3vw;
         }
 
         .disclaimer {
-            font-size: 6px;
+            font-size: 16px;
+            font-size: 1vw;
         }
+        //scss-lint:enable DuplicateProperty
     }
 }
