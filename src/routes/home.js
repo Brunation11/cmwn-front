@@ -91,16 +91,15 @@ export class Home extends React.Component {
         this.setState(state);
     }
 
+    /* eslint-disable max-len */
     render() {
         return (
             <div id="home" className="home">
                 <Modal id="video-modal"
                        show={this.state.viewOpen} onHide={this.setState.bind(this, {viewOpen: false})}>
                     <Modal.Body>
-                        <iframe id="viddler-b9cd1cb6" src={'//www.viddler.com/embed/b9cd1cb6/?f=1&' +
-                            'autoplay=1&player=simple&secret=54225444&make_responsive=0'}
-                                width="100%" height="300" frameBorder="0" scrolling="no" allowFullScreen="1">
-                        </iframe>
+                        <iframe src="https://player.vimeo.com/video/135112766?autoplay=true&width=568" width="568" height="319.5" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+                        <p><a href="https://vimeo.com/135112766">WHY WE DO</a> from <a href="https://vimeo.com/user42522076">ChangeMyWorldNow</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
                     </Modal.Body>
                 </Modal>
                 <div className="global-header">
@@ -155,6 +154,8 @@ export class Home extends React.Component {
         );
     }
 }
+
+/* eslint-enable max-len */
 
 
 /* istanbul ignore next */

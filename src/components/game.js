@@ -55,6 +55,7 @@ export class Game extends React.Component {
             fullscreenFallback: false,
             demo: false
         };
+
         this.gameEventHandler = this.gameEventHandler.bind(this);
         this.listenForEsc = this.listenForEsc.bind(this);
         this.checkForPortrait = this.checkForPortrait.bind(this);
@@ -82,6 +83,8 @@ export class Game extends React.Component {
     componentDidMount() {
         var frame = ReactDOM.findDOMNode(this.refs.gameRef);
         var callApi;
+        var self = this;
+        var escInterval;
 
         if (!frame) {
             return;
@@ -92,6 +95,18 @@ export class Game extends React.Component {
                 this.setState({isFullscreen: Screenfull.isFullscreen});
             });
         }
+
+        escInterval = window.setInterval(function () {
+            try {
+                Log.info('trying to set keydown event inside frame');
+                frame.contentWindow.addEventListener('keydown', function () {
+                    self.listenForEsc.apply(self, arguments);
+                });
+                window.clearInterval(escInterval);
+            } catch(err) {
+                Log.info('attempting to set event, failed for reason: ' + err);
+            }
+        }, 500);
 
         callApi = _.debounce(function () {
             HttpManager.GET({
@@ -162,6 +177,10 @@ export class Game extends React.Component {
         window.addEventListener('keydown', this.listenForEsc);
         window.addEventListener('resize', this.checkForPortrait);
         window.addEventListener('orientationchange', this.resizeFrame);
+        window.addEventListener('handleOrientationChange', this.resizeFrame);
+        if (Screenfull) { //MPR 1/26/17: why, safari
+            window.addEventListener(Screenfull.raw.fullscreenchange, this.resizeFrame);
+        }
     }
 
     clearEvent() {
@@ -170,6 +189,10 @@ export class Game extends React.Component {
         window.removeEventListener('keydown', this.listenForEsc);
         window.removeEventListener('resize', this.checkForPortrait);
         window.removeEventListener('orientationchange', this.resizeFrame);
+        window.removeEventListener('handleOrientationChange', this.resizeFrame);
+        if (Screenfull) {
+            window.removeEventListener(Screenfull.raw.fullscreenchange, this.resizeFrame);
+        }
     }
 
     listenForEsc(e) {
@@ -179,20 +202,28 @@ export class Game extends React.Component {
     }
 
     exitFullscreen() {
-        Screenfull.exit();
+        if (Screenfull) {
+            Screenfull.exit();
+        }
+        window.document.body.className =
+            _.without(window.document.body.className.split(' '), 'fullscreen').join(' ');
         this.setState({
             fullscreenFallback: false,
             isFullscreen: false,
-        });
+        }, this.resizeFrame);
+
+        this.resizeFrame();
     }
 
     resizeFrame() {
+        var self = this;
         var frame = ReactDOM.findDOMNode(this.refs.gameRef);
         if (frame) {
             frame.contentWindow.innerWidth = ReactDOM.findDOMNode(this.refs.wrapRef).offsetWidth;
             frame.contentWindow.innerHeight = ReactDOM.findDOMNode(this.refs.wrapRef).offsetHeight;
         }
-        this.dispatchPlatformEvent.call(this, 'resize');
+
+        self.dispatchPlatformEvent.call(self, 'resize');
     }
 
     dispatchPlatformEvent(name, data) {
@@ -206,13 +237,15 @@ export class Game extends React.Component {
 
     makeFullScreen() {
         var nextState = {isFullscreen: true};
-        if (Screenfull.enabled) {
+        if (Screenfull && Screenfull.enabled) {
             Screenfull.request(document.body);
         } else {
+            window.document.body.className = window.document.body.className + ' fullscreen';
             nextState.fullscreenFallback = true;
-            this.resizeFrame();
         }
-        this.setState(nextState);
+        this.setState(nextState, this.resizeFrame);
+        this.resizeFrame();
+
     }
 
     checkForPortrait() {

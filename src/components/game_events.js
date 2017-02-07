@@ -120,6 +120,8 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
         exit: function (e) {
             var gameData = e.gameData || {id: undefined, currentScreenIndex: undefined};
             var flipId = gameData.id || gameData.game || gameData.flip;
+            window.document.body.className =
+                _.without(window.document.body.className.split(' '), 'fullscreen').join(' ');
             ga('send', 'event', 'Game', 'Quit', flipId, gameData.currentScreenIndex);
             exitCallback({fullscreenFallback: false});
         },
