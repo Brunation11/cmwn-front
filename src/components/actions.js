@@ -89,15 +89,19 @@ Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
                     }
 
                     try {
-                        lastLogin = Moment(window.localStorage[LS_LAST_LOGIN] || 0);
+                        lastLogin = Moment(window.localStorage[LS_LAST_LOGIN + server.response.user_id] || 0);
                     } catch(error) {
-                        lastLogin = Moment(window._localStorage[LS_LAST_LOGIN] || 0);
+                        lastLogin = Moment(window._localStorage[
+                            LS_LAST_LOGIN + server.response.user_id
+                        ] || 0);
                     }
 
                     try {
-                        window.localStorage.setItem(LS_LAST_LOGIN, now.toDate().toISOString());
+                        window.localStorage.setItem(LS_LAST_LOGIN + server.response.user_id,
+                            now.toDate().toISOString());
                     } catch(error) {
-                        window._localStorage.setItem(LS_LAST_LOGIN, now.toDate().toISOString());
+                        window._localStorage.setItem(LS_LAST_LOGIN + server.response.user_id,
+                            now.toDate().toISOString());
                     }
                     if (now.format('X') - lastLogin.format('X') > 86164 || //seconds in a day
                             now.date() !== lastLogin.date()) {
