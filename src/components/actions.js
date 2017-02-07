@@ -19,6 +19,8 @@ import GLOBALS from 'components/globals';
 import Errors from 'components/errors';
 import Util from 'components/util';
 
+const LS_LAST_LOGIN = 'LAST_LOGIN_DATE';
+
 /**
  * Generates a dictionary of bound action creator functions.
  * See http://redux.js.org/docs/basics/Actions.html
@@ -66,7 +68,11 @@ Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
                 url: GLOBALS.API_URL,
                 handlePageLevelErrors: true
             }).then(server => {
+
                 return Promise.resolve((action, dispatch) => {
+                    var now = Moment();
+                    var lastLogin;
+
                     HttpManager.setToken(server.response.token);
                     //configure trackers to logged in user
                     Rollbar.configure({payload: {person: {id: server.response.user_id, //eslint-disable-line no-undef, max-len
@@ -76,6 +82,27 @@ Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
                     ga('set', 'dimension2',
                         (new Date(Date.now()).getFullYear()) - (Moment(server.response.birthdate).year()));
                     ga('set', 'dimension3', server.response.gender);
+                    if (_.has(server.response, '_embedded.groups')) {
+                        _.each(server.response._embedded.groups, i => {
+                            ga('set', 'dimension8', i.title + ':' + i.group_id);
+                        });
+                    }
+
+                    try {
+                        lastLogin = Moment(window.localStorage[LS_LAST_LOGIN] || 0);
+                    } catch(error) {
+                        lastLogin = Moment(window._localStorage[LS_LAST_LOGIN] || 0);
+                    }
+
+                    try {
+                        window.localStorage.setItem(LS_LAST_LOGIN, now.toDate().toISOString());
+                    } catch(error) {
+                        window._localStorage.setItem(LS_LAST_LOGIN, now.toDate().toISOString());
+                    }
+                    if (now.format('X') - lastLogin.format('X') > 86164 || //seconds in a day
+                            now.date() !== lastLogin.date()) {
+                        ga('set', 'dimension9', 1);
+                    }
 
                     if (server.response.user_id == null) {
                         Errors.handle401();
