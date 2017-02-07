@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import HttpManager from 'components/http_manager';
 import Toast from 'components/toast';
 import Layout from 'layouts/god_mode_two_col';
-import GLOBALS from 'components/globals';
 import Form from 'components/form';
 import Log from 'components/log';
 import EditMeta from 'components/edit_meta';
@@ -71,14 +70,14 @@ export class CreateOrg extends React.Component {
 
         postData = {
             title: this.state.title,
-            meta: meta,
+            meta,
             description: this.state.description,
             organization_id: this.state.organization_id, //eslint-disable-line camelcase
             type: this.state.type,
         };
 
         if (this.refs.formRef.isValid() && this.state.type) {
-            HttpManager.POST(`${GLOBALS.API_URL}org`, postData).then((res) => {
+            HttpManager.POST(this.props.currentUser._links.org.href, postData).then((res) => {
                 Toast.success(ORG_CREATE_SUCCESS);
                 this.setState({org_id: res.response.org_id}); //eslint-disable-line camelcase
             }).catch(err => {
@@ -96,10 +95,6 @@ export class CreateOrg extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState({props: nextProps});
-    }
-
-    shouldComponentUpdate() {
-        return (true);
     }
 
     renderEditableTitle() {
@@ -187,7 +182,7 @@ export class CreateOrg extends React.Component {
                     {HEADINGS.CLICK} <a href={`/district/${this.state.org_id}`}>{HEADINGS.HERE}</a>
                     {HEADINGS.VISIT}
                 </p>
-                <p> {HEADINGS.CLICK} <a href="/sa/group/create">{HEADINGS.HERE}</a> {HEADINGS.ANOTHER}</p>
+                <p> {HEADINGS.CLICK} <a href="/sa/org/create">{HEADINGS.HERE}</a> {HEADINGS.ANOTHER}</p>
             </div>
         );
     }
