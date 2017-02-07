@@ -39,24 +39,24 @@
         }
 
         .heading {
-            font-size: 1.5rem;
+            font-size: 25px;
         }
 
         .user-info {
-            font-size: 2rem;
+            font-size: 25px;
         }
 
         .site-link {
             text-align: center;
             // scss-lint:disable all
-            font-size: 1.75rem !important;
+            font-size: 35px !important;
             // scss-lint:enable all
         }
 
         .disclaimer {
             margin: 10px;
             text-align: center;
-            font-size: .75rem;
+            font-size: 12px;
         }
     }
 
@@ -71,10 +71,8 @@
         left: 50%;
         transform: translateX(-50%);
     }
-}
 
-@media only screen and (min-device-width: $device-max-break) and (max-device-width: $monitor-max-break) {
-    .user-cards {
+    @media (min-width: $device-max-break) and (max-width: $monitor-max-break) {
         .card {
             width: 50%;
 
@@ -83,28 +81,26 @@
             }
 
             .heading {
-                font-size: 1rem;
+                font-size: 1px;
             }
 
             .user-info {
-                font-size: 1.5rem;
+                font-size: 25px;
             }
 
             .site-link {
                 // scss-lint:disable all
-                font-size: 1.25rem !important;
+                font-size: 25px !important;
                 // scss-lint:enable all
             }
 
             .disclaimer {
-                font-size: .5rem;
+                font-size: 9px;
             }
         }
     }
-}
 
-@media only screen and (min-device-width: $device-portrait-break) and (max-device-width: $device-max-break) {
-    .user-cards {
+    @media (min-width: $device-portrait-break) and (max-width: $device-max-break) {
         .card {
             width: 100%;
 
@@ -113,28 +109,26 @@
             }
 
             .heading {
-                font-size: 1.5rem;
+                font-size: 16px;
             }
 
             .user-info {
-                font-size: 1.75rem;
+                font-size: 20px;
             }
 
             .site-link {
                 // scss-lint:disable all
-                font-size: 1.75rem !important;
+                font-size: 25px !important;
                 // scss-lint:enable all
             }
 
             .disclaimer {
-                font-size: .7rem;
+                font-size: 10px;
             }
         }
     }
-}
 
-@media only screen and (min-device-width: 0) and (max-device-width: $device-portrait-break) {
-    .user-cards {
+    @media (max-width: $device-portrait-break) {
         .card {
             width: 100%;
 
@@ -143,21 +137,21 @@
             }
 
             .heading {
-                font-size: 1rem;
+                font-size: 14px;
             }
 
             .user-info {
-                font-size: 1.5rem;
+                font-size: 18px;
             }
 
             .site-link {
                 // scss-lint:disable all
-                font-size: 1.1rem !important;
+                font-size: 22px !important;
                 // scss-lint:enable all
             }
 
             .disclaimer {
-                font-size: .45rem;
+                font-size: 8px;
             }
         }
     }
@@ -166,7 +160,7 @@
 @media print {
     @page {
         size: landscape;
-        margin: .5cm;
+        margin: 0;
     }
 
     .global-header,
@@ -175,28 +169,30 @@
         display: none;
     }
 
-    .card {
+    .user-cards .card {
         width: 50vw;
-        height: 50vh;
+        max-width: 50%;
 
         div {
-            margin: 25px 0;
+            margin: 5px 0;
         }
 
         .heading {
-            font-size: 1.25rem;
+            font-size: 12px;
         }
 
         .user-info {
-            font-size: 1.75rem;
+            font-size: 14px;
         }
 
         .site-link {
-            font-size: 1.5rem;
+            // scss-lint:disable all
+            font-size: 16px !important;
+            // scss-lint:enable all
         }
 
         .disclaimer {
-            font-size: .5rem;
+            font-size: 6px;
         }
     }
 }
