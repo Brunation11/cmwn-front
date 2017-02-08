@@ -16,6 +16,8 @@ import Util from 'components/util';
 import History from 'components/history';
 
 import Layout from 'layouts/two_col';
+import GroupCodeChange from 'components/group_code_change';
+
 
 import 'routes/schools/edit.scss';
 
@@ -135,6 +137,7 @@ export class SchoolEdit extends React.Component {
     }
 
     render() {
+        var bulkUpload = null;
         if (this.props.data == null || this.props.data.group_id == null ||
             !Util.decodePermissions(this.props.data.scope).update) {
             return null;
@@ -165,21 +168,19 @@ export class SchoolEdit extends React.Component {
                     id="school-edit-description"
                     onChange={() => this.setState({description: this.refs.descriptionInput.getValue()})}
                 />
-                <Button onClick={this.submitData.bind(this)} > Save </Button>
+                <Button onClick={this.submitData.bind(this)} > Save </Button><br/><br/>
             </Panel>
         );
-        if (this.props.data._links.import == null) {
-            return (
-                <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
-                    {SCHOOL_EDIT}
-                </Layout>
-            );
+        if (this.props.data._links.import) {
+            bulkUpload = (<BulkUpload data={this.props.data} url={this.props.data._links.import.href} />);
         }
+
         return (
            <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
                 {SCHOOL_EDIT}
+                <GroupCodeChange currentUser={this.props.currentUser} data={this.props.data}/>
                 {''/*<CreateClass data={this.props.data} />*/}
-                <BulkUpload data={this.props.data} url={this.props.data._links.import.href} />
+                {bulkUpload}
            </Layout>
          );
     }
