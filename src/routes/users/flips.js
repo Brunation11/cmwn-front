@@ -20,6 +20,8 @@ const FLIP_SOURCE = GenerateDataSource('user_flip', PAGE_UNIQUE_IDENTIFIER);
 
 const LABEL = 'EARNED FLIPS';
 
+const FLIP_ROW_LENGTH = 4;
+
 export class FlipWall extends React.Component {
     constructor() {
         super();
@@ -27,7 +29,8 @@ export class FlipWall extends React.Component {
         this.state = {
             xOffset: 0,
             yOffset: 0,
-            shelfIndex: 1
+            shelfIndex: 1,
+            caseIndex: 1
         };
     }
 
@@ -35,7 +38,7 @@ export class FlipWall extends React.Component {
         if (!_.isEmpty(this.props.data) && this.props.data._embedded && this.props.data._embedded.flip) {
             this.setState({
                 flips: this.props.data._embedded.flip,
-                shelves: _.chunk(_.shuffle(this.props.data._embedded.flip), 4)
+                shelves: _.chunk(_.shuffle(this.props.data._embedded.flip), FLIP_ROW_LENGTH)
             });
         }
     }
@@ -44,7 +47,7 @@ export class FlipWall extends React.Component {
         if (!_.isEmpty(nextProps.data) && this.props.data !== nextProps.data) {
             this.setState({
                 flips: nextProps.data._embedded.flip,
-                shelves: _.chunk(_.shuffle(nextProps.data._embedded.flip), 4)
+                shelves: _.chunk(_.shuffle(nextProps.data._embedded.flip), FLIP_ROW_LENGTH)
             });
         }
     }
@@ -76,8 +79,8 @@ export class FlipWall extends React.Component {
         var offsetReference;
         var offset;
 
-        if (this.state.shelfIndex <= this.state.shelves.length - 3) {
-            if (ref === 'shelves') {
+        if (ref === 'shelves') {
+            if (this.state.shelfIndex <= this.state.shelves.length - 3) {
                 container = this.refs.shelves;
                 offsetReference = container.firstChild;
                 offset = offsetReference.offsetHeight;
@@ -86,16 +89,17 @@ export class FlipWall extends React.Component {
                     yOffset: this.state.shelfIndex * offset * -1,
                     shelfIndex: this.state.shelfIndex + 1
                 });
-            } else {
+            }
+        } else {
+            if (this.state.caseIndex <= this.state.shelves.length - 3) { //need a way to get earned flips
                 container = this.refs.earned;
                 offset = container.offsetWidth / 4;
 
                 this.setState({
-                    xOffset: this.state.shelfIndex * offset * -1,
-                    shelfIndex: this.state.shelfIndex + 1
+                    xOffset: this.state.caseIndex * offset * -1,
+                    caseIndex: this.state.caseIndex + 1
                 });
             }
-
         }
     }
 
@@ -104,8 +108,8 @@ export class FlipWall extends React.Component {
         var offsetReference;
         var offset;
 
-        if (this.state.shelfIndex > 1) {
-            if (ref === 'shelves') {
+        if (ref === 'shelves') {
+            if (this.state.shelfIndex > 1) {
                 container = this.refs.shelves;
                 offsetReference = container.firstChild;
                 offset = offsetReference.offsetHeight;
@@ -114,16 +118,17 @@ export class FlipWall extends React.Component {
                     yOffset: (this.state.shelfIndex - 2) * offset * -1,
                     shelfIndex: this.state.shelfIndex - 1
                 });
-            } else {
+            }
+        } else {
+            if (this.state.caseIndex > 1) {
                 container = this.refs.earned;
                 offset = container.offsetWidth / 4;
 
                 this.setState({
-                    xOffset: (this.state.shelfIndex - 2) * offset * -1,
-                    shelfIndex: this.state.shelfIndex - 1
+                    xOffset: (this.state.caseIndex - 2) * offset * -1,
+                    caseIndex: this.state.caseIndex - 1
                 });
             }
-
         }
     }
 
