@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [ -z "{$PACKAGE_FILE}" ]
+if [ -z "$PACKAGE_FILE" ]
 then
     echo "No PACKAGE_FILE variable set"
     exit 2
@@ -15,6 +15,26 @@ fi
 # the part of the version to bump
 PART=$1
 
+while [[ $# -gt 0 ]]
+do
+    key="$1"
+
+    case $key in
+        -d|--dry-run)
+            DRYRUN="true"
+            shift # past argument
+        ;;
+        -p|--print-current)
+            ONLYCURRENT="true"
+            shift # past argument
+        ;;
+        *)
+            # unknown option
+            shift # past argument or value
+        ;;
+    esac
+done
+
 CURRENT_VERSION=`cat $PACKAGE_FILE | sed -n 's/^.*version.*[^0-9]\([0-9]*\.[0-9]*\.[0-9]*\).*$/\1/p'`
 
 MAJOR=$(echo $CURRENT_VERSION | cut -d'.' -f 1)
@@ -23,10 +43,9 @@ PATCH=$(echo $CURRENT_VERSION | cut -d'.' -f 3 | cut -d'-' -f 1)
 
 if [ -z "${MAJOR}" ] || [ -z "${MINOR}" ] || [ -z "${PATCH}" ]
 then
-    echo "VAR <$MAJOR>.<$MINOR>.<$PATCH> is bad set or set to the empty string"
+    echo "VAR $MAJOR.$MINOR.$PATCH is bad set or set to the empty string"
     exit 1
 fi
-
 
 case "$PART" in
     major )
@@ -58,7 +77,9 @@ esac
 
 NEW_VERSION="$MAJOR.$MINOR.$PATCH"
 
-sed -i -- "s/$CURRENT_VERSION/$NEW_VERSION/g" $PACKAGE_FILE
+if [ "$DRYRUN" != "true" ]; then
+    sed -i -- "s/$CURRENT_VERSION/$NEW_VERSION/g" $PACKAGE_FILE
+fi
 
 # the sed command will generate a file with -- at the end
 # just clean up that file here
@@ -67,4 +88,9 @@ then
     rm -f $PACKAGE_FILE--
 fi
 
-echo $NEW_VERSION
+if [ "$ONLYCURRENT" = 'true' ]; then
+    echo $CURRENT_VERSION
+else
+    echo $NEW_VERSION
+fi
+
