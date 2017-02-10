@@ -18,7 +18,7 @@ const CONFIRM = [
 ];
 const ERRORS = {
     BAD_UPDATE: 'Sorry, there was a problem making this user super',
-    BAD_DELETE: 'Srroy, there was a problem revoking the super admin privileges from this user'
+    BAD_DELETE: 'Sorry, there was a problem revoking the super admin privileges from this user'
 };
 
 class SetSuper extends React.Component {
