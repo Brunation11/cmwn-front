@@ -13,6 +13,7 @@ import Form from 'components/form';
 import DropdownDatepicker from 'components/dropdown_datepicker';
 import Log from 'components/log';
 import CodeChange from 'components/code_change';
+import SetSuper from 'components/set_super';
 
 export const PAGE_UNIQUE_IDENTIFIER = 'god-mode-edit-user';
 
@@ -263,6 +264,7 @@ export class EditUser extends React.Component {
                 <Panel header={`${HEADINGS.EDIT} ${this.props.data.username}`}
                     className="standard"
                 >
+                    <SetSuper data={this.props.data.asMutable()}/>
                     <div className="left">
                         {this.renderUserFields()}
                     </div>

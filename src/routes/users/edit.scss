@@ -18,6 +18,14 @@ $btns: '#{$media-url}0c7044bc6e88f37a8910966dba68fe47.png';
     .panel {
         margin-bottom: 0;
         box-shadow: none;
+
+        &.edit-profile-code {
+            border: dotted $cmwn-white 5px;
+
+            .panel-heading {
+                background: none;
+            }
+        }
     }
 
     a {

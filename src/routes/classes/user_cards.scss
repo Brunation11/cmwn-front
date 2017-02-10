@@ -1,4 +1,4 @@
-@import 'variables';
+@import '../../variables';
 
 .flipboard .panel-body > * {
     text-align: left;
@@ -8,7 +8,7 @@
     .card {
         display: inline-block;
         visibility: visible;
-        // border: 1px dashed $cmwn-black;
+        border: 1px dashed $cmwn-black;
         width: 50%;
         vertical-align: top;
 
@@ -17,12 +17,8 @@
             margin: 15px 0;
         }
 
-        .heading-container-1 {
-            width: 25%;
-        }
-
-        .heading-container-2 {
-            width: 32%;
+        .heading-container {
+            margin-right: $standard / 2;
         }
 
         [class^="user-info-container"] {
@@ -30,33 +26,45 @@
             text-align: center;
         }
 
-        .user-info-container-1 {
-            width: 75%;
-        }
-
-        .user-info-container-2 {
-            width: 68%;
-        }
-
         .heading {
-            font-size: 1.5rem;
+            font-size: 25px;
         }
 
         .user-info {
-            font-size: 2rem;
+            font-size: 25px;
         }
 
         .site-link {
             text-align: center;
-            // scss-lint:disable all
-            font-size: 1.75rem !important;
-            // scss-lint:enable all
+            font-family: $cmwn-jade-font;
+            font-size: 26px;
         }
 
         .disclaimer {
             margin: 10px;
             text-align: center;
-            font-size: .75rem;
+            font-size: 12px;
+        }
+
+        &:nth-of-type(4n+1),
+        &:nth-of-type(4n+2) {
+            margin-top: $standard * 2;
+        }
+
+        &:nth-of-type(1),
+        &:nth-of-type(2) {
+            margin-top: 0;
+        }
+    }
+
+    .card-position {
+        max-width: 100%;
+        vertical-align: middle;
+        text-align: center;
+
+        * {
+            max-width: 100%;
+            word-wrap: break-word;
         }
     }
 
@@ -71,10 +79,8 @@
         left: 50%;
         transform: translateX(-50%);
     }
-}
 
-@media only screen and (min-device-width: $device-max-break) and (max-device-width: $monitor-max-break) {
-    .user-cards {
+    @media (min-width: $device-max-break) and (max-width: $monitor-max-break) {
         .card {
             width: 50%;
 
@@ -82,29 +88,17 @@
                 margin: 5px 0;
             }
 
-            .heading {
-                font-size: 1rem;
-            }
-
             .user-info {
-                font-size: 1.5rem;
-            }
-
-            .site-link {
-                // scss-lint:disable all
-                font-size: 1.25rem !important;
-                // scss-lint:enable all
+                font-size: 25px;
             }
 
             .disclaimer {
-                font-size: .5rem;
+                font-size: 9px;
             }
         }
     }
-}
 
-@media only screen and (min-device-width: $device-portrait-break) and (max-device-width: $device-max-break) {
-    .user-cards {
+    @media (min-width: $device-portrait-break) and (max-width: $device-max-break) {
         .card {
             width: 100%;
 
@@ -113,28 +107,20 @@
             }
 
             .heading {
-                font-size: 1.5rem;
+                font-size: 16px;
             }
 
             .user-info {
-                font-size: 1.75rem;
-            }
-
-            .site-link {
-                // scss-lint:disable all
-                font-size: 1.75rem !important;
-                // scss-lint:enable all
+                font-size: 20px;
             }
 
             .disclaimer {
-                font-size: .7rem;
+                font-size: 10px;
             }
         }
     }
-}
 
-@media only screen and (min-device-width: 0) and (max-device-width: $device-portrait-break) {
-    .user-cards {
+    @media (max-width: $device-portrait-break) {
         .card {
             width: 100%;
 
@@ -143,21 +129,15 @@
             }
 
             .heading {
-                font-size: 1rem;
+                font-size: 14px;
             }
 
             .user-info {
-                font-size: 1.5rem;
-            }
-
-            .site-link {
-                // scss-lint:disable all
-                font-size: 1.1rem !important;
-                // scss-lint:enable all
+                font-size: 18px;
             }
 
             .disclaimer {
-                font-size: .45rem;
+                font-size: 8px;
             }
         }
     }
@@ -165,8 +145,8 @@
 
 @media print {
     @page {
-        size: landscape;
-        margin: .5cm;
+        size: 8.5in 11in landscape;
+        margin: 0;
     }
 
     .global-header,
@@ -175,28 +155,39 @@
         display: none;
     }
 
-    .card {
+    .card-position {
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+    }
+
+    .user-cards .card {
         width: 50vw;
-        height: 50vh;
+        max-width: 50%;
+        height: 4in;
+        overflow: hidden;
 
         div {
-            margin: 25px 0;
+            margin: 5px 0;
         }
 
+        //scss-lint:disable DuplicateProperty
         .heading {
-            font-size: 1.25rem;
+            font-size: 22px;
+            font-size: 2.5vw;
         }
 
-        .user-info {
-            font-size: 1.75rem;
-        }
-
+        .user-info,
         .site-link {
-            font-size: 1.5rem;
+            font-size: 24px;
+            font-size: 3vw;
         }
 
         .disclaimer {
-            font-size: .5rem;
+            font-size: 16px;
+            font-size: 1vw;
         }
+        //scss-lint:enable DuplicateProperty
     }
 }

@@ -64,7 +64,7 @@ var GlobalHeader = React.createClass({
                         <span className="read">Change My World Now</span>
                     </Link>
                 </div>
-                <Button className={ClassNames('menu', {hidden: this.props.currentUser == null})}
+                <Button className={ClassNames('menu', {hidden: !this.props.currentUser.user_id})}
                     onClick={this.toggleMenu}
                 >
                     <Glyphicon glyph="glyphicon glyphicon-menu-hamburger" />
