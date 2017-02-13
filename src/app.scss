@@ -11,6 +11,12 @@
 @import 'functions';
 @import 'ie9';
 
+//flexbox sizing fix
+* {
+    min-width: 0;
+    min-height: 0;
+}
+
 html {
     font-size: $base-font-size;
 }
@@ -184,6 +190,13 @@ h3 {
         align-items: stretch;
     }
 
+    .twocol {
+
+        .content {
+            max-width: calc(100% - $sidebar-max-width - $standard);
+        }
+    }
+
     .content {
         // scss-lint:disable all
         padding: $standard / 2;
@@ -220,7 +233,7 @@ h3 {
 
     .sidebar {
         padding: $standard / 2;
-        max-width: 200px;
+        max-width: $sidebar-max-width;
         order: 1;
         flex-grow: 0;
         flex-shrink: 0;

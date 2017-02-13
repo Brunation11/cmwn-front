@@ -1,5 +1,9 @@
+import React from 'react';
 import _ from 'lodash';
 import {Button} from 'react-bootstrap';
+import Slider from 'react-slick';
+
+import './featured_games.scss';
 
 const LABELS = {
     ABOUT: 'About this game',
@@ -8,20 +12,24 @@ const LABELS = {
     RIGHT: 'Right'
 };
 
-const COMPONENT_UNIQUE_IDENTIFIER = 'featured-game';
+const COMPONENT_UNIQUE_IDENTIFIER = 'featured-games';
 
 class Component extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            current: 0;
+            current: 0
         };
+    }
+    componentWillReceiveProps(nextProps) {
     }
     renderSlides() {
         var slides;
         slides = _.map(this.props.data, i => {
             return (
-                <div className="slide" onClick={this.props.launchGame.bind(null, i.gameId)}>
+                <div className="slide" onClick={this.props.launchGame.bind(null, i.game_id)}>
+                    <img width="718" height="218" className="background" src={'https://media-staging.changemyworldnow.com/f/8254c3f834ced23d71fd1de6c0ae1aad.gif'} />
+                    <img width="718" height="218" className="overlay"  src={'https://media-staging.changemyworldnow.com/f/8254c3f834ced23d71fd1de6c0ae1aad.gif'} />
                     <div className="labels">
                         <span>{LABELS.ABOUT}</span>
                         <span>{i.description}</span>
@@ -37,13 +45,15 @@ class Component extends React.Component {
         return (
             <div className={COMPONENT_UNIQUE_IDENTIFIER} >
                 <div className="featured-flag">{LABELS.FLAG}</div>
-                <div className="control-sweater">
-                    <Button className="left" >{LABELS.LEFT}</Button>
-                    <div className="slide-container">
-                        {this.renderSlides}
-                    </div>
-                    <Button className="right" >{LABELS.RIGHT}</Button>
-                </div>
+                <Slider
+                    arrows={true}
+                    infinite={true}
+                    lazyLoad={true}
+                    slidesToShow={1}
+                    slidesToScroll={1}
+                >
+                    {this.renderSlides()}
+                </Slider>
             </div>
         );
     }

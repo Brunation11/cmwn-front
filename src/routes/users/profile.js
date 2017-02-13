@@ -17,6 +17,7 @@ import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
 import History from 'components/history';
 import EditLink from 'components/edit_link';
+import FeaturedGames from 'components/featured_games';
 import GenerateDataSource from 'components/datasource';
 import InfinitePaginator from 'components/infinite_paginator';
 import IB_IDS from 'components/ib_ids';
@@ -219,6 +220,7 @@ export class Profile extends React.Component {
         }
         return (
                <GAME_WRAPPER transform={dataTransform}>
+                   <FeaturedGames />
                    <InfinitePaginator
                        state={this.props.state}
                        componentIdentifier={GAME_COMPONENT_IDENTIFIER}
