@@ -1,4 +1,4 @@
-@import 'variables';
+@import '../variables';
 
 .featured-games {
     position: relative;
@@ -36,6 +36,43 @@
 
     .featured-flag {
         position: absolute;
+        top: 1em;
+        right: 0;
+        z-index: 3;
+        background-color: $cmwn-green;
+        color: white;
+        height: 3em;
+
+        &::before {
+            content: "";
+            position: absolute;
+            height: 1.2em;
+            border: 1.5em solid $cmwn-green;
+                border-left-color: transparent;
+            left: -3em;
+            z-index: 2;
+        }
+
+        &::after {
+            content: "";
+            border-color: $cmwn-dark-green transparent transparent transparent;
+            border-width: 1em 1em 0em 0em;
+            bottom: -1em;
+            position: absolute;
+            border-style: solid;
+            visibility: visible;
+
+            @media (min-width: $monitor-max-break) {
+                visibility: hidden;
+                right: 1em;
+            }
+        }
+
+        span {
+            display: block;
+            transform: translateY(50%);
+            padding-right: 15px;
+        }
     }
 
     .control-sweater {
@@ -57,6 +94,23 @@
         width: $standard * 2;
     }
 
+    .slick-arrow {
+        display: block;
+        height: 100%;
+        min-width: 2em;
+
+        button {
+            box-shadow: none;
+            border: none;
+            color: purple;
+            height: 100%;
+            width: 100%;
+            background: transparent;
+            font-size: 30px;
+            font-family: $cmwn-jade-font;
+        }
+    }
+
     .slick-prev,
     .slick-next {
         z-index: 2;
@@ -68,6 +122,10 @@
 
     .slick-prev {
         left: 0;
+    }
+    .slick-next:before,
+    .slick-prev:before {
+        content: '';
     }
 }
 

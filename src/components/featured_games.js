@@ -23,13 +23,27 @@ class Component extends React.Component {
     }
     componentWillReceiveProps(nextProps) {
     }
+    renderLeft(props) {
+        return (
+            <div className="left">
+                <button {...props}>{'<'}</button>
+            </div>
+        );
+    }
+    renderRight(props) {
+        return (
+            <div className="right">
+                <button {...props}>{'>'}</button>
+            </div>
+        );
+    }
     renderSlides() {
         var slides;
         slides = _.map(this.props.data, i => {
             return (
                 <div className="slide" onClick={this.props.launchGame.bind(null, i.game_id)}>
-                    <img width="718" height="218" className="background" src={'https://media-staging.changemyworldnow.com/f/8254c3f834ced23d71fd1de6c0ae1aad.gif'} />
-                    <img width="718" height="218" className="overlay"  src={'https://media-staging.changemyworldnow.com/f/8254c3f834ced23d71fd1de6c0ae1aad.gif'} />
+                    <img width="703" height="218" className="background" src={'https://media-staging.changemyworldnow.com/f/8254c3f834ced23d71fd1de6c0ae1aad.gif'} />
+                    <img width="703" height="218" className="overlay"  src={'https://media-staging.changemyworldnow.com/f/8254c3f834ced23d71fd1de6c0ae1aad.gif'} />
                     <div className="labels">
                         <span>{LABELS.ABOUT}</span>
                         <span>{i.description}</span>
@@ -44,13 +58,15 @@ class Component extends React.Component {
 
         return (
             <div className={COMPONENT_UNIQUE_IDENTIFIER} >
-                <div className="featured-flag">{LABELS.FLAG}</div>
+                <div className="featured-flag"><span>{LABELS.FLAG}</span></div>
                 <Slider
                     arrows={true}
                     infinite={true}
                     lazyLoad={true}
                     slidesToShow={1}
                     slidesToScroll={1}
+                    prevArrow={this.renderLeft()}
+                    nextArrow={this.renderRight()}
                 >
                     {this.renderSlides()}
                 </Slider>
