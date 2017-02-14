@@ -26,14 +26,14 @@ class Component extends React.Component {
     renderLeft(props) {
         return (
             <div className="left">
-                <button {...props}>{'<'}</button>
+                <button {...props}><span>{'<'}</span></button>
             </div>
         );
     }
     renderRight(props) {
         return (
             <div className="right">
-                <button {...props}>{'>'}</button>
+                <button {...props}><span>{'>'}</span></button>
             </div>
         );
     }
@@ -41,14 +41,15 @@ class Component extends React.Component {
         var slides;
         slides = _.map(this.props.data, i => {
             return (
-                <div className="slide" onClick={this.props.launchGame.bind(null, i.game_id)}>
-                    <img width="703" height="218" className="background" src={'https://media-staging.changemyworldnow.com/f/8254c3f834ced23d71fd1de6c0ae1aad.gif'} />
-                    <img width="703" height="218" className="overlay"  src={'https://media-staging.changemyworldnow.com/f/8254c3f834ced23d71fd1de6c0ae1aad.gif'} />
-                    <div className="labels">
-                        <span>{LABELS.ABOUT}</span>
-                        <span>{i.description}</span>
+                <figure className="slide effect-apollo" onClick={this.props.launchGame.bind(null, i.game_id)}>
+                    <div className="slide-container">
+                        <img width="685" height="218" className="background" src={'https://media-staging.changemyworldnow.com/f/8254c3f834ced23d71fd1de6c0ae1aad.gif'} />
                     </div>
-                </div>
+                    <figcaption className="labels">
+                        <span className="about">{LABELS.ABOUT}</span>
+                        <span>{i.description}</span>
+                    </figcaption>
+                </figure>
             );
         });
         return slides;
@@ -70,6 +71,7 @@ class Component extends React.Component {
                 >
                     {this.renderSlides()}
                 </Slider>
+                <div className="featured-nub"></div>
             </div>
         );
     }
