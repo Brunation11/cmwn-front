@@ -54,24 +54,73 @@ export class FlipWall extends React.Component {
 
     renderEarnedShelf() {
         return (
-            <FLIP_SOURCE>
-                <Flipcase
-                    render="earned"
+            <div className="earned-flips">
+                <button
+                    className="nav-btn scroll-btn backward"
+                    onClick={this.scrollBackward.bind(this)}
                 />
-            </FLIP_SOURCE>
+                <div className="earned-container">
+                    <div
+                        ref="earned"
+                        className="earned"
+                        style={{
+                            marginLeft: this.state.xOffset
+                        }}
+                    >
+                        <FLIP_SOURCE>
+                            <Flipcase
+                                render="earned"
+                            />
+                        </FLIP_SOURCE>
+                    </div>
+                </div>
+                <button
+                    className="nav-btn info-btn"
+                    onClick=""
+                />
+                <button
+                    className="nav-btn scroll-btn forward"
+                    onClick={this.scrollForward.bind(this)}
+                />
+                <span className="label">
+                    {LABEL}
+                </span>
+            </div>
         );
     }
 
     renderShelves() {
-        return _.map(this.state.shelves, shelf => {
-            return (
-                <Flipcase
-                    key={Shortid.generate()}
-                    render="all"
-                    allFlips={shelf}
+        return (
+            <div className="all-flips">
+                <button
+                    className="nav-btn scroll-btn backward"
+                    onClick={this.scrollBackward.bind(this, 'shelves')}
                 />
-            );
-        });
+                <div className="shelf-container">
+                    <div
+                        ref="shelves"
+                        className="shelves"
+                        style={{
+                            marginTop: this.state.yOffset
+                        }}
+                    >
+                        {_.map(this.state.shelves, shelf => {
+                            return (
+                                <Flipcase
+                                    key={Shortid.generate()}
+                                    render="all"
+                                    allFlips={shelf}
+                                />
+                            );
+                        })}
+                    </div>
+                </div>
+                <button
+                    className="nav-btn scroll-btn forward"
+                    onClick={this.scrollForward.bind(this, 'shelves')}
+                />
+            </div>
+        );
     }
 
     scrollForward(ref) {
@@ -91,10 +140,9 @@ export class FlipWall extends React.Component {
                 });
             }
         } else {
-            if (this.state.caseIndex <= this.state.shelves.length - 3) { //need a way to get earned flips
-                container = this.refs.earned;
-                offset = container.offsetWidth / 4;
-
+            container = this.refs.earned;
+            offset = container.offsetWidth / 4;
+            if (this.state.caseIndex <= container.children[0].children[0].children.length - 5) {
                 this.setState({
                     xOffset: this.state.caseIndex * offset * -1,
                     caseIndex: this.state.caseIndex + 1
@@ -142,55 +190,8 @@ export class FlipWall extends React.Component {
                 navMenuId="navMenu"
             >
                 <Panel className="standard flip-wall">
-                    <div className="earned-flips">
-                        <button
-                            className="nav-btn scroll-btn backward"
-                            onClick={this.scrollBackward.bind(this)}
-                        />
-                        <div className="earned-container">
-                            <div
-                                ref="earned"
-                                className="earned"
-                                style={{
-                                    marginLeft: this.state.xOffset
-                                }}
-                            >
-                                {this.renderEarnedShelf()}
-                            </div>
-                        </div>
-                        <button
-                            className="nav-btn info-btn"
-                            onClick=""
-                        />
-                        <button
-                            className="nav-btn scroll-btn forward"
-                            onClick={this.scrollForward.bind(this)}
-                        />
-                        <span className="label">
-                            {LABEL}
-                        </span>
-                    </div>
-                    <div className="all-flips">
-                        <button
-                            className="nav-btn scroll-btn backward"
-                            onClick={this.scrollBackward.bind(this, 'shelves')}
-                        />
-                        <div className="shelf-container">
-                            <div
-                                ref="shelves"
-                                className="shelves"
-                                style={{
-                                    marginTop: this.state.yOffset
-                                }}
-                            >
-                                {this.renderShelves()}
-                            </div>
-                        </div>
-                        <button
-                            className="nav-btn scroll-btn forward"
-                            onClick={this.scrollForward.bind(this, 'shelves')}
-                        />
-                    </div>
+                    {this.renderEarnedShelf()}
+                    {this.renderShelves()}
                 </Panel>
             </Layout>
         );
