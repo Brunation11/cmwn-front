@@ -159,13 +159,13 @@ $ribbon-thickness: .7em;
             transform: translateX(-50%);
             transition: opacity .35s, transform .35s;
             margin-left: 50%;
-            background: $cmwn-blue;
+            max-height: 218px;
         }
 
         img,
         object {
             transition: opacity .35s, transform .35s;
-            opacity: .95;
+            opacity: 1;
         }
 
         figcaption::before {
@@ -201,11 +201,15 @@ $ribbon-thickness: .7em;
         &:hover {
             .slide-container {
                 transform: scale3d(1.05, 1.05, 1) translateX(-47.5%);
-            }
+                background: url('https://media-staging.changemyworldnow.com/f/PlatformArt/gradients/pixelate.jpg');
 
-            img,
-            object {
-                opacity: .6;
+                // scss-lint:disable NestingDepth
+                > img,
+                > object {
+                    opacity: .6;
+                }
+                // scss-lint:enable NestingDepth
+
             }
 
             figcaption::before {

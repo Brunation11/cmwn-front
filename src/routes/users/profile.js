@@ -151,6 +151,31 @@ export class Profile extends React.Component {
         this.refs.gameRef.dispatchPlatformEvent('quit');
     }
 
+    transformFeaturedData(data) {
+        var array = !data || data.asMutable == null ? data : data.asMutable();
+        var currentIndex;
+        var temporaryValue;
+        var randomIndex;
+        if (array == null) {
+            array = [];
+        } else if (!_.isArray(array)) {
+            return [];
+        }
+        currentIndex = array.length;
+         // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+            // Pick a remaining element...
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+            // And swap it with the current element.
+            temporaryValue = array[currentIndex];
+            array[currentIndex] = array[randomIndex];
+            array[randomIndex] = temporaryValue;
+        }
+        array = _.filter(array, v => !v.coming_soon);
+        return _.filter(array, v => (!v.meta || !v.meta.desktop));
+    }
+
     renderGame() {
         if (!window.navigator.standalone && (Detector.isMobileOrTablet() || Detector.isIe10())) {
             return (
@@ -220,7 +245,9 @@ export class Profile extends React.Component {
         }
         return (
                <GAME_WRAPPER transform={dataTransform}>
-                   <FeaturedGames />
+                   <FeaturedGames
+                       transformData={this.transformFeaturedData}
+                   />
                    <InfinitePaginator
                        state={this.props.state}
                        componentIdentifier={GAME_COMPONENT_IDENTIFIER}

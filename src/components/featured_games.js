@@ -22,6 +22,9 @@ class Component extends React.Component {
             current: 0
         };
     }
+    componentWillReceiveProps(nextProps) {
+        this.setState({titles: this.props.transformData(nextProps.data)});
+    }
     renderLeft(props) {
         return (
             <div className="left">
@@ -38,7 +41,7 @@ class Component extends React.Component {
     }
     renderSlides() {
         var slides;
-        slides = _.map(this.props.data, i => {
+        slides = _.map(this.state.titles, i => {
             return (
                 <figure className="slide effect-apollo" onClick={this.props.launchGame.bind(null, i.game_id)}>
                     <div className="slide-container">
@@ -84,8 +87,11 @@ class Component extends React.Component {
                 <div className="featured-flag"><span>{LABELS.FLAG}</span></div>
                 <Slider
                     arrows={true}
+                    autoplay={true}
+                    autoplaySpeed={8000}
                     infinite={true}
                     lazyLoad={true}
+                    pauseOnHover={true}
                     slidesToShow={1}
                     slidesToScroll={1}
                     prevArrow={this.renderLeft()}
@@ -100,7 +106,8 @@ class Component extends React.Component {
 }
 
 Component.defaultProps = {
-    launchGame: _.identity
+    launchGame: _.identity,
+    transformData: _.identity
 };
 
 Component.identifier = COMPONENT_UNIQUE_IDENTIFIER;
