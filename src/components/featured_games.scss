@@ -31,13 +31,14 @@ $ribbon-thickness: .7em;
             margin: 0 0 15px 30px;
             padding: 5px;
             max-width: 45%;
-            text-shadow: black 2px 2px;
+            text-shadow: $cmwn-black 2px 2px;
             color: $cmwn-white;
         }
     }
 
     .about {
-        line-height: 0px;
+        line-height: 0;
+        white-space: nowrap;
         font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
         font-size: 35px;
     }
@@ -137,6 +138,20 @@ $ribbon-thickness: .7em;
         content: '';
     }
 
+    .slick-slide {
+        figcaption,
+        figcaption::before {
+            display: none;
+        }
+
+        &.slick-active {
+            figcaption,
+            figcaption::before {
+                display: initial;
+            }
+        }
+    }
+
     .effect-apollo {
 
         .slide-container {
@@ -147,7 +162,8 @@ $ribbon-thickness: .7em;
             background: $cmwn-blue;
         }
 
-        img {
+        img,
+        object {
             transition: opacity .35s, transform .35s;
             opacity: .95;
         }
@@ -156,7 +172,7 @@ $ribbon-thickness: .7em;
             position: absolute;
             top: 0;
             left: 0;
-            transform: scale3d(1.9, 1.4, 1) rotate3d(0, 0, 1, 45deg) translate3d(0, -210%, 0);
+            transform: scale3d(1.9, 1.4, 1) rotate3d(0, 0, 1, 45deg) translate3d(0, -300%, 0);
             transition: transform .6s;
             background: rgba(255, 255, 255, .5);
             width: 100%;
@@ -187,7 +203,8 @@ $ribbon-thickness: .7em;
                 transform: scale3d(1.05, 1.05, 1) translateX(-47.5%);
             }
 
-            img {
+            img,
+            object {
                 opacity: .6;
             }
 

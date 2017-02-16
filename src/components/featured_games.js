@@ -1,7 +1,8 @@
 import React from 'react';
 import _ from 'lodash';
-import {Button} from 'react-bootstrap';
 import Slider from 'react-slick';
+
+import GLOBALS from 'components/globals';
 
 import './featured_games.scss';
 
@@ -20,8 +21,6 @@ class Component extends React.Component {
         this.state = {
             current: 0
         };
-    }
-    componentWillReceiveProps(nextProps) {
     }
     renderLeft(props) {
         return (
@@ -43,7 +42,30 @@ class Component extends React.Component {
             return (
                 <figure className="slide effect-apollo" onClick={this.props.launchGame.bind(null, i.game_id)}>
                     <div className="slide-container">
-                        <img width="685" height="218" className="background" src={'https://media-staging.changemyworldnow.com/f/8254c3f834ced23d71fd1de6c0ae1aad.gif'} />
+                        <object
+                            width="685"
+                            height="218"
+                            className="background"
+                            data={`${GLOBALS.MEDIA_URL}titles/18-5/${i.game_id}.gif`}
+                        >
+                            <object
+                                data={`${GLOBALS.MEDIA_URL}titles/18-5/${i.game_id}.png`}
+                                width="685"
+                                height="218"
+                            >
+                                <object
+                                    data={`${GLOBALS.MEDIA_URL}titles/18-5/${i.game_id}.jpg`}
+                                    width="685"
+                                    height="218"
+                                >
+                                    <img
+                                        src={`${GLOBALS.MEDIA_URL}titles/18-5/${i.game_id}.jpeg`}
+                                        width="685"
+                                        height="218"
+                                    />
+                                </object>
+                            </object>
+                        </object>
                     </div>
                     <figcaption className="labels">
                         <span className="about">{LABELS.ABOUT}</span>
