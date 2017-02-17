@@ -5,6 +5,14 @@ $ribbon-thickness: .7em;
 .featured-games {
     position: relative;
 
+    .hidden-preload {
+        display: block;
+        position: fixed;
+        visibility: hidden;
+        width: 1px;
+        height: 1px;
+    }
+
     .slide {
         position: relative;
         width: 100%;
@@ -160,6 +168,20 @@ $ribbon-thickness: .7em;
             transition: opacity .35s, transform .35s;
             margin-left: 50%;
             max-height: 218px;
+            background-size: cover;
+
+            &::after {
+                content: "";
+                transition: opacity .35s;
+                opacity: 0;
+                background: url('#{$media-url}PlatformArt/gradients/gradient01.svg');
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                position: absolute;
+                z-index: -1;   
+            }
         }
 
         img,
@@ -201,12 +223,16 @@ $ribbon-thickness: .7em;
         &:hover {
             .slide-container {
                 transform: scale3d(1.05, 1.05, 1) translateX(-47.5%);
-                background: url('https://media-staging.changemyworldnow.com/f/PlatformArt/gradients/pixelate.jpg');
+
+                &::after {
+                    opacity: 1;
+                }
 
                 // scss-lint:disable NestingDepth
-                > img,
+                img,
                 > object {
-                    opacity: .6;
+                    transition: opacity .35s, transform .35s;
+                    opacity: .2;
                 }
                 // scss-lint:enable NestingDepth
 

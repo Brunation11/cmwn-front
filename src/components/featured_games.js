@@ -52,17 +52,17 @@ class Component extends React.Component {
                             data={`${GLOBALS.MEDIA_URL}titles/18-5/${i.game_id}.gif`}
                         >
                             <object
-                                data={`${GLOBALS.MEDIA_URL}titles/18-5/${i.game_id}.png`}
+                                data={`${GLOBALS.MEDIA_URL}titles/18-5/${i.game_id}.jpeg`}
                                 width="685"
                                 height="218"
                             >
                                 <object
-                                    data={`${GLOBALS.MEDIA_URL}titles/18-5/${i.game_id}.jpg`}
+                                    data={`${GLOBALS.MEDIA_URL}titles/18-5/${i.game_id}.png`}
                                     width="685"
                                     height="218"
                                 >
                                     <img
-                                        src={`${GLOBALS.MEDIA_URL}titles/18-5/${i.game_id}.jpeg`}
+                                        src={`${GLOBALS.MEDIA_URL}titles/18-5/${i.game_id}.jpg`}
                                         width="685"
                                         height="218"
                                     />
@@ -84,6 +84,7 @@ class Component extends React.Component {
 
         return (
             <div className={COMPONENT_UNIQUE_IDENTIFIER} >
+                <object className="hidden-preload" data="https://media.changemyworldnow.com/f/PlatformArt/gradients/gradient01.svg" />
                 <div className="featured-flag"><span>{LABELS.FLAG}</span></div>
                 <Slider
                     arrows={true}
