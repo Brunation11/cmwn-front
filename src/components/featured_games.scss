@@ -159,6 +159,19 @@ $ribbon-thickness: .7em;
                 display: initial;
             }
         }
+
+        &:nth-of-type(2n) {
+            .slide-container {
+                border: 2px solid $cmwn-green;
+            }
+        }
+
+        &:nth-of-type(3n) {
+            .slide-container {
+                border: 2px solid $cmwn-blue;
+            }
+        }
+
     }
 
     .effect-apollo {
@@ -166,10 +179,13 @@ $ribbon-thickness: .7em;
         .slide-container {
             display: inline-block;
             transform: translateX(-50%);
-            transition: opacity .35s, transform .35s;
+            transition: opacity .35s, transform .35s, border .35s;
             margin-left: 50%;
+            border: 2px solid $cmwn-purple;
+            background-color: $cmwn-white;
             background-size: cover;
             max-height: 218px;
+            overflow: hidden;
 
             &::after {
                 position: absolute;
@@ -224,6 +240,7 @@ $ribbon-thickness: .7em;
         &:hover {
             .slide-container {
                 transform: scale3d(1.05, 1.05, 1) translateX(-47.5%);
+                border: 0;
 
                 // scss-lint:disable NestingDepth
                 &::after {

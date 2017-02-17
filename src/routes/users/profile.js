@@ -41,7 +41,7 @@ const TITLES = IB_IDS.GAME_TILES;
 
 const HEADINGS = {
     ACTION: 'Profile',
-    ARCADE: 'Activities',
+    ARCADE: 'My Activities',
     TROPHYCASE: 'Trophycase'
 };
 
@@ -430,7 +430,12 @@ export class Profile extends React.Component {
                         />
                     </FLIP_SOURCE>
                 </Panel>
-                {this.renderGameList()}
+                <Panel
+                    header={HEADINGS.ARCADE}
+                    className={ClassNames('standard')}
+                >
+                    {this.renderGameList()}
+                </Panel>
             </div>
         );
     }

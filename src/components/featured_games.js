@@ -46,24 +46,24 @@ class Component extends React.Component {
                 <figure className="slide effect-apollo" onClick={this.props.launchGame.bind(null, `${GLOBALS.GAME_URL}${i.game_id}/index.html`)}>
                     <div className="slide-container">
                         <object
-                            width="685"
+                            width="650"
                             height="218"
                             className="background"
                             data={`${GLOBALS.MEDIA_URL}titles/18-5/${i.game_id}.gif`}
                         >
                             <object
                                 data={`${GLOBALS.MEDIA_URL}titles/18-5/${i.game_id}.jpeg`}
-                                width="685"
+                                width="650"
                                 height="218"
                             >
                                 <object
                                     data={`${GLOBALS.MEDIA_URL}titles/18-5/${i.game_id}.png`}
-                                    width="685"
+                                    width="650"
                                     height="218"
                                 >
                                     <img
                                         src={`${GLOBALS.MEDIA_URL}titles/18-5/${i.game_id}.jpg`}
-                                        width="685"
+                                        width="650"
                                         height="218"
                                     />
                                 </object>
