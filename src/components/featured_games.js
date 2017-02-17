@@ -43,7 +43,10 @@ class Component extends React.Component {
         var slides;
         slides = _.map(this.state.titles, i => {
             return (
-                <figure className="slide effect-apollo" onClick={this.props.launchGame.bind(null, `${GLOBALS.GAME_URL}${i.game_id}/index.html`)}>
+                <figure
+                    className="slide effect-apollo"
+                    onClick={this.props.launchGame.bind(null, `${GLOBALS.GAME_URL}${i.game_id}/index.html`)}
+                >
                     <div className="slide-container">
                         <object
                             width="650"
@@ -84,7 +87,10 @@ class Component extends React.Component {
 
         return (
             <div className={COMPONENT_UNIQUE_IDENTIFIER} >
-                <object className="hidden-preload" data="https://media.changemyworldnow.com/f/PlatformArt/gradients/gradient01.svg" />
+                <object
+                    className="hidden-preload"
+                    data={`${GLOBALS.MEDIA_URL}PlatformArt/gradients/gradient01.svg`}
+                />
                 <div className="featured-flag"><span>{LABELS.FLAG}</span></div>
                 <Slider
                     arrows={true}

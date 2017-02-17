@@ -17,13 +17,6 @@ var eslintConfigTest = JSON.parse(fs.readFileSync('./.eslintrc_test'));
 var eslintConfigConfig = JSON.parse(fs.readFileSync('./.eslintrc_config'));
 var env = require('gulp-env');
 var _ = require('lodash');
-var inject = require('gulp-inject');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var mergeStream = require('merge-stream');
-var sri = require('gulp-sri');
-var mocha = require('gulp-mocha');
-var zip = require('gulp-zip');
-var webdriver = require('gulp-webdriver');
 var jsonfile = require('jsonfile');
 
 /** @const */
@@ -278,7 +271,7 @@ var buildAndCopyStaticResources = function () {
                 }, {
                     test: /\.scss$/,
                     loader: ExtractTextPlugin.extract('style-loader',
-                        'css-loader!autoprefixer-loader!sass-loader')
+                        'css-loader!autoprefixer-loader!sass-loader!prepend?data=' + scssGlobals)
                 }, {
                     test: /\.(jpe?g|png|gif|svg)$/i,
                     loader: 'url-loader?limit=10000'

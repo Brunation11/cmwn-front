@@ -309,8 +309,26 @@ export class Profile extends React.Component {
         );
     }
 
+    renderFlipPanel() {
+        return (
+            <Panel
+                header={HEADINGS.TROPHYCASE}
+                className={ClassNames('standard', {
+                    hidden: !this.state.isStudent
+                })}
+            >
+                <FLIP_SOURCE>
+                   <Flipcase
+                        type="trophycase"
+                        header={true}
+                        render="earned"
+                    />
+                </FLIP_SOURCE>
+            </Panel>
+        );
+    }
+
     renderUserProfile() {
-        var self = this;
         var ISODate;
         try {
             ISODate = (new Date(this.state.birthdate)).toISOString();
@@ -349,20 +367,7 @@ export class Profile extends React.Component {
                             canUpdate={Util.decodePermissions(this.state.scope).update}
                         />
                     </Panel>
-                    <Panel
-                        header={HEADINGS.TROPHYCASE}
-                        className={ClassNames('standard', {
-                            hidden: !this.state.isStudent
-                        })}
-                    >
-                        <FLIP_SOURCE>
-                           <Flipcase
-                                type="trophycase"
-                                header={true}
-                                render="earned"
-                            />
-                        </FLIP_SOURCE>
-                    </Panel>
+                    {this.renderFlipPanel()}
                 </div>
             );
         }
@@ -380,23 +385,7 @@ export class Profile extends React.Component {
                         canUpdate={Util.decodePermissions(this.state.scope).update}
                     />
                 </Panel>
-                <Panel
-                    header={HEADINGS.TROPHYCASE}
-                    className={ClassNames('standard', {
-                        hidden: !this.state.hasFlipData
-                    })}
-                >
-                    <FLIP_SOURCE>
-                       <Flipcase
-                            type="trophycase"
-                            header={true}
-                            render="earned"
-                            onDataReceived={data => {
-                                self.setState({hasFlipData: (data && data.length)});
-                            }}
-                        />
-                    </FLIP_SOURCE>
-                </Panel>
+                {this.renderFlipPanel()}
             </div>
         );
     }
@@ -416,20 +405,7 @@ export class Profile extends React.Component {
                         {this.renderGame()}
                     </Modal.Body>
                 </Modal>
-                <Panel
-                    header={HEADINGS.TROPHYCASE}
-                    className={ClassNames('standard', {
-                        hidden: !this.state.isStudent
-                    })}
-                >
-                    <FLIP_SOURCE>
-                       <Flipcase
-                            type="trophycase"
-                            header={true}
-                            render="earned"
-                        />
-                    </FLIP_SOURCE>
-                </Panel>
+                {this.renderFlipPanel()}
                 <Panel
                     header={HEADINGS.ARCADE}
                     className={ClassNames('standard')}

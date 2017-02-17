@@ -1,5 +1,4 @@
 import React from 'react';
-import {Panel} from 'react-bootstrap';
 import _ from 'lodash';
 import Loader from 'react-loader';
 import InfiniteScroll from 'react-infinite-scroller';
