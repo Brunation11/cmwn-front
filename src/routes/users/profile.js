@@ -246,6 +246,7 @@ export class Profile extends React.Component {
         return (
                <GAME_WRAPPER transform={dataTransform}>
                    <FeaturedGames
+                       launchGame={this.showModal.bind(this)}
                        transformData={this.transformFeaturedData}
                    />
                    <InfinitePaginator
@@ -256,7 +257,6 @@ export class Profile extends React.Component {
                    >
                        <FlipBoard
                            renderFlip={this.renderFlip.bind(this)}
-                           header={HEADINGS.ARCADE}
                            id="game-flip-board"
                        />
                    </InfinitePaginator>

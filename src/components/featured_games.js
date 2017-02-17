@@ -43,7 +43,7 @@ class Component extends React.Component {
         var slides;
         slides = _.map(this.state.titles, i => {
             return (
-                <figure className="slide effect-apollo" onClick={this.props.launchGame.bind(null, i.game_id)}>
+                <figure className="slide effect-apollo" onClick={this.props.launchGame.bind(null, `${GLOBALS.GAME_URL}${i.game_id}/index.html`)}>
                     <div className="slide-container">
                         <object
                             width="685"

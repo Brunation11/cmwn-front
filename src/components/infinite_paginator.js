@@ -70,7 +70,7 @@ class InfinitePaginator extends React.Component {
     render() {
         var self = this;
         return (
-            <Panel className={COMPONENT_IDENTIFIER}>
+            <div className={COMPONENT_IDENTIFIER}>
 
                <InfiniteScroll
                   pageStart={0}
@@ -84,7 +84,7 @@ class InfinitePaginator extends React.Component {
                    { React.Children.map(self.props.children, child =>
                        React.cloneElement(child, {data: self.props.data}))}
                </InfiniteScroll>
-            </Panel>
+            </div>
         );
     }
 }
