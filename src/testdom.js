@@ -49,6 +49,14 @@ global.window.grecaptcha = {
     }
 };
 
+global.window.matchMedia = window.matchMedia || function() {
+    return {
+        matches : false,
+        addListener : function() {},
+        removeListener: function() {}
+    };
+};
+
 // take all properties of the window object and also attach it to the
 // mocha global object
 propagateToGlobal(win)
