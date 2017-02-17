@@ -22,6 +22,7 @@ export class GamePage extends React.Component {
     }
     componentDidMount() {
         var gameElem = ReactDOM.findDOMNode(this.refs.gameRef);
+
         if (gameElem && gameElem.scrollIntoView) { //defensive code only needed for error in testDOM
             gameElem.scrollIntoView();
         }

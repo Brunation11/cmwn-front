@@ -2,7 +2,7 @@ Change My World Now Platform
 ============================
 
 [![wercker status](https://app.wercker.com/status/89d783b307249e7b765a4d044ff24a0f/m "wercker status")](https://app.wercker.com/project/bykey/89d783b307249e7b765a4d044ff24a0f)
-
+[![CodeFactor](https://www.codefactor.io/repository/github/ginasink/cmwn-front/badge)](https://www.codefactor.io/repository/github/ginasink/cmwn-front)
 
 Requirements
 ------------
