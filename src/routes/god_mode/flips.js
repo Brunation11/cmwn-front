@@ -76,7 +76,6 @@ export class ManageFlips extends React.Component {
         }).catch(err => {
             Toast.error(HEADINGS.SAVE_FAILED);
             Log.log(HEADINGS.SAVE_FAILED, err, postData);
-            this.setState({});
         });
     }
 
@@ -205,7 +204,7 @@ export class ManageFlips extends React.Component {
         var flips = {};
 
         if (this.state.update) {
-            _.forEach(data, item => {
+            _.each(data, item => {
                 flips[item.flip_id] = {
                     flipId: item.flip_id,
                     title: item.title,
