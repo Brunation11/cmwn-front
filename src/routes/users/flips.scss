@@ -1,23 +1,92 @@
-// start changes
-
 @import 'variables';
 
 $halfway-break-1: 885px;
 
-$background: '#{$media-url}1872fab42d9c57f01edc15bee49d5337.png';
-$trophcase-shelf: '#{$media-url}f39eaf3f4b14221bdf278bba4f25a353.png';
-$shelf: '#{$media-url}66432844da8fb716d11512d97f1e1a68.png';
-$trophy: '#{$media-url}2c290cd012dd70a4d4aa22d41e7b3c87.png';
-$nav-btns: '#{$media-url}a9157cf49a6684031e303ddc28fabd85.png';
+$media: '#{$media-url}PlatformArt/discoveryPAGE/desktop/';
+
+$background: '#{$media}images/blue.gradient.png';
+$trophcase-shelf: '#{$media}images/main.shelf.png';
+$shelf: '#{$media}images/white.shelf.png';
+$trophy: '#{$media}images/trophy.png';
+$nav-btns: '#{$media}sprites/buttons.png';
 
 .discover-flips {
     .flip-wall {
         background: url($background);
         background-size: 100% 100%;
 
+        .mobile {
+            display: none;
+        }
+
         .panel-body {
             position: relative;
             padding: 0;
+        }
+
+        .edit-profile-btn,
+        .profile-btn {
+            outline: none;
+            border: 0;
+            box-shadow: 0 0 10px $cmwn-black;
+            padding: $standard + 5 $standard;
+            width: 100%;
+            text-transform: uppercase;
+            color: $cmwn-white;
+
+            span {
+                display: inline-block;
+            }
+        }
+
+        .edit-profile-btn {
+            background: $cmwn-purple;
+            text-align: left;
+            font-size: 11px;
+
+            .tap-to-view {
+                float: right;
+            }
+        }
+
+        .notice {
+            position: absolute;
+            padding: $standard;
+            width: 100%;
+            text-align: center;
+            font-weight: 900;
+
+            span {
+                position: absolute;
+                text-decoration: underline;
+            }
+
+            span:nth-of-type(1) {
+                left: 31%;
+            }
+
+            span:nth-of-type(3) {
+                left: 56%;
+            }
+
+            .btn {
+                top: 80%;
+                left: 50%;
+                transform: translateX(-50%) translateY(-50%);
+                background: url($nav-btns);
+                background-position: 87% 0;
+                background-size: auto 243%;
+                width: 34px;
+                height: 34px;
+            }
+        }
+
+        .profile-btn {
+            position: absolute;
+            bottom: 0;
+            background: $cmwn-green;
+            text-align: center;
+            font-size: 20px;
         }
 
         .label {
@@ -35,7 +104,6 @@ $nav-btns: '#{$media-url}a9157cf49a6684031e303ddc28fabd85.png';
 
         .single-flip {
             width: 25%;
-            height: 180px;
         }
 
         .nav-btn {
@@ -72,7 +140,8 @@ $nav-btns: '#{$media-url}a9157cf49a6684031e303ddc28fabd85.png';
             }
 
             .flipcase {
-                padding: 0;
+                padding: 0 0 45%;
+                height: 0;
             }
 
             &::before {
@@ -117,7 +186,8 @@ $nav-btns: '#{$media-url}a9157cf49a6684031e303ddc28fabd85.png';
             }
 
             .single-flip {
-                margin-bottom: 9%;
+                padding-bottom: 35%;
+                height: auto;
             }
         }
 
@@ -132,7 +202,7 @@ $nav-btns: '#{$media-url}a9157cf49a6684031e303ddc28fabd85.png';
                 left: 50%;
                 transform: translateX(-50%) translateY(-50%);
                 width: 70%;
-                height: 76%;
+                height: 83.5%;
                 overflow: hidden;
             }
 
@@ -146,18 +216,29 @@ $nav-btns: '#{$media-url}a9157cf49a6684031e303ddc28fabd85.png';
                 background-repeat: no-repeat;
                 background-position: 0 100%;
                 background-size: 100% auto;
-                padding: 2% 0 25%;
+                padding: 5% 0 25%;
                 width: 100%;
                 height: 0;
             }
 
             .single-flip {
-                padding-bottom: 17%;
+                margin-top: -5%;
+                padding-bottom: 25%;
                 height: auto;
+                overflow: hidden;
 
                 // scss-lint:disable NestingDepth, SelectorDepth
+                img {
+                    bottom: 20%;
+                }
+
                 &::after {
                     position: absolute;
+                    top: 60%;
+                    left: 27%;
+                    box-shadow: 0 20px 15px $cmwn-black;
+                    width: 40%;
+                    height: 5%;
                     content: '';
                 }
                 // scss-lint:enable NestingDepth, SelectorDepth
@@ -169,12 +250,12 @@ $nav-btns: '#{$media-url}a9157cf49a6684031e303ddc28fabd85.png';
 
                 // scss-lint:disable NestingDepth, SelectorDepth
                 &.backward {
-                    top: -2%;
+                    top: -3%;
                     transform: translateX(-50%) scaleY(-1);
                 }
 
                 &.forward {
-                    bottom: -4%;
+                    bottom: -5%;
                 }
 
                 &.backward,
@@ -190,45 +271,82 @@ $nav-btns: '#{$media-url}a9157cf49a6684031e303ddc28fabd85.png';
         }
 
         @media (max-width: $device-portrait-break) {
-            .panel-body {
-                height: 85vh;
-            }
+            .mobile {
+                display: block;
 
-            .nav-btn {
-                display: none;
-            }
-
-            .earned-flips {
-                .earned-container {
+                .modal-dialog {
                     margin: 0;
                     width: 100%;
+                    height: 100%;
                 }
 
-                .flipcase {
-                    margin: 0 0 0 15%;
-                    width: 85%;
-                    overflow: auto;
-                }
-
-                .single-flip {
-                    height: 120px;
-                }
-
-                .label {
-                    bottom: 6%;
-                    font-size: 12px;
-                }
-            }
-
-            .all-flips {
-                padding-bottom: 110%;
-
-                .shelf-container {
+                .modal-content {
+                    border: 0;
+                    border-radius: 0;
+                    box-shadow: none;
+                    background: url($background);
+                    background-size: 100% 100%;
                     width: 100%;
-                    overflow: auto;
+                    height: 100%;
+                }
+
+                .nav-btn {
+                    display: none;
+                }
+
+                .earned-flips {
+                    // scss-lint:disable NestingDepth, SelectorDepth
+                    .earned-container {
+                        margin: 0;
+                        width: 100%;
+                    }
+
+                    .flipcase {
+                        margin: 0 0 0 15%;
+                        padding: 0 0 37%;
+                        width: 85%;
+                        overflow: auto;
+                    }
+                    // scss-lint:enable NestingDepth, SelectorDepth
+                }
+
+                .all-flips {
+                    margin: 0;
+                    padding-bottom: 90%;
+
+                    // scss-lint:disable NestingDepth, SelectorDepth
+                    .shelf-container {
+                        top: 50%;
+                        width: 100%;
+                        height: 99%;
+                        overflow: auto;
+                    }
+                    // scss-lint:enable NestingDepth, SelectorDepth
+                }
+            }
+        }
+
+        $increment: 30;
+
+        @for $i from 0 through $increment {
+            @media (min-width: $i * 35px) and (max-width: $device-portrait-break) {
+                .label {
+                    bottom: 5%;
+                    font-size: 1px + $i;
                 }
             }
 
+            @media (min-width: $device-portrait-break + $i * 40) and (max-width: $device-max-break) {
+                .label {
+                    font-size: 12px + $i;
+                }
+            }
+
+            @media (min-width: $device-max-break + $i * 35) and (max-width: $monitor-max-break) {
+                .label {
+                    font-size: 12px + $i;
+                }
+            }
         }
     }
 }
