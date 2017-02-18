@@ -13,6 +13,8 @@ var Util = {
             var func = self[key];
             if (_.isFunction(func)) {
                 self[key] = function () { return func.apply(self, arguments); };
+            } else {
+                Log.warn('Looks like there is a typo in function name ' + key + '! Get some caffeine.');
             }
         });
     },

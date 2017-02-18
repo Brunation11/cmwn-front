@@ -120,10 +120,13 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
         exit: function (e) {
             var gameData = e.gameData || {id: undefined, currentScreenIndex: undefined};
             var flipId = gameData.id || gameData.game || gameData.flip;
+            window.document.body.className =
+                _.without(window.document.body.className.split(' '), 'fullscreen').join(' ');
             ga('send', 'event', 'Game', 'Quit', flipId, gameData.currentScreenIndex);
             exitCallback({fullscreenFallback: false});
         },
         init: function (e) {
+            var href = _.get(_links, 'save_game.href');
             ga('send', 'event', {
                 'eventCategory': 'Game',
                 'eventAction': 'Started',
@@ -132,8 +135,8 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
             });
             //we are not concerned if this HAL link is not present,
             //this user simply doesn't have permission to save
-            if (_.get(_links, 'save_game.href')) {
-                HttpManager.GET( _links.save_game.href.replace('{game_id}', gameId))
+            if (href) {
+                HttpManager.GET(href.replace('{game_id}', gameId))
                     .then(server => e.respond(server.response.data))
                     .catch(err => {
                         var message = 'failed to get game data for ' + gameId;

@@ -65,8 +65,15 @@ var Component = React.createClass({
         };
     },
     componentDidMount: function () {
+        var self = this;
         this.getToken();
         window.document.addEventListener('keydown', this.attemptLogin);
+        //react and chrome struggle to communicate autofilling forms.
+        //lets give a little push once the browser has had half a second
+        //to fill the fields
+        window.setTimeout(() => {
+            self.forceUpdate();
+        }, 500);
     },
     componentWillUnmount: function () {
         window.document.removeEventListener('keydown', this.attemptLogin);
@@ -91,14 +98,15 @@ var Component = React.createClass({
     login: function (e) {
         var dataUrl;
         var req;
-        var user = this.getUsernameWithoutSpaces();
+        var user = this.getInputWithoutSpaces('login');
+        var password = this.getInputWithoutSpaces('password');
         dataUrl = this.state.overrideLogin || this.props.currentUser._links.login.href;
         ga('send', 'event', 'Login', 'Attempted');
         req = HttpManager.POST({
             url: dataUrl,
         }, {
             'username': user,
-            'password': this.state.password
+            'password': password
         });
         req.then(res => {
             if (res.response && res.response.status && res.response.detail &&
@@ -150,7 +158,7 @@ var Component = React.createClass({
             !this.state.username ||
             !this.state.password) return;
 
-        user = this.getUsernameWithoutSpaces();
+        user = this.getInputWithoutSpaces('login');
 
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
             if (this.props.data._links && this.props.data._links.login == null) {
@@ -220,16 +228,18 @@ var Component = React.createClass({
             }
         }
     },
-    getUsernameWithoutSpaces: function () {
-        var newLogin;
+    getInputWithoutSpaces: function (field) {
+        var originalField;
+        var newField;
         try {
-            newLogin = this.refs.login.getValue().replace(/\s/g, '');
+            originalField = this.refs[field];
+            newField = originalField.getValue().replace(/\s/g, '');
         } catch(err) {
             //ref not yet mounted, probably somebody getting antsy and
             //hammering the enter key.
-            newLogin = '';
+            newField = '';
         }
-        return newLogin;
+        return newField;
     },
     renderLogin: function () {
         return (
