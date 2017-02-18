@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import {Panel, Modal} from 'react-bootstrap';
 import Shortid from 'shortid';
 import _ from 'lodash';
+import ClassNames from 'classnames';
 
 import Layout from 'layouts/two_col';
 import Flipcase from 'components/flipcase';
@@ -52,7 +53,11 @@ export class FlipWall extends React.Component {
         return (
             <div className="earned-flips">
                 <button
-                    className="nav-btn scroll-btn backward"
+                    className={ClassNames(
+                        "nav-btn scroll-btn backward", {
+                            hidden: this.state.caseIndex === 0
+                        }
+                    )}
                     onClick={this.scrollBackward.bind(this)}
                 />
                 <div className="earned-container">
@@ -90,7 +95,11 @@ export class FlipWall extends React.Component {
         return (
             <div className="all-flips">
                 <button
-                    className="nav-btn scroll-btn backward"
+                    className={ClassNames(
+                        "nav-btn scroll-btn backward", {
+                            hidden: this.state.shelfIndex === 0
+                        }
+                    )}
                     onClick={this.scrollBackward.bind(this, 'shelves')}
                 />
                 <div ref="shelf-container" className="shelf-container">
