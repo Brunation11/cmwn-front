@@ -122,7 +122,11 @@ export class FlipWall extends React.Component {
                     </div>
                 </div>
                 <button
-                    className="nav-btn scroll-btn forward"
+                    className={ClassNames(
+                        "nav-btn scroll-btn forward", {
+                            hidden: this.state.shelfIndex >= this.state.shelves.length - 3
+                        }
+                    )}
                     onClick={this.scrollForward.bind(this, 'shelves')}
                 />
             </div>
