@@ -67,7 +67,8 @@ export default class Flipcase extends React.Component {
     }
 
     renderEarned() {
-        return (_.map(this.state.flips, (flip) => {
+        var flips = _.orderBy(this.state.flips, ['earned'], ['desc']);
+        return (_.map(flips, (flip) => {
             return (
                 <FlipPopover
                     key={Shortid.generate()}
