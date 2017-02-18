@@ -54,7 +54,7 @@ export class FlipWall extends React.Component {
             <div className="earned-flips">
                 <button
                     className={ClassNames(
-                        "nav-btn scroll-btn backward", {
+                        'nav-btn scroll-btn backward', {
                             hidden: this.state.caseIndex === 0
                         }
                     )}
@@ -96,7 +96,7 @@ export class FlipWall extends React.Component {
             <div className="all-flips">
                 <button
                     className={ClassNames(
-                        "nav-btn scroll-btn backward", {
+                        'nav-btn scroll-btn backward', {
                             hidden: this.state.shelfIndex === 0
                         }
                     )}
@@ -123,7 +123,7 @@ export class FlipWall extends React.Component {
                 </div>
                 <button
                     className={ClassNames(
-                        "nav-btn scroll-btn forward", {
+                        'nav-btn scroll-btn forward', {
                             hidden: this.state.shelfIndex >= this.state.shelves.length - 3
                         }
                     )}
@@ -134,10 +134,6 @@ export class FlipWall extends React.Component {
     }
 
     scrollForward(ref) {
-        var container;
-        var offsetReference;
-        var offset;
-
         if (ref === 'shelves') {
             if (this.state.shelfIndex < this.state.shelves.length - 3) {
                 this.setState({shelfIndex: this.state.shelfIndex + 1});
@@ -150,10 +146,6 @@ export class FlipWall extends React.Component {
     }
 
     scrollBackward(ref) {
-        var container;
-        var offsetReference;
-        var offset;
-
         if (ref === 'shelves') {
             if (this.state.shelfIndex > 0) {
                 this.setState({shelfIndex: this.state.shelfIndex - 1});
@@ -166,7 +158,7 @@ export class FlipWall extends React.Component {
     }
 
     renderMobile() {
-        return(
+        return (
             <div className="mobile">
                 <Modal.Dialog>
                     <button className="edit-profile-btn">
