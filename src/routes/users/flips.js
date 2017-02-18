@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { connect } from 'react-redux';
-import {Panel} from 'react-bootstrap';
+import {Panel, Modal} from 'react-bootstrap';
 import Shortid from 'shortid';
 import _ from 'lodash';
 
@@ -27,17 +27,14 @@ export class FlipWall extends React.Component {
         super();
 
         this.state = {
-            xOffset: 0,
-            yOffset: 0,
-            shelfIndex: 1,
-            caseIndex: 1
+            shelfIndex: 0,
+            caseIndex: 0
         };
     }
 
     componentDidMount() {
         if (!_.isEmpty(this.props.data) && this.props.data._embedded && this.props.data._embedded.flip) {
             this.setState({
-                flips: this.props.data._embedded.flip,
                 shelves: _.chunk(_.shuffle(this.props.data._embedded.flip), FLIP_ROW_LENGTH)
             });
         }
@@ -46,7 +43,6 @@ export class FlipWall extends React.Component {
     componentWillReceiveProps(nextProps) {
         if (!_.isEmpty(nextProps.data) && this.props.data !== nextProps.data) {
             this.setState({
-                flips: nextProps.data._embedded.flip,
                 shelves: _.chunk(_.shuffle(nextProps.data._embedded.flip), FLIP_ROW_LENGTH)
             });
         }
@@ -64,11 +60,12 @@ export class FlipWall extends React.Component {
                         ref="earned"
                         className="earned"
                         style={{
-                            marginLeft: this.state.xOffset
+                            marginLeft: `${this.state.caseIndex * -25}%`
                         }}
                     >
                         <FLIP_SOURCE>
                             <Flipcase
+                                ref="flipcase"
                                 render="earned"
                             />
                         </FLIP_SOURCE>
@@ -96,12 +93,12 @@ export class FlipWall extends React.Component {
                     className="nav-btn scroll-btn backward"
                     onClick={this.scrollBackward.bind(this, 'shelves')}
                 />
-                <div className="shelf-container">
+                <div ref="shelf-container" className="shelf-container">
                     <div
                         ref="shelves"
                         className="shelves"
                         style={{
-                            marginTop: this.state.yOffset
+                            marginTop: `${this.state.shelfIndex * -30}%`
                         }}
                     >
                         {_.map(this.state.shelves, shelf => {
@@ -129,24 +126,12 @@ export class FlipWall extends React.Component {
         var offset;
 
         if (ref === 'shelves') {
-            if (this.state.shelfIndex <= this.state.shelves.length - 3) {
-                container = this.refs.shelves;
-                offsetReference = container.firstChild;
-                offset = offsetReference.offsetHeight;
-
-                this.setState({
-                    yOffset: this.state.shelfIndex * offset * -1,
-                    shelfIndex: this.state.shelfIndex + 1
-                });
+            if (this.state.shelfIndex < this.state.shelves.length - 3) {
+                this.setState({shelfIndex: this.state.shelfIndex + 1});
             }
         } else {
-            container = this.refs.earned;
-            offset = container.offsetWidth / 4;
-            if (this.state.caseIndex <= container.children[0].children[0].children.length - 5) {
-                this.setState({
-                    xOffset: this.state.caseIndex * offset * -1,
-                    caseIndex: this.state.caseIndex + 1
-                });
+            if (this.state.caseIndex < this.refs.flipcase.props.data.length - 4) {
+                this.setState({caseIndex: this.state.caseIndex + 1});
             }
         }
     }
@@ -157,27 +142,45 @@ export class FlipWall extends React.Component {
         var offset;
 
         if (ref === 'shelves') {
-            if (this.state.shelfIndex > 1) {
-                container = this.refs.shelves;
-                offsetReference = container.firstChild;
-                offset = offsetReference.offsetHeight;
-
-                this.setState({
-                    yOffset: (this.state.shelfIndex - 2) * offset * -1,
-                    shelfIndex: this.state.shelfIndex - 1
-                });
+            if (this.state.shelfIndex > 0) {
+                this.setState({shelfIndex: this.state.shelfIndex - 1});
             }
         } else {
-            if (this.state.caseIndex > 1) {
-                container = this.refs.earned;
-                offset = container.offsetWidth / 4;
-
-                this.setState({
-                    xOffset: (this.state.caseIndex - 2) * offset * -1,
-                    caseIndex: this.state.caseIndex - 1
-                });
+            if (this.state.caseIndex > 0) {
+                this.setState({caseIndex: this.state.caseIndex - 1});
             }
         }
+    }
+
+    renderMobile() {
+        return(
+            <div className="mobile">
+                <Modal.Dialog>
+                    <button className="edit-profile-btn">
+                        <span className="welcome">
+                            WELCOME TO DISCOVERY PAGE,
+                            <br />
+                            <strong>{this.props.currentUser.username}</strong>
+                        </span>
+                        <span className="tap-to-view">
+                            TAP TO<strong> VIEW PROFILE</strong>
+                        </span>
+                    </button>
+                    {this.renderEarnedShelf()}
+                    {this.renderShelves()}
+                    <span className="notice">
+                        swipe up
+                        <span className="btn"></span>
+                        for more shelves
+                    </span>
+                    <button className="profile-btn">
+                        <span className="tap-to-return">
+                            TAP TO<strong> VIEW PROFILE</strong>
+                        </span>
+                    </button>
+                </Modal.Dialog>
+            </div>
+        );
     }
 
     render() {
@@ -190,6 +193,7 @@ export class FlipWall extends React.Component {
                 navMenuId="navMenu"
             >
                 <Panel className="standard flip-wall">
+                    {this.renderMobile()}
                     {this.renderEarnedShelf()}
                     {this.renderShelves()}
                 </Panel>
