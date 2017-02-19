@@ -9,6 +9,7 @@ import ClassNames from 'classnames';
 import Layout from 'layouts/two_col';
 import Flipcase from 'components/flipcase';
 import GenerateDataSource from 'components/datasource';
+import History from 'components/history';
 
 import './flips.scss';
 
@@ -166,11 +167,18 @@ export class FlipWall extends React.Component {
         }
     }
 
+    renderNavigate(path) {
+        History.push(path);
+    }
+
     renderMobile() {
         return (
             <div className="mobile">
                 <Modal.Dialog>
-                    <button className="edit-profile-btn">
+                    <button
+                        className="edit-profile-btn"
+                        onClick={this.renderNavigate.bind(this, '/profile/edit')}
+                    >
                         <span className="welcome">
                             WELCOME TO DISCOVERY PAGE,
                             <br />
@@ -187,7 +195,10 @@ export class FlipWall extends React.Component {
                         <span className="btn"></span>
                         for more shelves
                     </span>
-                    <button className="profile-btn">
+                    <button
+                        className="profile-btn"
+                        onClick={this.renderNavigate.bind(this, '/profile')}
+                    >
                         <span className="tap-to-return">
                             TAP TO<strong> VIEW PROFILE</strong>
                         </span>
