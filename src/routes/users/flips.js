@@ -168,7 +168,7 @@ export class FlipWall extends React.Component {
     }
 
     renderNavigate(path) {
-        History.push(path)
+        History.push(path);
     }
 
     renderMobile() {
