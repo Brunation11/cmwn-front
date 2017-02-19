@@ -29,7 +29,9 @@ export class FlipWall extends React.Component {
 
         this.state = {
             shelfIndex: 0,
-            caseIndex: 0
+            caseIndex: 0,
+            shelves: [],
+            earned: [],
         };
     }
 
@@ -81,7 +83,12 @@ export class FlipWall extends React.Component {
                     onClick=""
                 />
                 <button
-                    className="nav-btn scroll-btn forward"
+                    className={ClassNames(
+                        'nav-btn scroll-btn forward', {
+                            hidden: this.refs.flipcase &&
+                                    (this.state.caseIndex >= this.refs.flipcase.props.data.length - 4)
+                        }
+                    )}
                     onClick={this.scrollForward.bind(this)}
                 />
                 <span className="label">
@@ -115,6 +122,7 @@ export class FlipWall extends React.Component {
                                 <Flipcase
                                     key={Shortid.generate()}
                                     render="all"
+                                    static={true}
                                     allFlips={shelf}
                                 />
                             );
@@ -124,7 +132,8 @@ export class FlipWall extends React.Component {
                 <button
                     className={ClassNames(
                         'nav-btn scroll-btn forward', {
-                            hidden: this.state.shelfIndex >= this.state.shelves.length - 3
+                            hidden: this.state.shelves &&
+                                    (this.state.shelfIndex >= this.state.shelves.length - 3)
                         }
                     )}
                     onClick={this.scrollForward.bind(this, 'shelves')}
