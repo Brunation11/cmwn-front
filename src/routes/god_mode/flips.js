@@ -10,6 +10,8 @@ import Toast from 'components/toast';
 import Log from 'components/log';
 import Form from 'components/form';
 import 'routes/god_mode/flips.scss';
+import IB_IDS from 'components/ib_ids';
+import GLOBALS from 'components/globals';
 
 import Layout from 'layouts/god_mode_two_col';
 
@@ -98,6 +100,9 @@ export class ManageFlips extends React.Component {
 
     renderFlip(item) {
         var res = this.renderPopover(item);
+        var src = (IB_IDS.FLIPS[item.flipId] && IB_IDS.FLIPS[item.flipId].static) ?
+            GLOBALS.MEDIA_URL + IB_IDS.FLIPS[item.flipId].static :
+            GLOBALS.MEDIA_URL + IB_IDS.FLIPS.default;
         if (item.newFlip) {
             return (
                 <div className="create-flip" key={item.flipId}>
@@ -117,8 +122,9 @@ export class ManageFlips extends React.Component {
                 <img
                     ref={`img-ref-${item.flipId}`}
                     className="flip-image"
-                    src={`/flips/${item.flipId}-static.gif`}
-                    alt={item.flipId}/>
+                    src={src}
+                    alt={item.flipId}
+                />
                 <a onClick={this.toggleClose.bind(this, true, item.flipId)}>
                     {res}
                     <div className="flip-title">{item.title}</div>
