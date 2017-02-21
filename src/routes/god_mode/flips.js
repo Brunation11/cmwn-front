@@ -190,7 +190,8 @@ export class ManageFlips extends React.Component {
                             className={
                                 ClassNames('btn', 'standard', 'purple', 'delete-btn', {hidden: item.newFlip})
                             }
-                            onClick={this.deleteFlip.bind(this, item.flipId)}>
+                            onClick={this.deleteFlip.bind(this, item.flipId)}
+                        >
                             {this.state.deleteTry === item.flipId ? HEADINGS.CONFIRM_DELETE : HEADINGS.DELETE}
                         </Button>
                     </Form>
