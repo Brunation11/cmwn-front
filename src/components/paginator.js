@@ -54,7 +54,7 @@ var Paginator = React.createClass({
         return {
             onPageChange: _.identity,
             onRowCountChange: _.identity,
-            pagePaginator: false
+            pagePaginator: true
         };
     },
     getInitialState: function () {

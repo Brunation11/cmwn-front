@@ -199,9 +199,10 @@ var Util = {
                 //we need to do this second ? split as well as the interior loop because of an api
                 //error. they will be extranneous but harmless once this bug is fixed.
                 debugger;
-                return _.defaults(a, _.reduce(v.split('&', (acc, keyparam) => {
-                    return acc[keyparam.split('=')[0]] = keyparam.split('=')[1];
-                }), {}));
+                return _.defaults(a, _.reduce(v.split('&'), (acc, keyparam) => {
+                    acc[keyparam.split('=')[0]] = keyparam.split('=')[1];
+                    return acc;
+                }, {}));
             }, {});
         } else {
             presetParams = {};
@@ -213,7 +214,7 @@ var Util = {
         //but currently not all possible qs params are listed
         //so we just have to include everything provided
         //and ignore the template entirely
-        _.each(params, key => {
+        _.each(params, (v, key) => {
             if (params[key] != null){
                 url += key + '=' + params[key] + '&';
             }

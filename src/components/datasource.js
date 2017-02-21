@@ -89,6 +89,7 @@ export default function (endpointIdentifier, componentName) {
                 )
                 .set('currentPage', this.props.component.page || this.props.currentPage || 1)
                 .set('pageCount', this.props.component.page_count || this.props.pageCount || 1)
+                .set('pagePaginator', false)
                 .set('componentName', this.props.componentName)
                 .set('endpointIdentifier', this.props.endpointIdentifier);
             return (
