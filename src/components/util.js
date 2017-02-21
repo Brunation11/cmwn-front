@@ -190,22 +190,30 @@ var Util = {
         //this will break under any other circumstance
         //there are also two possible cases here - preset query params exist, or not
         //as such, we need to strip them out and add them to our other params
-        var templates = template.replace('&', '').replace('?', '').split('{')[1].split('}')[0].split(',');
+        //var templates = template.replace('&', '').replace('?', '').split('{')[1].split('}')[0].split(',');
         var url = template.split('{')[0].split('?')[0] + '?';
         var presetParams = template.split('{')[0];
         if (~presetParams.indexOf('?')) {
-            _.reduce(presetParams.split('?')[0].split('?'), (a, v) => {
+            presetParams = presetParams.split('?').slice(1).join('?');
+            presetParams = _.reduce(presetParams.split('?'), (a, v) => {
                 //we need to do this second ? split as well as the interior loop because of an api
                 //error. they will be extranneous but harmless once this bug is fixed.
-                return a.concat(_.map(v.split('&', keyparam => {
-                    return {[keyparam.split('=')[0]]: keyparam.split('=')[1]};
-                })));
-            }, []);
+                debugger;
+                return _.defaults(a, _.reduce(v.split('&', (acc, keyparam) => {
+                    return acc[keyparam.split('=')[0]] = keyparam.split('=')[1];
+                }), {}));
+            }, {});
         } else {
             presetParams = {};
         }
+        console.log(JSON.stringify(presetParams));
         params = _.defaults(params, presetParams);
-        _.each(templates, key => {
+        //this should be
+        //_.each(templates, key => {
+        //but currently not all possible qs params are listed
+        //so we just have to include everything provided
+        //and ignore the template entirely
+        _.each(params, key => {
             if (params[key] != null){
                 url += key + '=' + params[key] + '&';
             }
