@@ -103,7 +103,6 @@
     "img-loader": "^1.2.2",
     "istanbul": "^1.0.0-alpha.2",
     "istanbul-react": "^1.1.0",
-    "jpegtran-bin": "0.2.3",
     "jsdom": "8.5.0",
     "jsdom-global": "2.0.0",
     "jsonfile": "^2.3.1",
