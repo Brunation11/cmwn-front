@@ -98,6 +98,29 @@ export class ManageFlips extends React.Component {
         this.setState({deleteTry: flipId});
     }
 
+    updateFlips(data) {
+        var flips = {};
+
+        if (this.state.update) {
+            _.each(data, item => {
+                flips[item.flip_id] = {
+                    flipId: item.flip_id,
+                    title: item.title,
+                    description: item.description
+                };
+            });
+
+            if (!_.isEqual(flips, this.state.flips)) {
+                flips['new-flip'] = {flipId: 'new-flip', title: '', description: '', newFlip: true};
+                this.setState({flips, update: false});
+            }
+        }
+    }
+
+    toggleClose(open, flipId) {
+        this.setState({open: open ? flipId : ''});
+    }
+
     renderFlip(item) {
         var res = this.renderPopover(item);
         var src = (IB_IDS.FLIPS[item.flipId] && IB_IDS.FLIPS[item.flipId].static) ?
@@ -131,10 +154,6 @@ export class ManageFlips extends React.Component {
                 </a>
             </div>
         );
-    }
-
-    toggleClose(open, flipId) {
-        this.setState({open: open ? flipId : ''});
     }
 
     renderPopover(item) {
@@ -205,25 +224,6 @@ export class ManageFlips extends React.Component {
                 </a>
             </Modal>
         );
-    }
-
-    updateFlips(data) {
-        var flips = {};
-
-        if (this.state.update) {
-            _.each(data, item => {
-                flips[item.flip_id] = {
-                    flipId: item.flip_id,
-                    title: item.title,
-                    description: item.description
-                };
-            });
-
-            if (!_.isEqual(flips, this.state.flips)) {
-                flips['new-flip'] = {flipId: 'new-flip', title: '', description: '', newFlip: true};
-                this.setState({flips, update: false});
-            }
-        }
     }
 
     render() {

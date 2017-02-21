@@ -33,7 +33,7 @@ const IB_IDS = {
         'drone-zone': '9e9b3bae0f9e8ba512eed9fad35868b2.gif'
     },
     FLIPS: {
-        'default': 'b86903222ed7cc0fa7c8a281614d5dd3.png',
+        'default': '1ed4762c74be069c535490bf6f8391eb.gif',
         'drought-out': {
             earned: '65e520c9fca8531d935967f1ddba7c4b.gif',
             unearned: '44622644f9eb3bfce8640649c2dbe3b4.gif',
@@ -138,6 +138,16 @@ const IB_IDS = {
             earned: 'e6be7b03b894d711d95dd4d8aa26bb0a.gif',
             unearned: '044049385dc8499dc53b808a6e726f48.gif',
             static: '4a3e47e27a7415fb10d09637c0a240c6.gif'
+        },
+        'green-team': {
+            earned: '0805c9727c0ec233eab94e4d67a646c4.gif',
+            unearned: '41cf97dfd52d73f62ad678a6f2c1cc54.gif',
+            static: '00a1afcb41b46fffa60b042771374891.gif'
+        },
+        'green-team-challenge': {
+            earned: '0805c9727c0ec233eab94e4d67a646c4.gif',
+            unearned: '41cf97dfd52d73f62ad678a6f2c1cc54.gif',
+            static: '00a1afcb41b46fffa60b042771374891.gif'
         },
     },
 };
