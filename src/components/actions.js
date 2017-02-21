@@ -259,6 +259,8 @@ Actions = Actions.set(ACTION_CONSTANTS.CHANGE_COMPONENT_ROW_COUNT, function
 
 Actions = Actions.set(ACTION_CONSTANTS.GET_NEXT_INFINITE_COMPONENT_PAGE, function
     (state, endpointIdentifier, componentName) {
+    console.log('here');
+    debugger;
     var componentKey = endpointIdentifier + '-' + componentName;
     var endpoint;
     if (

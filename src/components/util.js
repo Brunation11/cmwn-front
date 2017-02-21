@@ -188,8 +188,23 @@ var Util = {
     modifyTemplatedQueryParams(template, params){
         //this approach assumes all template params are in the query string
         //this will break under any other circumstance
-        var templates = template.replace('?', '').split('{')[1].split('}')[0].split(',');
-        var url = template.split('{')[0] + '?';
+        //there are also two possible cases here - preset query params exist, or not
+        //as such, we need to strip them out and add them to our other params
+        var templates = template.replace('&', '').replace('?', '').split('{')[1].split('}')[0].split(',');
+        var url = template.split('{')[0].split('?')[0] + '?';
+        var presetParams = template.split('{')[0];
+        if (~presetParams.indexOf('?')) {
+            _.reduce(presetParams.split('?')[0].split('?'), (a, v) => {
+                //we need to do this second ? split as well as the interior loop because of an api
+                //error. they will be extranneous but harmless once this bug is fixed.
+                return a.concat(_.map(v.split('&', keyparam => {
+                    return {[keyparam.split('=')[0]]: keyparam.split('=')[1]};
+                })));
+            }, []);
+        } else {
+            presetParams = {};
+        }
+        params = _.defaults(params, presetParams);
         _.each(templates, key => {
             if (params[key] != null){
                 url += key + '=' + params[key] + '&';
