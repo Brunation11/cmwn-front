@@ -1,7 +1,7 @@
 /*global describe, it */
 
-var assert = require('assert');
-var expect = require('chai').expect;
+import assert from 'assert';
+import {expect} from 'chai';
 
 /*
 import Users from 'routes/users';

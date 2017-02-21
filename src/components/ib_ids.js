@@ -140,12 +140,12 @@ const IB_IDS = {
             static: '4a3e47e27a7415fb10d09637c0a240c6.gif'
         },
         'green-team': {
-            earned: '0805c9727c0ec233eab94e4d67a646c4.gif',
+            earned: '9063d79b44cf9c4c39ff32e8dae931e0.gif',
             unearned: '41cf97dfd52d73f62ad678a6f2c1cc54.gif',
             static: '00a1afcb41b46fffa60b042771374891.gif'
         },
         'green-team-challenge': {
-            earned: '0805c9727c0ec233eab94e4d67a646c4.gif',
+            earned: '9063d79b44cf9c4c39ff32e8dae931e0.gif',
             unearned: '41cf97dfd52d73f62ad678a6f2c1cc54.gif',
             static: '00a1afcb41b46fffa60b042771374891.gif'
         },
