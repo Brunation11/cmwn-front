@@ -149,6 +149,31 @@ const IB_IDS = {
             unearned: '41cf97dfd52d73f62ad678a6f2c1cc54.gif',
             static: '00a1afcb41b46fffa60b042771374891.gif'
         },
+        'recycling-champion': {
+            earned: 'd5fbeea00d04559674ce65e42dbb360a.gif',
+            unearned: 'b434b943743e6804cbc6ba5926526efd.gif',
+            static: '55afd316be2600d967f70aad69569ac5.gif'
+        },
+        'priceless-pourer': {
+            earned: '11509474e4e98b6aa0e3d98a7b73de91.gif',
+            unearned: '7fcba0d87084cd75e81aa4a14de7c0bf.gif',
+            static: '24eaaecd6818b6f1f93bbe8a1e45959b.gif'
+        },
+        'fantastic-food-sharer': {
+            earned: '7326131e224d281e90292418758e2e1b.gif',
+            unearned: 'af4b534b3c0e49eab1ec4a22b314ead1.gif',
+            static: '715ffba385a9f7c4a63ace2e4feb44b7.gif'
+        },
+        'dynamic-diverter': {
+            earned: '25586caa61a58b4378f483cd1af1ba51.gif',
+            unearned: 'e9da048c7d075318386101c672aa645d.gif',
+            static: 'e2de3628439f8bc5b2b8d3577443328d.gif'
+        },
+        'master-sorter': {
+            earned: 'd7c67f43016f68916d89abafe88fbdcd.gif',
+            unearned: '7bee327c9c1ac9fd6830029bc484f956.gif',
+            static: '27f759d9631757f5654d8b2a1bdcb2cc.gif'
+        },
     },
 };
 

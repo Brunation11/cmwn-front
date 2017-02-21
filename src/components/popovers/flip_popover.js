@@ -42,7 +42,8 @@ export default class FlipPopover extends React.Component {
             return null;
         }
 
-        if (IB_IDS.FLIPS[this.state.element.flip_id] && IB_IDS.FLIPS[this.state.element.flip_id][this.state.status]) {
+        if (IB_IDS.FLIPS[this.state.element.flip_id] &&
+            IB_IDS.FLIPS[this.state.element.flip_id][this.state.status]) {
             src = GLOBALS.MEDIA_URL + IB_IDS.FLIPS[this.state.element.flip_id][this.state.status];
         }
         return (
