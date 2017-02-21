@@ -22,7 +22,7 @@ test:
       code: gulp lint
     - script:
       name: Unit Tests
-      code: ./test.sh
+      code: gulp unit
   after-steps:
     - slack-notifier:
       url: $SLACK_URL
