@@ -3,9 +3,8 @@ import {ButtonToolbar, OverlayTrigger, Popover} from 'react-bootstrap';
 import Shortid from 'shortid';
 import Moment from 'moment';
 import ClassNames from 'classnames';
-
-import Globals from 'components/globals';
 import IB_IDS from 'components/ib_ids';
+import Globals from 'components/globals';
 
 import 'components/popovers/popover.scss';
 
@@ -39,14 +38,12 @@ export default class FlipPopover extends React.Component {
 
     render() {
         var flipID = this.state.element.flip_id;
-        var mediaID;
+        var mediaID = IB_IDS.FLIPS.default;
 
         if (!this._mounted) return null;
 
         if (IB_IDS.FLIPS[flipID] && IB_IDS.FLIPS[flipID][this.state.status]) {
             mediaID = IB_IDS.FLIPS[flipID][this.state.status];
-        } else {
-            mediaID = IB_IDS.FLIPS.default;
         }
 
         return (

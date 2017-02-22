@@ -82,6 +82,8 @@ const LOG = {
 const HEADINGS = {
     ACTIVE: 'ACTIVE GAMES :',
     DELETED: 'DELETED GAMES :',
+    DELETE: 'DELETE',
+    CONFIRM: 'ARE YOU SURE?',
 };
 
 const TOAST = {
@@ -305,7 +307,7 @@ export class GodModeGames extends React.Component {
                 })}
                 onClick={this.deleteGame.bind(this, currentItem, item.game_id, false)}
             >
-                {this.state.deleteTry === item.game_id ? 'ARE YOU SURE?' : 'DELETE'}
+                {this.state.deleteTry === item.game_id ? HEADINGS.CONFIRM : HEADINGS.DELETE}
             </Button>
         );
     }

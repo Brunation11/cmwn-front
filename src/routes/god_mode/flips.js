@@ -10,6 +10,8 @@ import Toast from 'components/toast';
 import Log from 'components/log';
 import Form from 'components/form';
 import 'routes/god_mode/flips.scss';
+import IB_IDS from 'components/ib_ids';
+import GLOBALS from 'components/globals';
 
 import Layout from 'layouts/god_mode_two_col';
 
@@ -76,7 +78,6 @@ export class ManageFlips extends React.Component {
         }).catch(err => {
             Toast.error(HEADINGS.SAVE_FAILED);
             Log.log(HEADINGS.SAVE_FAILED, err, postData);
-            this.setState({});
         });
     }
 
@@ -97,8 +98,34 @@ export class ManageFlips extends React.Component {
         this.setState({deleteTry: flipId});
     }
 
+    updateFlips(data) {
+        var flips = {};
+
+        if (this.state.update) {
+            _.each(data, item => {
+                flips[item.flip_id] = {
+                    flipId: item.flip_id,
+                    title: item.title,
+                    description: item.description
+                };
+            });
+
+            if (!_.isEqual(flips, this.state.flips)) {
+                flips['new-flip'] = {flipId: 'new-flip', title: '', description: '', newFlip: true};
+                this.setState({flips, update: false});
+            }
+        }
+    }
+
+    toggleClose(open, flipId) {
+        this.setState({open: open ? flipId : ''});
+    }
+
     renderFlip(item) {
         var res = this.renderPopover(item);
+        var src = (IB_IDS.FLIPS[item.flipId] && IB_IDS.FLIPS[item.flipId].static) ?
+            GLOBALS.MEDIA_URL + IB_IDS.FLIPS[item.flipId].static :
+            GLOBALS.MEDIA_URL + IB_IDS.FLIPS.default;
         if (item.newFlip) {
             return (
                 <div className="create-flip" key={item.flipId}>
@@ -118,18 +145,15 @@ export class ManageFlips extends React.Component {
                 <img
                     ref={`img-ref-${item.flipId}`}
                     className="flip-image"
-                    src={`/flips/${item.flipId}-static.gif`}
-                    alt={item.flipId}/>
+                    src={src}
+                    alt={item.flipId}
+                />
                 <a onClick={this.toggleClose.bind(this, true, item.flipId)}>
                     {res}
                     <div className="flip-title">{item.title}</div>
                 </a>
             </div>
         );
-    }
-
-    toggleClose(open, flipId) {
-        this.setState({open: open ? flipId : ''});
     }
 
     renderPopover(item) {
@@ -185,7 +209,8 @@ export class ManageFlips extends React.Component {
                             className={
                                 ClassNames('btn', 'standard', 'purple', 'delete-btn', {hidden: item.newFlip})
                             }
-                            onClick={this.deleteFlip.bind(this, item.flipId)}>
+                            onClick={this.deleteFlip.bind(this, item.flipId)}
+                        >
                             {this.state.deleteTry === item.flipId ? HEADINGS.CONFIRM_DELETE : HEADINGS.DELETE}
                         </Button>
                     </Form>
@@ -199,25 +224,6 @@ export class ManageFlips extends React.Component {
                 </a>
             </Modal>
         );
-    }
-
-    updateFlips(data) {
-        var flips = {};
-
-        if (this.state.update) {
-            _.forEach(data, item => {
-                flips[item.flip_id] = {
-                    flipId: item.flip_id,
-                    title: item.title,
-                    description: item.description
-                };
-            });
-
-            if (!_.isEqual(flips, this.state.flips)) {
-                flips['new-flip'] = {flipId: 'new-flip', title: '', description: '', newFlip: true};
-                this.setState({flips, update: false});
-            }
-        }
     }
 
     render() {
