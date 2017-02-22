@@ -37,6 +37,7 @@ const IGNORED_ROUTES_FOR_CHILDREN = [
     'Friends and Network',
     'Resource Center',
     'Flags',
+    'My Earned Flips'
 ];
 
 const IGNORED_ROUTES_FOR_EVERYONE = [
