@@ -75,6 +75,15 @@ h3 {
     font-family: 'CMWNJadeRegular', Impact, Helvetica, Arial, sans-serif;
 }
 
+a {
+    cursor: pointer;
+    color: $cmwn-blue;
+
+    &:visited {
+        color: $cmwn-purple;
+    }
+}
+
 // scss-lint:disable IdSelector
 #pageerror,
 #triggerederror {
@@ -221,10 +230,6 @@ h3 {
         a + span::before {
             content: ' | ';
         }
-    }
-
-    a {
-        cursor: pointer;
     }
 
     img {
