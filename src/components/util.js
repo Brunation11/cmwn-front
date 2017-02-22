@@ -209,7 +209,6 @@ var Util = {
             presetParams = _.reduce(presetParams.split('?'), (a, v) => {
                 //we need to do this second ? split as well as the interior loop because of an api
                 //error. they will be extranneous but harmless once this bug is fixed.
-                debugger;
                 return _.defaults(a, _.reduce(v.split('&'), (acc, keyparam) => {
                     acc[keyparam.split('=')[0]] = keyparam.split('=')[1];
                     return acc;
@@ -218,7 +217,6 @@ var Util = {
         } else {
             presetParams = {};
         }
-        console.log(JSON.stringify(presetParams));
         params = _.defaults(params, presetParams);
         //this should be
         //_.each(templates, key => {

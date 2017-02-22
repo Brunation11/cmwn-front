@@ -455,7 +455,7 @@ mapStateToProps = state => {
     }
     if (state.components && state.components[componentKey] && state.components[componentKey].has_more) {
         hasMore = state.components[componentKey].has_more === true;
-        flipsHaveMore = state.components[flipComponentKey].has_more = true;
+        flipsHaveMore = state.components[flipComponentKey].has_more = true; // eslint-disable-line
     }
     return {
         state,
