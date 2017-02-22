@@ -7,11 +7,11 @@ import { Button } from 'react-bootstrap';
 import Shortid from 'shortid';
 
 import UserPopover from 'components/popovers/user_popover';
+import Paginator from 'components/paginator';
 import Log from 'components/log';
 import HttpManager from 'components/http_manager';
 import FlipBoard from 'components/flipboard';
 import Toast from 'components/toast';
-import Paginator from 'components/paginator';
 import Actions from 'components/actions';
 import GLOBALS from 'components/globals';
 import Flag from 'components/flag';
@@ -190,13 +190,7 @@ export class Friends extends React.Component {
                 navMenuId="navMenu"
             >
                 <form>
-                    <Paginator
-                        rowCount={this.props.rowCount}
-                        currentPage={this.props.currentPage}
-                        pageCount={this.props.pageCount}
-                        data={this.props.data}
-                        pagePaginator={true}
-                    >
+                    <Paginator data={this.props.data} >
                         <FlipBoard
                            renderFlip={this.renderCard.bind(this)}
                            header={HEADINGS.FRIENDS}

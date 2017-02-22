@@ -33,6 +33,8 @@ const LOADER_OPTIONS = {
 };
 
 
+/* TODO MPR 2/21/17: Make this work for horizontal scrollers*/
+/* TODO MPR 2/21/17: Make it possible to disable wraparound scrolling*/
 class InfinitePaginator extends React.Component {
     constructor() {
         super();

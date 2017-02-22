@@ -33,9 +33,10 @@ var Page;
 
 const PAGE_UNIQUE_IDENTIFIER = 'profile';
 const GAME_COMPONENT_IDENTIFIER = 'games';
+const FLIP_COMPONENT_IDENTIFIER = 'user_flip';
 
 const GAME_WRAPPER = GenerateDataSource(GAME_COMPONENT_IDENTIFIER, PAGE_UNIQUE_IDENTIFIER);
-const FLIP_SOURCE = GenerateDataSource('user_flip', PAGE_UNIQUE_IDENTIFIER);
+const FLIP_SOURCE = GenerateDataSource(FLIP_COMPONENT_IDENTIFIER, PAGE_UNIQUE_IDENTIFIER);
 
 const TITLES = IB_IDS.GAME_TILES;
 
@@ -318,7 +319,7 @@ export class Profile extends React.Component {
                 })}
             >
                 <FLIP_SOURCE>
-                   <Flipcase
+                    <Flipcase
                         type="trophycase"
                         header={true}
                         render="earned"
@@ -441,10 +442,12 @@ Profile.defaultProps = {
 
 mapStateToProps = state => {
     var componentKey = GAME_COMPONENT_IDENTIFIER + '-' + PAGE_UNIQUE_IDENTIFIER;
+    var flipComponentKey = FLIP_COMPONENT_IDENTIFIER + '-' + PAGE_UNIQUE_IDENTIFIER;
     var data = {};
     var loading = true;
     var currentUser = {};
     var hasMore = true;
+    var flipsHaveMore = true;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
@@ -452,10 +455,12 @@ mapStateToProps = state => {
     }
     if (state.components && state.components[componentKey] && state.components[componentKey].has_more) {
         hasMore = state.components[componentKey].has_more === true;
+        flipsHaveMore = state.components[flipComponentKey].has_more = true;
     }
     return {
         state,
         hasMore,
+        flipsHaveMore,
         data,
         loading,
         currentUser
