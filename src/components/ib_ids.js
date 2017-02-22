@@ -139,6 +139,11 @@ const IB_IDS = {
             unearned: '044049385dc8499dc53b808a6e726f48.gif',
             static: '4a3e47e27a7415fb10d09637c0a240c6.gif'
         },
+        'green-team-challenge': {
+            earned: '9063d79b44cf9c4c39ff32e8dae931e0.gif',
+            unearned: '41cf97dfd52d73f62ad678a6f2c1cc54.gif',
+            static: 'c80d08d78375598ccda7bfd7481e0289.png'
+        }
     },
 };
 

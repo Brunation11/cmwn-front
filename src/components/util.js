@@ -7,6 +7,17 @@ import GLOBALS from 'components/globals';
 import EventManager from 'components/event_manager';
 
 var Util = {
+    /* Binds the context to the given list of functions in a component*/
+    autobind: function (self, functionNames) {
+        _.each(functionNames, (key) => {
+            var func = self[key];
+            if (_.isFunction(func)) {
+                self[key] = function () { return func.apply(self, arguments); };
+            } else {
+                Log.warn('Looks like there is a typo in function name ' + key + '! Get some caffeine.');
+            }
+        });
+    },
     setPageTitle: function (text) {
         var titleElem;
         var title;

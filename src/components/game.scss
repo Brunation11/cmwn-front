@@ -240,6 +240,16 @@ body:fullscreen .game-frame-wrapper {
                 }
             }
         }
+    }
+
+    @media (max-width: $device-max-break) and (orientation: landscape) {
+
+        .game-frame-wrapper {
+            left: 50%;
+            transform: translateX(-50%);
+            padding-bottom: 77vmin;
+            width: 138vmin;
+        }
 
         .game-buttons {
             left: 50%;
