@@ -10,7 +10,6 @@ import Form from 'components/form';
 import Log from 'components/log';
 import EditMeta from 'components/edit_meta';
 import 'routes/god_mode/groups/create_group.scss';
-import Shortid from 'shortid';
 
 export const PAGE_UNIQUE_IDENTIFIER = 'god-mode-create-group';
 
@@ -211,7 +210,7 @@ export class CreateGroup extends React.Component {
                     })}
                 >
                     {_.map(this.state.orgs, function (item){
-                        return (<option key={Shortid.generate()} value={item.value}>{item.text}</option>);
+                        return (<option value={item.value}>{item.text}</option>);
                     })}
                 </select>
             </div>
@@ -238,7 +237,7 @@ export class CreateGroup extends React.Component {
                     }}
                 >
                     {_.map(this.state.groups, function (item){
-                        return (<option key={Shortid.generate()} value={item.value}>{item.text}</option>);
+                        return (<option value={item.value}>{item.text}</option>);
                     })}
                 </select>
             </div>
@@ -256,7 +255,7 @@ export class CreateGroup extends React.Component {
                     onChange={e => this.setState({type: e.target.value})}
                 >
                     {_.map(this.state.types, function (item) {
-                        return (<option key={Shortid.generate()} value={item.value}>{item.text}</option>);
+                        return (<option value={item.value}>{item.text}</option>);
                     })}
                 </select>
             </div>
