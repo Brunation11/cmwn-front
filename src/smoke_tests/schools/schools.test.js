@@ -20,7 +20,7 @@ var checkContents = function (WRAPPER, data) {
     expect(WRAPPER.find('Layout')).to.have.length(1);
     expect(WRAPPER.find('FlipBoard')).to.have.length(1);
     expect(WRAPPER.find('.flip')).to.have.length(1);
-    expect(WRAPPER.find('a')).to.have.length(4);
+    expect(WRAPPER.find('a')).to.have.length(8);
     expect(WRAPPER.find('img')).to.have.length(1);
     expect(WRAPPER.find('p')).to.have.length(1);
 };
