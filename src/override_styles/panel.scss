@@ -1,21 +1,26 @@
 @import 'variables';
 
-.panel.standard {
-    border: 0;
-    border-radius: 0;
+.panel {
+    clear: both;
 
-    .panel-heading {
+    &.standard {
+        border: 0;
         border-radius: 0;
-        background: url('media/blue-header-bg.jpg');
-        background-color: $cmwn-blue;
-        background-size: 100% auto;
-        text-transform: uppercase;
-        color: $cmwn-white;
-        font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
-        font-size: 1.2rem;
-    }
 
-    .panel-body {
-        border-radius: 0;
+        .panel-heading {
+            border-radius: 0;
+            background: url('media/blue-header-bg.jpg');
+            background-color: $cmwn-blue;
+            background-size: 100% auto;
+            text-transform: uppercase;
+            color: $cmwn-white;
+            font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
+            font-size: 1.2rem;
+        }
+
+        .panel-body {
+            border-radius: 0;
+        }
     }
 }
+

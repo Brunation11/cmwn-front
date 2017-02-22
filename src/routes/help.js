@@ -35,9 +35,9 @@ export class Help extends React.Component {
 
     renderLink(data) {
         return (
-            <li><a href={data.href} target="_blank">
-                <h2>{data.label}</h2>
-            </a></li>
+            <li><h2><a href={data.href} target="_blank">
+                {data.label}
+            </a></h2></li>
         );
     }
 

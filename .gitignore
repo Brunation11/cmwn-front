@@ -31,6 +31,7 @@ tar-*
 scssReport.json
 scsslint.json
 *.tar
+.eslintrc
 .happypack
 .test/src
 testsrc

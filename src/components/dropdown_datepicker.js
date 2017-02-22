@@ -12,16 +12,18 @@ class Page extends React.Component {
         var month = 0; //eslint-disable-line vars-on-top
         var day = 0; //eslint-disable-line vars-on-top
         var year = 0; //eslint-disable-line vars-on-top
+        var date = Moment(); //eslint-disable-line vars-on-top
         if (this.props.value != null) {
-            month = Moment(this.props.value).month() + 1;
-            day = Moment(this.props.value).date();
-            year = Moment(this.props.value).year();
+            date = Moment(this.props.value);
+            month = date.month() + 1;
+            day = date.date();
+            year = date.year();
         }
         this.state = {
-            date: Date.now(),
-            month: month,
-            day: day,
-            year: year
+            date,
+            month,
+            day,
+            year
         };
         this.setState = this.setState.bind(this);
     }
@@ -45,13 +47,13 @@ class Page extends React.Component {
         var month = nextState.month || this.state.month;
         var day = nextState.day || this.state.day;
         var year = nextState.year || this.state.year;
-        var date;
+        var momentDate;
         if (!month || !day || !year) {
             return null;
         }
-        date = new Date(`${month}-${day}-${year}`);
-        this.setState({date: date.getTime()});
-        return Moment(`${month}-${day}-${year}`).format('MM-DD-YYYY');
+        momentDate = Moment(`${month}-${day}-${year}`, 'MM-DD-YYYY');
+        this.setState({date: momentDate});
+        return momentDate.format('MM-DD-YYYY');
     }
 
     reset() {
@@ -160,7 +162,7 @@ class Page extends React.Component {
                 <input
                     type="hidden"
                     name={this.props.name}
-                    value={(new Date(this.state.date).toUTCString())}
+                    value={this.state.date.utc().format()}
                 />
             </span>
         );

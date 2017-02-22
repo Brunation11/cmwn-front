@@ -1,9 +1,7 @@
 import React from 'react';
-
+import ReactDOM from 'react-dom';
 import _ from 'lodash';
-
 import Shortid from 'shortid';
-
 import {Panel} from 'react-bootstrap';
 
 import 'components/flipboard.scss';
@@ -34,22 +32,24 @@ class FlipBoard extends React.Component {
         }
     }
     render() {
+        var WrapComponent;
         if (!this.state.data.length) {
             return this.props.renderNoData();
         }
 
+        WrapComponent = this.props.hideHeader ? props => <div>{props.children}</div> : Panel;
+
         return (
             <div className="flipboard">
-                <Panel header={this.props.header} className="standard">
+                <WrapComponent header={this.props.header} className="standard">
                     {_.map(this.state.data, (item, i) => this.props.renderFlip(item, i))}
-                </Panel>
+                </WrapComponent>
             </div>
         );
     }
 }
 
 FlipBoard.defaultProps = {
-    header: 'Flipboard',
     transform: _.identity,
     onLoad: _.noop,
     renderNoData: () => null,

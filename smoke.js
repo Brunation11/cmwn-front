@@ -1,6 +1,6 @@
 var JsDom = require('jsdom');
 
-var Rollbar = function () {;};
+var Rollbar = function () {};
 Rollbar.configure = Rollbar;
 
 global.document = JsDom.jsdom('<!DOCTYPE html><html><head></head><body></body></html>', {url: 'http://localhost'});
