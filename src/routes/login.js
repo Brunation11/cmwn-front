@@ -65,8 +65,15 @@ var Component = React.createClass({
         };
     },
     componentDidMount: function () {
+        var self = this;
         this.getToken();
         window.document.addEventListener('keydown', this.attemptLogin);
+        //react and chrome struggle to communicate autofilling forms.
+        //lets give a little push once the browser has had half a second
+        //to fill the fields
+        window.setTimeout(() => {
+            self.forceUpdate();
+        }, 500);
     },
     componentWillUnmount: function () {
         window.document.removeEventListener('keydown', this.attemptLogin);
@@ -222,9 +229,11 @@ var Component = React.createClass({
         }
     },
     getInputWithoutSpaces: function (field) {
+        var originalField;
         var newField;
         try {
-            newField = this.refs[field].getValue().replace(/\s/g, '');
+            originalField = this.refs[field];
+            newField = originalField.getValue().replace(/\s/g, '');
         } catch(err) {
             //ref not yet mounted, probably somebody getting antsy and
             //hammering the enter key.

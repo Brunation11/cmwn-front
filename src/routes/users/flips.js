@@ -36,7 +36,7 @@ class FlipCount extends React.Component {
             <span className="count">
                 {this.props.data.length}
             </span>
-        )
+        );
     }
 }
 
@@ -191,7 +191,6 @@ export class FlipWall extends React.Component {
     }
 
     renderMobile() {
-        console.log(this);
         return (
             <div className="mobile">
                 <Modal.Dialog>

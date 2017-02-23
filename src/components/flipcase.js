@@ -12,8 +12,8 @@ const COPY = {
 };
 
 export default class Flipcase extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
 
         this.state = _.defaults({
             flips: [],
@@ -22,21 +22,29 @@ export default class Flipcase extends React.Component {
     }
 
     componentDidMount() {
-        if (this.props.data) this.setState({flips: this.props.data});
-        if (this.props.allFlips) this.setState({allFlips: this.props.allFlips});
+        this.props.onDataReceived([]);
+        if (this.props.data) {
+            this.setState({flips: this.props.data});
+            this.props.onDataReceived(this.props.data);
+        }
+        if (this.props.allFlips) {
+            this.setState({allFlips: this.props.allFlips});
+            this.props.onDataReceived(this.props.allFlips);
+        }
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.data && this.props.data !== nextProps.data) {
-            this.setState({
-                flips: nextProps.data
-            });
+        if (nextProps.data) {
+            if (
+                this.props.data == null ||
+                nextProps.data.length !== this.props.data.length ||
+                nextProps.data[0] !== this.props.data[0]
+            ) {
+                this.props.onDataReceived(nextProps.data);
+            }
+            this.setState({flips: nextProps.data});
         }
-        if (nextProps.allFlips && this.props.allFlips !== nextProps.allFlips) {
-            this.setState({
-                allFlips: nextProps.allFlips
-            });
-        }
+        if (nextProps.allFlips && nextProps.allFlips) this.setState({allFlips: nextProps.allFlips});
     }
 
     renderAll() {
@@ -109,3 +117,7 @@ export default class Flipcase extends React.Component {
         );
     }
 }
+
+Flipcase.defaultProps = {
+    onDataReceived: _.identity
+};

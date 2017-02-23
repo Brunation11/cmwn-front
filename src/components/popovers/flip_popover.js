@@ -4,7 +4,7 @@ import Shortid from 'shortid';
 import Moment from 'moment';
 import ClassNames from 'classnames';
 
-import Globals from 'components/globals';
+import GLOBALS from 'components/globals';
 import IB_IDS from 'components/ib_ids';
 
 import 'components/popovers/popover.scss';
@@ -38,19 +38,23 @@ export default class FlipPopover extends React.Component {
     }
 
     render() {
-        var flipID = this.state.element.flip_id;
-        var mediaID;
-
-        if (!this._mounted) return null;
-
-        if (IB_IDS.FLIPS[flipID] && IB_IDS.FLIPS[flipID][this.state.status]) {
-            mediaID = IB_IDS.FLIPS[flipID][this.state.status];
-        } else {
-            mediaID = IB_IDS.FLIPS.default;
+        var src = GLOBALS.MEDIA_URL + IB_IDS.FLIPS.default;
+        if (!this._mounted) {
+            return null;
         }
 
+        if (IB_IDS.FLIPS[this.state.element.flip_id] &&
+            IB_IDS.FLIPS[this.state.element.flip_id][this.state.status]) {
+            src = GLOBALS.MEDIA_URL + IB_IDS.FLIPS[this.state.element.flip_id][this.state.status];
+        }
         return (
-            <div className={ClassNames('single-flip', flipID, {hidden: this.state.error})}>
+            <div className={ClassNames(
+                'single-flip',
+                this.state.element.flip_id,
+                {
+                    hidden: this.state.error
+                }
+            )}>
                 <ButtonToolbar id={Shortid.generate()}>
                     <OverlayTrigger
                         trigger={this.state.trigger}
@@ -75,7 +79,7 @@ export default class FlipPopover extends React.Component {
                                 {this.state.element.description}
                             </Popover>}>
                             <img
-                                src={`${Globals.MEDIA_URL}${mediaID}`}
+                                src={src}
                                 onError={ () => {
                                     this.setState({error: true});
                                 } }
