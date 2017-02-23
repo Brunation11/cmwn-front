@@ -45,7 +45,20 @@ $nav-btns: '#{$media}sprites/buttons.png';
             font-size: 11px;
 
             .tap-to-view {
+                position: absolute;
+                right: 12%;
                 float: right;
+            }
+
+            &::after {
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 10%;
+                height: 100%;
+                color: $cmwn-lime;
+                font-size: 45px;
+                content: 'X';
             }
         }
 
@@ -100,6 +113,16 @@ $nav-btns: '#{$media}sprites/buttons.png';
             color: $cmwn-white;
             font-family: $cmwn-jade-font;
             font-size: 22px;
+        }
+
+        .count {
+            position: absolute;
+            top: 47%;
+            left: 8%;
+            transform: translateX(-50%) translateY(-50%);
+            text-align: center;
+            color: $cmwn-white;
+            font-size: 28px;
         }
 
         .single-flip {
@@ -164,7 +187,6 @@ $nav-btns: '#{$media}sprites/buttons.png';
 
 
             .info-btn {
-                display: none; // disabled pending functionality update from design
                 bottom: 40%;
                 background-position: 1px 4px;
             }
@@ -280,6 +302,14 @@ $nav-btns: '#{$media}sprites/buttons.png';
                     height: 100%;
                 }
 
+                .profile-img {
+                    position: absolute;
+                    top: .5%;
+                    left: 45%;
+                    border-radius: 50%;
+                    width: 15%;
+                }
+
                 .modal-content {
                     border: 0;
                     border-radius: 0;
@@ -299,6 +329,10 @@ $nav-btns: '#{$media}sprites/buttons.png';
                     .earned-container {
                         margin: 0;
                         width: 100%;
+                    }
+
+                    .earned {
+                        margin: 0;
                     }
 
                     .flipcase {
@@ -334,17 +368,39 @@ $nav-btns: '#{$media}sprites/buttons.png';
                     bottom: 5%;
                     font-size: 1px + $i;
                 }
+
+                .count {
+                    top: 50%;
+                    font-size: 8px + $i;
+                }
+
+                .welcome,
+                .tap-to-view {
+                    font-size: 1px + $i - 2;
+                }
+
+                .edit-profile-btn::after {
+                    font-size: 35px + $i;
+                }
             }
 
             @media (min-width: $device-portrait-break + $i * 40) and (max-width: $device-max-break) {
                 .label {
                     font-size: 12px + $i;
                 }
+
+                .count {
+                    font-size: 25px + $i;
+                }
             }
 
             @media (min-width: $device-max-break + $i * 35) and (max-width: $monitor-max-break) {
                 .label {
                     font-size: 12px + $i;
+                }
+
+                .count {
+                    font-size: 20px + $i;
                 }
             }
         }
