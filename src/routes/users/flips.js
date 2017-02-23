@@ -24,6 +24,22 @@ const LABEL = 'EARNED FLIPS';
 
 const FLIP_ROW_LENGTH = 4;
 
+class FlipCount extends React.Component {
+    constructor() {
+        super();
+    }
+
+    render() {
+        if (_.isEmpty(this.props.data)) return null;
+
+        return (
+            <span className="count">
+                {this.props.data.length}
+            </span>
+        )
+    }
+}
+
 export class FlipWall extends React.Component {
     constructor() {
         super();
@@ -63,6 +79,9 @@ export class FlipWall extends React.Component {
                     )}
                     onClick={this.scrollBackward.bind(this)}
                 />
+                <FLIP_SOURCE>
+                    <FlipCount />
+                </FLIP_SOURCE>
                 <div className="earned-container">
                     <div
                         ref="earned"
@@ -81,7 +100,7 @@ export class FlipWall extends React.Component {
                 </div>
                 <button
                     className="nav-btn info-btn"
-                    onClick=""
+                    onClick={this.renderNavigate.bind(this, '/profile')}
                 />
                 <button
                     className={ClassNames(
@@ -172,6 +191,7 @@ export class FlipWall extends React.Component {
     }
 
     renderMobile() {
+        console.log(this);
         return (
             <div className="mobile">
                 <Modal.Dialog>
@@ -184,6 +204,7 @@ export class FlipWall extends React.Component {
                             <br />
                             <strong>{this.props.currentUser.username}</strong>
                         </span>
+                        <img className="profile-img" src={this.props.currentUser._embedded.image.url} />
                         <span className="tap-to-view">
                             TAP TO<strong> VIEW PROFILE</strong>
                         </span>
