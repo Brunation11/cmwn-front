@@ -46,7 +46,7 @@ var checkContents = function (WRAPPER, flipWrapper) {
     expect(flipWrapper.find('.item')).to.have.length(1);
     expect(flipWrapper.find('.item-panel')).to.have.length(1);
     expect(flipWrapper.find('Form')).to.have.length(1);
-    expect(flipWrapper.find('Input')).to.have.length(FIELDS.length - NON_INPUTS.length+2);
+    expect(flipWrapper.find('Input')).to.have.length(FIELDS.length - NON_INPUTS.length);
     expect(flipWrapper.find('Button')).to.have.length(4);
 };
 
