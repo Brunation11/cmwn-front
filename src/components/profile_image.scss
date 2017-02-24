@@ -121,17 +121,16 @@ $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
 
     .modal-content {
         position: absolute;
-        top: 20%;
+        top: 50%;
         left: 50%;
-        transform: translateX(-50%);
+        transform: translateX(-50%) translateY(-50%);
         border: 0;
         box-shadow: none;
         background: url('#{$media-url}#{$desktop-modal-background}');
-        background-position: 0 5px;
         background-size: 100% 100%;
+        padding-bottom: 60%;
         width: 80%;
         max-width: 850px;
-        height: 60%;
     }
 
     .modal-body {
@@ -143,23 +142,27 @@ $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
 
     .close-modal-btn {
         position: absolute;
+        top: -3%;
+        left: 94%;
+        outline: none;
+        border: 0;
         background: url('#{$media-url}#{$close-modal-btn}');
         background-repeat: no-repeat;
         background-size: 100% auto;
-        width: 20%;
-        height: 20%;
+        padding-bottom: 8%;
+        width: 10%;
     }
 
-    .welcome-container,
-    .select-default-container,
-    .cofirm-container {
+    .welcome-container {
+    // .select-default-container,
+    // .cofirm-container {
         position: absolute;
         width: 100%;
         height: 100%;
     }
 
-    .desktop.welcome-container,
-    .desktop.confirm-container {
+    .desktop.welcome-container {
+    // .desktop.confirm-container {
         .left {
             position: absolute;
             top: 50%;
@@ -184,8 +187,8 @@ $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
         }
     }
 
-    .desktop.welcome-container,
-    .mobile.welcome-container {
+    .desktop.welcome-container {
+    // .mobile.welcome-container {
         .upload-your-photo-btn,
         .pick-one-from-our-avatar-btn {
             position: absolute;
@@ -195,28 +198,28 @@ $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
         }
     }
 
-    .desktop.select-default-container,
-    .mobile.select-default-container {
-        .avatar-container {
-            display: flex;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            overflow: scroll;
-            justify-content: center;
-            flex-direction: row;
-            align-items: flex-start;
-            align-content: flex-start;
-        }
+    // .desktop.select-default-container,
+    // .mobile.select-default-container {
+    //     .avatar-container {
+    //         display: flex;
+    //         position: absolute;
+    //         left: 50%;
+    //         transform: translateX(-50%);
+    //         overflow: scroll;
+    //         justify-content: center;
+    //         flex-direction: row;
+    //         align-items: flex-start;
+    //         align-content: flex-start;
+    //     }
 
-        .confirm-btn,
-        .cancel-btn {
-            position: absolute;
-            outline: none;
-            border: 0;
-            box-shadow: none;
-        }
-    }
+    //     .confirm-btn,
+    //     .cancel-btn {
+    //         position: absolute;
+    //         outline: none;
+    //         border: 0;
+    //         box-shadow: none;
+    //     }
+    // }
 
     .desktop.welcome-container {
         .upload-your-photo-btn,
@@ -291,534 +294,554 @@ $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
         }
     }
 
-    .desktop.select-default-container {
-        .avatar-container {
-            top: 5%;
-            z-index: 1;
-            padding: 20px 25px;
-            width: 93%;
-            height: 70%;
-            flex-wrap: wrap;
-        }
+    // .desktop.select-default-container {
+    //     .avatar-container {
+    //         top: 5%;
+    //         z-index: 1;
+    //         padding: 20px 25px;
+    //         width: 93%;
+    //         height: 70%;
+    //         flex-wrap: wrap;
+    //     }
 
-        .avatar {
-            display: inline-block;
-            position: relative;
-            transform: scale(1);
-            transition: all 200ms ease-in;
-            margin: 1px;
-            border: 0;
-            width: 10%;
-            min-width: 76px;
-            // height: 16%;
+    //     .avatar {
+    //         display: inline-block;
+    //         position: relative;
+    //         transform: scale(1);
+    //         transition: all 200ms ease-in;
+    //         margin: 1px;
+    //         border: 0;
+    //         width: 10%;
+    //         min-width: 76px;
+    //         // height: 16%;
 
-            .bw,
-            .clr {
-                width: 100%;
-            }
+    //         .bw,
+    //         .clr {
+    //             width: 100%;
+    //         }
 
-            .bw {
-                position: absolute;
-                top: 0;
-                left: 0;
-            }
+    //         .bw {
+    //             position: absolute;
+    //             top: 0;
+    //             left: 0;
+    //         }
 
-            &.disable .bw {
-                visibility: hidden;
-            }
+    //         &.disable .bw {
+    //             visibility: hidden;
+    //         }
 
-            &:hover,
-            &:focus {
-                transform: scale(1.5);
-                transition: all 200ms ease-in;
-                z-index: 2;
-                box-shadow: 0 0 20px $cmwn-black;
+    //         &:hover,
+    //         &:focus {
+    //             transform: scale(1.5);
+    //             transition: all 200ms ease-in;
+    //             z-index: 2;
+    //             box-shadow: 0 0 20px $cmwn-black;
 
-                // scss-lint:disable NestingDepth, SelectorDepth
-                .bw {
-                    display: none;
-                }
-                // scss-lint:enable NestingDepth, SelectorDepth
-            }
-        }
+    //             // scss-lint:disable NestingDepth, SelectorDepth
+    //             .bw {
+    //                 display: none;
+    //             }
+    //             // scss-lint:enable NestingDepth, SelectorDepth
+    //         }
+    //     }
 
-        .prompt-container {
-            position: absolute;
-            bottom: 12%;
-            left: 6%;
-            width: 45%;
-            color: $cmwn-white;
-            font-size: 1.5rem;
-            font-weight: 100;
+    //     .prompt-container {
+    //         position: absolute;
+    //         bottom: 12%;
+    //         left: 6%;
+    //         width: 45%;
+    //         color: $cmwn-white;
+    //         font-size: 1.5rem;
+    //         font-weight: 100;
 
-            .disclaimer {
-                position: absolute;
-                font-size: .75rem;
-                font-weight: 900;
-            }
-        }
+    //         .disclaimer {
+    //             position: absolute;
+    //             font-size: .75rem;
+    //             font-weight: 900;
+    //         }
+    //     }
 
-        .confirm-btn,
-        .cancel-btn {
-            bottom: 8%;
-            width: 18%;
-            height: 9%;
-        }
+    //     .confirm-btn,
+    //     .cancel-btn {
+    //         bottom: 8%;
+    //         width: 18%;
+    //         height: 9%;
+    //     }
 
-        .confirm-btn {
-            left: 55%;
-            background: url('#{$media-url}#{$confirm-btn}');
-            background-repeat: no-repeat;
-            background-size: 100% auto;
+    //     .confirm-btn {
+    //         left: 55%;
+    //         background: url('#{$media-url}#{$confirm-btn}');
+    //         background-repeat: no-repeat;
+    //         background-size: 100% auto;
 
 
-            &:hover,
-            &:focus {
-                background: url('#{$media-url}#{$confirm-btn-hvr}');
-                background-repeat: no-repeat;
-                background-size: 100% auto;
-            }
-        }
+    //         &:hover,
+    //         &:focus {
+    //             background: url('#{$media-url}#{$confirm-btn-hvr}');
+    //             background-repeat: no-repeat;
+    //             background-size: 100% auto;
+    //         }
+    //     }
 
-        .cancel-btn {
-            left: 75%;
-            background: url('#{$media-url}#{$cancel-btn}');
-            background-repeat: no-repeat;
-            background-size: 100% auto;
-        }
+    //     .cancel-btn {
+    //         left: 75%;
+    //         background: url('#{$media-url}#{$cancel-btn}');
+    //         background-repeat: no-repeat;
+    //         background-size: 100% auto;
+    //     }
 
-        &::after {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translateX(-50%) translateY(-50%);
-            border: 3px dotted $purple;
-            border-radius: 10px;
-            width: 94%;
-            height: 92%;
-            content: '';
-        }
+    //     &::after {
+    //         position: absolute;
+    //         top: 50%;
+    //         left: 50%;
+    //         transform: translateX(-50%) translateY(-50%);
+    //         border: 3px dotted $purple;
+    //         border-radius: 10px;
+    //         width: 94%;
+    //         height: 92%;
+    //         content: '';
+    //     }
+    // }
+
+    // .desktop.confirm-container {
+    //     .left,
+    //     .right {
+    //         .header,
+    //         .prompt-1,
+    //         .prompt-2 {
+    //             position: absolute;
+    //             left: 50%;
+    //             transform: translateX(-50%);
+    //             width: 100%;
+    //             text-align: center;
+    //         }
+
+    //         .header {
+    //             top: 5%;
+    //             font-family: $cmwn-jade-font;
+    //             font-size: 60px;
+    //         }
+    //     }
+
+    //     .left {
+    //         .prompt-1,
+    //         .prompt-2 {
+    //             color: $cmwn-white;
+    //             font-size: 22px;
+    //         }
+
+    //         .header {
+    //             color: $purple;
+    //         }
+
+    //         .prompt-1 {
+    //             top: 20%;
+    //             font-weight: 100;
+    //         }
+
+    //         .prompt-2 {
+    //             bottom: 22%;
+    //         }
+
+    //         .selected-avatar {
+    //             position: absolute;
+    //             top: 50%;
+    //             left: 50%;
+    //             transform: translateX(-50%) translateY(-50%);
+    //             border: 3px solid $neon-green;
+    //             border-radius: 2px;
+    //             width: 60%;
+    //         }
+    //     }
+
+    //     .right {
+    //         .header {
+    //             color: $neon-green;
+    //         }
+
+    //         .looks-great-btn,
+    //         .change-my-mind-btn,
+    //         .back-to-upload-btn {
+    //             position: absolute;
+    //             left: 50%;
+    //             transform: translateX(-50%);
+    //             outline: none;
+    //             border: 0;
+    //             box-shadow: none;
+    //             width: 70%;
+    //             height: 12%;
+    //         }
+
+    //         // scss-lint:disable NestingDepth, SelectorDepth
+    //         .looks-great-btn {
+    //             top: 28%;
+    //             background: url('#{$media-url}#{$looks-great-btn}');
+    //             background-repeat: no-repeat;
+    //             background-size: 100% auto;
+
+    //             &:hover,
+    //             &:focus {
+    //                 background: url('#{$media-url}#{$looks-great-btn-hvr}');
+    //                 background-repeat: no-repeat;
+    //                 background-size: 100% auto;
+    //             }
+    //         }
+
+    //         .change-my-mind-btn {
+    //             top: 42%;
+    //             background: url('#{$media-url}#{$change-my-mind-btn}');
+    //             background-repeat: no-repeat;
+    //             background-size: 100% auto;
+
+    //             &:hover,
+    //             &:focus {
+    //                 background: url('#{$media-url}#{$change-my-mind-btn-hvr}');
+    //                 background-repeat: no-repeat;
+    //                 background-size: 100% auto;
+    //             }
+    //         }
+
+    //         .back-to-upload-btn {
+    //             top: 56%;
+    //             background: url('#{$media-url}#{$back-to-upload-btn}');
+    //             background-repeat: no-repeat;
+    //             background-size: 100% auto;
+
+    //             &:hover,
+    //             &:focus {
+    //                 background: url('#{$media-url}#{$back-to-upload-btn-hvr}');
+    //                 background-repeat: no-repeat;
+    //                 background-size: 100% auto;
+    //             }
+    //         }
+    //         // scss-lint:enable NestingDepth, SelectorDepth
+    //     }
+    // }
+
+    // .mobile.welcome-container,
+    // .mobile.select-default-container,
+    // .mobile.confirm-container {
+    //     display: none;
+    // }
+
+    // .mobile.welcome-container {
+    //     background: url('#{$media-url}#{$mobile-welcome-background}');
+    //     background-size: auto 100%;
+
+    //     &::after {
+    //         position: absolute;
+    //         top: 27%;
+    //         left: 50%;
+    //         transform: translateX(-50%);
+    //         background: url('#{$media-url}#{$logo-white}');
+    //         background-repeat: no-repeat;
+    //         background-size: 100% auto;
+    //         width: 35%;
+    //         height: 19%;
+    //         content: '';
+    //     }
+
+    //     .header {
+    //         position: absolute;
+    //         top: 50%;
+    //         width: 100%;
+    //         text-align: center;
+    //         color: $cmwn-white;
+    //         font-size: 40px;
+    //         font-weight: 900;
+    //     }
+
+    //     .upload-your-photo-btn {
+    //         top: 60%;
+    //         left: 50%;
+    //         transform: translateX(-50%);
+    //         background: url('#{$media-url}#{$upload-your-photo-btn}');
+    //         background-repeat: no-repeat;
+    //         background-size: 100% auto;
+    //         width: 70%;
+    //         height: 10%;
+    //     }
+
+    //     .pick-one-from-our-avatar-btn {
+    //         top: 72%;
+    //         left: 50%;
+    //         transform: translateX(-50%);
+    //         background: url('#{$media-url}#{$go-to-gallery-btn}');
+    //         background-repeat: no-repeat;
+    //         background-size: 100% auto;
+    //         width: 70%;
+    //         height: 7%;
+    //     }
+
+    //     .close-modal-btn {
+    //         position: absolute;
+    //         bottom: 0%;
+    //         width: 100%;
+    //         height: 20%;
+    //         text-align: center;
+    //         text-decoration: underline;
+    //         color: $cmwn-white;
+    //         font-family: $cmwn-jade-font;
+    //         font-size: 15px;
+    //     }
+    // }
+
+
+    // .mobile.select-default-container {
+    //     .avatar-container {
+    //         top: 15%;
+    //         width: 100%;
+    //         height: 50%;
+    //         flex-wrap: nowrap;
+    //     }
+
+    //     .avatar,
+    //     .clr {
+    //         position: absolute;
+    //         width: 100%;
+    //         height: 100%;
+    //     }
+
+    //     .clr {
+    //         animation-name: slideInRight;
+    //     }
+
+    //     .prev-btn,
+    //     .next-btn {
+    //         position: absolute;
+    //         top: 50%;
+    //         transform: translateY(-50%);
+    //         outline: none;
+    //         border: 0;
+    //         box-shadow: none;
+    //         width: 12%;
+    //         height: 14%;
+
+    //     }
+
+    //     .prev-btn {
+    //         left: 3%;
+    //         background: url('#{$media-url}#{$prev-btn}');
+    //         background-repeat: no-repeat;
+    //         background-size: 100% auto;
+    //     }
+
+    //     .next-btn {
+    //         right: 3%;
+    //         background: url('#{$media-url}#{$next-btn}');
+    //         background-repeat: no-repeat;
+    //         background-size: 100% auto;
+    //     }
+
+    //     .confirm-btn,
+    //     .cancel-btn {
+    //         left: 50%;
+    //         transform: translateX(-50%);
+    //         width: 90%;
+    //         height: 8%;
+    //     }
+
+    //     .confirm-btn {
+    //         top: 72%;
+    //         background: url('#{$media-url}#{$mobile-save-btn}');
+    //         background-repeat: no-repeat;
+    //         background-size: 100% auto;
+    //     }
+
+    //     .cancel-btn {
+    //         top: 82%;
+    //         background: url('#{$media-url}#{$mobile-cancel-btn}');
+    //         background-repeat: no-repeat;
+    //         background-size: 100% auto;
+    //     }
+    // }
+
+    // .mobile-confirm-container {
+    //     &::after {
+    //         position: absolute;
+    //         top: 27%;
+    //         left: 50%;
+    //         transform: translateX(-50%);
+    //         background: url('#{$media-url}#{$logo-white}');
+    //         background-repeat: no-repeat;
+    //         background-size: 100% auto;
+    //         width: 35%;
+    //         height: 19%;
+    //         content: '';
+    //     }
+
+    //     .header {
+    //         position: absolute;
+    //         top: 10%;
+    //         left: 50%;
+    //         transform: translateX(-50%);
+    //         color: $purple;
+    //         font-family: $cmwn-jade-font;
+    //         font-size: 2rem;
+    //     }
+
+    //     .selected-avatar {
+    //         position: absolute;
+    //         left: 50%;
+    //         transform: translateX(-50%);
+    //         border: 1px solid $cmwn-white;
+    //         width: 70%;
+    //         height: 20%;
+    //     }
+
+    //     .confirm-btn,
+    //     .cancel-btn {
+    //         left: 50%;
+    //         transform: translateX(-50%);
+    //         width: 90%;
+    //         height: 8%;
+    //     }
+
+    //     .confirm-btn {
+    //         top: 72%;
+    //         background: url('#{$media-url}#{$mobile-save-btn}');
+    //         background-repeat: no-repeat;
+    //         background-size: 100% auto;
+    //     }
+
+    //     .cancel-btn {
+    //         top: 82%;
+    //         background: url('#{$media-url}#{$mobile-cancel-btn}');
+    //         background-repeat: no-repeat;
+    //         background-size: 100% auto;
+    //     }
+    // }
+
+    // @media (min-width: $device-max-break) and (max-width: $monitor-max-break) {
+    //     .modal-content {
+    //         height: 55%;
+    //     }
+
+    //     .desktop.welcome-container {
+    //         .left {
+    //             .prompt-1 {
+    //                 font-size: .9rem;
+    //             }
+
+    //             .prompt-2 {
+    //                 font-size: 1.3rem;
+    //             }
+
+    //             .upload-your-photo-btn {
+    //                 background-size: 75% auto;
+    //             }
+    //         }
+
+    //         .right {
+    //             .pick-one-from-our-avatar-btn {
+    //                 background-size: 75% auto;
+    //             }
+    //         }
+    //     }
+
+    //     // .desktop.select-default-container .prompt-container {
+    //     //     font-size: 1.1rem;
+    //     // }
+
+    //     // .desktop.confirm-container {
+    //     //     .left,
+    //     //     .right {
+    //     //         .header {
+    //     //             font-size: 40px;
+    //     //         }
+
+    //     //         [class^='.prompt-'] {
+    //     //             font-size: 15px;
+    //     //         }
+    //     //     }
+    //     // }
+    // }
+
+    // @media (min-width: $device-portrait-break) and (max-width: $device-max-break) {
+    //     .modal-content {
+    //         width: 100%;
+    //         height: 50%;
+    //     }
+
+    //     .desktop.welcome-container {
+    //         .left {
+    //             .prompt-1 {
+    //                 font-size: .7rem;
+    //             }
+
+    //             .prompt-2 {
+    //                 font-size: .95rem;
+    //             }
+
+    //             .upload-your-photo-btn {
+    //                 background-size: 80% auto;
+    //             }
+    //         }
+
+    //         .right {
+    //             .pick-one-from-our-avatar-btn {
+    //                 background-size: 80% auto;
+    //             }
+    //         }
+    //     }
+
+    //     // .desktop.select-default-container .prompt-container {
+    //     //     font-size: .8rem;
+    //     // }
+
+    //     // .desktop.confirm-container {
+    //     //     .left,
+    //     //     .right {
+    //     //         .header {
+    //     //             font-size: 30px;
+    //     //         }
+
+    //     //         [class^='prompt-'] {
+    //     //             font-size: 12px;
+    //     //         }
+    //     //     }
+    //     // }
+    // }
+
+    // @media (max-width: $device-portrait-break) {
+    //     .modal-content {
+    //         top: 0;
+    //         background: url('#{$media-url}#{$mobile-modal-background}');
+    //         background-size: 100% 100%;
+    //         width: 100%;
+    //         height: 100%;
+    //     }
+
+    //     .desktop {
+    //         display: none;
+    //     }
+
+    //     // .mobile.welcome-container,
+    //     // .mobile.select-default-container,
+    //     // .mobile-confirm-container {
+    //     //     display: block;
+    //     // }
+    // }
+
+}
+
+$increment: 30;
+
+@for $i from 0 through $increment {
+    @media (min-width: $i * 35px) and (max-width: $device-portrait-break) {
+
     }
 
-    .desktop.confirm-container {
-        .left,
-        .right {
-            .header,
-            .prompt-1,
-            .prompt-2 {
-                position: absolute;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 100%;
-                text-align: center;
-            }
+    @media (min-width: $device-portrait-break + $i * 40) and (max-width: $device-max-break) {
 
-            .header {
-                top: 5%;
-                font-family: $cmwn-jade-font;
-                font-size: 60px;
-            }
-        }
-
-        .left {
-            .prompt-1,
-            .prompt-2 {
-                color: $cmwn-white;
-                font-size: 22px;
-            }
-
-            .header {
-                color: $purple;
-            }
-
-            .prompt-1 {
-                top: 20%;
-                font-weight: 100;
-            }
-
-            .prompt-2 {
-                bottom: 22%;
-            }
-
-            .selected-avatar {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translateX(-50%) translateY(-50%);
-                border: 3px solid $neon-green;
-                border-radius: 2px;
-                width: 60%;
-            }
-        }
-
-        .right {
-            .header {
-                color: $neon-green;
-            }
-
-            .looks-great-btn,
-            .change-my-mind-btn,
-            .back-to-upload-btn {
-                position: absolute;
-                left: 50%;
-                transform: translateX(-50%);
-                outline: none;
-                border: 0;
-                box-shadow: none;
-                width: 70%;
-                height: 12%;
-            }
-
-            // scss-lint:disable NestingDepth, SelectorDepth
-            .looks-great-btn {
-                top: 28%;
-                background: url('#{$media-url}#{$looks-great-btn}');
-                background-repeat: no-repeat;
-                background-size: 100% auto;
-
-                &:hover,
-                &:focus {
-                    background: url('#{$media-url}#{$looks-great-btn-hvr}');
-                    background-repeat: no-repeat;
-                    background-size: 100% auto;
-                }
-            }
-
-            .change-my-mind-btn {
-                top: 42%;
-                background: url('#{$media-url}#{$change-my-mind-btn}');
-                background-repeat: no-repeat;
-                background-size: 100% auto;
-
-                &:hover,
-                &:focus {
-                    background: url('#{$media-url}#{$change-my-mind-btn-hvr}');
-                    background-repeat: no-repeat;
-                    background-size: 100% auto;
-                }
-            }
-
-            .back-to-upload-btn {
-                top: 56%;
-                background: url('#{$media-url}#{$back-to-upload-btn}');
-                background-repeat: no-repeat;
-                background-size: 100% auto;
-
-                &:hover,
-                &:focus {
-                    background: url('#{$media-url}#{$back-to-upload-btn-hvr}');
-                    background-repeat: no-repeat;
-                    background-size: 100% auto;
-                }
-            }
-            // scss-lint:enable NestingDepth, SelectorDepth
-        }
     }
 
-    .mobile.welcome-container,
-    .mobile.select-default-container,
-    .mobile.confirm-container {
-        display: none;
-    }
-
-    .mobile.welcome-container {
-        background: url('#{$media-url}#{$mobile-welcome-background}');
-        background-size: auto 100%;
-
-        &::after {
-            position: absolute;
-            top: 27%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: url('#{$media-url}#{$logo-white}');
-            background-repeat: no-repeat;
-            background-size: 100% auto;
-            width: 35%;
-            height: 19%;
-            content: '';
-        }
-
-        .header {
-            position: absolute;
-            top: 50%;
-            width: 100%;
-            text-align: center;
-            color: $cmwn-white;
-            font-size: 40px;
-            font-weight: 900;
-        }
-
-        .upload-your-photo-btn {
-            top: 60%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: url('#{$media-url}#{$upload-your-photo-btn}');
-            background-repeat: no-repeat;
-            background-size: 100% auto;
-            width: 70%;
-            height: 10%;
-        }
-
-        .pick-one-from-our-avatar-btn {
-            top: 72%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: url('#{$media-url}#{$go-to-gallery-btn}');
-            background-repeat: no-repeat;
-            background-size: 100% auto;
-            width: 70%;
-            height: 7%;
-        }
-
-        .close-modal-btn {
-            position: absolute;
-            bottom: 0%;
-            width: 100%;
-            height: 20%;
-            text-align: center;
-            text-decoration: underline;
-            color: $cmwn-white;
-            font-family: $cmwn-jade-font;
-            font-size: 15px;
-        }
-    }
-
-
-    .mobile.select-default-container {
-        .avatar-container {
-            top: 15%;
-            width: 100%;
-            height: 50%;
-            flex-wrap: nowrap;
-        }
-
-        .avatar,
-        .clr {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-        }
-
-        .clr {
-            animation-name: slideInRight;
-        }
-
-        .prev-btn,
-        .next-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            outline: none;
-            border: 0;
-            box-shadow: none;
-            width: 12%;
-            height: 14%;
-
-        }
-
-        .prev-btn {
-            left: 3%;
-            background: url('#{$media-url}#{$prev-btn}');
-            background-repeat: no-repeat;
-            background-size: 100% auto;
-        }
-
-        .next-btn {
-            right: 3%;
-            background: url('#{$media-url}#{$next-btn}');
-            background-repeat: no-repeat;
-            background-size: 100% auto;
-        }
-
-        .confirm-btn,
-        .cancel-btn {
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            height: 8%;
-        }
-
-        .confirm-btn {
-            top: 72%;
-            background: url('#{$media-url}#{$mobile-save-btn}');
-            background-repeat: no-repeat;
-            background-size: 100% auto;
-        }
-
-        .cancel-btn {
-            top: 82%;
-            background: url('#{$media-url}#{$mobile-cancel-btn}');
-            background-repeat: no-repeat;
-            background-size: 100% auto;
-        }
-    }
-
-    .mobile-confirm-container {
-        &::after {
-            position: absolute;
-            top: 27%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: url('#{$media-url}#{$logo-white}');
-            background-repeat: no-repeat;
-            background-size: 100% auto;
-            width: 35%;
-            height: 19%;
-            content: '';
-        }
-
-        .header {
-            position: absolute;
-            top: 10%;
-            left: 50%;
-            transform: translateX(-50%);
-            color: $purple;
-            font-family: $cmwn-jade-font;
-            font-size: 2rem;
-        }
-
-        .selected-avatar {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 1px solid $cmwn-white;
-            width: 70%;
-            height: 20%;
-        }
-
-        .confirm-btn,
-        .cancel-btn {
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            height: 8%;
-        }
-
-        .confirm-btn {
-            top: 72%;
-            background: url('#{$media-url}#{$mobile-save-btn}');
-            background-repeat: no-repeat;
-            background-size: 100% auto;
-        }
-
-        .cancel-btn {
-            top: 82%;
-            background: url('#{$media-url}#{$mobile-cancel-btn}');
-            background-repeat: no-repeat;
-            background-size: 100% auto;
-        }
-    }
-
-    @media (min-width: $device-max-break) and (max-width: $monitor-max-break) {
-        .modal-content {
-            height: 55%;
-        }
-
-        .desktop.welcome-container {
-            .left {
-                .prompt-1 {
-                    font-size: .9rem;
-                }
-
-                .prompt-2 {
-                    font-size: 1.3rem;
-                }
-
-                .upload-your-photo-btn {
-                    background-size: 75% auto;
-                }
-            }
-
-            .right {
-                .pick-one-from-our-avatar-btn {
-                    background-size: 75% auto;
-                }
-            }
-        }
-
-        .desktop.select-default-container .prompt-container {
-            font-size: 1.1rem;
-        }
-
-        .desktop.confirm-container {
-            .left,
-            .right {
-                .header {
-                    font-size: 40px;
-                }
-
-                [class^='.prompt-'] {
-                    font-size: 15px;
-                }
-            }
-        }
-    }
-
-    @media (min-width: $device-portrait-break) and (max-width: $device-max-break) {
-        .modal-content {
-            width: 100%;
-            height: 50%;
-        }
-
-        .desktop.welcome-container {
-            .left {
-                .prompt-1 {
-                    font-size: .7rem;
-                }
-
-                .prompt-2 {
-                    font-size: .95rem;
-                }
-
-                .upload-your-photo-btn {
-                    background-size: 80% auto;
-                }
-            }
-
-            .right {
-                .pick-one-from-our-avatar-btn {
-                    background-size: 80% auto;
-                }
-            }
-        }
-
-        .desktop.select-default-container .prompt-container {
-            font-size: .8rem;
-        }
-
-        .desktop.confirm-container {
-            .left,
-            .right {
-                .header {
-                    font-size: 30px;
-                }
-
-                [class^='prompt-'] {
-                    font-size: 12px;
-                }
-            }
-        }
-    }
-
-    @media (max-width: $device-portrait-break) {
-        .modal-content {
-            top: 0;
-            background: url('#{$media-url}#{$mobile-modal-background}');
-            background-size: 100% 100%;
-            width: 100%;
-            height: 100%;
-        }
-
-        .desktop {
-            display: none;
-        }
-
-        .mobile.welcome-container,
-        .mobile.select-default-container,
-        .mobile-confirm-container {
-            display: block;
+    @media (min-width: $device-max-break + $i) and (max-width: $monitor-max-break) {
+        .desktop.welcome-container .left .prompt-1 {
+            font-size: 12px + $i;
         }
     }
 }
+
 
 

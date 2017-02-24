@@ -1,6 +1,6 @@
 /* eslint-disable max-lines*/
 import React from 'react';
-import {Modal, ButtonToolbar, OverlayTrigger, Popover} from 'react-bootstrap';
+import {Modal, ButtonToolbar, OverlayTrigger, Popover, Button} from 'react-bootstrap';
 import Classnames from 'classnames';
 import _ from 'lodash';
 
@@ -80,18 +80,18 @@ export default class Image extends React.Component {
     getDefaultImages() {
         // get black and white default images
         HttpManager.GET({
-            url: `${GLOBALS.API_URL}media/${DEFAULT_IMGS.bw}`
+            url: `${GLOBALS.API_URL}media/${DEFAULT_IMGS.BW}`
         }).then((res) => {
             this.setState({
                 defaultsBW: res.response._embedded.items
             });
-        }).catch(() => {
+        }).catch((e) => {
             Toast.error(ERRORS.NO_DEFAULTS);
         });
 
         // get color default images
         HttpManager.GET({
-            url: `${GLOBALS.API_URL}media/${DEFAULT_IMGS.clr}`
+            url: `${GLOBALS.API_URL}media/${DEFAULT_IMGS.CLR}`
         }).then((res) => {
             this.setState({
                 defaultsCLR: res.response._embedded.items
@@ -166,6 +166,7 @@ export default class Image extends React.Component {
     }
 
     showModal() {
+        this.getDefaultImages();
         this.setState({
             uploaderOn: true
         });
@@ -217,17 +218,43 @@ export default class Image extends React.Component {
                         <br />
                         from your computer
                     </span>
-                    <button
+                    <Button
                         className="upload-your-photo-btn"
                         onClick={this.cloudinaryUpload.bind(this)}
                     />
                 </div>
                 <div className="right">
-                    <button
+                    <Button
                         className="pick-one-from-our-avatar-btn"
                         onClick={this.setPage.bind(this, 'select-default')}
                     />
                 </div>
+            </div>
+        );
+    }
+
+    renderMobileWelcome() {
+        return (
+            <div className="mobile welcome-container">
+                <span className="header">
+                    Profile Picture
+                </span>
+                <Button
+                    className="upload-your-photo-btn"
+                    onClick={this.cloudinaryUpload.bind(this)}
+                />
+                <Button
+                    className="pick-one-from-our-avatar-btn"
+                    onClick={this.setPage.bind(this, 'select-default')}
+                />
+                <Button
+                    className="close-modal-btn"
+                    onClick={this.hideModal.bind(this)}
+                >
+                    SWIPE DOWN TO CANCEL,
+                    <br />
+                    AND GO BACK TO YOUR PROFILE PAGE.
+                </Button>
             </div>
         );
     }
@@ -277,12 +304,68 @@ export default class Image extends React.Component {
                         (DESKTOP ONLY)
                     </span>
                 </div>
-                <button
+                <Button
                     className="confirm-btn"
                     onClick={this.setPage.bind(this, 'confirm')}
                 />
-                <button className="cancel-btn"
+                <Button className="cancel-btn"
                     onClick={this.setPage.bind(this, 'welcome')}
+                />
+            </div>
+        );
+    }
+
+    renderMobileSelectDefault() {
+        var self = this;
+        var currentOption = self.state.defaultsBW[self.state.currentOption || 0];
+
+        return (
+            <div className="mobile select-default-container">
+                <div className="avatar-container">
+                    <div
+                        className={`avatar ${currentOption.name}`}
+                        onClick={() => {
+                            self.setState({
+                                selected: currentOption.name
+                            });
+                        }}
+                    >
+                        <img
+                            className="clr animated"
+                            src={currentOption.src}
+                        />
+                    </div>
+                    <Button
+                        className="prev-btn"
+                        onClick={() => {
+                            if (_.get(self, 'state.currentOption', 0) > 0) {
+                                self.setState({
+                                    currentOption: _.get(self, 'state.currentOption', 0) - 1,
+                                    selected: currentOption.name
+                                });
+                            }
+                        }}
+                    />
+                    <Button
+                        className="next-btn"
+                        onClick={() => {
+                            if (_.get(self, 'state.currentOption', 0) < self.state.defaultsBW.length) {
+                                self.setState({
+                                    currentOption: _.get(self, 'state.currentOption', 0) + 1,
+                                });
+                            }
+                        }}
+                    />
+                </div>
+                <Button
+                    className="confirm-btn"
+                    onClick={() => {
+                        this.setState({selected: currentOption.name});
+                        self.setPage.call(self, 'confirm');
+                    }}
+                />
+                <Button className="cancel-btn"
+                    onClick={self.setPage.bind(self, 'welcome')}
                 />
             </div>
         );
@@ -310,15 +393,15 @@ export default class Image extends React.Component {
                     <span className="header">
                         CONFIRM
                     </span>
-                    <button
+                    <Button
                         className="looks-great-btn"
                         onClick={this.defaultUpload.bind(this)}
                     />
-                    <button
+                    <Button
                         className="change-my-mind-btn"
                         onClick={this.setPage.bind(this, 'select-default')}
                     />
-                    <button
+                    <Button
                         className="back-to-upload-btn"
                         onClick={(e) => {
                             this.setPage.call(this, 'welcome');
@@ -326,88 +409,6 @@ export default class Image extends React.Component {
                         }}
                     />
                 </div>
-            </div>
-        );
-    }
-
-    renderMobileWelcome() {
-        return (
-            <div className="mobile welcome-container">
-                <span className="header">
-                    Profile Picture
-                </span>
-                <button
-                    className="upload-your-photo-btn"
-                    onClick={this.cloudinaryUpload.bind(this)}
-                />
-                <button
-                    className="pick-one-from-our-avatar-btn"
-                    onClick={this.setPage.bind(this, 'select-default')}
-                />
-                <button
-                    className="close-modal-btn"
-                    onClick={this.hideModal.bind(this)}
-                >
-                    SWIPE DOWN TO CANCEL,
-                    <br />
-                    AND GO BACK TO YOUR PROFILE PAGE.
-                </button>
-            </div>
-        );
-    }
-
-    renderMobileSelectDefault() {
-        var self = this;
-        var currentOption = self.state.defaultsBW[self.state.currentOption || 0];
-
-        return (
-            <div className="mobile select-default-container">
-                <div className="avatar-container">
-                    <div
-                        className={`avatar ${currentOption.name}`}
-                        onClick={() => {
-                            self.setState({
-                                selected: currentOption.name
-                            });
-                        }}
-                    >
-                        <img
-                            className="clr animated"
-                            src={currentOption.src}
-                        />
-                    </div>
-                    <button
-                        className="prev-btn"
-                        onClick={() => {
-                            if (_.get(self, 'state.currentOption', 0) > 0) {
-                                self.setState({
-                                    currentOption: _.get(self, 'state.currentOption', 0) - 1,
-                                    selected: currentOption.name
-                                });
-                            }
-                        }}
-                    />
-                    <button
-                        className="next-btn"
-                        onClick={() => {
-                            if (_.get(self, 'state.currentOption', 0) < self.state.defaultsBW.length) {
-                                self.setState({
-                                    currentOption: _.get(self, 'state.currentOption', 0) + 1,
-                                });
-                            }
-                        }}
-                    />
-                </div>
-                <button
-                    className="confirm-btn"
-                    onClick={() => {
-                        this.setState({selected: currentOption.name});
-                        self.setPage.call(self, 'confirm');
-                    }}
-                />
-                <button className="cancel-btn"
-                    onClick={self.setPage.bind(self, 'welcome')}
-                />
             </div>
         );
     }
@@ -422,30 +423,53 @@ export default class Image extends React.Component {
                     className="selected-avatar"
                     src={_.find(this.state.defaultsBW, ['name', this.state.selected]).src}
                 />
-                <button
+                <Button
                     className="confirm-btn"
                     onClick={this.defaultUpload.bind(this)}
                 />
-                <button className="cancel-btn"
+                <Button className="cancel-btn"
                     onClick={this.setPage.bind(this, 'welcome')}
                 />
             </div>
         );
     }
 
+    renderWelcome() {
+        return (
+            <div>
+                {this.renderDesktopWelcome()}
+
+            </div>
+        );
+    }
+
+    renderSelectDefault() {
+        return (
+            <div>
+                {this.renderDesktopSelectDefault()}
+
+            </div>
+        );
+    }
+
+    renderConfirm() {
+        return (
+            <div>
+                {this.renderDesktopConfirm()}
+
+            </div>
+        );
+    }
+
     renderUploader() {
-        var mobilePage;
-        var desktopPage;
+        var page;
 
         if (this.state.page === 'select-default') {
-            mobilePage = this.renderMobileSelectDefault;
-            desktopPage = this.renderDesktopSelectDefault;
+            page = this.renderSelectDefault;
         } else if (this.state.page === 'confirm') {
-            mobilePage = this.renderMobileConfirm;
-            desktopPage = this.renderDesktopConfirm;
+            page = this.renderConfirm;
         } else {
-            mobilePage = this.renderMobileWelcome;
-            desktopPage = this.renderDesktopWelcome;
+            page = this.renderWelcome;
         }
 
         return (
@@ -454,15 +478,8 @@ export default class Image extends React.Component {
                     className="close-modal-btn"
                     onClick={this.hideModal.bind(this)}
                 >
-                    <span className="prompt-1">
-                        Tap TO KEEP
-                    </span>
-                    <span className="prompt-2">
-                        MY CURRENT PROFILE PICTURE
-                    </span>
                 </Button>
-                {mobilePage.call(this)}
-                {desktopPage.call(this)}
+                {page.call(this)}
             </div>
         );
     }
@@ -474,11 +491,11 @@ export default class Image extends React.Component {
         }
         if ((this.state.profileImage === GLOBALS.DEFAULT_PROFILE) || this.state.isModerated) {
             return (
-                <button className="upload" onClick={this.showModal.bind(this)}>Upload Image</button>
+                <Button className="upload" onClick={this.showModal.bind(this)}>Upload Image</Button>
             );
         } else {
             return (
-                <ButtonToolbar>
+                <buttonToolbar>
                     <OverlayTrigger
                         trigger="click"
                         rootClose
@@ -499,13 +516,13 @@ export default class Image extends React.Component {
                             </Popover>
                         }
                     >
-                        <button
+                        <Button
                             className="upload"
                         >
                             Upload Image
-                        </button>
+                        </Button>
                     </OverlayTrigger>
-                </ButtonToolbar>
+                </buttonToolbar>
             );
         }
     }
