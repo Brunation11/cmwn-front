@@ -4,6 +4,7 @@ import Screenfull from 'screenfull';
 import ClassNames from 'classnames';
 import _ from 'lodash';
 import {Button, Glyphicon} from 'react-bootstrap';
+import Shortid from 'shortid';
 
 import getEventsForGame from 'components/game_events';
 import GLOBALS from 'components/globals';
@@ -50,9 +51,15 @@ export class Game extends React.Component {
 
         this.state = {
             isFullscreen: false,
+            gameKey: Shortid.generate(),
             fullscreenFallback: false,
             demo: false
         };
+
+        this.gameEventHandler = this.gameEventHandler.bind(this);
+        this.listenForEsc = this.listenForEsc.bind(this);
+        this.checkForPortrait = this.checkForPortrait.bind(this);
+        this.resizeFrame = this.resizeFrame.bind(this);
     }
 
     componentWillMount() {
@@ -76,6 +83,8 @@ export class Game extends React.Component {
     componentDidMount() {
         var frame = ReactDOM.findDOMNode(this.refs.gameRef);
         var callApi;
+        var self = this;
+        var escInterval;
 
         if (!frame) {
             return;
@@ -86,6 +95,18 @@ export class Game extends React.Component {
                 this.setState({isFullscreen: Screenfull.isFullscreen});
             });
         }
+
+        escInterval = window.setInterval(function () {
+            try {
+                Log.info('trying to set keydown event inside frame');
+                frame.contentWindow.addEventListener('keydown', function () {
+                    self.listenForEsc.apply(self, arguments);
+                });
+                window.clearInterval(escInterval);
+            } catch(err) {
+                Log.info('attempting to set event, failed for reason: ' + err);
+            }
+        }, 500);
 
         callApi = _.debounce(function () {
             HttpManager.GET({
@@ -113,6 +134,7 @@ export class Game extends React.Component {
 
         this.setState({
             currentGame: nextProps.game,
+            gameKey: Shortid.generate(),
             eventHandler: getEventsForGame(
                 EVENT_PREFIX,
                 nextProps.game,
@@ -150,18 +172,27 @@ export class Game extends React.Component {
     }
 
     setEvent() {
-        window.addEventListener('game-event', this.gameEventHandler.bind(this));
-        window.addEventListener('platform-event', this.gameEventHandler.bind(this));
-        window.addEventListener('keydown', this.listenForEsc.bind(this));
-        window.addEventListener('resize', this.checkForPortrait.bind(this));
-        window.addEventListener('orientationchange', this.resizeFrame.bind(this));
+        window.addEventListener('game-event', this.gameEventHandler);
+        window.addEventListener('platform-event', this.gameEventHandler);
+        window.addEventListener('keydown', this.listenForEsc);
+        window.addEventListener('resize', this.checkForPortrait);
+        window.addEventListener('orientationchange', this.resizeFrame);
+        window.addEventListener('handleOrientationChange', this.resizeFrame);
+        if (Screenfull) { //MPR 1/26/17: why, safari
+            window.addEventListener(Screenfull.raw.fullscreenchange, this.resizeFrame);
+        }
     }
 
     clearEvent() {
         window.removeEventListener('game-event', this.gameEventHandler);
+        window.removeEventListener('platform-event', this.gameEventHandler);
         window.removeEventListener('keydown', this.listenForEsc);
         window.removeEventListener('resize', this.checkForPortrait);
-        window.addEventListener('orientationchange', this.resizeFrame);
+        window.removeEventListener('orientationchange', this.resizeFrame);
+        window.removeEventListener('handleOrientationChange', this.resizeFrame);
+        if (Screenfull) {
+            window.removeEventListener(Screenfull.raw.fullscreenchange, this.resizeFrame);
+        }
     }
 
     listenForEsc(e) {
@@ -171,20 +202,28 @@ export class Game extends React.Component {
     }
 
     exitFullscreen() {
-        Screenfull.exit();
+        if (Screenfull) {
+            Screenfull.exit();
+        }
+        window.document.body.className =
+            _.without(window.document.body.className.split(' '), 'fullscreen').join(' ');
         this.setState({
             fullscreenFallback: false,
             isFullscreen: false,
-        });
+        }, this.resizeFrame);
+
+        this.resizeFrame();
     }
 
     resizeFrame() {
+        var self = this;
         var frame = ReactDOM.findDOMNode(this.refs.gameRef);
         if (frame) {
             frame.contentWindow.innerWidth = ReactDOM.findDOMNode(this.refs.wrapRef).offsetWidth;
             frame.contentWindow.innerHeight = ReactDOM.findDOMNode(this.refs.wrapRef).offsetHeight;
         }
-        this.dispatchPlatformEvent.call(this, 'resize');
+
+        self.dispatchPlatformEvent.call(self, 'resize');
     }
 
     dispatchPlatformEvent(name, data) {
@@ -198,13 +237,15 @@ export class Game extends React.Component {
 
     makeFullScreen() {
         var nextState = {isFullscreen: true};
-        if (Screenfull.enabled) {
+        if (Screenfull && Screenfull.enabled) {
             Screenfull.request(document.body);
         } else {
+            window.document.body.className = window.document.body.className + ' fullscreen';
             nextState.fullscreenFallback = true;
-            this.resizeFrame();
         }
-        this.setState(nextState);
+        this.setState(nextState, this.resizeFrame);
+        this.resizeFrame();
+
     }
 
     checkForPortrait() {
@@ -238,6 +279,7 @@ export class Game extends React.Component {
                     </div>
                     <iframe
                         ref="gameRef"
+                        key={this.state.gameKey}
                         className={ClassNames('game-frame', {
                             portrait: this.state.isPortrait
                         })}
@@ -245,24 +287,26 @@ export class Game extends React.Component {
                         allowTransparency="true"
                     />
                 </div>
-                <Button
-                    onClick={this.makeFullScreen.bind(this)}
-                    className={ClassNames('purple', 'standard', 'full-screen-btn', {
-                        hidden: this.state.isPortrait
-                    })}
-                >
-                    <Glyphicon glyph="fullscreen" /> {FULLSCREEN}
-                </Button>
-                <Button
-                    className={ClassNames('standard',
-                        {'purple': !this.state.demo},
-                        {'green': this.state.demo},
-                        {hidden: !this.props.isTeacher || this.props.game === 'skribble'}
-                    )}
-                    onClick={this.dispatchPlatformEvent.bind(this, 'toggle-demo-mode')}
-                >
-                    {DEMO_MODE}
-                </Button>
+                <div className="game-buttons">
+                    <Button
+                        onClick={this.makeFullScreen.bind(this)}
+                        className={ClassNames('purple', 'standard', 'full-screen-btn', {
+                            hidden: this.state.isPortrait
+                        })}
+                    >
+                        <Glyphicon glyph="fullscreen" /> {FULLSCREEN}
+                    </Button>
+                    <Button
+                        className={ClassNames('standard',
+                            {'purple': !this.state.demo},
+                            {'green': this.state.demo},
+                            {hidden: !this.props.isTeacher || this.props.game === 'skribble'}
+                        )}
+                        onClick={this.dispatchPlatformEvent.bind(this, 'toggle-demo-mode')}
+                    >
+                        {DEMO_MODE}
+                    </Button>
+                </div>
             </div>
         );
     }

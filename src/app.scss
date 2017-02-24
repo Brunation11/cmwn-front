@@ -356,7 +356,7 @@ h3 {
     }
 
     .logo {
-        position: relative;
+        position: absolute;
         width: 22vmin;
         min-width: 180px;
         max-width: 210px;
@@ -368,7 +368,7 @@ h3 {
 
     .header-logo {
         margin-top: 8px;
-        margin-left: $standard * 2;
+        margin-left: 190px;
         width: calc(100% - 180px - 8em);
         vertical-align: middle;
 
@@ -525,7 +525,6 @@ h3 {
         }
 
         .header-logo {
-            margin-left: 0;
             padding: 0;
             width: calc(100% - 180px - 8em);
         }

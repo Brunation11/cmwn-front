@@ -1,6 +1,6 @@
 {
   "name": "cmwn-platorm-frontend",
-  "version": "0.7.21",
+  "version": "0.11.14",
   "description": "ChangeMyWorldNow Platform Frontend (React)",
   "main": "index.html",
   "scripts": {
@@ -32,6 +32,7 @@
     "react-redux": "^4.4.0",
     "react-router": "^2.0.0",
     "react-router-redux": "^4.0.0",
+    "react-tag-input": "^4.6.2",
     "redux": "^3.3.1",
     "redux-combine-actions": "^0.1.2",
     "redux-immutable": "^3.0.6",
@@ -83,7 +84,7 @@
     "gulp-exit": "0.0.2",
     "gulp-if": "^2.0.0",
     "gulp-inject": "^3.0.0",
-    "gulp-mocha": "git+https://github.com/sindresorhus/gulp-mocha.git",
+    "gulp-mocha": "^3.0.1",
     "gulp-scss-lint": "^0.4.0",
     "gulp-scss-lint-stylish": "^1.0.1",
     "gulp-scss-lint-stylish2": "^2.0.2",
@@ -99,7 +100,6 @@
     "img-loader": "^1.2.2",
     "istanbul": "^1.0.0-alpha.2",
     "istanbul-react": "^1.1.0",
-    "jpegtran-bin": "0.2.3",
     "jsdom": "8.5.0",
     "jsdom-global": "2.0.0",
     "jsx-loader": "^0.13.2",

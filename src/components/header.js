@@ -29,9 +29,9 @@ export const COPY = {
     MODALS: {
         WORK: <span>
             <p>We are so excited about your interest to work with us!</p>
-            <p dangerouslySetInnerHTML={{__html: 'Click <a href=\'mailto:&#106;&#111;&#110;&#105;&#064;' +
-                '&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;' +
-                '&#046;&#099;&#111;&#109;?subject=Work With Us!\'>here</a> to contact us.'}}>
+            <p dangerouslySetInnerHTML={{__html: 'Click <a href=\'mailto:&#108;&#117;&#122;&#064;&#103;&#1' +
+                '05;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;?subject=Work With Us!\'>h' +
+                'ere</a> to contact us.'}}>
             </p>
         </span>,
 
@@ -40,19 +40,16 @@ export const COPY = {
             <p>Postage can be sent to:</p>
             <p>21 W 46th Street, Suite 605<br />New York, New York 10036<br /></p>
             <p>Or give us a call at &#40;&#54;&#52;&#54;&#41;&#32;&#56;&#54;&#49;&#45;&#48;&#53;&#55;&#49;</p>
-            <p dangerouslySetInnerHTML={{__html: 'Click <a href=\'mailto:&#105;&#110;&#102;&#111;&#064;' +
-                '&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#106;&#111;' +
-                '&#110;&#105;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;' +
-                '&#109;\'>here</a> to contact us.'}}>
+            <p dangerouslySetInnerHTML={{__html: 'Click <a href=\'mailto:&#108;&#117;&#122;&#064;&#103;&#10' +
+                '5;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;\'>here</a> to contact us.'}}>
             </p>
         </span>,
 
         SIGNUP: <span>
             <p>We are so excited about your interest to work with us!</p>
-            <p dangerouslySetInnerHTML={{__html: 'Click <a href=\'mailto:&#106;&#111;&#110;&#105;&#064;' +
-                '&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;,&#099;&#097;' +
-                '&#116;&#104;&#121;&#064;&#103;&#105;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;' +
-                '&#111;&#109;?subject=Sign up with CMWN&body=Thank you for your interest in Change My ' +
+            <p dangerouslySetInnerHTML={{__html: 'Click <a href=\'mailto:&#108;&#117;&#122;&#064;&#103;&#10' +
+                '5;&#110;&#097;&#115;&#105;&#110;&#107;&#046;&#099;&#111;&#109;' +
+                '?subject=Sign up with CMWN&body=Thank you for your interest in Change My ' +
                 'World Now!%0D%0A%0D%0AIf you would like to launch Change My World Now in your school ' +
                 'please provide the following information and someone from our team will contact you.' +
                 '%0D%0A%0D%0AYour Name:%0D%0AYour School:%0D%0AYour Email:%0D%0ASchool Grades:' +

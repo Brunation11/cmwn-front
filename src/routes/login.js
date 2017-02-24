@@ -65,8 +65,15 @@ var Component = React.createClass({
         };
     },
     componentDidMount: function () {
+        var self = this;
         this.getToken();
         window.document.addEventListener('keydown', this.attemptLogin);
+        //react and chrome struggle to communicate autofilling forms.
+        //lets give a little push once the browser has had half a second
+        //to fill the fields
+        window.setTimeout(() => {
+            self.forceUpdate();
+        }, 500);
     },
     componentWillUnmount: function () {
         window.document.removeEventListener('keydown', this.attemptLogin);
@@ -91,14 +98,15 @@ var Component = React.createClass({
     login: function (e) {
         var dataUrl;
         var req;
-        var user = this.getUsernameWithoutSpaces();
+        var user = this.getInputWithoutSpaces('login');
+        var password = this.getInputWithoutSpaces('password');
         dataUrl = this.state.overrideLogin || this.props.currentUser._links.login.href;
         ga('send', 'event', 'Login', 'Attempted');
         req = HttpManager.POST({
             url: dataUrl,
         }, {
             'username': user,
-            'password': this.refs.password.getValue()
+            'password': password
         });
         req.then(res => {
             if (res.response && res.response.status && res.response.detail &&
@@ -135,15 +143,22 @@ var Component = React.createClass({
             //});
             Log.log(e, 'Invalid login');
         });
+
+        this.setState({
+            username: '',
+            password: ''
+        });
     },
     attemptLogin: function (e) {
         var user;
         var logout;
         var logoutUrl;
 
-        if (this.state.currentPage === 'forgot-password') return;
+        if (this.state.currentPage === 'forgot-password' ||
+            !this.state.username ||
+            !this.state.password) return;
 
-        user = this.getUsernameWithoutSpaces();
+        user = this.getInputWithoutSpaces('login');
 
         if (e.keyCode === 13 || e.charCode === 13 || e.type === 'click') {
             if (this.props.data._links && this.props.data._links.login == null) {
@@ -213,16 +228,18 @@ var Component = React.createClass({
             }
         }
     },
-    getUsernameWithoutSpaces: function () {
-        var newLogin;
+    getInputWithoutSpaces: function (field) {
+        var originalField;
+        var newField;
         try {
-            newLogin = this.refs.login.getValue().replace(/\s/g, '');
+            originalField = this.refs[field];
+            newField = originalField.getValue().replace(/\s/g, '');
         } catch(err) {
             //ref not yet mounted, probably somebody getting antsy and
             //hammering the enter key.
-            newLogin = '';
+            newField = '';
         }
-        return newLogin;
+        return newField;
     },
     renderLogin: function () {
         return (
@@ -243,6 +260,11 @@ var Component = React.createClass({
                                 name="username"
                                 label={LABELS.LOGIN}
                                 placeholder="FUN-RABBIT003"
+                                value={this.state.username}
+                                onChange={e => this.setState({username: e.target.value})}
+                                onFocus={e => e.target.placeholder = ''}
+                                onBlur={e => e.target.placeholder = 'FUN-RABBIT003'}
+                                autoComplete="off"
                             />
                             <Input
                                 ref="password"
@@ -251,12 +273,18 @@ var Component = React.createClass({
                                 name="password"
                                 label={LABELS.PASSWORD}
                                 placeholder="PA********"
+                                value={this.state.password}
+                                onChange={e => this.setState({password: e.target.value})}
+                                onFocus={e => e.target.placeholder = ''}
+                                onBlur={e => e.target.placeholder = 'PA********'}
+                                autoComplete="off"
                             />
                             <Button
                                 id="login-button"
                                 className="login-button"
                                 onKeyPress={this.attemptLogin}
                                 onClick={this.attemptLogin}
+                                disabled={!this.state.username || !this.state.password}
                             />
                             <a
                                 className="forgot-password-link"
@@ -379,6 +407,10 @@ var Component = React.createClass({
     },
     render: function () {
         var page;
+
+        if (this.props.currentUser.user_id) {
+            window.location.replace(window.location.href.replace('/login', '/profile'));
+        }
 
         if (this.state.currentPage === 'forgot-password') {
             page = this.renderForgotPassword;

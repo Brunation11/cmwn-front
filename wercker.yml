@@ -3,6 +3,9 @@ box:
 test:
   steps:
     - script:
+      name: Checking version
+      code: $PWD/bin/check_version.sh
+    - script:
       name: Install packages
       code: npm prune && npm install && tar cf $WERCKER_CACHE_DIR/nm_cache.tar node_modules
     - script:
@@ -57,7 +60,6 @@ release:
       code: |-
         echo "Uploading to S3"
         python /deploy_to_s3.py -v --version $VERSION
-
 deploy:
   box:
     id: cmwn/python
