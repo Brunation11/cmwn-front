@@ -27,8 +27,8 @@ const IB_IDS = {
         'skribble': '10b58a3fbacaa46203faf65a02f8fbbc.gif',
         'turtle-hurdle': '1cf1a4952107ce19e6b8675643a17c5d.gif',
         '3d-world': '3d45287ac7d23711d32af8b7c797c2f8.gif',
-        'green-team': '8254c3f834ced23d71fd1de6c0ae1aad.gif',
         'green-team-challenge': '8254c3f834ced23d71fd1de6c0ae1aad.gif',
+        'green-team': '8254c3f834ced23d71fd1de6c0ae1aad.gif',
         'waste-busters': 'a41a5f14aa880f298a987134849629fe.png',
         'drone-zone': '9e9b3bae0f9e8ba512eed9fad35868b2.gif'
     },
