@@ -281,11 +281,13 @@ export default class Image extends React.Component {
                             >
                                 <img
                                     className="clr"
-                                    src={_.find(this.state.defaultsCLR, ['name', value.name])}
+                                    // src={_.find(this.state.defaultsCLR, ['name', value.name])}
+                                    src="https://media-staging.changemyworldnow.com/f/ff161d80f8e87d18d59a626989f1d85e.png"
                                 />
                                 <img
                                     className="bw"
-                                    src={value.src}
+                                    // src={value.src}
+                                    src="https://media-staging.changemyworldnow.com/f/34d5ce8d53c506711e60080d6aa8f66e.png"
                                 />
                             </div>
                         );
