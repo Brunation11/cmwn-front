@@ -1,6 +1,6 @@
 /* eslint-disable max-lines*/
 import React from 'react';
-import {Modal, ButtonToolbar, OverlayTrigger, Popover, Button} from 'react-bootstrap';
+import {Modal, OverlayTrigger, Popover, Button} from 'react-bootstrap';
 import Classnames from 'classnames';
 import _ from 'lodash';
 
@@ -85,7 +85,7 @@ export default class Image extends React.Component {
             this.setState({
                 defaultsBW: res.response._embedded.items
             });
-        }).catch((e) => {
+        }).catch(() => {
             Toast.error(ERRORS.NO_DEFAULTS);
         });
 
