@@ -144,6 +144,7 @@ $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
         position: absolute;
         top: -3%;
         left: 94%;
+        z-index: 1;
         outline: none;
         border: 0;
         background: url('#{$media-url}#{$close-modal-btn}');
