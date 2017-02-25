@@ -387,7 +387,7 @@ export default class Image extends React.Component {
                         src={_.find(this.state.defaultsBW, ['name', this.state.selected]).src}
                     />
                     <span className="prompt-2">
-                        USERNAME HERE
+                        {this.props.currentUser.username}
                     </span>
                 </div>
                 <div className="right">
