@@ -248,7 +248,7 @@ export default class Image extends React.Component {
                     onClick={this.setPage.bind(this, 'select-default')}
                 />
                 <Button
-                    className="close-modal-btn"
+                    className="profile-btn"
                     onClick={this.hideModal.bind(this)}
                 >
                     SWIPE DOWN TO CANCEL,
@@ -281,13 +281,11 @@ export default class Image extends React.Component {
                             >
                                 <img
                                     className="clr"
-                                    // src={_.find(this.state.defaultsCLR, ['name', value.name])}
-                                    src="https://media-staging.changemyworldnow.com/f/ff161d80f8e87d18d59a626989f1d85e.png"
+                                    src={_.find(this.state.defaultsCLR, ['name', value.name])}
                                 />
                                 <img
                                     className="bw"
-                                    // src={value.src}
-                                    src="https://media-staging.changemyworldnow.com/f/34d5ce8d53c506711e60080d6aa8f66e.png"
+                                    src={value.src}
                                 />
                             </div>
                         );
@@ -309,6 +307,7 @@ export default class Image extends React.Component {
                 <Button
                     className="confirm-btn"
                     onClick={this.setPage.bind(this, 'confirm')}
+                    disabled={!this.state.selected}
                 />
                 <Button className="cancel-btn"
                     onClick={this.setPage.bind(this, 'welcome')}
@@ -430,7 +429,7 @@ export default class Image extends React.Component {
                     onClick={this.defaultUpload.bind(this)}
                 />
                 <Button className="cancel-btn"
-                    onClick={this.setPage.bind(this, 'welcome')}
+                    onClick={this.setPage.bind(this, 'select-default')}
                 />
             </div>
         );
@@ -440,7 +439,7 @@ export default class Image extends React.Component {
         return (
             <div>
                 {this.renderDesktopWelcome()}
-
+                {this.renderMobileWelcome()}
             </div>
         );
     }
@@ -449,7 +448,7 @@ export default class Image extends React.Component {
         return (
             <div>
                 {this.renderDesktopSelectDefault()}
-
+                {this.renderMobileSelectDefault()}
             </div>
         );
     }
@@ -458,7 +457,7 @@ export default class Image extends React.Component {
         return (
             <div>
                 {this.renderDesktopConfirm()}
-
+                {this.renderMobileConfirm()}
             </div>
         );
     }
@@ -480,6 +479,7 @@ export default class Image extends React.Component {
                     className="close-modal-btn"
                     onClick={this.hideModal.bind(this)}
                 >
+                    <span className="label"><strong>TAP TO KEEP</strong> MY CURRENT PROFILE PICTURE</span>
                 </Button>
                 {page.call(this)}
             </div>
