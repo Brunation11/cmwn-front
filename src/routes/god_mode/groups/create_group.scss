@@ -1,0 +1,20 @@
+@import 'variables';
+
+.god-create .panel-body {
+
+    .drop-down {
+        display: 'block';
+        width: 100%;
+
+        .control-label {
+            position: relative;
+            width: 18%;
+        }
+
+        .select-options {
+            position: relative;
+            border: 1px solid $copy-medium-gray;
+            width: 32%;
+        }
+    }
+}

@@ -1,5 +1,5 @@
 /*global describe, it */
-import React from 'react'; //eslint-disable-line no-unused-vars
+
 import assert from 'assert';
 import {expect} from 'chai';
 

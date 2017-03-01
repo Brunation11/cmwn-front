@@ -2,6 +2,12 @@
 
 .god-mode-games {
 
+    .heading {
+        color: $cmwn-purple;
+        font-family: $cmwn-jade-font;
+        font-size: 1.75rem;
+    }
+
     .item {
         position: relative;
         width: 100%;
@@ -28,6 +34,10 @@
             max-height: 0;
             overflow: hidden;
             text-align: center;
+        }
+
+        .panel-heading {
+            background-color: $cmwn-purple;
         }
 
         form {

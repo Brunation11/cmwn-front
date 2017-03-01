@@ -20,7 +20,7 @@ var Page;
 
 export const PAGE_UNIQUE_IDENTIFIER = 'god-mode-games';
 
-const GAME_WRAPPER = GenerateDataSource('games', PAGE_UNIQUE_IDENTIFIER);
+const GAME_WRAPPER = GenerateDataSource('games_deleted', PAGE_UNIQUE_IDENTIFIER);
 
 export const FIELDS = [
     'title',
@@ -39,6 +39,8 @@ export const NON_INPUTS = [
     'key',
     'newGame',
     'game_id',
+    'deletedGame',
+    'undelete',
 ];
 
 const FIELD_TYPES = {
@@ -58,8 +60,8 @@ const FIELD_LABELS = {
 };
 
 const NEW_GAME = {
-    [FIELDS[0]]: 'New Game',
-    [FIELDS[1]]: 'Description',
+    [FIELDS[0]]: '',
+    [FIELDS[1]]: '',
     [FIELDS[2]]: false,
     [FIELDS[3]]: false,
     [FIELDS[4]]: false,
@@ -77,6 +79,13 @@ const LOG = {
     DELETE: 'Could not delete game',
 };
 
+const HEADINGS = {
+    ACTIVE: 'ACTIVE GAMES :',
+    DELETED: 'DELETED GAMES :',
+    DELETE: 'DELETE',
+    CONFIRM: 'ARE YOU SURE?',
+};
+
 const TOAST = {
     SUCCESS: {
         CREATE: ' successfully created',
@@ -90,10 +99,18 @@ const TOAST = {
     },
 };
 
-export var dataTransform = function (data) {
-    data = _.filter(data, item => !item.deleted);
+export var dataTransform = function (data, deleted = false) {
+    if (!data) return [];
+    switch (deleted) {
+        case true:
+            data = _.filter(data, item => item.deleted);
+            break;
+        default:
+            data = _.filter(data, item => !item.deleted);
+    }
+
     data = _.map(data, filterInputFields);
-    data.unshift(NEW_GAME);
+
     return data;
 };
 
@@ -114,6 +131,10 @@ export var filterInputFields = function (item, index) {
         }
     });
 
+    if (item.deleted) {
+        gameItem.deletedGame = true;
+    }
+    gameItem.undelete = false;
     gameItem.key = index;
 
     return gameItem;
@@ -127,9 +148,8 @@ export class GodModeGames extends React.Component {
             open: '',
             games: {},
             deleteTry: '',
-            update: true,
+            update: 3,
             reset: '',
-            changed: [],
         };
     }
 
@@ -172,24 +192,13 @@ export class GodModeGames extends React.Component {
         }
     }
 
-    saveAllGames() {
-        _.forEach(this.state.games, (game, gameId) => {
-            if (this.state.changed.indexOf(gameId) !== -1 && !game.newGame) {
-                this.saveGame(game, gameId);
-            }
-        });
-    }
-
     deleteGame(item, gameId) {
         var postData;
         var game = _.find(this.props.data._embedded.game, v => v.game_id === gameId);
         if (this.state.deleteTry === gameId) {
-            postData = {
-                'game_id': gameId
-            };
-
-            HttpManager.DELETE({url: game._links.self.href},
-                postData).then(() => {
+            HttpManager.DELETE(
+                    game._links.self.href,
+                ).then(() => {
                     Toast.success(`${item.title}${TOAST.SUCCESS.DELETE}`);
                 }).catch(err => {
                     Toast.error(`${TOAST.ERROR.DELETE}${item.title}:
@@ -213,13 +222,14 @@ export class GodModeGames extends React.Component {
             this.setState({ games, reset: '' });
         }
 
-        if (this.state.update) {
+        if (this.state.update !== 0) {
+            games = _.cloneDeep(this.state.games);
             _.forEach(data, item => {
                 games[item.game_id] = item;
             });
 
             if (!_.isEqual(games, this.state.games)) {
-                this.setState({ games, update: false });
+                this.setState({ games, update: this.state.update - 1 });
             }
         }
     }
@@ -234,12 +244,10 @@ export class GodModeGames extends React.Component {
     renderInputField(inputValue, inputType, gameId, key) {
         var self = this;
         var games;
-        var changed;
 
         if (NON_INPUTS.indexOf(inputType) !== -1) return;
 
         games = _.cloneDeep(this.state.games);
-        changed = _.clone(this.state.changed);
 
         if (FIELD_TYPES[inputType] === 'checkbox') {
             return (
@@ -252,9 +260,8 @@ export class GodModeGames extends React.Component {
                     key={key}
                     validate="required"
                     onChange={e => {
-                        if (changed.indexOf(gameId) === -1) changed.push(gameId);
                         games[gameId][inputType] = e.target.checked;
-                        self.setState({ games, changed });
+                        self.setState({ games });
                     }}
                />
             );
@@ -266,16 +273,42 @@ export class GodModeGames extends React.Component {
                 type={FIELD_TYPES[inputType]}
                 label={FIELD_LABELS[inputType]}
                 value={inputValue}
+                placeholder={inputType}
                 ref={`${inputType}-input`}
                 name={`${inputType}-input`}
                 key={key}
                 validate="required"
                 onChange={e => {
-                    if (changed.indexOf(gameId) === -1) changed.push(gameId);
                     games[gameId][inputType] = e.target.value;
-                    self.setState({ games, changed });
+                    self.setState({ games });
                 }}
            />
+        );
+    }
+
+    renderDeleteButton(item) {
+        var currentItem = _.has(item, 'asMutable') ? item.asMutable() : item;
+
+        currentItem.undelete = true;
+        if (item.deletedGame) {
+            return (
+                <Button
+                    className="btn standard purple save-btn"
+                    onClick={this.saveGame.bind(this, currentItem, item.game_id, false)}
+                >
+                    {'UNDELETE'}
+                </Button>
+            );
+        }
+        return (
+            <Button
+                className={ClassNames('btn', 'standard', 'purple', 'delete-btn', {
+                    hidden: currentItem.newGame
+                })}
+                onClick={this.deleteGame.bind(this, currentItem, item.game_id, false)}
+            >
+                {this.state.deleteTry === item.game_id ? HEADINGS.CONFIRM : HEADINGS.DELETE}
+            </Button>
         );
     }
 
@@ -325,14 +358,7 @@ export class GodModeGames extends React.Component {
                         >
                             RESET
                         </Button>
-                        <Button
-                            className={ClassNames('btn', 'standard', 'purple', 'delete-btn', {
-                                hidden: currentItem.newGame
-                            })}
-                            onClick={this.deleteGame.bind(this, currentItem, item.game_id)}
-                        >
-                            {this.state.deleteTry === item.game_id ? 'ARE YOU SURE?' : 'DELETE'}
-                        </Button>
+                        {this.renderDeleteButton(item)}
                     </Form>
                 </Panel>
                 <Button
@@ -350,32 +376,24 @@ export class GodModeGames extends React.Component {
     render() {
         if (this.props.data === null || _.isEmpty(this.props.data)) return null;
 
-        const BUTTONS = (
-            <div>
-                <Button
-                    className="btn standard purple save-all-btn"
-                    onClick={this.saveAllGames.bind(this)}
-                >
-                    SAVE ALL UPDATED GAMES
-                </Button>
-                <Button
-                    className="btn standard green reset-all-btn"
-                    onClick={() => {
-                        this.setState({ update: true });
-                    }}
-                >
-                    RESET ALL
-                </Button>
-            </div>
-        );
-
         return (
             <Layout
                 currentUser={this.props.currentUser}
                 className={PAGE_UNIQUE_IDENTIFIER}
                 navMenuId="navMenu"
             >
-                {BUTTONS}
+                <FlipBoard
+                        renderFlip={this.renderFlip.bind(this)}
+                        data={[NEW_GAME]}
+                        id="game-flip-board"
+                        updateParent={this.updateGameData.bind(this)}
+                        alwaysUpdateParent
+                        header={null}
+                />
+
+                <div className="heading">
+                    {HEADINGS.ACTIVE}
+                </div>
                 <GAME_WRAPPER transform={dataTransform}>
                     <FlipBoard
                         renderFlip={this.renderFlip.bind(this)}
@@ -385,7 +403,22 @@ export class GodModeGames extends React.Component {
                         header={null}
                     />
                 </GAME_WRAPPER>
-                {BUTTONS}
+
+                <div className="heading">
+                    {HEADINGS.DELETED}
+                </div>
+                <GAME_WRAPPER
+                    transform={data => { return (dataTransform(data, true)); }}
+                    renderNoData={() => <div>No Deleted Games</div>}
+                >
+                    <FlipBoard
+                        renderFlip={this.renderFlip.bind(this)}
+                        updateParent={this.updateGameData.bind(this)}
+                        alwaysUpdateParent
+                        id="deleted-game-flip-board"
+                        header={null}
+                    />
+                </GAME_WRAPPER>
            </Layout>
         );
     }
@@ -410,4 +443,3 @@ mapStateToProps = state => {
 Page = connect(mapStateToProps)(GodModeGames);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
-
