@@ -61,7 +61,7 @@ export class ResourceCenter extends React.Component {
         return links.map(link => {
             return (
                 <li>
-                    <a href={link.href} target="_blank">{link.label}</a>
+                    <a href={link.href}>{link.label}</a>
                 </li>
             );
         });

@@ -9,8 +9,6 @@ import Toast from 'components/toast';
 import Util from 'components/util';
 
 import Layout from 'layouts/two_col';
-import GroupCodeChange from 'components/group_code_change';
-
 
 const HEADINGS = {
     EDIT_TITLE: 'Edit Class: ',
@@ -25,6 +23,7 @@ export class EditClass extends React.Component {
     constructor() {
         super();
         this.state = {
+            code: '',
             title: '',
             description: ''
         };
@@ -75,14 +74,13 @@ export class EditClass extends React.Component {
                     placeholder="Description"
                     label="Description"
                     validate="required"
-                    ref="descriptionInput"
-                    name="descriptionInput"
+                    ref="codeInput"
+                    name="codeInput"
                     onChange={e => this.setState(
                         {description: e.target.value} //eslint-disable-line camelcase
                     )}
                 />
-                 <Button id="save-button" onClick={this.submitData.bind(this)} > Save </Button><br/><br/>
-                 <GroupCodeChange currentUser={this.props.currentUser} data={this.props.data}/>
+                 <Button id="save-button" onClick={this.submitData.bind(this)} > Save </Button>
               </Panel>
            </Layout>
          );
