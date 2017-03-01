@@ -3,7 +3,6 @@ import {Modal} from 'react-bootstrap';
 import {Panel} from 'react-bootstrap';
 import _ from 'lodash';
 import 'components/survey_modal.scss';
-import Shortid from 'shortid';
 
 const HEADINGS = {
     'DATA': 'Survey Data',
@@ -109,14 +108,12 @@ class SurveyModal extends React.Component {
                                 if ((Object.keys(value)).length === 2 && _.isArray(value['dropzone-0'])) {
                                     body = _.map(value, function (qualities, dropzone){
                                         return (
-                                            <div key={Shortid.generate()}>
+                                            <div>
                                                 <p>{HEADINGS[dropzone]}</p>
                                                 <ol>
                                                     {_.map(qualities, function (quality){
                                                         return (
-                                                            <li key={Shortid.generate()}>
-                                                                {quality.replace(/-/g, ' ')}
-                                                            </li>
+                                                            <li> {quality.replace(/-/g, ' ')} </li>
                                                         );
                                                     })}
                                                 </ol>
@@ -125,14 +122,10 @@ class SurveyModal extends React.Component {
                                     });
 
                                 } else {
-                                    body = <ol key={Shortid.generate()}>
+                                    body = <ol>
                                             {_.map(value, function (data){
                                                 return (
-                                                    <li
-                                                        key={Shortid.generate()}
-                                                    >
-                                                        {data.ref.replace(/-/g, ' ')}
-                                                    </li>
+                                                    <li>{data.ref.replace(/-/g, ' ')}</li>
                                                 );
                                             })}
                                             </ol>;
@@ -140,8 +133,8 @@ class SurveyModal extends React.Component {
                             }
 
                             return (
-                                <div key={Shortid.generate()}>
-                                    <h4 key="heading">{version[screen]}</h4>
+                                <div>
+                                    <h4>{version[screen]}</h4>
                                     {body}
                                 </div>
                             );
