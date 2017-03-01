@@ -23,7 +23,7 @@ const LABELS = {
 
 const ERRORS = {
     BAD_PASS: 'Sorry, there was a problem updating your password.',
-    TOO_SHORT: 'Passwords must contain at least 8 characters, including one number',
+    EMPTY_PASSWORD: 'Please enter a new password to update your password',
     NO_MATCH: 'Those passwords do not appear to match. Please try again.'
 };
 
@@ -31,6 +31,12 @@ const CHANGE_COPY = {
     PART_ONE: 'You are required to change your password before using ',
     PART_TWO: 'ChangeMyWorldNow.com',
     PART_THREE: 'Please update your password using the form below to proceed.'
+};
+
+const PASSWORD = {
+    password: 'validationErrorMessagePassword',
+    password_confirmation: //eslint-disable-line camelcase
+        'validationErrorMessagePasswordConfirmation',
 };
 
 var mapStateToProps;
@@ -43,7 +49,9 @@ export class UpdatePassword extends React.Component {
             type: 'password',
             extraProps: {},
             currentPage: 'update-password',
-            background: _.sample(['bkg-1', 'bkg-2'])
+            background: _.sample(['bkg-1', 'bkg-2']),
+            validationErrorMessagePassword: '',
+            validationErrorMessagePasswordConfirmation: ''
         });
     }
 
@@ -73,48 +81,40 @@ export class UpdatePassword extends React.Component {
         }
     }
 
-    isPassValid(password) {
-        if (password === null || typeof (password) === 'undefined') return false;
-        return password.length >= 8 && ~password.search(/[0-9]+/);
-    }
-
     goToProfile() {
         History.replace('/profile?message=updated');
     }
 
     submit() {
-        if (!this.isPassValid(this.refs.newPassword.getValue())) {
+        HttpManager.POST({
+            url: `${GLOBALS.API_URL}password`
+        }, {
+            'password': this.refs.newPassword.getValue(),
+            'password_confirmation': this.refs.confirmPassword.getValue()
+        }).then(() => {
             this.setState({
-                extraProps: {
-                    bsStyle: 'error'
-                }
+                currentPage: 'confirm-re-login'
             });
-            Toast.error(ERRORS.TOO_SHORT);
-        } else if (this.refs.confirmPassword.getValue() === this.refs.newPassword.getValue()) {
-            HttpManager.POST({
-                url: `${GLOBALS.API_URL}password`
-            }, {
-                'password': this.refs.newPassword.getValue(),
-                'password_confirmation': this.refs.confirmPassword.getValue()
-            }).then(() => {
+        }).catch(err => {
+            var message = {};
+            if (err.status === 422) {
+                _.each(err.response.validation_messages, function (item, field) {
+                    if (PASSWORD[field]) {
+                        message[PASSWORD[field]] = Object.values(item).join(' ');
+                    }
+                });
+                Toast.error(ERRORS.BAD_PASS);
+                this.setState(message);
+            } else if (err.status === 0) {
+                //non-error response indicates password already changed successfully
                 this.setState({
                     currentPage: 'confirm-re-login'
                 });
-            }).catch(err => {
-                if (err.status === 0) {
-                    //non-error response indicates password already changed successfully
-                    this.setState({
-                        currentPage: 'confirm-re-login'
-                    });
-                } else {
-                    Log.warn(`Update password failed. ${err.message ? `Message: ${err.message}` : ''}`, err);
-                    Toast.error(ERRORS.BAD_PASS);
-                }
-            });
-        } else {
-            this.setState({extraProps: {bsStyle: 'error'}});
-            Toast.error(ERRORS.NO_MATCH);
-        }
+            } else {
+                Log.warn(`Update password failed. ${err.message ? `Message: ${err.message}` : ''}`, err);
+                Toast.error(ERRORS.BAD_PASS);
+            }
+        });
     }
 
     renderConfirmReLogin() {
@@ -154,6 +154,7 @@ export class UpdatePassword extends React.Component {
                                 autoComplete="off"
                                 {...this.state.extraProps}
                             />
+                            <span className="error">{this.state.validationErrorMessagePassword}</span>
                             <Input
                                 ref="confirmPassword"
                                 name="confirmPassword"
@@ -167,6 +168,9 @@ export class UpdatePassword extends React.Component {
                                 autoComplete="off"
                                 {...this.state.extraProps}
                             />
+                            <span className="error">
+                                {this.state.validationErrorMessagePasswordConfirmation}
+                            </span>
                             <Input
                                 type="radio"
                                 ref="toggle"

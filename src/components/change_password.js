@@ -5,6 +5,7 @@ import SweetAlert from 'sweetalert2';
 import HttpManager from 'components/http_manager';
 import Toast from 'components/toast';
 import Log from 'components/log';
+import _ from 'lodash';
 
 const HEADINGS = {
     PASSWORD: 'Update Password'
@@ -19,7 +20,11 @@ export const ERRORS = {
 const PASS_UPDATED = '<p id="show-msg">You have successfully updated your password.' +
     '<br />Be sure to remember for next time!</p>';
 
-var isPassValid;
+const PASSWORD = {
+    password: 'validationErrorMessagePassword',
+    password_confirmation: //eslint-disable-line camelcase
+        'validationErrorMessagePasswordConfirmation',
+};
 
 class ChangePassword extends React.Component {
     constructor() {
@@ -29,7 +34,9 @@ class ChangePassword extends React.Component {
             new: '',
             confirm: '',
             extraProps: {},
-            type: 'password'
+            type: 'password',
+            validationErrorMessagePassword: '',
+            validationErrorMessagePasswordConfirmation: ''
         };
     }
 
@@ -46,32 +53,27 @@ class ChangePassword extends React.Component {
     }
 
     submit() {
-        if (!isPassValid(this.state.new)) {
-            this.setState({extraProps: {bsStyle: 'error'}});
-            Toast.error(ERRORS.TOO_SHORT);
-        } else if (this.state.confirm === this.state.new) {
-            HttpManager.POST({url: this.props.url.href}, {
-                'current_password': this.state.current,
-                'password': this.state.new,
-                'password_confirmation': this.state.confirm,
-                'user_id': this.props.user_id,
-            }).then(() => {
-                this.confirmReLogin();
-            }).catch(err => {
-                Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
-                Toast.error(ERRORS.BAD_PASS);
-            });
+        HttpManager.POST({url: this.props.url.href}, {
+            'current_password': this.state.current,
+            'password': this.state.new,
+            'password_confirmation': this.state.confirm,
+            'user_id': this.props.user_id,
+        }).then(() => {
+            this.confirmReLogin();
+        }).catch(err => {
+            var message = {};
 
-            this.setState({
-                current: '',
-                new: '',
-                confirm: ''
-            });
-        } else {
-            this.setState({extraProps: {bsStyle: 'error'}});
-            Toast.error(ERRORS.NO_MATCH);
-            /** @TODO MPR, 11/19/15: check on change, not submit*/
-        }
+            if (err.status === 422) {
+                _.each(err.response.validation_messages, function (item, field) {
+                    if (PASSWORD[field]) {
+                        message[PASSWORD[field]] = Object.values(item).join(' ');
+                    }
+                });
+            }
+            Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
+            Toast.error(ERRORS.BAD_PASS);
+            this.setState(message);
+        });
 
         this.setState({
             current: '',
@@ -132,6 +134,7 @@ class ChangePassword extends React.Component {
                         autoComplete="off"
                         {...this.state.extraProps}
                     />
+                    <span className="error">{this.state.validationErrorMessagePassword}</span>
                     <Input
                         id="confirm-pass"
                         type={this.state.type}
@@ -147,6 +150,7 @@ class ChangePassword extends React.Component {
                         autoComplete="off"
                         {...this.state.extraProps}
                     />
+                    <span className="error">{this.state.validationErrorMessagePasswordConfirmation}</span>
                     <Input
                         type="radio"
                         ref="show-pass"
@@ -169,9 +173,5 @@ class ChangePassword extends React.Component {
         );
     }
 }
-
-isPassValid = function (password) {
-    return password.length >= 8 && ~password.search(/[0-9]+/);
-};
 
 export default ChangePassword;
