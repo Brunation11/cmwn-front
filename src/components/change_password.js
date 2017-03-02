@@ -12,7 +12,7 @@ const HEADINGS = {
 };
 
 export const ERRORS = {
-    BAD_PASS: 'Sorry, there was a problem updating your password.',
+    BAD_PASS: 'Sorry, there was a problem updating your password. Please try again.',
     NO_MATCH: 'Those passwords do not appear to match. Please try again.',
     TOO_SHORT: 'Passwords must contain at least 8 characters, including one number',
 };
@@ -21,10 +21,12 @@ const PASS_UPDATED = '<p id="show-msg">You have successfully updated your passwo
     '<br />Be sure to remember for next time!</p>';
 
 const PASSWORD = {
-    password: 'validationErrorMessagePassword',
+    password: 'passwordErrorMessage',
     password_confirmation: //eslint-disable-line camelcase
-        'validationErrorMessagePasswordConfirmation',
+        'passwordConfirmationErrorMessage',
 };
+
+var isPassValid;
 
 class ChangePassword extends React.Component {
     constructor() {
@@ -35,8 +37,8 @@ class ChangePassword extends React.Component {
             confirm: '',
             extraProps: {},
             type: 'password',
-            validationErrorMessagePassword: '',
-            validationErrorMessagePasswordConfirmation: ''
+            passwordErrorMessage: '',
+            passwordConfirmationErrorMessage: ''
         };
     }
 
@@ -53,33 +55,49 @@ class ChangePassword extends React.Component {
     }
 
     submit() {
-        HttpManager.POST({url: this.props.url.href}, {
-            'current_password': this.state.current,
-            'password': this.state.new,
-            'password_confirmation': this.state.confirm,
-            'user_id': this.props.user_id,
-        }).then(() => {
-            this.confirmReLogin();
-        }).catch(err => {
-            var message = {};
+        var updatedState = {
+            current: this.state.current,
+            new: this.state.new,
+            confirm: this.state.confirm,
+            passwordErrorMessage: '',
+            passwordConfirmationErrorMessage: ''
+        };
 
-            if (err.status === 422) {
-                _.each(err.response.validation_messages, function (item, field) {
-                    if (PASSWORD[field]) {
-                        message[PASSWORD[field]] = Object.values(item).join(' ');
-                    }
-                });
-            }
-            Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
-            Toast.error(ERRORS.BAD_PASS);
-            this.setState(message);
-        });
+        if (!isPassValid(this.state.new)) {
+            updatedState['passwordErrorMessage'] = ERRORS.TOO_SHORT;
+        }
 
-        this.setState({
-            current: '',
-            new: '',
-            confirm: ''
-        });
+        if (this.state.new !== this.state.confirm) {
+            updatedState['passwordConfirmationErrorMessage'] = ERRORS.NO_MATCH;
+        }
+
+        if (!(
+            updatedState['passwordErrorMessage'] === '' &&
+            updatedState['passwordConfirmationErrorMessage'] === ''
+        )) {
+            this.setState(updatedState);
+        } else {
+            HttpManager.POST({url: this.props.url.href}, {
+                'current_password': this.state.current,
+                'password': this.state.new,
+                'password_confirmation': this.state.confirm,
+                'user_id': this.props.user_id,
+            }).then(() => {
+                this.confirmReLogin();
+            }).catch(err => {
+                console.log(updatedState);
+                if (err.status === 422) {
+                    _.each(err.response.validation_messages, function (item, field) {
+                        if (PASSWORD[field]) {
+                            updatedState[PASSWORD[field]] = Object.values(item).join(' ');
+                        }
+                    });
+                }
+                Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
+                Toast.error(ERRORS.BAD_PASS);
+                this.setState(updatedState);
+            });
+        }
     }
 
     confirmReLogin() {
@@ -134,7 +152,7 @@ class ChangePassword extends React.Component {
                         autoComplete="off"
                         {...this.state.extraProps}
                     />
-                    <span className="error">{this.state.validationErrorMessagePassword}</span>
+                    <span className="error">{this.state.passwordErrorMessage}</span>
                     <Input
                         id="confirm-pass"
                         type={this.state.type}
@@ -150,7 +168,7 @@ class ChangePassword extends React.Component {
                         autoComplete="off"
                         {...this.state.extraProps}
                     />
-                    <span className="error">{this.state.validationErrorMessagePasswordConfirmation}</span>
+                    <span className="error">{this.state.passwordConfirmationErrorMessage}</span>
                     <Input
                         type="radio"
                         ref="show-pass"
@@ -173,5 +191,9 @@ class ChangePassword extends React.Component {
         );
     }
 }
+
+isPassValid = function (password) {
+    return password.length >= 8 && ~password.search(/[0-9]+/);
+};
 
 export default ChangePassword;

@@ -22,8 +22,8 @@ const LABELS = {
 };
 
 const ERRORS = {
-    BAD_PASS: 'Sorry, there was a problem updating your password.',
-    EMPTY_PASSWORD: 'Please enter a new password to update your password',
+    BAD_PASS: 'Sorry, there was a problem updating your password. ',
+    TOO_SHORT: 'Passwords must contain at least 8 characters, including one number',
     NO_MATCH: 'Those passwords do not appear to match. Please try again.'
 };
 
@@ -34,9 +34,9 @@ const CHANGE_COPY = {
 };
 
 const PASSWORD = {
-    password: 'validationErrorMessagePassword',
+    password: 'passwordErrorMessage',
     password_confirmation: //eslint-disable-line camelcase
-        'validationErrorMessagePasswordConfirmation',
+        'passwordConfirmationErrorMessage',
 };
 
 var mapStateToProps;
@@ -50,8 +50,8 @@ export class UpdatePassword extends React.Component {
             extraProps: {},
             currentPage: 'update-password',
             background: _.sample(['bkg-1', 'bkg-2']),
-            validationErrorMessagePassword: '',
-            validationErrorMessagePasswordConfirmation: ''
+            passwordErrorMessage: '',
+            passwordConfirmationErrorMessage: ''
         });
     }
 
@@ -81,40 +81,61 @@ export class UpdatePassword extends React.Component {
         }
     }
 
+    isPassValid(password) {
+        if (password === null || typeof (password) === 'undefined') return false;
+        return password.length >= 8 && ~password.search(/[0-9]+/);
+    }
+
     goToProfile() {
         History.replace('/profile?message=updated');
     }
 
     submit() {
-        HttpManager.POST({
-            url: `${GLOBALS.API_URL}password`
-        }, {
-            'password': this.refs.newPassword.getValue(),
-            'password_confirmation': this.refs.confirmPassword.getValue()
-        }).then(() => {
-            this.setState({
-                currentPage: 'confirm-re-login'
-            });
-        }).catch(err => {
-            var message = {};
-            if (err.status === 422) {
-                _.each(err.response.validation_messages, function (item, field) {
-                    if (PASSWORD[field]) {
-                        message[PASSWORD[field]] = Object.values(item).join(' ');
-                    }
-                });
-                Toast.error(ERRORS.BAD_PASS);
-                this.setState(message);
-            } else if (err.status === 0) {
-                //non-error response indicates password already changed successfully
+        var message = {
+            passwordErrorMessage: '',
+            passwordConfirmationErrorMessage: ''
+        }
+
+        if (!this.isPassValid(this.refs.newPassword.getValue())) {
+            message.passwordErrorMessage = ERRORS.TOO_SHORT;
+        }
+
+        if (this.refs.confirmPassword.getValue() !== this.refs.newPassword.getValue()) {
+            message.passwordConfirmationErrorMessage = ERRORS.NO_MATCH;
+        }
+
+        if (!(message.passwordErrorMessage === '' && message.passwordConfirmationErrorMessage === '')) {
+            this.setState(message);
+        } else {
+            HttpManager.POST({
+                url: `${GLOBALS.API_URL}password`
+            }, {
+                'password': this.refs.newPassword.getValue(),
+                'password_confirmation': this.refs.confirmPassword.getValue()
+            }).then(() => {
                 this.setState({
                     currentPage: 'confirm-re-login'
                 });
-            } else {
-                Log.warn(`Update password failed. ${err.message ? `Message: ${err.message}` : ''}`, err);
-                Toast.error(ERRORS.BAD_PASS);
-            }
-        });
+            }).catch(err => {
+                if (err.status === 422) {
+                    _.each(err.response.validation_messages, function (item, field) {
+                        if (PASSWORD[field]) {
+                            message[PASSWORD[field]] = Object.values(item).join(' ');
+                        }
+                    });
+                    Toast.error(ERRORS.BAD_PASS);
+                    this.setState(message);
+                } else if (err.status === 0) {
+                    //non-error response indicates password already changed successfully
+                    this.setState({
+                        currentPage: 'confirm-re-login'
+                    });
+                } else {
+                    Log.warn(`Update password failed. ${err.message ? `Message: ${err.message}` : ''}`, err);
+                    Toast.error(ERRORS.BAD_PASS);
+                }
+            });
+        }
     }
 
     renderConfirmReLogin() {
@@ -154,7 +175,7 @@ export class UpdatePassword extends React.Component {
                                 autoComplete="off"
                                 {...this.state.extraProps}
                             />
-                            <span className="error">{this.state.validationErrorMessagePassword}</span>
+                            <span className="error">{this.state.passwordErrorMessage}</span>
                             <Input
                                 ref="confirmPassword"
                                 name="confirmPassword"
@@ -169,7 +190,7 @@ export class UpdatePassword extends React.Component {
                                 {...this.state.extraProps}
                             />
                             <span className="error">
-                                {this.state.validationErrorMessagePasswordConfirmation}
+                                {this.state.passwordConfirmationErrorMessage}
                             </span>
                             <Input
                                 type="radio"
