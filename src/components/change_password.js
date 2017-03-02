@@ -64,16 +64,16 @@ class ChangePassword extends React.Component {
         };
 
         if (!isPassValid(this.state.new)) {
-            updatedState['passwordErrorMessage'] = ERRORS.TOO_SHORT;
+            updatedState.passwordErrorMessage = ERRORS.TOO_SHORT;
         }
 
         if (this.state.new !== this.state.confirm) {
-            updatedState['passwordConfirmationErrorMessage'] = ERRORS.NO_MATCH;
+            updatedState.passwordConfirmationErrorMessage = ERRORS.NO_MATCH;
         }
 
         if (!(
-            updatedState['passwordErrorMessage'] === '' &&
-            updatedState['passwordConfirmationErrorMessage'] === ''
+            updatedState.passwordErrorMessage === '' &&
+            updatedState.passwordConfirmationErrorMessage === ''
         )) {
             this.setState(updatedState);
         } else {
@@ -85,7 +85,6 @@ class ChangePassword extends React.Component {
             }).then(() => {
                 this.confirmReLogin();
             }).catch(err => {
-                console.log(updatedState);
                 if (err.status === 422) {
                     _.each(err.response.validation_messages, function (item, field) {
                         if (PASSWORD[field]) {
@@ -94,7 +93,6 @@ class ChangePassword extends React.Component {
                     });
                 }
                 Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
-                Toast.error(ERRORS.BAD_PASS);
                 this.setState(updatedState);
             });
         }

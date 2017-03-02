@@ -94,7 +94,7 @@ export class UpdatePassword extends React.Component {
         var message = {
             passwordErrorMessage: '',
             passwordConfirmationErrorMessage: ''
-        }
+        };
 
         if (!this.isPassValid(this.refs.newPassword.getValue())) {
             message.passwordErrorMessage = ERRORS.TOO_SHORT;
@@ -123,7 +123,6 @@ export class UpdatePassword extends React.Component {
                             message[PASSWORD[field]] = Object.values(item).join(' ');
                         }
                     });
-                    Toast.error(ERRORS.BAD_PASS);
                     this.setState(message);
                 } else if (err.status === 0) {
                     //non-error response indicates password already changed successfully
