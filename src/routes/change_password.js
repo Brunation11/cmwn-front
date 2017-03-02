@@ -34,6 +34,7 @@ const CHANGE_COPY = {
 };
 
 const PASSWORD = {
+    //the keys are in lowercase since they are used to compare keys coming from api
     password: 'passwordErrorMessage',
     password_confirmation: //eslint-disable-line camelcase
         'passwordConfirmationErrorMessage',

@@ -21,6 +21,7 @@ const PASS_UPDATED = '<p id="show-msg">You have successfully updated your passwo
     '<br />Be sure to remember for next time!</p>';
 
 const PASSWORD = {
+    //the keys are in lowercase since they are used to compare keys coming from api
     password: 'passwordErrorMessage',
     password_confirmation: //eslint-disable-line camelcase
         'passwordConfirmationErrorMessage',
