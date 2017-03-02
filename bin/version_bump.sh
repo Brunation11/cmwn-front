@@ -2,8 +2,8 @@
 
 if [ -z "$PACKAGE_FILE" ]
 then
-    echo "No PACKAGE_FILE variable set"
-    exit 2
+    echo "No PACKAGE_FILE variable set, defaulting to package.json"
+    PACKAGE_FILE="package.json"
 fi
 
 if [ ! -f $PACKAGE_FILE ] || [ ! -w $PACKAGE_FILE ] || [ ! -r $PACKAGE_FILE ]

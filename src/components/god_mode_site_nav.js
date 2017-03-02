@@ -10,24 +10,26 @@ import Util from 'components/util';
 import 'components/god_mode_site_nav.scss';
 
 class GodModeSiteNav extends React.Component {
-    constructor() {
+    constructor(props) {
         super();
-
-        this.state = {
-            linksRetrieved: false
-        };
+        this.state = {saLinks: null};
+        if (props.currentUser) {
+            this.state.currentUser = props.currentUser;
+        }
+        this.mounted = false;
     }
 
     componentDidMount() {
         this.getSaSettingsLinks();
-        this.setState({linksRetrieved: true});
+        this.mounted = true;
     }
 
-    componentWillReceiveProps() {
-        if (!this.state.linksRetrieved) {
-            this.getSaSettingsLinks();
-            this.setState({linksRetrieved: true});
+    shouldComponentUpdate() {
+        if (this.mounted){
+            return true;
         }
+
+        return false;
     }
 
     addHardcodedEntries(menuItems) {
@@ -38,22 +40,29 @@ class GodModeSiteNav extends React.Component {
     }
 
     getSaSettingsLinks() {
-        var self = this;
-        var links = self.props.currentUser._links;
+        var links = this.state.currentUser._links;
         var promise;
+
+        if (!this.state.currentUser) return;
 
         if (!links || !links.sa_settings) return;
 
         promise = Promise.all([HttpManager.GET(links.sa_settings.href)]);
         promise.then((res) => {
-            self.setState({saLinks: res[0].response._links});
+            if (this.mounted){
+                this.setState({saLinks: res[0].response._links});
+            }
         });
+    }
+
+    componentWillUnmount() {
+        this.mounted = false;
     }
 
     buildMenuRoutes() {
         var saLinks;
         var menuItems;
-        if (!this.state || !this.state.saLinks) return [];
+        if (!this.state.saLinks) return [];
 
         saLinks = _.clone(this.state.saLinks, true);
 
@@ -135,8 +144,6 @@ class GodModeSiteNav extends React.Component {
     }
 
     render() {
-        if (!this.props.currentUser || !this.props.currentUser._links ) return null;
-
         return (
             <div id="god-mode-site-nav">
                 <div className="sidebar">
