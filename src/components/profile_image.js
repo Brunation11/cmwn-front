@@ -24,8 +24,8 @@ const PENDING = ' We\'re reviewing your image and it should appear shortly. ' +
                 'To continue uploading a new image click ';
 
 const DEFAULT_IMGS = {
-    BW: '4795ea6a87f34d517f750669c67a5377',
-    CLR: '85a95f88575463336eb36e55ed044c40'
+    BW: 'a3ed3518427afd7ede55a84bea83f5f6',
+    CLR: 'e7f29f11fbaf7da8ac1d19ab2cea34db'
 };
 
 const ERRORS = {
@@ -45,7 +45,9 @@ export default class Image extends React.Component {
         this.state = {
             profileImage: GLOBALS.DEFAULT_PROFILE,
             isModerated: false,
-            page: 'welcome'
+            page: 'welcome',
+            defaultsBW: [],
+            defaultsCLR: []
         };
     }
 
@@ -214,7 +216,7 @@ export default class Image extends React.Component {
                         CLICK ANYWHERE IN THIS BOX TO
                     </span>
                     <span className="prompt-2">
-                        Upload or drag photo
+                        Upload photo
                         <br />
                         from your computer
                     </span>
@@ -260,10 +262,14 @@ export default class Image extends React.Component {
     }
 
     renderDesktopSelectDefault() {
+        var color;
+
         return (
             <div className="desktop select-default-container">
                 <div className="avatar-container">
                     {_.map(this.state.defaultsBW, (value) => {
+                        color = _.find(this.state.defaultsCLR, ['name', value.name]);
+                        if (!color) return null;
                         return (
                             <div
                                 onClick={() => {
@@ -281,7 +287,7 @@ export default class Image extends React.Component {
                             >
                                 <img
                                     className="clr"
-                                    src={_.find(this.state.defaultsCLR, ['name', value.name])}
+                                    src={color.src}
                                 />
                                 <img
                                     className="bw"
@@ -318,7 +324,9 @@ export default class Image extends React.Component {
 
     renderMobileSelectDefault() {
         var self = this;
-        var currentOption = self.state.defaultsBW[self.state.currentOption || 0];
+        var currentOption = self.state.defaultsCLR[self.state.currentOption || 0];
+
+        if (!currentOption) return null;
 
         return (
             <div className="mobile select-default-container">
@@ -350,7 +358,7 @@ export default class Image extends React.Component {
                     <Button
                         className="next-btn"
                         onClick={() => {
-                            if (_.get(self, 'state.currentOption', 0) < self.state.defaultsBW.length) {
+                            if (_.get(self, 'state.currentOption', 0) < self.state.defaultsCLR.length) {
                                 self.setState({
                                     currentOption: _.get(self, 'state.currentOption', 0) + 1,
                                 });
