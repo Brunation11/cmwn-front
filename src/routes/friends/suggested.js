@@ -71,20 +71,24 @@ export class Suggested extends React.Component{
 
     render() {
         var content;
-        if (this.props.data == null) return null;
-        if (this.props.data && this.props.data.length === 0) return this.renderNoData([]);
-        content = (
-            <form>
-                <FlipBoard
-                    data={this.props.data}
-                    renderFlip={this.renderCard.bind(this)}
-                    header={HEADINGS.SUGGESTED}
-                    transform={data => {
-                        return data.set('user_id', data.suggest_id);
-                    }}
-                />
-            </form>
-        );
+        if (this.props.data == null) {
+            content = null;
+        } else if (this.props.data && this.props.data.length === 0) {
+            content = this.renderNoData([]);
+        } else {
+            content = (
+                <form>
+                    <FlipBoard
+                        data={this.props.data}
+                        renderFlip={this.renderCard.bind(this)}
+                        header={HEADINGS.SUGGESTED}
+                        transform={data => {
+                            return data.set('user_id', data.suggest_id);
+                        }}
+                    />
+                </form>
+            );
+        }
 
         return (
            <Layout
