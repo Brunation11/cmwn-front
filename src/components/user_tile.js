@@ -9,6 +9,8 @@ import HttpManager from 'components/http_manager';
 import Toast from 'components/toast';
 import Flag from 'components/flag';
 
+import 'components/user_tile.scss';
+
 const FRIEND_ADDED = 'Great! You are now friends with ';
 const FRIEND_PROBLEM = 'There was a problem adding your friend. Please try again in a little while.';
 const PROFILE = 'View Profile';
@@ -117,6 +119,7 @@ export class Component extends React.Component {
         if (this.props.item == null) return null;
         return (
             <Flag
+                className={COMPONENT_UNIQUE_IDENTIFIER}
                 data={this.props.item}
             >
                 <UserPopover
