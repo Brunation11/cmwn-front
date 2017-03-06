@@ -7,7 +7,6 @@ import FlipBoard from 'components/flipboard';
 import UserTile from 'components/user_tile';
 import Actions from 'components/actions';
 import GLOBALS from 'components/globals';
-import GenerateDataSource from 'components/datasource';
 
 import Layout from 'layouts/two_col';
 
@@ -19,14 +18,18 @@ const HEADINGS = {
 
 const PAGE_UNIQUE_IDENTIFIER = 'suggested-friends';
 
-const SUGGEST_SOURCE = GenerateDataSource('suggested_friends', PAGE_UNIQUE_IDENTIFIER);
-
 var mapStateToProps;
 var Page;
 
 export class Suggested extends React.Component{
     constructor(){
         super();
+    }
+
+    reloadList(){
+        setTimeout(() => {
+            Actions.dispatch.START_RELOAD_PAGE(this.props.state);
+        }, 0);
     }
 
     renderNoLink() {
@@ -57,10 +60,10 @@ export class Suggested extends React.Component{
                 item={item}
                 friendHAL={this.props.currentUser._links.friend.href}
                 onFriendAdded={() => {
-                    Actions.dispatch.START_RELOAD_PAGE(this.props);
+                    this.reloadList.call(this);
                 }}
                 onFriendRequested={() => {
-                    Actions.dispatch.START_RELOAD_PAGE(this.props);
+                    this.reloadList.call(this);
                 }}
                 key={Shortid.generate()}
                 showAdd={true}
@@ -69,30 +72,30 @@ export class Suggested extends React.Component{
     }
 
     render() {
-        var content = (
+        var content;
+        if (this.props.data == null) return null;
+        if (this.props.data && this.props.data.length === 0) return this.renderNoData([]);
+        content = (
             <form>
-                <SUGGEST_SOURCE
-                    renderNoLink={this.renderNoLink}
-                    renderNoData={this.renderNoData}
-                >
-                    <FlipBoard
-                        renderFlip={this.renderCard.bind(this)}
-                        header={HEADINGS.SUGGESTED}
-                        transform={data => {
-                            var image;
-                            if (!_.has(data, '_embedded.image')) {
-                                image = GLOBALS.DEFAULT_PROFILE;
+                <FlipBoard
+                    data={this.props.data}
+                    renderFlip={this.renderCard.bind(this)}
+                    header={HEADINGS.SUGGESTED}
+                    transform={data => {
+                        var image;
+                        if (!_.has(data, '_embedded.image')) {
+                            image = GLOBALS.DEFAULT_PROFILE;
+                        } else {
+                            if (data._embedded.image.url != null) {
+                                image = data._embedded.image.url;
                             } else {
-                                if (data._embedded.image.url != null) {
-                                    image = data._embedded.image.url;
-                                } else {
-                                    image = data.images.data[0].url;
-                                }
+                                image = data.images.data[0].url;
                             }
-                            return data.set('image', image);
-                        }}
-                    />
-                </SUGGEST_SOURCE>
+                        }
+                        data = data.set('user_id', data.suggest_id);
+                        return data.set('image', image);
+                    }}
+                />
             </form>
         );
 
@@ -110,11 +113,16 @@ export class Suggested extends React.Component{
 mapStateToProps = state => {
     var currentUser = {};
     var loading = true;
+    var data;
     if (state.currentUser != null){
         currentUser = state.currentUser;
     }
+    if (state.page && state.page.data && state.page.data._embedded) {
+        data = state.page.data._embedded.suggest;
+    }
     return {
         state,
+        data,
         loading,
         currentUser
     };

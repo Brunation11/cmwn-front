@@ -106,7 +106,7 @@ export class Component extends React.Component {
     renderAcceptRequestButton() {
         return (
             <Button
-                onClick={this.acceptRequest.bind(this, this.props.item)}
+                onClick={this.acceptRequest.bind(this)}
                 className={ClassNames(
                     'blue standard', {
                         disabled: this.props.item.friend_status !== 'NEEDS_YOUR_ACCEPTANCE'

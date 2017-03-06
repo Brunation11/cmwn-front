@@ -35,16 +35,22 @@ export class Friends extends React.Component {
         super();
     }
 
+    reloadList(){
+        setTimeout(() => {
+            Actions.dispatch.START_RELOAD_PAGE(this.props);
+        }, 500);
+    }
+
     renderCard(item) {
         return (
              <UserTile
                 item={item}
                 friendHAL={this.props.currentUser._links.friend.href}
                 onFriendAdded={() => {
-                    Actions.dispatch.START_RELOAD_PAGE(this.props);
+                    this.reloadList.call(this);
                 }}
                 onFriendRequested={() => {
-                    Actions.dispatch.START_RELOAD_PAGE(this.props);
+                    this.reloadList.call(this);
                 }}
                 key={Shortid.generate()}
              />
@@ -119,6 +125,7 @@ mapStateToProps = state => {
     var currentPage = 1;
     var pageCount = 1;
     var currentUser = {};
+    var page;
     if (state.page && state.page.data != null &&
         state.page.data._embedded && state.page.data._embedded.friend) {
         loading = state.page.loading;
@@ -126,6 +133,7 @@ mapStateToProps = state => {
         rowCount = state.page.data.page_size;
         currentPage = state.page.data.page;
         pageCount = state.page.data.page_count;
+        page = state.page;
     }
     if (state.currentUser != null) {
         currentUser = state.currentUser;
@@ -136,6 +144,7 @@ mapStateToProps = state => {
         rowCount,
         currentPage,
         pageCount,
+        page,
         currentUser
     };
 };
