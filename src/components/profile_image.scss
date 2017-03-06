@@ -311,7 +311,7 @@ $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
         .avatar-container {
             top: 5%;
             z-index: 1;
-            padding: 15px 0;
+            padding: 15px;
             width: 93%;
             height: 70%;
             flex-wrap: wrap;
@@ -322,9 +322,8 @@ $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
             position: relative;
             transform: scale(1);
             transition: all 200ms ease-in;
-            margin: 1px;
             border: 0;
-            padding-bottom: 10%;
+            padding-bottom: 9%;
             width: 10%;
 
             .bw,
