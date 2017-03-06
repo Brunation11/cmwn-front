@@ -6,6 +6,7 @@ import Shortid from 'shortid';
 
 import FlipBoard from 'components/flipboard';
 import Paginator from 'components/paginator';
+import UserTile from 'components/user_tile';
 import Actions from 'components/actions';
 import GLOBALS from 'components/globals';
 

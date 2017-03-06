@@ -12,6 +12,7 @@ import Flag from 'components/flag';
 import 'components/user_tile.scss';
 
 const FRIEND_ADDED = 'Great! You are now friends with ';
+const ADD_FRIEND = 'Add Friend';
 const FRIEND_PROBLEM = 'There was a problem adding your friend. Please try again in a little while.';
 const PROFILE = 'View Profile';
 const REQUESTED = 'Accept Request';
@@ -24,7 +25,7 @@ export class Component extends React.Component {
         super();
     }
 
-    addFriend(item, e) {
+    addFriend(e) {
         e.stopPropagation();
         e.preventDefault();
         ga('send', 'event', {
@@ -38,12 +39,9 @@ export class Component extends React.Component {
         }, {
             'friend_id': this.props.item.user_id != null ? this.props.item.user_id : this.props.item.friend_id
         }).then(() => {
-            this.refs.fetcher.getData().then(() => {
-                Toast.success(FRIEND_ADDED + this.props.item.username);
-                this.forceUpdate();
-            });
+            Toast.success(FRIEND_ADDED + this.props.item.username);
+            this.forceUpdate();
             this.props.onFriendAdded();
-            //Actions.dispatch.START_RELOAD_PAGE(this.props);
         }).catch((err) => {
             Toast.error(FRIEND_PROBLEM);
             Log.error(err, 'Friend request failed');
@@ -87,6 +85,24 @@ export class Component extends React.Component {
         );
     }
 
+    renderAddFriendButton() {
+        if (!this.props.showAdd) return null;
+        return (
+            <Button
+                onClick={this.addFriend.bind(this)}
+                className={ClassNames(
+                    'green standard', {
+                        hidden: this.props.item.relationship === 'Pending' ||
+                        this.props.item.relationship === 'requested'
+                    }
+                )}
+            >
+                {ADD_FRIEND}
+            </Button>
+        );
+    }
+
+
     renderAcceptRequestButton() {
         return (
             <Button
@@ -129,11 +145,12 @@ export class Component extends React.Component {
                     <div className="user-card">
                         <span className="overlay">
                             <div className="prompts">
-                                {this.renderRequestStatus(this.props.item)}
+                                {this.renderAddFriendButton()}
+                                {this.renderRequestStatus()}
                                 <br />
-                                {this.renderAcceptRequestButton(this.props.item)}
+                                {this.renderAcceptRequestButton()}
                                 <br />
-                                {this.renderViewProfileButton(this.props.item)}
+                                {this.renderViewProfileButton()}
                             </div>
                         </span>
                         <img className="avatar" src={this.props.item.image}></img>

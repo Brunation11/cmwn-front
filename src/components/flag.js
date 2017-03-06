@@ -142,7 +142,7 @@ class Flag extends React.Component {
     render() {
         if (!this.props.data) return null;
         return (
-            <div className={'flag-container ' + COMPONENT_UNIQUE_IDENTIFIER}>
+            <div className={'flag-container ' + COMPONENT_UNIQUE_IDENTIFIER + ' ' + this.props.className}>
                 <Modal
                     className="flag-form-modal"
                     show={this.state.flagFormOpen}
