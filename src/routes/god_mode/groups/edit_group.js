@@ -10,7 +10,6 @@ import Form from 'components/form';
 import Log from 'components/log';
 import GroupCodeChange from 'components/group_code_change';
 import EditMeta from 'components/edit_meta';
-import GLOBALS from 'components/globals';
 import Address from 'components/address';
 
 export const PAGE_UNIQUE_IDENTIFIER = 'god-mode-edit-group';
@@ -46,14 +45,16 @@ export class EditGroup extends React.Component {
             HttpManager.GET(
                 this.state._links.group_address.href
             ).then((res) => {
-                console.log(res);
-                let address = {};
-                if (res.response && res.response._embedded && res.response._embedded.address && res.response._embedded.address.length > 0) {
+                if (res.response &&
+                    res.response._embedded &&
+                    res.response._embedded.address &&
+                    res.response._embedded.address.length > 0
+                ) {
                     this.setState({address: res.response._embedded.address[0]});
                 }
             }).catch(err => {
                 Toast.error(HEADINGS.ADDRESS_FETCH_FAILED + ' ' + err.message ? err.message : '');
-            })
+            });
         }
     }
 
@@ -169,7 +170,6 @@ export class EditGroup extends React.Component {
 
     render() {
         if (this.state === null || _.isEmpty(this.state)) return null;
-        console.log(this.state.address)
         return (
             <Layout
                 currentUser={this.props.currentUser}
