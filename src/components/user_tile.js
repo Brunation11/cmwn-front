@@ -4,6 +4,7 @@ import ClassNames from 'classnames';
 import { Button } from 'react-bootstrap';
 
 import UserPopover from 'components/popovers/user_popover';
+import GLOBALS from 'components/globals';
 import Log from 'components/log';
 import HttpManager from 'components/http_manager';
 import Toast from 'components/toast';
@@ -72,6 +73,7 @@ export class Component extends React.Component {
     }
 
     renderRequestStatus() {
+        if (this.props.friendHAL == null) return null;
         return (
             <span
                 className={ClassNames(
@@ -86,6 +88,7 @@ export class Component extends React.Component {
     }
 
     renderAddFriendButton() {
+        if (this.props.friendHAL == null) return null;
         if (!this.props.showAdd) return null;
         return (
             <Button
@@ -104,6 +107,7 @@ export class Component extends React.Component {
 
 
     renderAcceptRequestButton() {
+        if (this.props.friendHAL == null) return null;
         return (
             <Button
                 onClick={this.acceptRequest.bind(this)}
@@ -132,7 +136,21 @@ export class Component extends React.Component {
     }
 
     render() {
+        //this image transform should technically be done in the parent's transform fn
+        //but we do it so frequently it makes sense to pull the logic in here
+        var image;
         if (this.props.item == null) return null;
+
+        if (!_.has(this.props.item, '_embedded.image')) {
+            image = GLOBALS.DEFAULT_PROFILE;
+        } else {
+            if (this.props.item._embedded.image.url != null) {
+                image = this.props.item._embedded.image.url;
+            } else {
+                image = this.props.item.images.data[0].url;
+            }
+        }
+
         return (
             <Flag
                 className={COMPONENT_UNIQUE_IDENTIFIER}
@@ -153,7 +171,7 @@ export class Component extends React.Component {
                                 {this.renderViewProfileButton()}
                             </div>
                         </span>
-                        <img className="avatar" src={this.props.item.image}></img>
+                        <img className="avatar" src={image}></img>
                         <p className="link-text" >{this.props.item.username}</p>
                     </div>
                 </UserPopover>

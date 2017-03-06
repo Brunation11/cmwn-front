@@ -1,12 +1,10 @@
 import React from 'react';
-import _ from 'lodash';
 import { connect } from 'react-redux';
 import Shortid from 'shortid';
 
 import FlipBoard from 'components/flipboard';
 import UserTile from 'components/user_tile';
 import Actions from 'components/actions';
-import GLOBALS from 'components/globals';
 
 import Layout from 'layouts/two_col';
 
@@ -82,18 +80,7 @@ export class Suggested extends React.Component{
                     renderFlip={this.renderCard.bind(this)}
                     header={HEADINGS.SUGGESTED}
                     transform={data => {
-                        var image;
-                        if (!_.has(data, '_embedded.image')) {
-                            image = GLOBALS.DEFAULT_PROFILE;
-                        } else {
-                            if (data._embedded.image.url != null) {
-                                image = data._embedded.image.url;
-                            } else {
-                                image = data.images.data[0].url;
-                            }
-                        }
-                        data = data.set('user_id', data.suggest_id);
-                        return data.set('image', image);
+                        return data.set('user_id', data.suggest_id);
                     }}
                 />
             </form>

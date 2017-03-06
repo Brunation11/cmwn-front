@@ -44,7 +44,9 @@ export default class UserPopover extends React.Component {
     }
 
     getUserFlips() {
-        var userID = this.props.element.friend_id || this.props.element.suggest_id;
+        var userID = this.props.element.friend_id ||
+            this.props.element.suggest_id ||
+            this.props.element.user_id;
         HttpManager.GET({
             url: (`${GLOBALS.API_URL}user/${userID}/flip`),
             handleErrors: false
