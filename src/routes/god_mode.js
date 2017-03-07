@@ -30,7 +30,7 @@ export class GodModeHome extends React.Component {
         }
 
         return (
-           <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
+           <Layout currentUser={this.props.currentUser} navMenuId="navMenu">
                <Panel header={HEADINGS.HEADER} className="standard">
                     <p>This is an admin dashboard</p>
                </Panel>
