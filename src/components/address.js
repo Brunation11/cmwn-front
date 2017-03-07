@@ -87,11 +87,9 @@ class Address extends React.Component {
             nextProps.data.countries = {};
         }
 
-        if (
-            this.props.currentUser &&
-            this.props.currentUser._links &&
-            this.props.currentUser._links.sa_settings
-        ) {
+        let href = _.get(this, 'props.currentUser._links.sa_settings.href');
+
+        if (href) {
             HttpManager.GET(
                 this.props.currentUser._links.sa_settings.href
             ).then(res => {
