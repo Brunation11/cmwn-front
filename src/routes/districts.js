@@ -5,6 +5,7 @@ import {Panel} from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import {Table, Column} from 'components/table';
+import Paginator from 'components/paginator';
 
 import Layout from 'layouts/two_col';
 
@@ -30,20 +31,22 @@ export class District extends React.Component{
                     <div >
                         {this.renderCreateDistrict()}
                     </div>
-                    <Table data={this.props.data} className="admin">
-                        <Column dataKey="title"
-                            renderCell={(data, row) => (
-                                <Link to={'/districts/' + row.org_id} className="district-link">
-                                    {_.startCase(data)}
-                                </Link>
-                            )}
-                        />
-                        <Column dataKey="description" />
-                        <Column dataKey="created_at" renderHeader="Created" />
-                        <Column dataKey="updated_at" renderHeader="Last Updated"
-                            renderCell={data => (data == null ? 'never' : data)}
-                        />
-                    </Table>
+                    <Paginator data={this.props.data}>
+                        <Table className="admin">
+                            <Column dataKey="title"
+                                renderCell={(data, row) => (
+                                    <Link to={'/districts/' + row.org_id} className="district-link">
+                                        {_.startCase(data)}
+                                    </Link>
+                                )}
+                            />
+                            <Column dataKey="description" />
+                            <Column dataKey="created_at" renderHeader="Created" />
+                            <Column dataKey="updated_at" renderHeader="Last Updated"
+                                renderCell={data => (data == null ? 'never' : data)}
+                            />
+                        </Table>
+                    </Paginator>
                 </Panel>
             </Layout>
         );

@@ -17,7 +17,9 @@ import GLOBALS from 'components/globals';
 import Toast from 'components/toast';
 import History from 'components/history';
 import EditLink from 'components/edit_link';
+import FeaturedGames from 'components/featured_games';
 import GenerateDataSource from 'components/datasource';
+import InfinitePaginator from 'components/infinite_paginator';
 import IB_IDS from 'components/ib_ids';
 
 import Layout from 'layouts/two_col';
@@ -30,15 +32,17 @@ var mapStateToProps;
 var Page;
 
 const PAGE_UNIQUE_IDENTIFIER = 'profile';
+const GAME_COMPONENT_IDENTIFIER = 'games';
+const FLIP_COMPONENT_IDENTIFIER = 'user_flip';
 
-const GAME_WRAPPER = GenerateDataSource('games', PAGE_UNIQUE_IDENTIFIER);
-const FLIP_SOURCE = GenerateDataSource('user_flip', PAGE_UNIQUE_IDENTIFIER);
+const GAME_WRAPPER = GenerateDataSource(GAME_COMPONENT_IDENTIFIER, PAGE_UNIQUE_IDENTIFIER);
+const FLIP_SOURCE = GenerateDataSource(FLIP_COMPONENT_IDENTIFIER, PAGE_UNIQUE_IDENTIFIER);
 
 const TITLES = IB_IDS.GAME_TILES;
 
 const HEADINGS = {
     ACTION: 'Profile',
-    ARCADE: 'Activities',
+    ARCADE: 'My Activities',
     TROPHYCASE: 'Trophycase'
 };
 
@@ -60,27 +64,32 @@ const BROWSER_NOT_SUPPORTED = (
 const PASS_UPDATED = '<p>You have successfully updated your password.' +
     '<br />Be sure to remember for next time!</p>';
 
+export const BAD_TRANSFORM_TYPE = new TypeError('Game list expected item of type array');
+
 export var dataTransform = function (data) {
-    var array = data;
-    var currentIndex;
-    var temporaryValue;
-    var randomIndex;
-    if (array == null) {
-        array = [];
-    } else if (!_.isArray(array)) {
-        return [];
-    }
-    currentIndex = array.length;
-     // While there remain elements to shuffle...
-    while (0 !== currentIndex) {
-        // Pick a remaining element...
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex -= 1;
-        // And swap it with the current element.
-        temporaryValue = array[currentIndex];
-        array[currentIndex] = array[randomIndex];
-        array[randomIndex] = temporaryValue;
-    }
+    var array;
+    data = data || [];
+    if (!_.isArray(data)) throw BAD_TRANSFORM_TYPE;
+    array = data;
+//    var currentIndex;
+//    var temporaryValue;
+//    var randomIndex;
+//    if (array == null) {
+//        array = [];
+//    } else if (!_.isArray(array)) {
+//        return [];
+//    }
+//    currentIndex = array.length;
+//     // While there remain elements to shuffle...
+//    while (0 !== currentIndex) {
+//        // Pick a remaining element...
+//        randomIndex = Math.floor(Math.random() * currentIndex);
+//        currentIndex -= 1;
+//        // And swap it with the current element.
+//        temporaryValue = array[currentIndex];
+//        array[currentIndex] = array[randomIndex];
+//        array[randomIndex] = temporaryValue;
+//    }
     return _.filter(array, v => !v.coming_soon).concat(_.filter(array, v => v.coming_soon));
 };
 
@@ -107,8 +116,9 @@ export class Profile extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        var nextState = nextProps.data;
         this.resolveRole(nextProps);
-        this.setState(nextProps.data);
+        this.setState(nextState);
     }
 
     resolveRole(props) {
@@ -140,6 +150,31 @@ export class Profile extends React.Component {
     hideModal() {
         this.setState({gameOn: false});
         this.refs.gameRef.dispatchPlatformEvent('quit');
+    }
+
+    transformFeaturedData(data) {
+        var array = !data || data.asMutable == null ? data : data.asMutable();
+        var currentIndex;
+        var temporaryValue;
+        var randomIndex;
+        if (array == null) {
+            array = [];
+        } else if (!_.isArray(array)) {
+            return [];
+        }
+        currentIndex = array.length;
+         // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+            // Pick a remaining element...
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+            // And swap it with the current element.
+            temporaryValue = array[currentIndex];
+            array[currentIndex] = array[randomIndex];
+            array[randomIndex] = temporaryValue;
+        }
+        array = _.filter(array, v => !v.coming_soon);
+        return _.filter(array, v => (!v.meta || !v.meta.desktop));
     }
 
     renderGame() {
@@ -210,13 +245,23 @@ export class Profile extends React.Component {
             return null;
         }
         return (
-           <GAME_WRAPPER transform={dataTransform}>
-               <FlipBoard
-                   renderFlip={this.renderFlip.bind(this)}
-                   header={HEADINGS.ARCADE}
-                   id="game-flip-board"
-               />
-           </GAME_WRAPPER>
+               <GAME_WRAPPER transform={dataTransform}>
+                   <FeaturedGames
+                       launchGame={this.showModal.bind(this)}
+                       transformData={this.transformFeaturedData}
+                   />
+                   <InfinitePaginator
+                       state={this.props.state}
+                       componentIdentifier={GAME_COMPONENT_IDENTIFIER}
+                       pageIdentifier={PAGE_UNIQUE_IDENTIFIER}
+                       hasMore={this.props.hasMore}
+                   >
+                       <FlipBoard
+                           renderFlip={this.renderFlip.bind(this)}
+                           id="game-flip-board"
+                       />
+                   </InfinitePaginator>
+               </GAME_WRAPPER>
         );
     }
 
@@ -265,8 +310,26 @@ export class Profile extends React.Component {
         );
     }
 
+    renderFlipPanel() {
+        return (
+            <Panel
+                header={HEADINGS.TROPHYCASE}
+                className={ClassNames('standard', {
+                    hidden: !this.state.isStudent
+                })}
+            >
+                <FLIP_SOURCE>
+                    <Flipcase
+                        type="trophycase"
+                        header={true}
+                        render="earned"
+                    />
+                </FLIP_SOURCE>
+            </Panel>
+        );
+    }
+
     renderUserProfile() {
-        var self = this;
         var ISODate;
         try {
             ISODate = (new Date(this.state.birthdate)).toISOString();
@@ -305,20 +368,7 @@ export class Profile extends React.Component {
                             canUpdate={Util.decodePermissions(this.state.scope).update}
                         />
                     </Panel>
-                    <Panel
-                        header={HEADINGS.TROPHYCASE}
-                        className={ClassNames('standard', {
-                            hidden: !this.state.isStudent
-                        })}
-                    >
-                        <FLIP_SOURCE>
-                           <Flipcase
-                                type="trophycase"
-                                header={true}
-                                render="earned"
-                            />
-                        </FLIP_SOURCE>
-                    </Panel>
+                    {this.renderFlipPanel()}
                 </div>
             );
         }
@@ -336,23 +386,7 @@ export class Profile extends React.Component {
                         canUpdate={Util.decodePermissions(this.state.scope).update}
                     />
                 </Panel>
-                <Panel
-                    header={HEADINGS.TROPHYCASE}
-                    className={ClassNames('standard', {
-                        hidden: !this.state.hasFlipData
-                    })}
-                >
-                    <FLIP_SOURCE>
-                       <Flipcase
-                            type="trophycase"
-                            header={true}
-                            render="earned"
-                            onDataReceived={data => {
-                                self.setState({hasFlipData: (data && data.length)});
-                            }}
-                        />
-                    </FLIP_SOURCE>
-                </Panel>
+                {this.renderFlipPanel()}
             </div>
         );
     }
@@ -372,21 +406,13 @@ export class Profile extends React.Component {
                         {this.renderGame()}
                     </Modal.Body>
                 </Modal>
+                {this.renderFlipPanel()}
                 <Panel
-                    header={HEADINGS.TROPHYCASE}
-                    className={ClassNames('standard', {
-                        hidden: !this.state.isStudent
-                    })}
+                    header={HEADINGS.ARCADE}
+                    className={ClassNames('standard')}
                 >
-                    <FLIP_SOURCE>
-                       <Flipcase
-                            type="trophycase"
-                            header={true}
-                            render="earned"
-                        />
-                    </FLIP_SOURCE>
+                    {this.renderGameList()}
                 </Panel>
-                {this.renderGameList()}
             </div>
         );
     }
@@ -410,16 +436,31 @@ export class Profile extends React.Component {
     }
 }
 
+Profile.defaultProps = {
+    state: {}
+};
+
 mapStateToProps = state => {
+    var componentKey = GAME_COMPONENT_IDENTIFIER + '-' + PAGE_UNIQUE_IDENTIFIER;
+    var flipComponentKey = FLIP_COMPONENT_IDENTIFIER + '-' + PAGE_UNIQUE_IDENTIFIER;
     var data = {};
     var loading = true;
     var currentUser = {};
+    var hasMore = true;
+    var flipsHaveMore = true;
     if (state.page && state.page.data != null) {
         loading = state.page.loading;
         data = state.page.data;
         currentUser = state.currentUser;
     }
+    if (state.components && state.components[componentKey] && state.components[componentKey].has_more) {
+        hasMore = state.components[componentKey].has_more === true;
+        flipsHaveMore = state.components[flipComponentKey].has_more = true; // eslint-disable-line
+    }
     return {
+        state,
+        hasMore,
+        flipsHaveMore,
         data,
         loading,
         currentUser

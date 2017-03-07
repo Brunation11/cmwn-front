@@ -257,6 +257,41 @@ Actions = Actions.set(ACTION_CONSTANTS.CHANGE_COMPONENT_ROW_COUNT, function
     };
 });
 
+Actions = Actions.set(ACTION_CONSTANTS.GET_NEXT_INFINITE_COMPONENT_PAGE, function
+    (state, endpointIdentifier, componentName) {
+    var componentKey = endpointIdentifier + '-' + componentName;
+    var endpoint;
+    if (
+        state.components == null ||
+        state.components[componentKey] == null ||
+        state.components[componentKey]._links == null
+    ) {
+        return {
+            type: 'ACTION_CONSTANTS.GET_NEXT_INFINITE_COMPONENT_PAGE',
+            payload: []
+        };
+    }
+    endpoint = Util.modifyTemplatedQueryParams(
+        state.components[componentKey]._links.find.href, {
+            page: state.components[componentKey].page_count === 1 ?
+                1 :
+                state.components[componentKey].page + 1,
+            'per_page': state.components[componentKey].page_size
+        }
+    );
+    return {
+        type: 'ACTION_CONSTANTS.GET_NEXT_INFINITE_COMPONENT_PAGE',
+        payload: {
+            promise: HttpManager.GET({url: endpoint}).then(server => {
+                return Promise.resolve((action, dispatch) => {
+                    dispatch(Actions.END_GET_NEXT_INFINITE_COMPONENT_PAGE(
+                        {data: server.response, endpointIdentifier, componentName}));
+                });
+            })
+        }
+    };
+});
+
 Actions = Actions.set(ACTION_CONSTANTS.GET_NEXT_COMPONENT_PAGE, function
     (state, endpointIdentifier, componentName, pageNum) {
     var endpoint = Util.modifyTemplatedQueryParams(

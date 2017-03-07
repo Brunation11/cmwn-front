@@ -7,6 +7,7 @@ import {Button, Input, Panel} from 'react-bootstrap';
 import FlipBoard from 'components/flipboard';
 import GenerateDataSource from 'components/datasource';
 import HttpManager from 'components/http_manager';
+import Paginator from 'components/paginator';
 import Toast from 'components/toast';
 import Log from 'components/log';
 import Form from 'components/form';
@@ -377,13 +378,15 @@ export class GodModeGames extends React.Component {
             >
                 {BUTTONS}
                 <GAME_WRAPPER transform={dataTransform}>
-                    <FlipBoard
-                        renderFlip={this.renderFlip.bind(this)}
-                        updateParent={this.updateGameData.bind(this)}
-                        alwaysUpdateParent
-                        id="game-flip-board"
-                        header={null}
-                    />
+                    <Paginator>
+                        <FlipBoard
+                            renderFlip={this.renderFlip.bind(this)}
+                            updateParent={this.updateGameData.bind(this)}
+                            alwaysUpdateParent
+                            id="game-flip-board"
+                            header={null}
+                        />
+                    </Paginator>
                 </GAME_WRAPPER>
                 {BUTTONS}
            </Layout>
