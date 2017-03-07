@@ -60,6 +60,8 @@ export default class Flipcase extends React.Component {
                 status = earnedOn ? 'earned' : 'static';
             }
 
+            if (earnedFlip && !this.props.earned) return null;
+
             return (
                 <FlipPopover
                     key={Shortid.generate()}

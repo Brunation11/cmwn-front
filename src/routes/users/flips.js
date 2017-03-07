@@ -10,6 +10,7 @@ import Layout from 'layouts/two_col';
 import Flipcase from 'components/flipcase';
 import GenerateDataSource from 'components/datasource';
 import History from 'components/history';
+import HttpManager from 'components/http_manager';
 
 import './flips.scss';
 
@@ -61,8 +62,28 @@ export class FlipWall extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!_.isEmpty(nextProps.data) && this.props.data !== nextProps.data) {
-            this.setState({
+        var self = this;
+        var flips;
+
+        if (!_.isEmpty(nextProps.currentUser) && self.props.currentUser !== nextProps.currentUser) {
+            HttpManager.GET({
+                url: (this.props.currentUser._links.user_flip.href)
+            }).then(res => {
+                this.setState({
+                    trophycase: res.response._embedded.flip_user
+                });
+            });
+        }
+
+        shelves = _.chunk(_.remove(_.flattenDeep(self.state.shelves), function(flip) {
+            return _.includes(self.state.trophycase, flip);
+        }));
+
+        if (!_.isEmpty(nextProps.data) && self.props.data !== nextProps.data) {
+            flips = nextProps.data._embedded.flip;
+            _
+
+            self.setState({
                 shelves: _.chunk(_.shuffle(nextProps.data._embedded.flip), FLIP_ROW_LENGTH)
             });
         }
@@ -144,6 +165,7 @@ export class FlipWall extends React.Component {
                                     render="all"
                                     static={true}
                                     allFlips={shelf}
+                                    earned={false}
                                 />
                             );
                         })}
