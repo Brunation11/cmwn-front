@@ -8,17 +8,14 @@ import Log from 'components/log';
 const HEADINGS = {
     MAKE_SUPER: 'Give super admin privileges',
     SUPER: 'This user is a super admin',
-    REVOKE_SUPER: 'Revoke super admin privileges',
-    SET_SUPER_SUCCESS: 'The user is given super admin privileges',
-    UNSET_SUPER_SUCCESS: 'This user\'s super admin privileges have been revoked'
+    REVOKE_SUPER: 'Revoke super admin privileges'
 };
 const CONFIRM = [
     'Are you sure that you want to revoke the super admin privileges of this user?',
     'Are you sure that you want to make this user super?'
 ];
 const ERRORS = {
-    BAD_UPDATE: 'Sorry, there was a problem making this user super',
-    BAD_DELETE: 'Sorry, there was a problem revoking the super admin privileges from this user'
+    BAD_UPDATE: 'Sorry, there was a problem making this user super'
 };
 
 class SetSuper extends React.Component {
@@ -36,7 +33,7 @@ class SetSuper extends React.Component {
         }
         nextProps.data.super = null;
         HttpManager.GET(
-            nextProps.data._links.super.href
+            `${nextProps.data._links.super.href}/${nextProps.data.user_id}`
         ).then(() => {
             nextProps.data.super = true;
             this.setState(nextProps.data);
@@ -50,28 +47,19 @@ class SetSuper extends React.Component {
     }
 
     submit(superFlag) {
+        var update;
+
         if (window.confirm(CONFIRM[superFlag | 0])) { //eslint-disable-line no-alert
-            if (superFlag) {
-                HttpManager.POST({url: this.state._links.super.href},
-                    {super: superFlag}
-                ).then(() => {
-                    Toast.success(HEADINGS.SET_SUPER_SUCCESS);
-                    this.setState({super: superFlag});
-                }).catch(err => {
-                    Log.warn(ERRORS.BAD_UPDATE + (err.message ? ' Message: ' + err.message : ''), err);
-                    Toast.error(ERRORS.BAD_UPDATE);
-                });
-            } else {
-                HttpManager.DELETE(
-                    this.state._links.super.href
-                ).then(() => {
-                    Toast.success(HEADINGS.UNSET_SUPER_SUCCESS);
-                    this.setState({super: superFlag});
-                }).catch(err => {
-                    Log.warn(ERRORS.BAD_DELETE + (err.message ? 'Message: ' + err.message : ''), err);
-                    Toast.error(ERRORS.BAD_DELETE);
-                });
-            }
+            update = HttpManager.POST({url: this.state._links.super_flag.href},
+                {super: superFlag}
+            );
+            update.then(() => {
+                Toast.success('The super status is updated');
+                this.setState({super: superFlag});
+            }).catch(err => {
+                Log.warn('Update code failed.' + (err.message ? ' Message: ' + err.message : ''), err);
+                Toast.error(ERRORS.BAD_UPDATE);
+            });
         }
     }
 
