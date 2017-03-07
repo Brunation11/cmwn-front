@@ -246,8 +246,8 @@ export class GodModeGames extends React.Component {
                 var tags = [];
 
                 if (item.meta && item.meta.zipcodes) {
-                    _.each(item.meta.zipcodes, zipcode => {
-                        tags.push({id: tags.length + 1, text: zipcode});
+                    tags = _.map(item.meta.zipcodes, (zipcode, index) => {
+                        return {id: index + 1, text: zipcode};
                     });
                 }
                 if (_.has(item, 'asMutable')) {
