@@ -30,7 +30,7 @@ const IB_IDS = {
         'green-team': '8254c3f834ced23d71fd1de6c0ae1aad.jpg',
         'green-team-challenge': '8254c3f834ced23d71fd1de6c0ae1aad.jpg',
         'waste-busters': 'a41a5f14aa880f298a987134849629fe.png',
-        'drone-zone': '9e9b3bae0f9e8ba512eed9fad35868b2.gif'
+        'drone-zone': '9e9b3bae0f9e8ba512eed9fad35868b2.png',
     },
     FLIPS: {
         'default': 'b86903222ed7cc0fa7c8a281614d5dd3.png',
@@ -139,11 +139,6 @@ const IB_IDS = {
             unearned: '044049385dc8499dc53b808a6e726f48.gif',
             static: '4a3e47e27a7415fb10d09637c0a240c6.gif'
         },
-        'green-team-challenge': {
-            earned: '9063d79b44cf9c4c39ff32e8dae931e0.gif',
-            unearned: '41cf97dfd52d73f62ad678a6f2c1cc54.gif',
-            static: 'c80d08d78375598ccda7bfd7481e0289.png'
-        }
     },
 };
 

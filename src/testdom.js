@@ -1,18 +1,8 @@
 'use strict';
-var _;
-var jsdom;
-/* eslint-disable */
-require('babel-core/register');//for mocha to use es6
-require('app-module-path').addPath(__dirname + '/src');
-_ = require('lodash')
 
-require.extensions['.css'] = _.noop;
-require.extensions['.scss'] = _.noop;
-require.extensions['.png'] = _.noop;
-require.extensions['.jpg'] = _.noop;
-require.extensions['.jpeg'] = _.noop;
-require.extensions['.gif'] = _.noop;
-jsdom = require('jsdom')
+/* eslint-disable */
+var jsdom = require('jsdom')
+var _ = require('lodash')
 
 // setup the simplest document possible
 var doc = jsdom.jsdom('<!doctype html><html><body></body></html>')
