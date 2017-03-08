@@ -22,6 +22,7 @@ var createWrapper = function (data, user) {
 
 var createFlipWrapper= function (item) {
     var functions = {
+        'renderDeleteButton': GodModeGames.prototype.renderDeleteButton,
         'renderInputField': GodModeGames.prototype.renderInputField,
         'saveGame': GodModeGames.prototype.saveGame,
         'deleteGame': GodModeGames.prototype.deleteGame,
@@ -39,13 +40,13 @@ var checkContents = function (WRAPPER, flipWrapper) {
     expect(WRAPPER.instance()).to.be.instanceof(GodModeGames);
     expect(WRAPPER.hasClass(PAGE_UNIQUE_IDENTIFIER)).to.equal(true);
     expect(WRAPPER.find('Layout')).to.have.length(1);
-    expect(WRAPPER.find('#game-flip-board')).to.have.length(1);
+    expect(WRAPPER.find('#game-flip-board')).to.have.length(2);
 
     expect(flipWrapper.instance()).to.be.instanceof(MockFunctionWrapper);
     expect(flipWrapper.find('.item')).to.have.length(1);
     expect(flipWrapper.find('.item-panel')).to.have.length(1);
     expect(flipWrapper.find('Form')).to.have.length(1);
-    expect(flipWrapper.find('Input')).to.have.length(FIELDS.length - NON_INPUTS.length);
+    expect(flipWrapper.find('Input')).to.have.length(FIELDS.length - NON_INPUTS.length+2);
     expect(flipWrapper.find('Button')).to.have.length(4);
 };
 
@@ -74,13 +75,11 @@ describe('god mode games route test', function () {
         it('should change checkbox input value on change', function () {
             flipWrapper.find('Input').at(0).simulate('change', { target: { checked: true }});
             flipWrapper.update();
-            expect(flipWrapper.state('changed').indexOf(game.game_id)).to.equal(0);
             expect(flipWrapper.find('Input').at(0).prop('checked')).to.equal(true);
         });
         it('should change text input value on change', function () {
             flipWrapper.find('Input').at(1).simulate('change', { target: { value: 'test' }});
             flipWrapper.update();
-            expect(flipWrapper.state('changed').indexOf(game.game_id)).to.equal(0);
             expect(flipWrapper.find('Input').at(1).prop('value')).to.equal('test');
         });
     });
