@@ -25,22 +25,6 @@ const LABEL = 'EARNED FLIPS';
 
 const FLIP_ROW_LENGTH = 4;
 
-class FlipCount extends React.Component {
-    constructor() {
-        super();
-    }
-
-    render() {
-        if (_.isEmpty(this.props.data)) return null;
-
-        return (
-            <span className="count">
-                {this.props.data.length}
-            </span>
-        );
-    }
-}
-
 export class FlipWall extends React.Component {
     constructor() {
         super();
@@ -63,7 +47,7 @@ export class FlipWall extends React.Component {
                     url: (this.props.currentUser._links.user_flip.href)
                 }).then(res => {
                     earnedFlips = res.response._embedded.flip_user;
-                    allFlips = _.filter(this.props.data._embedded.flip, function(flip) {
+                    allFlips = _.filter(this.props.data._embedded.flip, function (flip) {
                         return !_.find(earnedFlips, ['flip_id', flip.flip_id]);
                     });
                     this.setState({
@@ -85,7 +69,7 @@ export class FlipWall extends React.Component {
                     url: (nextProps.currentUser._links.user_flip.href)
                 }).then(res => {
                     earnedFlips = res.response._embedded.flip_user;
-                    allFlips = _.filter(nextProps.data._embedded.flip, function(flip) {
+                    allFlips = _.filter(nextProps.data._embedded.flip, function (flip) {
                         return !_.find(earnedFlips, ['flip_id', flip.flip_id]);
                     });
                     this.setState({
