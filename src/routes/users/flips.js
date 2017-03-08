@@ -10,6 +10,7 @@ import Layout from 'layouts/two_col';
 import Flipcase from 'components/flipcase';
 import GenerateDataSource from 'components/datasource';
 import History from 'components/history';
+import HttpManager from 'components/http_manager';
 
 import './flips.scss';
 
@@ -53,18 +54,46 @@ export class FlipWall extends React.Component {
     }
 
     componentDidMount() {
-        if (!_.isEmpty(this.props.data) && this.props.data._embedded && this.props.data._embedded.flip) {
-            this.setState({
-                shelves: _.chunk(_.shuffle(this.props.data._embedded.flip), FLIP_ROW_LENGTH)
-            });
+        var earnedFlips;
+        var allFlips;
+
+        if (!_.isEmpty(this.props.currentUser) && this.props.currentUser._links) {
+            if (!_.isEmpty(this.props.data) && this.props.data._embedded && this.props.data._embedded.flip) {
+                HttpManager.GET({
+                    url: (this.props.currentUser._links.user_flip.href)
+                }).then(res => {
+                    earnedFlips = res.response._embedded.flip_user;
+                    allFlips = _.filter(this.props.data._embedded.flip, function(flip) {
+                        return !_.find(earnedFlips, ['flip_id', flip.flip_id]);
+                    });
+                    this.setState({
+                        earned: earnedFlips,
+                        shelves: _.chunk(_.shuffle(allFlips), FLIP_ROW_LENGTH)
+                    });
+                });
+            }
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!_.isEmpty(nextProps.data) && this.props.data !== nextProps.data) {
-            this.setState({
-                shelves: _.chunk(_.shuffle(nextProps.data._embedded.flip), FLIP_ROW_LENGTH)
-            });
+        var earnedFlips;
+        var allFlips;
+
+        if (!_.isEmpty(nextProps.currentUser) && this.props.currentUser !== nextProps.currentUser) {
+            if (!_.isEmpty(nextProps.data) && this.props.data !== nextProps.data) {
+                HttpManager.GET({
+                    url: (nextProps.currentUser._links.user_flip.href)
+                }).then(res => {
+                    earnedFlips = res.response._embedded.flip_user;
+                    allFlips = _.filter(nextProps.data._embedded.flip, function(flip) {
+                        return !_.find(earnedFlips, ['flip_id', flip.flip_id]);
+                    });
+                    this.setState({
+                        earned: earnedFlips,
+                        shelves: _.chunk(_.shuffle(allFlips), FLIP_ROW_LENGTH)
+                    });
+                });
+            }
         }
     }
 
@@ -79,9 +108,9 @@ export class FlipWall extends React.Component {
                     )}
                     onClick={this.scrollBackward.bind(this)}
                 />
-                <FLIP_SOURCE>
-                    <FlipCount />
-                </FLIP_SOURCE>
+                <span className="count">
+                    {this.state.earned.length}
+                </span>
                 <div className="earned-container">
                     <div
                         ref="earned"
@@ -105,8 +134,7 @@ export class FlipWall extends React.Component {
                 <button
                     className={ClassNames(
                         'nav-btn scroll-btn forward', {
-                            hidden: this.refs.flipcase &&
-                                    (this.state.caseIndex >= this.refs.flipcase.props.data.length - 4)
+                            hidden: this.state.caseIndex >= this.state.earned.length - 4
                         }
                     )}
                     onClick={this.scrollForward.bind(this)}
