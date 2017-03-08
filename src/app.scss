@@ -72,6 +72,10 @@ h3 {
 // scss-lint:disable IdSelector
 #static-preload {
     font-size: 2px;
+
+    h1 {
+        font-size: 3px;
+    }
 }
 
 #pageerror,
