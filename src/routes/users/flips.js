@@ -172,6 +172,7 @@ export class FlipWall extends React.Component {
                                     render="all"
                                     static={true}
                                     allFlips={shelf}
+                                    earned={false}
                                 />
                             );
                         })}
