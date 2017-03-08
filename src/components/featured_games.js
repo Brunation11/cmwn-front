@@ -50,24 +50,24 @@ class Component extends React.Component {
                     <div className="slide-container">
                         <object
                             width="650"
-                            height="218"
+                            height="182"
                             className="background"
-                            data={`${GLOBALS.MEDIA_URL}titles/18-5/${i.game_id}.gif`}
+                            data={`${GLOBALS.MEDIA_URL}titles/18-5/${i.game_id}.jpg`}
                         >
                             <object
-                                data={`${GLOBALS.MEDIA_URL}titles/18-5/${i.game_id}.jpeg`}
+                                data={`${GLOBALS.MEDIA_URL}titles/18-5/${i.game_id}.gif`}
                                 width="650"
-                                height="218"
+                                height="182"
                             >
                                 <object
                                     data={`${GLOBALS.MEDIA_URL}titles/18-5/${i.game_id}.png`}
                                     width="650"
-                                    height="218"
+                                    height="182"
                                 >
                                     <img
-                                        src={`${GLOBALS.MEDIA_URL}titles/18-5/${i.game_id}.jpg`}
+                                        src={`${GLOBALS.MEDIA_URL}titles/18-5/${i.game_id}.jpeg`}
                                         width="650"
-                                        height="218"
+                                        height="182"
                                     />
                                 </object>
                             </object>
