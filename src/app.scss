@@ -70,6 +70,10 @@ h3 {
 }
 
 // scss-lint:disable IdSelector
+#static-preload {
+    font-size: 2px;
+}
+
 #pageerror,
 #triggerederror {
     display: block;

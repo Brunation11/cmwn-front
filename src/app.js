@@ -150,6 +150,7 @@ if (window.location.protocol !== 'https:') {
 }
 
 document.domain = 'changemyworldnow.com';
+document.getElementById('static-preload').style.color = "white";
 
 var renderDevTool = () => {
     if (_.isFunction(DevTools) && (~GLOBALS.MODE.indexOf('local') || ~GLOBALS.MODE.indexOf('dev'))) {
