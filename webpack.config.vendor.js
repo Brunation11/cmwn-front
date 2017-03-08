@@ -26,7 +26,6 @@ module.exports = {
         "react-redux",
         "react-router",
         "react-router-redux",
-        "react-tag-input",
         "redux",
         "redux-combine-actions",
         "redux-immutable",

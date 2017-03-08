@@ -2,7 +2,6 @@
 
 if [ -z "$PACKAGE_FILE" ]
 then
-    echo "No PACKAGE_FILE variable set, defaulting to package.json"
     PACKAGE_FILE="package.json"
 fi
 
