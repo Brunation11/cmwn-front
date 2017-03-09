@@ -11,12 +11,12 @@
     .item {
         position: relative;
         width: 100%;
-
+        // scss-lint:disable SelectorFormat, SelectorDepth, NestingDepth
         .item-panel {
             width: 100%;
 
             &.open {
-                // scss-lint:disable NestingDepth
+
                 .panel-body {
                     max-height: 1000px; // larger than panel will be
                 }
@@ -34,6 +34,44 @@
             max-height: 0;
             overflow: hidden;
             text-align: center;
+
+            .zipcode {
+                display: flex;
+
+                .control-label {
+                    position: relative;
+                    width: 15%;
+                    color: $cmwn-form-valid-green;
+                }
+
+                .ReactTags__tags {
+                    position: relative;
+                    width: 85%;
+
+                    .ReactTags__selected {
+                        display: flex;
+                        margin-bottom: 1px;
+                        padding-bottom: 15px;
+                        flex-wrap: wrap;
+                    }
+
+                    .ReactTags__tag {
+                        margin: 1%;
+                        background: $cmwn-light-blue;
+                        padding-right: 1%;
+                        padding-left: 1%;
+                    }
+
+                    .ReactTags__tagInput {
+                        margin-left: 1%;
+                        width: 40%;
+                    }
+
+                    .ReactTags__tagInputField {
+                        width: 100%;
+                    }
+                }
+            }
         }
 
         .panel-heading {

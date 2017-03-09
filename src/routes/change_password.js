@@ -22,7 +22,7 @@ const LABELS = {
 };
 
 const ERRORS = {
-    BAD_PASS: 'Sorry, there was a problem updating your password.',
+    BAD_PASS: 'Sorry, there was a problem updating your password. ',
     TOO_SHORT: 'Passwords must contain at least 8 characters, including one number',
     NO_MATCH: 'Those passwords do not appear to match. Please try again.'
 };
@@ -31,6 +31,13 @@ const CHANGE_COPY = {
     PART_ONE: 'You are required to change your password before using ',
     PART_TWO: 'ChangeMyWorldNow.com',
     PART_THREE: 'Please update your password using the form below to proceed.'
+};
+
+const PASSWORD = {
+    //the keys are in lowercase since they are used to compare keys coming from api
+    password: 'passwordErrorMessage',
+    password_confirmation: //eslint-disable-line camelcase
+        'passwordConfirmationErrorMessage',
 };
 
 var mapStateToProps;
@@ -43,7 +50,9 @@ export class UpdatePassword extends React.Component {
             type: 'password',
             extraProps: {},
             currentPage: 'update-password',
-            background: _.sample(['bkg-1', 'bkg-2'])
+            background: _.sample(['bkg-1', 'bkg-2']),
+            passwordErrorMessage: '',
+            passwordConfirmationErrorMessage: ''
         });
     }
 
@@ -83,14 +92,22 @@ export class UpdatePassword extends React.Component {
     }
 
     submit() {
+        var message = {
+            passwordErrorMessage: '',
+            passwordConfirmationErrorMessage: ''
+        };
+
         if (!this.isPassValid(this.refs.newPassword.getValue())) {
-            this.setState({
-                extraProps: {
-                    bsStyle: 'error'
-                }
-            });
-            Toast.error(ERRORS.TOO_SHORT);
-        } else if (this.refs.confirmPassword.getValue() === this.refs.newPassword.getValue()) {
+            message.passwordErrorMessage = ERRORS.TOO_SHORT;
+        }
+
+        if (this.refs.confirmPassword.getValue() !== this.refs.newPassword.getValue()) {
+            message.passwordConfirmationErrorMessage = ERRORS.NO_MATCH;
+        }
+
+        if (!(message.passwordErrorMessage === '' && message.passwordConfirmationErrorMessage === '')) {
+            this.setState(message);
+        } else {
             HttpManager.POST({
                 url: `${GLOBALS.API_URL}password`
             }, {
@@ -101,7 +118,14 @@ export class UpdatePassword extends React.Component {
                     currentPage: 'confirm-re-login'
                 });
             }).catch(err => {
-                if (err.status === 0) {
+                if (err.status === 422) {
+                    _.each(err.response.validation_messages, function (item, field) {
+                        if (PASSWORD[field]) {
+                            message[PASSWORD[field]] = Object.values(item).join(' ');
+                        }
+                    });
+                    this.setState(message);
+                } else if (err.status === 0) {
                     //non-error response indicates password already changed successfully
                     this.setState({
                         currentPage: 'confirm-re-login'
@@ -111,9 +135,6 @@ export class UpdatePassword extends React.Component {
                     Toast.error(ERRORS.BAD_PASS);
                 }
             });
-        } else {
-            this.setState({extraProps: {bsStyle: 'error'}});
-            Toast.error(ERRORS.NO_MATCH);
         }
     }
 
@@ -154,6 +175,7 @@ export class UpdatePassword extends React.Component {
                                 autoComplete="off"
                                 {...this.state.extraProps}
                             />
+                            <span className="error">{this.state.passwordErrorMessage}</span>
                             <Input
                                 ref="confirmPassword"
                                 name="confirmPassword"
@@ -167,6 +189,9 @@ export class UpdatePassword extends React.Component {
                                 autoComplete="off"
                                 {...this.state.extraProps}
                             />
+                            <span className="error">
+                                {this.state.passwordConfirmationErrorMessage}
+                            </span>
                             <Input
                                 type="radio"
                                 ref="toggle"

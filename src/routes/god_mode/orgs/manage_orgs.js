@@ -104,7 +104,7 @@ export class ManageOrgs extends React.Component {
                         <Column renderHeader={HEADINGS.TITLE}
                             renderCell={(data, row) => {
                                 return (
-                                    <Link to={row._links.self.href}>
+                                    <Link to={`/district/${row.org_id}`}>
                                         {row.title}
                                     </Link>
                                 ); }
