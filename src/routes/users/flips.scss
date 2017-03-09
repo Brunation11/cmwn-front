@@ -77,7 +77,7 @@ $nav-btns: '#{$media}sprites/buttons.png';
             }
 
             span:nth-of-type(1) {
-                left: 31%;
+                left: 28%;
             }
 
             span:nth-of-type(3) {
@@ -335,7 +335,7 @@ $nav-btns: '#{$media}sprites/buttons.png';
                     }
 
                     .earned {
-                        margin: 0;
+                        margin-left: 0 !important; // scss-lint:disable ImportantRule
                     }
 
                     .flipcase {
@@ -408,7 +408,7 @@ $nav-btns: '#{$media}sprites/buttons.png';
             }
         }
 
-        @media (max-height: 567px) {
+        @media (max-height: 567px) and (max-width: $device-portrait-break) {
             .mobile .all-flips {
                 top: 21vh;
                 transform: translateY(-50%);
