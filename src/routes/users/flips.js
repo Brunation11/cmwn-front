@@ -82,6 +82,8 @@ export class FlipWall extends React.Component {
     }
 
     renderEarnedShelf() {
+        if (this.props.currentUser.type !== 'CHILD') return null;
+
         return (
             <div className="earned-flips">
                 <button
@@ -156,7 +158,6 @@ export class FlipWall extends React.Component {
                                     render="all"
                                     static={true}
                                     allFlips={shelf}
-                                    earned={false}
                                 />
                             );
                         })}
