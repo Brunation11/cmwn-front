@@ -139,7 +139,7 @@ export class FlipWall extends React.Component {
                 </div>
                 <button
                     className="nav-btn info-btn"
-                    onClick={this.renderNavigate.bind(this, '/profile')}
+                    onClick={this.navigate.bind(this, '/profile')}
                 />
                 <button
                     className={ClassNames(
@@ -200,7 +200,7 @@ export class FlipWall extends React.Component {
         );
     }
 
-    renderNavigate(path) {
+    navigate(path) {
         History.push(path);
     }
 
@@ -210,7 +210,7 @@ export class FlipWall extends React.Component {
                 <Modal.Dialog>
                     <button
                         className="edit-profile-btn"
-                        onClick={this.renderNavigate.bind(this, '/profile/edit')}
+                        onClick={this.navigate.bind(this, '/profile/edit')}
                     >
                         <span className="welcome">
                             WELCOME TO DISCOVERY PAGE,
@@ -231,7 +231,7 @@ export class FlipWall extends React.Component {
                     </span>
                     <button
                         className="profile-btn"
-                        onClick={this.renderNavigate.bind(this, '/profile')}
+                        onClick={this.navigate.bind(this, '/profile')}
                     >
                         <span className="tap-to-return">
                             TAP TO<strong> VIEW PROFILE</strong>
