@@ -111,11 +111,10 @@ export default class Image extends React.Component {
             url: imageURL,
             image_id: imageID
         }).then(() => {
-            self.setState({
+            this.setState({
                 profileImage: imageURL,
                 isModerated: false
             });
-
             Toast.error(ERRORS.MODERATION);
         }).catch(() => {
             Toast.error(ERRORS.UPLOAD_ERROR);
@@ -159,12 +158,13 @@ export default class Image extends React.Component {
 
     defaultUpload(e) {
         var postURL = this.props.data._links.user_image.href;
-        var imageURL = _.get(this.state.defaultsCLR, ['name', this.state.selected]).src;
+        var imageURL = _.find(this.state.defaultsCLR, ['name', this.state.selected]).src;
         var imageID = imageURL.replace('.png', '');
 
         e.stopPropagation();
 
         this.upload(e, postURL, imageURL, imageID);
+        this.hideModal();
     }
 
     showModal() {
@@ -392,7 +392,7 @@ export default class Image extends React.Component {
                     </span>
                     <img
                         className="selected-avatar"
-                        src={_.find(this.state.defaultsBW, ['name', this.state.selected]).src}
+                        src={_.find(this.state.defaultsCLR, ['name', this.state.selected]).src}
                     />
                     <span className="prompt-2">
                         {this.props.currentUser.username}
