@@ -1,18 +1,17 @@
+/* eslint max-lines: ["error", {"max": 530, "skipComments": true}] */
 import React from 'react';
 import _ from 'lodash';
 import ClassNames from 'classnames';
 import { connect } from 'react-redux';
+import { WithContext as ReactTags } from 'react-tag-input';
 import {Button, Input, Panel} from 'react-bootstrap';
-
 import FlipBoard from 'components/flipboard';
 import GenerateDataSource from 'components/datasource';
 import HttpManager from 'components/http_manager';
 import Toast from 'components/toast';
 import Log from 'components/log';
 import Form from 'components/form';
-
 import Layout from 'layouts/god_mode_two_col';
-
 import 'routes/god_mode/games.scss';
 
 var mapStateToProps;
@@ -28,6 +27,8 @@ export const FIELDS = [
     'coming_soon',
     'desktop',
     'unity',
+    'zipcodes',
+    'global',
     'meta',
     'key',
     'newGame',
@@ -43,21 +44,31 @@ export const NON_INPUTS = [
     'undelete',
 ];
 
-const FIELD_TYPES = {
-    [FIELDS[0]]: 'text',
-    [FIELDS[1]]: 'textarea',
-    [FIELDS[2]]: 'checkbox',
-    [FIELDS[3]]: 'checkbox',
-    [FIELDS[4]]: 'checkbox',
-};
+const FIELD_TYPES = _.zipObject(
+    _.slice(FIELDS, 0, 7),
+    [
+        'text',
+        'textarea',
+        'checkbox',
+        'checkbox',
+        'checkbox',
+        'taginput',
+        'checkbox',
+    ]
+);
 
-const FIELD_LABELS = {
-    [FIELDS[0]]: 'Title',
-    [FIELDS[1]]: 'Description',
-    [FIELDS[2]]: 'Coming Soon',
-    [FIELDS[3]]: 'Desktop Only',
-    [FIELDS[4]]: 'Unity',
-};
+const FIELD_LABELS = _.zipObject(
+    _.slice(FIELDS, 0, 7),
+    [
+        'Title',
+        'Description',
+        'Coming Soon',
+        'Desktop Only',
+        'Unity',
+        'Zip Codes:',
+        'Visible to everyone',
+    ]
+);
 
 const NEW_GAME = {
     [FIELDS[0]]: '',
@@ -65,12 +76,15 @@ const NEW_GAME = {
     [FIELDS[2]]: false,
     [FIELDS[3]]: false,
     [FIELDS[4]]: false,
-    [FIELDS[5]]: {
+    [FIELDS[5]]: [],
+    [FIELDS[6]]: false,
+    [FIELDS[7]]: {
         [FIELDS[3]]: false,
         [FIELDS[4]]: false,
+        [FIELDS[5]]: [],
     },
-    [FIELDS[6]]: -1,
-    [FIELDS[7]]: true,
+    [FIELDS[8]]: -1,
+    [FIELDS[9]]: true,
 };
 
 const LOG = {
@@ -137,13 +151,15 @@ export var filterInputFields = function (item, index) {
     gameItem.undelete = false;
     gameItem.key = index;
 
+    if (!gameItem.zipcodes) {
+        gameItem.zipcodes = [];
+    }
+
     return gameItem;
 };
-
 export class GodModeGames extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
             open: '',
             games: {},
@@ -160,7 +176,18 @@ export class GodModeGames extends React.Component {
         _.forEach(item, (inputValue, inputType) => {
             if (inputType === 'key') return;
 
-            if (typeof inputValue === 'object') {
+            if (inputType === 'zipcodes') {
+                inputValue = _.reduce(inputValue, function (a, zipcode) {
+                    if (zipcode.text && zipcode.id) {
+                        a.push(zipcode.text);
+                    } else {
+                        a.push(zipcode);
+                    }
+                    return a;
+                }, []);
+
+                postData.zipcodes = inputValue;
+            } else if (typeof inputValue === 'object') {
                 postData[inputType] = {};
                 _.forEach(inputValue, (inputValue_, inputType_) => {
                     postData[inputType][inputType_] = item[inputType_];
@@ -169,6 +196,8 @@ export class GodModeGames extends React.Component {
                 postData[inputType] = inputValue;
             }
         });
+
+        postData.meta.zipcodes = postData.zipcodes;
 
         if (create) {
             HttpManager.POST({url: `${this.props.data._links.first.href}`},
@@ -225,6 +254,17 @@ export class GodModeGames extends React.Component {
         if (this.state.update !== 0) {
             games = _.cloneDeep(this.state.games);
             _.forEach(data, item => {
+                var tags = [];
+
+                if (item.meta && item.meta.zipcodes) {
+                    tags = _.map(item.meta.zipcodes, (zipcode, index) => {
+                        return {id: index + 1, text: zipcode};
+                    });
+                }
+                if (_.has(item, 'asMutable')) {
+                    item = item.asMutable({deep: true});
+                }
+                item.zipcodes = tags;
                 games[item.game_id] = item;
             });
 
@@ -248,6 +288,29 @@ export class GodModeGames extends React.Component {
         if (NON_INPUTS.indexOf(inputType) !== -1) return;
 
         games = _.cloneDeep(this.state.games);
+
+        if (FIELD_TYPES[inputType] === 'taginput') {
+            return (
+                <div className="zipcode" key={key}>
+                    <label className="control-label">
+                        {FIELD_LABELS[inputType]}
+                    </label>
+                    <ReactTags
+                        tags={inputValue}
+                        handleDelete={(n) => {
+                            games[gameId][inputType].splice(n, 1);
+                            self.setState({ games });
+                        }}
+                        handleAddition={(tag) => {
+                            var tags = games[gameId][inputType];
+                            tags.push({id: tags.length + 1, text: tag});
+                            games[gameId][inputType] = tags;
+                            self.setState({ games });
+                        }}
+                    />
+                </div>
+            );
+        }
 
         if (FIELD_TYPES[inputType] === 'checkbox') {
             return (
@@ -383,12 +446,12 @@ export class GodModeGames extends React.Component {
                 navMenuId="navMenu"
             >
                 <FlipBoard
-                        renderFlip={this.renderFlip.bind(this)}
-                        data={[NEW_GAME]}
-                        id="game-flip-board"
-                        updateParent={this.updateGameData.bind(this)}
-                        alwaysUpdateParent
-                        header={null}
+                    renderFlip={this.renderFlip.bind(this)}
+                    data={[NEW_GAME]}
+                    id="game-flip-board"
+                    updateParent={this.updateGameData.bind(this)}
+                    alwaysUpdateParent
+                    header={null}
                 />
 
                 <div className="heading">
