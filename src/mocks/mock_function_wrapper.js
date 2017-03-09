@@ -9,7 +9,6 @@ class MockFunctionWrapper extends React.Component {
 
     componentWillMount() {
         this.render = this.props.render.bind(this, this.props.item);
-
         if (this.props.functions) {
             _.forEach(this.props.functions, (func, funcName) => {
                 this[funcName] = func.bind(this);
