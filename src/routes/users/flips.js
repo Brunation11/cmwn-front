@@ -81,6 +81,30 @@ export class FlipWall extends React.Component {
         }
     }
 
+    scrollForward(ref) {
+        if (ref === 'shelves') {
+            if (this.state.shelfIndex < this.state.shelves.length - 3) {
+                this.setState({shelfIndex: this.state.shelfIndex + 1});
+            }
+        } else {
+            if (this.state.caseIndex < this.refs.flipcase.props.data.length - 4) {
+                this.setState({caseIndex: this.state.caseIndex + 1});
+            }
+        }
+    }
+
+    scrollBackward(ref) {
+        if (ref === 'shelves') {
+            if (this.state.shelfIndex > 0) {
+                this.setState({shelfIndex: this.state.shelfIndex - 1});
+            }
+        } else {
+            if (this.state.caseIndex > 0) {
+                this.setState({caseIndex: this.state.caseIndex - 1});
+            }
+        }
+    }
+
     renderEarnedShelf() {
         if (this.props.currentUser.type !== 'CHILD') return null;
 
@@ -174,30 +198,6 @@ export class FlipWall extends React.Component {
                 />
             </div>
         );
-    }
-
-    scrollForward(ref) {
-        if (ref === 'shelves') {
-            if (this.state.shelfIndex < this.state.shelves.length - 3) {
-                this.setState({shelfIndex: this.state.shelfIndex + 1});
-            }
-        } else {
-            if (this.state.caseIndex < this.refs.flipcase.props.data.length - 4) {
-                this.setState({caseIndex: this.state.caseIndex + 1});
-            }
-        }
-    }
-
-    scrollBackward(ref) {
-        if (ref === 'shelves') {
-            if (this.state.shelfIndex > 0) {
-                this.setState({shelfIndex: this.state.shelfIndex - 1});
-            }
-        } else {
-            if (this.state.caseIndex > 0) {
-                this.setState({caseIndex: this.state.caseIndex - 1});
-            }
-        }
     }
 
     renderNavigate(path) {
