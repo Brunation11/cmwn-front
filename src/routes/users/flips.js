@@ -81,6 +81,30 @@ export class FlipWall extends React.Component {
         }
     }
 
+    scrollForward(ref) {
+        if (ref === 'shelves') {
+            if (this.state.shelfIndex < this.state.shelves.length - 3) {
+                this.setState({shelfIndex: this.state.shelfIndex + 1});
+            }
+        } else {
+            if (this.state.caseIndex < this.refs.flipcase.props.data.length - 4) {
+                this.setState({caseIndex: this.state.caseIndex + 1});
+            }
+        }
+    }
+
+    scrollBackward(ref) {
+        if (ref === 'shelves') {
+            if (this.state.shelfIndex > 0) {
+                this.setState({shelfIndex: this.state.shelfIndex - 1});
+            }
+        } else {
+            if (this.state.caseIndex > 0) {
+                this.setState({caseIndex: this.state.caseIndex - 1});
+            }
+        }
+    }
+
     renderEarnedShelf() {
         if (this.props.currentUser.type !== 'CHILD') return null;
 
@@ -115,7 +139,7 @@ export class FlipWall extends React.Component {
                 </div>
                 <button
                     className="nav-btn info-btn"
-                    onClick={this.renderNavigate.bind(this, '/profile')}
+                    onClick={this.navigate.bind(this, '/profile')}
                 />
                 <button
                     className={ClassNames(
@@ -176,31 +200,7 @@ export class FlipWall extends React.Component {
         );
     }
 
-    scrollForward(ref) {
-        if (ref === 'shelves') {
-            if (this.state.shelfIndex < this.state.shelves.length - 3) {
-                this.setState({shelfIndex: this.state.shelfIndex + 1});
-            }
-        } else {
-            if (this.state.caseIndex < this.refs.flipcase.props.data.length - 4) {
-                this.setState({caseIndex: this.state.caseIndex + 1});
-            }
-        }
-    }
-
-    scrollBackward(ref) {
-        if (ref === 'shelves') {
-            if (this.state.shelfIndex > 0) {
-                this.setState({shelfIndex: this.state.shelfIndex - 1});
-            }
-        } else {
-            if (this.state.caseIndex > 0) {
-                this.setState({caseIndex: this.state.caseIndex - 1});
-            }
-        }
-    }
-
-    renderNavigate(path) {
+    navigate(path) {
         History.push(path);
     }
 
@@ -210,7 +210,7 @@ export class FlipWall extends React.Component {
                 <Modal.Dialog>
                     <button
                         className="edit-profile-btn"
-                        onClick={this.renderNavigate.bind(this, '/profile/edit')}
+                        onClick={this.navigate.bind(this, '/profile/edit')}
                     >
                         <span className="welcome">
                             WELCOME TO DISCOVERY PAGE,
@@ -231,7 +231,7 @@ export class FlipWall extends React.Component {
                     </span>
                     <button
                         className="profile-btn"
-                        onClick={this.renderNavigate.bind(this, '/profile')}
+                        onClick={this.navigate.bind(this, '/profile')}
                     >
                         <span className="tap-to-return">
                             TAP TO<strong> VIEW PROFILE</strong>
