@@ -43,7 +43,6 @@ const IGNORED_ROUTES_FOR_CHILDREN = [
 const IGNORED_ROUTES_FOR_EVERYONE = [
     'Profile',
     'Games',
-    'Discover Flips'
 ];
 
 var buildMenuRoutes = function (links) {
