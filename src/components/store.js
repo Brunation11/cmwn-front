@@ -21,8 +21,16 @@ var isAvailable = window.__cmwn.MODE === 'dev' || window.__cmwn.MODE === 'develo
     window.__cmwn.MODE === 'local';
 
 var populate = function (host, key, storageKey) {
-    var prop = window.localStorage[storageKey];
-    if (window.localStorage == null) {
+    var storage;
+    var prop;
+    try {
+        storage = window.localStorage;
+        prop = storage[storageKey];
+    } catch(error) {
+        storage = window._localStorage;
+        prop = storage[storageKey];
+    }
+    if (storage == null ) {
         return null;
     }
     if (prop != null && prop !== 'null' && prop !== 'undefined') {
