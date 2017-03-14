@@ -6,11 +6,13 @@ import Shortid from 'shortid';
 import _ from 'lodash';
 import ClassNames from 'classnames';
 
-import Layout from 'layouts/two_col';
 import Flipcase from 'components/flipcase';
 import GenerateDataSource from 'components/datasource';
 import History from 'components/history';
 import HttpManager from 'components/http_manager';
+import GLOBALS from 'components/globals';
+
+import Layout from 'layouts/two_col';
 
 import './flips.scss';
 
@@ -205,6 +207,10 @@ export class FlipWall extends React.Component {
     }
 
     renderMobile() {
+        var image = GLOBALS.DEFAULT_PROFILE;
+        if (_.has(this, 'props.currentUser._embedded.image.url')) {
+            image = this.props.currentUser._embedded.image.url;
+        }
         return (
             <div className="mobile">
                 <Modal.Dialog>
@@ -217,7 +223,7 @@ export class FlipWall extends React.Component {
                             <br />
                             <strong>{this.props.currentUser.username}</strong>
                         </span>
-                        <img className="profile-img" src={this.props.currentUser._embedded.image.url} />
+                        <img className="profile-img" src={image} />
                         <span className="tap-to-view">
                             TAP TO<strong> VIEW PROFILE</strong>
                         </span>
