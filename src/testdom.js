@@ -28,7 +28,8 @@ global.window.MODE = 'test';
 global.window.__cmwn = {};
 global.window.__cmwn.MODE = 'test';
 global.window.cmwn_token = '';
-global.window.localStorage = {
+
+var storageObject = {
     cmwn_token: '',
     setItem: function (key, val) {
         this[key] = val;
@@ -37,6 +38,12 @@ global.window.localStorage = {
         return '';
     }
 };
+
+try {
+    global.window.localStorage = storageObject;
+} catch(error) {
+    global.window._localStorage = storageObject;
+}
 global.window.console = global.console;
 global.console.error = global.console.error || _.noop;
 global.window.Rollbar = global.window.Rollbar || {
