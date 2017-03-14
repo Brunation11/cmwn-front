@@ -307,9 +307,7 @@ export class Profile extends React.Component {
                     </Panel>
                     <Panel
                         header={HEADINGS.TROPHYCASE}
-                        className={ClassNames('standard', {
-                            hidden: !this.state.isStudent
-                        })}
+                        className={ClassNames('standard', {})}
                     >
                         <FLIP_SOURCE>
                            <Flipcase
