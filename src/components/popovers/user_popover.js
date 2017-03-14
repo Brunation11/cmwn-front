@@ -21,7 +21,8 @@ export default class UserPopover extends React.Component {
         this.state = {
             element: [],
             trigger: 'hover',
-            placement: 'bottom'
+            placement: 'bottom',
+            flips: []
         };
     }
 
@@ -33,7 +34,7 @@ export default class UserPopover extends React.Component {
             type: this.props.type
         });
 
-        this.getUserFlips();
+        //this.getUserFlips();
 
         this._mounted = true;
     }
@@ -43,7 +44,9 @@ export default class UserPopover extends React.Component {
     }
 
     getUserFlips() {
-        var userID = this.props.element.friend_id || this.props.element.suggest_id;
+        var userID = this.props.element.friend_id ||
+            this.props.element.suggest_id ||
+            this.props.element.user_id;
         HttpManager.GET({
             url: (`${GLOBALS.API_URL}user/${userID}/flip`),
             handleErrors: false
@@ -84,6 +87,7 @@ export default class UserPopover extends React.Component {
             <ButtonToolbar id={Shortid.generate()}>
                 <OverlayTrigger
                     trigger={this.state.trigger}
+                    onEntering={this.getUserFlips.bind(this)}
                     rootClose
                     placement={this.state.placement}
                     overlay={(
@@ -102,3 +106,4 @@ export default class UserPopover extends React.Component {
         );
     }
 }
+
