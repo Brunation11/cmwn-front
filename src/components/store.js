@@ -12,6 +12,7 @@ import DevReducers from 'components/dev_reducers';
 import Log from 'components/log';
 import ACTION_CONSTANTS from 'components/action_constants';
 import GLOBALS from 'components/globals';
+import LocalStorage from 'components/local_storage';
 
 const INITIAL_STATE = Immutable({
     locationBeforeTransitions: null
@@ -21,10 +22,8 @@ var isAvailable = window.__cmwn.MODE === 'dev' || window.__cmwn.MODE === 'develo
     window.__cmwn.MODE === 'local';
 
 var populate = function (host, key, storageKey) {
-    var prop = window.localStorage[storageKey];
-    if (window.localStorage == null) {
-        return null;
-    }
+    var prop = LocalStorage.getItem(storageKey);
+    if (LocalStorage.storage() == null) return null;
     if (prop != null && prop !== 'null' && prop !== 'undefined') {
         try {
             host[key] = JSON.parse(prop);

@@ -18,6 +18,7 @@ import HttpManager from 'components/http_manager';
 import GLOBALS from 'components/globals';
 import Errors from 'components/errors';
 import Util from 'components/util';
+import LocalStorage from 'components/local_storage';
 
 const LS_LAST_LOGIN = 'LAST_LOGIN_DATE';
 
@@ -88,21 +89,9 @@ Actions = Actions.set(ACTION_CONSTANTS.AUTHORIZE_APP, function () {
                         });
                     }
 
-                    try {
-                        lastLogin = Moment(window.localStorage[LS_LAST_LOGIN + server.response.user_id] || 0);
-                    } catch(error) {
-                        lastLogin = Moment(window._localStorage[
-                            LS_LAST_LOGIN + server.response.user_id
-                        ] || 0);
-                    }
+                    lastLogin = Moment(LocalStorage.getItem(LS_LAST_LOGIN + server.response.user_id) || 0);
+                    LocalStorage.setItem(LS_LAST_LOGIN + server.response.user_id, now.toDate().toISOString());
 
-                    try {
-                        window.localStorage.setItem(LS_LAST_LOGIN + server.response.user_id,
-                            now.toDate().toISOString());
-                    } catch(error) {
-                        window._localStorage.setItem(LS_LAST_LOGIN + server.response.user_id,
-                            now.toDate().toISOString());
-                    }
                     if (now.format('X') - lastLogin.format('X') > 86164 || //seconds in a day
                             now.date() !== lastLogin.date()) {
                         ga('set', 'dimension9', 1);

@@ -120,6 +120,7 @@
             <script src="https://cdnjs.cloudflare.com/ajax/libs/flexie/1.0.3/flexie.min.js"></script>
         <![endif]-->
         <script type="text/javascript">
+            import LocalStorage from 'components/local_storage';
             var isIE10 = false;
             var fileref;
             /*@cc_on
@@ -138,78 +139,7 @@
                 document.head.appendChild(fileref);
             }
             //polyfill localstorage
-            try {
-                //will fail in private safari
-                window.localStorage.setItem('testKey', '1');
-                window.localStorage.removeItem('testKey');
-            } catch (error) {
-                var setStorage = function() {
-                    var Storage = function() {
-                        function setData(data) {
-                            data = JSON.stringify(data);
-                            window.name = data;
-                        }
-
-                        function clearData() {
-                            window.name = '';
-                        }
-
-                        function getData() {
-                            var data = window.name;
-                            return data ? JSON.parse(data) : {};
-                        }
-
-                        // initialise if there's already data
-                        var data = getData();
-
-                        function numKeys() {
-                            var n = 0;
-                            for (var k in data) {
-                                if (data.hasOwnProperty(k)) n += 1;
-                            }
-                            return n;
-                        }
-
-                        return {
-                            clear: function() {
-                                data = {};
-                                clearData();
-                                this.length = numKeys();
-                            },
-                            getItem: function(key) {
-                                key = encodeURIComponent(key);
-                                return data[key] === undefined ? null : data[key];
-                            },
-                            key: function(i) {
-                                var ctr = 0;
-                                for (var k in data) {
-                                    if (ctr == i) return decodeURIComponent(k);
-                                    else ctr++;
-                                }
-                                return null;
-                            },
-                            removeItem: function(key) {
-                                key = encodeURIComponent(key);
-                                delete data[key];
-                                setData(data);
-                                this.length = numKeys();
-                            },
-                            setItem: function(key, value) {
-                                key = encodeURIComponent(key);
-                                data[key] = String(value);
-                                setData(data);
-                                this.length = numKeys();
-                            },
-                            length: 0
-                        };
-                    };
-
-                    window._localStorage = new Storage();
-                    window._sessionStorage = new Storage();
-                };
-
-                setStorage();
-            }
+            LocalStorage.polyfill();
         </script>
         <script>
             var style = document.createElement('style');
