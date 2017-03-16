@@ -4,6 +4,7 @@ import {Modal, Button, Input, Glyphicon} from 'react-bootstrap';
 import ClassNames from 'classnames';
 
 import Detector from 'components/browser_detector';
+import LocalStorage from 'components/local_storage';
 
 import 'components/teacher_guide.scss';
 
@@ -58,25 +59,15 @@ class Guide extends React.Component {
         var page;
         //var modalOpen;
 
-        try {
-            startClosed = window.localStorage[LS_AUTOPLAY_KEY] === 'true';
-            minimized = window.localStorage[LS_MINIMIZED] === 'true';
-            page = +(window.localStorage[LS_CURRENT_PAGE]);
-        } catch(error) {
-            startClosed = window._localStorage[LS_AUTOPLAY_KEY] === 'true';
-            minimized = window._localStorage[LS_MINIMIZED] === 'true';
-            page = +(window._localStorage[LS_CURRENT_PAGE]);
-        }
+        startClosed = LocalStorage.getItem(LS_AUTOPLAY_KEY) === 'true';
+        minimized = LocalStorage.getItem(LS_MINIMIZED) === 'true';
+        page = +(LocalStorage.getItem(LS_CURRENT_PAGE));
 
         if (isNaN(page)) page = 1;
 
         //if (!startClosed) {
             // if we autoplay once, dont do it again
-        try {
-            window.localStorage.setItem(LS_AUTOPLAY_KEY, startClosed);
-        } catch(error) {
-            window._localStorage.setItem(LS_AUTOPLAY_KEY, startClosed);
-        }
+        LocalStorage.setItem(LS_AUTOPLAY_KEY, startClosed);
         //    modalOpen = true;
         //    startClosed = true;
         //}
@@ -98,39 +89,23 @@ class Guide extends React.Component {
     }
 
     nextPage() {
-        try {
-            window.localStorage.setItem(LS_CURRENT_PAGE, this.state.page + 1);
-        } catch(error) {
-            window._localStorage.setItem(LS_CURRENT_PAGE, this.state.page + 1);
-        }
+        LocalStorage.setItem(LS_CURRENT_PAGE, this.state.page + 1);
         this.setState({page: window.Math.min(4, this.state.page + 1)});
 
     }
 
     prevPage() {
-        try {
-            window.localStorage.setItem(LS_CURRENT_PAGE, this.state.page - 1);
-        } catch(error) {
-            window._localStorage.setItem(LS_CURRENT_PAGE, this.state.page - 1);
-        }
+        LocalStorage.setItem(LS_CURRENT_PAGE, this.state.page - 1);
         this.setState({page: window.Math.max(1, this.state.page - 1)});
     }
 
     toggleAutoplay() {
-        try {
-            window.localStorage.setItem(LS_AUTOPLAY_KEY, !this.state.startClosed);
-        } catch(error) {
-            window._localStorage.setItem(LS_AUTOPLAY_KEY, !this.state.startClosed);
-        }
+        LocalStorage.setItem(LS_AUTOPLAY_KEY, !this.state.startClosed);
         this.setState({startClosed: !this.state.startClosed});
     }
 
     toggleTab() {
-        try {
-            window.localStorage.setItem(LS_MINIMIZED, !this.state.minimized);
-        } catch(error) {
-            window._localStorage.setItem(LS_MINIMIZED, !this.state.minimized);
-        }
+        LocalStorage.setItem(LS_MINIMIZED, !this.state.minimized);
         this.setState({minimized: !this.state.minimized});
     }
 

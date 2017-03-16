@@ -5,6 +5,7 @@ import Store from 'components/store';
 import Log from 'components/log';
 import GLOBALS from 'components/globals';
 import EventManager from 'components/event_manager';
+import LocalStorage from 'components/local_storage';
 
 var Util = {
     /* Binds the context to the given list of functions in a component*/
@@ -163,19 +164,11 @@ var Util = {
         return perms;
     },
     logout() {
-        try {
-            window.localStorage.setItem('com.cmwn.platform.userName', null);
-            window.localStorage.setItem('com.cmwn.platform.userId', null);
-            window.localStorage.setItem('com.cmwn.platform.profileImage', null);
-            window.localStorage.setItem('com.cmwn.platform.roles', null);
-            window.localStorage.setItem('com.cmwn.platform._links', null);
-        } catch(error) {
-            window._localStorage.setItem('com.cmwn.platform.userName', null);
-            window._localStorage.setItem('com.cmwn.platform.userId', null);
-            window._localStorage.setItem('com.cmwn.platform.profileImage', null);
-            window._localStorage.setItem('com.cmwn.platform.roles', null);
-            window._localStorage.setItem('com.cmwn.platform._links', null);
-        }
+        LocalStorage.setItem('com.cmwn.platform.userName', null);
+        LocalStorage.setItem('com.cmwn.platform.userId', null);
+        LocalStorage.setItem('com.cmwn.platform.profileImage', null);
+        LocalStorage.setItem('com.cmwn.platform.roles', null);
+        LocalStorage.setItem('com.cmwn.platform._links', null);
         Actions.dispatch.LOGOUT();
         Log.info('User logout successful');
         EventManager.update('userChanged', null);
