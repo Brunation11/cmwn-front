@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import _ from 'lodash';
 import {Panel} from 'react-bootstrap';
 import { connect } from 'react-redux';
+import Moment from 'moment';
 
 import {Table, Column} from 'components/table';
 
@@ -39,9 +40,21 @@ export class District extends React.Component{
                             )}
                         />
                         <Column dataKey="description" />
-                        <Column dataKey="created_at" renderHeader="Created" />
-                        <Column dataKey="updated_at" renderHeader="Last Updated"
-                            renderCell={data => (data == null ? 'never' : data)}
+                        <Column
+                            dataKey="created"
+                            renderHeader="Created"
+                            renderCell={created => (
+                                _.get(created, 'date') ? Moment(created.date).format('MM/DD/YYYY h:mm a') :
+                                (created !== null ? Moment(created).format('MM/DD/YYYY h:mm a') : '-')
+                            )}
+                        />
+                        <Column
+                            dataKey="updated"
+                            renderHeader="Last Updated"
+                            renderCell={updated => (
+                                _.get(updated, 'date') ? Moment(updated.date).format('MM/DD/YYYY h:mm a') :
+                                (updated !== null ? Moment(updated).format('MM/DD/YYYY h:mm a') : 'never')
+                            )}
                         />
                     </Table>
                 </Panel>
