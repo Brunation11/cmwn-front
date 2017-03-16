@@ -1,3 +1,4 @@
+/* eslint max-lines: ["error", {"max": 530, "skipComments": true}] */
 import React from 'react';
 import _ from 'lodash';
 import ClassNames from 'classnames';
@@ -44,25 +45,31 @@ export const NON_INPUTS = [
     'undelete',
 ];
 
-const FIELD_TYPES = {
-    [FIELDS[0]]: 'text',
-    [FIELDS[1]]: 'textarea',
-    [FIELDS[2]]: 'checkbox',
-    [FIELDS[3]]: 'checkbox',
-    [FIELDS[4]]: 'checkbox',
-    [FIELDS[5]]: 'taginput',
-    [FIELDS[6]]: 'checkbox',
-};
+const FIELD_TYPES = _.zipObject(
+    _.slice(FIELDS, 0, 7),
+    [
+        'text',
+        'textarea',
+        'checkbox',
+        'checkbox',
+        'checkbox',
+        'taginput',
+        'checkbox',
+    ]
+);
 
-const FIELD_LABELS = {
-    [FIELDS[0]]: 'Title',
-    [FIELDS[1]]: 'Description',
-    [FIELDS[2]]: 'Desktop Only',
-    [FIELDS[3]]: 'Unity',
-    [FIELDS[4]]: 'Coming Soon',
-    [FIELDS[5]]: 'Zip Codes:',
-    [FIELDS[6]]: 'Visible to everyone',
-};
+const FIELD_LABELS = _.zipObject(
+    _.slice(FIELDS, 0, 7),
+    [
+        'Title',
+        'Description',
+        'Coming Soon',
+        'Desktop Only',
+        'Unity',
+        'Zip Codes:',
+        'Visible to everyone',
+    ]
+);
 
 const NEW_GAME = {
     [FIELDS[0]]: '',
@@ -150,7 +157,6 @@ export var filterInputFields = function (item, index) {
 
     return gameItem;
 };
-
 export class GodModeGames extends React.Component {
     constructor(props) {
         super(props);
@@ -172,12 +178,15 @@ export class GodModeGames extends React.Component {
 
             if (inputType === 'zipcodes') {
                 inputValue = _.reduce(inputValue, function (a, zipcode) {
-                    if (zipcode.text) {
+                    if (zipcode.text && zipcode.id) {
                         a.push(zipcode.text);
+                    } else {
+                        a.push(zipcode);
                     }
                     return a;
                 }, []);
-                postData.meta.zipcodes = inputValue;
+
+                postData.zipcodes = inputValue;
             } else if (typeof inputValue === 'object') {
                 postData[inputType] = {};
                 _.forEach(inputValue, (inputValue_, inputType_) => {
@@ -187,6 +196,8 @@ export class GodModeGames extends React.Component {
                 postData[inputType] = inputValue;
             }
         });
+
+        postData.meta.zipcodes = postData.zipcodes;
 
         if (create) {
             HttpManager.POST({url: `${this.props.data._links.first.href}`},

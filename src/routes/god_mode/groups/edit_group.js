@@ -10,6 +10,7 @@ import Form from 'components/form';
 import Log from 'components/log';
 import GroupCodeChange from 'components/group_code_change';
 import EditMeta from 'components/edit_meta';
+import Address from 'components/address';
 
 export const PAGE_UNIQUE_IDENTIFIER = 'god-mode-edit-group';
 
@@ -22,7 +23,8 @@ const HEADINGS = {
     organization: 'Organization',
     SAVE: 'Save',
     UPDATE_SUCCESS: 'Group Updated',
-    UPDATE_FAILED: 'Server refused Group update'
+    UPDATE_FAILED: 'Server refused Group update',
+    ADDRESS_FETCH_FAILED: 'problem retrieving address of group',
 };
 
 const INVALID_SUBMISSION = 'Invalid submission. Please update fields highlighted in red and submit again';
@@ -39,6 +41,21 @@ export class EditGroup extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState(nextProps.data);
+        if (this.state && this.state._links && this.state._links.group_address){
+            HttpManager.GET(
+                this.state._links.group_address.href
+            ).then((res) => {
+                if (res.response &&
+                    res.response._embedded &&
+                    res.response._embedded.address &&
+                    res.response._embedded.address.length > 0
+                ) {
+                    this.setState({address: res.response._embedded.address[0]});
+                }
+            }).catch(err => {
+                Toast.error(HEADINGS.ADDRESS_FETCH_FAILED + ' ' + err.message ? err.message : '');
+            });
+        }
     }
 
     renderStaticFeild(fieldName, value) {
@@ -153,7 +170,6 @@ export class EditGroup extends React.Component {
 
     render() {
         if (this.state === null || _.isEmpty(this.state)) return null;
-
         return (
             <Layout
                 currentUser={this.props.currentUser}
@@ -168,6 +184,11 @@ export class EditGroup extends React.Component {
                         </div>
                     </Panel>
                     <GroupCodeChange currentUser={this.props.currentUser} data={this.state}/>
+                    <Address
+                        currentUser={this.props.currentUser}
+                        data={this.state.address ? this.state.address : null}
+                        links={this.state._links}
+                    />
                 </div>
             </Layout>
         );
