@@ -1,9 +1,10 @@
+/* eslint max-lines: ["error", {"max": 530, "skipComments": true}] */
 import React from 'react';
 import _ from 'lodash';
 import ClassNames from 'classnames';
 import { connect } from 'react-redux';
+import { WithContext as ReactTags } from 'react-tag-input';
 import {Button, Input, Panel} from 'react-bootstrap';
-
 import FlipBoard from 'components/flipboard';
 import GenerateDataSource from 'components/datasource';
 import HttpManager from 'components/http_manager';
@@ -11,9 +12,7 @@ import Paginator from 'components/paginator';
 import Toast from 'components/toast';
 import Log from 'components/log';
 import Form from 'components/form';
-
 import Layout from 'layouts/god_mode_two_col';
-
 import 'routes/god_mode/games.scss';
 
 var mapStateToProps;
@@ -21,7 +20,7 @@ var Page;
 
 export const PAGE_UNIQUE_IDENTIFIER = 'god-mode-games';
 
-const GAME_WRAPPER = GenerateDataSource('games', PAGE_UNIQUE_IDENTIFIER);
+const GAME_WRAPPER = GenerateDataSource('games_deleted', PAGE_UNIQUE_IDENTIFIER);
 
 export const FIELDS = [
     'title',
@@ -29,6 +28,8 @@ export const FIELDS = [
     'coming_soon',
     'desktop',
     'unity',
+    'zipcodes',
+    'global',
     'meta',
     'key',
     'newGame',
@@ -40,42 +41,64 @@ export const NON_INPUTS = [
     'key',
     'newGame',
     'game_id',
+    'deletedGame',
+    'undelete',
 ];
 
-const FIELD_TYPES = {
-    [FIELDS[0]]: 'text',
-    [FIELDS[1]]: 'textarea',
-    [FIELDS[2]]: 'checkbox',
-    [FIELDS[3]]: 'checkbox',
-    [FIELDS[4]]: 'checkbox',
-};
+const FIELD_TYPES = _.zipObject(
+    _.slice(FIELDS, 0, 7),
+    [
+        'text',
+        'textarea',
+        'checkbox',
+        'checkbox',
+        'checkbox',
+        'taginput',
+        'checkbox',
+    ]
+);
 
-const FIELD_LABELS = {
-    [FIELDS[0]]: 'Title',
-    [FIELDS[1]]: 'Description',
-    [FIELDS[2]]: 'Coming Soon',
-    [FIELDS[3]]: 'Desktop Only',
-    [FIELDS[4]]: 'Unity',
-};
+const FIELD_LABELS = _.zipObject(
+    _.slice(FIELDS, 0, 7),
+    [
+        'Title',
+        'Description',
+        'Coming Soon',
+        'Desktop Only',
+        'Unity',
+        'Zip Codes:',
+        'Visible to everyone',
+    ]
+);
 
 const NEW_GAME = {
-    [FIELDS[0]]: 'New Game',
-    [FIELDS[1]]: 'Description',
+    [FIELDS[0]]: '',
+    [FIELDS[1]]: '',
     [FIELDS[2]]: false,
     [FIELDS[3]]: false,
     [FIELDS[4]]: false,
-    [FIELDS[5]]: {
+    [FIELDS[5]]: [],
+    [FIELDS[6]]: false,
+    [FIELDS[7]]: {
         [FIELDS[3]]: false,
         [FIELDS[4]]: false,
+        [FIELDS[5]]: [],
     },
-    [FIELDS[6]]: -1,
-    [FIELDS[7]]: true,
+    [FIELDS[8]]: -1,
+    [FIELDS[9]]: true,
 };
 
 const LOG = {
     CREATE: 'Could not create game',
     SAVE: 'Could not save game',
     DELETE: 'Could not delete game',
+};
+
+const HEADINGS = {
+    ACTIVE: 'ACTIVE GAMES :',
+    DELETED: 'DELETED GAMES :',
+    DELETE: 'DELETE',
+    CONFIRM: 'ARE YOU SURE?',
 };
 
 const TOAST = {
@@ -91,10 +114,18 @@ const TOAST = {
     },
 };
 
-export var dataTransform = function (data) {
-    data = _.filter(data, item => !item.deleted);
+export var dataTransform = function (data, deleted = false) {
+    if (!data) return [];
+    switch (deleted) {
+        case true:
+            data = _.filter(data, item => item.deleted);
+            break;
+        default:
+            data = _.filter(data, item => !item.deleted);
+    }
+
     data = _.map(data, filterInputFields);
-    data.unshift(NEW_GAME);
+
     return data;
 };
 
@@ -115,22 +146,27 @@ export var filterInputFields = function (item, index) {
         }
     });
 
+    if (item.deleted) {
+        gameItem.deletedGame = true;
+    }
+    gameItem.undelete = false;
     gameItem.key = index;
+
+    if (!gameItem.zipcodes) {
+        gameItem.zipcodes = [];
+    }
 
     return gameItem;
 };
-
 export class GodModeGames extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
             open: '',
             games: {},
             deleteTry: '',
-            update: true,
+            update: 3,
             reset: '',
-            changed: [],
         };
     }
 
@@ -141,7 +177,18 @@ export class GodModeGames extends React.Component {
         _.forEach(item, (inputValue, inputType) => {
             if (inputType === 'key') return;
 
-            if (typeof inputValue === 'object') {
+            if (inputType === 'zipcodes') {
+                inputValue = _.reduce(inputValue, function (a, zipcode) {
+                    if (zipcode.text && zipcode.id) {
+                        a.push(zipcode.text);
+                    } else {
+                        a.push(zipcode);
+                    }
+                    return a;
+                }, []);
+
+                postData.zipcodes = inputValue;
+            } else if (typeof inputValue === 'object') {
                 postData[inputType] = {};
                 _.forEach(inputValue, (inputValue_, inputType_) => {
                     postData[inputType][inputType_] = item[inputType_];
@@ -150,6 +197,8 @@ export class GodModeGames extends React.Component {
                 postData[inputType] = inputValue;
             }
         });
+
+        postData.meta.zipcodes = postData.zipcodes;
 
         if (create) {
             HttpManager.POST({url: `${this.props.data._links.first.href}`},
@@ -173,24 +222,13 @@ export class GodModeGames extends React.Component {
         }
     }
 
-    saveAllGames() {
-        _.forEach(this.state.games, (game, gameId) => {
-            if (this.state.changed.indexOf(gameId) !== -1 && !game.newGame) {
-                this.saveGame(game, gameId);
-            }
-        });
-    }
-
     deleteGame(item, gameId) {
         var postData;
         var game = _.find(this.props.data._embedded.game, v => v.game_id === gameId);
         if (this.state.deleteTry === gameId) {
-            postData = {
-                'game_id': gameId
-            };
-
-            HttpManager.DELETE({url: game._links.self.href},
-                postData).then(() => {
+            HttpManager.DELETE(
+                    game._links.self.href,
+                ).then(() => {
                     Toast.success(`${item.title}${TOAST.SUCCESS.DELETE}`);
                 }).catch(err => {
                     Toast.error(`${TOAST.ERROR.DELETE}${item.title}:
@@ -214,13 +252,25 @@ export class GodModeGames extends React.Component {
             this.setState({ games, reset: '' });
         }
 
-        if (this.state.update) {
+        if (this.state.update !== 0) {
+            games = _.cloneDeep(this.state.games);
             _.forEach(data, item => {
+                var tags = [];
+
+                if (item.meta && item.meta.zipcodes) {
+                    tags = _.map(item.meta.zipcodes, (zipcode, index) => {
+                        return {id: index + 1, text: zipcode};
+                    });
+                }
+                if (_.has(item, 'asMutable')) {
+                    item = item.asMutable({deep: true});
+                }
+                item.zipcodes = tags;
                 games[item.game_id] = item;
             });
 
             if (!_.isEqual(games, this.state.games)) {
-                this.setState({ games, update: false });
+                this.setState({ games, update: this.state.update - 1 });
             }
         }
     }
@@ -235,12 +285,33 @@ export class GodModeGames extends React.Component {
     renderInputField(inputValue, inputType, gameId, key) {
         var self = this;
         var games;
-        var changed;
 
         if (NON_INPUTS.indexOf(inputType) !== -1) return;
 
         games = _.cloneDeep(this.state.games);
-        changed = _.clone(this.state.changed);
+
+        if (FIELD_TYPES[inputType] === 'taginput') {
+            return (
+                <div className="zipcode" key={key}>
+                    <label className="control-label">
+                        {FIELD_LABELS[inputType]}
+                    </label>
+                    <ReactTags
+                        tags={inputValue}
+                        handleDelete={(n) => {
+                            games[gameId][inputType].splice(n, 1);
+                            self.setState({ games });
+                        }}
+                        handleAddition={(tag) => {
+                            var tags = games[gameId][inputType];
+                            tags.push({id: tags.length + 1, text: tag});
+                            games[gameId][inputType] = tags;
+                            self.setState({ games });
+                        }}
+                    />
+                </div>
+            );
+        }
 
         if (FIELD_TYPES[inputType] === 'checkbox') {
             return (
@@ -253,9 +324,8 @@ export class GodModeGames extends React.Component {
                     key={key}
                     validate="required"
                     onChange={e => {
-                        if (changed.indexOf(gameId) === -1) changed.push(gameId);
                         games[gameId][inputType] = e.target.checked;
-                        self.setState({ games, changed });
+                        self.setState({ games });
                     }}
                />
             );
@@ -267,16 +337,42 @@ export class GodModeGames extends React.Component {
                 type={FIELD_TYPES[inputType]}
                 label={FIELD_LABELS[inputType]}
                 value={inputValue}
+                placeholder={inputType}
                 ref={`${inputType}-input`}
                 name={`${inputType}-input`}
                 key={key}
                 validate="required"
                 onChange={e => {
-                    if (changed.indexOf(gameId) === -1) changed.push(gameId);
                     games[gameId][inputType] = e.target.value;
-                    self.setState({ games, changed });
+                    self.setState({ games });
                 }}
            />
+        );
+    }
+
+    renderDeleteButton(item) {
+        var currentItem = _.has(item, 'asMutable') ? item.asMutable() : item;
+
+        currentItem.undelete = true;
+        if (item.deletedGame) {
+            return (
+                <Button
+                    className="btn standard purple save-btn"
+                    onClick={this.saveGame.bind(this, currentItem, item.game_id, false)}
+                >
+                    {'UNDELETE'}
+                </Button>
+            );
+        }
+        return (
+            <Button
+                className={ClassNames('btn', 'standard', 'purple', 'delete-btn', {
+                    hidden: currentItem.newGame
+                })}
+                onClick={this.deleteGame.bind(this, currentItem, item.game_id, false)}
+            >
+                {this.state.deleteTry === item.game_id ? HEADINGS.CONFIRM : HEADINGS.DELETE}
+            </Button>
         );
     }
 
@@ -326,14 +422,7 @@ export class GodModeGames extends React.Component {
                         >
                             RESET
                         </Button>
-                        <Button
-                            className={ClassNames('btn', 'standard', 'purple', 'delete-btn', {
-                                hidden: currentItem.newGame
-                            })}
-                            onClick={this.deleteGame.bind(this, currentItem, item.game_id)}
-                        >
-                            {this.state.deleteTry === item.game_id ? 'ARE YOU SURE?' : 'DELETE'}
-                        </Button>
+                        {this.renderDeleteButton(item)}
                     </Form>
                 </Panel>
                 <Button
@@ -351,32 +440,24 @@ export class GodModeGames extends React.Component {
     render() {
         if (this.props.data === null || _.isEmpty(this.props.data)) return null;
 
-        const BUTTONS = (
-            <div>
-                <Button
-                    className="btn standard purple save-all-btn"
-                    onClick={this.saveAllGames.bind(this)}
-                >
-                    SAVE ALL UPDATED GAMES
-                </Button>
-                <Button
-                    className="btn standard green reset-all-btn"
-                    onClick={() => {
-                        this.setState({ update: true });
-                    }}
-                >
-                    RESET ALL
-                </Button>
-            </div>
-        );
-
         return (
             <Layout
                 currentUser={this.props.currentUser}
                 className={PAGE_UNIQUE_IDENTIFIER}
                 navMenuId="navMenu"
             >
-                {BUTTONS}
+                <FlipBoard
+                    renderFlip={this.renderFlip.bind(this)}
+                    data={[NEW_GAME]}
+                    id="game-flip-board"
+                    updateParent={this.updateGameData.bind(this)}
+                    alwaysUpdateParent
+                    header={null}
+                />
+
+                <div className="heading">
+                    {HEADINGS.ACTIVE}
+                </div>
                 <GAME_WRAPPER transform={dataTransform}>
                     <Paginator>
                         <FlipBoard
@@ -388,7 +469,22 @@ export class GodModeGames extends React.Component {
                         />
                     </Paginator>
                 </GAME_WRAPPER>
-                {BUTTONS}
+
+                <div className="heading">
+                    {HEADINGS.DELETED}
+                </div>
+                <GAME_WRAPPER
+                    transform={data => { return (dataTransform(data, true)); }}
+                    renderNoData={() => <div>No Deleted Games</div>}
+                >
+                    <FlipBoard
+                        renderFlip={this.renderFlip.bind(this)}
+                        updateParent={this.updateGameData.bind(this)}
+                        alwaysUpdateParent
+                        id="deleted-game-flip-board"
+                        header={null}
+                    />
+                </GAME_WRAPPER>
            </Layout>
         );
     }
@@ -413,4 +509,3 @@ mapStateToProps = state => {
 Page = connect(mapStateToProps)(GodModeGames);
 Page._IDENTIFIER = PAGE_UNIQUE_IDENTIFIER;
 export default Page;
-

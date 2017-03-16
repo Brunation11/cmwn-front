@@ -1,20 +1,12 @@
 import React from 'react';
-import _ from 'lodash';
-import ClassNames from 'classnames';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import { Button } from 'react-bootstrap';
 import Shortid from 'shortid';
 
-import UserPopover from 'components/popovers/user_popover';
 import Paginator from 'components/paginator';
-import Log from 'components/log';
-import HttpManager from 'components/http_manager';
 import FlipBoard from 'components/flipboard';
-import Toast from 'components/toast';
+import UserTile from 'components/user_tile';
 import Actions from 'components/actions';
-import GLOBALS from 'components/globals';
-import Flag from 'components/flag';
 
 import Layout from 'layouts/two_col';
 
@@ -24,11 +16,6 @@ const HEADINGS = {
     FRIENDS: 'My Friends'
 };
 
-const FRIEND_ADDED = 'Great! You are now friends with ';
-const FRIEND_PROBLEM = 'There was a problem adding your friend. Please try again in a little while.';
-const PROFILE = 'View Profile';
-const REQUESTED = 'Accept Request';
-const PENDING = 'Request Sent';
 const NO_FRIENDS = (
     <h2 className="placeholder">
         Looks like you haven't added any friends yet. Let's go{' '}
@@ -46,117 +33,25 @@ export class Friends extends React.Component {
         super();
     }
 
-    addFriend(item, e) {
-        e.stopPropagation();
-        e.preventDefault();
-        ga('send', 'event', {
-            'eventCategory': 'Friend',
-            'eventAction': 'Sent',
-            'dimension7': 'sent'
-        });
-
-        HttpManager.POST({
-            url: this.props.currentUser._links.friend.href
-        }, {
-            'friend_id': item.user_id != null ? item.user_id : item.friend_id
-        }).then(() => {
-            this.refs.fetcher.getData().then(() => {
-                Toast.success(FRIEND_ADDED + item.username);
-                this.forceUpdate();
-            });
+    reloadList(){
+        setTimeout(() => {
             Actions.dispatch.START_RELOAD_PAGE(this.props);
-        }).catch((err) => {
-            Toast.error(FRIEND_PROBLEM);
-            Log.error(err, 'Friend request failed');
-        });
-    }
-
-    acceptRequest(item, e) {
-        e.stopPropagation();
-        e.preventDefault();
-        ga('send', 'event', {
-            'eventCategory': 'Friend',
-            'eventAction': 'Recieved',
-            'dimension7': 'recieved'
-        });
-
-        HttpManager.POST({
-            url: this.props.currentUser._links.friend.href
-        }, {
-            'friend_id': item.user_id != null ? item.user_id : item.friend_id
-        }).then(() => {
-            Toast.success(FRIEND_ADDED + item.username);
-            Actions.dispatch.START_RELOAD_PAGE(this.props);
-        }).catch((err) => {
-            Toast.error(FRIEND_PROBLEM);
-            Log.error(err, 'Friend request failed');
-        });
-    }
-
-    renderRequestStatus(item) {
-        return (
-            <span
-                className={ClassNames(
-                    'request-status', {
-                        disabled: item.friend_status !== 'PENDING'
-                    }
-                )}
-            >
-                {PENDING}
-            </span>
-        );
-    }
-
-    renderAcceptRequestButton(item) {
-        return (
-            <Button
-                onClick={this.acceptRequest.bind(this, item)}
-                className={ClassNames(
-                    'blue standard', {
-                        disabled: item.friend_status !== 'NEEDS_YOUR_ACCEPTANCE'
-                    }
-                )}
-            >
-                {REQUESTED}
-            </Button>
-        );
-    }
-
-    renderViewProfileButton(item) {
-        return (
-            <a
-                className="btn purple standard"
-                href={`/profile/${item.user_id == null ? item.friend_id : item.user_id}`}
-            >
-                {PROFILE}
-            </a>
-        );
+        }, 500);
     }
 
     renderCard(item) {
         return (
-            <Flag
-                data={item}
-            >
-                <UserPopover
-                    element={item}
-                    trigger="click"
-                >
-                    <div className="user-card" key={Shortid.generate()}>
-                        <span className="overlay">
-                            <div className="prompts">
-                                {this.renderRequestStatus(item)}
-                                <br />
-                                {this.renderAcceptRequestButton(item)}
-                                <br />
-                                {this.renderViewProfileButton(item)}
-                            </div>
-                        </span>
-                        <img className="avatar" src={item.image}></img>
-                        <p className="link-text" >{item.username}</p>
-                    </div>
-                </UserPopover>
-            </Flag>
+             <UserTile
+                item={item}
+                friendHAL={this.props.currentUser._links.friend.href}
+                onFriendAdded={() => {
+                    this.reloadList.call(this);
+                }}
+                onFriendRequested={() => {
+                    this.reloadList.call(this);
+                }}
+                key={Shortid.generate()}
+             />
         );
     }
 
@@ -194,19 +89,6 @@ export class Friends extends React.Component {
                         <FlipBoard
                            renderFlip={this.renderCard.bind(this)}
                            header={HEADINGS.FRIENDS}
-                           transform={data => {
-                               var image;
-                               if (!_.has(data, '_embedded.image')) {
-                                   image = GLOBALS.DEFAULT_PROFILE;
-                               } else {
-                                   if (data._embedded.image.url != null) {
-                                       image = data._embedded.image.url;
-                                   } else {
-                                       image = data.images.data[0].url;
-                                   }
-                               }
-                               return data.set('image', image);
-                           }}
                         />
                    </Paginator>
                 </form>
@@ -222,6 +104,7 @@ mapStateToProps = state => {
     var currentPage = 1;
     var pageCount = 1;
     var currentUser = {};
+    var page;
     if (state.page && state.page.data != null &&
         state.page.data._embedded && state.page.data._embedded.friend) {
         loading = state.page.loading;
@@ -229,6 +112,7 @@ mapStateToProps = state => {
         rowCount = state.page.data.page_size;
         currentPage = state.page.data.page;
         pageCount = state.page.data.page_count;
+        page = state.page;
     }
     if (state.currentUser != null) {
         currentUser = state.currentUser;
@@ -239,6 +123,7 @@ mapStateToProps = state => {
         rowCount,
         currentPage,
         pageCount,
+        page,
         currentUser
     };
 };
