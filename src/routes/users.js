@@ -124,7 +124,9 @@ var Component = React.createClass({
     },
     renderChildView: function () {
         return (
-            <FlipBoard data={this.props.data} header={TITLE} renderFlip={this.renderFlip} />
+            <Paginator data={this.props.data}>
+                <FlipBoard header={TITLE} renderFlip={this.renderFlip} />
+            </Paginator>
         );
     },
     render: function () {

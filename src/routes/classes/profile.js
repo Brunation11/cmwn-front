@@ -8,6 +8,7 @@ import UserTile from 'components/user_tile';
 import Toast from 'components/toast';
 import FlipBoard from 'components/flipboard';
 import EditLink from 'components/edit_link';
+import Paginator from 'components/paginator';
 import Util from 'components/util';
 import GenerateDataSource from 'components/datasource';
 
@@ -117,10 +118,12 @@ export class Profile extends React.Component {
            <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
                {this.renderClassInfo()}
                <USER_SOURCE>
-                    <FlipBoard
-                        renderFlip={this.renderFlip}
-                        header={`${HEADINGS.CLASS} ${this.state.title}`}
-                    />
+                    <Paginator>
+                        <FlipBoard
+                            renderFlip={this.renderFlip}
+                            header={`${HEADINGS.CLASS} ${this.state.title}`}
+                        />
+                    </Paginator>
                </USER_SOURCE>
            </Layout>
         );

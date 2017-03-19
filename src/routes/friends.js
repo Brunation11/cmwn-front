@@ -3,8 +3,8 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import Shortid from 'shortid';
 
-import FlipBoard from 'components/flipboard';
 import Paginator from 'components/paginator';
+import FlipBoard from 'components/flipboard';
 import UserTile from 'components/user_tile';
 import Actions from 'components/actions';
 
@@ -85,13 +85,7 @@ export class Friends extends React.Component {
                 navMenuId="navMenu"
             >
                 <form>
-                    <Paginator
-                        rowCount={this.props.rowCount}
-                        currentPage={this.props.currentPage}
-                        pageCount={this.props.pageCount}
-                        data={this.props.data}
-                        pagePaginator={true}
-                    >
+                    <Paginator data={this.props.data} >
                         <FlipBoard
                            renderFlip={this.renderCard.bind(this)}
                            header={HEADINGS.FRIENDS}

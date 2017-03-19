@@ -30,7 +30,7 @@ const IB_IDS = {
         'green-team': '8254c3f834ced23d71fd1de6c0ae1aad.jpg',
         'green-team-challenge': '8254c3f834ced23d71fd1de6c0ae1aad.jpg',
         'waste-busters': 'a41a5f14aa880f298a987134849629fe.png',
-        'drone-zone': '9e9b3bae0f9e8ba512eed9fad35868b2.gif'
+        'drone-zone': '9e9b3bae0f9e8ba512eed9fad35868b2.png',
     },
     FLIPS: {
         'default': '1ed4762c74be069c535490bf6f8391eb.gif',

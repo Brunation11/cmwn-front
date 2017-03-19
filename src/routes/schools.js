@@ -2,8 +2,10 @@ import React from 'react';
 import Shortid from 'shortid';
 import { connect } from 'react-redux';
 
-import Layout from 'layouts/two_col';
 import FlipBoard from 'components/flipboard';
+import Paginator from 'components/paginator';
+
+import Layout from 'layouts/two_col';
 
 import DefaultProfile from 'media/icon_school_blue.png';
 
@@ -38,12 +40,13 @@ export class Schools extends React.Component {
         }
 
         return (
-            <FlipBoard
-                data={this.props.data}
-                header={TITLE}
-                renderFlip={this.renderFlip}
-                renderNoData={() => null}
-            />
+            <Paginator data={this.props.data} pagePaginator={true}>
+                <FlipBoard
+                    header={TITLE}
+                    renderFlip={this.renderFlip}
+                    renderNoData={() => null}
+                />
+            </Paginator>
         );
     }
 

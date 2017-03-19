@@ -9,6 +9,7 @@ import Layout from 'layouts/two_col';
 
 import FlipBoard from 'components/flipboard';
 import GenerateDataSource from 'components/datasource';
+import Paginator from 'components/paginator';
 import EditLink from 'components/edit_link';
 import Toast from 'components/toast';
 import Util from 'components/util';
@@ -122,8 +123,10 @@ export class SchoolProfile extends React.Component {
                    {this.props.data.description}
                </Panel>
                <CLASS_SOURCE>
-                   <FlipBoard renderFlip={this.renderFlip}
-                        header={`${this.props.data.title}${HEADINGS.CLASS_ENDING}`} />
+                    <Paginator>
+                       <FlipBoard renderFlip={this.renderFlip}
+                            header={`${this.props.data.title}${HEADINGS.CLASS_ENDING}`} />
+                    </Paginator>
                </CLASS_SOURCE>
            </Layout>
         );

@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 
 import Detector from 'components/browser_detector';
 import FlipBoard from 'components/flipboard';
+import Paginator from 'components/paginator';
 import Game from 'components/game';
 import GLOBALS from 'components/globals';
 import GenerateDataSource from 'components/datasource';
@@ -139,10 +140,12 @@ export class GamesPage extends React.Component {
     renderGameList() {
         return (
            <GAME_WRAPPER transform={dataTransform}>
-               <FlipBoard
-                   renderFlip={this.renderFlip.bind(this)}
-                   header={HEADINGS.ARCADE}
-               />
+               <Paginator>
+                   <FlipBoard
+                       renderFlip={this.renderFlip.bind(this)}
+                       header={HEADINGS.ARCADE}
+                   />
+               </Paginator>
            </GAME_WRAPPER>
         );
     }

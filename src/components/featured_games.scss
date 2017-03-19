@@ -1,0 +1,284 @@
+@import '../variables';
+
+$ribbon-thickness: .7em;
+
+.featured-games {
+    position: relative;
+
+    .hidden-preload {
+        display: block;
+        position: fixed;
+        visibility: hidden;
+        width: 1px;
+        height: 1px;
+    }
+
+    .slide {
+        position: relative;
+        width: 100%;
+        height: 100%;
+
+        img {
+            margin: auto;
+        }
+    }
+
+    .overlay {
+        position: absolute;
+        z-index: 2;
+        background: $cmwn-blue;
+    }
+
+    .labels {
+        position: absolute;
+        bottom: 0;
+        left: $standard;
+
+        span {
+            display: block;
+            margin: 0 0 15px 30px;
+            padding: 5px;
+            max-width: 45%;
+            text-shadow: $cmwn-black 2px 2px;
+            color: $cmwn-white;
+        }
+    }
+
+    .about {
+        line-height: 0;
+        white-space: nowrap;
+        font-family: "CMWNJadeRegular", Impact, Helvetica, Arial, sans-serif;
+        font-size: 35px;
+    }
+
+    .featured-flag {
+        position: absolute;
+        top: 1em;
+        right: 0;
+        z-index: 3;
+        background-color: $cmwn-green;
+        height: $ribbon-thickness * 2;
+        line-height: 14px;
+        color: $cmwn-white;
+        font-family: $cmwn-jade-font;
+        font-size: 23px;
+
+        &::before {
+            position: absolute;
+            left: $ribbon-thickness * -2;
+            z-index: 2;
+            border: $ribbon-thickness solid $cmwn-green;
+            border-left-color: transparent;
+            content: '';
+        }
+
+        span {
+            display: block;
+            transform: translateY(50%);
+            padding-right: 15px;
+        }
+    }
+
+    .featured-nub {
+        display: block;
+        position: absolute;
+        top: 3.9em; //who knows why this is right. Not me!
+        right: 0;
+        visibility: visible;
+        z-index: 0;
+        border-width: 1em 1em 0 0;
+        border-style: solid;
+        border-color: $cmwn-dark-green transparent transparent;
+        width: 100px;
+        content: '';
+    }
+
+    .left {
+        width: $standard * 2;
+    }
+
+    .right {
+        width: $standard * 2;
+    }
+
+    .slick-slider {
+        z-index: 2;
+    }
+
+    .slick-arrow {
+        display: block;
+        min-width: 2em;
+        height: 100%;
+
+        button {
+            border: 0;
+            box-shadow: none;
+            background: transparent;
+            width: 100%;
+            height: 100%;
+            color: $cmwn-purple;
+            font-family: $cmwn-jade-font;
+            font-size: 30px;
+        }
+
+        span {
+            margin-right: 10px;
+            border-radius: 15px;
+            background: $cmwn-white;
+            padding-left: 5px;
+        }
+    }
+
+    .slick-prev,
+    .slick-next {
+        z-index: 2;
+    }
+
+    .slick-next {
+        right: 20px;
+    }
+
+    .slick-prev {
+        left: -1px;
+    }
+
+    .slick-next::before,
+    .slick-prev::before {
+        content: '';
+    }
+
+    .slick-slide {
+        figcaption,
+        figcaption::before {
+            display: none;
+        }
+
+        &.slick-active {
+            figcaption,
+            figcaption::before {
+                display: initial;
+            }
+        }
+
+        &:nth-of-type(2n) {
+            .slide-container {
+                border: 2px solid $cmwn-green;
+            }
+        }
+
+        &:nth-of-type(3n) {
+            .slide-container {
+                border: 2px solid $cmwn-blue;
+            }
+        }
+
+    }
+
+    .effect-apollo {
+
+        .slide-container {
+            display: inline-block;
+            transform: translateX(-50%);
+            transition: opacity .35s, transform .35s, border .35s;
+            margin-left: 50%;
+            border: 2px solid $cmwn-purple;
+            background-color: $cmwn-white;
+            background-size: cover;
+            max-height: 186px;
+            overflow: hidden;
+
+            &::after {
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                transition: opacity .35s;
+                opacity: 0;
+                z-index: -1;
+                background: url('#{$media-url}PlatformArt/gradients/gradient01.svg');
+                content: '';
+            }
+        }
+
+        img,
+        object {
+            transition: opacity .35s, transform .35s;
+            opacity: 1;
+        }
+
+        figcaption::before {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform: scale3d(1.9, 1.4, 1) rotate3d(0, 0, 1, 45deg) translate3d(0, -300%, 0);
+            transition: transform .6s;
+            // scss-lint:disable ColorVariable
+            background: rgba(255, 255, 255, .5);
+            // scss-lint:enable ColorVariable
+            width: 100%;
+            height: 100%;
+            content: '';
+        }
+
+        .labels span {
+            transform: translate3d(-360px, 0, 0);
+            transition: opacity .35s, transform .35s;
+            opacity: 0;
+
+            &:first-child {
+                transition-delay: .15s;
+            }
+
+            &:nth-of-type(2) {
+                transition-delay: .1s;
+            }
+        }
+
+        h2 {
+            text-align: left;
+        }
+
+        &:hover {
+            .slide-container {
+                transform: scale3d(1.05, 1.05, 1) translateX(-47.5%);
+                border: 0;
+
+                // scss-lint:disable NestingDepth
+                &::after {
+                    opacity: 1;
+                }
+
+                img,
+                > object {
+                    transition: opacity .35s, transform .35s;
+                    opacity: .2;
+                }
+                // scss-lint:enable NestingDepth
+
+            }
+
+            figcaption::before {
+                transform: scale3d(1.9, 1.4, 1) rotate3d(0, 0, 1, 45deg) translate3d(0, 200%, 0);
+            }
+
+            .labels span {
+                transform: translate3d(0, 0, 0);
+                opacity: 1;
+                transition-delay: .1s;
+
+                // scss-lint:disable NestingDepth
+                &:first-child {
+                    transition-delay: .15s;
+                }
+
+                &:nth-of-type(2) {
+                    transition-delay: .1s;
+                }
+                // scss-lint:enable NestingDepth
+            }
+        }
+    }
+}
+
+

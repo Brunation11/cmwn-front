@@ -2,10 +2,19 @@
 
 $overlay-color: #fff;
 
-.flipboard {
+//scss-lint:disable IdSelector, SelectorDepth
+#cmwn-app .flipboard {
+//scss-lint:enable IdSelector
 
     img {
         vertical-align: initial;
+    }
+
+    a {
+
+        &:visited {
+            color: $cmwn-blue;
+        }
     }
 
     .panel-body {
