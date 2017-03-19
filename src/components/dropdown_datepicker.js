@@ -142,12 +142,12 @@ class Page extends React.Component {
                 >{this.renderMonthOptions()}</Input>
                 <div className="date-btns">
                     <Button
-                        className="month-btn down"
-                        onClick={this.decrement.bind(this, 'month')}
-                    />
-                    <Button
                         className="month-btn up"
                         onClick={this.increment.bind(this, 'month')}
+                    />
+                    <Button
+                        className="month-btn down"
+                        onClick={this.decrement.bind(this, 'month')}
                     />
                 </div>
                 <Input
@@ -167,12 +167,12 @@ class Page extends React.Component {
                 >{this.renderDayOptions()}</Input>
                 <div className="date-btns">
                     <Button
-                        className="day-btn down"
-                        onClick={this.decrement.bind(this, 'day')}
-                    />
-                    <Button
                         className="day-btn up"
                         onClick={this.increment.bind(this, 'day')}
+                    />
+                    <Button
+                        className="day-btn down"
+                        onClick={this.decrement.bind(this, 'day')}
                     />
                 </div>
                 <Input
