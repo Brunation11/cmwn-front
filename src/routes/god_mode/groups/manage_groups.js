@@ -107,7 +107,7 @@ export class ManageGroups extends React.Component {
                         <Column renderHeader={HEADINGS.TITLE}
                             renderCell={(data, row) => {
                                 return (
-                                    <Link to={`/group/${row.group_id}`}>
+                                    <Link to={`/${row.type}/${row.group_id}`}>
                                         {`${row.title}`}
                                     </Link>
                                 ); }
