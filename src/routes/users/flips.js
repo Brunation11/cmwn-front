@@ -6,10 +6,13 @@ import Shortid from 'shortid';
 import _ from 'lodash';
 import ClassNames from 'classnames';
 
-import Layout from 'layouts/two_col';
 import Flipcase from 'components/flipcase';
 import GenerateDataSource from 'components/datasource';
 import History from 'components/history';
+import HttpManager from 'components/http_manager';
+import GLOBALS from 'components/globals';
+
+import Layout from 'layouts/two_col';
 
 import './flips.scss';
 
@@ -24,22 +27,6 @@ const LABEL = 'EARNED FLIPS';
 
 const FLIP_ROW_LENGTH = 4;
 
-class FlipCount extends React.Component {
-    constructor() {
-        super();
-    }
-
-    render() {
-        if (_.isEmpty(this.props.data)) return null;
-
-        return (
-            <span className="count">
-                {this.props.data.length}
-            </span>
-        );
-    }
-}
-
 export class FlipWall extends React.Component {
     constructor() {
         super();
@@ -53,22 +40,76 @@ export class FlipWall extends React.Component {
     }
 
     componentDidMount() {
-        if (!_.isEmpty(this.props.data) && this.props.data._embedded && this.props.data._embedded.flip) {
-            this.setState({
-                shelves: _.chunk(_.shuffle(this.props.data._embedded.flip), FLIP_ROW_LENGTH)
-            });
+        var earnedFlips;
+        var allFlips;
+
+        if (!_.isEmpty(this.props.currentUser) && this.props.currentUser._links) {
+            if (!_.isEmpty(this.props.data) && this.props.data._embedded && this.props.data._embedded.flip) {
+                HttpManager.GET({
+                    url: (this.props.currentUser._links.user_flip.href)
+                }).then(res => {
+                    earnedFlips = res.response._embedded.flip_user;
+                    allFlips = _.filter(this.props.data._embedded.flip, function (flip) {
+                        return !_.find(earnedFlips, ['flip_id', flip.flip_id]);
+                    });
+                    this.setState({
+                        earned: earnedFlips,
+                        shelves: _.chunk(_.shuffle(allFlips), FLIP_ROW_LENGTH)
+                    });
+                });
+            }
         }
     }
 
     componentWillReceiveProps(nextProps) {
-        if (!_.isEmpty(nextProps.data) && this.props.data !== nextProps.data) {
-            this.setState({
-                shelves: _.chunk(_.shuffle(nextProps.data._embedded.flip), FLIP_ROW_LENGTH)
-            });
+        var earnedFlips;
+        var allFlips;
+
+        if (!_.isEmpty(nextProps.currentUser) && this.props.currentUser !== nextProps.currentUser) {
+            if (!_.isEmpty(nextProps.data) && this.props.data !== nextProps.data) {
+                HttpManager.GET({
+                    url: (nextProps.currentUser._links.user_flip.href)
+                }).then(res => {
+                    earnedFlips = res.response._embedded.flip_user;
+                    allFlips = _.filter(nextProps.data._embedded.flip, function (flip) {
+                        return !_.find(earnedFlips, ['flip_id', flip.flip_id]);
+                    });
+                    this.setState({
+                        earned: earnedFlips,
+                        shelves: _.chunk(_.shuffle(allFlips), FLIP_ROW_LENGTH)
+                    });
+                });
+            }
+        }
+    }
+
+    scrollForward(ref) {
+        if (ref === 'shelves') {
+            if (this.state.shelfIndex < this.state.shelves.length - 3) {
+                this.setState({shelfIndex: this.state.shelfIndex + 1});
+            }
+        } else {
+            if (this.state.caseIndex < this.refs.flipcase.props.data.length - 4) {
+                this.setState({caseIndex: this.state.caseIndex + 1});
+            }
+        }
+    }
+
+    scrollBackward(ref) {
+        if (ref === 'shelves') {
+            if (this.state.shelfIndex > 0) {
+                this.setState({shelfIndex: this.state.shelfIndex - 1});
+            }
+        } else {
+            if (this.state.caseIndex > 0) {
+                this.setState({caseIndex: this.state.caseIndex - 1});
+            }
         }
     }
 
     renderEarnedShelf() {
+        if (this.props.currentUser.type !== 'CHILD') return null;
+
         return (
             <div className="earned-flips">
                 <button
@@ -79,9 +120,9 @@ export class FlipWall extends React.Component {
                     )}
                     onClick={this.scrollBackward.bind(this)}
                 />
-                <FLIP_SOURCE>
-                    <FlipCount />
-                </FLIP_SOURCE>
+                <span className="count">
+                    {this.state.earned.length}
+                </span>
                 <div className="earned-container">
                     <div
                         ref="earned"
@@ -100,13 +141,12 @@ export class FlipWall extends React.Component {
                 </div>
                 <button
                     className="nav-btn info-btn"
-                    onClick={this.renderNavigate.bind(this, '/profile')}
+                    onClick={this.navigate.bind(this, '/profile')}
                 />
                 <button
                     className={ClassNames(
                         'nav-btn scroll-btn forward', {
-                            hidden: this.refs.flipcase &&
-                                    (this.state.caseIndex >= this.refs.flipcase.props.data.length - 4)
+                            hidden: this.state.caseIndex >= this.state.earned.length - 4
                         }
                     )}
                     onClick={this.scrollForward.bind(this)}
@@ -162,48 +202,28 @@ export class FlipWall extends React.Component {
         );
     }
 
-    scrollForward(ref) {
-        if (ref === 'shelves') {
-            if (this.state.shelfIndex < this.state.shelves.length - 3) {
-                this.setState({shelfIndex: this.state.shelfIndex + 1});
-            }
-        } else {
-            if (this.state.caseIndex < this.refs.flipcase.props.data.length - 4) {
-                this.setState({caseIndex: this.state.caseIndex + 1});
-            }
-        }
-    }
-
-    scrollBackward(ref) {
-        if (ref === 'shelves') {
-            if (this.state.shelfIndex > 0) {
-                this.setState({shelfIndex: this.state.shelfIndex - 1});
-            }
-        } else {
-            if (this.state.caseIndex > 0) {
-                this.setState({caseIndex: this.state.caseIndex - 1});
-            }
-        }
-    }
-
-    renderNavigate(path) {
+    navigate(path) {
         History.push(path);
     }
 
     renderMobile() {
+        var image = GLOBALS.DEFAULT_PROFILE;
+        if (_.has(this, 'props.currentUser._embedded.image.url')) {
+            image = this.props.currentUser._embedded.image.url;
+        }
         return (
             <div className="mobile">
                 <Modal.Dialog>
                     <button
                         className="edit-profile-btn"
-                        onClick={this.renderNavigate.bind(this, '/profile/edit')}
+                        onClick={this.navigate.bind(this, '/profile/edit')}
                     >
                         <span className="welcome">
                             WELCOME TO DISCOVERY PAGE,
                             <br />
                             <strong>{this.props.currentUser.username}</strong>
                         </span>
-                        <img className="profile-img" src={this.props.currentUser._embedded.image.url} />
+                        <img className="profile-img" src={image} />
                         <span className="tap-to-view">
                             TAP TO<strong> VIEW PROFILE</strong>
                         </span>
@@ -217,7 +237,7 @@ export class FlipWall extends React.Component {
                     </span>
                     <button
                         className="profile-btn"
-                        onClick={this.renderNavigate.bind(this, '/profile')}
+                        onClick={this.navigate.bind(this, '/profile')}
                     >
                         <span className="tap-to-return">
                             TAP TO<strong> VIEW PROFILE</strong>

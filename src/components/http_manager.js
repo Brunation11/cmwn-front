@@ -10,6 +10,7 @@ import _ from 'lodash';
 // import History from 'components/history';
 // import Errors from 'components/errors';
 import Log from 'components/log';
+import LocalStorage from 'components/local_storage';
 
 const APP_COOKIE_NAME = 'cmwn_token';
 
@@ -155,7 +156,7 @@ var _makeRequest = function (verb, requests){
 
 class _HttpManager {
     constructor() {
-        var csrf = window.localStorage[APP_COOKIE_NAME];
+        var csrf = LocalStorage.getItem(APP_COOKIE_NAME);
         if (csrf != null && csrf !== 'null' && csrf !== 'undefined') {
             this.setToken(csrf);
         }
@@ -179,11 +180,7 @@ class _HttpManager {
     }
     setToken(_token) {
         this._token = _token;
-        try {
-            window.localStorage.setItem(APP_COOKIE_NAME, _token);
-        } catch(error) {
-            window._localStorage.setItem(APP_COOKIE_NAME, _token);
-        }
+        LocalStorage.setItem(APP_COOKIE_NAME, _token);
     }
     get token() {
         return this._token;

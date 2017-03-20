@@ -211,7 +211,7 @@ export default function (eventPrefix, gameId, _links, exitCallback) {
                 .catch(err => Log.error(err));
         },
         getFriends: function (e) {
-            if (_links && _links.friend != null) {
+            if (!_.isEmpty(_links) && _links.friend !== null) {
                 HttpManager.GET(_links.friend.href)
                     .then(server => {
                         var friends = _.map(server.response._embedded.friend, friend => {

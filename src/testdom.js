@@ -4,7 +4,8 @@ var jsdom;
 /* eslint-disable */
 require('babel-core/register');//for mocha to use es6
 require('app-module-path').addPath(__dirname + '/src');
-_ = require('lodash')
+_ = require('lodash');
+import LocalStorage from 'components/local_storage';
 
 require.extensions['.css'] = _.noop;
 require.extensions['.scss'] = _.noop;
@@ -28,15 +29,7 @@ global.window.MODE = 'test';
 global.window.__cmwn = {};
 global.window.__cmwn.MODE = 'test';
 global.window.cmwn_token = '';
-global.window.localStorage = {
-    cmwn_token: '',
-    setItem: function (key, val) {
-        this[key] = val;
-    },
-    getItem: function () {
-        return '';
-    }
-};
+LocalStorage.testDom();
 global.window.console = global.console;
 global.console.error = global.console.error || _.noop;
 global.window.Rollbar = global.window.Rollbar || {
