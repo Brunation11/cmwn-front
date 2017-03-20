@@ -83,8 +83,10 @@ export class Game extends React.Component {
     componentDidMount() {
         var frame = ReactDOM.findDOMNode(this.refs.gameRef);
         var callApi;
-        var self = this;
         var escInterval;
+        var onkeydown = (function () {
+            this.listenForEsc.apply(this, arguments);
+        }).bind(this);
 
         if (!frame) {
             return;
@@ -99,9 +101,7 @@ export class Game extends React.Component {
         escInterval = window.setInterval(function () {
             try {
                 Log.info('trying to set keydown event inside frame');
-                frame.contentWindow.addEventListener('keydown', function () {
-                    self.listenForEsc.apply(self, arguments);
-                });
+                frame.contentWindow.addEventListener('keydown', onkeydown);
                 window.clearInterval(escInterval);
             } catch(err) {
                 Log.info('attempting to set event, failed for reason: ' + err);
