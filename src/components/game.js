@@ -98,15 +98,17 @@ export class Game extends React.Component {
             });
         }
 
-        escInterval = window.setInterval(function () {
-            try {
-                Log.info('trying to set keydown event inside frame');
-                frame.contentWindow.addEventListener('keydown', onkeydown);
-                window.clearInterval(escInterval);
-            } catch(err) {
-                Log.info('attempting to set event, failed for reason: ' + err);
-            }
-        }, 500);
+        if (!Detector.isMobileOrTablet()) {
+            escInterval = window.setInterval(function () {
+                try {
+                    Log.info('trying to set keydown event inside frame');
+                    frame.contentWindow.addEventListener('keydown', onkeydown);
+                    window.clearInterval(escInterval);
+                } catch(err) {
+                    Log.info('attempting to set event, failed for reason: ' + err);
+                }
+            }, 500);
+        }
 
         callApi = _.debounce(function () {
             HttpManager.GET({
