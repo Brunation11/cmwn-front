@@ -3,7 +3,6 @@ import React from 'react';
 import {Modal, Button, Input, Glyphicon} from 'react-bootstrap';
 import ClassNames from 'classnames';
 
-import Detector from 'components/browser_detector';
 import LocalStorage from 'components/local_storage';
 
 import 'components/teacher_guide.scss';
@@ -220,7 +219,7 @@ class Guide extends React.Component {
 
     render() {
         var self = this;
-        if (!self.props.isAdult || Detector.isMobile()) {
+        if (!self.props.isAdult) {
             return null;
         }
         return (
