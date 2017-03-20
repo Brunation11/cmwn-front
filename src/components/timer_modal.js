@@ -21,6 +21,7 @@ class TimerModal extends React.Component {
             showModal: false,
         };
         this.logout = this.logout.bind(this);
+        this.checkTime = this.checkTime.bind(this);
         this.resetTimer = this.resetTimer.bind(this);
     }
 
@@ -29,16 +30,17 @@ class TimerModal extends React.Component {
         return endTime - Date.parse(new Date());
     }
 
+    checkTime() {
+        var time = this.getTimeRemaining();
+        if (time <= 0 && this.props.currentUser.user_id) {
+            this.logout();
+        } else if (time <= TIMEOUT_WARNING && this.props.currentUser.user_id) {
+            this.setState({timeRemaining: time, showModal: true});
+        }
+    }
+
     componentDidMount() {
-        var self = this;
-        this.timeUpdate = window.setInterval(function () {
-            var time = self.getTimeRemaining();
-            if (time <= 0 && self.props.currentUser.user_id) {
-                self.logout();
-            } else if (time <= TIMEOUT_WARNING && self.props.currentUser.user_id) {
-                self.setState({timeRemaining: time, showModal: true});
-            }
-        }, 1000);
+        this.timeUpdate = window.setInterval(this.checkTime, 1000);
     }
 
     componentWillUnmount() {
