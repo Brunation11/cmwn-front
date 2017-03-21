@@ -128,14 +128,25 @@ body:fullscreen .game-frame-wrapper {
 
         &.fullscreen {
             position: fixed;
-            top: 0;
+            top: 50%;
             left: 0%;
             transform: translateY(-50%);
-            margin-top: 50%;
+            z-index: 100;
+            margin: 0;
             width: 100vw;
             max-width: calc(100vh * 1.77777777778);
             height: 100vh;
             max-height: calc(100vw * .5625);
+
+            &::before {
+                display: block;
+                top: -500%;
+                left: -500%;
+                background-color: $cmwn-black;
+                width: 2000%;
+                height: 2000%;
+                content: '';
+            }
 
             // scss-lint:disable SelectorDepth, NestingDepth
             ~ * {
@@ -144,7 +155,7 @@ body:fullscreen .game-frame-wrapper {
             // scss-lint:enable SelectorDepth, NestingDepth
 
             .game-frame {
-                transform: translateX(-50%);
+                transform: none;
                 margin-left: 50%;
             }
 
