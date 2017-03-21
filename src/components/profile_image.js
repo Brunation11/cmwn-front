@@ -52,6 +52,7 @@ export default class Image extends React.Component {
     }
 
     componentDidMount() {
+        this.getDefaultImages();
         if (this.props.data._embedded.image) {
             this.setState({
                 profileImage: this.props.data._embedded.image.url,
@@ -66,7 +67,7 @@ export default class Image extends React.Component {
                     profileImage: res.response.url
                 });
             }).catch(e => {
-                //if a user has never uploaded an image, we expect a 404
+                // if a user has never uploaded an image, we expect a 404
                 if (e.status === 404) {
                     this.setState({
                         profileImage: GLOBALS.DEFAULT_PROFILE
@@ -76,6 +77,22 @@ export default class Image extends React.Component {
                     Log.error(e, ERRORS.NO_IMAGE);
                 }
             });
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        var animal;
+        var defaultAvatar;
+
+        if (this.state !== prevState && !_.isEmpty(this.state.defaultsCLR) && !this.state.selected) {
+            animal = _.replace(this.props.currentUser.username, /\d+/, '').split('-').pop();
+            defaultAvatar = _.find(this.state.defaultsCLR, function (avatar) {
+                return avatar.name.indexOf(animal) !== -1;
+            });
+            this.setState({
+                selected: defaultAvatar.name
+            });
+            this.defaultUpload();
         }
     }
 
@@ -113,7 +130,7 @@ export default class Image extends React.Component {
         }).then(() => {
             this.setState({
                 profileImage: imageURL,
-                isModerated: false
+                isModerated: this.state.isModerated
             });
             Toast.error(ERRORS.MODERATION);
         }).catch(() => {
@@ -168,7 +185,6 @@ export default class Image extends React.Component {
     }
 
     showModal() {
-        this.getDefaultImages();
         this.setState({
             uploaderOn: true
         });
