@@ -31,6 +31,11 @@ const IB_IDS = {
         'green-team-challenge': '8254c3f834ced23d71fd1de6c0ae1aad.jpg',
         'waste-busters': 'a41a5f14aa880f298a987134849629fe.png',
         'drone-zone': '9e9b3bae0f9e8ba512eed9fad35868b2.png',
+        'gtc-recycling-champion': '5c010e75bc64b915f42b6718de52ed2c.gif',
+        'gtc-priceless-pourer': '8904815a168a1e04aa640b413bf8f116.gif',
+        'gtc-fantastic-food-sharer': 'd46d73db31951a9cfbfe3d5564313240.gif',
+        'gtc-dynamic-diverter': 'fd30411ba4a69e0841bad479fe5c1bbe.gif',
+        'gtc-master-sorter': '6221ae35a73bd92110d44d36d3c0efcb.gif',
     },
     FLIPS: {
         'default': '1ed4762c74be069c535490bf6f8391eb.gif',
