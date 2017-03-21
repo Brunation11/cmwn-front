@@ -140,6 +140,7 @@ body:fullscreen .game-frame-wrapper {
 
             &::before {
                 display: block;
+                position: absolute;
                 top: -500%;
                 left: -500%;
                 background-color: $cmwn-black;
