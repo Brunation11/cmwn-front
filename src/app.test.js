@@ -1,5 +1,8 @@
 /*global describe, it */
 
+require('babel-core/register');//for mocha to use es6
+require('app-module-path').addPath(__dirname + '/src');
+import React from 'react'; //eslint-disable-line no-unused-vars
 import assert from 'assert';
 import {expect} from 'chai';
 

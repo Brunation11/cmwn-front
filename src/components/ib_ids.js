@@ -30,7 +30,7 @@ const IB_IDS = {
         'green-team-challenge': '8254c3f834ced23d71fd1de6c0ae1aad.gif',
         'green-team': '8254c3f834ced23d71fd1de6c0ae1aad.gif',
         'waste-busters': 'a41a5f14aa880f298a987134849629fe.png',
-        'drone-zone': '9e9b3bae0f9e8ba512eed9fad35868b2.gif',
+        'drone-zone': '9e9b3bae0f9e8ba512eed9fad35868b2.png',
         'gtc-recycling-champion': '5c010e75bc64b915f42b6718de52ed2c.gif',
         'gtc-priceless-pourer': '8904815a168a1e04aa640b413bf8f116.gif',
         'gtc-fantastic-food-sharer': 'd46d73db31951a9cfbfe3d5564313240.gif',

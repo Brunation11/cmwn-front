@@ -33,7 +33,7 @@ export class District extends React.Component{
                         {this.renderCreateDistrict()}
                     </div>
                     <Paginator data={this.props.data}>
-                        <Table className="admin">
+                        <Table data={this.props.data} className="admin">
                             <Column dataKey="title"
                                 renderCell={(data, row) => (
                                     <Link to={'/districts/' + row.org_id} className="district-link">
@@ -43,21 +43,23 @@ export class District extends React.Component{
                             />
                             <Column dataKey="description" />
                             <Column
-                            dataKey="created"
-                            renderHeader="Created"
-                            renderCell={created => (
-                                _.get(created, 'date') ? Moment(created.date).format('MM/DD/YYYY h:mm a') :
-                                (created !== null ? Moment(created).format('MM/DD/YYYY h:mm a') : '-')
-                            )}
-                        />
-                        <Column
-                            dataKey="updated"
-                            renderHeader="Last Updated"
-                            renderCell={updated => (
-                                _.get(updated, 'date') ? Moment(updated.date).format('MM/DD/YYYY h:mm a') :
-                                (updated !== null ? Moment(updated).format('MM/DD/YYYY h:mm a') : 'never')
-                            )}
-                        />
+                                dataKey="created"
+                                renderHeader="Created"
+                                renderCell={created => (
+                                    _.get(created, 'date') ?
+                                    Moment(created.date).format('MM/DD/YYYY h:mm a') :
+                                    (created !== null ? Moment(created).format('MM/DD/YYYY h:mm a') : '-')
+                                )}
+                            />
+                            <Column
+                                dataKey="updated"
+                                renderHeader="Last Updated"
+                                renderCell={updated => (
+                                    _.get(updated, 'date') ?
+                                    Moment(updated.date).format('MM/DD/YYYY h:mm a') :
+                                    (updated !== null ? Moment(updated).format('MM/DD/YYYY h:mm a') : 'never')
+                                )}
+                            />
                         </Table>
                     </Paginator>
                 </Panel>
