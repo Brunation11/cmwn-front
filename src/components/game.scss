@@ -2,6 +2,8 @@
 
 // scss-lint:disable QualifyingElement, ImportantRule
 body.fullscreen {
+    overflow: hidden;
+
     .game {
         margin: 0;
     }
