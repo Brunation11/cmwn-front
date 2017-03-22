@@ -52,75 +52,96 @@ export default class Image extends React.Component {
     }
 
     componentDidMount() {
-        this.getDefaultImages();
-        if (this.props.data._embedded.image) {
-            this.setState({
-                profileImage: this.props.data._embedded.image.url,
-                isModerated: this.props.data._embedded.image.is_moderated
-            });
-        } else {
-            HttpManager.GET({
-                url: (this.props.data._links.user_image.href),
-                handleErrors: false
-            }).then(res => {
-                this.setState({
-                    profileImage: res.response.url
-                });
-            }).catch(e => {
-                // if a user has never uploaded an image, we expect a 404
-                if (e.status === 404) {
-                    this.setState({
-                        profileImage: GLOBALS.DEFAULT_PROFILE
-                    });
-                } else {
-                    Toast.error(ERRORS.REFRESH);
-                    Log.error(e, ERRORS.NO_IMAGE);
-                }
-            });
-        }
+        console.log('COMPONENT DID MOUNT');
+        // if (this.props.data._embedded.image) {
+        //     console.log('FOUND EMBEDDED IMAGE');
+        //     this.setState({
+        //         profileImage: this.props.data._embedded.image.url,
+        //         isModerated: this.props.data._embedded.image.is_moderated
+        //     });
+        // } else {
+        //     console.log('RETRIEVING IMAGE');
+        //     HttpManager.GET({
+        //         url: (this.props.data._links.user_image.href),
+        //         handleErrors: false
+        //     }).then(res => {
+        //         this.setState({
+        //             profileImage: res.response.url
+        //         });
+        //     }).catch(e => {
+        //         // if a user has never uploaded an image, we expect a 404
+        //         if (e.status !== 404) {
+        //             Toast.error(ERRORS.REFRESH);
+        //             Log.error(e, ERRORS.NO_IMAGE);
+        //         }
+        //     });
+        // }
+        this.getDefaultBWImages();
+        this.getDefaultCLRImages();
     }
 
-    componentDidUpdate(prevProps, prevState) {
+    setDefault (defaults) {
         var animal;
         var defaultAvatar;
 
-        if (this.state !== prevState && !_.isEmpty(this.state.defaultsCLR) && !this.state.selected) {
-            animal = _.replace(this.props.currentUser.username, /\d+/, '').split('-').pop();
-            defaultAvatar = _.find(this.state.defaultsCLR, function (avatar) {
-                return avatar.name.indexOf(animal) !== -1;
-            });
-            this.setState({
-                selected: defaultAvatar.name
-            });
-            this.defaultUpload();
-        }
+        console.log('setDefault');
+        animal = _.replace(this.props.currentUser.username, /\d+/, '').split('-').pop();
+        defaultAvatar = _.find(defaults, function (avatar) {
+            return avatar.name.indexOf(animal) !== -1;
+        });
+        this.setState({
+            selected: defaultAvatar.name
+        });
+        this.defaultUpload();
     }
 
-    getDefaultImages() {
+    getDefaultBWImages() {
         // get black and white default images
         HttpManager.GET({
             url: `${GLOBALS.API_URL}media/${DEFAULT_IMGS.BW}`
         }).then((res) => {
+            console.log('SUCCESS BW');
             this.setState({
                 defaultsBW: res.response._embedded.items
             });
         }).catch(() => {
+            console.log('FAIL BW');
             Toast.error(ERRORS.NO_DEFAULTS);
         });
+    }
+
+    getDefaultCLRImages() {
+        var animal;
+        var defaultAvatar;
+        var selected;
+        var profileImage;
 
         // get color default images
         HttpManager.GET({
             url: `${GLOBALS.API_URL}media/${DEFAULT_IMGS.CLR}`
         }).then((res) => {
+            console.log('SUCCESS CLR');
+            if (this.state.profileImage === GLOBALS.DEFAULT_PROFILE) {
+                animal = _.replace(this.props.currentUser.username, /\d+/, '').split('-').pop();
+                defaultAvatar = _.find(res.response._embedded.items, function (avatar) {
+                    return avatar.name.indexOf(animal) !== -1;
+                });
+                this.setState({
+                    selected: defaultAvatar.name,
+                    profileImage: defaultAvatar.src
+                });
+            }
             this.setState({
                 defaultsCLR: res.response._embedded.items
             });
         }).catch(() => {
+            console.log('FAIL CLR');
             Toast.error(ERRORS.NO_DEFAULTS);
         });
     }
 
     upload(e, postURL, imageURL, imageID) {
+        console.log('UPLOAD');
         /* eslint-disable camelcase*/
         HttpManager.POST({
             url: postURL
@@ -128,12 +149,14 @@ export default class Image extends React.Component {
             url: imageURL,
             image_id: imageID
         }).then(() => {
+            console.log('SUCCESS UPLOAD');
             this.setState({
                 profileImage: imageURL,
                 isModerated: this.state.isModerated
             });
             Toast.error(ERRORS.MODERATION);
         }).catch(() => {
+            console.log('FAIL UPLOAD');
             Toast.error(ERRORS.UPLOAD_ERROR);
             Log.error(e, ERRORS.FAILED_UPLOAD);
         });
@@ -174,6 +197,7 @@ export default class Image extends React.Component {
     }
 
     defaultUpload(e) {
+        console.log('DEFAULT UPLOAD');
         var postURL = this.props.data._links.user_image.href;
         var imageURL = _.find(this.state.defaultsCLR, ['name', this.state.selected]).src;
         var imageID = imageURL.replace('.png', '');
