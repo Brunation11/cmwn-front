@@ -134,6 +134,7 @@ import TimerModal from 'components/timer_modal';
 import GlobalAlert from 'components/global_alert';
 import Detector from 'components/browser_detector';
 import Errors from 'components/errors';
+import LocalStorage from 'components/local_storage';
 import Home from 'routes/home';
 
 //import 'reset.css';
@@ -151,6 +152,9 @@ if (window.location.protocol !== 'https:') {
 
 document.domain = 'changemyworldnow.com';
 document.getElementById('static-preload').style.color = 'white';
+
+//polyfill localstorage
+LocalStorage.polyfill();
 
 var renderDevTool = () => {
     if (_.isFunction(DevTools) && (~GLOBALS.MODE.indexOf('local') || ~GLOBALS.MODE.indexOf('dev'))) {

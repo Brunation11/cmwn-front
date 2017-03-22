@@ -141,7 +141,6 @@
             <script src="https://cdnjs.cloudflare.com/ajax/libs/flexie/1.0.3/flexie.min.js"></script>
         <![endif]-->
         <script type="text/javascript">
-            import LocalStorage from 'components/local_storage';
             var isIE10 = false;
             var fileref;
             /*@cc_on
@@ -159,8 +158,6 @@
                 fileref.setAttribute("src", "https://cdnjs.cloudflare.com/ajax/libs/xdomain/0.7.3/xdomain.min.js");
                 document.head.appendChild(fileref);
             }
-            //polyfill localstorage
-            LocalStorage.polyfill();
         </script>
         <script>
             var style = document.createElement('style');
