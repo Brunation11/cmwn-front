@@ -16,7 +16,6 @@
             width: 100%;
 
             &.open {
-
                 .panel-body {
                     max-height: 1000px; // larger than panel will be
                 }
@@ -34,6 +33,10 @@
             max-height: 0;
             overflow: hidden;
             text-align: center;
+
+            #game-form { // scss-lint:disable IdSelector
+                text-align: left;
+            }
 
             .zipcode {
                 display: flex;
