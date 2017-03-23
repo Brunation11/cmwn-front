@@ -97,7 +97,7 @@ export class Profile extends React.Component {
     constructor(props) {
         super(props);
         this.state = _.defaults({
-            hasFlipData: false,
+            flipsEarned: false,
             gameOn: false,
             gameId: -1
         }, _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {},
@@ -314,9 +314,13 @@ export class Profile extends React.Component {
         return (
             <Panel
                 header={HEADINGS.TROPHYCASE}
-                className={ClassNames('standard', {})}
+                className={ClassNames('standard', {
+                    hidden: !this.state.flipsEarned
+                })}
             >
-                <FLIP_SOURCE>
+                <FLIP_SOURCE onDataReceived={data => {
+                    this.setState({flipsEarned: !!data.length});
+                }}>
                     <Flipcase
                         type="trophycase"
                         header={true}

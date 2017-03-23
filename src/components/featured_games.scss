@@ -65,7 +65,7 @@ $ribbon-thickness: .7em;
 
         &::before {
             position: absolute;
-            left: $ribbon-thickness * -2.1;
+            left: $ribbon-thickness * -1.9;
             z-index: 2;
             border: $ribbon-thickness solid $cmwn-green;
             border-left-color: transparent;
