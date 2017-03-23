@@ -2,6 +2,7 @@
 
 .god-mode-flips {
     #flips-god-mode { // scss-lint:disable IdSelector
+        // scss-lint:enable IdSelector
         .manage-flip-panel .panel-body {
             display: inline-block;
             position: relative;
