@@ -67,6 +67,8 @@ class Header extends React.Component {
             signupOpen: false,
             verified: false
         };
+
+        this.renderCaptchaCallback = this.renderCaptchaCallback.bind(this);
     }
 
     componentDidMount() {
@@ -92,6 +94,12 @@ class Header extends React.Component {
         }
     }
 
+    renderCaptchaCallback() {
+        this.setState({
+            verified: true
+        });
+    }
+
     renderCaptcha() {
         var captchas;
         if (this.state.verified) {
@@ -101,11 +109,7 @@ class Header extends React.Component {
             if (captchas.length) {
                 grecaptcha.render(captchas[0], {
                     'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l',
-                    callback: () => { //eslint-disable-line no-undef
-                        this.setState({
-                            verified: true
-                        });
-                    }
+                    callback: this.renderCaptchaCallback,
                 });
             }
         }

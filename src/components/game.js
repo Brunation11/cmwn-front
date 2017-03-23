@@ -60,6 +60,11 @@ export class Game extends React.Component {
         this.listenForEsc = this.listenForEsc.bind(this);
         this.checkForPortrait = this.checkForPortrait.bind(this);
         this.resizeFrame = this.resizeFrame.bind(this);
+        this.setIsFullscreen = this.setIsFullscreen.bind(this);
+    }
+
+    setIsFullscreen() {
+        this.setState({isFullscreen: Screenfull.isFullscreen});
     }
 
     componentWillMount() {
@@ -73,11 +78,6 @@ export class Game extends React.Component {
                 this.onExit.bind(this)
             )
         });
-        if (Screenfull.enabled) {
-            document.addEventListener(Screenfull.raw.fullscreenchange, () => {
-                this.setState({isFullscreen: Screenfull.isFullscreen});
-            });
-        }
     }
 
     componentDidMount() {
@@ -93,9 +93,7 @@ export class Game extends React.Component {
         }
 
         if (Screenfull.enabled) {
-            document.addEventListener(Screenfull.raw.fullscreenchange, () => {
-                this.setState({isFullscreen: Screenfull.isFullscreen});
-            });
+            document.addEventListener(Screenfull.raw.fullscreenchange, this.setIsFullscreen);
         }
 
         if (!Detector.isMobileOrTablet()) {

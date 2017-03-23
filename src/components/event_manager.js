@@ -39,6 +39,19 @@ var eqByCollection = function (a, b) {
     ));
 };
 
+var _commitChangesHelper = function (change) {
+    var handlers;
+    try {
+        change.resolver(true);
+        _.set(_state, change.key, change.val);
+        handlers = _.get(_changeHandlers, change.key);
+        _.each(handlers, handle => handle(change.val));
+    } catch(err) {
+        Log.error(err, 'Exception generated during event cycle', change, _pendingChanges);
+        change.resolver(err);//we resolve here to allow other changes to continue updating.
+    }
+};
+
 /**
  * Private method of _EventManager. Must always be called with .call(this, ...) or .apply(this, ...)
  * Consumes the current list of pending changes
@@ -50,18 +63,7 @@ var _commitChanges = function (id) {
         return; //deferred change was commited by an earlier event. We're done.
     }
     _pendingChangeTracker = {}; //empty pending changes;
-    _.each(_pendingChanges, change => {
-        var handlers;
-        try {
-            change.resolver(true);
-            _.set(_state, change.key, change.val);
-            handlers = _.get(_changeHandlers, change.key);
-            _.each(handlers, handle => handle(change.val));
-        } catch(err) {
-            Log.error(err, 'Exception generated during event cycle', change, _pendingChanges);
-            change.resolver(err);//we resolve here to allow other changes to continue updating.
-        }
-    });
+    _.each(_pendingChanges, _commitChangesHelper);
     _pendingChanges = [];
 };
 
