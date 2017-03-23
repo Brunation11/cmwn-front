@@ -238,7 +238,7 @@ export class ManageFlips extends React.Component {
                 className={PAGE_UNIQUE_IDENTIFIER}
                 navMenuId="navMenu"
             >
-                <Panel header="Manage Flips" className="standard">
+                <Panel header="Manage Flips" className="standard" id="flips-god-mode">
                     <div className="manage-flip-panel">
                         <FlipBoard
                             renderFlip={this.renderFlip.bind(this)}

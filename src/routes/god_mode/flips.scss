@@ -1,55 +1,60 @@
 @import 'variables';
 
 .god-mode-flips {
-    .manage-flip-panel .panel-body {
-        display: inline-block;
-        position: relative;
-        padding-top: 200px;
-    }
-
-    .create-flip {
-        position: absolute;
-        top: 0;
-        left: 0;
-        margin-right: 75%;
-        margin-bottom: 30px;
-
-        .create-btn {
-            position: absolute;
+    #flips-god-mode { // scss-lint:disable IdSelector
+        // scss-lint:enable IdSelector
+        .manage-flip-panel .panel-body {
+            display: inline-block;
+            position: relative;
+            padding-top: 200px;
         }
 
-        .active-flip-title {
-            margin-top: 170px;
-            width: 180px;
-            color: $cmwn-medium-green;
-            font-family: $cmwn-jade-font;
-            font-size: 1.75rem;
-        }
-    }
-
-    .edit-flip {
-        position: relative;
-        margin-top: 30px;
-        margin-bottom: 20px;
-        padding-bottom: 270px;
-        width: 25%;
-        height: 120px;
-
-        .flip-image {
+        .create-flip {
             position: absolute;
-            bottom: 0;
+            top: 0;
             left: 0;
-            padding-bottom: 25px;
-            width: 100%;
-            vertical-align: middle;
+            margin-right: 75%;
+            margin-bottom: 30px;
+
+            .create-btn {
+                position: absolute;
+                left: 0;
+            }
+
+            .active-flip-title {
+                margin-top: 170px;
+                width: 180px;
+                color: $cmwn-medium-green;
+                font-family: $cmwn-jade-font;
+                font-size: 1.75rem;
+            }
         }
 
-        .flip-title {
-            position: absolute;
-            bottom: 0;
-            padding-left: 15px;
-            color: $cmwn-blue;
-            font-family: $cmwn-jade-font;
+        .edit-flip {
+            position: relative;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            padding-bottom: 270px;
+            width: 25%;
+            height: 120px;
+
+            .flip-image {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                padding-bottom: 25px;
+                width: 100%;
+                vertical-align: middle;
+            }
+
+            .flip-title {
+                position: relative;
+                bottom: 0;
+                margin-top: 250px;
+                padding-left: 15px;
+                color: $cmwn-blue;
+                font-family: $cmwn-jade-font;
+            }
         }
     }
 }

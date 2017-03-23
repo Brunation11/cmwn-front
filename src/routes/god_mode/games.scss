@@ -1,7 +1,7 @@
 @import 'variables';
 
-.god-mode-games {
-
+#god-mode-games { // scss-lint:disable IdSelector
+    // scss-lint:enable IdSelector
     .heading {
         color: $cmwn-purple;
         font-family: $cmwn-jade-font;
@@ -16,7 +16,6 @@
             width: 100%;
 
             &.open {
-
                 .panel-body {
                     max-height: 1000px; // larger than panel will be
                 }
@@ -34,6 +33,10 @@
             max-height: 0;
             overflow: hidden;
             text-align: center;
+
+            .game-form {
+                text-align: left;
+            }
 
             .zipcode {
                 display: flex;
