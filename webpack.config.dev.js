@@ -13,6 +13,10 @@ var scssGlobals = require('./scss_globals.js');
 module.exports = {
     cache: true,
     devtool: 'cheap-source-map',
+    externals: {
+        'moment': 'moment',
+        'react': 'react'
+    },
     resolve: {
         root: path.resolve('./src'),
         extensions: ['', '.js']

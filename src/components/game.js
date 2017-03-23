@@ -29,6 +29,13 @@ const BROWSER_NOT_SUPPORTED = <span>Sorry! Your browser or device is currently n
 
 const COMPONENT_IDENTIFIER = 'game';
 
+let callApi = _.debounce(function () {
+    HttpManager.GET({
+        url: (GLOBALS.API_URL),
+        handleErrors: false
+    });
+}, 5000);
+
 /**
  * Game wrapper iframe component.
  * Listens for 'game-event'
@@ -82,7 +89,6 @@ export class Game extends React.Component {
 
     componentDidMount() {
         var frame = ReactDOM.findDOMNode(this.refs.gameRef);
-        var callApi;
         var escInterval;
         var onkeydown = (function () {
             this.listenForEsc.apply(this, arguments);
@@ -108,12 +114,6 @@ export class Game extends React.Component {
             }, 500);
         }
 
-        callApi = _.debounce(function () {
-            HttpManager.GET({
-                url: (GLOBALS.API_URL),
-                handleErrors: false
-            });
-        }, 5000);
         frame.addEventListener('load', function () {
             frame.contentWindow.addEventListener('click', callApi, false);
         }, false);
@@ -121,17 +121,6 @@ export class Game extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        var frame = ReactDOM.findDOMNode(this.refs.gameRef);
-        var callApi = _.debounce(function () {
-            HttpManager.GET({
-                url: (GLOBALS.API_URL),
-                handleErrors: false
-            });
-        }, 10000);
-        frame.addEventListener('load', function () {
-            frame.contentWindow.addEventListener('click', callApi, false);
-        }, false);
-
         this.setState({
             currentGame: nextProps.game,
             gameKey: Shortid.generate(),
