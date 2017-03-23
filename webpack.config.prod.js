@@ -10,6 +10,13 @@ var scssGlobals = require('./scss_globals.js');
 
 module.exports = {
     devtool: 'source-map',
+    externals: {
+        moment: 'moment',
+        react: 'React',
+        'react-dom': 'ReactDOM',
+        lodash: '_',
+        'babel-polyfill': 'window',
+    },
     resolve: {
         root: path.resolve('./src'),
         extensions: ['', '.js']
