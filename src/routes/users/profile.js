@@ -51,6 +51,20 @@ const COMING_SOON = 'Coming Soon!';
 const DESKTOP_ONLY = 'Log on with a Desktop computer to play!';
 const CLASSES = 'Classes';
 
+const BLOCKED_FEATURED_GAMES = [
+    'skribble',
+    'printmaster',
+    'fire',
+    'litter-bug',
+    'meerkat-mania',
+    'sea-turtle',
+    'gtc-recycling-champion',
+    'gtc-priceless-pourer',
+    'gtc-fantastic-food-sharer',
+    'gtc-dynamic-diverter',
+    'gtc-master-sorter',
+];
+
 const BROWSER_NOT_SUPPORTED = (
     <span>
         <p>For the best viewing experience we recommend the desktop version in Chrome</p>
@@ -174,6 +188,7 @@ export class Profile extends React.Component {
             array[randomIndex] = temporaryValue;
         }
         array = _.filter(array, v => !v.coming_soon);
+        array = _.filter(array, v => !~BLOCKED_FEATURED_GAMES.indexOf(v.game_id));
         return _.filter(array, v => (!v.meta || !v.meta.desktop));
     }
 
