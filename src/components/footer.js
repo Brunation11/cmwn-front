@@ -43,6 +43,8 @@ class Footer extends React.Component {
             contactOpen: false,
             verified: false
         };
+
+        this.renderCaptchaCallback = this.renderCaptchaCallback.bind(this);
     }
 
     componentDidUpdate() {
@@ -76,6 +78,12 @@ class Footer extends React.Component {
         this.setState({ contactOpen: false });
     }
 
+    renderCaptchaCallback() {
+        this.setState({
+            verified: true
+        });
+    }
+
     renderCaptcha() {
         var captchas;
         if (this.state.verified) {
@@ -85,11 +93,7 @@ class Footer extends React.Component {
             if (captchas.length) {
                 grecaptcha.render(captchas[0], {
                     'sitekey': '6LdNaRITAAAAAInKyd3qYz8CfK2p4VauStHMn57l',
-                    callback: () => {
-                        this.setState({
-                            verified: true
-                        });
-                    }
+                    callback: this.renderCaptchaCallback,
                 });
             }
         }
