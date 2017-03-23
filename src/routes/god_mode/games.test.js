@@ -38,7 +38,7 @@ var createFlipWrapper= function (item) {
 
 var checkContents = function (WRAPPER, flipWrapper) {
     expect(WRAPPER.instance()).to.be.instanceof(GodModeGames);
-    expect(WRAPPER.hasClass(PAGE_UNIQUE_IDENTIFIER)).to.equal(true);
+    expect(WRAPPER.find('#'+PAGE_UNIQUE_IDENTIFIER)).to.have.length(1);
     expect(WRAPPER.find('Layout')).to.have.length(1);
     expect(WRAPPER.find('#game-flip-board')).to.have.length(2);
 

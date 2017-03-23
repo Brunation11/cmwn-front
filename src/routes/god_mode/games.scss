@@ -1,7 +1,6 @@
 @import 'variables';
 
-.god-mode-games {
-
+#god-mode-games { // scss-lint:disable IdSelector
     .heading {
         color: $cmwn-purple;
         font-family: $cmwn-jade-font;
@@ -34,7 +33,7 @@
             overflow: hidden;
             text-align: center;
 
-            #game-form { // scss-lint:disable IdSelector
+            .game-form {
                 text-align: left;
             }
 
