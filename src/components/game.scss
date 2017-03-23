@@ -2,6 +2,10 @@
 
 // scss-lint:disable QualifyingElement, ImportantRule
 body.fullscreen {
+    position: fixed;
+    height: 100%;
+    overflow: hidden;
+
     .game {
         margin: 0;
     }
@@ -128,14 +132,28 @@ body:fullscreen .game-frame-wrapper {
 
         &.fullscreen {
             position: fixed;
-            top: 0;
+            top: 50%;
             left: 0%;
             transform: translateY(-50%);
-            margin-top: 50%;
+            z-index: 100;
+            margin: 0;
             width: 100vw;
-            max-width: calc(100vh * 1.77777777778);
             height: 100vh;
-            max-height: calc(100vw * .5625);
+            overflow: auto;
+
+
+            &::before {
+                display: block;
+                position: absolute;
+                top: -500%;
+                left: -500%;
+                background-color: $cmwn-black;
+                width: 2000%;
+                max-width: 2000%;
+                height: 2000%;
+                max-height: 2000%;
+                content: '';
+            }
 
             // scss-lint:disable SelectorDepth, NestingDepth
             ~ * {
@@ -144,8 +162,11 @@ body:fullscreen .game-frame-wrapper {
             // scss-lint:enable SelectorDepth, NestingDepth
 
             .game-frame {
-                transform: translateX(-50%);
+                top: 50%;
+                transform: translateY(-50%);
                 margin-left: 50%;
+                max-width: calc(100vh * 1.77777777778);
+                max-height: calc(100vw * .5625);
             }
 
         }
@@ -259,4 +280,3 @@ body:fullscreen .game-frame-wrapper {
 
     }
 }
-

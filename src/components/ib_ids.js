@@ -179,6 +179,11 @@ const IB_IDS = {
             unearned: '7bee327c9c1ac9fd6830029bc484f956.gif',
             static: '27f759d9631757f5654d8b2a1bdcb2cc.gif'
         },
+        'waste-busters': {
+            earned: '4bd1ddfa94a551ccd3731f3018e7f49f.gif',
+            unearned: '4e68a0104f2f66edba34685aa3ca3462.gif',
+            static: '42d3b49e1f74b773bd42f730203520d0.gif'
+        },
     },
 };
 
