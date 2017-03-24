@@ -53,11 +53,8 @@ const CLASSES = 'Classes';
 
 const BLOCKED_FEATURED_GAMES = [
     'skribble',
-    'printmaster',
     'fire',
-    'litter-bug',
     'meerkat-mania',
-    'sea-turtle',
     'gtc-recycling-champion',
     'gtc-priceless-pourer',
     'gtc-fantastic-food-sharer',

@@ -84,7 +84,7 @@ export class Game extends React.Component {
         var frame = ReactDOM.findDOMNode(this.refs.gameRef);
         var callApi;
         var self = this;
-        var escInterval;
+        //var escInterval;
 
         if (!frame) {
             return;
@@ -96,6 +96,7 @@ export class Game extends React.Component {
             });
         }
 
+        /*
         escInterval = window.setInterval(function () {
             try {
                 Log.info('trying to set keydown event inside frame');
@@ -107,6 +108,18 @@ export class Game extends React.Component {
                 Log.info('attempting to set event, failed for reason: ' + err);
             }
         }, 500);
+        */
+
+        frame.onload = function () {
+            try {
+                Log.info('trying to set keydown event inside frame');
+                frame.contentWindow.addEventListener('keydown', function () {
+                    self.listenForEsc.apply(self, arguments);
+                });
+            } catch(err) {
+                Log.info('attempting to set event, failed for reason: ' + err);
+            }
+        };
 
         callApi = _.debounce(function () {
             HttpManager.GET({
