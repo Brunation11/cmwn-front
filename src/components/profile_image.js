@@ -52,47 +52,34 @@ export default class Image extends React.Component {
     }
 
     componentDidMount() {
-        console.log('COMPONENT DID MOUNT');
-        // if (this.props.data._embedded.image) {
-        //     console.log('FOUND EMBEDDED IMAGE');
-        //     this.setState({
-        //         profileImage: this.props.data._embedded.image.url,
-        //         isModerated: this.props.data._embedded.image.is_moderated
-        //     });
-        // } else {
-        //     console.log('RETRIEVING IMAGE');
-        //     HttpManager.GET({
-        //         url: (this.props.data._links.user_image.href),
-        //         handleErrors: false
-        //     }).then(res => {
-        //         this.setState({
-        //             profileImage: res.response.url
-        //         });
-        //     }).catch(e => {
-        //         // if a user has never uploaded an image, we expect a 404
-        //         if (e.status !== 404) {
-        //             Toast.error(ERRORS.REFRESH);
-        //             Log.error(e, ERRORS.NO_IMAGE);
-        //         }
-        //     });
-        // }
+        if (this.props.data._embedded.image) {
+            this.setState({
+                profileImage: this.props.data._embedded.image.url,
+                isModerated: this.props.data._embedded.image.is_moderated
+            });
+        } else {
+            HttpManager.GET({
+                url: (this.props.data._links.user_image.href),
+                handleErrors: false
+            }).then(res => {
+                this.setState({
+                    profileImage: res.response.url,
+                    isModerated: res.response.is_moderated
+                });
+            }).catch(e => {
+                // if a user has never uploaded an image, we expect a 404
+                if (e.status === 404) {
+                    this.setState({
+                        setDefault: true
+                    });
+                } else {
+                    Toast.error(ERRORS.REFRESH);
+                    Log.error(e, ERRORS.NO_IMAGE);
+                }
+            });
+        }
         this.getDefaultBWImages();
         this.getDefaultCLRImages();
-    }
-
-    setDefault (defaults) {
-        var animal;
-        var defaultAvatar;
-
-        console.log('setDefault');
-        animal = _.replace(this.props.currentUser.username, /\d+/, '').split('-').pop();
-        defaultAvatar = _.find(defaults, function (avatar) {
-            return avatar.name.indexOf(animal) !== -1;
-        });
-        this.setState({
-            selected: defaultAvatar.name
-        });
-        this.defaultUpload();
     }
 
     getDefaultBWImages() {
@@ -100,12 +87,10 @@ export default class Image extends React.Component {
         HttpManager.GET({
             url: `${GLOBALS.API_URL}media/${DEFAULT_IMGS.BW}`
         }).then((res) => {
-            console.log('SUCCESS BW');
             this.setState({
                 defaultsBW: res.response._embedded.items
             });
         }).catch(() => {
-            console.log('FAIL BW');
             Toast.error(ERRORS.NO_DEFAULTS);
         });
     }
@@ -113,35 +98,30 @@ export default class Image extends React.Component {
     getDefaultCLRImages() {
         var animal;
         var defaultAvatar;
-        var selected;
-        var profileImage;
 
         // get color default images
         HttpManager.GET({
             url: `${GLOBALS.API_URL}media/${DEFAULT_IMGS.CLR}`
         }).then((res) => {
-            console.log('SUCCESS CLR');
-            if (this.state.profileImage === GLOBALS.DEFAULT_PROFILE) {
+            if (this.state.setDefault) {
                 animal = _.replace(this.props.currentUser.username, /\d+/, '').split('-').pop();
                 defaultAvatar = _.find(res.response._embedded.items, function (avatar) {
                     return avatar.name.indexOf(animal) !== -1;
                 });
-                this.setState({
-                    selected: defaultAvatar.name,
-                    profileImage: defaultAvatar.src
-                });
             }
             this.setState({
-                defaultsCLR: res.response._embedded.items
+                defaultsCLR: res.response._embedded.items,
+                selected: defaultAvatar ? defaultAvatar.name : null,
+                profileImage: defaultAvatar ? defaultAvatar.src : this.state.profileImage,
+                isModerated: defaultAvatar ? true : this.state.isModerated
             });
+            this.defaultUpload();
         }).catch(() => {
-            console.log('FAIL CLR');
             Toast.error(ERRORS.NO_DEFAULTS);
         });
     }
 
-    upload(e, postURL, imageURL, imageID) {
-        console.log('UPLOAD');
+    upload(postURL, imageURL, imageID) {
         /* eslint-disable camelcase*/
         HttpManager.POST({
             url: postURL
@@ -149,14 +129,13 @@ export default class Image extends React.Component {
             url: imageURL,
             image_id: imageID
         }).then(() => {
-            console.log('SUCCESS UPLOAD');
             this.setState({
                 profileImage: imageURL,
-                isModerated: this.state.isModerated
+                isModerated: this.state.isModerated,
+                defaultUpload: false
             });
-            Toast.error(ERRORS.MODERATION);
-        }).catch(() => {
-            console.log('FAIL UPLOAD');
+            if (!this.state.setDefault) Toast.error(ERRORS.MODERATION);
+        }).catch((e) => {
             Toast.error(ERRORS.UPLOAD_ERROR);
             Log.error(e, ERRORS.FAILED_UPLOAD);
         });
@@ -190,21 +169,18 @@ export default class Image extends React.Component {
 
                 ('set', 'dimension6', 1);
 
-                this.upload(e, postURL, imageURL, imageID);
+                this.upload(postURL, imageURL, imageID);
             });
             /* eslint-enable camelcase */
         });
     }
 
-    defaultUpload(e) {
-        console.log('DEFAULT UPLOAD');
+    defaultUpload() {
         var postURL = this.props.data._links.user_image.href;
         var imageURL = _.find(this.state.defaultsCLR, ['name', this.state.selected]).src;
-        var imageID = imageURL.replace('.png', '');
+        var imageID = imageURL.replace('.png', '').replace('jpg', '').split('/').pop();
 
-        e.stopPropagation();
-
-        this.upload(e, postURL, imageURL, imageID);
+        this.upload(postURL, imageURL, imageID);
         this.hideModal();
     }
 
