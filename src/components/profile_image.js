@@ -63,13 +63,14 @@ export default class Image extends React.Component {
                 handleErrors: false
             }).then(res => {
                 this.setState({
-                    profileImage: res.response.url
+                    profileImage: res.response.url,
+                    isModerated: res.response.is_moderated
                 });
             }).catch(e => {
-                //if a user has never uploaded an image, we expect a 404
+                // if a user has never uploaded an image, we expect a 404
                 if (e.status === 404) {
                     this.setState({
-                        profileImage: GLOBALS.DEFAULT_PROFILE
+                        setDefault: true
                     });
                 } else {
                     Toast.error(ERRORS.REFRESH);
@@ -77,9 +78,11 @@ export default class Image extends React.Component {
                 }
             });
         }
+        this.getDefaultBWImages();
+        this.getDefaultCLRImages();
     }
 
-    getDefaultImages() {
+    getDefaultBWImages() {
         // get black and white default images
         HttpManager.GET({
             url: `${GLOBALS.API_URL}media/${DEFAULT_IMGS.BW}`
@@ -90,20 +93,35 @@ export default class Image extends React.Component {
         }).catch(() => {
             Toast.error(ERRORS.NO_DEFAULTS);
         });
+    }
+
+    getDefaultCLRImages() {
+        var animal;
+        var defaultAvatar;
 
         // get color default images
         HttpManager.GET({
             url: `${GLOBALS.API_URL}media/${DEFAULT_IMGS.CLR}`
         }).then((res) => {
+            if (this.state.setDefault) {
+                animal = _.replace(this.props.currentUser.username, /\d+/, '').split('-').pop();
+                defaultAvatar = _.find(res.response._embedded.items, function (avatar) {
+                    return avatar.name.indexOf(animal) !== -1;
+                });
+            }
             this.setState({
-                defaultsCLR: res.response._embedded.items
+                defaultsCLR: res.response._embedded.items,
+                selected: defaultAvatar ? defaultAvatar.name : null,
+                profileImage: defaultAvatar ? defaultAvatar.src : this.state.profileImage,
+                isModerated: defaultAvatar ? true : this.state.isModerated
             });
+            this.defaultUpload();
         }).catch(() => {
             Toast.error(ERRORS.NO_DEFAULTS);
         });
     }
 
-    upload(e, postURL, imageURL, imageID) {
+    upload(postURL, imageURL, imageID) {
         /* eslint-disable camelcase*/
         HttpManager.POST({
             url: postURL
@@ -113,10 +131,11 @@ export default class Image extends React.Component {
         }).then(() => {
             this.setState({
                 profileImage: imageURL,
-                isModerated: false
+                isModerated: this.state.isModerated,
+                defaultUpload: false
             });
-            Toast.error(ERRORS.MODERATION);
-        }).catch(() => {
+            if (!this.state.setDefault) Toast.error(ERRORS.MODERATION);
+        }).catch((e) => {
             Toast.error(ERRORS.UPLOAD_ERROR);
             Log.error(e, ERRORS.FAILED_UPLOAD);
         });
@@ -150,25 +169,22 @@ export default class Image extends React.Component {
 
                 ('set', 'dimension6', 1);
 
-                this.upload(e, postURL, imageURL, imageID);
+                this.upload(postURL, imageURL, imageID);
             });
             /* eslint-enable camelcase */
         });
     }
 
-    defaultUpload(e) {
+    defaultUpload() {
         var postURL = this.props.data._links.user_image.href;
         var imageURL = _.find(this.state.defaultsCLR, ['name', this.state.selected]).src;
-        var imageID = imageURL.replace('.png', '');
+        var imageID = imageURL.replace('.png', '').replace('jpg', '').split('/').pop();
 
-        e.stopPropagation();
-
-        this.upload(e, postURL, imageURL, imageID);
+        this.upload(postURL, imageURL, imageID);
         this.hideModal();
     }
 
     showModal() {
-        this.getDefaultImages();
         this.setState({
             uploaderOn: true
         });
