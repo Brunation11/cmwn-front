@@ -19,6 +19,7 @@ import Form from 'components/form';
 import DropdownDatepicker from 'components/dropdown_datepicker';
 import ACTION_CONSTANTS from 'components/action_constants';
 import ChangePassword from 'components/change_password';
+import CodeChangePopup from 'components/popups/code_change';
 
 
 import 'routes/users/edit.scss';
@@ -386,6 +387,8 @@ export class EditProfile extends React.Component {
                         currentUser={this.props.currentUser}
                         confirmReLogin={true}
                     />
+
+                    <CodeChangePopup />
 
                     <CodeChange
                         endpoint={_.get(this, 'state._links.reset.href')}
