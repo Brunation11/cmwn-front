@@ -8,7 +8,6 @@ import {Button, Input, Panel} from 'react-bootstrap';
 import FlipBoard from 'components/flipboard';
 import GenerateDataSource from 'components/datasource';
 import HttpManager from 'components/http_manager';
-import Paginator from 'components/paginator';
 import Toast from 'components/toast';
 import Log from 'components/log';
 import Form from 'components/form';
@@ -404,7 +403,7 @@ export class GodModeGames extends React.Component {
                         }
                     )}
                 >
-                    <Form>
+                    <Form className="game-form">
                         {form}
                         <Button
                             className="btn standard purple save-btn"
@@ -443,23 +442,22 @@ export class GodModeGames extends React.Component {
         return (
             <Layout
                 currentUser={this.props.currentUser}
-                className={PAGE_UNIQUE_IDENTIFIER}
                 navMenuId="navMenu"
             >
-                <FlipBoard
-                    renderFlip={this.renderFlip.bind(this)}
-                    data={[NEW_GAME]}
-                    id="game-flip-board"
-                    updateParent={this.updateGameData.bind(this)}
-                    alwaysUpdateParent
-                    header={null}
-                />
+                <div id={PAGE_UNIQUE_IDENTIFIER}>
+                    <FlipBoard
+                        renderFlip={this.renderFlip.bind(this)}
+                        data={[NEW_GAME]}
+                        id="game-flip-board"
+                        updateParent={this.updateGameData.bind(this)}
+                        alwaysUpdateParent
+                        header={null}
+                    />
 
-                <div className="heading">
-                    {HEADINGS.ACTIVE}
-                </div>
-                <GAME_WRAPPER transform={dataTransform}>
-                    <Paginator>
+                    <div className="heading">
+                        {HEADINGS.ACTIVE}
+                    </div>
+                    <GAME_WRAPPER transform={dataTransform}>
                         <FlipBoard
                             renderFlip={this.renderFlip.bind(this)}
                             updateParent={this.updateGameData.bind(this)}
@@ -467,24 +465,24 @@ export class GodModeGames extends React.Component {
                             id="game-flip-board"
                             header={null}
                         />
-                    </Paginator>
-                </GAME_WRAPPER>
+                    </GAME_WRAPPER>
 
-                <div className="heading">
-                    {HEADINGS.DELETED}
+                    <div className="heading">
+                        {HEADINGS.DELETED}
+                    </div>
+                    <GAME_WRAPPER
+                        transform={data => { return (dataTransform(data, true)); }}
+                        renderNoData={() => <div>No Deleted Games</div>}
+                    >
+                        <FlipBoard
+                            renderFlip={this.renderFlip.bind(this)}
+                            updateParent={this.updateGameData.bind(this)}
+                            alwaysUpdateParent
+                            id="deleted-game-flip-board"
+                            header={null}
+                        />
+                    </GAME_WRAPPER>
                 </div>
-                <GAME_WRAPPER
-                    transform={data => { return (dataTransform(data, true)); }}
-                    renderNoData={() => <div>No Deleted Games</div>}
-                >
-                    <FlipBoard
-                        renderFlip={this.renderFlip.bind(this)}
-                        updateParent={this.updateGameData.bind(this)}
-                        alwaysUpdateParent
-                        id="deleted-game-flip-board"
-                        header={null}
-                    />
-                </GAME_WRAPPER>
            </Layout>
         );
     }
