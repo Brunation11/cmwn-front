@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import Shortid from 'shortid';
-import {Input} from 'react-bootstrap';
+import {Input, Button} from 'react-bootstrap';
 import Moment from 'moment';
 
 import 'components/dropdown_datepicker.scss';
@@ -108,6 +108,18 @@ class Page extends React.Component {
         return items;
     }
 
+    increment(field) {
+        var max = field === 'year' ?
+                  new Date().getFullYear() :
+                  this.refs[`${field}Input`].props.children.length - 1;
+
+        if (this.state[field] < max) this.setState({[field]: this.state[field] + 1});
+    }
+
+    decrement(field) {
+        if (this.state[field] > 1) this.setState({[field]: this.state[field] - 1});
+    }
+
     render() {
         return (
             <span className={'form-inline dropdown-datepicker ' + this.props.className} >
@@ -128,6 +140,16 @@ class Page extends React.Component {
                     }}
                     disabled={this.props.disabled}
                 >{this.renderMonthOptions()}</Input>
+                <div className="date-btns">
+                    <Button
+                        className="month-btn up"
+                        onClick={this.increment.bind(this, 'month')}
+                    />
+                    <Button
+                        className="month-btn down"
+                        onClick={this.decrement.bind(this, 'month')}
+                    />
+                </div>
                 <Input
                     className="birthday-input"
                     id="day-input"
@@ -143,6 +165,16 @@ class Page extends React.Component {
                     }}
                     disabled={this.props.disabled}
                 >{this.renderDayOptions()}</Input>
+                <div className="date-btns">
+                    <Button
+                        className="day-btn up"
+                        onClick={this.increment.bind(this, 'day')}
+                    />
+                    <Button
+                        className="day-btn down"
+                        onClick={this.decrement.bind(this, 'day')}
+                    />
+                </div>
                 <Input
                     className="birthday-input"
                     id="year-input"
@@ -158,6 +190,16 @@ class Page extends React.Component {
                     }}
                     disabled={this.props.disabled}
                 >{this.renderYearOptions()}</Input>
+                <div className="date-btns">
+                    <Button
+                        className="year-btn up"
+                        onClick={this.increment.bind(this, 'year')}
+                    />
+                    <Button
+                        className="year-btn down"
+                        onClick={this.decrement.bind(this, 'year')}
+                    />
+                </div>
                 <br />
                 <input
                     type="hidden"
