@@ -388,8 +388,6 @@ export class EditProfile extends React.Component {
                         confirmReLogin={true}
                     />
 
-                    <CodeChangePopup />
-
                     <CodeChange
                         endpoint={_.get(this, 'state._links.reset.href')}
                         updatingUserEmail={this.state.email}
@@ -404,7 +402,10 @@ export class EditProfile extends React.Component {
 
 CodeChange = React.createClass({
     getInitialState: function () {
-        return {code: ''};
+        return {
+            code: '',
+            reset: false
+        };
     },
     submit: function () {
         var self = this;
@@ -415,6 +416,7 @@ CodeChange = React.createClass({
         update.then(() => {
             Toast.success(CODE_UPDATED);
             self.setState({code: ''});
+            this.refs.popup.showModal();
         }).catch(err => {
             Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
             Toast.error(ERRORS.BAD_PASS);
@@ -441,6 +443,9 @@ CodeChange = React.createClass({
                         onChange={e => this.setState({code: e.target.value})}
                     />
                     <Button onClick={this.submit.bind(this)}>Reset Code</Button>
+                    <CodeChangePopup
+                        ref="popup"
+                    />
             </form></Panel>
         );
     }
