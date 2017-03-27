@@ -1,11 +1,18 @@
 @import 'variables';
 
 #god-mode-site-nav { // scss-lint:disable IdSelector
+    position: relative;
+    width: 25%;
+
     .sidebar {
-        width: 200px;
+        padding: $standard / 2;
+        order: 1;
+        flex-grow: 0;
+        flex-shrink: 0;
 
         .username {
-            a {
+            a,
+            a:visited {
                 color: $cmwn-purple;
             }
         }
@@ -34,5 +41,15 @@
                 color: $cmwn-purple;
             }
         }
+    }
+
+    .content {
+        // scss-lint:disable all
+        padding: $standard / 2;
+        order: 2;
+        width: 100%;
+        flex-grow: 1;
+        flex-shrink: 1;
+        // scss-lint:enable all
     }
 }

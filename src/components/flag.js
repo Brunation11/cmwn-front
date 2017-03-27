@@ -10,6 +10,8 @@ import Log from 'components/log';
 
 import 'components/flag.scss';
 
+const COMPONENT_UNIQUE_IDENTIFIER = 'flagger-wrapper';
+
 const COPY = {
     SUCCESS: 'You have successfully flagged this image.',
     ERROR: 'Looks like there was an issue flagging this image.',
@@ -19,7 +21,7 @@ const COPY = {
     LABEL: 'Why are you reporting this image?'
 };
 
-export default class Flag extends React.Component {
+class Flag extends React.Component {
     constructor() {
         super();
 
@@ -140,7 +142,7 @@ export default class Flag extends React.Component {
     render() {
         if (!this.props.data) return null;
         return (
-            <div className="flag-container">
+            <div className={'flag-container ' + COMPONENT_UNIQUE_IDENTIFIER + ' ' + this.props.className}>
                 <Modal
                     className="flag-form-modal"
                     show={this.state.flagFormOpen}
@@ -162,3 +164,7 @@ export default class Flag extends React.Component {
         );
     }
 }
+
+Flag._IDENTIFIER = COMPONENT_UNIQUE_IDENTIFIER;
+export default Flag;
+

@@ -11,6 +11,12 @@
 @import 'functions';
 @import 'ie9';
 
+//flexbox sizing fix
+* {
+    min-width: 0;
+    min-height: 0;
+}
+
 html {
     font-size: $base-font-size;
 }
@@ -69,7 +75,24 @@ h3 {
     font-family: 'CMWNJadeRegular', Impact, Helvetica, Arial, sans-serif;
 }
 
+a {
+    cursor: pointer;
+    color: $cmwn-blue;
+
+    &:visited {
+        color: $cmwn-purple;
+    }
+}
+
 // scss-lint:disable IdSelector
+#static-preload {
+    font-size: 2px;
+
+    h1 {
+        font-size: 3px;
+    }
+}
+
 #pageerror,
 #triggerederror {
     display: block;
@@ -184,6 +207,13 @@ h3 {
         align-items: stretch;
     }
 
+    .twocol {
+
+        .content {
+            max-width: calc(100% - $sidebar-max-width - $standard);
+        }
+    }
+
     .content {
         // scss-lint:disable all
         padding: $standard / 2;
@@ -210,17 +240,13 @@ h3 {
         }
     }
 
-    a {
-        cursor: pointer;
-    }
-
     img {
         user-drag: none;
     }
 
     .sidebar {
         padding: $standard / 2;
-        max-width: 200px;
+        max-width: $sidebar-max-width;
         order: 1;
         flex-grow: 0;
         flex-shrink: 0;

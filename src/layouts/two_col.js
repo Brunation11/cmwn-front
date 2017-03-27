@@ -20,7 +20,7 @@ var Layout = React.createClass({
     },
     render: function () {
         return (
-             <div className={'layout ' + this.props.className}>
+             <div className={'layout twocol ' + this.props.className}>
                 <Sidebar
                     currentUser={this.props.currentUser}
                     menuIsOpen={this.state.menuIsOpen}

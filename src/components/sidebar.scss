@@ -1,6 +1,8 @@
-@import '../variables';
+@import 'variables';
 
-.sidebar {
+//scss-lint:disable IdSelector
+#cmwn-app .sidebar {
+//scss-lint:enable IdSelector
     .username,
     .username a {
         cursor: pointer;
@@ -13,6 +15,10 @@
         word-break: break-word;
         hyphen: auto;
         //scss-lint:enable all
+
+        &:visited {
+            color: $cmwn-blue;
+        }
     }
 
     .welcome {

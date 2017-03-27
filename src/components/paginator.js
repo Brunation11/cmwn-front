@@ -46,7 +46,7 @@ var _getButtonPattern = function (currentPage, pageCount) {
 };
 
 /**
- * A generic paginator. Reqires a 'data' prop that will be attached to any children
+ * A generic paginator. Requires a 'data' prop that will be attached to any children
  * of the paginator.
  */
 var Paginator = React.createClass({
@@ -54,7 +54,7 @@ var Paginator = React.createClass({
         return {
             onPageChange: _.identity,
             onRowCountChange: _.identity,
-            pagePaginator: false
+            pagePaginator: true
         };
     },
     getInitialState: function () {
@@ -68,6 +68,15 @@ var Paginator = React.createClass({
         var rowCount = nextProps.rowCount || this.props.rowCount;
         var currentPage = nextProps.currentPage || this.props.currentPage;
         var pageCount = nextProps.pageCount || this.props.pageCount;
+        // TODO MPR 2/19/17: the page paginator and component paginators should be broken
+        // into their own subcomponents for testing. until then ignore all this getState
+        // garbage.
+        // http://s2.quickmeme.com/img/79/79518715538b9fb1b0ec7b9bfb475dc7539afda69c6c9c912515d6ea9cf67b2f.jpg
+        if (nextProps.pagePaginator && Store.getState().page && Store.getState().page.data != null) {
+            rowCount = Store.getState().page.data.page_size;
+            currentPage = Store.getState().page.data.page;
+            pageCount = Store.getState().page.data.page_count;
+        }
         this.setState({rowCount, currentPage, pageCount});
     },
     selectPage: function (pageNum, isPagePaginator) {

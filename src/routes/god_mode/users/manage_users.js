@@ -114,15 +114,7 @@ export class ManageUsers extends React.Component {
                     <br/>
                 </Panel>
                 <Panel header={HEADINGS.USERS} className="standard">
-                <Paginator
-                    endpointIdentifier={'user'}
-                    rowCount={this.props.rowCount}
-                    currentPage={this.props.currentPage}
-                    pageCount={this.props.pageCount}
-                    componentName={PAGE_UNIQUE_IDENTIFIER}
-                    data={userData}
-                    pagePaginator={true}
-                >
+                <Paginator data={userData} >
                     <Table className="admin">
                         <Column renderHeader={HEADINGS.NAME}
                             renderCell={(data, row) => {

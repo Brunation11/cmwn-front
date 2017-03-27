@@ -1,8 +1,18 @@
 'use strict';
-
+var _;
+var jsdom;
 /* eslint-disable */
-var jsdom = require('jsdom')
-var _ = require('lodash')
+require('babel-core/register');//for mocha to use es6
+require('app-module-path').addPath(__dirname + '/src');
+_ = require('lodash')
+
+require.extensions['.css'] = _.noop;
+require.extensions['.scss'] = _.noop;
+require.extensions['.png'] = _.noop;
+require.extensions['.jpg'] = _.noop;
+require.extensions['.jpeg'] = _.noop;
+require.extensions['.gif'] = _.noop;
+jsdom = require('jsdom')
 
 // setup the simplest document possible
 var doc = jsdom.jsdom('<!doctype html><html><body></body></html>')
@@ -47,6 +57,14 @@ global.window.grecaptcha = {
     reset: function(a, b) {
         return null;
     }
+};
+
+global.window.matchMedia = window.matchMedia || function() {
+    return {
+        matches : false,
+        addListener : function() {},
+        removeListener: function() {}
+    };
 };
 
 // take all properties of the window object and also attach it to the

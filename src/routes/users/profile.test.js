@@ -3,40 +3,14 @@ import { expect } from 'chai';
 import { mount, shallow } from 'enzyme';
 
 import { Profile } from 'routes/users/profile';
-import { dataTransform } from 'routes/users/profile';
+import { dataTransform, BAD_TRANSFORM_TYPE } from 'routes/users/profile';
 import MockFlipWrapper from 'mocks/mock_flip_wrapper';
 import GLOBALS from 'components/globals';
 import profileSmoke from 'smoke_tests/users/profile.test.js';
 
-import teacherData from 'mocks/users/teacher_data';
 import studentDataA from 'mocks/users/student_data_a';
-import studentDataB from 'mocks/users/student_data_b';
 
 const COMING_SOON = 'Coming Soon!';
-
-var checkProfileRender = function (data, currentUser) {
-    var profile = <Profile data={data} loading={false} currentUser={currentUser}/>;
-    const WRAPPER = shallow(profile);
-    expect(WRAPPER.instance()).to.be.instanceOf(Profile);
-};
-
-var checkOwnProfileContent = function (data, currentUser) {
-    var profile = <Profile data={data} loading={false} currentUser={currentUser}/>;
-    const WRAPPER = shallow(profile);
-    expect(WRAPPER.children()).to.have.length(1);
-    expect(WRAPPER.children('div')).to.have.length(1);
-    expect(WRAPPER.find('Modal')).to.have.length(1);
-    expect(WRAPPER.find('Panel')).to.have.length(1);
-    expect(WRAPPER.find('FlipBoard')).to.have.length(1);
-};
-
-var checkAnotherProfileContent = function (data, currentUser) {
-    var profile = <Profile data={data} loading={false} currentUser={currentUser}/>;
-    const WRAPPER = shallow(profile);
-    expect(WRAPPER.children()).to.have.length(1);
-    expect(WRAPPER.find('Panel')).to.have.length(2);
-    expect(WRAPPER.find('.frame')).to.have.length(1);
-};
 
 describe('Profile Smoke Tests', function () {
     profileSmoke();
@@ -44,56 +18,6 @@ describe('Profile Smoke Tests', function () {
 
 describe('Profile Unit Tests', function () {
     // TODO: test show modal when set up mock Detector and History set up. LB 06/22/16
-
-    describe('Teacher viewing own Profile', function () {
-
-        it('renders own teacher Profile', function () {
-            checkProfileRender(teacherData, teacherData);
-        });
-
-        it('has all of the correct elements', function () {
-            checkOwnProfileContent(teacherData, teacherData);
-        });
-    });
-
-    describe('Student viewing own Profile', function () {
-        it('renders own student Profile', function () {
-            checkProfileRender(studentDataA, studentDataA);
-        });
-
-        it('has all of the correct elements', function () {
-            checkOwnProfileContent(studentDataA, studentDataA);
-        });
-
-    });
-
-    describe('Teaching viewing student Profile', function () {
-        it('renders student profile', function () {
-            checkProfileRender(studentDataA, teacherData);
-        });
-        it ('has all of the correct elements', function () {
-            checkAnotherProfileContent(studentDataA, teacherData);
-        });
-    });
-
-    describe('Student viewing another student profile', function () {
-        it('renders student profile', function () {
-            checkProfileRender(studentDataB, studentDataA);
-        });
-        it ('has all of the correct elements', function () {
-            checkAnotherProfileContent(studentDataB, studentDataA);
-        });
-    });
-
-    describe('Student viewing teacher profile', function () {
-        it('renders student profile', function () {
-            checkProfileRender(teacherData, studentDataA);
-        });
-
-        it ('has all of the correct elements', function () {
-            checkAnotherProfileContent(teacherData, studentDataA);
-        });
-    });
 
     describe('Null profile viewing', function () {
         it('renders null profile with null username', function () {
@@ -149,7 +73,7 @@ describe('Profile Unit Tests', function () {
         });
 
         it('handles undefined input', function () {
-            expect(dataTransform(null)).to.be.an.instanceof(Array).and.to.be.empty;
+            expect(dataTransform()).to.be.an.instanceof(Array).and.to.be.empty;
         });
 
         it('handles empty list', function () {
@@ -157,11 +81,11 @@ describe('Profile Unit Tests', function () {
         });
 
         it('handles non array', function () {
-            expect(dataTransform({})).to.be.an.instanceof(Array).and.to.be.empty;
+            expect(dataTransform.bind(null, {})).to.throw(BAD_TRANSFORM_TYPE);
         });
 
         it('handles nonsense', function () {
-            expect(dataTransform('cat dog!!!!')).to.be.an.instanceof(Array).and.to.be.empty;
+            expect(dataTransform.bind(null, 'cat dog!!!!')).to.throw(BAD_TRANSFORM_TYPE);
         });
 
         it('handles one element', function () {

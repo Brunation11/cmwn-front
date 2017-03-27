@@ -24,7 +24,7 @@ var Layout = React.createClass({
             !this.props.currentUser._links.sa_settings.href) return null;
 
         return (
-             <div className={'layout'}>
+             <div className={'layout twocol'}>
                 <GodModeSiteNav
                     currentUser={this.props.currentUser}
                     navMenuId={this.props.navMenuId}

@@ -1,18 +1,18 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
-import _ from 'lodash';
 import QueryString from 'query-string';
-import {Link} from 'react-router';
 import {Panel} from 'react-bootstrap';
 import { connect } from 'react-redux';
 
-import Layout from 'layouts/two_col';
 import Shortid from 'shortid';
+import UserTile from 'components/user_tile';
 import Toast from 'components/toast';
 import FlipBoard from 'components/flipboard';
 import EditLink from 'components/edit_link';
+import Paginator from 'components/paginator';
 import Util from 'components/util';
 import GenerateDataSource from 'components/datasource';
-import GLOBALS from 'components/globals';
+
+import Layout from 'layouts/two_col';
 
 import 'routes/classes/profile.scss';
 
@@ -76,23 +76,17 @@ export class Profile extends React.Component {
         );
     }
     renderFlip(item){
-        var image;
-        if (!_.has(item, '_embedded.image')) {
-            image = GLOBALS.DEFAULT_PROFILE;
-        } else {
-            if (item._embedded.image.url != null) {
-                image = item._embedded.image.url;
-            } else {
-                image = item.images.data[0].url;
-            }
-        }
         return (
-            <div className="flip" key={Shortid.generate()}>
-                <Link to={`/student/${item.user_id.toString()}`} id={item.username}>
-                    <img src={image}></img>
-                    <p className="linkText" >{item.username}</p>
-                </Link>
-            </div>
+             <UserTile
+                item={item}
+                onFriendAdded={() => {
+                    this.reloadList.call(this);
+                }}
+                onFriendRequested={() => {
+                    this.reloadList.call(this);
+                }}
+                key={Shortid.generate()}
+             />
         );
     }
     renderClassInfo() {
@@ -124,10 +118,12 @@ export class Profile extends React.Component {
            <Layout currentUser={this.props.currentUser} className={PAGE_UNIQUE_IDENTIFIER}>
                {this.renderClassInfo()}
                <USER_SOURCE>
-                    <FlipBoard
-                        renderFlip={this.renderFlip}
-                        header={`${HEADINGS.CLASS} ${this.state.title}`}
-                    />
+                    <Paginator>
+                        <FlipBoard
+                            renderFlip={this.renderFlip}
+                            header={`${HEADINGS.CLASS} ${this.state.title}`}
+                        />
+                    </Paginator>
                </USER_SOURCE>
            </Layout>
         );

@@ -14,6 +14,7 @@ import History from 'components/history';
 import GenerateDataSource from 'components/datasource';
 import Text from 'components/nullable_text';
 import {Table, Column} from 'components/table';
+import Paginator from 'components/paginator';
 
 const DISTRICT_CREATED = 'Disctrict created successfully';
 const HEADINGS = {
@@ -81,90 +82,96 @@ export class ViewDistrict extends React.Component{
                         {ClassNames('standard', {hidden: !showHelpers})}>
                     <a onClick={() => History.push('/schools')}>View All Your Schools</a>
                     <SCHOOL_SOURCE>
-                        <Table className="admin">
-                            <Column dataKey="title"
-                                renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/school/' + row.group_id)}>
-                                        {_.startCase(data)}
-                                    </a>
-                                )}
-                            />
-                            <Column dataKey="description" />
-                            <Column dataKey="title" renderHeader="Admin View"
-                                renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/school/' + row.group_id + '/view')}>
-                                        Admin View
-                                    </a>
-                                )}
-                            />
-                            <Column dataKey="title" renderHeader="Edit"
-                                renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/school/' + row.group_id + '/edit')}>
-                                        Edit
-                                    </a>
-                                )}
-                            />
-                        </Table>
+                        <Paginator>
+                            <Table className="admin">
+                                <Column dataKey="title"
+                                    renderCell={(data, row) => (
+                                        <a onClick={() => History.push('/school/' + row.group_id)}>
+                                            {_.startCase(data)}
+                                        </a>
+                                    )}
+                                />
+                                <Column dataKey="description" />
+                                <Column dataKey="title" renderHeader="Admin View"
+                                    renderCell={(data, row) => (
+                                        <a onClick={() => History.push('/school/' + row.group_id + '/view')}>
+                                            Admin View
+                                        </a>
+                                    )}
+                                />
+                                <Column dataKey="title" renderHeader="Edit"
+                                    renderCell={(data, row) => (
+                                        <a onClick={() => History.push('/school/' + row.group_id + '/edit')}>
+                                            Edit
+                                        </a>
+                                    )}
+                                />
+                            </Table>
+                        </Paginator>
                     </SCHOOL_SOURCE>
                 </Panel>
                 <Panel id="panel-3" header={HEADINGS.CLASSES} className=
                         {ClassNames('standard', {hidden: !showHelpers})}>
                     <a onClick={() => History.push('/classes')}>View All Your Classes</a>
                     <CLASS_SOURCE>
-                        <Table className="admin">
-                            <Column dataKey="title"
-                                renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/class/' + row.group_id)}>
-                                        {_.startCase(data)}
-                                    </a>
-                                )}
-                            />
-                            <Column dataKey="description" />
-                            <Column dataKey="title" renderHeader="Admin View"
-                                renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/class/' + row.group_id + '/view')}>
-                                        Admin View
-                                    </a>
-                                )}
-                            />
-                            <Column dataKey="title" renderHeader="Edit"
-                                renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/class/' + row.group_id + '/edit')}>
-                                        Edit
-                                    </a>
-                                )}
-                            />
-                        </Table>
+                        <Paginator>
+                            <Table className="admin">
+                                <Column dataKey="title"
+                                    renderCell={(data, row) => (
+                                        <a onClick={() => History.push('/class/' + row.group_id)}>
+                                            {_.startCase(data)}
+                                        </a>
+                                    )}
+                                />
+                                <Column dataKey="description" />
+                                <Column dataKey="title" renderHeader="Admin View"
+                                    renderCell={(data, row) => (
+                                        <a onClick={() => History.push('/class/' + row.group_id + '/view')}>
+                                            Admin View
+                                        </a>
+                                    )}
+                                />
+                                <Column dataKey="title" renderHeader="Edit"
+                                    renderCell={(data, row) => (
+                                        <a onClick={() => History.push('/class/' + row.group_id + '/edit')}>
+                                            Edit
+                                        </a>
+                                    )}
+                                />
+                            </Table>
+                        </Paginator>
                     </CLASS_SOURCE>
                 </Panel>
                 <Panel id="panel-4" header={HEADINGS.USERS} className=
                         {ClassNames('standard', {hidden: !showHelpers})}>
                     <a onClick={() => History.push('/users')}>View All Your Users</a>
                     <USER_SOURCE>
-                        <Table className="admin">
-                            <Column dataKey="first_name" renderHeader="Name"
-                                renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/user/' + row.user_id)}>
-                                        {row.first_name + ' ' + row.last_name}
-                                    </a>
-                                )}
-                            />
-                            <Column dataKey="username" />
-                            <Column dataKey="title" renderHeader="Admin View"
-                                renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/user/' + row.user_id + '/view')}>
-                                        Admin View
-                                    </a>
-                                )}
-                            />
-                            <Column dataKey="title" renderHeader="Edit"
-                                renderCell={(data, row) => (
-                                    <a onClick={() => History.push('/user/' + row.user_id + '/edit')}>
-                                        Edit
-                                    </a>
-                                )}
-                            />
-                        </Table>
+                        <Paginator>
+                            <Table className="admin">
+                                <Column dataKey="first_name" renderHeader="Name"
+                                    renderCell={(data, row) => (
+                                        <a onClick={() => History.push('/user/' + row.user_id)}>
+                                            {row.first_name + ' ' + row.last_name}
+                                        </a>
+                                    )}
+                                />
+                                <Column dataKey="username" />
+                                <Column dataKey="title" renderHeader="Admin View"
+                                    renderCell={(data, row) => (
+                                        <a onClick={() => History.push('/user/' + row.user_id + '/view')}>
+                                            Admin View
+                                        </a>
+                                    )}
+                                />
+                                <Column dataKey="title" renderHeader="Edit"
+                                    renderCell={(data, row) => (
+                                        <a onClick={() => History.push('/user/' + row.user_id + '/edit')}>
+                                            Edit
+                                        </a>
+                                    )}
+                                />
+                            </Table>
+                        </Paginator>
                     </USER_SOURCE>
                 </Panel>
            </Layout>

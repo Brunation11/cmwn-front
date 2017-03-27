@@ -125,26 +125,26 @@ export class Home extends React.Component {
                     <CarouselItem>
                         <img className="bg" src={SOURCES.SLIDEBG[0]}/>
                         <div className="content-group centered">
-                            <div>
+                            <section>
                                 <h2>{COPY.SLIDES[0].HEADING}</h2>
                                 <Button className="purple" id="video-btn"
                                         onClick={this.openViewModal.bind(this)}>
                                     {COPY.BUTTONS.WATCH}
                                 </Button>
-                            </div>
+                            </section>
                         </div>
                     </CarouselItem>
                     <CarouselItem>
                         <img className="bg" src={SOURCES.SLIDEBG[1]}/>
-                        <div className="content-group centered">
+                        <section className="content-group centered">
                             <h2>{COPY.SLIDES[1].HEADING}</h2>
-                        </div>
+                        </section>
                     </CarouselItem>
                     <CarouselItem>
                         <img className="bg" src={SOURCES.SLIDEBG[2]}/>
-                        <div className="content-group centered">
+                        <section className="content-group centered">
                             <h2>{COPY.SLIDES[2].HEADING}</h2>
-                        </div>
+                        </section>
                     </CarouselItem>
                 </Carousel>
                 <div id="layout-sweater" className="sweater">
