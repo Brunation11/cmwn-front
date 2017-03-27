@@ -51,6 +51,17 @@ const COMING_SOON = 'Coming Soon!';
 const DESKTOP_ONLY = 'Log on with a Desktop computer to play!';
 const CLASSES = 'Classes';
 
+const BLOCKED_FEATURED_GAMES = [
+    'skribble',
+    'fire',
+    'meerkat-mania',
+    'gtc-recycling-champion',
+    'gtc-priceless-pourer',
+    'gtc-fantastic-food-sharer',
+    'gtc-dynamic-diverter',
+    'gtc-master-sorter',
+];
+
 const BROWSER_NOT_SUPPORTED = (
     <span>
         <p>For the best viewing experience we recommend the desktop version in Chrome</p>
@@ -97,7 +108,7 @@ export class Profile extends React.Component {
     constructor(props) {
         super(props);
         this.state = _.defaults({
-            hasFlipData: false,
+            flipsEarned: false,
             gameOn: false,
             gameId: -1
         }, _.isObject(this.props.data) && !_.isArray(this.props.data) ? this.props.data : {},
@@ -174,6 +185,7 @@ export class Profile extends React.Component {
             array[randomIndex] = temporaryValue;
         }
         array = _.filter(array, v => !v.coming_soon);
+        array = _.filter(array, v => !~BLOCKED_FEATURED_GAMES.indexOf(v.game_id));
         return _.filter(array, v => (!v.meta || !v.meta.desktop));
     }
 
@@ -314,9 +326,13 @@ export class Profile extends React.Component {
         return (
             <Panel
                 header={HEADINGS.TROPHYCASE}
-                className={ClassNames('standard', {})}
+                className={ClassNames('standard', {
+                    hidden: !this.state.flipsEarned
+                })}
             >
-                <FLIP_SOURCE>
+                <FLIP_SOURCE onDataReceived={data => {
+                    this.setState({flipsEarned: !!data.length});
+                }}>
                     <Flipcase
                         type="trophycase"
                         header={true}

@@ -65,7 +65,7 @@ $ribbon-thickness: .7em;
 
         &::before {
             position: absolute;
-            left: $ribbon-thickness * -2;
+            left: $ribbon-thickness * -1.9;
             z-index: 2;
             border: $ribbon-thickness solid $cmwn-green;
             border-left-color: transparent;
@@ -122,6 +122,7 @@ $ribbon-thickness: .7em;
         }
 
         span {
+            position: relative;
             margin-right: 10px;
             border-radius: 15px;
             background: $cmwn-white;
