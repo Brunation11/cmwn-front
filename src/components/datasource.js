@@ -33,6 +33,7 @@ export default function (endpointIdentifier, componentName) {
             this.attemptLoadComponentData();
 
             if (!_.isEqual(newProps.data, this.props.data)) {
+                this.props.onDataReceived(newProps.data);
                 mutableData = newProps.data.asMutable == null ? newProps.data : newProps.data.asMutable();
                 this.setState({data: Immutable(this.props.transform(mutableData))});
             }
@@ -104,7 +105,8 @@ export default function (endpointIdentifier, componentName) {
     Component.defaultProps = {
         renderNoData: () => null,
         transform: _.identity,
-        onError: _.noop
+        onError: _.noop,
+        onDataReceived: _.noop
     };
 
     mapStateToProps = state => {
