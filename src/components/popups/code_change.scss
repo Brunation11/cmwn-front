@@ -1,0 +1,87 @@
+@import '../../variables';
+
+#code-change-modal { // scss-lint:disable IdSelector
+    .modal-dialog {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        margin: 0;
+        border: 5px solid $cmwn-white;
+        border-radius: 10px;
+        background: $cmwn-white;
+        width: 90%;
+        max-width: 550px;
+    }
+
+    .modal-content {
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        background: $cmwn-purple;
+    }
+
+    .modal-body {
+        padding: $standard 0;
+    }
+
+    h1,
+    .copy {
+        position: relative;
+        width: 100%;
+        text-align: center;
+        color: $cmwn-white;
+        font-family: $cmwn-jade-font;
+    }
+
+    h1 {
+        margin: 0;
+        color: $cmwn-blue;
+        font-size: 80px;
+    }
+
+    .copy {
+        top: 450%;
+        margin: 10px 0;
+        font-size: 30px;
+    }
+
+    .callout {
+        text-shadow: 1px  1px $cmwn-white,
+                    -1px  1px $cmwn-white,
+                    -1px -1px $cmwn-white,
+                     1px -1px $cmwn-white;
+        color: $cmwn-turquoise;
+    }
+
+    .close-modal {
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        outline: none;
+        border: 1px solid $cmwn-white;
+        border-radius: $standard;
+        box-shadow: inset -1px 1px 10px $cmwn-black;
+        background: transparent;
+        padding: 2%;
+        width: 40%;
+        color: $cmwn-white;
+        font-family: $cmwn-jade-font;
+        font-size: 32px;
+    }
+
+    $increment: 30;
+
+    @for $i from 0 through $increment {
+        @media (min-width: $i * 20px) and (max-width: 612px) {
+            h1 {
+                font-size: 20px + $i * 2;
+            }
+
+            .copy,
+            .close-modal {
+                font-size: 2px + $i;
+            }
+        }
+    }
+}
