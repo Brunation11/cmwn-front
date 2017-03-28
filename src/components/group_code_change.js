@@ -4,6 +4,7 @@ import {Button, Input, Panel} from 'react-bootstrap';
 import HttpManager from 'components/http_manager';
 import Toast from 'components/toast';
 import Log from 'components/log';
+import CodeChangePopup from 'components/popups/code_change';
 
 const HEADINGS = {
     UPDATE_CODE: 'Reset code for Group:',
@@ -14,6 +15,14 @@ const HEADINGS = {
 const ERRORS = {
     BAD_CODE: 'Sorry, there was a problem resetting group code.',
 };
+
+const COPY = (
+    <span>
+        To share this code with the users.
+        <br />
+        It will only be active for <span className="callout">24 hours!</span>
+    </span>
+);
 
 class GroupCodeChange extends React.Component {
     constructor() {
@@ -28,9 +37,10 @@ class GroupCodeChange extends React.Component {
         }
         update = HttpManager.POST({url: this.props.data._links.group_reset.href },
             {code: this.state.code});
-        update.then(
-            Toast.success.bind(this, HEADINGS.RESET_SUCCESS)
-        ).catch(err => {
+        update.then(() => {
+            this.refs.popup.showModal();
+            Toast.success.call(this, HEADINGS.RESET_SUCCESS);
+        }).catch(err => {
             Log.warn(HEADINGS.RESET_FAILED + (err.message ? ' Message: ' + err.message : ''), err);
             Toast.error(ERRORS.BAD_CODE);
         });
@@ -58,6 +68,10 @@ class GroupCodeChange extends React.Component {
                         <Button onClick={this.submit.bind(this)} className="green standard left">
                             Reset Code
                         </Button>
+                        <CodeChangePopup
+                            ref="popup"
+                            copy={COPY}
+                        />
                     </div>
             </form></Panel>
         );

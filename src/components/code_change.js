@@ -4,6 +4,7 @@ import {Button, Input, Panel} from 'react-bootstrap';
 import HttpManager from 'components/http_manager';
 import Toast from 'components/toast';
 import Log from 'components/log';
+import CodeChangePopup from 'components/popups/code_change';
 
 const HEADINGS = {
     UPDATE_CODE: 'Reset code for user',
@@ -25,10 +26,11 @@ class CodeChange extends React.Component {
         }
         update = HttpManager.POST({url: this.props.data._links.reset.href },
             {email: this.props.data.email, code: this.state.code});
-        update.then(
-            Toast.success.bind(this,
-                'Code Reset for user. They will need to update their password on next login.')
-        ).catch(err => {
+        update.then(() => {
+            this.refs.popup.showModal();
+            Toast.success.call(this,
+                'Code Reset for user. They will need to update their password on next login.');
+        }).catch(err => {
             Log.warn('Update code failed.' + (err.message ? ' Message: ' + err.message : ''), err);
             Toast.error(ERRORS.BAD_CODE);
         });
@@ -53,6 +55,9 @@ class CodeChange extends React.Component {
                         onChange={e => this.setState({code: e.target.value})}
                     />
                     <Button onClick={this.submit.bind(this)} id="reset-code-btn">Reset Code</Button>
+                    <CodeChangePopup
+                        ref="popup"
+                    />
             </form></Panel>
         );
     }

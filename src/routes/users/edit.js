@@ -19,6 +19,7 @@ import Form from 'components/form';
 import DropdownDatepicker from 'components/dropdown_datepicker';
 import ACTION_CONSTANTS from 'components/action_constants';
 import ChangePassword from 'components/change_password';
+import CodeChangePopup from 'components/popups/code_change';
 
 
 import 'routes/users/edit.scss';
@@ -401,7 +402,10 @@ export class EditProfile extends React.Component {
 
 CodeChange = React.createClass({
     getInitialState: function () {
-        return {code: ''};
+        return {
+            code: '',
+            reset: false
+        };
     },
     submit: function () {
         var self = this;
@@ -412,6 +416,7 @@ CodeChange = React.createClass({
         update.then(() => {
             Toast.success(CODE_UPDATED);
             self.setState({code: ''});
+            this.refs.popup.showModal();
         }).catch(err => {
             Log.warn('Update password failed.' + (err.message ? ' Message: ' + err.message : ''), err);
             Toast.error(ERRORS.BAD_PASS);
@@ -438,6 +443,9 @@ CodeChange = React.createClass({
                         onChange={e => this.setState({code: e.target.value})}
                     />
                     <Button onClick={this.submit.bind(this)}>Reset Code</Button>
+                    <CodeChangePopup
+                        ref="popup"
+                    />
             </form></Panel>
         );
     }
