@@ -11,7 +11,9 @@ const HEADINGS = {
 };
 const ERRORS = {
     BAD_CODE: 'Sorry, there was a problem resetting your code.',
+    UPDATE_FAIL: 'Update code failed.'
 };
+const CODE_RESET = 'Code Reset for user. They will need to update their password on next login.';
 
 class CodeChange extends React.Component {
     constructor() {
@@ -28,10 +30,9 @@ class CodeChange extends React.Component {
             {email: this.props.data.email, code: this.state.code});
         update.then(() => {
             this.refs.popup.showModal();
-            Toast.success.call(this,
-                'Code Reset for user. They will need to update their password on next login.');
+            Toast.success.call(this, CODE_RESET);
         }).catch(err => {
-            Log.warn('Update code failed.' + (err.message ? ' Message: ' + err.message : ''), err);
+            Log.warn(ERRORS.UPDATE_FAIL + (err.message ? ` Message: ${err.message}` : ''), err);
             Toast.error(ERRORS.BAD_CODE);
         });
     }
@@ -55,9 +56,7 @@ class CodeChange extends React.Component {
                         onChange={e => this.setState({code: e.target.value})}
                     />
                     <Button onClick={this.submit.bind(this)} id="reset-code-btn">Reset Code</Button>
-                    <CodeChangePopup
-                        ref="popup"
-                    />
+                    <CodeChangePopup ref="popup" />
             </form></Panel>
         );
     }

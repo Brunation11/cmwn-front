@@ -16,14 +16,6 @@ const ERRORS = {
     BAD_CODE: 'Sorry, there was a problem resetting group code.',
 };
 
-const COPY = (
-    <span>
-        To share this code with the users.
-        <br />
-        It will only be active for <span className="callout">24 hours!</span>
-    </span>
-);
-
 class GroupCodeChange extends React.Component {
     constructor() {
         super();
@@ -41,7 +33,7 @@ class GroupCodeChange extends React.Component {
             this.refs.popup.showModal();
             Toast.success.call(this, HEADINGS.RESET_SUCCESS);
         }).catch(err => {
-            Log.warn(HEADINGS.RESET_FAILED + (err.message ? ' Message: ' + err.message : ''), err);
+            Log.warn(HEADINGS.RESET_FAILED + (err.message ? ` Message: ${err.message}` : ''), err);
             Toast.error(ERRORS.BAD_CODE);
         });
     }
@@ -68,10 +60,7 @@ class GroupCodeChange extends React.Component {
                         <Button onClick={this.submit.bind(this)} className="green standard left">
                             Reset Code
                         </Button>
-                        <CodeChangePopup
-                            ref="popup"
-                            copy={COPY}
-                        />
+                        <CodeChangePopup ref="popup" />
                     </div>
             </form></Panel>
         );
