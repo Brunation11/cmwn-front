@@ -6,6 +6,7 @@ import _ from 'lodash';
 import GLOBALS from 'components/globals';
 import HttpManager from 'components/http_manager';
 import Log from 'components/log';
+import IB_IDS from 'components/ib_ids';
 
 import 'components/popovers/popover.scss';
 
@@ -63,11 +64,17 @@ export default class UserPopover extends React.Component {
     renderUserFlips() {
         if (this.state.flips.length) {
             return _.map(this.state.flips, (flip) => {
+                var src = GLOBALS.MEDIA_URL + (
+                    _.get(IB_IDS.FLIPS, `${flip.flip_id}.static`) ?
+                    _.get(IB_IDS.FLIPS, `${flip.flip_id}.static`) :
+                    IB_IDS.FLIPS.default
+                );
+
                 return (
                     <img
                         className="hover-flips"
                         key={Shortid.generate()}
-                        src={`/flips/${flip.flip_id}-earned.gif`}
+                        src={src}
                     />
                 );
             });
