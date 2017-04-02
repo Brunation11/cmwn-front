@@ -35,6 +35,7 @@ $mobile-cancel-btn: '5f8508cebd4a0c965f35b7d0e0ccc05e.png';
 $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
 
 .profile-image-popover {
+    z-index: 1101; //required to position above mobile nav menu
     color: $cmwn-gray;
 
     strong {
@@ -113,6 +114,8 @@ $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
 }
 
 .profile-image-uploader-modal {
+    z-index: 1101; //required to position above mobile nav menu
+
     .modal-dialog {
         margin: 0;
         width: 100%;
@@ -721,7 +724,7 @@ $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
 
         .header {
             position: absolute;
-            top: 50%;
+            top: 45%;
             left: 50%;
             transform: translateX(-50%) translateY(-50%);
             width: 100%;
@@ -734,12 +737,11 @@ $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
 
         .selected-avatar {
             position: absolute;
-            top: 58%;
+            top: 51%;
             left: 50%;
             transform: translateX(-50%);
             border: 1px solid $cmwn-white;
-            width: 70%;
-            height: 20%;
+            height: 27%;
         }
 
         .confirm-btn,
