@@ -98,6 +98,8 @@ export default class Image extends React.Component {
     getDefaultCLRImages() {
         var animal;
         var defaultAvatar;
+        var imageURL;
+        var imageID;
 
         // get color default images
         HttpManager.GET({
@@ -106,36 +108,37 @@ export default class Image extends React.Component {
             if (this.state.setDefault) {
                 animal = _.replace(this.props.currentUser.username, /\d+/, '').split('-').pop();
                 defaultAvatar = _.find(res.response._embedded.items, function (avatar) {
-                    return _.replace(avatar.name, /\d+/, '') === animal
+                    return _.replace(avatar.name, /\d+/, '') === animal;
                 });
+                imageURL = _.find(res.response._embedded.items, ['name', defaultAvatar.name]).src;
+                imageID = imageURL.replace('.png', '').replace('jpg', '').split('/').pop();
+                this.upload(imageURL, imageID);
             }
 
             this.setState({
                 defaultsCLR: res.response._embedded.items,
-                profileImage: defaultAvatar ? defaultAvatar.src : this.state.profileImage,
+                imageURL: imageURL,
+                imageID: imageID,
                 isModerated: defaultAvatar ? true : this.state.isModerated
             });
-
-            if (this.state.setDefault) this.defaultUpload();
         }).catch(() => {
             Toast.error(ERRORS.NO_DEFAULTS);
         });
     }
 
-    upload(postURL, imageURL, imageID) {
+    upload(imageURL, imageID) {
+        var postURL = this.props.data._links.user_image.href;
         /* eslint-disable camelcase*/
-        HttpManager.POST({
-            url: postURL
-        }, {
+        HttpManager.POST({url: postURL}, {
             url: imageURL,
             image_id: imageID
         }).then(() => {
             this.setState({
                 profileImage: imageURL,
-                isModerated: this.state.isModerated,
-                defaultUpload: false
+                isModerated: this.state.isModerated
             });
             if (!this.state.setDefault) Toast.error(ERRORS.MODERATION);
+            this.hideModal();
         }).catch((e) => {
             Toast.error(ERRORS.UPLOAD_ERROR);
             Log.error(e, ERRORS.FAILED_UPLOAD);
@@ -144,10 +147,6 @@ export default class Image extends React.Component {
     }
 
     cloudinaryUpload(e) {
-        var postURL = this.props.data._links.user_image.href;
-        var imageURL;
-        var imageID;
-
         e.stopPropagation();
 
         Cloudinary.load((e_, err) => {
@@ -165,25 +164,19 @@ export default class Image extends React.Component {
             }, (error, result) => {
                 if (error !== null && error.message === 'User closed widget') return;
 
-                imageURL = result[0].secure_url;
-                imageID = result[0].public_id;
-
                 ('set', 'dimension6', 1);
 
-                this.upload(postURL, imageURL, imageID);
-                this.hideModal();
+                this.setState({
+                    imageURL: result[0].secure_url,
+                    imageID: result[0].public_id,
+                    setDefault: false,
+                    isModerated: false
+                });
+
+                this.setPage('confirm');
             });
             /* eslint-enable camelcase */
         });
-    }
-
-    defaultUpload() {
-        var postURL = this.props.data._links.user_image.href;
-        var imageURL = _.find(this.state.defaultsCLR, ['name', this.state.selected]).src;
-        var imageID = imageURL.replace('.png', '').replace('jpg', '').split('/').pop();
-
-        this.upload(postURL, imageURL, imageID);
-        this.hideModal();
     }
 
     showModal() {
@@ -212,16 +205,20 @@ export default class Image extends React.Component {
         }
     }
 
+    getID(src) {
+        return src.replace('.png', '').replace('jpg', '').split('/').pop();
+    }
+
     renderImage(url) {
         var style = {'backgroundImage': `url(${url})`};
         return (
              <div
-                onClick={this.attemptNavigate}
+                onClick={this.attemptNavigate.bind(this)}
                 className="profile-pic"
                 alt={PIC_ALT}
                 style={style}
             >
-                 {PIC_ALT}
+                {PIC_ALT}
             </div>
         );
     }
@@ -280,21 +277,29 @@ export default class Image extends React.Component {
     }
 
     renderDesktopSelectDefault() {
-        var color;
-
         return (
             <div className="desktop select-default-container">
                 <div className="avatar-container">
                     {_.map(this.state.defaultsBW, (value) => {
-                        color = _.find(this.state.defaultsCLR, ['name', value.name]);
+                        let color = _.find(this.state.defaultsCLR, ['name', value.name]);
                         if (!color) return null;
                         return (
                             <div
                                 onClick={() => {
-                                    if(this.state.selected && value.name === this.state.selected) {
-                                        this.setState({selected: ''});
+                                    if (this.state.selected && value.name === this.state.selected) {
+                                        this.setState({
+                                            selected: '',
+                                            imageURL: '',
+                                            imageID: ''
+                                        });
                                     } else {
-                                        this.setState({selected: value.name});
+                                        this.setState({
+                                            selected: value.name,
+                                            imageURL: color.src,
+                                            imageID: this.getID(color.src),
+                                            setDefault: true,
+                                            isModerated: true
+                                        });
                                     }
                                 }}
                                 className={Classnames(
@@ -359,7 +364,9 @@ export default class Image extends React.Component {
                         className={`avatar ${currentOption.name}`}
                         onClick={() => {
                             self.setState({
-                                selected: currentOption.name
+                                selected: currentOption.name,
+                                imageURL: currentOption.src,
+                                imageID: this.getID(currentOption.src),
                             });
                         }}
                     >
@@ -373,8 +380,7 @@ export default class Image extends React.Component {
                         onClick={() => {
                             if (_.get(self, 'state.currentOption', 0) > 0) {
                                 self.setState({
-                                    currentOption: _.get(self, 'state.currentOption', 0) - 1,
-                                    selected: currentOption.name
+                                    currentOption: _.get(self, 'state.currentOption', 0) - 1
                                 });
                             }
                         }}
@@ -384,7 +390,7 @@ export default class Image extends React.Component {
                         onClick={() => {
                             if (_.get(self, 'state.currentOption', 0) < self.state.defaultsCLR.length) {
                                 self.setState({
-                                    currentOption: _.get(self, 'state.currentOption', 0) + 1,
+                                    currentOption: _.get(self, 'state.currentOption', 0) + 1
                                 });
                             }
                         }}
@@ -393,7 +399,13 @@ export default class Image extends React.Component {
                 <Button
                     className="confirm-btn"
                     onClick={() => {
-                        this.setState({selected: currentOption.name});
+                        this.setState({
+                            selected: currentOption.name,
+                            imageURL: currentOption.src,
+                            imageID: this.getID(currentOption.src),
+                            setDefault: true,
+                            isModerated: true
+                        });
                         self.setPage.call(self, 'confirm');
                     }}
                 />
@@ -416,7 +428,7 @@ export default class Image extends React.Component {
                     </span>
                     <img
                         className="selected-avatar"
-                        src={_.find(this.state.defaultsCLR, ['name', this.state.selected]).src}
+                        src={this.state.imageURL}
                     />
                     <span className="prompt-2">
                         {this.props.currentUser.username.toUpperCase()}
@@ -428,7 +440,7 @@ export default class Image extends React.Component {
                     </span>
                     <Button
                         className="looks-great-btn"
-                        onClick={this.defaultUpload.bind(this)}
+                        onClick={this.upload.bind(this, this.state.imageURL, this.state.imageID)}
                     />
                     <Button
                         className="change-my-mind-btn"
@@ -454,11 +466,11 @@ export default class Image extends React.Component {
                 </span>
                 <img
                     className="selected-avatar"
-                    src={_.find(this.state.defaultsBW, ['name', this.state.selected]).src}
+                    src={this.state.imageURL}
                 />
                 <Button
                     className="confirm-btn"
-                    onClick={this.defaultUpload.bind(this)}
+                    onClick={this.upload.bind(this, this.state.imageURL, this.state.imageID)}
                 />
                 <Button className="cancel-btn"
                     onClick={this.setPage.bind(this, 'select-default')}
