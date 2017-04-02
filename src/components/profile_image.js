@@ -106,16 +106,17 @@ export default class Image extends React.Component {
             if (this.state.setDefault) {
                 animal = _.replace(this.props.currentUser.username, /\d+/, '').split('-').pop();
                 defaultAvatar = _.find(res.response._embedded.items, function (avatar) {
-                    return avatar.name.indexOf(animal) !== -1;
+                    return _.replace(avatar.name, /\d+/, '') === animal
                 });
             }
+
             this.setState({
                 defaultsCLR: res.response._embedded.items,
-                selected: defaultAvatar ? defaultAvatar.name : null,
                 profileImage: defaultAvatar ? defaultAvatar.src : this.state.profileImage,
                 isModerated: defaultAvatar ? true : this.state.isModerated
             });
-            this.defaultUpload();
+
+            if (this.state.setDefault) this.defaultUpload();
         }).catch(() => {
             Toast.error(ERRORS.NO_DEFAULTS);
         });
@@ -170,6 +171,7 @@ export default class Image extends React.Component {
                 ('set', 'dimension6', 1);
 
                 this.upload(postURL, imageURL, imageID);
+                this.hideModal();
             });
             /* eslint-enable camelcase */
         });
@@ -232,7 +234,7 @@ export default class Image extends React.Component {
                         CLICK ANYWHERE IN THIS BOX TO
                     </span>
                     <span className="prompt-2">
-                        Upload photo
+                        Upload photo or drag photo
                         <br />
                         from your computer
                     </span>
@@ -289,9 +291,11 @@ export default class Image extends React.Component {
                         return (
                             <div
                                 onClick={() => {
-                                    this.setState({
-                                        selected: value.name
-                                    });
+                                    if(this.state.selected && value.name === this.state.selected) {
+                                        this.setState({selected: ''});
+                                    } else {
+                                        this.setState({selected: value.name});
+                                    }
                                 }}
                                 className={Classnames(
                                     `avatar ${value.name}`,
@@ -330,10 +334,14 @@ export default class Image extends React.Component {
                     className="confirm-btn"
                     onClick={this.setPage.bind(this, 'confirm')}
                     disabled={!this.state.selected}
-                />
+                >
+                    CONFIRM
+                </Button>
                 <Button className="cancel-btn"
                     onClick={this.setPage.bind(this, 'welcome')}
-                />
+                >
+                    CANCEL
+                </Button>
             </div>
         );
     }
@@ -411,7 +419,7 @@ export default class Image extends React.Component {
                         src={_.find(this.state.defaultsCLR, ['name', this.state.selected]).src}
                     />
                     <span className="prompt-2">
-                        {this.props.currentUser.username}
+                        {this.props.currentUser.username.toUpperCase()}
                     </span>
                 </div>
                 <div className="right">
