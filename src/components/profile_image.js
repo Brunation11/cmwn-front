@@ -189,10 +189,6 @@ export default class Image extends React.Component {
         }
     }
 
-    getID(src) {
-        return src.replace('.png', '').replace('jpg', '').split('/').pop();
-    }
-
     renderImage(url) {
         var style = {'backgroundImage': `url(${url})`};
         return (
@@ -280,7 +276,7 @@ export default class Image extends React.Component {
                                         this.setState({
                                             selected: value.name,
                                             imageURL: color.src,
-                                            imageID: this.getID(color.src),
+                                            imageID: color.media_id,
                                             setDefault: true,
                                             isModerated: true
                                         });
@@ -346,7 +342,7 @@ export default class Image extends React.Component {
                             self.setState({
                                 selected: currentOption.name,
                                 imageURL: currentOption.src,
-                                imageID: this.getID(currentOption.src),
+                                imageID: currentOption.media_id,
                             });
                         }}
                     >
@@ -382,7 +378,7 @@ export default class Image extends React.Component {
                         this.setState({
                             selected: currentOption.name,
                             imageURL: currentOption.src,
-                            imageID: this.getID(currentOption.src),
+                            imageID: currentOption.media_id,
                             setDefault: true,
                             isModerated: true
                         });
