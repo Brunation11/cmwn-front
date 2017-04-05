@@ -195,7 +195,8 @@ $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
         .right {
             position: absolute;
             top: 50%;
-            right: 4%;
+            //right: 4%;
+            right: 24%;
             transform: translateY(-50%);
             border: 2px dotted $purple;
             border-radius: 7px;
@@ -248,6 +249,8 @@ $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
         }
 
         .left {
+            display: none;
+
             .prompt-1,
             .prompt-2 {
                 position: absolute;
@@ -319,7 +322,7 @@ $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
             color: $cmwn-lime;
             font-family: $cmwn-jade-font;
             font-size: 40px;
-            content: 'OR';
+            //content: 'OR';
         }
     }
 
@@ -341,6 +344,7 @@ $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
             border: 0;
             padding-bottom: 9%;
             width: 10%;
+            filter: grayscale(100%);
 
             .bw,
             .clr {
@@ -352,10 +356,6 @@ $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
             .bw {
                 top: 0;
                 left: 0;
-            }
-
-            .clr {
-                visibility: hidden;
             }
 
             &.disable {
@@ -376,6 +376,7 @@ $close-modal-btn: 'e2e78d3b4a48fd788a27c4ef091416c3.png';
                 transform: scale(1.5);
                 transition: all 200ms ease-in;
                 z-index: 2;
+                filter: none;
 
                 // scss-lint:disable NestingDepth, SelectorDepth
                 .bw {

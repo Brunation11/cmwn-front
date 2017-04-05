@@ -24,7 +24,6 @@ const PENDING = ' We\'re reviewing your image and it should appear shortly. ' +
                 'To continue uploading a new image click ';
 
 const DEFAULT_IMGS = {
-    BW: 'a3ed3518427afd7ede55a84bea83f5f6',
     CLR: 'e7f29f11fbaf7da8ac1d19ab2cea34db'
 };
 
@@ -46,7 +45,6 @@ export default class Image extends React.Component {
             profileImage: GLOBALS.DEFAULT_PROFILE,
             isModerated: false,
             page: 'welcome',
-            defaultsBW: [],
             defaultsCLR: []
         };
     }
@@ -78,21 +76,7 @@ export default class Image extends React.Component {
                 }
             });
         }
-        this.getDefaultBWImages();
         this.getDefaultCLRImages();
-    }
-
-    getDefaultBWImages() {
-        // get black and white default images
-        HttpManager.GET({
-            url: `${GLOBALS.API_URL}media/${DEFAULT_IMGS.BW}`
-        }).then((res) => {
-            this.setState({
-                defaultsBW: res.response._embedded.items
-            });
-        }).catch(() => {
-            Toast.error(ERRORS.NO_DEFAULTS);
-        });
     }
 
     getDefaultCLRImages() {
@@ -110,7 +94,7 @@ export default class Image extends React.Component {
                 defaultAvatar = _.find(res.response._embedded.items, function (avatar) {
                     return _.replace(avatar.name, /\d+/, '') === animal;
                 });
-                imageURL = _.find(res.response._embedded.items, ['name', defaultAvatar.name]).src;
+                imageURL = _.find(res.response._embedded.items, ['name', defaultAvatar.name]).thumb;
                 imageID = imageURL.replace('.png', '').replace('jpg', '').split('/').pop();
                 this.upload(imageURL, imageID);
             }
@@ -280,7 +264,7 @@ export default class Image extends React.Component {
         return (
             <div className="desktop select-default-container">
                 <div className="avatar-container">
-                    {_.map(this.state.defaultsBW, (value) => {
+                    {_.map(this.state.defaultsCLR, (value) => {
                         let color = _.find(this.state.defaultsCLR, ['name', value.name]);
                         if (!color) return null;
                         return (
@@ -295,7 +279,7 @@ export default class Image extends React.Component {
                                     } else {
                                         this.setState({
                                             selected: value.name,
-                                            imageURL: color.src,
+                                            imageURL: color.thumb,
                                             imageID: this.getID(color.src),
                                             setDefault: true,
                                             isModerated: true
@@ -313,10 +297,6 @@ export default class Image extends React.Component {
                                 <img
                                     className="clr"
                                     src={color.src}
-                                />
-                                <img
-                                    className="bw"
-                                    src={value.src}
                                 />
                             </div>
                         );
