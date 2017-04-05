@@ -279,7 +279,7 @@ export default class Image extends React.Component {
                                     } else {
                                         this.setState({
                                             selected: value.name,
-                                            imageURL: color.thumb,
+                                            imageURL: color.src,
                                             imageID: this.getID(color.src),
                                             setDefault: true,
                                             isModerated: true
@@ -296,7 +296,7 @@ export default class Image extends React.Component {
                             >
                                 <img
                                     className="clr"
-                                    src={color.src}
+                                    src={color.thumb}
                                 />
                             </div>
                         );
@@ -425,13 +425,6 @@ export default class Image extends React.Component {
                     <Button
                         className="change-my-mind-btn"
                         onClick={this.setPage.bind(this, 'select-default')}
-                    />
-                    <Button
-                        className="back-to-upload-btn"
-                        onClick={(e) => {
-                            this.setPage.call(this, 'welcome');
-                            this.cloudinaryUpload.call(this, e);
-                        }}
                     />
                 </div>
             </div>
